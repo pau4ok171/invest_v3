@@ -1,0 +1,156 @@
+.key-valuation-metrics__tabs {
+    display: grid;
+    align-content: start;
+}
+
+.key-valuation-metrics__tab-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+}
+
+.key-valuation-metrics__tab-button {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    padding: 4px;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.key-valuation-metrics__tab-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.key-valuation-metrics__tab-button--active {
+    color: rgb(255, 255, 255);
+    background: rgba(0, 0, 0, 0.3);
+    cursor: auto;
+}
+
+.key-valuation-metrics__tab-desc-wrapper {
+    background-color: rgb(38, 46, 58);
+    padding: 10px;
+    border-radius: 4px;
+    height: min-content;
+    margin-top: 16px;
+}
+
+[hidden], [hidden] * {
+    visibility: hidden;
+    height: 0!important;
+    width: 0!important;
+}
+
+.key-valuation-metrics__tab-desc {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 30px auto;
+    grid-template-rows: auto;
+}
+
+.key-valuation-metrics__tab-desc-icon {
+    display: grid;
+    justify-content: center;
+}
+
+.key-valuation-metrics__tab-desc-textbox {
+    display: grid;
+}
+
+.key-valuation-metrics__tab-desc-text {
+    line-height: 1.5;
+    font-size: 1.4rem;
+}
+
+.key-valuation-metrics__tab-desc-title {
+    background-color: transparent;
+    color: var(--blue);
+}
+
+.key-valuation-metrics__charts {
+    display: grid;
+}
+
+.key-valuation-metrics__chart-wrapper {
+    display: grid;
+    height: 280px;
+}
+
+.key-valuation-metrics__chart {
+    display: grid;
+    grid-template-columns: auto 200px;
+    grid-template-rows: auto;
+
+}
+
+.key-valuation-metrics__chart-metric {
+    display: grid;
+    place-content: center start;
+}
+
+.key-valuation-metrics__chart-metric-value {
+    line-height: 1.25;
+    font-size: 3.6rem;
+    font-weight: normal;
+}
+
+.key-valuation-metrics__chart-metric-text {
+    font-size: 1.6rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, .7);
+}
+
+.key-valuation-metrics__table-wrapper {
+    min-height: 326px;
+}
+
+.key-valuation-metrics__table {
+    line-height: 1.5;
+    font-weight: 500;
+    width: 100%;
+    border-spacing: 0;
+    font-size: 1.6rem;
+    margin-top: 0;
+}
+
+.key-valuation-metrics__table caption {
+    line-height: 1.5;
+    opacity: 0.5;
+    padding-top: 8px;
+    caption-side: bottom;
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+.key-valuation-metrics__table th {
+    text-align: left;
+    line-height: 1.5;
+    font-weight: 500;
+    font-size: 1.2rem;
+}
+
+.key-valuation-metrics__table td {
+    font-size: 1.6rem;
+    box-sizing: border-box;
+    height: 38px;
+    padding-bottom: 8px;
+    vertical-align: bottom;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.key-valuation-metrics__table-text {
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    border-bottom: 1px dotted rgb(35, 148, 223);
+    cursor: help;
+    width: fit-content;
+    font-size: 1.6rem;
+}

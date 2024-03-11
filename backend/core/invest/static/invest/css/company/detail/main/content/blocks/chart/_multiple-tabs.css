@@ -1,0 +1,65 @@
+.chart__tabs {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.chart__tab {
+    position: relative;
+    display: inline-block;
+}
+
+.chart__tab-button {
+    cursor: pointer;
+    appearance: none;
+    position: relative;
+    text-decoration: none;
+    vertical-align: top;
+    font-weight: normal;
+    line-height: 32px;
+    color: rgba(255, 255, 255, .7);
+    height: 32px;
+    padding: 0 32px 0 16px;
+    box-shadow: none;
+    background-color: transparent;
+    font-size: 1.2rem;
+    user-select: none;
+    border-radius: 16px;
+    transition: none 0s ease 0s;
+    border: 1px solid rgba(255, 255, 255, .2);
+    margin-right: 8px;
+}
+
+.chart__tab-button:hover {
+    background-color: rgba(255, 255, 255, .05);
+    box-shadow: none;
+}
+
+.chart__tab-button-text {
+    line-height: 32px;
+    font-size: 1.2rem;
+    user-select: none;
+    pointer-events: none;
+    color: #fff;
+}
+
+.chart__tab-button-icon {
+    cursor: pointer;
+    font-weight: normal;
+    line-height: 32px;
+    color: rgba(255, 255, 255, .7);
+    font-size: 1.2rem;
+    user-select: none;
+    pointer-events: none;
+    display: inline;
+    fill: rgb(255, 255, 255);
+    opacity: .5;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 4px;
+}

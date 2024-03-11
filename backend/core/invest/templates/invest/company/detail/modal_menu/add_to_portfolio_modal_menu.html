@@ -1,0 +1,46 @@
+<div class="modal_menu add_to_portfolio_modal_menu">
+  <div class="modal_menu__inner">
+    <header class="modal_menu__header">
+      <h1 class="modal_menu__title">Add SBER to a Portfolio</h1>
+      <button class="modal_menu__close-button modal_menu__header-button"><svg><use href="#close-icon"></use></svg></button>
+    </header>
+    <main class="modal_menu__main add_to_portfolio_modal_menu__main">
+      {% for portfolio in company_info.portfolios  %}
+        <div data-id="{{ portfolio.id }}" class="add_to_portfolio_modal_menu__item">
+          <div class="add_to_portfolio_modal_menu__info-block">
+            <div class="add_to_portfolio_modal_menu__info-block-title">{{ portfolio.name }}</div>
+            <div class="add_to_portfolio_modal_menu__info-block-total-shares">
+              {% with portfolio.positions.count as total_holdings %}{{ total_holdings }} Holding{{ total_holdings|pluralize }}{% endwith %}
+            </div>
+          </div>
+
+          <div class="add_to_portfolio_modal_menu__action-block">
+            {% if company in portfolio.positions.all %}
+              <button disabled class="add_to_portfolio_modal_menu__button add_to_portfolio_modal_menu__button--added">
+                <svg height="24" width="24" viewBox="0 0 24 24" fill="#fff">
+                <use href="#checked-icon"></use>
+              </svg>
+                Added
+              </button>
+              <button class="add_to_portfolio_modal_menu__button add_to_portfolio_modal_menu__button--delete">
+                <svg height="20" width="20" viewBox="0 0 512 512" fill="#fff">
+                  <use href="#trash-icon"></use>
+                </svg>
+              </button>
+            {% else %}
+              <button class="add_to_portfolio_modal_menu__button add_to_portfolio_modal_menu__button--add">
+                <svg height="20" width="20" viewBox="0 0 512 512" fill="#fff">
+                  <use href="#add-icon"></use>
+                </svg>
+                  Add
+              </button>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </main>
+    <footer class="modal_menu__footer add_to_portfolio_modal_menu__footer">
+      <button class="add_to_portfolio_modal_menu__button add_to_portfolio_modal_menu__button--new">New Portfolio</button>
+    </footer>
+  </div>
+</div>

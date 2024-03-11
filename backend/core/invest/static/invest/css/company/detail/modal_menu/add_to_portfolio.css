@@ -1,0 +1,105 @@
+.add_to_portfolio_modal_menu__main {
+    padding: 0;
+    border-bottom: none;
+}
+
+.add_to_portfolio_modal_menu__item {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 24px;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.add_to_portfolio_modal_menu__info-block {
+    color: #262e3a;
+    line-height: 1.5;
+}
+
+.add_to_portfolio_modal_menu__info-block-title {
+    font-size: 1.8rem;
+    font-weight: 500;
+}
+
+.add_to_portfolio_modal_menu__info-block-total-shares {
+    font-size: 1.4rem;
+    opacity: .5;
+}
+
+.add_to_portfolio_modal_menu__action-block {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.add_to_portfolio_modal_menu__button {
+    transition: background-color .2s ease 0s, box-shadow .2s ease 0s, color .4s ease 0s, padding .4s ease 0s;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    line-height: 32px;
+    color: #fff;
+    height: 32px;
+    padding: 0 12px;
+    background-color: #2394df;
+}
+
+.add_to_portfolio_modal_menu__button--added {
+    background-color: #2dc97e;
+}
+
+.add_to_portfolio_modal_menu__button--delete {
+    background-color: #e64141;
+}
+
+.add_to_portfolio_modal_menu__button--add {
+}
+
+.add_to_portfolio_modal_menu__button--new {
+    line-height: 40px;
+    height: 40px;
+    background-color: #e8e8e8;
+    color: #000;
+}
+
+.add_to_portfolio_modal_menu__button:not(:disabled):hover {
+    background-color: #2085c9;
+}
+
+.add_to_portfolio_modal_menu__button--added:not(:disabled):hover {
+    background-color: #29a268;
+}
+
+.add_to_portfolio_modal_menu__button--delete:not(:disabled):hover {
+    background-color: #ac2121;
+}
+
+.add_to_portfolio_modal_menu__button--new:not(:disabled):hover {
+    background-color: #aea4a4;
+}
+
+.add_to_portfolio_modal_menu__button svg {
+    margin-bottom: 2px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+.add_to_portfolio_modal_menu__input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid rgba(38, 46, 58, .2);
+    padding: 0 14px;
+    appearance: none;
+    outline: none;
+    font-size: 1.4rem;
+    font-weight: 500;
+    border-radius: 4px;
+    background-color: rgba(35, 148, 223, .05);
+    caret-color: var(--blue);
+    color: #000;
+    transition: border .2s ease 0s, background-color .2s ease 0s;
+}
+
+.add_to_portfolio_modal_menu__footer {
+    justify-content: flex-start;
+    padding-left: 24px;
+}

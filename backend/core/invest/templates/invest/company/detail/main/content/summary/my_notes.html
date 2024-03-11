@@ -1,0 +1,30 @@
+{% load static %}
+<section class="article__section">
+    <div class="section__inner">
+
+        <div class="section__box">
+
+            <header class="header__notes">
+                <h3 class="text__header2 text__lh--1d5">My Notes</h3>
+                <span class="mark__wrapper">
+                    <mark class="detail__mark">0</mark>
+                </span>
+            </header>
+
+            <div class="detail__empty-notes">
+                <div class="empty-notes__inner">
+                    <img class="empty-notes__image" src="{% static 'invest/images/TEMP/book.svg' %}" alt="Empty Notes">
+                    <p class="text__header3 text__text-align--center text__fw--n">Capture your thoughts, links and company narrative</p>
+                    <button class="button-note button text pl-36 button--theme-bg-blue-dark">
+                        <svg class="svg button__svg svg--fill-blue">
+                            <use href="#pen-icon"></use>
+                        </svg>
+                        <span>Add note</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>

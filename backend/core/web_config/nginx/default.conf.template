@@ -1,0 +1,41 @@
+# Входной поток для uWSGI
+upstream uwsgi_app {
+    server unix:/code/uwsgi_app.sock;
+}
+
+server {
+    listen 80;
+    server_name www.finargo.ru finargo.ru;
+
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+       return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name www.finargo.ru finargo.ru;
+    ssl_certificate /code/certbot/conf/live/finargo.ru/fullchain.pem;
+    ssl_certificate_key /code/certbot/conf/live/finargo.ru/privkey.pem;
+    error_log stderr warn;
+    access_log /dev/stdout main;
+
+    location / {
+        include /etc/nginx/uwsgi_params;
+        uwsgi_pass uwsgi_app;
+    }
+
+    location /static/ {
+        alias /code/static/;
+    }
+
+    location /media/ {
+        alias /code/media/;
+    }
+
+}

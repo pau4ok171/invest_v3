@@ -1,0 +1,13 @@
+# Globally
+**/migrations
+**/libs
+**/archive
+**.env
+
+# venv
+/venv
+
+# DataBase
+backend/core/db.sqlite3
+
+

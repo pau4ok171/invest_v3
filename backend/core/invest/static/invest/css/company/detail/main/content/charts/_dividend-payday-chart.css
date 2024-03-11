@@ -1,0 +1,43 @@
+.dividend-payday-chart__wrapper {
+    height: 200px;
+}
+
+.dividend-payday-chart__label {
+    overflow: visible;
+}
+
+.dividend-payday-chart__text {
+    font-size: 1.4rem;
+    line-height: 1.5;
+}
+
+.dividend-payday-chart__more-info-icon {
+    opacity: .5;
+}
+
+.dividend-payday-chart__more-info-icon > path {
+    fill: #fff;
+}
+
+.dividend-payday-chart__connector {
+    stroke: #5f6875;
+    stroke-width: 1;
+}
+
+.dividend-payday-chart__principal-line {
+    stroke: #3e4855;
+    stroke-width: 4;
+}
+
+.dividend-payday-chart__remaining-line {
+    stroke: #2394df;
+    stroke-width: 4;
+}
+
+.dividend-payday-chart__line-point {
+    fill: #5f6875;
+}
+
+.dividend-payday-chart__remaining-line-point {
+    fill: #2394df;
+}

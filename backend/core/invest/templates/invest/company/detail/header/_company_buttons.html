@@ -1,0 +1,30 @@
+<div class="container__element">
+  <div class="detail__buttons">
+    {% if request.user not in company.users_watchlist.all %}
+      <button class="button-watchlist button text button--theme-bg-blue ml-4 pl-36">
+        <svg class="svg button__svg"><use href="#outline-star-icon"></use></svg>
+        Add to watchlist
+      </button>
+    {% else %}
+      <button class="button-watchlisted button text button--theme-bg-blue ml-4">
+        <svg class="svg button__svg button__svg--unique-object"><use href="#star-solid-icon"></use></svg>
+      </button>
+
+      <button class="button-note button text button--theme-bg-blue ml-4 pl-36">
+        <svg class="svg button__svg">
+          <use href="#pen-icon"></use>
+        </svg>
+        Add note
+      </button>
+    {% endif %}
+
+    <button class="add_to_portfolio_open_button button text ml-4">
+      <span>Add to portfolio</span>
+    </button>
+
+    <button class="button text ml-4">
+      <svg class="svg button__svg button__svg--unique-object svg--fill-black"><use href="#dot3-icon"></use></svg>
+    </button>
+
+  </div>
+</div>

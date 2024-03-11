@@ -1,0 +1,41 @@
+{% load humanize %}
+<section class="article__section">
+
+    <h3 class="text__header2 text__lh--1d5 mb-16">About the Company</h3>
+
+    <table class="table ml-n1 mb-16">
+        <thead>
+            <tr>
+                <th class="table__th text__fsz--1d4 text__color--grey-d7">Founded</th>
+                <th class="table__th text__fsz--1d4 text__color--grey-d7">Employees</th>
+                <th class="table__th text__fsz--1d4 text__color--grey-d7">CEO</th>
+                <th class="table__th text__fsz--1d4 text__color--grey-d7">Website</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text text__lh-1d5 text__fw--500 text__fsz--1d6">{{ company.year_founded|default_if_none:'n/a' }}</td>
+                <td class="text text__lh-1d5 text__fw--500 text__fsz--1d6">{{ report.total_employees_figure|default_if_none:'n/a'|intcomma }}</td>
+                <td class="text text__lh-1d5 text__fw--500 text__fsz--1d6">n/a</td>
+                <td class="text text__lh-1d5 text__fw--500 text__fsz--1d6">
+                    {% if company.website %}
+                    <a target="_blank" class="detail__extra-link" href="{{ company.website }}" rel="noopener noreferrer nofollow">
+                        {{ company.website }}
+                        <svg><use href="#extra-link-icon"></use></svg>
+                    </a>
+                    {% else %}
+                        n/a
+                    {% endif %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if company.description %}
+    <div class="about-company__description">
+        {{ company.description|linebreaks }}
+        <button class="button text ml-4 button--theme-bg-blue-dark" data-active="false">Show more</button>
+    </div>
+    {% endif %}
+
+</section>

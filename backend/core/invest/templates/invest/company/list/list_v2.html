@@ -1,0 +1,192 @@
+{% extends 'invest/base/base_v2.html' %}
+{% load static %}
+
+{% block title %}Stocks{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'invest/css/company/list/list.css' %}">
+    <link rel="stylesheet" href="{% static 'invest/css/dropdown-menu/dropdown-menu.css' %}">
+{% endblock %}
+
+{% block scripts %}
+    <script type="module" src="{% static 'invest/js/company/list/basic-filters.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <div class="content__inner">
+        <section class="content__company-list">
+
+            <header class="company-list__header">
+                <div class="company-list__description">
+                    <div class="description__inner">
+                        <h1 class="compony-list__h">Largest {{ selectors.country_iso|default:'Global' }} Stocks by {{ selectors.sorter_slug }}</h1>
+                        <p class="compony-list__date"><span>Обновлен</span> {{ last_update|date:'d M, Y' }}</p>
+                        <p class="compony-list__p">Discover large cap {{ selectors.country_iso|default:'Global' }} companies that are on the [Market Exchange]. These companies are organised by {{ selectors.sorter_slug }}.</p>
+                    </div>
+            </div>
+                <div class="company-list__filters">
+                    <div class="filters__basics">
+
+                        <div class="dropdown-market-filter dropdown-container filters__drop-down-basic-filter">
+                            <div class="drop-down-basic-filter__inner">
+                                <button class="drop-down-basic-filter__button dropdown-button content__button">
+                                    <span>{{ selectors.country_name|capfirst|default:'Global' }}</span>
+                                    <img src="{% static 'invest/images/icons/chevron-down.svg' %}">
+                                </button>
+                            </div>
+                            {% include 'invest/base/blocks/dropdown-menu.html' with type='country' current_options=selectors selectors_list=selectors_list has_search=True %}
+                        </div>
+
+                        <div class="dropdown-sector-filter dropdown-container filters__drop-down-basic-filter">
+                            <div class="drop-down-basic-filter__inner">
+                                <button class="drop-down-basic-filter__button dropdown-button content__button">
+                                    <span>{{ selectors.sector_name|capfirst|default:'Sector' }}</span>
+                                    <img src="{% static 'invest/images/icons/chevron-down.svg' %}">
+                                </button>
+                            </div>
+                            {% include 'invest/base/blocks/dropdown-menu.html' with type='sector' current_options=selectors selectors_list=selectors_list has_search=True %}
+                        </div>
+
+                    </div>
+
+                    <div class="filters__advanced">
+                        <button class="advanced-filter__button content__button">
+                            <span>Advanced filters</span>
+                            <img src="{% static 'invest/images/icons/filter.svg' %}">
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="company-list__settings">
+                    <div class="dropdown-sorter dropdown-container settings__selector">
+                        <div class="dropdown-sorter__inner">
+                            <button class="dropdown-sorter__button dropdown-button selector__button content__button">
+                                <span>{{ selectors.sorter_name }}</span>
+                                <img src="{% static 'invest/images/icons/chevron-down.svg' %}">
+                            </button>
+                        </div>
+                        {% include 'invest/base/blocks/dropdown-menu.html' with type='sorter' current_options=selectors selectors_list=selectors_list %}
+                    </div>
+                    <div class="settings__info"><span>{{ stock_count }} компаний</span></div>
+                    <div class="settings__table-view">
+                        <button class="table-view__button content__button table-view__button--disabled"><img src="{% static 'invest/images/icons/grid-table.svg' %}"></button>
+                        <button class="table-view__button content__button"><img src="{% static 'invest/images/icons/grid-tile.svg' %}"></button>
+                    </div>
+                </div>
+
+            </header>
+
+            <table class="company-list__table">
+
+                <thead class="company-list__thead">
+                    <tr class="company-list__tr">
+                        <th class="company-list__th company-list__th--first"></th>
+                        <th class="company-list__th company-list__th--w116">Компания</th>
+                        <th class="company-list__th">Последняя цена</th>
+                        <th class="company-list__th">7Д Изменение</th>
+                        <th class="company-list__th">1Г Изменение</th>
+                        <th class="company-list__th">Капитализация</th>
+                        <th class="company-list__th">Консенсус</th>
+                        <th class="company-list__th">Стоимость</th>
+                        <th class="company-list__th">Рост</th>
+                        <th class="company-list__th">Дивиденд</th>
+                        <th class="company-list__th">Сектор</th>
+                        <th class="company-list__th"></th>
+                    </tr>
+                </thead>
+
+                <tbody class="company-list__tbody">
+                {% for company in object_list %}
+                    <tr class="company-list__tr--body">
+
+                        <td class="company-list__td">
+                            <div class="company-list__logoblock">
+                                <div class="company-list__logoblock-wrapper">
+                                    <img
+                                            src="{% if company.logo %}{{ company.logo.url }}{% else %}{% static 'invest/images/no-img2.png' %}{% endif %}"
+                                            class="company-list__logo"
+                                            alt="Logo"
+                                    >
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="company-list__td company-list__td--grey-text">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                <b>{{ company.ticker|upper }}</b>
+                                <span>{{ company.title }}</span>
+                            </a>
+                        </td>
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                US$173.75
+                            </a>
+                        </td>
+
+                        <td class="company-list__td company-list__td--red-text">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                -1.3%
+                            </a>
+                        </td>
+
+                        <td class="company-list__td company-list__td--green-text">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                22.0%
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                US$2.7t
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                US$199.23
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                PE 28.7x
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                E 6.1%
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <a href="{% url 'invest:company_detail' company.slug %}" class="company-list__link">
+                                0.6%
+                            </a>
+                        </td>
+
+                        <td class="company-list__td company-list__td--blue-text company-list__td--fsz14 company-list__td--w64">
+                            <a href="{% url 'invest:company_list_with_all_options' selectors.country_iso company.sector.slug selectors.sorter_slug %}" class="company-list__link company-list__link--industry">
+                                {{ company.sector }}
+                            </a>
+                        </td>
+
+                        <td class="company-list__td">
+                            <button class="content__button company-list__button">
+                                <img src="{% static 'invest/images/icons/outline-star.svg' %}">
+                            </button>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+
+        </section>
+    </div>
+</div>
+
+{% endblock %}

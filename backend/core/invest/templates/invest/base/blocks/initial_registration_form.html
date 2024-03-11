@@ -1,0 +1,53 @@
+{% load static %}
+<div class="modal__menu modal__menu--initLogin login">
+    <div class="login__inner">
+        <div class="login__login-form">
+            <img src="{% static 'invest/images/icons/close-button.svg' %}" class="login__close-button">
+            <section class="login-form__left-section">
+
+                <div class="login-form__wrapper">
+                    <div class="login-left-section__inner">
+                        <div class="default-logo login-left-section__logo">Arcipelago</div>
+                        <div class="login-left-section__info">
+                            <div class="login-left-section__h">The revolution for<span>long-term investors</span></div>
+                            <div class="login-left-section__p">Packed with data-driven analysis and intelligent tools to enhance your investment journey.</div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="login-form__right-section">
+
+                <div class="login-right-section__inner">
+                    <div class="login-right-section__sign-up">
+                        <div class="login-right-section__p">
+                            Sign up for free and <span>continue analysing SBER</span>
+                        </div>
+                        <div class="login-right-section__button">
+                            <button class="content__button google-sign-up__button">
+                                <img src="{% static 'invest/images/icons/google.svg' %}" width="24px" height="24px">
+                                Продолжить с Google
+                            </button>
+                        </div>
+                        <div class="login-right-section__button">
+                            <button class="modal__registerButton content__button email-sign-up__button">
+                                <img src="{% static 'invest/images/icons/email.svg' %}" width="24px" height="24px">
+                                Продолжить с почтой
+                            </button>
+                        </div>
+                        <div class="login-right-section__sign-in">Уже есть аккаунт? <span class="modal__loginButton">Войти</span></div>
+                    </div>
+                    <div class="login-right-section__conditions">
+                        <p>
+                            By using Simply Wall St you are agreeing to our <br>
+                            <a href="#" target="_blank">terms and conditions</a>.
+                            Simply Wall St provides <br>general investment advice only.
+                        </p>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>

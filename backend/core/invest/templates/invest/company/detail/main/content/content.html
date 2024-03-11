@@ -1,0 +1,24 @@
+{% load static %}
+<div class="detail__content">
+    <article class="detail__article">
+
+        {% include 'invest/company/detail/main/content/summary/summary.html' with company=company %}
+
+        {% include 'invest/company/detail/main/content/analysis/valuation/valuation.html' with company=company %}
+
+        <div class="detail__future"></div> <!-- /detail__future -->
+
+        <div class="detail__past"></div> <!-- /detail__past -->
+
+        <div class="detail__health"></div> <!-- /detail__health -->
+
+        <div class="detail__dividend"></div> <!-- /detail__dividend -->
+
+        <div class="detail__management"></div> <!-- /detail__management -->
+
+        <div class="detail__ownership"></div> <!-- /detail__ownership -->
+
+        <div class="detail__other"></div> <!-- /detail__other -->
+
+    </article>
+</div>

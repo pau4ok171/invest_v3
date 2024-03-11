@@ -1,0 +1,25 @@
+<div class="container__element">
+
+  <div class="detail__breadcrumbs">
+    <ul class="ul text__fsz--1d6">
+      <li class="detail__li detail__li--inline">
+        <a class="link link--t-dec-underl text__fsz--1d4" href="{% url 'invest:company_list' %}">Stocks</a>
+      </li>
+      <li class="detail__li detail__li--inline">
+        <a class="link link--t-dec-underl text__fsz--1d4" href="{% url 'invest:company_list_with_all_options' company.country.name_iso company.sector.slug 'market-cap-large' %}">{{ company.sector.title }}</a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="detail__logo">
+    <img src="{{ company.logo.url }}" alt="{{ company.slug }}">
+  </div>
+
+  <div>
+    <h1 class="text__header1 company-header">
+      {{ company.title }}
+      <span class="d-block text__p text__color--grey-d7 text__fw--n">{{ company.market.title }}:{{ company.slug|upper }} Stock Report</span>
+    </h1>
+  </div>
+
+</div>

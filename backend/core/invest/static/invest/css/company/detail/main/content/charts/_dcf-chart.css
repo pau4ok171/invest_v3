@@ -1,0 +1,118 @@
+/*@import url("https://code.highcharts.com/css/highcharts.css");*/
+
+
+/* RESET */
+
+.dcf-chart .highcharts-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip: rect(1px, 1px, 1px, 1px);
+    margin-top: -3px;
+    opacity: 0.01;
+}
+
+.dcf-chart .highcharts-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    line-height: normal;
+    z-index: 0;
+    font-size: 1rem;
+    user-select: none;
+    touch-action: manipulation;
+    outline: none;
+}
+
+.dcf-chart .highcharts-plot-border, .dcf-chart .highcharts-plot-background {
+    fill: none;
+}
+
+.dcf-chart g.highcharts-series, .dcf-chart .highcharts-point, .dcf-chart .highcharts-markers, .dcf-chart .highcharts-data-labels {
+    transition: opacity 250ms;
+}
+
+.dcf-chart .highcharts-data-label-box {
+    fill: none;
+    stroke-width: 0;
+}
+
+/* RESET END */
+
+.dcf-chart {
+    height: 380px;
+    width: 100%;
+}
+
+.dcf-chart__container {
+    font-family: inherit;
+}
+
+.dcf-chart .highcharts-background {
+    fill: #1b222d;
+}
+
+.dcf-chart .highcharts-plot-background {
+    fill: url(#Chart_Fail_Pattern);
+}
+
+.dcf-chart .highcharts-color-0 {
+    outline: none;
+    stroke-width: 0;
+    fill: #1b222d;
+}
+
+.dcf-chart .highcharts-color-1 {
+    outline: none;
+    stroke-width: 0;
+    fill: url(#BarGradient);
+}
+
+.dcf-chart__data-label-value {
+    fill: #fff;
+    font-size: 2.4rem;
+    line-height: 1.25;
+    font-weight: 500;
+}
+
+.dcf-chart__data-label-name {
+    fill: #fff;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.dcf-chart__data-label-diff--undervalued {
+    fill: #2dc97e;
+}
+
+.dcf-chart__data-label-diff--about-right {
+    fill: #eeb219;
+}
+
+.dcf-chart__data-label-diff--overvalued {
+    fill: #e64141;
+}
+
+.dcf-chart__data-label-diff-value {
+    line-height: 1.25;
+    font-weight: 500;
+    font-size: 2.4rem;
+}
+
+.dcf-chart__data-label-diff-type {
+    line-height: 1.5;
+    font-weight: 500;
+    font-size: 1.4rem;
+}
+
+.dcf-chart__label-level-name {
+    line-height: 1.5;
+    font-weight: 500;
+    font-size: 1.4rem;
+    text-anchor: end;
+}

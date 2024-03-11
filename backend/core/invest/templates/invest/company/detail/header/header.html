@@ -1,0 +1,18 @@
+{% load static %}
+<div class="detail__wrapper">
+  <div class="container__wrapper">
+    <header class="detail__header">
+      <div class="container__inner">
+
+        {% include 'invest/company/detail/header/_company_picture.html' %}
+
+        {% include 'invest/company/detail/header/_company_title.html' %}
+
+        {% include 'invest/company/detail/header/_company_buttons.html' with company=company %}
+
+        {% include 'invest/company/detail/header/_company_info.html' with company_info=company_detail_header_info last_report=report %}
+_
+      </div>
+    </header>
+  </div>
+</div>

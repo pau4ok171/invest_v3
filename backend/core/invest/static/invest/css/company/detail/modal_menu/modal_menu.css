@@ -1,0 +1,126 @@
+.modal_menu {
+    width: 100%;
+    background-color: rgba(38, 46, 58, .4);
+    padding: 32px;
+    top: 0;
+    left: 0;
+    position: fixed;
+    height: 100%;
+    z-index: 9999;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    /*transition: visibility 0s .6s, opacity .6s ease; */
+    opacity: 0;
+    overflow: hidden;
+}
+
+.modal_menu--active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal_menu__inner {
+    width: 700px;
+    max-height: 530px;
+    background-color: #fff;
+    color: #000;
+}
+
+.modal_menu__header {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.modal_menu__left-header,
+.modal_menu__right-header {
+    display: flex;
+    align-items: center;
+}
+
+.modal_menu__title {
+    font-size: 2rem;
+    line-height: 1.5;
+    font-weight: 500;
+    color: #262e3a;
+}
+
+.modal_menu__header-button {
+    padding: 0 12px;
+    border-radius: 8px;
+    transition: background-color .2s ease-out;
+}
+
+.modal_menu__header-button:hover {
+    background-color: rgba(38, 46, 58, .05);
+}
+
+.modal_menu__header-button svg {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+    fill: #92969c;
+    pointer-events: none;
+}
+
+.modal_menu__main {
+    padding: 32px 24px;
+    border-bottom: 1px solid #e8e8e8;
+    max-height: 392px;
+    overflow-y: auto;
+}
+
+.modal_menu__main::-webkit-scrollbar {
+    width: 10px;
+}
+
+.modal_menu__main::-webkit-scrollbar-track {
+	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
+	background-color: #f9f9fd;
+	border-radius: 10px;
+}
+
+.modal_menu__main::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background: linear-gradient(180deg, #00c6fb, #005bea);
+}
+
+.modal_menu__footer {
+    display: flex;
+    padding: 16px;
+    justify-content: flex-end;
+}
+
+.modal-menu__footer-button {
+    display: inline-flex;
+    position: relative;
+    vertical-align: middle;
+    align-items: center;
+    height: 28px;
+    border-radius: 4px;
+    line-height: 28px;
+    padding: 0 12px;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    appearance: none;
+    transition: all .3s ease 0s;
+}
+
+.modal-menu__footer-button svg {
+    display: inline;
+    fill: #fff;
+    opacity: .5;
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+
+.modal-menu__footer-button:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, .1);
+}
+

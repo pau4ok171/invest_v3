@@ -1,0 +1,54 @@
+services:
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    restart: always
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    ports:
+      - 8000:8000
+
+  rabbitmq:
+    image: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    env_file:
+      - ./.env
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  celery:
+    build: .
+    command: celery -A config worker -P eventlet -l info
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      - web
+      - rabbitmq
+
+  celery-beat:
+    build: .
+    command: celery -A config beat -l info
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      - celery
+
+  celery-flower:
+    build: .
+    command: celery -A config flower
+    volumes:
+      - .:/code
+    env_file:
+      - ./.env
+    depends_on:
+      - celery

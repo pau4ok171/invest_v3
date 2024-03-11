@@ -1,0 +1,43 @@
+<section>
+  <h2 class="analysis-section__title">
+    <span class="analysis-section__title-num">1.3</span>Price to Earnings Ratio vs Peers
+  </h2>
+  <p class="analysis-section__desc">How does SBER's PE Ratio compare to its peers?</p>
+  <div class="analysis-section__content">
+    <div class="analysis-section__content-item">
+      <div class="multiple-vs-peers-chart">
+        <div class="chart__tabs">
+
+          <div class="chart__tab">
+            <button class="chart__tab-button">
+              <span class="chart__tab-button-text">Default Peers</span>
+              <svg class="chart__tab-button-icon" height="24" width="24" viewBox="0 0 24 24"><use href="#arrow-down-icon"></use></svg>
+            </button>
+            <span class="chart__dropdown-menu"></span>
+          </div>
+
+          <div class="chart__tab">
+
+            {% include 'invest/company/detail/main/content/blocks/chart/multiple-tab-button.html' %}
+            {% include 'invest/company/detail/main/content/blocks/chart/multiple-dropdown-menu.html' %}
+
+          </div>
+
+        </div>
+        <div id="multiple-vs-peers-chart"></div>
+      </div>
+    </div>
+    <div class="analysis-section__content-item">
+      <div class="analysis-section__points">
+        <blockquote class="analysis-section__point">
+          <svg width="24" height="24" fill="#2dc97e" class="analysis-section__point-icon"><use href="#check-icon"></use></svg>
+          <p class="analysis-section__point-text">
+            <span class="analysis-section__point-title">Price-To-Earnings vs Peers: </span>
+            <span>SBER is good value based on its Price-To-Earnings Ratio (2.6x) compared to the peer average (7.9x)</span>
+
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>

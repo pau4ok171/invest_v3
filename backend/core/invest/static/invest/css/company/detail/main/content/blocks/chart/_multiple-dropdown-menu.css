@@ -1,0 +1,67 @@
+.chart__dropdown-menu {
+    display: none;
+    position: absolute;
+    width: 100%;
+    z-index: 9999;
+    left: 0;
+    bottom: 0;
+}
+
+.chart__dropdown-menu--active {
+    display: block;
+}
+
+.chart__dropdown-list {
+    font-size: 1.6rem;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 100%;
+    min-width: 200px;
+    padding: 4px 0;
+    border-radius: 4px;
+    background: white;
+    max-height: 200px;
+    overflow: hidden auto;
+    box-shadow: rgba(0, 0, 0, 0.25) 0 2px 8px;
+}
+
+.chart__dropdown-link {
+    transition: all 0.3s ease 0s;
+    position: relative;
+    white-space: nowrap;
+    line-height: 1.5;
+    cursor: pointer;
+    padding: 8px 12px 8px 36px;
+    display: block;
+    text-decoration: none;
+    user-select: none;
+    border-top: none;
+    font-size: 1.4rem;
+    background: #fff;
+    color: #262e3a;
+}
+
+.chart__dropdown-link--selected {
+    font-weight: 500;
+}
+
+.chart__dropdown-link:hover {
+    background: rgb(35, 148, 223);
+    color: #fff;
+}
+
+.chart__dropdown-link:hover svg {
+    fill: #fff;
+}
+
+.chart__dropdown-icon {
+    cursor: pointer;
+    user-select: none;
+    pointer-events: none;
+    color: #262e3a;
+    box-sizing: border-box;
+    position: absolute;
+    left: 8px;
+    top: 6px;
+}
