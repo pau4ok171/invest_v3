@@ -3,6 +3,7 @@
 **/libs
 **/archive
 **.env
+**/node_modules
 
 # idea
 **/.idea
@@ -12,5 +13,7 @@
 
 # DataBase
 backend/core/db.sqlite3
+
+
 
 
