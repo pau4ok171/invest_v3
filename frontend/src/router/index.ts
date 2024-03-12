@@ -1,13 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import { loadLayoutMiddleware } from "@/router/middleware/loadLayout.middleware";
+import { RouteNamesEnum } from "@/router/routes.types";
+import { AppLayoutsEnum } from "@/layouts/layouts.types";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView
+      name: RouteNamesEnum.home,
+      component: () => import('@/views/HomeView.vue'),
     },
     {
       path: '/about',
@@ -19,5 +21,7 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach(loadLayoutMiddleware);
 
 export default router
