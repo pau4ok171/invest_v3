@@ -4,6 +4,9 @@
 **/archive
 **.env
 
+# idea
+**/.idea
+
 # venv
 /venv
 
