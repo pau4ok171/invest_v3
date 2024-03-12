@@ -4,6 +4,7 @@
 **/archive
 **.env
 **/node_modules
+**/.vscode
 
 # idea
 **/.idea
