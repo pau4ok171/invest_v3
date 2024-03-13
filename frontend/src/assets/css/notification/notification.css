@@ -1,0 +1,34 @@
+.snackbar {
+	opacity: 0;
+	position: fixed;
+	display: flex;
+	vertical-align: middle;
+	background-color: #202833;
+	width: 448px;
+	height: 53px;
+	border: 1px solid #2b333d;
+	border-radius: 5px;
+	right: 30px;
+	bottom: 0;
+	transition: all .8s ease-out;
+}
+
+.snackbar--active {
+	opacity: 1;
+	bottom: 50px;
+}
+
+.snackbar__inner {
+	display: flex;
+	align-items: center;
+	gap: 17px;
+}
+
+.snackbar__icon {
+	margin-left: 16px;
+}
+
+.snackbar__text {
+	font-size: 16px;
+	font-weight: 500;
+}

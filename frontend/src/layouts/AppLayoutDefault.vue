@@ -1,13 +1,11 @@
-<script setup lang="ts">
-  import { useLifecycleLogger } from '@/common/hooks/lifecycleLogger';
-
-  useLifecycleLogger({ name: 'AppLayoutDefault' });
-</script>
-
 <template>
-  <div>AppLayoutDefault</div>
-  <slot/>
+  <BasicHeader />
 </template>
+
+<script setup lang="ts">
+import BasicHeader from '@/components/base/BasicHeader.vue'
+
+</script>
 
 <style scoped>
 

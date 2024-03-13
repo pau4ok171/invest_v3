@@ -10,5 +10,5 @@ import AppLayout from '@/layouts/AppLayout.vue';
 </template>
 
 <style>
-  @import 'assets/main.css';
+  @import 'assets/css/main.css';
 </style>

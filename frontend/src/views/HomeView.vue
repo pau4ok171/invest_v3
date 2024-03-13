@@ -1,11 +1,15 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div>HJHFJDHJF</div>
+  <div>
+
+  </div>
 </template>
 
-<style>
+<script>
+export default {
+
+}
+</script>
+
+<style scoped>
 
 </style>
