@@ -5,7 +5,7 @@
 <template>
   <div class="navigation__nav-lang">
     <button class="nav-lang__nav-button">
-      <span class="nav-button__flag"><img src="@/assets/img/flags/ru.svg" alt="RU"></span>
+      <span class="nav-button__flag"><img src="../../../../assets/img/flags/ru.svg" alt="RU"></span>
       <span class="nav-button__langcode">RU</span>
     </button>
   </div>

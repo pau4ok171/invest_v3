@@ -17,7 +17,7 @@
               <div class="nav-search__dropdown-desc">
                 <div class="nav-search__dropdown-title">{{ company.title }}</div>
                 <div class="nav-search__dropdown-market">
-                  <img class="nav-search__dropdown-market-img" src="@/assets/img/flags/ru.svg" alt="RU">
+                  <img class="nav-search__dropdown-market-img" src="../../../../assets/img/flags/ru.svg" alt="RU">
                   <p class="nav-search__dropdown-market-title">{{ company.market.title }}</p>
                 </div>
               </div>

@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import {defineComponent} from "vue";
-  import Navigation from "@/components/base/navigation/Navigation.vue";
+  import Navigation from "@/components/base/header/navigation/Navigation.vue";
 
   export default defineComponent({
     components: {Navigation}

@@ -28,7 +28,7 @@
 
 <script lang="ts">
   import axios from "axios";
-  import NavSearchDropDown from "@/components/base/navigation/NavSearchDropDown.vue";
+  import NavSearchDropDown from "@/components/base/header/navigation/NavSearchDropDown.vue";
   import SearchIcon from "@/components/icons/SearchIcon.vue";
   import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
 
