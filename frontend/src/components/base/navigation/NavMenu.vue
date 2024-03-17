@@ -1,5 +1,5 @@
 <template>
-  <div class="navigation__nav-menu">
+  <div class="navigation__nav-menu" >
     <RouterLink
         v-for="routeName in RouteNamesEnum"
         :key="routeName"

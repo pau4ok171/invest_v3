@@ -1,9 +1,17 @@
 <script setup lang="ts">
 
+import {RouteNamesEnum} from "@/router/routes.types";
 </script>
 
 <template>
-  <div class="default-logo navigation__logo"><a href="/">Finargo</a></div>
+  <div class="default-logo navigation__logo">
+    <RouterLink
+      :key="`home`"
+      :to="{ name: `home` }"
+    >
+      Finargo
+    </RouterLink>
+  </div>
 </template>
 
 <style scoped>

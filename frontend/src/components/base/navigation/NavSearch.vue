@@ -1,23 +1,61 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
   <div class="navigation__nav-search">
-  <div class="nav-search__inner">
-    <input autocomplete="off" type="search" name="search-field" placeholder="Поиск по компаниям" class="nav-search__input" value>
-    <span class="nav-search__prefix"><svg width="24" height="24" class="nav-search__prefix-icon"><use href="#search-icon"></use></svg></span>
-    <span class="nav-search__postfix"><svg width="24" height="24" class="nav-search__postfix-icon none"><use href="#search-cross-icon"></use></svg></span>
+    <div class="nav-search__inner">
+      <input
+        autocomplete="off"
+        type="search"
+        name="search-field"
+        placeholder="Поиск по компаниям"
+        class="nav-search__input"
+        v-model="searchQuery"
+        @input="searchCompanies"
+      >
+      <span class="nav-search__prefix"><svg width="24" height="24" class="nav-search__prefix-icon"><use href="#search-icon"></use></svg></span>
+      <span class="nav-search__postfix"><svg width="24" height="24" class="nav-search__postfix-icon none"><use href="#search-cross-icon"></use></svg></span>
+    </div>
+
+    <NavSearchDropDown
+      v-if="searchResponse.length"
+      :companies="searchResponse"
+      @closeDropDown="closeDropDown"
+    />
   </div>
-</div>
 </template>
+
+<script lang="ts">
+  import axios from "axios";
+  import NavSearchDropDown from "@/components/base/navigation/NavSearchDropDown.vue";
+
+  export default {
+    components: {NavSearchDropDown},
+    data() {
+      return {
+        searchQuery: "",
+        searchResponse: []
+      }
+    },
+    methods: {
+      async searchCompanies() {
+        if (this.searchQuery.length) {
+          await axios
+            .post('/invest/api/v1/search/', {query: this.searchQuery})
+            .then(response => this.searchResponse = response.data)
+            .catch(err => {console.log(err)})
+        }
+      },
+      closeDropDown() {
+        this.searchResponse = []
+      }
+    },
+  }
+</script>
 
 <style scoped>
   .navigation__nav-search {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 24px;
+    margin:0 24px;
     width: 271px;
   }
   .nav-search__inner {

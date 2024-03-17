@@ -1,32 +1,55 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div class="nav_search__dropdown none">
+  <div class="nav_search__dropdown">
     <div class="nav-search__dropdown-inner">
       <ul class="nav-search__dropdown-list">
 
-        <li class="nav-search__dropdown-item">
-          <a href="" class="nav-search__dropdown-link">
-            <img src="" alt="company_icon" class="nav-search__dropdown-link-icon">
+        <li
+            class="nav-search__dropdown-item"
+            v-for="company in companies"
+            :key="company.id"
+        >
+          <RouterLink
+              :to="company.absolute_url"
+              class="nav-search__dropdown-link"
+          >
+            <img :src="company.logo_url" alt="company_icon" class="nav-search__dropdown-link-icon">
             <div class="nav-search__dropdown-info">
               <div class="nav-search__dropdown-desc">
-                <div class="nav-search__dropdown-title"></div>
+                <div class="nav-search__dropdown-title">{{ company.title }}</div>
                 <div class="nav-search__dropdown-market">
                   <img class="nav-search__dropdown-market-img" src="@/assets/img/flags/ru.svg" alt="RU">
-                  <p class="nav-search__dropdown-market-title"></p>
+                  <p class="nav-search__dropdown-market-title">{{ company.market.title }}</p>
                 </div>
               </div>
-              <div class="nav-search__dropdown-sector"></div>
+              <div class="nav-search__dropdown-sector">Bank</div>
             </div>
-          </a>
+          </RouterLink>
+
         </li>
 
       </ul>
     </div>
   </div>
 </template>
+
+<script lang="ts">
+  export default {
+    name: 'NavSearchDropDown',
+    props: {
+      companies: Object
+    },
+    mounted() {
+      console.log('I am mounted')
+      document.addEventListener('click', this.clickHandler)
+    },
+    methods: {
+      clickHandler() {
+        this.$emit('closeDropDown')
+        document.removeEventListener('click', this.clickHandler)
+      }
+    },
+  }
+</script>
 
 <style scoped>
   .nav_search__dropdown {
