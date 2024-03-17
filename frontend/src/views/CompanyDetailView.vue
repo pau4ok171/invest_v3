@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="">You are in companyDetailView</div>
 
-  </div>
 </template>
 
 <script lang="ts">
 export default {
-
+  name: 'CompanyDetail',
 }
+
 </script>
 
 <style scoped>
