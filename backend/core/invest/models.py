@@ -155,6 +155,7 @@ class Country(models.Model):
     name_genitive = models.CharField(max_length=255)
     name_iso = models.CharField(max_length=10)
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
+    # TODO: add flag_icon for each country
 
     def __str__(self):
         return self.name
