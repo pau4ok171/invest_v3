@@ -1,6 +1,8 @@
 from .base import *
 import os
 
+URL_PREFIX = 'https://finargo.ru'
+
 DEBUG = False
 
 ADMINS = [

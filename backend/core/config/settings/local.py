@@ -1,5 +1,7 @@
 from .base import *
 
+URL_PREFIX = 'http://127.0.0.1:8000'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

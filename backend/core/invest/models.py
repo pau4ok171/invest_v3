@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.urls import reverse_lazy
 from .model_choices import QUARTERS, REPORT_TYPES, REPORT_FORMS, SCALES
 from notes.models import Note
+
+URL_PREFIX = settings.URL_PREFIX
 
 
 class Company(models.Model):
@@ -37,7 +40,12 @@ class Company(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse_lazy('invest:company_detail', kwargs={'slug': self.slug})
+        return f'/markets/{self.slug}/'
+
+    def get_logo(self):
+        if self.logo:
+            return URL_PREFIX + self.logo.url
+        return ''
 
     class Meta:
         ordering = ['id']
