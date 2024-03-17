@@ -39,7 +39,6 @@
       companies: Object
     },
     mounted() {
-      console.log('I am mounted')
       document.addEventListener('click', this.clickHandler)
     },
     methods: {

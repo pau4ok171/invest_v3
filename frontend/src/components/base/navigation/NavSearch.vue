@@ -10,8 +10,12 @@
         v-model="searchQuery"
         @input="searchCompanies"
       >
-      <span class="nav-search__prefix"><svg width="24" height="24" class="nav-search__prefix-icon"><use href="#search-icon"></use></svg></span>
-      <span class="nav-search__postfix"><svg width="24" height="24" class="nav-search__postfix-icon none"><use href="#search-cross-icon"></use></svg></span>
+      <span class="nav-search__prefix">
+        <SearchIcon width="24" height="24" class="nav-search__prefix-icon"/>
+      </span>
+      <span class="nav-search__postfix">
+        <InputCrossIcon v-if="searchQuery.length" @click="clearInput" width="24" height="24" class="nav-search__postfix-icon"/>
+      </span>
     </div>
 
     <NavSearchDropDown
@@ -25,9 +29,11 @@
 <script lang="ts">
   import axios from "axios";
   import NavSearchDropDown from "@/components/base/navigation/NavSearchDropDown.vue";
+  import SearchIcon from "@/components/icons/SearchIcon.vue";
+  import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
 
   export default {
-    components: {NavSearchDropDown},
+    components: {InputCrossIcon, SearchIcon, NavSearchDropDown},
     data() {
       return {
         searchQuery: "",
@@ -45,6 +51,10 @@
       },
       closeDropDown() {
         this.searchResponse = []
+      },
+      clearInput(event: Event) {
+        this.searchQuery = ''
+        document.querySelector('input[name="search-field"]').focus()
       }
     },
   }
