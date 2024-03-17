@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'portfolio.apps.PortfolioConfig',
     'notes.apps.NotesConfig',
     # External apps
+    'corsheaders',
     'rest_framework',
     'django_celery_beat',
     'django_celery_results',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -128,13 +130,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-# Rest Framework
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
-
 # Celery
 CELERY_BROKER_URL = env_conf('CELERY_BROKER_URL')
 CELERY_TASK_TRACK_STARTED = True  # запускает трекинг задач Celery
@@ -150,3 +145,8 @@ CELERY_TASK_SERIALIZER = 'json'  # это строка, используемая
 CELERY_RESULT_SERIALIZER = 'json'  # является типом формата сериализации результатов
 
 CELERY_TASK_DEFAULT_QUEUE = 'default'  # celery будет использовать это имя очереди
+
+# Django CORS Headers
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
