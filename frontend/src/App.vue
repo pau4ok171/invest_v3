@@ -1,13 +1,38 @@
-<script setup lang="ts">
+<template>
+  <div>
+    <AppLayout>
+      <RouterView />
+    </AppLayout>
+  </div>
+</template>
+
+<script lang="ts">
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
-</script>
+import axios from "axios";
+import store from "@/store";
 
-<template>
-  <AppLayout>
-    <RouterView />
-  </AppLayout>
-</template>
+export default {
+  components: {
+    AppLayout,
+    RouterView,
+  },
+  beforeCreate() {
+    store.commit('initializeStore')
+
+    const token = store.state.token
+
+    axios.defaults.headers.common["Authorization"] = token ? `Token ${token}` : ''
+  },
+  computed: {
+    store() {
+      return store
+    }
+  },
+
+}
+
+</script>
 
 <style>
   @import 'assets/css/main.css';
