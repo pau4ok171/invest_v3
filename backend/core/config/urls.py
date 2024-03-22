@@ -23,6 +23,8 @@ from invest import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/v1/', include('djoser.urls')),
+    path('api/v1/', include('djoser.urls.authtoken')),
     path('login/', views.CustomLoginView.as_view(), name='login'),
     path('register/', views.RegistrationView.as_view(), name='register'),
     path('invest/', include('invest.urls', namespace='invest')),
