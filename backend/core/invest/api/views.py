@@ -1,7 +1,9 @@
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 
 from invest.api.serializers import CompanySerializer, CandlePerDaySerializer
 from invest.models import Company, CandlePerDay
@@ -29,4 +31,15 @@ class SearchList(APIView):
         else:
             return Response({"companies": []})
 
+
+@api_view(['POST'])
+def validate_username(request):
+    username = request.data.get('username', None)
+    is_taken = User.objects.filter(username__iexact=username).exists()
+    message = "The username is already taken" if is_taken else "The username is free"
+
+    return Response({
+        "isTaken": is_taken,
+        "message": message
+    })
 
