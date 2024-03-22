@@ -20,8 +20,8 @@
 
     <NavSearchDropDown
       v-if="searchResponse.length"
-      :companies="searchResponse"
-      @closeDropDown="closeDropDown"
+      :items="searchResponse"
+      @closeDropDownMenu="closeDropDown"
     />
   </div>
 </template>

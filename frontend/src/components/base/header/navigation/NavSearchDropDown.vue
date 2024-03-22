@@ -5,20 +5,20 @@
 
         <li
             class="nav-search__dropdown-item"
-            v-for="company in companies"
-            :key="company.id"
+            v-for="item in items"
+            :key="item.id"
         >
           <RouterLink
-              :to="company.absolute_url"
+              :to="item.absolute_url"
               class="nav-search__dropdown-link"
           >
-            <img :src="company.logo_url" alt="company_icon" class="nav-search__dropdown-link-icon">
+            <img :src="item.logo_url" alt="company_icon" class="nav-search__dropdown-link-icon">
             <div class="nav-search__dropdown-info">
               <div class="nav-search__dropdown-desc">
-                <div class="nav-search__dropdown-title">{{ company.title }}</div>
+                <div class="nav-search__dropdown-title">{{ item.title }}</div>
                 <div class="nav-search__dropdown-market">
                   <img class="nav-search__dropdown-market-img" src="../../../../assets/img/flags/ru.svg" alt="RU">
-                  <p class="nav-search__dropdown-market-title">{{ company.market.title }}</p>
+                  <p class="nav-search__dropdown-market-title">{{ item.market.title }}</p>
                 </div>
               </div>
               <div class="nav-search__dropdown-sector">Bank</div>
@@ -33,17 +33,18 @@
 </template>
 
 <script lang="ts">
+
   export default {
     name: 'NavSearchDropDown',
     props: {
-      companies: Object
+      items: Object
     },
     mounted() {
       document.addEventListener('click', this.clickHandler)
     },
     methods: {
       clickHandler() {
-        this.$emit('closeDropDown')
+        this.$emit('closeDropDownMenu')
         document.removeEventListener('click', this.clickHandler)
       }
     },
