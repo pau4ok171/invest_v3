@@ -41,8 +41,10 @@ INSTALLED_APPS = [
     'portfolio.apps.PortfolioConfig',
     'notes.apps.NotesConfig',
     # External apps
-    'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
+    'corsheaders',
     'django_celery_beat',
     'django_celery_results',
 ]
