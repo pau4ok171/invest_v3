@@ -43,3 +43,98 @@ def validate_username(request):
         "message": message
     })
 
+
+class CompanyListView(ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    pagination_class = StandardResultsSetPagination
+    serializer_class = CompanySerializer
+
+    def get_queryset(self):
+        country_slug = self.kwargs.get('country_slug', 'global')
+        sector_slug = self.kwargs.get('sector_slug', 'any')
+
+        queryset = Company.objects.filter(is_visible=True)
+
+        if not country_slug == 'global':
+            queryset = queryset.filter(country__name_iso=country_slug)
+        if not sector_slug == 'any':
+            queryset = queryset.filter(sector__slug=sector_slug)
+
+        return queryset
+
+
+class CompanyListFilters(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def __init__(self):
+        super().__init__()
+        self.companies = None
+
+    def get(self, request, *args, **kwargs):
+        self.companies = Company.objects.filter(is_visible=True)
+        return Response({
+            'filters': {
+                'sorter': self.get_sorter_data(),
+                'country': self.get_country_data(),
+                'sector': self.get_sector_data(),
+            },
+            'list_updated': self.get_list_updated(),
+        })
+
+    def get_sector_data(self):
+        sectors = Sector.objects.filter(company__pk__in=self.companies).distinct()
+        sector_serializer = SectorSerializer(sectors, many=True)
+        return sector_serializer.data
+
+    def get_country_data(self):
+        countries = Country.objects.filter(company__pk__in=self.companies).distinct()
+        country_serializer = CountrySerializer(countries, many=True)
+        return country_serializer.data
+
+    @staticmethod
+    def get_sorter_data():
+        sorters = Sorter.objects.all()
+        sorter_serializer = SorterSerializer(sorters, many=True)
+        return sorter_serializer.data
+
+    def get_list_updated(self):
+        return self.companies.values_list('updated').latest('updated')[0].strftime('%d %b, %Y')
+
+
+class CompanyListSectorFilters(CompanyListFilters):
+    def get(self, request, *args, **kwargs):
+        country_slug = self.kwargs.get('country_slug', 'global')
+        self.companies = Company.objects.filter(is_visible=True)
+        if not country_slug == 'global':
+            self.companies = self.companies.filter(country__name_iso=country_slug)
+        return Response({
+            'filters': {
+                'sector': self.get_sector_data(),
+            },
+        })
+
+
+class WatchlistedCompanyAPIView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def patch(self, request, *args, **kwargs):
+        company_uid = request.data.get('uid')
+        company = Company.objects.get(uid=company_uid)
+        company.users_watchlist.add(self.request.user)
+        return JsonResponse(
+            data={
+                "status": 201
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+    def delete(self, request, *args, **kwargs):
+        company_uid = request.data.get('uid')
+        company = Company.objects.get(uid=company_uid)
+        company.users_watchlist.remove(self.request.user)
+        return JsonResponse(
+            data={
+                "status": 204
+            },
+            status=status.HTTP_204_NO_CONTENT
+        )
