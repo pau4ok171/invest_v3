@@ -10,6 +10,7 @@ from asgiref.sync import sync_to_async
 
 from tinkoff.invest import AsyncClient, CandleInterval, Client
 from tinkoff.invest.utils import now, quotation_to_decimal
+from tinkoff.invest.exceptions import RequestError
 
 TOKEN_API = decouple.config('TINKOFF_KEY')
 
@@ -39,10 +40,11 @@ def get_candles_by_instrument(instrument_id, instrument_uid) -> list[dict]:
         'to': datetime.datetime.now(tz=datetime.timezone.utc) + timedelta(days=1),
         'interval': CandleInterval.CANDLE_INTERVAL_DAY
     }
-
-    with Client(TOKEN_API) as client:
-        candles = [_get_dict(instrument_id, candle) for candle in client.get_all_candles(**opts)]
-
+    try:
+        with Client(TOKEN_API) as client:
+            candles = [_get_dict(instrument_id, candle) for candle in client.get_all_candles(**opts)]
+    except RequestError as e:
+        print(f'[ERROR]: {e}')
     return candles
 
 
