@@ -68,8 +68,9 @@ class SorterAdmin(admin.ModelAdmin):
 @admin.register(models.CandlePerDay)
 class CandlePerDayAdmin(admin.ModelAdmin):
     list_display = ('company', 'open', 'high', 'close', 'low', 'volume', 'time', 'is_complete')
-    list_filter = ('company', 'time')
-    search_fields = ('company', 'time')
+    ordering = ('-time', 'company__title')
+    list_filter = ('company__title', 'time')
+    search_fields = ('company__title', 'time')
 
 
 @admin.register(models.Currency)
