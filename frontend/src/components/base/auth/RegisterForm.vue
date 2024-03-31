@@ -4,7 +4,7 @@
       <AuthLabel for="username">Username</AuthLabel>
       <AuthInput
         :class="{'form__input--success': !checks.username.isError && checks.username.isInit, 'form__input--error': checks.username.isError && checks.username.isInit}"
-        v-model="formData.new_username"
+        v-model:inputValue="formData.new_username"
         name="username"
         autocomplete="username"
       />
@@ -17,7 +17,7 @@
       <AuthLabel for="password1">Password</AuthLabel>
       <AuthInput
         :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
-        v-model="formData.new_password1"
+        v-model:inputValue="formData.new_password1"
         type="password"
         name="password1"
         autocomplete="new-password"
@@ -31,7 +31,7 @@
       <AuthLabel for="password2">Password confirmation</AuthLabel>
       <AuthInput
         :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
-        v-model="formData.new_password2"
+        v-model:inputValue="formData.new_password2"
         type="password"
         name="password2"
         autocomplete="new-password"

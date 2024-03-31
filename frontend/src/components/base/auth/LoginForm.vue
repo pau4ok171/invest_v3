@@ -2,12 +2,12 @@
   <div class="form__fields">
     <AuthField>
       <AuthLabel  for="username">Username</AuthLabel>
-      <AuthInput v-model="formData.current_username" id="username" autocomplete="username"/>
+      <AuthInput v-model:inputValue="formData.current_username" id="username" autocomplete="username"/>
     </AuthField>
 
     <AuthField>
       <AuthLabel for="password">Password</AuthLabel>
-      <AuthInput v-model="formData.current_password" type="password" id="password" autocomplete="current-password"/>
+      <AuthInput v-model:inputValue="formData.current_password" type="password" id="password" autocomplete="current-password"/>
     </AuthField>
   </div>
 </template>

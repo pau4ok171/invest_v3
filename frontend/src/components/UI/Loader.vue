@@ -15,12 +15,14 @@ export default {
     z-index: 9999;
     background-color: #1b222d;
     opacity: 0.8;
-    position: absolute;
+    position: fixed;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
   }
   .loader,
   .loader:before,

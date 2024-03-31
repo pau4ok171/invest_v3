@@ -1,16 +1,25 @@
 <template>
-  <input :value="modelValue" @input="updateInput" type="text" class="form__input" maxlength="255">
+  <BaseInput
+    type="text"
+    class="form__input"
+    maxlength="255"
+    :inputValue
+    @updateInput="updateInput"
+  />
 </template>
 
 <script lang="ts">
+ import BaseInput from "@/components/UI/base/BaseInput.vue";
+
  export default {
    name: 'AuthInput',
+   components: {BaseInput},
    props: {
-     modelValue: [String, Number],
+     inputValue: [String, Number],
    },
    methods: {
-     updateInput(event: Event) {
-       this.$emit('update:modelValue', event.target.value)
+     updateInput(value) {
+       this.$emit('update:inputValue', value)
      },
    },
  }

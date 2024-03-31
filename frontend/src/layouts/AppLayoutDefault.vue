@@ -1,5 +1,10 @@
 <template>
   <BasicHeader :class="{'screen__blured' : store.state.authModalMenuIsActive}"/>
+  <div class="content">
+    <div class="content__inner">
+        <slot/>
+    </div>
+  </div>
   <AuthModalMenu v-if="store.state.authModalMenuIsActive"/>
   <Loader v-if="store.state.isLoading"/>
 </template>
@@ -26,5 +31,16 @@ export default {
 </script>
 
 <style scoped>
-
+  .content {
+    padding-top: 64px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .content__inner {
+    max-width: 1200px;
+    width: 100%;
+    color: #fff;
+    padding: 8px 24px 24px;
+  }
 </style>
