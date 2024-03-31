@@ -1,12 +1,15 @@
 from django.contrib.auth.models import User
-from rest_framework import status
+from django.http import JsonResponse
+from rest_framework import status, authentication, permissions
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
-from invest.api.serializers import CompanySerializer, CandlePerDaySerializer
-from invest.models import Company, CandlePerDay
+
+from invest.api.serializers import CompanySerializer, CandlePerDaySerializer, SorterSerializer, CountrySerializer, SectorSerializer, CompanySearchSerializer
+from invest.api.paginators import StandardResultsSetPagination
+from invest.models import Company, CandlePerDay, Sorter, Country, Sector
 
 from django.db.models import Q
 
@@ -26,7 +29,7 @@ class SearchList(APIView):
                 Q(title__icontains=query) | Q(ticker__icontains=query),
                 is_visible=True
             )
-            serializer = CompanySerializer(companies, many=True)
+            serializer = CompanySearchSerializer(companies, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response({"companies": []})
