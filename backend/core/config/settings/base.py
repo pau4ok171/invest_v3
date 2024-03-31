@@ -147,6 +147,7 @@ CELERY_TASK_SERIALIZER = 'json'  # это строка, используемая
 CELERY_RESULT_SERIALIZER = 'json'  # является типом формата сериализации результатов
 
 CELERY_TASK_DEFAULT_QUEUE = 'default'  # celery будет использовать это имя очереди
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Django CORS Headers
 CORS_ALLOWED_ORIGINS = [

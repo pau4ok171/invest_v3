@@ -25,7 +25,7 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
-    logo = models.ImageField(upload_to='companies/logos/small', blank=True)
+    logo = models.ImageField(upload_to='companies/logos/small', blank=True, default='companies/logos/small/default.png')
     is_fund = models.BooleanField(default=False)
     website = models.URLField(null=True, blank=True)
     year_founded = models.IntegerField(null=True, blank=True)
@@ -59,7 +59,7 @@ class Company(models.Model):
 class Market(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
-    country = models.ForeignKey('Country', on_delete=models.PROTECT, null=True)
+    country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='markets', null=True)
 
     def __str__(self):
         return self.title
@@ -171,13 +171,14 @@ class Sorter(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     order_type = models.CharField(max_length=255)
+    reverse = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
 
 
 class CandlePerDay(models.Model):
-    company = models.ForeignKey('Company', on_delete=models.PROTECT)
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='candles')
     open = models.FloatField()
     high = models.FloatField()
     low = models.FloatField()
