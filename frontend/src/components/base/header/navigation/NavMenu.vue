@@ -20,8 +20,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-left: 215px;
-    margin-right: auto;
   }
 
   .nav-menu__item {

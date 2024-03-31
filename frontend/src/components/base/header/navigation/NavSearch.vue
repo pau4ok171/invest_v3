@@ -1,20 +1,20 @@
 <template>
   <div class="navigation__nav-search">
     <div class="nav-search__inner">
-      <input
-        autocomplete="off"
+      <BaseInput
         type="search"
         name="search-field"
-        placeholder="Поиск по компаниям"
         class="nav-search__input"
-        v-model="searchQuery"
-        @input="searchCompanies"
-      >
+        placeholder="Поиск по компаниям"
+        autocomplete="off"
+        :inputValue
+        @updateInput="updateInput"
+      />
       <span class="nav-search__prefix">
         <SearchIcon width="24" height="24" class="nav-search__prefix-icon"/>
       </span>
       <span class="nav-search__postfix">
-        <InputCrossIcon v-if="searchQuery.length" @click="clearInput" width="24" height="24" class="nav-search__postfix-icon"/>
+        <InputCrossIcon v-if="inputValue.length" @click="clearInput" width="24" height="24" class="nav-search__postfix-icon"/>
       </span>
     </div>
 
@@ -31,29 +31,31 @@
   import NavSearchDropDown from "@/components/base/header/navigation/NavSearchDropDown.vue";
   import SearchIcon from "@/components/icons/SearchIcon.vue";
   import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
+  import BaseInput from "@/components/UI/base/BaseInput.vue";
 
   export default {
-    components: {InputCrossIcon, SearchIcon, NavSearchDropDown},
+    components: {BaseInput, InputCrossIcon, SearchIcon, NavSearchDropDown},
     data() {
       return {
-        searchQuery: "",
+        inputValue: "",
         searchResponse: []
       }
     },
     methods: {
-      async searchCompanies() {
-        if (this.searchQuery.length) {
+      async updateInput(value) {
+        this.inputValue = value
+        if (this.inputValue.length) {
           await axios
-            .post('/invest/api/v1/search/', {query: this.searchQuery})
+            .post('/invest/api/v1/search/', {query: this.inputValue})
             .then(response => this.searchResponse = response.data)
             .catch(err => {console.log(err)})
-        }
+          } else this.closeDropDown()
       },
       closeDropDown() {
         this.searchResponse = []
       },
       clearInput(event: Event) {
-        this.searchQuery = ''
+        this.inputValue = ''
         document.querySelector('input[name="search-field"]').focus()
       }
     },

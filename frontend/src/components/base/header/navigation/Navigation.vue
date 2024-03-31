@@ -12,18 +12,24 @@ import NavLogo from "@/components/base/header/navigation/NavLogo.vue";
     <NavLogo/>
     <NavMenu/>
     <NavSearch/>
-    <NavLang/>
-    <NavUser/>
+    <div class="navigation__group">
+      <NavLang/>
+      <NavUser/>
+    </div>
   </nav>
 </template>
 
 <style scoped>
   .navigation {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     height: 100%;
     width: 100%;
     max-width: 1200px;
     position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+  }
+  .navigation__group {
+    display: flex;
   }
 </style>

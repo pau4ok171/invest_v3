@@ -1,26 +1,30 @@
 <template>
-  <div class="account-access__dropdown">
-    <nav class="account-access__navigation">
-      <div class="account-access-navigation__inner">
-        <ul class="account-access__list">
-          <li><a href="#">Profile</a></li>
-          <li><a href="#">Plans & Pricing</a></li>
-          <li><a href="#">Notifications</a></li>
-          <li><a href="#">Help Center</a></li>
-          <li><button @click="logout">Logout</button></li>
-        </ul>
-      </div>
-    </nav>
-  </div>
+  <DropDownMenu>
+    <div class="account-access__dropdown">
+      <nav class="account-access__navigation">
+        <div class="account-access-navigation__inner">
+          <ul class="account-access__list">
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Plans & Pricing</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><button @click="logout">Logout</button></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </DropDownMenu>
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/store";
+import DropDownMenu from "@/components/UI/DropDownMenu.vue";
 
 
 export default {
   name: 'NavUserDropDown',
+  components: {DropDownMenu},
   methods: {
     logout() {
       axios.defaults.headers.common['Authorization'] = ''
@@ -31,20 +35,7 @@ export default {
 
       store.commit('removeToken')
     },
-    clickHandler(event) {
-      if (event.target.parentNode.parentNode !== this.$el.parentNode) {
-        this.$emit('closeDropDownMenu')
-        document.removeEventListener('click', this.clickHandler)
-      }
-    }
   },
-  mounted() {
-    document.addEventListener('click', this.clickHandler)
-  },
-
-
-
-
 }
 </script>
 

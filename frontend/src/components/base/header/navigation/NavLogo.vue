@@ -16,8 +16,8 @@ import {RouteNamesEnum} from "@/router/routes.types";
 
 <style scoped>
   .navigation__logo {
-    position: absolute;
-    left: 24px;
-    top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
   }
 </style>

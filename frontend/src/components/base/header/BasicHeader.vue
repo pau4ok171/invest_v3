@@ -21,15 +21,21 @@
     width: 100%;
     position: fixed;
     z-index: 1000;
+    display: flex;
+    justify-content: center;
   }
   .header__inner {
+    width: 1200px;
     font-size: 1.6rem;
     font-weight: normal;
     line-height: 1.5;
     color: #fff;
     height: 64px;
-    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    padding: 0 24px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
   }
+
 </style>
