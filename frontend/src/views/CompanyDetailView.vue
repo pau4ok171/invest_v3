@@ -1,15 +1,66 @@
 <template>
-  <div class="">You are in companyDetailView</div>
+<!--  {% block scripts %}-->
+<!--      <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" defer></script>-->
+<!--      <script src="{% static 'invest/js/company/detail/sidebar/sidebar.js' %}" defer></script>-->
+<!--      <script type="module" src="{% static 'invest/js/company/detail/sidebar/copy.js' %}" defer></script>-->
+<!--      <script type="module" src="{% static 'invest/js/company/detail/portfolio.js' %}" defer></script>-->
+<!--      <script type="module" src="{% static 'invest/js/company/detail/notes.js' %}" defer></script>-->
+<!--      <script src="{% static 'invest/js/company/detail/detail.js' %}" defer></script>-->
+<!--  {% endblock %}-->
+  <CompanyDetailHeader
+    v-if="isFetched"
+    :company
+  />
 
+  <CompanyDetailContent
+    v-if="isFetched"
+    :company
+  />
+
+<!--  {% include 'invest/company/detail/modal_menu/analyst_sources_modal_menu.html' with company_info=company_detail_header_info %}-->
+<!--  {% include 'invest/company/detail/modal_menu/add_to_portfolio_modal_menu.html' with company_info=company_detail_header_info %}-->
+<!--  {% include 'invest/company/detail/modal_menu/add_notes_modal_menu.html' with company_info=company_detail_header_info %}-->
+<!--  {% include 'invest/company/detail/svg_declaration/css-patterns.html' %}-->
+<!--  {% include 'invest/company/detail/svg_declaration/lineair-gradient.html' %}-->
 </template>
 
 <script lang="ts">
+import CompanyDetailHeader from "@/components/company_detail/CompanyDetailHeader.vue";
+import CompanyDetailContent from "@/components/company_detail/CompanyDetailContent.vue";
+
+
+import store from "@/store";
+import axios from "axios";
+
 export default {
   name: 'CompanyDetail',
+  components: {CompanyDetailContent, CompanyDetailHeader},
+  data() {
+    return {
+      company: {},
+      isFetched: false,
+    }
+  },
+  methods: {
+   async  fetchCompany() {
+     store.commit('setIsLoading', true)
+
+     const company_slug = this.$route.params.company_slug
+
+     axios
+       .get(`invest/api/v1/company/${company_slug}`)
+       .then(response => {
+         this.company = response.data
+         document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
+         this.isFetched = true
+       })
+
+     store.commit('setIsLoading', false)
+    },
+  },
+  async mounted() {
+    await this.fetchCompany()
+    await store.dispatch("companyDetail/fetchPriceData", this.$route.params.company_slug)
+  },
 }
-
 </script>
-
-<style scoped>
-
-</style>
