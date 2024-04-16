@@ -1,19 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { loadLayoutMiddleware } from "@/router/middleware/loadLayout.middleware";
-import { RouteNamesEnum } from "@/router/routes.types";
-import { AppLayoutsEnum } from "@/layouts/layouts.types";
+import {createRouter, createWebHistory} from 'vue-router';
+import {loadLayoutMiddleware} from "@/router/middleware/loadLayout.middleware";
+import {RouteNamesEnum} from "@/router/routes.types";
 
 // VIEWS
 import HomeView from "@/views/HomeView.vue";
-import CompanyListView from "@/views/CompanyListView.vue";
-import CompanyDetailView from "@/views/CompanyDetailView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: RouteNamesEnum.home,
       component: HomeView,
     },
     {
@@ -36,13 +33,13 @@ const router = createRouter({
     },
     {
       path: '/markets',
-      name: RouteNamesEnum.company,
-      component: CompanyListView
+      name: RouteNamesEnum.company_list,
+      component: () => import('@/views/CompanyListView.vue')
     },
     {
       path: '/markets/:company_slug',
-      name: CompanyDetailView.name,
-      component: CompanyDetailView
+      name: RouteNamesEnum.company_detail,
+      component: () => import('@/views/CompanyDetailView.vue')
     },
     {
       path: '/watchlist',

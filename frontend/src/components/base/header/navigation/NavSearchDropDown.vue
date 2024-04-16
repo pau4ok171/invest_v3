@@ -1,6 +1,6 @@
 <template>
   <div class="nav_search__dropdown">
-    <div class="nav-search__dropdown-inner">
+    <div class="dropdown-menu nav-search__dropdown-inner">
       <ul class="nav-search__dropdown-list">
 
         <li
@@ -52,6 +52,18 @@
 </script>
 
 <style scoped>
+  .dropdown-menu::-webkit-scrollbar {
+    width: 10px;
+  }
+  .dropdown-menu::-webkit-scrollbar-track {
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
+    background-color: #f9f9fd;
+    border-radius: 10px;
+  }
+  .dropdown-menu::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: linear-gradient(180deg, #00c6fb, #005bea);
+  }
   .nav_search__dropdown {
     position: fixed;
     left: 0;

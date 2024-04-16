@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {RouteNamesEnum} from "@/router/routes.types";
+import {RoutesHeaderEnum} from "@/router/routes.types";
 </script>
 
 <template>
@@ -19,5 +19,8 @@ import {RouteNamesEnum} from "@/router/routes.types";
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    font-size: 30px;
+    font-weight: 900;
+    user-select: none;
   }
 </style>

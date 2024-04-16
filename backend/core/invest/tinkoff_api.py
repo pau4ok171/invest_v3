@@ -27,8 +27,10 @@ def get_companies():
 
 def process_company_candles(company):
     candles = get_candles_by_instrument(instrument_id=company['id'], instrument_uid=company['uid'])
-    add_candles_to_db(candles)
-    return f'Company({company["id"]}) uid->{company["uid"]} ({len(candles)})candles'
+    if candles:
+        add_candles_to_db(candles)
+        return f'Company({company["id"]}) uid->{company["uid"]} ({len(candles)})candles'
+    return None
 
 
 def get_candles_by_instrument(instrument_id, instrument_uid) -> list[dict]:
@@ -45,6 +47,7 @@ def get_candles_by_instrument(instrument_id, instrument_uid) -> list[dict]:
             candles = [_get_dict(instrument_id, candle) for candle in client.get_all_candles(**opts)]
     except RequestError as e:
         print(f'[ERROR]: {e}')
+        return []
     return candles
 
 
