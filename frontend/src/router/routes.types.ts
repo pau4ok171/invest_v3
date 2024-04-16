@@ -9,6 +9,17 @@ declare module 'vue-router' {
 }
 
 export enum RouteNamesEnum {
+    home = 'home',
+    dashboard = 'dashboard',
+    portfolio = 'portfolio',
+    article = 'articles',
+    company_list = 'markets',
+    company_detail = 'company_detail',
+    watchlist = 'watchlist',
+    screener = 'screener',
+}
+
+export enum RoutesHeaderEnum {
     dashboard = 'dashboard',
     portfolio = 'portfolio',
     article = 'articles',

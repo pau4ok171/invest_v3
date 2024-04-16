@@ -1,7 +1,7 @@
 <template>
   <div class="navigation__nav-menu" >
     <RouterLink
-        v-for="routeName in RouteNamesEnum"
+        v-for="routeName in RoutesHeaderEnum"
         :key="routeName"
         class="nav-menu__item"
         :to="{ name: routeName }"
@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteNamesEnum } from "@/router/routes.types";
+  import { RoutesHeaderEnum } from "@/router/routes.types";
 </script>
 
 <style scoped>
