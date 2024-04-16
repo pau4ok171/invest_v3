@@ -34,13 +34,18 @@ export default {
   .content {
     padding-top: 64px;
     display: flex;
+    position: relative;
     flex-wrap: wrap;
     justify-content: center;
   }
   .content__inner {
+    position: relative;
     max-width: 1200px;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     color: #fff;
-    padding: 8px 24px 24px;
+    padding: 0 24px 24px;
+    transition: all .6s cubic-bezier(.83, 0, .17, 1) 0s;
   }
 </style>

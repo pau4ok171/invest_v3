@@ -5,72 +5,66 @@ html, body {
 	color: #fff;
 	min-width: 1200px;
 }
-
 body::-webkit-scrollbar {
     width: 10px;
 }
-
 body::-webkit-scrollbar-track {
 	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
 	background-color: #f9f9fd;
 	border-radius: 10px;
 }
-
 body::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	background: linear-gradient(180deg, #00c6fb, #005bea);
 }
-
 body[disabled] {
 	overflow-y: hidden;
 }
-
 .screen__blured {
 	filter: blur(6px);
 }
-
 a {
 	text-decoration: none;
 	color: inherit;
 }
-
 button {
 	border: none;
 	font: inherit;
 	background: none;
 	cursor: pointer;
 }
-
 button[disabled] {
 	cursor: auto;
 }
-
 input {
 	outline: none;
 }
-
-.none {
-	display: none;
+table {
+	width: 100%;
+    border-spacing: 0;
+    border: none;
+    border-radius: 0;
+}
+table th {
+	font-weight: normal;
+    text-align: left;
+    line-height: 1.5;
+}
+svg {
+	width: 24px;
+	height: 24px;
+	fill: #fff;
+}
+ul {
+	list-style-type: none;
 }
 
-.default-logo {
-	font-size: 30px;
-	font-weight: 900;
-	user-select: none;
+.text--success {
+	color: var(--color-success);
+}
+.text--error {
+    color: var(--color-error)
 }
 
-.content__button {
-	padding: 0 36px 0 12px;
-	background-color: transparent;
-	position: relative;
-	transition: background-color .2s ease 0s;
-	color: rgba(255, 255, 255, .7);
-	border-radius: 6px;
-	user-select: none;
-}
-
-.content__button:hover {
-	background-color: rgba(255, 255, 255, .05);
-}
 
 

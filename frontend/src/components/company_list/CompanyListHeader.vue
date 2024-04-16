@@ -13,10 +13,12 @@
 
       <div class="company-list__basic-filters">
         <div class="company-list__basic-filter">
-          <DropDownMenuBox :isRounded="true">
+          <DropDownMenuBox>
             <template v-slot:button>
+              <RoundedButton>
                 <span>{{ active_filters.country.title }}</span>
                 <ArrowDownIcon/>
+              </RoundedButton>
             </template>
             <template v-slot:menu>
               <CompanyListFilterDropDownMenu
@@ -33,10 +35,13 @@
         </div>
 
         <div class="company-list__basic-filter">
-          <DropDownMenuBox :isRounded="true">
+          <DropDownMenuBox>
             <template v-slot:button >
+              <RoundedButton>
                 <span>{{ active_filters.sector.title }}</span>
                 <ArrowDownIcon/>
+              </RoundedButton>
+
             </template>
             <template v-slot:menu>
               <CompanyListFilterDropDownMenu
@@ -54,10 +59,10 @@
       </div>
 
       <div>
-        <CompanyListButton>
+        <BaseButton>
           <span>Advanced filters</span>
           <FilterIcon/>
-        </CompanyListButton>
+        </BaseButton>
       </div>
 
     </section>
@@ -66,8 +71,10 @@
       <div class="company-list__sorter">
          <DropDownMenuBox>
             <template v-slot:button >
-              <span>{{ active_filters.sorter.title }}</span>
-              <ArrowDownIcon/>
+              <RoundedButton>
+                 <span>{{ active_filters.sorter.title }}</span>
+                <ArrowDownIcon/>
+              </RoundedButton>
             </template>
             <template v-slot:menu>
               <CompanyListFilterDropDownMenu
@@ -81,12 +88,12 @@
       </div>
       <div class="company-list__company-count"><p>{{ this.totalCompaniesLength }} companies</p></div>
       <div class="company-list__view-modes">
-        <CompanyListButton class="company-list__button--circled" disabled>
+        <CircledButton disabled>
           <TableModeIcon/>
-        </CompanyListButton>
-        <CompanyListButton class="company-list__button--circled">
+        </CircledButton>
+        <CircledButton>
           <TileModeIcon/>
-        </CompanyListButton>
+        </CircledButton>
       </div>
     </section>
   </header>
@@ -97,15 +104,19 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import FilterIcon from "@/components/icons/FilterIcon.vue";
 import TableModeIcon from "@/components/icons/TableModeIcon.vue";
 import TileModeIcon from "@/components/icons/TileModeIcon.vue";
-import CompanyListButton from "@/components/company_list/CompanyListButton.vue";
+import BaseButton from "@/components/UI/buttons/BaseButton.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
+import CircledButton from "@/components/UI/buttons/CircledButton.vue";
+import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 
 export default {
   name: "CompanyListHeader",
   components: {
+    RoundedButton,
+    CircledButton,
     DropDownMenuBox,
-    CompanyListFilterDropDownMenu, CompanyListButton, TileModeIcon, TableModeIcon, FilterIcon, ArrowDownIcon},
+    CompanyListFilterDropDownMenu, BaseButton, TileModeIcon, TableModeIcon, FilterIcon, ArrowDownIcon},
   props: {
     companies: {
       type: Array,

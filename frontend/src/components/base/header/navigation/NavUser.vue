@@ -4,8 +4,10 @@
       <template v-if="store.state.isAuthenticated">
         <DropDownMenuBox>
           <template v-slot:button>
-            <span><UserIcon/></span>
-            <span><ArrowDownIcon/></span>
+            <RoundedButton>
+              <span><UserIcon/></span>
+              <span><ArrowDownIcon/></span>
+            </RoundedButton>
           </template>
           <template v-slot:menu>
             <NavUserDropDown/>
@@ -26,10 +28,11 @@ import UserIcon from "@/components/icons/UserIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
+import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 
 export default {
   name: 'NavUser',
-  components: {DropDownMenuBox, NavUserDropDown, ArrowDownIcon, UserIcon},
+  components: {RoundedButton, DropDownMenuBox, NavUserDropDown, ArrowDownIcon, UserIcon},
   methods: {
     openAuthModalMenu() {
       store.commit('setAuthModalMenuIsActive', true)

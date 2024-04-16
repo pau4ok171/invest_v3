@@ -15,8 +15,8 @@ class Company(models.Model):
     title = models.CharField(max_length=255)
     short_title = models.CharField(max_length=255, null=True, blank=True)
     short_title_genitive = models.CharField(max_length=255, null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    short_description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True, default='No description yet')
+    short_description = models.TextField(blank=True, default='No description yet')
     city = models.CharField(max_length=255, null=True, blank=True)
     country = models.ForeignKey('Country', on_delete=models.PROTECT)
     market = models.ForeignKey('Market', on_delete=models.PROTECT)
@@ -75,7 +75,11 @@ class Sector(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     description = models.TextField(null=True, blank=True)
-    main_header = models.ImageField(upload_to='companies/header', null=True, blank=True)
+    main_header = models.ImageField(
+        upload_to='companies/header',
+        default='companies/header/default.png',
+        blank=True
+    )
 
     def __str__(self):
         return self.title
@@ -105,7 +109,7 @@ class Industry(models.Model):
 
 
 class Report(models.Model):
-    company = models.ForeignKey('Company', on_delete=models.PROTECT)
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='reports')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     verified = models.DateTimeField(blank=True, null=True)
@@ -218,7 +222,7 @@ class Analyst(models.Model):
 
 class AnalystIdea(models.Model):
     analyst = models.ForeignKey('Analyst', on_delete=models.PROTECT)
-    company = models.ForeignKey('Company', on_delete=models.PROTECT)
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='analyst_ideas')
     price_target = models.FloatField()
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
     date_target = models.DateTimeField()

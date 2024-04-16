@@ -64,23 +64,23 @@
       </RouterLink>
     </td>
     <td>
-      <CompanyListButton
+      <CircledButton
           :disabled="!store.state.isAuthenticated"
-          class="company-list__button--circled"
           @click="$emit('toggleToWatchlist', object)"
       >
         <SolidStarIcon :style="{fill: '#fff'}" v-if="object.is_watchlisted"/>
         <OutlineStarIcon v-else/>
-      </CompanyListButton>
+      </CircledButton>
     </td>
   </tr>
 </template>
 
 <script>
 import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
-import CompanyListButton from "@/components/company_list/CompanyListButton.vue";
 import store from "@/store";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
+import CircledButton from "@/components/UI/buttons/CircledButton.vue";
+import utils from "@/mixins/utils";
 
 export default {
   name: 'CompanyListItem',
@@ -89,7 +89,7 @@ export default {
       return store
     }
   },
-  components: {SolidStarIcon, CompanyListButton, OutlineStarIcon},
+  components: {CircledButton, SolidStarIcon, OutlineStarIcon},
   props: {
     object: {
       type: Object,
@@ -101,15 +101,8 @@ export default {
     }
   },
   methods: {
-    humanize_financial_val(val) {
-      if (val === 0) return 'n/a'
-      for (const unit of ["", "t", "M", "B", "T"]) {
-        if (Math.abs(val) < 1000) return '₽' + val.toFixed(2) + unit
-        val /= 1000
-      }
-      return '₽' + val.toFixed(2) + 'Q'
-    },
   },
+  mixins: [utils,],
 }
 </script>
 

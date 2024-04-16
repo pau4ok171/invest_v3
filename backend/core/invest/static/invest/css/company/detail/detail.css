@@ -635,10 +635,6 @@ background-color: var(--white-hover);
 	border-radius: 8px 8px 0 0;
 }
 
-.section__inner {
-
-}
-
 .section__inner--grid {
 	display: grid;
 	grid-template-columns: 1fr 280px;
@@ -686,10 +682,6 @@ background-color: var(--white-hover);
 	vertical-align: middle;
 	margin: 0 4px 0 -4px;
 	transform: none;
-}
-
-.section__box {
-
 }
 
 .section__box--grid {

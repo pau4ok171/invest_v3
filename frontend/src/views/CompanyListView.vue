@@ -12,7 +12,6 @@
       @updateCountrySearchQuery="updateCountrySearchQuery"
       @updateSectorSearchQuery="updateSectorSearchQuery"
       @fetchNewCompanies="fetchNewCompanies"
-
     />
     <CompanyListContent
       :companies="sortedCompanies"
@@ -37,7 +36,7 @@
 <script lang="ts">
 import CompanyListHeader from "@/components/company_list/CompanyListHeader.vue";
 import CompanyListContent from "@/components/company_list/CompanyListContent.vue";
-import axios, {get} from "axios";
+import axios from "axios";
 import store from "@/store";
 import Notification from "@/components/UI/Notification.vue";
 import CheckmarkCircleIcon from "@/components/icons/CheckmarkCircleIcon.vue";
