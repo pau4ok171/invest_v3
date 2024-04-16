@@ -1,36 +1,27 @@
 <template>
-  <CompanyListButton
-      @click="this.isActive=!this.isActive"
-      :class="{'company-list__button--rounded': isRounded}"
-  >
-    <slot name="button"/>
-  </CompanyListButton>
+  <div @click="isActive=!isActive">
+    <slot
+      name="button"
+    />
   <DropDownMenu
       v-if="isActive"
       @closeDropDownMenu="this.isActive=false"
   >
     <slot name="menu"/>
   </DropDownMenu>
+  </div>
 </template>
 
 <script lang="ts">
-import CompanyListButton from "@/components/company_list/CompanyListButton.vue";
 import DropDownMenu from "@/components/UI/DropDownMenu.vue";
 
 export default {
   name: 'DropDownMenuBox',
-  components: {DropDownMenu, CompanyListButton},
+  components: {DropDownMenu},
   data() {
     return {
       isActive: false
     }
   },
-  props: {
-    isRounded: Boolean
-  },
 }
 </script>
-
-<style scoped>
-
-</style>
