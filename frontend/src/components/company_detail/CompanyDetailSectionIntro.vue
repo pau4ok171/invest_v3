@@ -22,6 +22,14 @@ export default defineComponent({
           desc: 'Is SBER undervalued compared to its fair value, analyst forecasts and its price relative to the market?',
         }
       },
+      score_list: [
+        {title: 'Price-To-Earnings vs Peers', status: 'success'},
+        {title: 'Price-To-Earnings vs Industry', status: 'success'},
+        {title: 'Price-To-Earnings vs Fair Ratio', status: 'success'},
+        {title: 'Below Fair Value', status: 'success'},
+        {title: 'Significantly Below Fair Value', status: 'success'},
+        {title: 'Analyst Forecast', status: 'error'},
+      ],
       cur_section: {},
     }
   },
@@ -48,7 +56,7 @@ export default defineComponent({
       {{ this.cur_section.desc }}
     </DetailAnalysisDesc>
 
-    <CompanyDetailSectionIntroScore/>
+    <CompanyDetailSectionIntroScore :score_list/>
 
   </div>
 </template>

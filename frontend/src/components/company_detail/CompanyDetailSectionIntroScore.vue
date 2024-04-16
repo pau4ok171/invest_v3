@@ -8,7 +8,13 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 
 export default defineComponent({
   name: "CompanyDetailSectionIntroScore",
-  components: {ArrowDownIcon, CrossIcon, CheckIcon, CheckedIcon, CheckmarkCircleIcon}
+  components: {ArrowDownIcon, CrossIcon, CheckIcon, CheckedIcon, CheckmarkCircleIcon},
+  props: {
+    score_list: {
+      type: Array,
+      required: true,
+    }
+  }
 })
 </script>
 
@@ -21,41 +27,24 @@ export default defineComponent({
           <span class="detail-section-intro-score__num">5/6</span>
         </p>
         <ul class="detail-section-intro-score__point-list">
-          <li class="detail-section-intro-score__point">
-            <CheckIcon class="detail-section-intro-score__statement-icon-success"/>
-            <p>Price-To-Earnings vs Peers</p>
+
+          <li
+              class="detail-section-intro-score__point"
+              v-for="score in score_list"
+              :key="score.title"
+          >
+            <CheckIcon
+                v-if="score.status === 'success'"
+                class="detail-section-intro-score__statement-icon-success"
+            />
+            <CrossIcon
+                v-else
+                class="detail-section-intro-score__statement-icon-error"
+            />
+            <p>{{ score.title }}</p>
             <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
           </li>
 
-          <li class="detail-section-intro-score__point">
-            <CheckIcon class="detail-section-intro-score__statement-icon-success"/>
-            <p>Price-To-Earnings vs Industry</p>
-            <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
-          </li>
-
-          <li class="detail-section-intro-score__point">
-            <CheckIcon class="detail-section-intro-score__statement-icon-success"/>
-            <p>Price-To-Earnings vs Fair Ratio</p>
-            <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
-          </li>
-
-          <li class="detail-section-intro-score__point">
-            <CheckIcon class="detail-section-intro-score__statement-icon-success"/>
-            <p>Below Fair Value</p>
-            <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
-          </li>
-
-          <li class="detail-section-intro-score__point">
-            <CheckIcon class="detail-section-intro-score__statement-icon-success"/>
-            <p>Significantly Below Fair Value</p>
-            <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
-          </li>
-
-          <li class="detail-section-intro-score__point">
-            <CrossIcon class="detail-section-intro-score__statement-icon-error"/>
-            <p>Analyst Forecast</p>
-            <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
-          </li>
         </ul>
       </div>
     </div>
