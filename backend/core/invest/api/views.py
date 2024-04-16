@@ -1,13 +1,13 @@
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import status, authentication, permissions
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 
 
-from invest.api.serializers import CompanySerializer, CandlePerDaySerializer, SorterSerializer, CountrySerializer, SectorSerializer, CompanySearchSerializer
+from invest.api.serializers import CompanySerializer, CandlePerDaySerializer, SorterSerializer, CountrySerializer, SectorSerializer, CompanySearchSerializer, CompanyDetailSerializer
 from invest.api.paginators import StandardResultsSetPagination
 from invest.models import Company, CandlePerDay, Sorter, Country, Sector
 
@@ -141,3 +141,12 @@ class WatchlistedCompanyAPIView(APIView):
             },
             status=status.HTTP_204_NO_CONTENT
         )
+
+
+class CompanyDetailAPIView(RetrieveAPIView):
+    queryset = Company.objects.filter(is_visible=True)
+    serializer_class = CompanyDetailSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+    lookup_field = 'slug'
+    lookup_url_kwarg = 'company_slug'
+
