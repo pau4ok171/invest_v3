@@ -1,0 +1,67 @@
+<script lang="ts">
+import {defineComponent} from 'vue'
+import CompanyDetailSection from "@/components/company_detail/CompanyDetailSection.vue";
+import CompanyDetailContentGroup from "@/components/company_detail/CompanyDetailContentGroup.vue";
+import TextButton from "@/components/UI/buttons/TextButton.vue";
+import InfoIcon from "@/components/icons/InfoIcon.vue";
+import TextBlueButton from "@/components/UI/buttons/TextBlueButton.vue";
+import CompanyDetailSnowflakeTable from "@/components/company_detail/summary/CompanyDetailSnowflakeTable.vue";
+import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
+import CompanyDetailRiskRewardItem from "@/components/company_detail/summary/CompanyDetailRiskRewardItem.vue";
+import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
+import CompanyDetailRiskReward from "@/components/company_detail/summary/CompanyDetailRiskReward.vue";
+import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
+import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
+
+export default defineComponent({
+  name: "CompanyDetailStockOverview",
+  components: {
+    DetailSectionText,
+    DetailSectionTitle,
+    CompanyDetailRiskReward,
+    RoundedDarkBlueButton,
+    CompanyDetailRiskRewardItem,
+    SnowflakeChart,
+    CompanyDetailSnowflakeTable,
+    TextBlueButton,
+    InfoIcon,
+    TextButton,
+    CompanyDetailContentGroup,
+    CompanyDetailSection
+  },
+  props: {
+    company: {
+      type: Object,
+      required: true,
+    }
+  }
+})
+</script>
+
+<template>
+  <CompanyDetailSection :useGrid="true" :useMinH="true">
+    <CompanyDetailContentGroup>
+      <DetailSectionTitle>{{ company.slug.toUpperCase() }} Stock Overview</DetailSectionTitle>
+      <DetailSectionText>{{ company.short_description }}</DetailSectionText>
+      <TextBlueButton>
+        <InfoIcon/>
+        <span>About the company</span>
+      </TextBlueButton>
+    </CompanyDetailContentGroup>
+
+    <CompanyDetailContentGroup :useGridRow="true">
+
+      <CompanyDetailSnowflakeTable v-if="false"/>
+
+      <SnowflakeChart :chartData="[5, 2, 6, 5, 5]" v-else/>
+
+    </CompanyDetailContentGroup>
+
+    <CompanyDetailContentGroup :useGrid="true">
+
+      <CompanyDetailRiskReward/>
+
+    </CompanyDetailContentGroup>
+
+  </CompanyDetailSection>
+</template>
