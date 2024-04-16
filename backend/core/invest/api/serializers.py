@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report
+from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -27,6 +27,16 @@ class SectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sector
         fields = ['title', 'slug']
+
+
+class SectorDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sector
+        fields = (
+            'title',
+            'slug',
+            'main_header'
+        )
 
 
 class MarketSerializer(serializers.ModelSerializer):
@@ -154,6 +164,55 @@ class CompanySerializer(serializers.ModelSerializer):
             past_price = past_price.first().close
             return (last_price - past_price) / past_price * 100
         return 0
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    updated = serializers.SerializerMethodField('get_updated')
+
+    class Meta:
+        model = Report
+        fields = (
+            'updated',
+            'total_employees_figure',
+                  )
+
+    def get_updated(self, instance):
+        return instance.updated.strftime('%d %b, %Y')
+
+
+class AnalystIdeaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AnalystIdea
+        fields = '__all__'
+
+
+class CompanyDetailSerializer(CompanySerializer):
+    sector = SectorDetailSerializer(read_only=True)
+    reports = ReportSerializer(many=True)
+    analyst_ideas = AnalystIdeaSerializer(many=True)
+
+    class Meta:
+        model = Company
+        fields = (
+            'uid',
+            'ticker',
+            'title',
+            'slug',
+            'description',
+            'short_description',
+            'year_founded',
+            'website',
+            'logo_url',
+            'country',
+            'market',
+            'sector',
+            'absolute_url',
+            'is_watchlisted',
+            'price_data',
+            'reports',
+            'analyst_ideas',
+        )
 
 
 class CandlePerDaySerializer(serializers.ModelSerializer):
