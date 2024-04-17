@@ -21,6 +21,9 @@ export const companyDetailModule = {
     setCompany(state, company) {
       state.company = company
     },
+    setIsWatchlisted(state, status: Boolean) {
+      state.company.is_watchlisted = status
+    }
   },
   actions: {
     async fetchPriceData({state, commit}, slug) {
@@ -30,6 +33,25 @@ export const companyDetailModule = {
           commit("getCompanyPriceData", response.data)
           commit("setPriceChartDataIsLoading", false)
         })
+    },
+    async toggleToWatchlist({state, commit}) {
+      const formData = {
+        uid: state.company.uid
+      }
+      if (state.company.is_watchlisted) {
+        await axios
+          .delete('/invest/api/v1/toggle_to_watchlist/', {
+            data: formData
+          })
+          .then(response => commit('setIsWatchlisted', false))
+          .catch(error => console.log(error))
+      } else {
+        await axios
+          .patch('/invest/api/v1/toggle_to_watchlist/', formData)
+          .then(response => commit('setIsWatchlisted', true))
+          .catch(error => console.log(error))
+      }
+
     },
   },
   namespaced: true,

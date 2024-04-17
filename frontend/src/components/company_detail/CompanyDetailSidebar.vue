@@ -23,7 +23,7 @@
 
           <section class="detail-sidebar__button-list">
             <template v-if="company.is_watchlisted">
-              <RoundedBlueButton>
+              <RoundedBlueButton @click="toggleToWatchlist">
                 <SolidStarIcon/>
               </RoundedBlueButton>
 
@@ -34,7 +34,7 @@
             </template>
 
             <template v-else>
-              <RoundedBlueButton>
+              <RoundedBlueButton @click="toggleToWatchlist">
                 <OutlineStarIcon/>
                 <span>Add to watchlist</span>
               </RoundedBlueButton>
@@ -75,7 +75,7 @@
  import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
  import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
  import DotsIcon from "@/components/icons/DotsIcon.vue";
- import {mapState} from "vuex";
+ import {mapActions, mapState} from "vuex";
 
  export default {
    name: 'CompanyDetailSidebar',
@@ -83,6 +83,11 @@
    computed: {
      ...mapState({
        company: state => state.companyDetail.company,
+     }),
+   },
+   methods: {
+     ...mapActions({
+      toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
      }),
    },
    mixins: [utils,],

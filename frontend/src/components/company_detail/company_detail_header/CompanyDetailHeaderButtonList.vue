@@ -7,31 +7,15 @@ import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
 import axios from "axios";
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailHeaderButtonList",
   components: {RoundedBlueButton, SolidStarIcon, OutlineStarIcon, PenIcon, RoundedWhiteButton, DotsIcon},
   methods: {
-    async toggleToWatchlist() {
-      const formData = {
-        uid: this.company.uid
-      }
-      if (this.company.is_watchlisted) {
-        await axios
-          .delete('/invest/api/v1/toggle_to_watchlist/', {
-            data: formData
-          })
-          .then(response => this.$emit('toggleToWatchlist', {uid: this.company.uid, is_watchlisted: false}))
-          .catch(error => console.log(error))
-      } else {
-        await axios
-          .patch('/invest/api/v1/toggle_to_watchlist/', formData)
-          .then(response => {this.$emit('toggleToWatchlist', {uid: this.company.uid, is_watchlisted: true})})
-          .catch(error => console.log(error))
-      }
-
-    },
+    ...mapActions({
+      toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
+    }),
   },
   computed: {
     ...mapState({
@@ -45,22 +29,18 @@ export default defineComponent({
   <div class="detail-header__button-list">
 
     <template v-if="company.is_watchlisted">
-      <RoundedBlueButton
-        @click="toggleToWatchlist"
-      >
+      <RoundedBlueButton @click="toggleToWatchlist">
         <SolidStarIcon/>
       </RoundedBlueButton>
 
-      <RoundedBlueButton
-        @click="toggleToWatchlist"
-      >
+      <RoundedBlueButton @click="openNotes">
         <PenIcon/>
         <span>Add note</span>
       </RoundedBlueButton>
     </template>
 
     <template v-else>
-      <RoundedBlueButton>
+      <RoundedBlueButton @click="toggleToWatchlist">
         <OutlineStarIcon/>
         <span>Add to watchlist</span>
       </RoundedBlueButton>
