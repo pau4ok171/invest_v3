@@ -1,13 +1,9 @@
 <template>
   <div class="detail__content">
 
-    <CompanyDetailSidebar
-      :company
-    />
+    <CompanyDetailSidebar/>
 
-    <CompanyDetailContentList
-      :company
-    />
+    <CompanyDetailContentList/>
 
   </div>
 </template>
@@ -19,12 +15,6 @@ import CompanyDetailContentList from "@/components/company_detail/CompanyDetailC
 export default {
   name: 'CompanyDetailContent',
   components: {CompanyDetailContentList, CompanyDetailSidebar},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  }
 }
 </script>
 

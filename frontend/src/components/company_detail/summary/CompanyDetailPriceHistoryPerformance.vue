@@ -6,15 +6,10 @@ import CompanyDetailRecentNews from "@/components/company_detail/summary/Company
 import CompanyDetailShareholderReturns from "@/components/company_detail/summary/CompanyDetailShareholderReturns.vue";
 import CompanyDetailPriceVolatility from "@/components/company_detail/summary/CompanyDetailPriceVolatility.vue";
 import DetailCompanySectionInRowItemBox from "@/components/company_detail/DetailCompanySectionInRowItemBox.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailPriceHistoryPerformance",
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  },
   components: {
     DetailCompanySectionInRowItemBox,
     CompanyDetailPriceVolatility,
@@ -37,7 +32,7 @@ export default defineComponent({
 
       <CompanyDetailShareholderReturns class="detail-section__in-row-item"/>
 
-      <CompanyDetailPriceVolatility :company class="detail-section__in-row-item"/>
+      <CompanyDetailPriceVolatility class="detail-section__in-row-item"/>
 
     </DetailCompanySectionInRowItemBox>
 

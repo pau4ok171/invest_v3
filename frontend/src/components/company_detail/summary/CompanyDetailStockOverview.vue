@@ -12,6 +12,7 @@ import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton
 import CompanyDetailRiskReward from "@/components/company_detail/summary/CompanyDetailRiskReward.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailStockOverview",
@@ -29,12 +30,11 @@ export default defineComponent({
     CompanyDetailContentGroup,
     CompanyDetailSection
   },
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  }
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    }),
+  },
 })
 </script>
 

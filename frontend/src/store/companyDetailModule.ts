@@ -3,6 +3,7 @@ import axios from "axios";
 export const companyDetailModule = {
   state: () => ({
     companyPriceData: [],
+    company: {},
     priceChartDataisLoading: true
   }),
   getters: {
@@ -16,7 +17,10 @@ export const companyDetailModule = {
     },
     setPriceChartDataIsLoading(state, status: Boolean) {
       state.priceChartDataisLoading = status
-    }
+    },
+    setCompany(state, company) {
+      state.company = company
+    },
   },
   actions: {
     async fetchPriceData({state, commit}, slug) {

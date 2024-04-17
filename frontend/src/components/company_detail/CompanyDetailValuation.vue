@@ -23,29 +23,19 @@ export default defineComponent({
     CompanyDetailSectionIntro,
     CompanyDetailSection
   },
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  }
 })
 </script>
 
 <template>
   <CompanyDetailSection>
 
-    <CompanyDetailSectionIntro
-      :section_name="'valuation'"
-    />
+    <CompanyDetailSectionIntro :section_name="'valuation'"/>
 
-    <ShareVsFairPrice
-    />
+    <ShareVsFairPrice/>
 
     <hr>
 
-    <KeyValuationMetric
-    />
+    <KeyValuationMetric/>
 
     <hr>
 

@@ -7,15 +7,9 @@
 <!--      <script type="module" src="{% static 'invest/js/company/detail/notes.js' %}" defer></script>-->
 <!--      <script src="{% static 'invest/js/company/detail/detail.js' %}" defer></script>-->
 <!--  {% endblock %}-->
-  <CompanyDetailHeader
-    v-if="isFetched"
-    :company
-  />
+  <CompanyDetailHeader v-if="isFetched"/>
 
-  <CompanyDetailContent
-    v-if="isFetched"
-    :company
-  />
+  <CompanyDetailContent v-if="isFetched"/>
 
 <!--  {% include 'invest/company/detail/modal_menu/analyst_sources_modal_menu.html' with company_info=company_detail_header_info %}-->
 <!--  {% include 'invest/company/detail/modal_menu/add_to_portfolio_modal_menu.html' with company_info=company_detail_header_info %}-->
@@ -31,36 +25,45 @@ import CompanyDetailContent from "@/components/company_detail/CompanyDetailConte
 
 import store from "@/store";
 import axios from "axios";
+import {mapMutations, mapState} from "vuex";
 
 export default {
   name: 'CompanyDetail',
   components: {CompanyDetailContent, CompanyDetailHeader},
   data() {
     return {
-      company: {},
-      isFetched: false,
+      isFetched: false
     }
   },
   methods: {
    async  fetchCompany() {
-     store.commit('setIsLoading', true)
+     this.setIsLoading(true)
 
      const company_slug = this.$route.params.company_slug
 
      axios
        .get(`invest/api/v1/company/${company_slug}`)
        .then(response => {
-         this.company = response.data
+         this.setCompany(response.data)
          document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
          this.isFetched = true
        })
 
-     store.commit('setIsLoading', false)
+     this.setIsLoading(false)
     },
+    ...mapMutations({
+      setIsLoading: 'setIsLoading',
+      setCompany: 'companyDetail/setCompany',
+    })
   },
   async mounted() {
     await this.fetchCompany()
     await store.dispatch("companyDetail/fetchPriceData", this.$route.params.company_slug)
+  },
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    })
   },
 }
 </script>

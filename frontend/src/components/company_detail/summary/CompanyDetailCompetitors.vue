@@ -4,15 +4,15 @@ import CompanyDetailSection from "@/components/company_detail/CompanyDetailSecti
 import CompanyDetailSnowflakeTable from "@/components/company_detail/summary/CompanyDetailSnowflakeTable.vue";
 import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailCompetitors",
   components: {DetailSectionTitle, SnowflakeChart, CompanyDetailSnowflakeTable, CompanyDetailSection},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    }),
   },
 })
 </script>

@@ -4,15 +4,15 @@ import CompanyDetailAboutCompanyTable from "@/components/company_detail/summary/
 import CompanyDetailSection from "@/components/company_detail/CompanyDetailSection.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailAboutCompany",
   components: {DetailSectionTitle, RoundedDarkBlueButton, CompanyDetailSection, CompanyDetailAboutCompanyTable},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    }),
   },
 })
 </script>
@@ -22,7 +22,7 @@ export default defineComponent({
 
     <DetailSectionTitle>About the Company</DetailSectionTitle>
 
-    <CompanyDetailAboutCompanyTable :company/>
+    <CompanyDetailAboutCompanyTable/>
 
     <div class="detail-about-company__description">
       {{ company.description }}

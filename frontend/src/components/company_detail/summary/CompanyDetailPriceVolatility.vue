@@ -7,12 +7,6 @@ import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 export default defineComponent({
   name: "CompanyDetailPriceVolatility",
   components: {DetailSectionTitle, CompanyDetailStatement, PriceVolatilityChart},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  },
   data() {
     return {
       statement_list : [
@@ -28,7 +22,7 @@ export default defineComponent({
   <div>
     <DetailSectionTitle>Price Volatility</DetailSectionTitle>
 
-    <PriceVolatilityChart :company/>
+    <PriceVolatilityChart/>
 
     <CompanyDetailStatement :statement_list/>
 

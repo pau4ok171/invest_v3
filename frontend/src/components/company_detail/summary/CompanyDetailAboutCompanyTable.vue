@@ -1,15 +1,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import ExtraLinkIcon from "@/components/icons/ExtraLinkIcon.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailAboutCompanyTable",
   components: {ExtraLinkIcon},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    }),
   },
   methods: {
     humanize_number(val) {

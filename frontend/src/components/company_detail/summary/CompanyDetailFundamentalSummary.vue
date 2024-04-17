@@ -11,6 +11,7 @@ import CompanyDetailEarningsRevenueTable
 import CompanyDetailDividendsTable from "@/components/company_detail/summary/CompanyDetailDividendsTable.vue";
 import DividendPaydayChart from "@/components/charts/DividendPaydayChart.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailFundamentalSummary",
@@ -21,12 +22,14 @@ export default defineComponent({
     CompanyDetailEarningsRevenueTable,
     EarningsRevenueChart,
     CompanyDetailFundamentalSummaryTable,
-    FundamentalSummaryChart, DetailCompanySectionInRowItemBox, CompanyDetailSection},
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
+    FundamentalSummaryChart,
+    DetailCompanySectionInRowItemBox,
+    CompanyDetailSection
+  },
+  computed: {
+    ...mapState({
+      company: state => state.companyDetail.company,
+    }),
   },
 })
 </script>

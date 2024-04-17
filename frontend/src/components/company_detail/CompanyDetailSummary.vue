@@ -1,27 +1,17 @@
 <template>
   <div class="detail__summary">
 
-    <CompanyDetailStockOverview
-      :company
-    />
+    <CompanyDetailStockOverview/>
 
     <CompanyDetailNotes/>
 
-    <CompanyDetailCompetitors
-      :company
-    />
+    <CompanyDetailCompetitors/>
 
-    <CompanyDetailPriceHistoryPerformance
-      :company
-    />
+    <CompanyDetailPriceHistoryPerformance/>
 
-    <CompanyDetailAboutCompany
-      :company
-    />
+    <CompanyDetailAboutCompany/>
 
-    <CompanyDetailFundamentalSummary
-      :company
-    />
+    <CompanyDetailFundamentalSummary/>
 
 </div>
 </template>
@@ -46,11 +36,5 @@ export default defineComponent({
     CompanyDetailAboutCompany,
     CompanyDetailFundamentalSummary,
   },
-  props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  }
 })
 </script>

@@ -75,16 +75,16 @@
  import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
  import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
  import DotsIcon from "@/components/icons/DotsIcon.vue";
+ import {mapState} from "vuex";
 
  export default {
    name: 'CompanyDetailSidebar',
    components: {DotsIcon, SolidStarIcon, OutlineStarIcon, RoundedBlueButton, RoundedWhiteButton, PenIcon, CopyIcon},
-   props: {
-    company: {
-      type: Object,
-      required: true,
-    }
-  },
+   computed: {
+     ...mapState({
+       company: state => state.companyDetail.company,
+     }),
+   },
    mixins: [utils,],
    data() {
      return {
@@ -102,7 +102,6 @@
       ]
      }
    },
-
  }
 </script>
 
