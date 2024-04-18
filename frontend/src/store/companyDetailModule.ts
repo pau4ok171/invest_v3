@@ -4,12 +4,20 @@ export const companyDetailModule = {
   state: () => ({
     companyPriceData: [],
     company: {},
-    priceChartDataisLoading: true
+    priceChartDataisLoading: true,
+    notesModalMenuIsOpen: false,
+    notesModalMenuIsLateral: true,
   }),
   getters: {
     companyPriceData(state) {
       return state.companyPriceData.map(F => [F['time'], F['close']])
-    }
+    },
+    getNotesModalMenuIsActive(state) {
+      return state.notesModalMenuIsOpen
+    },
+    getNotesModalMenuIsLateral(state) {
+      return state.notesModalMenuIsLateral
+    },
   },
   mutations: {
     getCompanyPriceData(state, priceData) {
@@ -23,7 +31,13 @@ export const companyDetailModule = {
     },
     setIsWatchlisted(state, status: Boolean) {
       state.company.is_watchlisted = status
-    }
+    },
+    setNotesModalMenuIsOpen(state, status: Boolean) {
+      state.notesModalMenuIsOpen = status
+    },
+    setNotesModalMenuIsLateral(state, status: Boolean) {
+      state.notesModalMenuIsLateral = status
+    },
   },
   actions: {
     async fetchPriceData({state, commit}, slug) {
@@ -51,7 +65,6 @@ export const companyDetailModule = {
           .then(response => commit('setIsWatchlisted', true))
           .catch(error => console.log(error))
       }
-
     },
   },
   namespaced: true,

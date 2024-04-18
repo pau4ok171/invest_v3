@@ -1,10 +1,8 @@
 <template>
 <div class="modal_menu__wrapper">
   <div class="modal_menu">
-    <div class="login__login-form">
-      <button class="modal_menu__header-close-button" @click="closeModalMenu"><ModalMenuCloseIcon/></button>
-      <slot/>
-    </div>
+    <button class="modal_menu__header-close-button" @click="closeModalMenu"><ModalMenuCloseIcon/></button>
+    <slot/>
   </div>
 </div>
 </template>

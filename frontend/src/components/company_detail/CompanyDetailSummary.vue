@@ -19,7 +19,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailStockOverview from "@/components/company_detail/summary/CompanyDetailStockOverview.vue";
-import CompanyDetailNotes from "@/components/company_detail/summary/CompanyDetailNotes.vue";
+import CompanyDetailNotes from "@/components/company_detail/summary/notes/CompanyDetailNotes.vue";
 import CompanyDetailCompetitors from "@/components/company_detail/summary/CompanyDetailCompetitors.vue";
 import CompanyDetailPriceHistoryPerformance
   from "@/components/company_detail/summary/CompanyDetailPriceHistoryPerformance.vue";

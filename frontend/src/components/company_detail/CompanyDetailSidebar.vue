@@ -27,7 +27,7 @@
                 <SolidStarIcon/>
               </RoundedBlueButton>
 
-              <RoundedBlueButton>
+              <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
                 <PenIcon/>
                 <span>Add note</span>
               </RoundedBlueButton>
@@ -75,7 +75,7 @@
  import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
  import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
  import DotsIcon from "@/components/icons/DotsIcon.vue";
- import {mapActions, mapState} from "vuex";
+ import {mapActions, mapMutations, mapState} from "vuex";
 
  export default {
    name: 'CompanyDetailSidebar',
@@ -89,6 +89,9 @@
      ...mapActions({
       toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
      }),
+     ...mapMutations({
+      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
+    }),
    },
    mixins: [utils,],
    data() {

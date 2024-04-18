@@ -7,13 +7,31 @@ import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton
 import PenIcon from "@/components/icons/PenIcon.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
+import CompanyDetailNotesModalMenu from "@/components/company_detail/summary/notes/CompanyDetailNotesModalMenu.vue";
+import {mapGetters, mapMutations, mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailNotes",
   components: {
+    CompanyDetailNotesModalMenu,
     DetailSectionText,
     DetailSectionTitle,
-    PenIcon, RoundedDarkBlueButton, BookIcon, CompanyDetailContentGroup, CompanyDetailSection}
+    PenIcon,
+    RoundedDarkBlueButton,
+    BookIcon,
+    CompanyDetailContentGroup,
+    CompanyDetailSection
+  },
+  computed: {
+    ...mapGetters({
+      notesModalMenuIsOpen: "companyDetail/getNotesModalMenuIsActive",
+    }),
+  },
+  methods: {
+    ...mapMutations({
+      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen"
+    })
+  }
 })
 </script>
 
@@ -29,7 +47,7 @@ export default defineComponent({
       <div class="detail-notes__empty">
         <BookIcon class="detail-notes__empty-image"/>
         <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
-        <RoundedDarkBlueButton>
+        <RoundedDarkBlueButton @click="setNotesModalMenuIsOpen(true)">
           <PenIcon/>
           <span>Add note</span>
         </RoundedDarkBlueButton>
@@ -37,6 +55,8 @@ export default defineComponent({
 
     </CompanyDetailContentGroup>
   </CompanyDetailSection>
+
+  <CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen"/>
 </template>
 
 <style scoped>

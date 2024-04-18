@@ -7,7 +7,7 @@ import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
 import axios from "axios";
-import {mapActions, mapState} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailHeaderButtonList",
@@ -15,6 +15,9 @@ export default defineComponent({
   methods: {
     ...mapActions({
       toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
+    }),
+    ...mapMutations({
+      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
     }),
   },
   computed: {
@@ -33,7 +36,7 @@ export default defineComponent({
         <SolidStarIcon/>
       </RoundedBlueButton>
 
-      <RoundedBlueButton @click="openNotes">
+      <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
         <PenIcon/>
         <span>Add note</span>
       </RoundedBlueButton>

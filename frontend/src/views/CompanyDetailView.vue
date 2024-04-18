@@ -4,7 +4,6 @@
 <!--      <script src="{% static 'invest/js/company/detail/sidebar/sidebar.js' %}" defer></script>-->
 <!--      <script type="module" src="{% static 'invest/js/company/detail/sidebar/copy.js' %}" defer></script>-->
 <!--      <script type="module" src="{% static 'invest/js/company/detail/portfolio.js' %}" defer></script>-->
-<!--      <script type="module" src="{% static 'invest/js/company/detail/notes.js' %}" defer></script>-->
 <!--      <script src="{% static 'invest/js/company/detail/detail.js' %}" defer></script>-->
 <!--  {% endblock %}-->
   <CompanyDetailHeader v-if="isFetched"/>
@@ -13,9 +12,6 @@
 
 <!--  {% include 'invest/company/detail/modal_menu/analyst_sources_modal_menu.html' with company_info=company_detail_header_info %}-->
 <!--  {% include 'invest/company/detail/modal_menu/add_to_portfolio_modal_menu.html' with company_info=company_detail_header_info %}-->
-<!--  {% include 'invest/company/detail/modal_menu/add_notes_modal_menu.html' with company_info=company_detail_header_info %}-->
-<!--  {% include 'invest/company/detail/svg_declaration/css-patterns.html' %}-->
-<!--  {% include 'invest/company/detail/svg_declaration/lineair-gradient.html' %}-->
 </template>
 
 <script lang="ts">
