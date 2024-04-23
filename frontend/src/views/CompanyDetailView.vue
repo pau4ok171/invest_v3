@@ -21,7 +21,7 @@ import CompanyDetailContent from "@/components/company_detail/CompanyDetailConte
 
 import store from "@/store";
 import axios from "axios";
-import {mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: 'CompanyDetail',

@@ -1,5 +1,4 @@
-import { createApp } from "vue";
-import {createStore, Store} from "vuex";
+import {createStore} from "vuex";
 import {companyDetailModule} from "@/store/companyDetailModule";
 
 const store = createStore({

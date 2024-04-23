@@ -1,7 +1,7 @@
 <template>
 <div class="modal_menu__wrapper">
   <div class="modal_menu">
-    <button class="modal_menu__header-close-button" @click="closeModalMenu"><ModalMenuCloseIcon/></button>
+    <RoundedButton @click="closeModalMenu"><ModalMenuCloseIcon/></RoundedButton>
     <slot/>
   </div>
 </div>
@@ -9,10 +9,12 @@
 
 <script  lang="ts">
   import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
+  import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 
   export default {
     name: 'ModalMenu',
     components: {
+      RoundedButton,
       ModalMenuCloseIcon
     },
     data() {

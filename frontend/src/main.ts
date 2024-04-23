@@ -30,7 +30,10 @@ Highcharts.Templating.helpers.abs = value => Math.abs(value);
 Highcharts.setOptions({
     lang: {
         rangeSelectorZoom: ''
-    }
+    },
+    accessibility: {
+        enabled: false
+    },
 });
 
 app

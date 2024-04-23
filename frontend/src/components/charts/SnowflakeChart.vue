@@ -118,7 +118,7 @@ export default defineComponent({
 <template>
   <div :class="['snowflake', {'snowflake--small': isSmall}]">
     <div class="snowflake-labels">
-      <svg :width="this.chartW" :height="this.chartH" viewBox="0 0 241 231" fill="none" xmlns="http://www.w3.org/2000/svg" class="snowflake-labels__inner">
+      <svg :width="this.chartW" :height="this.chartH" viewBox="0 0 241 231" fill="none" class="snowflake-labels__inner">
         <g class="snowflake-labels__item snowflake-labels__item--value">
           <path d="M104.414 8.87181L105.614 1.95417L107.24 1.7169L105.391 10.6068L103.961 10.8126L99.7113 2.79367L101.322 2.55652L104.414 8.87181Z" class="snowflake-labels__label-text"></path>
           <path d="M114.142 7.74834L110.828 7.99804L110.286 10.0296L108.734 10.1312L111.337 1.37086L112.663 1.286L116.522 9.56314L114.986 9.67959L114.142 7.74834ZM111.151 6.7641L113.636 6.58058L112.134 3.13725L111.151 6.7641Z" class="snowflake-labels__label-text"></path>
@@ -187,7 +187,6 @@ export default defineComponent({
   }
   .snowflake-labels {
       position: absolute;
-      z-index: 1;
       width: 100%;
   }
   .snowflake-labels > canvas {
