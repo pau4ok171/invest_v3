@@ -5,17 +5,27 @@ import CompanyDetailHeaderInfoItem
 import SmallPriceChart from "@/components/charts/SmallPriceChart.vue";
 import TextButton from "@/components/UI/buttons/TextButton.vue";
 import utils from "@/mixins/utils";
-import {mapState} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
+import CompanyDetailAnalystsModalMenu
+  from "@/components/company_detail/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderInfoPanel",
-  components: {TextButton, SmallPriceChart, CompanyDetailHeaderInfoItem},
+  components: {CompanyDetailAnalystsModalMenu, TextButton, SmallPriceChart, CompanyDetailHeaderInfoItem},
   computed: {
     totalIdeas() {
       return this.company.analyst_ideas.length
     },
     ...mapState({
       company: state => state.companyDetail.company,
+    }),
+    ...mapGetters({
+      analystsModalMenuIsOpen: 'companyDetail/getAnalystsModalMenuIsOpen',
+    })
+  },
+  methods: {
+    ...mapMutations({
+      setAnalystsModalMenuIsOpen: 'companyDetail/setAnalystsModalMenuIsOpen',
     }),
   },
   mixins: [utils,],
@@ -72,11 +82,13 @@ export default defineComponent({
           <span>Financials Company</span>
           <template v-if="company.analyst_ideas">
             <span> + </span>
-            <TextButton>{{ this.totalIdeas }} Analysts</TextButton>
+            <TextButton @click="setAnalystsModalMenuIsOpen(true)">{{ this.totalIdeas }} Analysts</TextButton>
           </template>
         </span>
       </template>
     </CompanyDetailHeaderInfoItem>
+
+    <CompanyDetailAnalystsModalMenu v-if="analystsModalMenuIsOpen"/>
 
   </div>
 </template>

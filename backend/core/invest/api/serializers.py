@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea
+from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, Currency
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -180,7 +180,21 @@ class ReportSerializer(serializers.ModelSerializer):
         return instance.updated.strftime('%d %b, %Y')
 
 
+class AnalystSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Analyst
+        fields = '__all__'
+
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = '__all__'
+
+
 class AnalystIdeaSerializer(serializers.ModelSerializer):
+    analyst = AnalystSerializer()
+    currency = CurrencySerializer()
 
     class Meta:
         model = AnalystIdea
