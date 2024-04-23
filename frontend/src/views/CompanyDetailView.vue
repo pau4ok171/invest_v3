@@ -40,7 +40,8 @@ export default {
      axios
        .get(`invest/api/v1/company/${company_slug}`)
        .then(response => {
-         this.setCompany(response.data)
+         this.setCompany(response.data.company)
+         this.setPortfolios(response.data.portfolios)
          document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
          this.isFetched = true
        })
@@ -50,6 +51,7 @@ export default {
     ...mapMutations({
       setIsLoading: 'setIsLoading',
       setCompany: 'companyDetail/setCompany',
+      setPortfolios: 'companyDetail/setPortfolios',
     })
   },
   async mounted() {
@@ -57,8 +59,8 @@ export default {
     await store.dispatch("companyDetail/fetchPriceData", this.$route.params.company_slug)
   },
   computed: {
-    ...mapState({
-      company: state => state.companyDetail.company,
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
     })
   },
 }

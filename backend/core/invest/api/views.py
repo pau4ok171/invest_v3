@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from rest_framework import status, authentication, permissions
@@ -9,7 +11,10 @@ from rest_framework.decorators import api_view
 
 from invest.api.serializers import CompanySerializer, CandlePerDaySerializer, SorterSerializer, CountrySerializer, SectorSerializer, CompanySearchSerializer, CompanyDetailSerializer
 from invest.api.paginators import StandardResultsSetPagination
-from invest.models import Company, CandlePerDay, Sorter, Country, Sector
+from invest.models import Company, CandlePerDay, Sorter, Country, Sector, AnalystIdea
+
+from portfolio.models import Portfolio
+from portfolio.api.serializers import PortfolioSerializer
 
 from django.db.models import Q
 
@@ -150,3 +155,20 @@ class CompanyDetailAPIView(RetrieveAPIView):
     lookup_field = 'slug'
     lookup_url_kwarg = 'company_slug'
 
+    def retrieve(self, request, *args, **kwargs):
+        company_instance = self.get_object()
+        company_serializer = self.get_serializer(company_instance)
+        portfolio_serializer = self._get_portfolio_serializer()
+
+        return Response({
+            "company": company_serializer.data,
+            "portfolios": portfolio_serializer.data,
+        })
+
+    def _get_portfolio_serializer(self) -> PortfolioSerializer:
+        if self.request.user.is_authenticated:
+            portfolios = Portfolio.objects.filter(user=self.request.user)
+        else:
+            portfolios = {}
+
+        return PortfolioSerializer(portfolios, many=True)

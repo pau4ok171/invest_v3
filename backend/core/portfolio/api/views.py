@@ -1,4 +1,8 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 from django.http import JsonResponse
 from portfolio.models import Portfolio, PortfolioCompany
@@ -65,5 +69,36 @@ class CreatePortfolioAPI(CreateAPIView):
         )
 
 
+class PortfoliosViewSet(ModelViewSet):
+    serializer_class = PortfolioSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
+    def get_queryset(self):
+        return Portfolio.objects.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        data = {
+            'name': self.request.data.get('portfolio_name'),
+            'user': self.request.user.pk
+        }
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def update(self, request, *args, **kwargs):
+        portfolio = Portfolio.objects.get(pk=self.kwargs.get('pk'))
+        company = Company.objects.get(pk=self.request.data.get('company_id'))
+
+        action = self.request.data.get('action')
+
+        if action == 'include':
+            PortfolioCompany.objects.create(portfolio=portfolio, company=company)
+        elif action == 'exclude':
+            PortfolioCompany.objects.get(company=company, portfolio=portfolio).delete()
+
+        serializer = self.serializer_class(portfolio)
+
+        return Response(serializer.data)

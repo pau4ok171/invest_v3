@@ -6,23 +6,42 @@ import PenIcon from "@/components/icons/PenIcon.vue";
 import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import axios from "axios";
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import CompanyDetailPortfolioModalMenu
+  from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
+import MiniLoader from "@/components/UI/MiniLoader.vue";
+
 
 export default defineComponent({
   name: "CompanyDetailHeaderButtonList",
-  components: {RoundedBlueButton, SolidStarIcon, OutlineStarIcon, PenIcon, RoundedWhiteButton, DotsIcon},
+  components: {
+    MiniLoader,
+    CompanyDetailPortfolioModalMenu,
+    RoundedBlueButton,
+    SolidStarIcon,
+    OutlineStarIcon,
+    PenIcon,
+    RoundedWhiteButton,
+    DotsIcon
+  },
   methods: {
     ...mapActions({
       toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
     }),
     ...mapMutations({
       setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
+      setPortfolioModalMenuIsOpen: "companyDetail/setPortfolioModalMenuIsOpen",
     }),
   },
   computed: {
     ...mapState({
       company: state => state.companyDetail.company,
+      isAuthenticated: state => state.isAuthenticated,
+    }),
+    ...mapGetters({
+      portfolioModalMenuIsOpen: "companyDetail/getPortfolioModalMenuIsOpen",
+      watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
+      portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
     }),
   },
 })
@@ -32,8 +51,9 @@ export default defineComponent({
   <div class="detail-header__button-list">
 
     <template v-if="company.is_watchlisted">
-      <RoundedBlueButton @click="toggleToWatchlist">
-        <SolidStarIcon/>
+      <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+        <MiniLoader v-if="watchlistIsLoading"/>
+        <SolidStarIcon v-else/>
       </RoundedBlueButton>
 
       <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
@@ -43,13 +63,18 @@ export default defineComponent({
     </template>
 
     <template v-else>
-      <RoundedBlueButton @click="toggleToWatchlist">
-        <OutlineStarIcon/>
+      <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+        <MiniLoader v-if="watchlistIsLoading"/>
+        <OutlineStarIcon v-else/>
         <span>Add to watchlist</span>
       </RoundedBlueButton>
     </template>
 
-    <RoundedWhiteButton><span>Add to portfolio</span></RoundedWhiteButton>
+    <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
+      <span>Add to portfolio</span>
+    </RoundedWhiteButton>
+
+    <CompanyDetailPortfolioModalMenu v-if="portfolioModalMenuIsOpen && isAuthenticated"/>
 
     <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
 

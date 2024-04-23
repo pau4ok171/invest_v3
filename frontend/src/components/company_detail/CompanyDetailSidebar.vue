@@ -23,8 +23,9 @@
 
           <section class="detail-sidebar__button-list">
             <template v-if="company.is_watchlisted">
-              <RoundedBlueButton @click="toggleToWatchlist">
-                <SolidStarIcon/>
+              <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading"  @click="toggleToWatchlist">
+                <MiniLoader v-if="watchlistIsLoading"/>
+                <SolidStarIcon v-else/>
               </RoundedBlueButton>
 
               <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
@@ -34,8 +35,9 @@
             </template>
 
             <template v-else>
-              <RoundedBlueButton @click="toggleToWatchlist">
-                <OutlineStarIcon/>
+              <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+                <MiniLoader v-if="watchlistIsLoading"/>
+                <OutlineStarIcon v-else/>
                 <span>Add to watchlist</span>
               </RoundedBlueButton>
             </template>
@@ -75,15 +77,23 @@
  import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
  import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
  import DotsIcon from "@/components/icons/DotsIcon.vue";
- import {mapActions, mapMutations, mapState} from "vuex";
+ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+ import MiniLoader from "@/components/UI/MiniLoader.vue";
 
  export default {
    name: 'CompanyDetailSidebar',
-   components: {DotsIcon, SolidStarIcon, OutlineStarIcon, RoundedBlueButton, RoundedWhiteButton, PenIcon, CopyIcon},
+   components: {
+     MiniLoader,
+     DotsIcon, SolidStarIcon, OutlineStarIcon, RoundedBlueButton, RoundedWhiteButton, PenIcon, CopyIcon},
    computed: {
      ...mapState({
        company: state => state.companyDetail.company,
+       isAuthenticated: state => state.isAuthenticated,
      }),
+     ...mapGetters(({
+       watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
+       portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
+     }))
    },
    methods: {
      ...mapActions({

@@ -195,6 +195,7 @@ class CompanyDetailSerializer(CompanySerializer):
     class Meta:
         model = Company
         fields = (
+            'id',
             'uid',
             'ticker',
             'title',

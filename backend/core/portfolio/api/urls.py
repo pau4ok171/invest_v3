@@ -1,9 +1,14 @@
-from django.urls import path
-from .views import PortfolioPositionsAPI, CreatePortfolioAPI
+from django.urls import path, include
+from .views import PortfoliosViewSet
+
+from rest_framework import routers
 
 app_name = 'portfolio_api'
 
+router = routers.SimpleRouter()
+router.register(r'portfolios', PortfoliosViewSet, basename='portfolios')
+
 urlpatterns = [
-    path('create_portfolio/', CreatePortfolioAPI.as_view()),
-    path('portfolio_positions/', PortfolioPositionsAPI.as_view()),
+    # Invest v3
+    path('portfolios/', include(router.urls)),
 ]
