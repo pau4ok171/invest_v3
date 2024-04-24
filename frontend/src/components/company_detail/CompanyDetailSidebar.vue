@@ -1,71 +1,71 @@
 <template>
-  <div class="detail-sidebar">
-    <section class="detail-sidebar__inner">
+<div class="detail-sidebar">
+  <section class="detail-sidebar__inner">
 
-      <header class="detail-sidebar__header">
-        <div class="detail-sidebar__snowflake">
-          <div class="detail-sidebar__logo">
-            <img
-              :src="company.logo_url"
-              :alt="company.slug"
-            >
-          </div>
+    <header ref="sidebar_header" class="detail-sidebar__header">
+      <div class="detail-sidebar__snowflake">
+        <div class="detail-sidebar__logo">
+          <img
+            :src="company.logo_url"
+            :alt="company.slug"
+          >
         </div>
-      </header>
+      </div>
+    </header>
 
-      <main class="detail-sidebar__main">
-        <p class="detail-sidebar__title">
-          {{ company.title }}
-            <CopyIcon class="detail-sidebar__copy-icon"/>
-        </p>
-          <h3 class="detail-sidebar__text">{{ company.market.title }}:{{ company.slug.toUpperCase() }} Stock Report</h3>
-          <p class="detail-sidebar__text detail-sidebar__text--small">Mkt Cap: {{ humanize_financial_val(company.price_data.capitalisation) }}</p>
+    <main ref="sidebar_main" class="detail-sidebar__main">
+      <p class="detail-sidebar__title">
+        {{ company.title }}
+          <CopyIcon class="detail-sidebar__copy-icon" @click="addToClipBoard"/>
+      </p>
+        <h3 class="detail-sidebar__text">{{ company.market.title }}:{{ company.slug.toUpperCase() }} Stock Report</h3>
+        <p class="detail-sidebar__text detail-sidebar__text--small">Mkt Cap: {{ humanize_financial_val(company.price_data.capitalisation) }}</p>
 
-          <section class="detail-sidebar__button-list">
-            <template v-if="company.is_watchlisted">
-              <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading"  @click="toggleToWatchlist">
-                <MiniLoader v-if="watchlistIsLoading"/>
-                <SolidStarIcon v-else/>
-              </RoundedBlueButton>
+        <section class="detail-sidebar__button-list">
+          <template v-if="company.is_watchlisted">
+            <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading"  @click="toggleToWatchlist">
+              <MiniLoader v-if="watchlistIsLoading"/>
+              <SolidStarIcon v-else/>
+            </RoundedBlueButton>
 
-              <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
-                <PenIcon/>
-                <span>Add note</span>
-              </RoundedBlueButton>
-            </template>
+            <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
+              <PenIcon/>
+              <span>Add note</span>
+            </RoundedBlueButton>
+          </template>
 
-            <template v-else>
-              <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-                <MiniLoader v-if="watchlistIsLoading"/>
-                <OutlineStarIcon v-else/>
-                <span>Add to watchlist</span>
-              </RoundedBlueButton>
-            </template>
+          <template v-else>
+            <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+              <MiniLoader v-if="watchlistIsLoading"/>
+              <OutlineStarIcon v-else/>
+              <span>Add to watchlist</span>
+            </RoundedBlueButton>
+          </template>
 
-            <RoundedWhiteButton>
-              <DotsIcon/>
-            </RoundedWhiteButton>
-          </section>
-      </main>
+          <RoundedWhiteButton>
+            <DotsIcon/>
+          </RoundedWhiteButton>
+        </section>
+    </main>
 
-      <footer class="detail-sidebar__footer">
-        <nav class="detail-sidebar__navigation">
-          <ul>
-            <li
-                class="detail-sidebar__list-item"
-                :class="{'detail-sidebar__list-item--active': header === this.activeHeader}"
-                v-once
-                v-for="header in this.contentListHeaders"
-                :key="header"
-            >
-              {{ header }}
-            </li>
-          </ul>
-        </nav>
-      </footer>
+    <footer class="detail-sidebar__footer">
+      <nav class="detail-sidebar__navigation">
+        <ul>
+          <li
+              class="detail-sidebar__list-item"
+              :class="{'detail-sidebar__list-item--active': header === activeHeader}"
+              v-once
+              v-for="header in contentListHeaders"
+              :key="header"
+          >
+            {{ header }}
+          </li>
+        </ul>
+      </nav>
+    </footer>
 
-    </section>
-  </div>
+  </section>
+</div>
 </template>
 
 <script lang="ts">
@@ -79,47 +79,102 @@
  import DotsIcon from "@/components/icons/DotsIcon.vue";
  import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
  import MiniLoader from "@/components/UI/MiniLoader.vue";
+ import {toast} from "vue3-toastify";
 
- export default {
-   name: 'CompanyDetailSidebar',
-   components: {
-     MiniLoader,
-     DotsIcon, SolidStarIcon, OutlineStarIcon, RoundedBlueButton, RoundedWhiteButton, PenIcon, CopyIcon},
-   computed: {
-     ...mapState({
-       company: state => state.companyDetail.company,
-       isAuthenticated: state => state.isAuthenticated,
-     }),
-     ...mapGetters(({
-       watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
-       portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
-     }))
-   },
-   methods: {
-     ...mapActions({
-      toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
-     }),
-     ...mapMutations({
+export default {
+  name: 'CompanyDetailSidebar',
+  components: {
+    MiniLoader,
+    DotsIcon,
+    SolidStarIcon,
+    OutlineStarIcon,
+    RoundedBlueButton,
+    RoundedWhiteButton,
+    PenIcon,
+    CopyIcon
+  },
+  computed: {
+    ...mapState({
+     company: state => state.companyDetail.company,
+     isAuthenticated: state => state.isAuthenticated,
+    }),
+    ...mapGetters({
+     watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
+     portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
+     sidebarIsVisible: "companyDetail/getSidebarIsVisible",
+    })
+  },
+  methods: {
+    ...mapActions({
+    toggleToWatchlist: dispatch => dispatch('companyDetail/toggleToWatchlist')
+    }),
+    ...mapMutations({
       setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
     }),
-   },
-   mixins: [utils,],
-   data() {
-     return {
-       activeHeader: 'Company Overview',
-       contentListHeaders: [
-         'Company Overview',
-         '1 Valuation',
-         '2 Future Growth',
-         '3 Past Performance',
-         '4 Financial Health',
-         '5 Dividend',
-         '6 Management',
-         '7 Ownership',
-         'Other Information'
-      ]
-     }
-   },
+    addToClipBoard() {
+      navigator.clipboard.writeText(location.href)
+        .then(() => {
+            toast.success('Link Copied')
+        })
+        .catch(err => {console.log(err)})
+    },
+    changeSidebarOpacity() {
+      const opacity = this.calculateSidebarOpacity()
+      const sidebar_header = this.$refs.sidebar_header
+      const sidebar_body = this.$refs.sidebar_main
+
+      sidebar_header.style.setProperty('opacity', opacity)
+      sidebar_body.style.setProperty('opacity', opacity)
+
+      if (opacity === 0) {
+        sidebar_header.style.setProperty('visibility', 'hidden')
+        sidebar_body.style.setProperty('visibility', 'hidden')
+      } else {
+        sidebar_header.style.setProperty('visibility', 'visible')
+        sidebar_body.style.setProperty('visibility', 'visible')
+      }
+    },
+    calculateSidebarOpacity(): Number {
+      const scrollVisible = 25
+      const scrollHidden = 200
+      const scrollY = window.scrollY
+      let opacity = 0
+
+      if (scrollY < scrollHidden && scrollY > scrollVisible) {
+        opacity = (scrollY - scrollVisible) /  (scrollHidden - scrollVisible)
+        return opacity
+      }
+      if (scrollY <= scrollVisible) {
+        opacity = 0
+        return opacity
+      }
+      if (scrollY >= scrollHidden) {
+        opacity = 1
+        return opacity
+      }
+      return opacity
+    },
+  },
+  mixins: [utils,],
+  data() {
+   return {
+     activeHeader: 'Company Overview',
+     contentListHeaders: [
+       'Company Overview',
+       '1 Valuation',
+       '2 Future Growth',
+       '3 Past Performance',
+       '4 Financial Health',
+       '5 Dividend',
+       '6 Management',
+       '7 Ownership',
+       'Other Information'
+    ]
+   }
+  },
+  mounted() {
+    window.addEventListener('scroll', () => this.changeSidebarOpacity())
+  },
  }
 </script>
 
@@ -139,6 +194,8 @@
   }
   .detail-sidebar__header {
     padding-bottom: 8px;
+    visibility: hidden;
+    opacity: 0;
   }
   .detail-sidebar__snowflake {
     margin: -18px -8px;
@@ -158,6 +215,8 @@
   }
   .detail-sidebar__main {
     padding-bottom: 16px;
+    visibility: hidden;
+    opacity: 0;
   }
   .detail-sidebar__footer {
     position: fixed;

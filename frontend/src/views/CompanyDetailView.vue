@@ -1,17 +1,9 @@
 <template>
-<!--  {% block scripts %}-->
-<!--      <script src="https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js" defer></script>-->
-<!--      <script src="{% static 'invest/js/company/detail/sidebar/sidebar.js' %}" defer></script>-->
-<!--      <script type="module" src="{% static 'invest/js/company/detail/sidebar/copy.js' %}" defer></script>-->
-<!--      <script type="module" src="{% static 'invest/js/company/detail/portfolio.js' %}" defer></script>-->
-<!--      <script src="{% static 'invest/js/company/detail/detail.js' %}" defer></script>-->
-<!--  {% endblock %}-->
+
   <CompanyDetailHeader v-if="isFetched"/>
 
   <CompanyDetailContent v-if="isFetched"/>
 
-<!--  {% include 'invest/company/detail/modal_menu/analyst_sources_modal_menu.html' with company_info=company_detail_header_info %}-->
-<!--  {% include 'invest/company/detail/modal_menu/add_to_portfolio_modal_menu.html' with company_info=company_detail_header_info %}-->
 </template>
 
 <script lang="ts">
@@ -25,7 +17,10 @@ import {mapGetters, mapMutations} from "vuex";
 
 export default {
   name: 'CompanyDetail',
-  components: {CompanyDetailContent, CompanyDetailHeader},
+  components: {
+    CompanyDetailContent,
+    CompanyDetailHeader
+  },
   data() {
     return {
       isFetched: false
