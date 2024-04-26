@@ -28,31 +28,31 @@ StockChart(Highcharts)
 Highcharts.Templating.helpers.abs = value => Math.abs(value);
 
 Highcharts.setOptions({
-    lang: {
-        rangeSelectorZoom: ''
-    },
-    accessibility: {
-        enabled: false
-    },
+  lang: {
+    rangeSelectorZoom: ''
+  },
+  accessibility: {
+    enabled: false
+  },
 });
 
 app
-    .use(router)
-    .use(store)
-    .use(axios)
-    .use(HighchartsVue, {tagName: 'charts'})
-    .use(
-        Vue3Toastify,
-        {
-            autoClose: 3000,
-            position: toast.POSITION.BOTTOM_RIGHT,
-            limit: 5,
-            closeButton: false,
-            transition: toast.TRANSITIONS.BOUNCE,
-            style: {
-                fontSize: '1.6rem',
-            },
-            theme: 'colored',
-        } as ToastContainerOptions
-    )
-    .mount('#app')
+  .use(router)
+  .use(store)
+  .use(axios)
+  .use(HighchartsVue, {tagName: 'charts'})
+  .use(
+    Vue3Toastify,
+    {
+      autoClose: 3000,
+      position: toast.POSITION.BOTTOM_RIGHT,
+      limit: 5,
+      closeButton: false,
+      transition: toast.TRANSITIONS.BOUNCE,
+      style: {
+        fontSize: '1.6rem',
+      },
+      theme: 'colored',
+    } as ToastContainerOptions
+  )
+  .mount('#app')
