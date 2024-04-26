@@ -6,6 +6,8 @@ export const companyDetailModule = {
     companyPriceData: [],
     company: {},
     portfolios: [],
+    notes: [],
+    note: {},
     priceChartDataisLoading: true,
     // NotesModalMenu
     notesModalMenuIsOpen: false,
@@ -16,6 +18,8 @@ export const companyDetailModule = {
     portfolioIsLoading: false,
     // AnalystsModalMenu
     analystsModalMenuIsOpen: false,
+    // NotesModalMenu
+    noteSavedContent: '',
   }),
   getters: {
     companyPriceData(state) {
@@ -35,6 +39,15 @@ export const companyDetailModule = {
     },
     getPortfolios(state) {
       return state.portfolios
+    },
+    getNotes(state) {
+      return state.notes
+    },
+    getNote(state) {
+      return state.note
+    },
+    getNoteSavedContent(state) {
+      return state.noteSavedContent
     },
     getWatchlistIsLoading(state) {
       return state.watchlistIsLoading
@@ -59,8 +72,20 @@ export const companyDetailModule = {
     setPortfolios(state, portfolios) {
       state.portfolios = portfolios
     },
+    setNotes(state, notes) {
+      state.notes = notes
+    },
+    setNote(state, note) {
+      state.note = note
+    },
     addNewPortfolio(state, portfolio) {
       state.portfolios.push(portfolio)
+    },
+    addNewNote(state, note) {
+      state.notes.push(note)
+    },
+    setNoteSavedContent(state, savedContent) {
+      state.noteSavedContent = savedContent
     },
     setIsWatchlisted(state, status: Boolean) {
       state.company.is_watchlisted = status
@@ -95,6 +120,17 @@ export const companyDetailModule = {
         }
       })
       commit('setPortfolios', portfolios)
+    },
+    updateNotesWithNewNote({state, commit}, note) {
+      let notes: Array<Object> = []
+      state.notes.forEach((n: {id: Number}) => {
+        if (n.id === note.id) {
+          notes.push(note)
+        } else {
+          notes.push(n)
+        }
+      })
+      commit('setNotes', notes)
     },
     async fetchPriceData({state, commit}, slug) {
       await axios
@@ -135,6 +171,17 @@ export const companyDetailModule = {
           })
       }
       commit('setWatchlistIsLoading', false)
+    },
+    async deleteNote({state, commit}, note) {
+      await axios
+        .delete(`/notes/api/v1/notes/${note.id}`)
+        .then(response => {
+          commit('setNotes', [...state.notes].filter(n => n.id !== note.id))
+        })
+        .catch(error => {
+          console.log(error)
+          toast.error('Something was wrong...')
+          })
     },
   },
   namespaced: true,
