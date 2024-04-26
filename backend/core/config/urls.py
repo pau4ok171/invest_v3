@@ -30,7 +30,7 @@ urlpatterns = [
     path('invest/', include('invest.urls', namespace='invest')),
     path('watchlist/', include('watchlist.urls', namespace='watchlist')),
     path('portfolio/', include('portfolio.urls', namespace='portfolio')),
-    path('notes', include('notes.urls', namespace='notes')),
+    path('notes/', include('notes.urls', namespace='notes')),
     path('', include('django.contrib.auth.urls')),
     path('', views.HomePageView.as_view(), name='home'),
 ]
