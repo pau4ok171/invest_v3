@@ -17,6 +17,7 @@ export default defineComponent({
   },
   props: {
     editor: Object,
+    saveStatus: String,
   },
 })
 </script>
@@ -48,7 +49,7 @@ export default defineComponent({
 
   <div class="detail_notes_model_menu_footer__content_group detail_notes_model_menu_footer__r-content_group">
 
-    <div class="detail_notes_model_menu_footer__saving_state">Saved</div>
+    <div class="detail_notes_model_menu_footer__saving_state">{{ saveStatus }}</div>
     <div class="detail_notes_model_menu_footer__volume_state">
       <svg height="24" viewBox="0 0 20 20" width="24">
         <circle class="detail_notes_model_menu_footer__volume_state_total"></circle>
