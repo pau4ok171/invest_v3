@@ -9,10 +9,19 @@ import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
 import CompanyDetailNotesModalMenu from "@/components/company_detail/summary/notes/CompanyDetailNotesModalMenu.vue";
 import {mapGetters, mapMutations, mapState} from "vuex";
+import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
+import DotsIcon from "@/components/icons/DotsIcon.vue";
+import CompanyDetailNotesToolDropDownMenu
+  from "@/components/company_detail/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
+import CompanyDetailNotesNoteItem from "@/components/company_detail/summary/notes/CompanyDetailNotesNoteItem.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotes",
   components: {
+    CompanyDetailNotesNoteItem,
+    CompanyDetailNotesToolDropDownMenu,
+    DotsIcon,
+    RoundedGreyButton,
     CompanyDetailNotesModalMenu,
     DetailSectionText,
     DetailSectionTitle,
@@ -25,38 +34,55 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       notesModalMenuIsOpen: "companyDetail/getNotesModalMenuIsActive",
+      notes: 'companyDetail/getNotes',
+      note: "companyDetail/getNote",
     }),
+    getNoteListClass() {
+      return `detail-notes__note-list-${this.notes.slice(0, 3).length}-el`
+    }
   },
   methods: {
     ...mapMutations({
-      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen"
-    })
+      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
+      setNote: "companyDetail/setNote",
+    }),
   }
 })
 </script>
 
 <template>
-  <CompanyDetailSection>
-    <CompanyDetailContentGroup>
+<CompanyDetailSection>
+  <CompanyDetailContentGroup>
 
-      <header class="detail-notes">
-        <DetailSectionTitle>My Notes</DetailSectionTitle>
-        <mark class="detail-notes__mark">0</mark>
-      </header>
+    <header class="detail-notes">
+      <DetailSectionTitle>My Notes</DetailSectionTitle>
+      <mark class="detail-notes__mark">{{ notes.length }}</mark>
+    </header>
 
-      <div class="detail-notes__empty">
-        <BookIcon class="detail-notes__empty-image"/>
-        <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
-        <RoundedDarkBlueButton @click="setNotesModalMenuIsOpen(true)">
-          <PenIcon/>
-          <span>Add note</span>
-        </RoundedDarkBlueButton>
+    <template v-if="notes.length">
+      <div :class="['detail-notes__note-list', getNoteListClass]">
+        <CompanyDetailNotesNoteItem
+          v-for="note in notes.slice(0, 3)"
+          :note
+          :key="note.id"
+        />
       </div>
+      <RoundedDarkBlueButton :isFullWidth="true">See more</RoundedDarkBlueButton>
+    </template>
 
-    </CompanyDetailContentGroup>
-  </CompanyDetailSection>
+    <div v-else class="detail-notes__empty">
+      <BookIcon class="detail-notes__empty-image"/>
+      <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
+      <RoundedDarkBlueButton @click="setNotesModalMenuIsOpen(true)">
+        <PenIcon/>
+        <span>Add note</span>
+      </RoundedDarkBlueButton>
+    </div>
 
-  <CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen"/>
+  </CompanyDetailContentGroup>
+</CompanyDetailSection>
+
+<CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen"/>
 </template>
 
 <style scoped>
@@ -92,5 +118,21 @@ export default defineComponent({
     height: 66px;
     fill: none;
     transform: translateY(4px);
+  }
+  .detail-notes__note-list {
+    display: grid;
+    gap: 8px;
+    grid-template-rows: auto;
+    max-height: 164px;
+    margin-bottom: 8px;
+  }
+  .detail-notes__note-list-1-el {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .detail-notes__note-list-2-el {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .detail-notes__note-list-3-el {
+    grid-template-columns: repeat(3, 1fr);
   }
 </style>
