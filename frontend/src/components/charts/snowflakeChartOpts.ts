@@ -98,14 +98,14 @@ export default chartOpts =  {
     plotOptions: {
         series: {
             pointStart: 0,
-            pointInterval: 72
+            pointInterval: 72,
         },
 
     },
      series: [{
         type: 'areaspline',
         clip: false,
-        enableMouseTracking: true,
+        enableMouseTracking: false,
         fillColor: snowflakeChartColor5, // Цвет заливки
         lineColor: snowflakeChartBorderColor5, // Цвет границы
         lineWidth: 2, // Толщина границы
@@ -113,11 +113,19 @@ export default chartOpts =  {
         xAxis: 0,
         yAxis: 0,
         marker: {
-            enabled: false
+            enabled: false,
+            states: {
+                hover: {
+                    enabled: false
+                }
+            }
         },
         data: [],
-        trackByArea: true,
-    }]
+        trackByArea: false,
+    }],
+    tooltip: {
+        enabled: false,
+    },
 }
 
 
