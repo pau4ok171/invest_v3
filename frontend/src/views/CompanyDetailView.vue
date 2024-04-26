@@ -37,6 +37,7 @@ export default {
        .then(response => {
          this.setCompany(response.data.company)
          this.setPortfolios(response.data.portfolios)
+         this.setNotes(response.data.notes)
          document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
          this.isFetched = true
        })
@@ -47,6 +48,7 @@ export default {
       setIsLoading: 'setIsLoading',
       setCompany: 'companyDetail/setCompany',
       setPortfolios: 'companyDetail/setPortfolios',
+      setNotes: "companyDetail/setNotes",
     })
   },
   async mounted() {
