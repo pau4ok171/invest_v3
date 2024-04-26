@@ -3,12 +3,12 @@ import {defineComponent} from 'vue'
 import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
 import {mapActions, mapMutations} from "vuex";
+import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesNoteItem",
-  components: {RoundedGreyButton, CompanyDetailNotesToolDropDownMenu, DotsIcon},
+  components: {RoundedButton, CompanyDetailNotesToolDropDownMenu, DotsIcon},
   props: {
     note: {
       type: Object,
@@ -52,7 +52,7 @@ export default defineComponent({
       <time :datetime="note.updated">{{ new Date(note.updated).toLocaleDateString('ru-RU') }}</time>
     </p>
     <div class="detail-notes__note-actions">
-    <RoundedGreyButton @click="dropDownMenuIsActive=!dropDownMenuIsActive"><DotsIcon/></RoundedGreyButton>
+    <RoundedButton @click="dropDownMenuIsActive=!dropDownMenuIsActive"><DotsIcon/></RoundedButton>
     <CompanyDetailNotesToolDropDownMenu
       v-if="dropDownMenuIsActive"
       @closeDropDownMenu="closeDropDownMenu"
