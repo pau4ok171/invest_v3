@@ -31,7 +31,20 @@ export default defineComponent({
     ...mapMutations({
       setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
       setPortfolioModalMenuIsOpen: "companyDetail/setPortfolioModalMenuIsOpen",
+      setNote: 'companyDetail/setNote',
+      setNoteSavedContent: "companyDetail/setNoteSavedContent",
     }),
+    createNewNote() {
+      this.setNote({
+        id: null,
+        body: null,
+        created: null,
+        updated: null,
+        company: this.company.id,
+      })
+      this.setNoteSavedContent('')
+      this.setNotesModalMenuIsOpen(true)
+    },
   },
   computed: {
     ...mapState({
@@ -56,7 +69,7 @@ export default defineComponent({
         <SolidStarIcon v-else/>
       </RoundedBlueButton>
 
-      <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
+      <RoundedBlueButton @click="createNewNote">
         <PenIcon/>
         <span>Add note</span>
       </RoundedBlueButton>

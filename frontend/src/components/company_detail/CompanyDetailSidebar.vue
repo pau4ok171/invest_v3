@@ -28,7 +28,7 @@
               <SolidStarIcon v-else/>
             </RoundedBlueButton>
 
-            <RoundedBlueButton @click="setNotesModalMenuIsOpen(true)">
+            <RoundedBlueButton @click="createNewNote">
               <PenIcon/>
               <span>Add note</span>
             </RoundedBlueButton>
@@ -110,6 +110,8 @@ export default {
     }),
     ...mapMutations({
       setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
+      setNote: 'companyDetail/setNote',
+      setNoteSavedContent: "companyDetail/setNoteSavedContent",
     }),
     addToClipBoard() {
       navigator.clipboard.writeText(location.href)
@@ -117,6 +119,17 @@ export default {
             toast.success('Link Copied')
         })
         .catch(err => {console.log(err)})
+    },
+    createNewNote() {
+      this.setNote({
+        id: null,
+        body: null,
+        created: null,
+        updated: null,
+        company: this.company.id,
+      })
+      this.setNoteSavedContent('')
+      this.setNotesModalMenuIsOpen(true)
     },
     changeSidebarOpacity() {
       const opacity = this.calculateSidebarOpacity()
