@@ -16,6 +16,9 @@ from invest.models import Company, CandlePerDay, Sorter, Country, Sector, Analys
 from portfolio.models import Portfolio
 from portfolio.api.serializers import PortfolioSerializer
 
+from notes.models import Note
+from notes.api.serializers import NoteSerializer
+
 from django.db.models import Q
 
 
@@ -159,10 +162,12 @@ class CompanyDetailAPIView(RetrieveAPIView):
         company_instance = self.get_object()
         company_serializer = self.get_serializer(company_instance)
         portfolio_serializer = self._get_portfolio_serializer()
+        note_serializer = self._get_note_serializer()
 
         return Response({
             "company": company_serializer.data,
             "portfolios": portfolio_serializer.data,
+            "notes": note_serializer.data,
         })
 
     def _get_portfolio_serializer(self) -> PortfolioSerializer:
@@ -170,5 +175,11 @@ class CompanyDetailAPIView(RetrieveAPIView):
             portfolios = Portfolio.objects.filter(user=self.request.user)
         else:
             portfolios = {}
-
         return PortfolioSerializer(portfolios, many=True)
+
+    def _get_note_serializer(self) -> NoteSerializer:
+        if self.request.user.is_authenticated:
+            notes = Note.objects.filter(user=self.request.user, company=self.get_object())
+        else:
+            notes = {}
+        return NoteSerializer(notes, many=True)
