@@ -1,7 +1,7 @@
 <template>
   <div>
     <AppLayout>
-      <RouterView />
+      <RouterView/>
     </AppLayout>
   </div>
 </template>
@@ -29,9 +29,7 @@ export default {
       return store
     }
   },
-
 }
-
 </script>
 
 <style>

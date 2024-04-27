@@ -33,8 +33,7 @@ const store = createStore({
             state.isAuthenticated = false
         },
     },
-    actions: {
-    },
+    actions: {},
     modules: {
         companyDetail: companyDetailModule,
     }
