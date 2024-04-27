@@ -79,6 +79,7 @@ class CompanySerializer(serializers.ModelSerializer):
     absolute_url = serializers.CharField(source='get_absolute_url', read_only=True)
     is_watchlisted = serializers.SerializerMethodField('get_is_watchlisted')
     price_data = serializers.SerializerMethodField('get_price_data')
+    formatting = serializers.SerializerMethodField('get_formatting')
 
     class Meta:
         model = Company
@@ -93,6 +94,7 @@ class CompanySerializer(serializers.ModelSerializer):
             'absolute_url',
             'is_watchlisted',
             'price_data',
+            'formatting',
         )
 
     def __init__(self, instance=None, data=empty, **kwargs):
@@ -164,6 +166,17 @@ class CompanySerializer(serializers.ModelSerializer):
             past_price = past_price.first().close
             return (last_price - past_price) / past_price * 100
         return 0
+
+    @staticmethod
+    def get_formatting(obj):
+        return {
+            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencySymbol': obj.country.currency.symbol,
+            'reportCurrencyISO': '',
+            'reportCurrencySymbol': '',
+            'tradingCurrencyISO': '',
+            'tradingCurrencySymbol': '',
+        }
 
 
 class ReportSerializer(serializers.ModelSerializer):

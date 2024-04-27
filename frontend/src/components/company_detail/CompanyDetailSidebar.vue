@@ -19,7 +19,9 @@
           <CopyIcon class="detail-sidebar__copy-icon" @click="addToClipBoard"/>
       </p>
         <h3 class="detail-sidebar__text">{{ company.market.title }}:{{ company.slug.toUpperCase() }} Stock Report</h3>
-        <p class="detail-sidebar__text detail-sidebar__text--small">Mkt Cap: {{ humanize_financial_val(company.price_data.capitalisation) }}</p>
+        <p class="detail-sidebar__text detail-sidebar__text--small">
+          Mkt Cap: {{ humanize_financial_val(company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
+        </p>
 
         <section class="detail-sidebar__button-list">
           <template v-if="company.is_watchlisted">

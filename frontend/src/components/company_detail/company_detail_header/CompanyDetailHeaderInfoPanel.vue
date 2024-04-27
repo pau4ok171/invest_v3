@@ -42,7 +42,9 @@ export default defineComponent({
 
     <CompanyDetailHeaderInfoItem>
       <template v-slot:title><p>Market cap</p></template>
-      <template v-slot:value><span>{{ this.humanize_financial_val(this.company.price_data.capitalisation) }}</span></template>
+      <template v-slot:value><span>
+        {{ this.humanize_financial_val(this.company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
+      </span></template>
     </CompanyDetailHeaderInfoItem>
 
     <CompanyDetailHeaderInfoItem>

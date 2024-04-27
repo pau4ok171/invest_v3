@@ -34,7 +34,7 @@
     </td>
     <td>
        <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        {{ humanize_financial_val(object.price_data.capitalisation) }}
+        {{ humanize_financial_val(object.price_data.capitalisation, object.formatting.primaryCurrencySymbol) }}
       </RouterLink>
     </td>
     <td>
