@@ -32,9 +32,11 @@ export default defineComponent({
       this.inputMode = true
     },
     async createNewPortfolio() {
-      const formData = {
-        portfolio_name: this.portfolioInputValue
-      }
+      const formData = new FormData()
+      Object.entries({
+          portfolio_name: this.portfolioInputValue,
+      }).forEach(([key, val]) => formData.append(key, val))
+
       await axios
         .post('portfolio/api/v1/portfolios/portfolios/', formData)
         .then(response => {
@@ -49,9 +51,15 @@ export default defineComponent({
         })
     },
     async updatePortfolio(action, portfolio, company) {
+      const formData = new FormData()
+      Object.entries({
+          action: action,
+          company_id: company.id,
+      }).forEach(([key, val]) => formData.append(key, val))
+
       this.setPortfolioIsLoading(true)
       await axios
-        .put(`portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`, {'action': action, 'company_id': company.id})
+        .put(`portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`, formData)
         .then(response => {
           this.updatePortfoliosWithNewPortfolio(response.data)
           toast.success(`${company.slug.toUpperCase()} was added to ${portfolio.name}`)

@@ -21,7 +21,6 @@ import axios from "axios";
 import store from "@/store";
 import DropDownMenu from "@/components/UI/DropDownMenu.vue";
 
-
 export default {
   name: 'NavUserDropDown',
   components: {DropDownMenu},
@@ -40,50 +39,50 @@ export default {
 </script>
 
 <style scoped>
-  .account-access__dropdown {
-    transition: visibility 0s .6s, opacity .6s ease;
-  }
-  .account-access__navigation {
-    width: 200px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-  }
-  .account-access-navigation__inner {
-    position: absolute;
-    top: -6px;
-    left: 0;
-    width: 100%;
-    background-color: #262e3a;
-    border-radius: 4px;
-  }
-  .account-access__list {
-    list-style: none;
-  }
-  .account-access__list li {
-    font-size: 1.4rem;
-    line-height: 1.5;
-  }
-  .account-access__list li:last-child {
-    border-top: 1px solid #3c434e;
-  }
-  .account-access__list li > * {
-    display: block;
-    text-align: left;
-    color: #fff;
-    width: 100%;
-    padding: 12px 16px;
-    transition: all .3s ease 0s;
-  }
-  .account-access__list li:first-child > * {
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-  }
-  .account-access__list li:last-child > * {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-  .account-access__list li > *:hover {
-    background-color: rgb(35, 148, 223);
-  }
+.account-access__dropdown {
+  transition: visibility 0s .6s, opacity .6s ease;
+}
+.account-access__navigation {
+  width: 200px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.account-access-navigation__inner {
+  position: absolute;
+  top: -6px;
+  left: 0;
+  width: 100%;
+  background-color: #262e3a;
+  border-radius: 4px;
+}
+.account-access__list {
+  list-style: none;
+}
+.account-access__list li {
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+.account-access__list li:last-child {
+  border-top: 1px solid #3c434e;
+}
+.account-access__list li > * {
+  display: block;
+  text-align: left;
+  color: #fff;
+  width: 100%;
+  padding: 12px 16px;
+  transition: all .3s ease 0s;
+}
+.account-access__list li:first-child > * {
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+.account-access__list li:last-child > * {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.account-access__list li > *:hover {
+  background-color: rgb(35, 148, 223);
+}
 </style>

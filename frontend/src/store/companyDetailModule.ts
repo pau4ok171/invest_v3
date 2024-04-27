@@ -142,14 +142,15 @@ export const companyDetailModule = {
     },
     async toggleToWatchlist({state, commit}) {
       commit('setWatchlistIsLoading', true)
-      const formData = {
-        uid: state.company.uid
-      }
+
+      const formData = new FormData()
+      Object.entries({uid: state.company.uid}).forEach(([key, val]) => {
+        formData.append(key, val)
+      })
+
       if (state.company.is_watchlisted) {
         await axios
-          .delete('/invest/api/v1/toggle_to_watchlist/', {
-            data: formData
-          })
+          .delete('/invest/api/v1/toggle_to_watchlist/', {data: formData})
           .then(() => {
             commit('setIsWatchlisted', false)
             toast.success(`Company ${state.company.slug.toUpperCase()} was remove from watchlist`)

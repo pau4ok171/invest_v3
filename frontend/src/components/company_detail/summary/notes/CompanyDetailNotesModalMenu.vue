@@ -107,18 +107,19 @@ export default defineComponent({
       }
     },
     async saveNote() {
-      const formData = {
+      const formData = new FormData()
+      Object.entries({
         note_id: this.note.id,
         company_id: this.note.company,
         content: this.note.body,
-        updated: new Date()
-      }
+        updated: new Date(),
+      }).forEach(([key, val]) => formData.append(key, val))
 
       this.saveStatus = 'Saving...'
 
-      if (formData.note_id) {
+      if (this.note.id) {
         await axios
-          .put(`/notes/api/v1/notes/${formData.note_id}/`, formData)
+          .put(`/notes/api/v1/notes/${this.note.id}/`, formData)
           .then(response => {
             this.setNoteSavedContent(response.data.body)
             this.setNote(response.data)

@@ -47,14 +47,14 @@ export default {
   emits: ['fetchMoreCompanies', 'toggleToWatchlist'],
   methods: {
     async toggleToWatchlist(object) {
-      const formData = {
-        uid: object.uid
-      }
+      const formData = new FormData()
+      Object.entries({
+          uid: object.uid,
+      }).forEach(([key, val]) => formData.append(key, val))
+
       if (object.is_watchlisted) {
         await axios
-          .delete('/invest/api/v1/toggle_to_watchlist/', {
-            data: formData
-          })
+          .delete('/invest/api/v1/toggle_to_watchlist/', {data: formData})
           .then(response => this.$emit('toggleToWatchlist', {uid: object.uid, is_watchlisted: false}))
           .catch(error => console.log(error))
       } else {
@@ -63,7 +63,6 @@ export default {
           .then(response => {this.$emit('toggleToWatchlist', {uid: object.uid, is_watchlisted: true})})
           .catch(error => console.log(error))
       }
-
     }
   },
   mounted() {
@@ -83,41 +82,41 @@ export default {
 </script>
 
 <style scoped>
-  .company-list__table {
-    min-width: 920px;
-    width: 100%;
-    table-layout: auto;
-    border-spacing: 0;
-    color: #fff;
-  }
-  .company-list__table thead {
-    white-space: nowrap;
-    text-align: left;
-  }
-  .company-list__table th {
-    font-size: 1.2rem;
-    line-height: 1.5;
-    font-weight: 500;
-    color: #fff;
-    opacity: .5;
-    border-bottom: 1px solid rgba(255, 255, 255, .1);
-    position: sticky;
-    background-color: var(--bg-color);
-    padding: 10px 8px;
-  }
-  .company-list__table th:first-child {
-    height: 55px;
-    width: 56px;
-  }
-  .company-list__table th:nth-child(2) {
-    width: 116px;
-  }
-  .company-list__table tr {
-    height: auto;
-  }
-  .observer {
-    width: 100%;
-    height: 16px;
-    background-color: inherit;
-  }
+.company-list__table {
+  min-width: 920px;
+  width: 100%;
+  table-layout: auto;
+  border-spacing: 0;
+  color: #fff;
+}
+.company-list__table thead {
+  white-space: nowrap;
+  text-align: left;
+}
+.company-list__table th {
+  font-size: 1.2rem;
+  line-height: 1.5;
+  font-weight: 500;
+  color: #fff;
+  opacity: .5;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  position: sticky;
+  background-color: var(--bg-color);
+  padding: 10px 8px;
+}
+.company-list__table th:first-child {
+  height: 55px;
+  width: 56px;
+}
+.company-list__table th:nth-child(2) {
+  width: 116px;
+}
+.company-list__table tr {
+  height: auto;
+}
+.observer {
+  width: 100%;
+  height: 16px;
+  background-color: inherit;
+}
 </style>

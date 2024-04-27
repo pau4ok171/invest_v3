@@ -93,8 +93,13 @@
           if (formDataFields.new_username.length >= 8) {
             this.checks.username.isInit = true
             // Проверить имя пользователя на уникальность
+            const formData = new FormData()
+            Object.entries({
+                username: formDataFields.new_username,
+            }).forEach(([key, val]) => formData.append(key, val))
+
             await axios
-              .post('/invest/api/v1/validate_username/', {"username": formDataFields.new_username})
+              .post('/invest/api/v1/validate_username/', formData)
               .then(response => {
                 this.checks.username.isError = response.data.isTaken
                 this.checks.username.message = response.data.message
