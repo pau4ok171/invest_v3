@@ -205,6 +205,7 @@ class CompanyDetailSerializer(CompanySerializer):
     sector = SectorDetailSerializer(read_only=True)
     reports = ReportSerializer(many=True)
     analyst_ideas = AnalystIdeaSerializer(many=True)
+    formatting = serializers.SerializerMethodField('get_formatting')
 
     class Meta:
         model = Company
@@ -227,7 +228,19 @@ class CompanyDetailSerializer(CompanySerializer):
             'price_data',
             'reports',
             'analyst_ideas',
+            'formatting',
         )
+
+    @staticmethod
+    def get_formatting(obj):
+        return {
+            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencySymbol': obj.country.currency.symbol,
+            'reportCurrencyISO': '',
+            'reportCurrencySymbol': '',
+            'tradingCurrencyISO': '',
+            'tradingCurrencySymbol': '',
+        }
 
 
 class CandlePerDaySerializer(serializers.ModelSerializer):
