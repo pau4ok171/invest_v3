@@ -20,16 +20,6 @@
       @toggleToWatchlist="toggleToWatchlist"
     />
 
-    <Notification>
-      <template v-slot:icon>
-        <CheckmarkCircleIcon fill="#2dc97e"/>
-      </template>
-      <template v-slot:message>
-        Success
-      </template>
-
-    </Notification>
-
   </section>
 </template>
 
@@ -38,14 +28,12 @@ import CompanyListHeader from "@/components/company_list/CompanyListHeader.vue";
 import CompanyListContent from "@/components/company_list/CompanyListContent.vue";
 import axios from "axios";
 import store from "@/store";
-import Notification from "@/components/UI/Notification.vue";
 import CheckmarkCircleIcon from "@/components/icons/CheckmarkCircleIcon.vue";
 
 export default {
   name: 'CompanyList',
   components: {
     CheckmarkCircleIcon,
-    Notification,
     CompanyListHeader,
     CompanyListContent,
   },

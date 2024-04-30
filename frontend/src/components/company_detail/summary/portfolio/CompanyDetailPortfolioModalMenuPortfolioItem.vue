@@ -46,14 +46,14 @@ export default defineComponent({
         <span>Added</span>
       </RoundedSuccessButton>
 
-      <RoundedErrorButton @click="$emit('updatePortfolio', 'exclude', portfolio, company)">
+      <RoundedErrorButton @click="$emit('updatePortfolio', 'exclude', portfolio)">
         <MiniLoader v-if="portfolioIsLoading"/>
         <TrashIcon v-else style="width: 20px; height: 20px;"/>
       </RoundedErrorButton>
     </template>
 
     <template v-else>
-      <RoundedBlueButton @click="$emit('updatePortfolio', 'include', portfolio, company)">
+      <RoundedBlueButton @click="$emit('updatePortfolio', 'include', portfolio)">
         <MiniLoader v-if="portfolioIsLoading"/>
         <PlusIcon v-else style="width: 20px; height: 20px;"/>
         <span>Add</span>

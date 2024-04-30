@@ -50,11 +50,11 @@ export default defineComponent({
           toast.error('Something was wrong...')
         })
     },
-    async updatePortfolio(action, portfolio, company) {
+    async updatePortfolio(action: string, portfolio: object) {
       const formData = new FormData()
       Object.entries({
           action: action,
-          company_id: company.id,
+          company_id: this.company.id,
       }).forEach(([key, val]) => formData.append(key, val))
 
       this.setPortfolioIsLoading(true)
@@ -62,7 +62,11 @@ export default defineComponent({
         .put(`portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`, formData)
         .then(response => {
           this.updatePortfoliosWithNewPortfolio(response.data)
-          toast.success(`${company.slug.toUpperCase()} was added to ${portfolio.name}`)
+          if (action === 'include') {
+            toast.success(`${this.company.slug.toUpperCase()} was added to ${portfolio.name}`)
+          } else {
+            toast.success(`${this.company.slug.toUpperCase()} was remove from ${portfolio.name}`)
+          }
         })
         .catch(error => {
           console.log(error)

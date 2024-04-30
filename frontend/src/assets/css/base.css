@@ -20,9 +20,6 @@ body::-webkit-scrollbar-thumb {
 body[disabled] {
 	overflow-y: hidden;
 }
-.screen__blured {
-	filter: blur(6px);
-}
 a {
 	text-decoration: none;
 	color: inherit;
