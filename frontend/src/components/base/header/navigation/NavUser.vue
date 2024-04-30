@@ -1,25 +1,31 @@
 <template>
-  <div class="navigation__account-access">
-    <div class="account-access__inner">
-      <template v-if="store.state.isAuthenticated">
-        <DropDownMenuBox>
-          <template v-slot:button>
-            <RoundedButton>
-              <span><UserIcon/></span>
-              <span><ArrowDownIcon/></span>
-            </RoundedButton>
-          </template>
-          <template v-slot:menu>
-            <NavUserDropDown/>
-          </template>
-        </DropDownMenuBox>
-      </template>
-      <template v-else>
-        <button class="account-access__button" @click="openAuthModalMenu">Вход</button>
-      </template>
-    </div>
-
+<div class="navigation__account-access">
+  <div class="account-access__inner">
+    <template v-if="store.state.isAuthenticated">
+      <DropDownMenuBox>
+        <template v-slot:button>
+          <RoundedButton>
+            <span><UserIcon/></span>
+            <span><ArrowDownIcon/></span>
+          </RoundedButton>
+        </template>
+        <template v-slot:menu>
+          <NavUserDropDown/>
+        </template>
+      </DropDownMenuBox>
+    </template>
+    <template v-else>
+      <BaseModalMenuContainer>
+        <template #button>
+          <button class="account-access__button">Вход</button>
+        </template>
+        <template #menu="menuProps">
+          <AuthModalMenu @closeMenu="menuProps.close()"/>
+        </template>
+      </BaseModalMenuContainer>
+    </template>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -29,15 +35,14 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 
 export default {
   name: 'NavUser',
-  components: {RoundedButton, DropDownMenuBox, NavUserDropDown, ArrowDownIcon, UserIcon},
-  methods: {
-    openAuthModalMenu() {
-      store.commit('setAuthModalMenuIsActive', true)
-    },
-  },
+  components: {
+    AuthModalMenu,
+    BaseModalMenuContainer, RoundedButton, DropDownMenuBox, NavUserDropDown, ArrowDownIcon, UserIcon},
   computed: {
     store () {
       return store

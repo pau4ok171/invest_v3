@@ -1,12 +1,10 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import CompanyDetailPortfolioModalMenuPortfolioItem
   from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenuPortfolioItem.vue";
 import RoundedHighGreyButton from "@/components/UI/buttons/RoundedHighGreyButton.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
 import NewPortfolioInput from "@/components/UI/inputs/NewPortfolioInput.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
@@ -21,7 +19,6 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations({
-      setPortfolioModalMenuIsOpen: "companyDetail/setPortfolioModalMenuIsOpen",
       addNewPortfolio: "companyDetail/addNewPortfolio",
       setPortfolioIsLoading: "companyDetail/setPortfolioIsLoading",
     }),
@@ -77,10 +74,8 @@ export default defineComponent({
   },
   components: {
     NewPortfolioInput,
-    RoundedGreyButton,
     RoundedHighGreyButton,
     CompanyDetailPortfolioModalMenuPortfolioItem,
-    ModalMenuCloseIcon,
     BaseModalMenu,
   },
   computed: {
@@ -95,65 +90,34 @@ export default defineComponent({
 <template>
 <BaseModalMenu>
 
-  <header class="detail-portfolio-modal-menu__header">
-    <h1 class="detail-portfolio-modal-menu__title">Add SBER to Portfolio</h1>
-    <RoundedGreyButton @click="setPortfolioModalMenuIsOpen(false)"><ModalMenuCloseIcon/></RoundedGreyButton>
-  </header>
+  <template #title>Add SBER to Portfolio</template>
 
-  <main class="detail-portfolio-modal-menu__main">
+  <template #content>
     <CompanyDetailPortfolioModalMenuPortfolioItem
-        v-for="portfolio in this.portfolios"
-        :portfolio
-        :key="portfolio.id"
-        @updatePortfolio="updatePortfolio"
+      v-for="portfolio in portfolios"
+      :portfolio
+      :key="portfolio.id"
+      @updatePortfolio="updatePortfolio"
     />
-  </main>
 
-  <footer class="detail-portfolio-modal-menu__footer">
-    <NewPortfolioInput
+    <div class="detail-portfolio-modal-menu__new">
+      <NewPortfolioInput
         v-if="inputMode"
         v-model="portfolioInputValue"
         v-model:inputMode="inputMode"
         @createNewPortfolio="createNewPortfolio"
-    />
-    <RoundedHighGreyButton @click.stop="changeMode" v-else><span>New Portfolio</span></RoundedHighGreyButton>
-  </footer>
+      />
+      <RoundedHighGreyButton @click.stop="changeMode" v-else>
+        <span>New Portfolio</span>
+      </RoundedHighGreyButton>
+    </div>
+  </template>
 
 </BaseModalMenu>
 </template>
 
 <style scoped>
-.detail-portfolio-modal-menu__header {
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #e8e8e8;
-}
-.detail-portfolio-modal-menu__title {
-  font-size: 2rem;
-  line-height: 1.5;
-  font-weight: 500;
-  color: #262e3a;
-}
-.detail-portfolio-modal-menu__main {
-  max-height: 392px;
-  overflow-y: auto;
-  padding: 0;
-  border-bottom: none;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar {
-  width: 10px;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar-track {
-	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
-	background-color: #f9f9fd;
-	border-radius: 10px;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background: linear-gradient(180deg, #00c6fb, #005bea);
-}
-.detail-portfolio-modal-menu__footer {
+.detail-portfolio-modal-menu__new {
   display: flex;
   justify-content: flex-start;
   padding: 16px 16px 16px 24px;

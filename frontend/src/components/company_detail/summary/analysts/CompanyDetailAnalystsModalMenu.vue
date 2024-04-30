@@ -1,13 +1,13 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
 import {mapGetters, mapMutations} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailAnalystsModalMenu",
-  components: {ModalMenuCloseIcon, RoundedGreyButton, BaseModalMenu},
+  components: {
+    BaseModalMenu
+  },
   computed: {
     ...mapGetters({
       company: "companyDetail/getCompany",
@@ -27,12 +27,12 @@ export default defineComponent({
 <template>
 <BaseModalMenu>
 
-  <header class="detail-portfolio-modal-menu__header">
-    <h1 class="detail-portfolio-modal-menu__title">Analyst Sources</h1>
-    <RoundedGreyButton @click="setAnalystsModalMenuIsOpen(false)"><ModalMenuCloseIcon/></RoundedGreyButton>
-  </header>
+  <template #title>
+    Analyst Sources
+  </template>
 
-  <main class="detail-portfolio-modal-menu__main">
+  <template #content>
+  <div class="detail-analysts-modal-menu__content">
     <div class="detail-analysts-modal-menu__description">
       {{ company.title }} is covered by {{ totalIdeas }} analysts.
     </div>
@@ -52,41 +52,15 @@ export default defineComponent({
         </tr>
       </tbody>
     </table>
-  </main>
+  </div>
+  </template>
 
 </BaseModalMenu>
 </template>
 
 <style scoped>
-.detail-portfolio-modal-menu__header {
-  padding: 16px 24px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #e8e8e8;
-}
-.detail-portfolio-modal-menu__title {
-  font-size: 2rem;
-  line-height: 1.5;
-  font-weight: 500;
-  color: #262e3a;
-}
-.detail-portfolio-modal-menu__main {
+.detail-analysts-modal-menu__content {
   padding: 32px 24px;
-  border-bottom: 1px solid #e8e8e8;
-  max-height: 392px;
-  overflow-y: auto;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar {
-  width: 10px;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar-track {
-	-webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
-	background-color: #f9f9fd;
-	border-radius: 10px;
-}
-.detail-portfolio-modal-menu__main::-webkit-scrollbar-thumb {
-	border-radius: 10px;
-	background: linear-gradient(180deg, #00c6fb, #005bea);
 }
 .detail-analysts-modal-menu__description {
   font-size: 1.6rem;

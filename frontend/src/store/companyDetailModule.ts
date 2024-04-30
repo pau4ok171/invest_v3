@@ -12,12 +12,8 @@ export const companyDetailModule = {
     // NotesModalMenu
     notesModalMenuIsOpen: false,
     notesModalMenuIsLateral: true,
-    // PortfolioModalMenu
-    portfolioModalMenuIsOpen: false,
     watchlistIsLoading: false,
     portfolioIsLoading: false,
-    // AnalystsModalMenu
-    analystsModalMenuIsOpen: false,
     // NotesModalMenu
     noteSavedContent: '',
   }),
@@ -30,9 +26,6 @@ export const companyDetailModule = {
     },
     getNotesModalMenuIsLateral(state) {
       return state.notesModalMenuIsLateral
-    },
-    getPortfolioModalMenuIsOpen(state) {
-      return state.portfolioModalMenuIsOpen
     },
     getCompany(state) {
       return state.company
@@ -54,9 +47,6 @@ export const companyDetailModule = {
     },
     getPortfolioIsLoading(state) {
       return state.portfolioIsLoading
-    },
-    getAnalystsModalMenuIsOpen(state) {
-      return state.analystsModalMenuIsOpen
     },
   },
   mutations: {
@@ -96,17 +86,11 @@ export const companyDetailModule = {
     setNotesModalMenuIsLateral(state, status: Boolean) {
       state.notesModalMenuIsLateral = status
     },
-    setPortfolioModalMenuIsOpen(state, status: Boolean) {
-      state.portfolioModalMenuIsOpen = status
-    },
     setWatchlistIsLoading(state, status: Boolean) {
       state.watchlistIsLoading = status
     },
     setPortfolioIsLoading(state, status: Boolean) {
       state.portfolioIsLoading = status
-    },
-    setAnalystsModalMenuIsOpen(state, status: Boolean) {
-      state.analystsModalMenuIsOpen = status
     },
   },
   actions: {

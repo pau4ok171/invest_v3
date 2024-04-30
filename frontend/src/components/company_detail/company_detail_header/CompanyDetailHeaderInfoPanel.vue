@@ -5,27 +5,26 @@ import CompanyDetailHeaderInfoItem
 import SmallPriceChart from "@/components/charts/SmallPriceChart.vue";
 import TextButton from "@/components/UI/buttons/TextButton.vue";
 import utils from "@/mixins/utils";
-import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapGetters} from "vuex";
 import CompanyDetailAnalystsModalMenu
   from "@/components/company_detail/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderInfoPanel",
-  components: {CompanyDetailAnalystsModalMenu, TextButton, SmallPriceChart, CompanyDetailHeaderInfoItem},
+  components: {
+    BaseModalMenuContainer,
+    CompanyDetailAnalystsModalMenu,
+    TextButton,
+    SmallPriceChart,
+    CompanyDetailHeaderInfoItem
+  },
   computed: {
     totalIdeas() {
       return this.company.analyst_ideas.length
     },
-    ...mapState({
-      company: state => state.companyDetail.company,
-    }),
     ...mapGetters({
-      analystsModalMenuIsOpen: 'companyDetail/getAnalystsModalMenuIsOpen',
-    })
-  },
-  methods: {
-    ...mapMutations({
-      setAnalystsModalMenuIsOpen: 'companyDetail/setAnalystsModalMenuIsOpen',
+      company: "companyDetail/getCompany",
     }),
   },
   mixins: [utils,],
@@ -37,21 +36,21 @@ export default defineComponent({
 
     <CompanyDetailHeaderInfoItem>
       <template v-slot:title><p>Last price</p></template>
-      <template v-slot:value><span>₽{{ this.company.price_data.last_price.toFixed(2) }}</span></template>
+      <template v-slot:value><span>₽{{ company.price_data.last_price.toFixed(2) }}</span></template>
     </CompanyDetailHeaderInfoItem>
 
     <CompanyDetailHeaderInfoItem>
       <template v-slot:title><p>Market cap</p></template>
       <template v-slot:value><span>
-        {{ this.humanize_financial_val(this.company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
+        {{ humanize_financial_val(company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
       </span></template>
     </CompanyDetailHeaderInfoItem>
 
     <CompanyDetailHeaderInfoItem>
       <template v-slot:title><p>7D</p></template>
       <template v-slot:value>
-        <span :class="[this.company.price_data.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-          {{ this.company.price_data.return_7d.toFixed(2)}}%
+        <span :class="[company.price_data.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+          {{ company.price_data.return_7d.toFixed(2)}}%
         </span>
       </template>
     </CompanyDetailHeaderInfoItem>
@@ -59,8 +58,8 @@ export default defineComponent({
     <CompanyDetailHeaderInfoItem>
       <template v-slot:title><p>1Y</p></template>
       <template v-slot:value>
-        <span :class="[this.company.price_data.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-          {{ this.company.price_data.return_1y.toFixed(2)}}%
+        <span :class="[company.price_data.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+          {{ company.price_data.return_1y.toFixed(2)}}%
         </span>
       </template>
     </CompanyDetailHeaderInfoItem>
@@ -71,7 +70,7 @@ export default defineComponent({
       <template v-slot:title><p>Updated</p></template>
       <template v-slot:value>
         <span class="detail-header__info-item-value--small">
-          <template v-if="company.reports.length">{{ this.company.reports[0].updated}}</template>
+          <template v-if="company.reports.length">{{ company.reports[0].updated}}</template>
           <template v-else>n/a</template>
         </span>
       </template>
@@ -84,13 +83,18 @@ export default defineComponent({
           <span>Financials Company</span>
           <template v-if="company.analyst_ideas">
             <span> + </span>
-            <TextButton @click="setAnalystsModalMenuIsOpen(true)">{{ this.totalIdeas }} Analysts</TextButton>
+            <BaseModalMenuContainer>
+              <template #button>
+                <TextButton>{{ totalIdeas }} Analysts</TextButton>
+              </template>
+              <template #menu="menuProps">
+                <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
+              </template>
+            </BaseModalMenuContainer>
           </template>
         </span>
       </template>
     </CompanyDetailHeaderInfoItem>
-
-    <CompanyDetailAnalystsModalMenu v-if="analystsModalMenuIsOpen"/>
 
   </div>
 </template>

@@ -1,48 +1,50 @@
 <template>
-  <ModalMenu @closeModalMenu="closeModalMenu">
-    <div class="auth-form">
-      <h1 class="auth-form__title">Finargo</h1>
-      <h2 class="auth-form__subtitle">Your best invest analysis provider</h2>
+<BaseModalMenu>
+<template #content>
+  <div class="auth-form">
+    <h1 class="auth-form__title">Finargo</h1>
+    <h2 class="auth-form__subtitle">Your best invest analysis provider</h2>
 
-      <AuthForm
-          @submitForm="submitForm"
-          :registerIsChosen
-          :errors
-          v-model:formData="formData"
-          v-model:formIsValid="formIsValid"
-      />
+    <AuthForm
+      @submitForm="submitForm"
+      :registerIsChosen
+      :errors
+      v-model:formData="formData"
+      v-model:formIsValid="formIsValid"
+    />
 
-      <SocialAuthForm/>
+    <SocialAuthForm/>
 
-      <div class="auth-form__change-form">
-        <template v-if="!registerIsChosen">Еще нет аккаунта? <span @click="changeForm">Создать</span></template>
-        <template v-else>Уже есть аккаунт? <span @click="changeForm">Войти</span></template>
-      </div>
-
-      <div class="auth-form__conditions">
-          By using Simply Wall St you are agreeing to our <br>
-          <a href="#" target="_blank">terms and conditions</a>.
-          Simply Wall St provides <br>general investment advice only.
-      </div>
+    <div class="auth-form__change-form">
+      <template v-if="!registerIsChosen">Еще нет аккаунта? <span @click="changeForm">Создать</span></template>
+      <template v-else>Уже есть аккаунт? <span @click="changeForm">Войти</span></template>
     </div>
-  </ModalMenu>
+
+    <div class="auth-form__conditions">
+        By using Simply Wall St you are agreeing to our <br>
+        <a href="#" target="_blank">terms and conditions</a>.
+        Simply Wall St provides <br>general investment advice only.
+    </div>
+  </div>
+</template>
+</BaseModalMenu>
 </template>
 
 <script lang="ts">
-  import ModalMenu from "@/components/UI/ModalMenu.vue";
   import SocialAuthForm from "@/components/base/auth/SocialAuthForm.vue";
   import AuthForm from "@/components/base/auth/AuthForm.vue";
   import store from "@/store";
   import axios, {AxiosError} from "axios";
   import Loader from "@/components/UI/Loader.vue";
+  import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 
   export default {
     name: 'AuthModalMenu',
     components: {
+      BaseModalMenu,
       Loader,
       AuthForm,
       SocialAuthForm,
-      ModalMenu,
     },
     data() {
       return {
@@ -63,9 +65,12 @@
         formIsValid: false,
       }
     },
+    unmounted() {
+      console.log('UNMOUNTED')
+      this.cleanModalMenu()
+    },
     methods: {
-      closeModalMenu() {
-        store.commit('setAuthModalMenuIsActive', false)
+      cleanModalMenu() {
         this.formData = this.EMPTY_FORM_DATA
         this.errors = []
         this.formIsValid = false
@@ -120,7 +125,7 @@
 
           localStorage.setItem("token", token)
 
-          this.closeModalMenu()
+          this.cleanModalMenu()
         })
         .catch(this.catchError)
       store.commit('setIsLoading', false)

@@ -10,11 +10,13 @@ import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import CompanyDetailPortfolioModalMenu
   from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import MiniLoader from "@/components/UI/MiniLoader.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 
 
 export default defineComponent({
   name: "CompanyDetailHeaderButtonList",
   components: {
+    BaseModalMenuContainer,
     MiniLoader,
     CompanyDetailPortfolioModalMenu,
     RoundedBlueButton,
@@ -83,11 +85,17 @@ export default defineComponent({
       </RoundedBlueButton>
     </template>
 
-    <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
-      <span>Add to portfolio</span>
-    </RoundedWhiteButton>
+    <BaseModalMenuContainer>
+      <template #button>
+        <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
+          <span>Add to portfolio</span>
+        </RoundedWhiteButton>
+      </template>
 
-    <CompanyDetailPortfolioModalMenu v-if="portfolioModalMenuIsOpen && isAuthenticated"/>
+      <template #menu="menuProps">
+        <CompanyDetailPortfolioModalMenu @closeMenu="menuProps.close()" v-if="isAuthenticated"/>
+      </template>
+    </BaseModalMenuContainer>
 
     <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
 
@@ -95,13 +103,13 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .detail-header__button-list {
-    width: 100%;
-    display: flex;
-    gap: 4px;
-    justify-content: flex-end;
-    text-align: right;
-    margin-top: -30px;
-    height: 32px;
-  }
+.detail-header__button-list {
+  width: 100%;
+  display: flex;
+  gap: 4px;
+  justify-content: flex-end;
+  text-align: right;
+  margin-top: -30px;
+  height: 32px;
+}
 </style>

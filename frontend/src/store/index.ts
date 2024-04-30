@@ -3,7 +3,6 @@ import {companyDetailModule} from "@/store/companyDetailModule";
 
 const store = createStore({
     state: () => ({
-        authModalMenuIsActive: false,
         isAuthenticated: false,
         isLoading: false,
         token: '',
@@ -20,9 +19,6 @@ const store = createStore({
         },
         setIsLoading(state, status: Boolean) {
           state.isLoading = status
-        },
-        setAuthModalMenuIsActive(state, status: Boolean) {
-            state.authModalMenuIsActive = status
         },
         setToken(state, token) {
             state.token = token

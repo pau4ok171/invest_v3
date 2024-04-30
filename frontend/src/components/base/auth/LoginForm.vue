@@ -32,13 +32,16 @@
       formData: {
         handler(obj) {
           const formData = JSON.parse(JSON.stringify(obj))
-          const fieldList = {'current_username': '', 'current_password': ''}
-          const formDataFields = {...fieldList, ...formData}
+          const fieldList = {'current_username': formData.current_username, 'current_password': formData.current_password}
 
           let formIsValid = true
 
-          for (let [key, val] of Object.entries(formDataFields)) {
-            if (val.trim() === '') {
+          for (let [key, val] of Object.entries(fieldList)) {
+            if (val) {
+               if (val.trim() === '') {
+                formIsValid = false
+              }
+            } else {
               formIsValid = false
             }
           }
