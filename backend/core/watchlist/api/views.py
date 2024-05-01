@@ -1,8 +1,10 @@
-from invest.models import Company
-from .serializers import WatchlistUserSerializer
+from rest_framework.response import Response
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework import status
-from django.http import JsonResponse
+
+from invest.models import Company
+
+from .serializers import WatchlistUserSerializer
 
 
 class CreateWatchlistedCompany(RetrieveUpdateDestroyAPIView):
@@ -10,10 +12,13 @@ class CreateWatchlistedCompany(RetrieveUpdateDestroyAPIView):
     serializer_class = WatchlistUserSerializer
 
     def patch(self, request, *args, **kwargs):
-        company_slug = self.request.POST.get('slug')
-        company = Company.objects.get(slug__iexact=company_slug)
+        company = self.get_company()
+        if not company:
+            return Response(data={"error": "Company Slug was not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
         company.users_watchlist.add(self.request.user)
-        return JsonResponse(
+
+        return Response(
             data={
                 "status": 201
             },
@@ -21,10 +26,12 @@ class CreateWatchlistedCompany(RetrieveUpdateDestroyAPIView):
         )
 
     def delete(self, request, *args, **kwargs):
-        company_slug = self.request.POST.get('slug')
-        company = Company.objects.get(slug__iexact=company_slug)
+        company = self.get_company()
+        if not company:
+            return Response(data={"error": "Company Slug was not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
         company.users_watchlist.remove(self.request.user)
-        return JsonResponse(
+        return Response(
             data={
                 "status": 204
             },
@@ -32,13 +39,22 @@ class CreateWatchlistedCompany(RetrieveUpdateDestroyAPIView):
         )
 
     def get(self, request, *args, **kwargs):
-        company_slug = self.request.POST.get('slug')
-        company = Company.objects.get(slug__iexact=company_slug)
+        company = self.get_company()
+        if not company:
+            return Response(data={"error": "Company Slug was not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
         is_company_in_watchlist = self.request.user in company.users_watchlist
-        return JsonResponse(
+
+        return Response(
             data={
                 "is_company_in_watchlist": is_company_in_watchlist,
                 "status": 200
             },
             status=status.HTTP_200_OK
         )
+
+    def get_company(self):
+        company_slug = self.request.POST.get('slug', None)
+
+        if company_slug:
+            return Company.objects.get(slug__iexact=company_slug)

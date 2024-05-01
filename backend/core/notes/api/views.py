@@ -18,19 +18,35 @@ class NotesViewSet(ModelViewSet):
         return Note.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
+        company_id = self.request.data.get('company_id', None)
+        body = self.request.data.get('content', None)
+
+        if not company_id:
+            return Response({'error': 'Company ID was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not body:
+            return Response({'error': 'Content was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+
         note = Note.objects.create(
-            company=Company.objects.get(pk=self.request.data.get('company_id')),
+            company=Company.objects.get(pk=company_id),
             user=self.request.user,
-            body=self.request.data.get('content'),
+            body=body,
         )
         serializer = NoteSerializer(note)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
-        Note.objects\
-            .filter(pk=self.request.data.get('note_id'))\
-            .update(body=self.request.data.get('content'), updated=self.request.data.get('updated'))
+        note_id = self.request.data.get('note_id', None)
+        body = self.request.data.get('content', None)
+        updated = self.request.data.get('updated', None)
 
-        serializer = self.serializer_class(Note.objects.get(pk=self.kwargs.get('pk')))
+        if not note_id:
+            return Response({'error': 'Note ID was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not body:
+            return Response({'error': 'Body was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+        if not updated:
+            return Response({'error': 'Updated was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+        Note.objects.filter(pk=note_id).update(body=body, updated=updated)
+        serializer = self.serializer_class(Note.objects.get(pk=note_id))
         return Response(serializer.data)
