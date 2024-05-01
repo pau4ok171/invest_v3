@@ -15,7 +15,6 @@ export default {
 <style>
   .button--text-format {
     color: inherit;
-    line-height: normal;
     position: relative;
     height: auto;
     transition: all .3s ease 0s;
