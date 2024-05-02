@@ -113,7 +113,7 @@ export default defineComponent({
         note_id: this.note.id,
         company_id: this.note.company,
         content: this.note.body,
-        updated: new Date(),
+        updated: new Date().toISOString(),
       }).forEach(([key, val]) => formData.append(key, val))
 
       this.saveStatus = 'Saving...'
