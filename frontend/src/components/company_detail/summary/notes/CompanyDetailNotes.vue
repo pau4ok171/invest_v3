@@ -86,53 +86,53 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .detail-notes {
-    display: grid;
-    gap: 8px;
-    grid-template-columns: auto auto 1fr;
-    justify-content: start;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-  .detail-notes__mark {
-    font-size: 1.4rem;
-    border-radius: 8px;
-    background-color: #262e3a;
-    margin: 0 4px 8px;
-    padding: 2px 8px;
-    color: inherit;
-    white-space: nowrap;
-  }
-  .detail-notes__empty {
-    display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: auto auto auto;
-    justify-items: center;
-    align-content: center;
-    max-height: 164px;
-    margin-bottom: 8px;
-  }
-  .detail-notes__empty-image {
-    width: 64px;
-    height: 66px;
-    fill: none;
-    transform: translateY(4px);
-  }
-  .detail-notes__note-list {
-    display: grid;
-    gap: 8px;
-    grid-template-rows: auto;
-    max-height: 164px;
-    margin-bottom: 8px;
-  }
-  .detail-notes__note-list-1-el {
-    grid-template-columns: repeat(1, 1fr);
-  }
-  .detail-notes__note-list-2-el {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .detail-notes__note-list-3-el {
-    grid-template-columns: repeat(3, 1fr);
-  }
+.detail-notes {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto auto 1fr;
+  justify-content: start;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.detail-notes__mark {
+  font-size: 1.4rem;
+  border-radius: 8px;
+  background-color: #262e3a;
+  margin: 0 4px 8px;
+  padding: 2px 8px;
+  color: inherit;
+  white-space: nowrap;
+}
+.detail-notes__empty {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(1, 1fr);
+  grid-template-rows: auto auto auto;
+  justify-items: center;
+  align-content: center;
+  max-height: 164px;
+  margin-bottom: 8px;
+}
+.detail-notes__empty-image {
+  width: 64px;
+  height: 66px;
+  fill: none;
+  transform: translateY(4px);
+}
+.detail-notes__note-list {
+  display: grid;
+  gap: 8px;
+  grid-template-rows: auto;
+  max-height: 164px;
+  margin-bottom: 8px;
+}
+.detail-notes__note-list-1-el {
+  grid-template-columns: repeat(1, 1fr);
+}
+.detail-notes__note-list-2-el {
+  grid-template-columns: repeat(2, 1fr);
+}
+.detail-notes__note-list-3-el {
+  grid-template-columns: repeat(3, 1fr);
+}
 </style>
