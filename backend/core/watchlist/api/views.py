@@ -6,6 +6,8 @@ from invest.models import Company
 
 from .serializers import WatchlistUserSerializer
 
+# TODO: SUPPRIMER AU MOMENT VENU
+
 
 class CreateWatchlistedCompany(RetrieveUpdateDestroyAPIView):
     queryset = Company.objects.all()

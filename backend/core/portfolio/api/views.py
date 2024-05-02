@@ -10,6 +10,10 @@ from portfolio.models import Portfolio, PortfolioCompany
 from invest.models import Company
 
 from .serializers import PortfolioPositionsSerializer, PortfolioSerializer
+from .forms import (
+    PortfolioCreateForm,
+    PortfolioUpdateForm,
+)
 
 
 class PortfolioPositionsAPI(RetrieveUpdateDestroyAPIView):
@@ -94,41 +98,32 @@ class PortfoliosViewSet(ModelViewSet):
         return Portfolio.objects.filter(user=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        portfolio_name = self.request.data.get('portfolio_name', None)
+        form = PortfolioCreateForm(self.request.data)
+        if form.is_valid():
 
-        if not portfolio_name:
-            return Response({'error': 'Portfolio Name was not provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-        data = {
-            'name': portfolio_name,
-            'user': self.request.user.pk
-        }
-        serializer = self.get_serializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            portfolio_name = form.cleaned_data['portfolio_name']
+            data = {
+                'name': portfolio_name,
+                'user': self.request.user.pk
+            }
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
-        portfolio_id = self.kwargs.get('pk', None)
-        company_id = self.request.data.get('company_id', None)
-        action = self.request.data.get('action', None)
+        form = PortfolioUpdateForm(self.request.data)
+        if form.is_valid():
+            portfolio = Portfolio.objects.get(pk=self.kwargs.get('pk'))
+            company = Company.objects.get(pk=form.cleaned_data['company_id'])
 
-        if not portfolio_id:
-            return Response({'error': 'Portfolio ID was not provided'}, status=status.HTTP_400_BAD_REQUEST)
-        if not company_id:
-            return Response({'error': 'Company ID was not provided'}, status=status.HTTP_400_BAD_REQUEST)
-        if not action:
-            return Response({'error': 'Action  was not provided'}, status=status.HTTP_400_BAD_REQUEST)
+            if form.cleaned_data['action'] == 'include':
+                PortfolioCompany.objects.create(portfolio=portfolio, company=company)
+            else:
+                PortfolioCompany.objects.get(company=company, portfolio=portfolio).delete()
 
-        portfolio = Portfolio.objects.get(pk=portfolio_id)
-        company = Company.objects.get(pk=company_id)
-
-        if action == 'include':
-            PortfolioCompany.objects.create(portfolio=portfolio, company=company)
-        elif action == 'exclude':
-            PortfolioCompany.objects.get(company=company, portfolio=portfolio).delete()
-
-        serializer = self.serializer_class(portfolio)
-
-        return Response(serializer.data)
+            serializer = self.serializer_class(portfolio)
+            return Response(serializer.data)
+        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)

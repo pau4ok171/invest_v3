@@ -19,6 +19,11 @@ from invest.api.serializers import (
 )
 from invest.api.paginators import StandardResultsSetPagination
 from invest.models import Company, CandlePerDay, Sorter, Country, Sector
+from invest.api.forms import (
+    SearchListForm,
+    UsernameVerificationForm,
+    CompanyUIDForm,
+)
 # Portfolio App
 from portfolio.models import Portfolio
 from portfolio.api.serializers import PortfolioSerializer
@@ -36,29 +41,29 @@ class PriceChartList(ListAPIView):
 
 class SearchList(APIView):
     def post(self, request):
-        query = self.request.data.get('query', None)
-        response = None
-        if query:
+        form = SearchListForm(data=self.request.data)
+        if form.is_valid():
+            query = form.cleaned_data['query']
             companies = Company.objects.filter(
                 Q(title__icontains=query) | Q(ticker__icontains=query),
                 is_visible=True
             )
-            response = CompanySearchSerializer(companies, many=True).data
-        return Response(response)
+            return Response(CompanySearchSerializer(companies, many=True).data)
+        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
 def validate_username(request):
-    username = request.data.get('username', None)
-    is_taken = False
-    message = 'The username is empty'
-    if username:
+    form = UsernameVerificationForm(request.data)
+    if form.is_valid():
+        username = form.cleaned_data['username']
         is_taken = User.objects.filter(username__iexact=username).exists()
         message = "The username is already taken" if is_taken else "The username is free"
-    return Response({
-        "isTaken": is_taken,
-        "message": message
-    })
+        return Response({
+            "isTaken": is_taken,
+            "message": message
+        })
+    return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CompanyListView(ListAPIView):
@@ -137,8 +142,9 @@ class WatchlistedCompanyAPIView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
 
     def patch(self, request, *args, **kwargs):
-        company = self.get_company()
-        if company:
+        form = CompanyUIDForm(self.request.data)
+        if form.is_valid():
+            company = Company.objects.get(uid=form.cleaned_data['uid'])
             company.users_watchlist.add(self.request.user)
             return Response(
                 data={
@@ -146,30 +152,15 @@ class WatchlistedCompanyAPIView(APIView):
                 },
                 status=status.HTTP_201_CREATED
             )
-        return Response(
-            data={"status": 400, "error": "The Company UID was not provided"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, *args, **kwargs):
-        company = self.get_company()
-        if company:
+        form = CompanyUIDForm(self.request.data)
+        if form.is_valid():
+            company = Company.objects.get(uid=form.cleaned_data['uid'])
             company.users_watchlist.remove(self.request.user)
-            return Response(
-                data={
-                    "status": 204
-                },
-                status=status.HTTP_204_NO_CONTENT
-            )
-        return Response(
-            data={"status": 400, "error": "The Company UID was not provided"},
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-    def get_company(self) -> Company | None:
-        company_uid = self.request.data.get('uid', None)
-        if company_uid:
-            return Company.objects.get(uid=company_uid)
+            return Response(data={"status": 204}, status=status.HTTP_204_NO_CONTENT)
+        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CompanyDetailAPIView(RetrieveAPIView):
