@@ -14,9 +14,6 @@ export const chartOpts = {
       fontWeight: 'normal'
     }
   },
-  accessibility: {
-    enabled: false,
-  },
   xAxis: [{
     visible: true,
     labels: {
@@ -30,9 +27,6 @@ export const chartOpts = {
     visible: false
   }],
   scrollbar: {
-    enabled: false
-  },
-  credits: {
     enabled: false
   },
   rangeSelector: {
