@@ -118,7 +118,7 @@ export const companyDetailModule = {
     },
     async fetchPriceData({state, commit}, slug) {
       await axios
-        .get(`invest/api/v1/price_chart/${slug}`)
+        .get(`api/v1/invest/price_data/${slug}`)
         .then(response => {
           commit("getCompanyPriceData", response.data)
           commit("setPriceChartDataIsLoading", false)
@@ -134,7 +134,7 @@ export const companyDetailModule = {
 
       if (state.company.is_watchlisted) {
         await axios
-          .delete('/invest/api/v1/toggle_to_watchlist/', {data: formData})
+          .delete('/api/v1/invest/toggle_to_watchlist/', {data: formData})
           .then(() => {
             commit('setIsWatchlisted', false)
             toast.success(`Company ${state.company.slug.toUpperCase()} was remove from watchlist`)
@@ -145,7 +145,7 @@ export const companyDetailModule = {
           })
       } else {
         await axios
-          .patch('/invest/api/v1/toggle_to_watchlist/', formData)
+          .patch('/api/v1/invest/toggle_to_watchlist/', formData)
           .then(() => {
             commit('setIsWatchlisted', true)
             toast.success(`Company ${state.company.slug.toUpperCase()} was added to watchlist`)
@@ -159,7 +159,7 @@ export const companyDetailModule = {
     },
     async deleteNote({state, commit}, note) {
       await axios
-        .delete(`/notes/api/v1/notes/${note.id}`)
+        .delete(`/api/v1/notes/${note.id}`)
         .then(response => {
           commit('setNotes', [...state.notes].filter(n => n.id !== note.id))
         })
