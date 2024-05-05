@@ -33,7 +33,7 @@ export default {
      const company_slug = this.$route.params.company_slug
 
      axios
-       .get(`invest/api/v1/company/${company_slug}`)
+       .get(`api/v1/invest/companies/${company_slug}`)
        .then(response => {
          this.setCompany(response.data.company)
          this.setPortfolios(response.data.portfolios)
