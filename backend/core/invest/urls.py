@@ -22,5 +22,4 @@ urlpatterns = [
         views.InvestCompanyListView.as_view(),
         name='company_list_with_all_options'
     ),
-    path('api/v1/', include('invest.api.urls', namespace='invest_api')),
 ]
