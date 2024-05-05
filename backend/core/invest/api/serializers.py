@@ -95,6 +95,7 @@ class CompanySerializer(serializers.ModelSerializer):
             'is_watchlisted',
             'price_data',
             'formatting',
+            'updated',
         )
 
     def __init__(self, instance=None, data=empty, **kwargs):
