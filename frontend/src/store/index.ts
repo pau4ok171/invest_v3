@@ -1,5 +1,6 @@
 import {createStore} from "vuex";
 import {companyDetailModule} from "@/store/companyDetailModule";
+import {companyListModule} from "@/store/companyListModule";
 
 const store = createStore({
     state: () => ({
@@ -7,6 +8,11 @@ const store = createStore({
         isLoading: false,
         token: '',
     }),
+    getters: {
+        getIsAuthenticated(state) {
+            return state.isAuthenticated
+        },
+    },
     mutations: {
         initializeStore(state) {
             if (localStorage.getItem('token')) {
@@ -31,8 +37,10 @@ const store = createStore({
     },
     actions: {},
     modules: {
+        companyList: companyListModule,
         companyDetail: companyDetailModule,
-    }
+    },
+    namespaced: true,
 })
 
 export default store
