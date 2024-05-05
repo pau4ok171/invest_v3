@@ -1,11 +1,11 @@
 <template>
-  <div @click="isActive=!isActive">
+  <div class="drop-down-menu__button" @click="isActive=!isActive">
     <slot
       name="button"
     />
   <DropDownMenu
       v-if="isActive"
-      @closeDropDownMenu="this.isActive=false"
+      @closeDropDownMenu="isActive=false"
   >
     <slot name="menu"/>
   </DropDownMenu>
@@ -25,3 +25,9 @@ export default {
   },
 }
 </script>
+
+<style>
+.drop-down-menu__button{
+  position: relative;
+}
+</style>

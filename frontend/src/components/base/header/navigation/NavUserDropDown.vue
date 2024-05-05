@@ -50,7 +50,7 @@ export default {
 }
 .account-access-navigation__inner {
   position: absolute;
-  top: -6px;
+  top: 0;
   left: 0;
   width: 100%;
   background-color: #262e3a;
