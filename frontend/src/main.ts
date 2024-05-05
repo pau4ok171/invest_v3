@@ -14,6 +14,7 @@ import Highcharts from 'highcharts'
 import StockChart from 'highcharts/modules/stock';
 import highchartsMore from 'highcharts/highcharts-more'
 import loadSolidGauge from 'highcharts/modules/solid-gauge'
+import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
 
 axios.defaults.baseURL = 'http://localhost:8000'
 
@@ -28,12 +29,7 @@ StockChart(Highcharts)
 Highcharts.Templating.helpers.abs = value => Math.abs(value);
 
 Highcharts.setOptions({
-  lang: {
-    rangeSelectorZoom: ''
-  },
-  accessibility: {
-    enabled: false
-  },
+  ...defaultChartOpts
 });
 
 app
