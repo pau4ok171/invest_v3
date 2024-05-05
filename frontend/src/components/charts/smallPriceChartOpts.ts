@@ -4,28 +4,36 @@ export default chartOpts =  {
     backgroundColor: 'transparent',
     height: 40,
     width: 300,
-    spacing: [0, 0, 0, 0]
-  },
-  accessibility: {
-    enabled: false,
+    spacing: [5, 0, 5, 0]
   },
   series: [
     {
       name: 'price_candles',
       data: [],
       turboThreshold: 10000,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false
+          }
+        }
+      },
     },
   ],
   xAxis: {
-    visible: false
+    visible: false,
+    crosshair: {
+      width: 0
+    }
   },
   yAxis: {
-    visible: false
+    visible: false,
+    crosshair: {
+      width: 0
+    }
   },
   scrollbar: {
-    enabled: false
-  },
-  credits: {
     enabled: false
   },
   navigator: {

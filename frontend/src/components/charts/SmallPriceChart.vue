@@ -3,7 +3,7 @@
     <div class="price-history-chart">
       <charts
         :constructorType="'stockChart'"
-        :options="this.chartOpts"
+        :options="chartOpts"
       />
     </div>
   </div>
@@ -26,16 +26,16 @@
 </script>
 
 <style>
-  .price-history-chart {
-    display: flex;
-    width: 300px;
-    max-width: 100%;
-    height: 40px;
-    line-height: 1.5;
-  }
-  .price-history-chart svg {
-    width: 100%;
-    height: 100%;
-    fill: none;
-  }
+.price-history-chart {
+  display: flex;
+  width: 300px;
+  max-width: 100%;
+  height: 40px;
+  line-height: 1.5;
+}
+.price-history-chart svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+}
 </style>
