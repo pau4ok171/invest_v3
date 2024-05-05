@@ -11,7 +11,6 @@ from rest_framework.decorators import api_view
 from invest.api.serializers import (
     CompanySerializer,
     CandlePerDaySerializer,
-    SorterSerializer,
     CountrySerializer,
     SectorSerializer,
     CompanySearchSerializer,
@@ -32,38 +31,41 @@ from notes.models import Note
 from notes.api.serializers import NoteSerializer
 
 
+@api_view(['GET'])
+def validate_username(request):
+    form = UsernameVerificationForm(request.query_params)
+    if form.is_valid():
+        username = form.cleaned_data['username']
+        is_taken = User.objects.filter(username__iexact=username).exists()
+        message = "The username is already taken" if is_taken else "The username is free"
+        return Response(data={
+            "isTaken": is_taken,
+            "message": message
+        }, status=status.HTTP_200_OK)
+    return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def search_query(request):
+    form = SearchListForm(data=request.query_params)
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        companies = Company.objects.filter(
+            Q(title__icontains=query) | Q(ticker__icontains=query),
+            is_visible=True
+        )
+        return Response(
+            data=CompanySearchSerializer(companies, many=True).data,
+            status=status.HTTP_200_OK
+        )
+    return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class PriceChartList(ListAPIView):
     serializer_class = CandlePerDaySerializer
 
     def get_queryset(self):
         return CandlePerDay.objects.filter(company__slug__exact=self.kwargs.get('company_slug'))
-
-
-class SearchList(APIView):
-    def post(self, request):
-        form = SearchListForm(data=self.request.data)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            companies = Company.objects.filter(
-                Q(title__icontains=query) | Q(ticker__icontains=query),
-                is_visible=True
-            )
-            return Response(CompanySearchSerializer(companies, many=True).data)
-        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['POST'])
-def validate_username(request):
-    form = UsernameVerificationForm(request.data)
-    if form.is_valid():
-        username = form.cleaned_data['username']
-        is_taken = User.objects.filter(username__iexact=username).exists()
-        message = "The username is already taken" if is_taken else "The username is free"
-        return Response({
-            "isTaken": is_taken,
-            "message": message
-        })
-    return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CompanyListView(ListAPIView):
@@ -72,8 +74,8 @@ class CompanyListView(ListAPIView):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
-        country_slug = self.kwargs.get('country_slug', 'global')
-        sector_slug = self.kwargs.get('sector_slug', 'any')
+        country_slug = self.request.query_params.get('country', 'global')
+        sector_slug = self.request.query_params.get('sector', 'any')
 
         queryset = Company.objects.filter(is_visible=True)
 
@@ -94,33 +96,25 @@ class CompanyListFilters(APIView):
 
     def get(self, request, *args, **kwargs):
         self.companies = Company.objects.filter(is_visible=True)
-        return Response({
-            'filters': {
-                'sorter': self.get_sorter_data(),
-                'country': self.get_country_data(),
-                'sector': self.get_sector_data(),
+        return Response(
+            data={
+                'filters': {
+                    'country': self.get_country_filters(),
+                    'sector': self.get_sector_filters(),
+                },
             },
-            'list_updated': self.get_list_updated(),
-        })
+            status=status.HTTP_200_OK
+        )
 
-    def get_sector_data(self):
+    def get_sector_filters(self):
         sectors = Sector.objects.filter(company__pk__in=self.companies).distinct()
         sector_serializer = SectorSerializer(sectors, many=True)
         return sector_serializer.data
 
-    def get_country_data(self):
+    def get_country_filters(self):
         countries = Country.objects.filter(company__pk__in=self.companies).distinct()
         country_serializer = CountrySerializer(countries, many=True)
         return country_serializer.data
-
-    @staticmethod
-    def get_sorter_data():
-        sorters = Sorter.objects.all()
-        sorter_serializer = SorterSerializer(sorters, many=True)
-        return sorter_serializer.data
-
-    def get_list_updated(self):
-        return self.companies.values_list('updated').latest('updated')[0].strftime('%d %b, %Y')
 
 
 class CompanyListSectorFilters(CompanyListFilters):
@@ -131,11 +125,14 @@ class CompanyListSectorFilters(CompanyListFilters):
         if not country_slug == 'global':
             self.companies = self.companies.filter(country__name_iso=country_slug)
 
-        return Response({
-            'filters': {
-                'sector': self.get_sector_data(),
+        return Response(
+            data={
+                'filters': {
+                    'sector': self.get_sector_filters(),
+                },
             },
-        })
+            status=status.HTTP_200_OK
+        )
 
 
 class WatchlistedCompanyAPIView(APIView):
