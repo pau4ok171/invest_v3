@@ -11,11 +11,16 @@ import CompanyDetailPortfolioModalMenu
   from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import MiniLoader from "@/components/UI/MiniLoader.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import TheCompanyDetailHeaderMoreDropDownMenu
+  from "@/components/company_detail/company_detail_header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
+import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 
 
 export default defineComponent({
   name: "CompanyDetailHeaderButtonList",
   components: {
+    DropDownMenuBox,
+    TheCompanyDetailHeaderMoreDropDownMenu,
     BaseModalMenuContainer,
     MiniLoader,
     CompanyDetailPortfolioModalMenu,
@@ -97,7 +102,14 @@ export default defineComponent({
       </template>
     </BaseModalMenuContainer>
 
-    <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
+    <DropDownMenuBox>
+      <template #button>
+        <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
+      </template>
+      <template #menu>
+        <TheCompanyDetailHeaderMoreDropDownMenu/>
+      </template>
+    </DropDownMenuBox>
 
   </div>
 </template>
