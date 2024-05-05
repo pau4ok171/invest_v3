@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-  import axios from "axios";
+import axios, {options} from "axios";
   import NavSearchDropDown from "@/components/base/header/navigation/NavSearchDropDown.vue";
   import SearchIcon from "@/components/icons/SearchIcon.vue";
   import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
@@ -45,13 +45,10 @@
       async updateInput(value) {
         this.inputValue = value
         if (this.inputValue.length) {
-          const formData = new FormData()
-          Object.entries({
-              query: this.inputValue,
-          }).forEach(([key, val]) => formData.append(key, val))
+
 
           await axios
-            .post('/invest/api/v1/search/', formData)
+            .get('/api/v1/invest/search/', {params: {query: this.inputValue}})
             .then(response => this.searchResponse = response.data)
             .catch(err => {console.log(err)})
           } else this.closeDropDown()
