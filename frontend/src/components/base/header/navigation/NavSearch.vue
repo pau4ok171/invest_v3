@@ -48,7 +48,7 @@ import axios, {options} from "axios";
 
 
           await axios
-            .get('/api/v1/invest/search/', {params: {query: this.inputValue}})
+            .get('/api/v1/invest/search_query/', {params: {query: this.inputValue}})
             .then(response => this.searchResponse = response.data)
             .catch(err => {console.log(err)})
           } else this.closeDropDown()

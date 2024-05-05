@@ -58,9 +58,9 @@
     props: {
       formData: {
         type: Object,
-        new_username: '',
-        new_password1: '',
-        new_password2: '',
+        new_username: String,
+        new_password1: String,
+        new_password2: String,
       },
       formIsValid: Boolean,
     },
@@ -93,13 +93,9 @@
           if (formDataFields.new_username.length >= 8) {
             this.checks.username.isInit = true
             // Проверить имя пользователя на уникальность
-            const formData = new FormData()
-            Object.entries({
-                username: formDataFields.new_username,
-            }).forEach(([key, val]) => formData.append(key, val))
 
             await axios
-              .post('/invest/api/v1/validate_username/', formData)
+              .get(`/api/v1/invest/validate_username/?username=${formDataFields.new_username}`)
               .then(response => {
                 this.checks.username.isError = response.data.isTaken
                 this.checks.username.message = response.data.message
