@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'watchlist.apps.WatchlistConfig',
     'portfolio.apps.PortfolioConfig',
     'notes.apps.NotesConfig',
+    'statements.apps.StatementsConfig',
     # External apps
     'rest_framework',
     'rest_framework.authtoken',

@@ -1,6 +1,12 @@
 from django.contrib import admin
 from . import models
 from django.utils.safestring import mark_safe
+from statements.services.analysis import check_has_financial_data
+
+
+@admin.action(description='Analyse company by statements checks')
+def check_company(modeladmin, request, queryset):
+    return [check_has_financial_data(c) for c in queryset]
 
 
 @admin.register(models.Company)
@@ -19,6 +25,7 @@ class CompanyAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('ticker',)}
     list_display_links = ('title',)
     list_editable = ('is_visible',)
+    actions = [check_company]
 
     def get_html_image(self, object):
         if object.logo:

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
-from django.urls import reverse_lazy
 from .model_choices import QUARTERS, REPORT_TYPES, REPORT_FORMS, SCALES
 from notes.models import Note
 
