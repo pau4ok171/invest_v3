@@ -29,6 +29,8 @@ from portfolio.api.serializers import PortfolioSerializer
 # Notes App
 from notes.models import Note
 from notes.api.serializers import NoteSerializer
+from statements.api.serializers import StatementSerializer
+from statements.models import Statement
 
 
 @api_view(['GET'])
@@ -172,6 +174,7 @@ class CompanyDetailAPIView(RetrieveAPIView):
             "company": self.get_serializer(self.get_object()).data,
             "portfolios": self._get_portfolio_serializer().data,
             "notes": self._get_note_serializer().data,
+            "statements:": self._get_statement_serializer_data(),
         })
 
     def _get_portfolio_serializer(self) -> PortfolioSerializer:
@@ -187,3 +190,8 @@ class CompanyDetailAPIView(RetrieveAPIView):
             notes = Note.objects.filter(user=self.request.user, company=self.get_object())
 
         return NoteSerializer(notes, many=True)
+
+    def _get_statement_serializer_data(self):
+        statements = Statement.objects.filter(company=self.get_object())
+        serializer = StatementSerializer(statements, many=True)
+        return serializer.data
