@@ -1,12 +1,12 @@
 from django.contrib import admin
 from . import models
 from django.utils.safestring import mark_safe
-from statements.services.analysis import check_has_financial_data
+from statements.services.analysis import main
 
 
 @admin.action(description='Analyse company by statements checks')
 def check_company(modeladmin, request, queryset):
-    return [check_has_financial_data(c) for c in queryset]
+    return main(queryset)
 
 
 @admin.register(models.Company)
