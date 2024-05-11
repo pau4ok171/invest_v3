@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import TypedDict
+from invest.models import Company
 
 
 class ExtendedEnum(Enum):
@@ -48,16 +49,9 @@ class Severity(ExtendedEnum):
     MINOR = 'MINOR'
     MAJOR = 'MAJOR'
 
-    @classmethod
-    def as_dict(cls):
-        return dict(map(lambda item: (item.name, item.value.capitalize()), cls))
-
-    def __str__(self):
-        return self.name
-
 
 class Statement(TypedDict):
-    company: object
+    company: Company
     name: str
     title: str
     description: str
