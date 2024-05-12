@@ -61,3 +61,14 @@ class Statement(TypedDict):
     type: Type
     status: Status
     severity: Severity
+
+
+class Fields(TypedDict):
+    company_object: Company
+    slug: str
+    current_price: float
+    fair_price: float
+    company_pe: float
+    peers_pe: float
+    industry_pe: float
+    fair_pe: float
