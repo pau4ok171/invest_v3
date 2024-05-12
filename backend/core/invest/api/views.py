@@ -174,7 +174,7 @@ class CompanyDetailAPIView(RetrieveAPIView):
             "company": self.get_serializer(self.get_object()).data,
             "portfolios": self._get_portfolio_serializer().data,
             "notes": self._get_note_serializer().data,
-            "statements:": self._get_statement_serializer_data(),
+            "statements": self._get_statement_serializer_data(),
         })
 
     def _get_portfolio_serializer(self) -> PortfolioSerializer:
