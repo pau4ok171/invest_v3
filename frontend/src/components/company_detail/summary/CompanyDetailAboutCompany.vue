@@ -18,7 +18,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <CompanyDetailSection>
+  <CompanyDetailSection id="about-company-section">
 
     <DetailSectionTitle>About the Company</DetailSectionTitle>
 

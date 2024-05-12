@@ -35,6 +35,14 @@ export default defineComponent({
       company: state => state.companyDetail.company,
     }),
   },
+  methods: {
+    scrollToAboutTheCompanySection() {
+      const goTo = document.querySelector('#about-company-section').getBoundingClientRect()
+      const windowScroll = document.documentElement.scrollTop
+      const scrollTop = goTo.top + windowScroll - 80
+      window.scrollTo({top: scrollTop, behavior: 'smooth'})
+    }
+  },
 })
 </script>
 
@@ -43,10 +51,12 @@ export default defineComponent({
     <CompanyDetailContentGroup>
       <DetailSectionTitle>{{ company.slug.toUpperCase() }} Stock Overview</DetailSectionTitle>
       <DetailSectionText>{{ company.short_description }}</DetailSectionText>
-      <TextBlueButton>
+
+      <TextBlueButton @click="scrollToAboutTheCompanySection">
         <InfoIcon/>
         <span>About the company</span>
       </TextBlueButton>
+
     </CompanyDetailContentGroup>
 
     <CompanyDetailContentGroup :useGridRow="true">
