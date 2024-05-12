@@ -38,6 +38,7 @@ export default {
          this.setCompany(response.data.company)
          this.setPortfolios(response.data.portfolios)
          this.setNotes(response.data.notes)
+         this.setStatements(response.data.statements)
          document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
          this.isFetched = true
        })
@@ -49,6 +50,7 @@ export default {
       setCompany: 'companyDetail/setCompany',
       setPortfolios: 'companyDetail/setPortfolios',
       setNotes: "companyDetail/setNotes",
+      setStatements: "companyDetail/setStatements",
     })
   },
   async mounted() {
