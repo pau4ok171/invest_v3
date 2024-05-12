@@ -7,6 +7,7 @@ export const companyDetailModule = {
     company: {},
     portfolios: [],
     notes: [],
+    statements: [],
     note: {},
     priceChartDataisLoading: true,
     // NotesModalMenu
@@ -39,6 +40,9 @@ export const companyDetailModule = {
     getNote(state) {
       return state.note
     },
+    getStatements(state) {
+      return state.statements
+    },
     getNoteSavedContent(state) {
       return state.noteSavedContent
     },
@@ -67,6 +71,9 @@ export const companyDetailModule = {
     },
     setNote(state, note) {
       state.note = note
+    },
+    setStatements(state, statements) {
+      state.statements = statements
     },
     addNewPortfolio(state, portfolio) {
       state.portfolios.push(portfolio)
