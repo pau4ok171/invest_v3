@@ -2,10 +2,15 @@
 import {defineComponent} from 'vue'
 import CompanyDetailRiskRewardItem from "@/components/company_detail/summary/CompanyDetailRiskRewardItem.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import TheCompanyDetailRisksModalMenu
+  from "@/components/company_detail/summary/risks/TheCompanyDetailRisksModalMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailRiskReward",
-  components: {RoundedDarkBlueButton, CompanyDetailRiskRewardItem}
+  components: {
+    TheCompanyDetailRisksModalMenu,
+    BaseModalMenuContainer, RoundedDarkBlueButton, CompanyDetailRiskRewardItem}
 })
 </script>
 
@@ -41,9 +46,17 @@ export default defineComponent({
 
     <br>
 
-    <RoundedDarkBlueButton>
-      <span>See All Risk Checks</span>
-    </RoundedDarkBlueButton>
+    <BaseModalMenuContainer>
+      <template #button>
+        <RoundedDarkBlueButton>
+          <span>See All Risk Checks</span>
+        </RoundedDarkBlueButton>
+      </template>
+      <template #menu="menuProps">
+        <TheCompanyDetailRisksModalMenu @closeMenu="menuProps.close()"/>
+      </template>
+    </BaseModalMenuContainer>
+
   </div>
 </template>
 
