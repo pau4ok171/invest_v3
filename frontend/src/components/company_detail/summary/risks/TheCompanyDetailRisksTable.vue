@@ -17,6 +17,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
+      company: "companyDetail/getCompany",
       statements: "companyDetail/getStatements",
     })
   },
@@ -28,7 +29,7 @@ export default defineComponent({
   <thead>
     <tr>
       <th colspan="2">
-        <div>Sberbank (SBER) Risk Checks</div>
+        <div>{{ company.title }} ({{ company.slug.toUpperCase() }}) Risk Checks</div>
       </th>
     </tr>
   </thead>
