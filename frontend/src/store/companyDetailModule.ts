@@ -8,6 +8,7 @@ export const companyDetailModule = {
     portfolios: [],
     notes: [],
     statements: [],
+    snowflake: [],
     note: {},
     priceChartDataisLoading: true,
     // NotesModalMenu
@@ -74,6 +75,9 @@ export const companyDetailModule = {
     },
     setStatements(state, statements) {
       state.statements = statements
+    },
+    setSnowflake(state, snowflake: Array<Number>) {
+      state.snowflake = snowflake
     },
     addNewPortfolio(state, portfolio) {
       state.portfolios.push(portfolio)
