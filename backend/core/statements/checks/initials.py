@@ -12,10 +12,10 @@ class HasFinancialDataCheck(BaseCheck):
     def check(self) -> None:
         if self.company_object.reports.all().exists():
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -30,7 +30,7 @@ class HasFinancialDataCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
+        self.descriptions = {
             'success': f'{self.slug.upper()} has financial data available.',
             'error': f'{self.slug.upper()} has\'t financial data available.',
         }

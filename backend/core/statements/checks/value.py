@@ -10,12 +10,12 @@ severity = types.Severity
 
 class BelowFairValueCheck(BaseCheck):
     def check(self) -> None:
-        if self.current_price < self.fair_price:
+        if self.company_current_price < self.company_fair_price:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -30,22 +30,30 @@ class BelowFairValueCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} ({self.current_price}) '
-                       f'is trading below our estimate of fair value ({self.fair_price})',
-            'error': f'{self.slug.upper()} ({self.current_price}) '
-                     f'is trading above our estimate of fair value ({self.fair_price})',
+        formatted_slug = self.slug.upper()
+        formatted_current_price = self.get_finance_format(self.company_current_price)
+        formatted_fair_price = self.get_finance_format(self.company_current_price)
+
+        self.descriptions = {
+            'success': f'{formatted_slug} '
+                       f'({formatted_current_price}) '
+                       f'is trading below our estimate of fair value '
+                       f'({formatted_fair_price})',
+            'error': f'{formatted_slug} '
+                     f'({formatted_current_price}) '
+                     f'is trading above our estimate of fair value '
+                     f'({formatted_fair_price})',
         }
 
 
 class SignificantlyBelowFairValueCheck(BaseCheck):
     def check(self) -> None:
-        if (self.current_price - self.fair_price) / self.fair_price > 0.2:
+        if (self.company_current_price - self.company_fair_price) / self.company_fair_price > 0.2:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -60,9 +68,13 @@ class SignificantlyBelowFairValueCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} ({self.current_price}) is trading below fair value by more than 20%.',
-            'error': f'{self.slug.upper()} ({self.current_price}) is trading above our estimate of fair value.',
+        formatted_slug = self.slug.upper()
+        formatted_current_price = self.get_finance_format(self.company_current_price)
+
+        self.descriptions = {
+            'success': f'{formatted_slug} ({formatted_current_price}) is trading below fair value '
+                       f'by more than 20%.',
+            'error': f'{formatted_slug} ({formatted_current_price}) is trading above our estimate of fair value.',
         }
 
 
@@ -70,9 +82,9 @@ class PriceToEarningsVsPeersCheck(BaseCheck):
     def check(self) -> None:
         if self.company_pe < self.peers_pe:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -87,11 +99,15 @@ class PriceToEarningsVsPeersCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} is good value based on its Price-To-Earnings Ratio '
-                       f'({self.company_pe}x) compared to the peer average ({self.peers_pe}x).',
-            'error': f'{self.slug.upper()} is expensive based on its Price-To-Earnings Ratio '
-                     f'({self.company_pe}x) compared to the peer average ({self.peers_pe}x).',
+        formatted_slug = self.slug.upper()
+        formatted_pe = self.get_multiple_format(self.company_pe)
+        formatted_peers_pe = self.get_multiple_format(self.peers_pe)
+
+        self.descriptions = {
+            'success': f'{formatted_slug} is good value based on its Price-To-Earnings Ratio '
+                       f'({formatted_pe}) compared to the peer average ({formatted_peers_pe}).',
+            'error': f'{formatted_slug} is expensive based on its Price-To-Earnings Ratio '
+                     f'({formatted_pe}) compared to the peer average ({formatted_peers_pe}).',
         }
 
 
@@ -99,9 +115,9 @@ class PriceToEarningsVsIndustryCheck(BaseCheck):
     def check(self) -> None:
         if self.company_pe < self.industry_pe:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -116,21 +132,25 @@ class PriceToEarningsVsIndustryCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} is good value based on its Price-To-Earnings Ratio '
-                       f'({self.company_pe}x) compared to the European Banks industry average ({self.industry_pe}x).',
-            'error': f'{self.slug.upper()} is expensive based on its Price-To-Earnings Ratio '
-                     f'({self.company_pe}x) compared to the US Semiconductor industry average ({self.industry_pe}x).',
+        formatted_slug = self.slug.upper()
+        formatted_pe = self.get_multiple_format(self.company_pe)
+        formatted_industry_pe = self.get_multiple_format(self.industry_pe)
+
+        self.descriptions = {
+            'success': f'{formatted_slug} is good value based on its Price-To-Earnings Ratio '
+                       f'({formatted_pe}) compared to the European Banks industry average ({formatted_industry_pe}).',
+            'error': f'{formatted_slug} is expensive based on its Price-To-Earnings Ratio '
+                     f'({formatted_pe}) compared to the US Semiconductor industry average ({formatted_industry_pe}).',
         }
 
 
 class PriceToEarningsVsFairRatioCheck(BaseCheck):
     def check(self) -> None:
-        if self.company_pe < self.fair_pe:
+        if self.company_pe < self.company_fair_pe:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -145,11 +165,15 @@ class PriceToEarningsVsFairRatioCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} is good value based on its Price-To-Earnings Ratio '
-                       f'({self.company_pe}x) '
-                       f'compared to the estimated Fair Price-To-Earnings Ratio ({self.fair_pe}x).',
-            'error': f'{self.slug.upper()} is expensive based on its Price-To-Earnings Ratio '
-                     f'({self.company_pe}x) '
-                     f'compared to the estimated Fair Price-To-Earnings Ratio ({self.fair_pe}x).',
+        formatted_slug = self.slug.upper()
+        formatted_pe = self.get_multiple_format(self.company_pe)
+        formatted_fair_pe = self.get_multiple_format(self.company_fair_pe)
+
+        self.descriptions = {
+            'success': f'{formatted_slug} is good value based on its Price-To-Earnings Ratio '
+                       f'({formatted_pe}) '
+                       f'compared to the estimated Fair Price-To-Earnings Ratio ({formatted_fair_pe}).',
+            'error': f'{formatted_slug} is expensive based on its Price-To-Earnings Ratio '
+                     f'({formatted_pe}) '
+                     f'compared to the estimated Fair Price-To-Earnings Ratio ({formatted_fair_pe}).',
         }

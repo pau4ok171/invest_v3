@@ -12,10 +12,10 @@ class NotableDividendCheck(BaseCheck):
     def check(self) -> None:
         if self.dividend_yield > self.market_dividend_yield_p25:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -46,10 +46,10 @@ class HighDividendCheck(BaseCheck):
     def check(self) -> None:
         if self.dividend_yield > self.market_dividend_yield_p75:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(

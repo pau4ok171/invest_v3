@@ -10,12 +10,12 @@ severity = types.Severity
 
 class EarningsVsSavingRateCheck(BaseCheck):
     def check(self) -> None:
-        if self.forecast_earnings_growth > self.saving_rate:
+        if self.company_forecast_earnings_growth > self.country_saving_rate:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -30,24 +30,28 @@ class EarningsVsSavingRateCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s '
-                       f'forecast earnings growth ({self.forecast_earnings_growth * 100}% per year)'
-                       f' is above the savings rate ({self.saving_rate * 100}%).',
-            'error': f'{self.slug.upper()}\'s '
-                     f'forecast earnings growth ({self.forecast_earnings_growth * 100}% per year)'
-                     f' is below the savings rate ({self.saving_rate * 100}%).',
+        formatted_slug = self.slug.upper()
+        formatted_forecast_earnings_growth = self.get_percent_format(self.company_forecast_earnings_growth)
+        formatted_saving_rate = self.get_percent_format(self.country_saving_rate)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s '
+                       f'forecast earnings growth ({formatted_forecast_earnings_growth} per year)'
+                       f' is above the savings rate ({formatted_saving_rate}).',
+            'error': f'{formatted_slug}\'s '
+                     f'forecast earnings growth ({formatted_forecast_earnings_growth} per year)'
+                     f' is below the savings rate ({formatted_saving_rate}).',
         }
 
 
 class EarningsVsMarketCheck(BaseCheck):
     def check(self) -> None:
-        if self.forecast_earnings_growth > self.market_forecast_earnings_growth:
+        if self.company_forecast_earnings_growth > self.market_forecast_earnings_growth:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -62,26 +66,31 @@ class EarningsVsMarketCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s earnings ({self.forecast_earnings_growth * 100}% per year) '
+        formatted_slug = self.slug.upper()
+        formatted_country_adjectif = self.market_country_adjectif.capitalize()
+        formatted_forecast_earnings_growth = self.get_percent_format(self.company_forecast_earnings_growth)
+        formatted_market_forecast_earnings_growth = self.get_percent_format(self.market_forecast_earnings_growth)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s earnings ({formatted_forecast_earnings_growth} per year) '
                        f'are forecast to grow faster than '
-                       f'the {self.market_country_adjectif.capitalize()} market '
-                       f'({self.market_forecast_earnings_growth * 100}% per year).',
-            'error': f'{self.slug.upper()}\'s earnings ({self.forecast_earnings_growth * 100}% per year) '
+                       f'the {formatted_country_adjectif} market '
+                       f'({formatted_market_forecast_earnings_growth} per year).',
+            'error': f'{formatted_slug}\'s earnings ({formatted_forecast_earnings_growth} per year) '
                      f'are forecast to grow slower than '
-                     f'the {self.market_country_adjectif.capitalize()} market '
-                     f'({self.market_forecast_earnings_growth * 100}% per year).',
+                     f'the {formatted_country_adjectif} market '
+                     f'({formatted_market_forecast_earnings_growth} per year).',
         }
 
 
 class HighGrowthEarningsCheck(BaseCheck):
     def check(self) -> None:
-        if self.forecast_earnings_growth > 0.2:
+        if self.company_forecast_earnings_growth > 0.2:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -96,7 +105,7 @@ class HighGrowthEarningsCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
+        self.descriptions = {
             'success': f'{self.slug.upper()}\'s earnings are expected to grow significantly over the next 3 years.',
             'error': f'{self.slug.upper()}\'s earnings are forecast to grow, but not significantly.',
         }
@@ -104,12 +113,12 @@ class HighGrowthEarningsCheck(BaseCheck):
 
 class RevenueVsMarketCheck(BaseCheck):
     def check(self) -> None:
-        if self.forecast_revenue_growth > self.market_forecast_revenue_growth:
+        if self.company_forecast_revenue_growth > self.market_forecast_revenue_growth:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -124,28 +133,33 @@ class RevenueVsMarketCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s revenue '
-                       f'({self.forecast_revenue_growth * 100}% per year) '
+        formatted_slug = self.slug.upper()
+        formatted_country_adjectif = self.market_country_adjectif.capitalize()
+        formatted_forecast_revenue_growth = self.get_percent_format(self.company_forecast_revenue_growth)
+        formatted_market_forecast_revenue_growth = self.get_percent_format(self.market_forecast_revenue_growth)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s revenue '
+                       f'({formatted_forecast_revenue_growth} per year) '
                        f'is forecast to grow faster than the '
-                       f'{self.market_country_adjectif} market '
-                       f'({self.market_forecast_revenue_growth * 100}% per year).',
-            'error': f'{self.slug.upper()}\'s revenue '
-                     f'({self.forecast_revenue_growth * 100}% per year) '
+                       f'{formatted_country_adjectif} market '
+                       f'({formatted_market_forecast_revenue_growth} per year).',
+            'error': f'{formatted_slug}\'s revenue '
+                     f'({formatted_forecast_revenue_growth} per year) '
                      f'is forecast to grow slower than the '
-                     f'{self.market_country_adjectif.capitalize()} market '
-                     f'({self.market_forecast_revenue_growth * 100}% per year).',
+                     f'{formatted_country_adjectif} market '
+                     f'({formatted_market_forecast_revenue_growth} per year).',
         }
 
 
 class HighGrowthRevenueCheck(BaseCheck):
     def check(self) -> None:
-        if self.forecast_revenue_growth > 0.2:
+        if self.company_forecast_revenue_growth > 0.2:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -160,24 +174,27 @@ class HighGrowthRevenueCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s revenue '
-                       f'({self.forecast_revenue_growth * 100}% per year) '
+        formatted_slug = self.slug.upper()
+        formatted_forecast_revenue_growth = self.get_percent_format(self.company_forecast_revenue_growth)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s revenue '
+                       f'({formatted_forecast_revenue_growth} per year) '
                        f'is forecast to grow faster than 20% per year.',
-            'error': f'{self.slug.upper()}\'s revenue '
-                     f'({self.forecast_revenue_growth * 100}% per year) '
+            'error': f'{formatted_slug}\'s revenue '
+                     f'({formatted_forecast_revenue_growth} per year) '
                      f'is forecast to grow slower than 20% per year.',
         }
 
 
 class FutureROECheck(BaseCheck):
     def check(self) -> None:
-        if self.future_roe_3y > 0.2:
+        if self.company_future_roe_3y > 0.2:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -192,9 +209,12 @@ class FutureROECheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s Return on Equity '
-                       f'is forecast to be very high in 3 years time ({self.future_roe_3y*100}%).',
-            'error': f'{self.slug.upper()}\'s Return on Equity '
-                     f'is forecast to be low in 3 years time ({self.future_roe_3y*100}%).',
+        formatted_slug = self.slug.upper()
+        formatted_future_roe_3y = self.get_percent_format(self.company_future_roe_3y)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s Return on Equity '
+                       f'is forecast to be very high in 3 years time ({formatted_future_roe_3y}).',
+            'error': f'{formatted_slug}\'s Return on Equity '
+                     f'is forecast to be low in 3 years time ({formatted_future_roe_3y}).',
         }

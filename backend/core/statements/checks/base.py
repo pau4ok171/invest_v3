@@ -9,7 +9,8 @@ class BaseCheck:
         self.statement: Statement | None = None
         self.company_object: Company | None = None
         self.slug: str | None = None
-        self.description: str | None = None
+        self.currency: str | None = None
+        self.descriptions: dict | None = None
         self.market_country_adjectif: str | None = None
         self.company_sector_name: str | None = None
         # Value

@@ -10,12 +10,12 @@ severity = types.Severity
 
 class QualityEarningsCheck(BaseCheck):
     def check(self) -> None:
-        if self.net_income > 0:
+        if self.company_earnings > 0:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -30,7 +30,7 @@ class QualityEarningsCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
+        self.descriptions = {
             'success': f'{self.slug.upper()} has high quality earnings.',
             'error': f'{self.slug.upper()} is currently unprofitable.',
         }
@@ -38,12 +38,12 @@ class QualityEarningsCheck(BaseCheck):
 
 class GrowingProfitMarginCheck(BaseCheck):
     def check(self) -> None:
-        if self.profit_margins > self.past_profit_margins:
+        if self.company_profit_margins > self.past_profit_margins:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -58,24 +58,28 @@ class GrowingProfitMarginCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s '
-                       f'current net profit margins ({self.profit_margins*100}%) '
-                       f'are higher than last year ({self.past_profit_margins*100}%).',
-            'error': f'{self.slug.upper()}\'s '
-                     f'current net profit margins ({self.profit_margins*100}%) '
-                     f'are lower than last year ({self.past_profit_margins*100}%).',
+        formatted_slug = self.slug.upper()
+        formatted_profit_margins = self.get_percent_format(self.company_profit_margins)
+        formatted_past_profit_margins = self.get_percent_format(self.past_profit_margins)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s '
+                       f'current net profit margins ({formatted_profit_margins}) '
+                       f'are higher than last year ({formatted_past_profit_margins}).',
+            'error': f'{formatted_slug}\'s '
+                     f'current net profit margins ({formatted_profit_margins}) '
+                     f'are lower than last year ({formatted_past_profit_margins}).',
         }
 
 
 class EarningsTrendCheck(BaseCheck):
     def check(self) -> None:
-        if self.net_income_growth_5y > 0:
+        if self.company_earnings_growth_5y > 0:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -90,22 +94,25 @@ class EarningsTrendCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s earnings have grown by '
-                       f'{self.net_income_growth_5y*100}% per year over the past 5 years.',
-            'error': f'{self.slug.upper()} is unprofitable, and losses have increased '
-                     f'over the past 5 years at a rate of {self.net_income_growth_5y*100}% per year.',
+        formatted_slug = self.slug.upper()
+        formatted_earnings_growth_5y = self.get_percent_format(self.company_earnings_growth_5y)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s earnings have grown by '
+                       f'{formatted_earnings_growth_5y} per year over the past 5 years.',
+            'error': f'{formatted_slug} is unprofitable, and losses have increased '
+                     f'over the past 5 years at a rate of {formatted_earnings_growth_5y} per year.',
         }
 
 
 class AcceleratingGrowthCheck(BaseCheck):
     def check(self) -> None:
-        if self.earnings_growth > self.net_income_growth_5y:
+        if self.company_earnings_growth > self.company_earnings_growth_5y:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -120,24 +127,28 @@ class AcceleratingGrowthCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s earnings growth over the past year '
-                       f'({self.earnings_growth*100}%) exceeds its 5-year average '
-                       f'({self.net_income_growth_5y*100}% per year).',
-            'error': f'{self.slug.upper()}\'s earnings growth over the past year '
-                       f'({self.earnings_growth*100}%) is below than its 5-year average '
-                       f'({self.net_income_growth_5y*100}% per year).',
+        formatted_slug = self.slug.upper()
+        formatted_earnings_growth = self.get_percent_format(self.company_earnings_growth)
+        formatted_earnings_growth_5y = self.get_percent_format(self.company_earnings_growth_5y)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s earnings growth over the past year '
+                       f'({formatted_earnings_growth}) exceeds its 5-year average '
+                       f'({formatted_earnings_growth_5y} per year).',
+            'error': f'{formatted_slug}\'s earnings growth over the past year '
+                       f'({formatted_earnings_growth}) is below than its 5-year average '
+                       f'({formatted_earnings_growth_5y} per year).',
         }
 
 
 class EarningsVsIndustryCheck(BaseCheck):
     def check(self) -> None:
-        if self.earnings_growth > self.industry_earnings_growth:
+        if self.company_earnings_growth > self.industry_earnings_growth:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -152,13 +163,18 @@ class EarningsVsIndustryCheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()} earnings growth over the past year '
-                       f'({self.earnings_growth}%) exceeded '
-                       f'the {self.company_sector_name.capitalize()} industry {self.industry_earnings_growth}%.',
-            'error': f'{self.slug.upper()} earnings growth over the past year '
-                       f'({self.earnings_growth}%) was below than '
-                       f'the {self.company_sector_name.capitalize()} industry {self.industry_earnings_growth}%.',
+        formatted_slug = self.slug.upper()
+        formatted_earnings_growth = self.get_percent_format(self.company_earnings_growth)
+        formatted_industry_earnings_growth = self.get_percent_format(self.industry_earnings_growth)
+        formatted_sector_name = self.sector_company_name.capitalize()
+
+        self.descriptions = {
+            'success': f'{formatted_slug} earnings growth over the past year '
+                       f'({formatted_earnings_growth}) exceeded '
+                       f'the {formatted_sector_name} industry {formatted_industry_earnings_growth}.',
+            'error': f'{formatted_slug} earnings growth over the past year '
+                       f'({formatted_earnings_growth}) was below than '
+                       f'the {formatted_sector_name} industry {formatted_industry_earnings_growth}.',
         }
 
 
@@ -166,10 +182,10 @@ class HighROECheck(BaseCheck):
     def check(self) -> None:
         if self.company_roe > 0.2:
             self.statement['status'] = status.PASS
-            self.statement['description'] = self.description['success']
+            self.statement['description'] = self.descriptions['success']
         else:
             self.statement['status'] = status.FAIL
-            self.statement['description'] = self.description['error']
+            self.statement['description'] = self.descriptions['error']
 
     def populate(self) -> None:
         self.statement = types.Statement(
@@ -184,7 +200,10 @@ class HighROECheck(BaseCheck):
             status=status.FAIL,
             severity=severity.NONE,
         )
-        self.description = {
-            'success': f'{self.slug.upper()}\'s Return on Equity ({self.company_roe*100}%) is considered high.',
-            'error': f'{self.slug.upper()}\'s Return on Equity ({self.company_roe*100}%) is considered low.',
+        formatted_slug = self.slug.upper()
+        formatted_roe = self.get_percent_format(self.company_roe)
+
+        self.descriptions = {
+            'success': f'{formatted_slug}\'s Return on Equity ({formatted_roe}) is considered high.',
+            'error': f'{formatted_slug}\'s Return on Equity ({formatted_roe}) is considered low.',
         }
