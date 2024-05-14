@@ -31,6 +31,7 @@ from notes.models import Note
 from notes.api.serializers import NoteSerializer
 from statements.api.serializers import StatementSerializer
 from statements.models import Statement
+from statements.types import Status, Area
 
 
 @api_view(['GET'])
@@ -175,6 +176,7 @@ class CompanyDetailAPIView(RetrieveAPIView):
             "portfolios": self._get_portfolio_serializer().data,
             "notes": self._get_note_serializer().data,
             "statements": self._get_statement_serializer_data(),
+            "snowflake": self._get_snowflake_serializer_data(),
         })
 
     def _get_portfolio_serializer(self) -> PortfolioSerializer:
@@ -195,3 +197,13 @@ class CompanyDetailAPIView(RetrieveAPIView):
         statements = Statement.objects.filter(company=self.get_object())
         serializer = StatementSerializer(statements, many=True)
         return serializer.data
+
+    def _get_snowflake_serializer_data(self):
+        statements = Statement.objects.filter(company=self.get_object())
+        return {
+            "value": statements.filter(area=Area.VALUE, status=Status.PASS).count(),
+            "future": statements.filter(area=Area.FUTURE, status=Status.PASS).count(),
+            "past": statements.filter(area=Area.PAST, status=Status.PASS).count(),
+            "health": statements.filter(area=Area.HEALTH, status=Status.PASS).count(),
+            "dividends": statements.filter(area=Area.DIVIDENDS, status=Status.PASS).count(),
+        }
