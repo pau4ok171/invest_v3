@@ -12,48 +12,49 @@ class BaseCheck:
         self.currency: str | None = None
         self.descriptions: dict | None = None
         self.market_country_adjectif: str | None = None
-        self.company_sector_name: str | None = None
+        self.sector_company_name: str | None = None
         # Value
-        self.current_price: float | None = None
-        self.fair_price: float | None = None
+        self.company_current_price: float | None = None
+        self.company_fair_price: float | None = None
         self.company_pe: float | None = None
         self.peers_pe: float | None = None
         self.industry_pe: float | None = None
-        self.fair_pe: float | None = None
+        self.company_fair_pe: float | None = None
         # Future
-        self.forecast_earnings_growth: float | None = None
-        self.saving_rate: float | None = None
+        self.company_forecast_earnings_growth: float | None = None
+        self.country_saving_rate: float | None = None
         self.market_forecast_earnings_growth: float | None = None
-        self.forecast_revenue_growth: float | None = None
+        self.company_forecast_revenue_growth: float | None = None
         self.market_forecast_revenue_growth: float | None = None
-        self.future_roe_3y: float | None = None
+        self.company_future_roe_3y: float | None = None
         # Past
-        self.net_income: float | None = None
-        self.profit_margins: float | None = None
+        self.company_earnings: float | None = None
+        self.company_profit_margins: float | None = None
         self.past_profit_margins: float | None = None
-        self.net_income_growth_5y: float | None = None
-        self.earnings_growth: float | None = None
+        self.company_earnings_growth_5y: float | None = None
+        self.company_earnings_growth: float | None = None
         self.industry_earnings_growth: float | None = None
         self.company_roe: float | None = None
         # Health
-        self.short_term_assets: float | None = None
-        self.short_term_liabilities: float | None = None
-        self.long_term_liabilities: float | None = None
-        self.debt_to_equity_ratio: float | None = None
-        self.debt: float | None = None
-        self.debt_5Y_ago: float | None = None
-        self.operating_cash_flow: float | None = None
-        self.interest_rate: float | None = None
+        self.company_short_term_assets: float | None = None
+        self.company_short_term_liabilities: float | None = None
+        self.company_long_term_liabilities: float | None = None
+        self.company_net_debt_to_equity_ratio: float | None = None
+        self.company_debt: float | None = None
+        self.company_debt_to_equity_ratio: float | None = None
+        self.company_debt_to_equity_ratio_5Y_ago: float | None = None
+        self.company_operating_cash_flow: float | None = None
+        self.company_interest_rate: float | None = None
         self.company_ebit: float | None = None
         # Dividend
-        self.dividend_yield: float | None = None
+        self.company_dividend_yield: float | None = None
         self.market_dividend_yield_p25: float | None = None
         self.market_dividend_yield_p75: float | None = None
-        self.dividend_is_volatile_in_10y: bool | None = None
-        self.dividend_amount: float | None = None
-        self.dividend_amount_10y_ago: float | None = None
-        self.payout_ratio: float | None = None
-        self.cash_payout_ratio: float | None = None
+        self.company_dividend_is_volatile_in_10y: bool | None = None
+        self.company_dividend_amount: float | None = None
+        self.company_dividend_amount_10y_ago: float | None = None
+        self.company_payout_ratio: float | None = None
+        self.company_cash_payout_ratio: float | None = None
 
         for k, v in fields.items():
             setattr(self, k, v)
@@ -81,3 +82,23 @@ class BaseCheck:
 
     def populate(self):
         pass
+
+    def get_finance_format(self, value):
+        return f'{self.currency}{value:.2f}'
+
+    @staticmethod
+    def get_multiple_format(value):
+        return f'{value:.1f}x'
+
+    @staticmethod
+    def get_percent_format(value):
+        return f'{value*100:.2f}%'
+
+    def get_finance_format_with_unit(self, value):
+        if value == 0:
+            return 'n/a'
+        for unit in ["", "t", "M", "B", "T"]:
+            if abs(value) < 1000:
+                return f'{self.currency}{value:.3f}{unit}'
+            value /= 1000
+        return f'{self.currency}{value:.2f}Q'
