@@ -15,30 +15,6 @@ const snowflakeChartBorderColor2 = '#ff5a23'
 const snowflakeChartColor1 = '#c74a35'
 const snowflakeChartBorderColor1 = '#fb4a27'
 
-const data = {
-    companySnowflake: {
-        score: 23,
-        snowflakeData: [5, 2, 6, 5, 5]
-    },
-    competitors: {
-        VTBR: {
-            score: 18,
-            snowflakeData: [5, 1, 4, 5, 3]
-        },
-        CBOM: {
-            score: 14,
-            snowflakeData: [2, 5, 2, 5, 0]
-        },
-        ROSB: {
-            score: 8,
-            snowflakeData: [1, 0, 3, 4, 0]
-        },
-        AVAN: {
-            score: 7,
-            snowflakeData: [0, 0, 1, 4, 2]
-        },
-    }
-}
 export default chartOpts =  {
     chart: {
         polar: true,
