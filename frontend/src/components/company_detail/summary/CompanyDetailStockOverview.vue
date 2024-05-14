@@ -33,6 +33,7 @@ export default defineComponent({
   computed: {
     ...mapState({
       company: state => state.companyDetail.company,
+      snowflake: state => state.companyDetail.snowflake,
     }),
   },
   methods: {
@@ -63,7 +64,7 @@ export default defineComponent({
 
       <CompanyDetailSnowflakeTable v-if="false"/>
 
-      <SnowflakeChart :chartData="[5, 2, 6, 5, 5]" v-else/>
+      <SnowflakeChart :chartData="snowflake" v-else/>
 
     </CompanyDetailContentGroup>
 
