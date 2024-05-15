@@ -14,7 +14,8 @@ from invest.api.serializers import (
     CountrySerializer,
     SectorSerializer,
     CompanySearchSerializer,
-    CompanyDetailSerializer
+    CompanyDetailSerializer,
+    CompanyPeersSerializer
 )
 from invest.api.paginators import StandardResultsSetPagination
 from invest.models import Company, CandlePerDay, Sorter, Country, Sector
@@ -171,12 +172,14 @@ class CompanyDetailAPIView(RetrieveAPIView):
     lookup_url_kwarg = 'company_slug'
 
     def retrieve(self, request, *args, **kwargs):
+        statements = Statement.objects.filter(company=self.get_object())
         return Response({
             "company": self.get_serializer(self.get_object()).data,
             "portfolios": self._get_portfolio_serializer().data,
             "notes": self._get_note_serializer().data,
             "statements": self._get_statement_serializer_data(),
-            "snowflake": self._get_snowflake_serializer_data(),
+            "snowflake": self._get_snowflake_serializer_data(statements),
+            "peers": self._get_peers_serializer_data(),
         })
 
     def _get_portfolio_serializer(self) -> PortfolioSerializer:
@@ -198,8 +201,8 @@ class CompanyDetailAPIView(RetrieveAPIView):
         serializer = StatementSerializer(statements, many=True)
         return serializer.data
 
-    def _get_snowflake_serializer_data(self):
-        statements = Statement.objects.filter(company=self.get_object())
+    @staticmethod
+    def _get_snowflake_serializer_data(statements):
         return {
             "value": statements.filter(area=Area.VALUE, status=Status.PASS).count(),
             "future": statements.filter(area=Area.FUTURE, status=Status.PASS).count(),
@@ -207,3 +210,18 @@ class CompanyDetailAPIView(RetrieveAPIView):
             "health": statements.filter(area=Area.HEALTH, status=Status.PASS).count(),
             "dividends": statements.filter(area=Area.DIVIDENDS, status=Status.PASS).count(),
         }
+
+    def _get_peers_serializer_data(self):
+        company_object = self.get_object()
+        peers = Company.objects.filter(is_visible=True).exclude(pk=company_object.id)
+        peers = sorted(peers, key=self._get_sort_key, reverse=True)[:4]
+        serializer = CompanyPeersSerializer(peers, many=True)
+        return serializer.data
+
+    def _get_sort_key(self, iter_company):
+        company_object = self.get_object()
+        sector_id = company_object.sector.id
+        country_id = company_object.country.id
+        country_score = 4 if iter_company.country.id == country_id else 3
+        sector_score = 4 if iter_company.sector.id == sector_id else 2
+        return country_score + sector_score
