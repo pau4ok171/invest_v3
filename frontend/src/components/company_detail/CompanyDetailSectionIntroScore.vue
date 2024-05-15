@@ -10,9 +10,19 @@ export default defineComponent({
   name: "CompanyDetailSectionIntroScore",
   components: {ArrowDownIcon, CrossIcon, CheckIcon, CheckedIcon, CheckmarkCircleIcon},
   props: {
-    score_list: {
+    statements: {
       type: Array,
       required: true,
+    }
+  },
+  computed: {
+    statementPassCount() {
+      return this.statements.reduce((acc, s) => {
+        if (s.status === 'PASS') {
+          acc += 1
+        }
+        return acc
+      }, 0)
     }
   }
 })
@@ -24,24 +34,24 @@ export default defineComponent({
       <div class="detail-section-intro-score__inner">
         <p class="detail-section-intro-score__title">
           Valuation Score
-          <span class="detail-section-intro-score__num">5/6</span>
+          <span class="detail-section-intro-score__num">{{ statementPassCount }}/6</span>
         </p>
         <ul class="detail-section-intro-score__point-list">
 
           <li
               class="detail-section-intro-score__point"
-              v-for="score in score_list"
-              :key="score.title"
+              v-for="statement in statements"
+              :key="statement.id"
           >
             <CheckIcon
-                v-if="score.status === 'success'"
+                v-if="statement.status === 'PASS'"
                 class="detail-section-intro-score__statement-icon-success"
             />
             <CrossIcon
                 v-else
                 class="detail-section-intro-score__statement-icon-error"
             />
-            <p>{{ score.title }}</p>
+            <p>{{ statement.title }}</p>
             <ArrowDownIcon class="detail-section-intro-score__arrow-icon"/>
           </li>
 
