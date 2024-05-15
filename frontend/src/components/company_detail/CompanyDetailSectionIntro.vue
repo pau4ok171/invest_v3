@@ -4,6 +4,7 @@ import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import CompanyDetailSectionIntroScore from "@/components/company_detail/CompanyDetailSectionIntroScore.vue";
 import DetailAnalysisTitle from "@/components/UI/text/DetailAnalysisTitle.vue";
 import DetailAnalysisDesc from "@/components/UI/text/DetailAnalysisDesc.vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailSectionIntro",
@@ -13,35 +14,21 @@ export default defineComponent({
     CompanyDetailSectionIntroScore,
     DetailSectionTitle
   },
-  data() {
-    return {
-      section_list: {
-        valuation: {
-          num: 1,
-          name: 'Valuation',
-          desc: 'Is SBER undervalued compared to its fair value, analyst forecasts and its price relative to the market?',
-        }
-      },
-      score_list: [
-        {title: 'Price-To-Earnings vs Peers', status: 'success'},
-        {title: 'Price-To-Earnings vs Industry', status: 'success'},
-        {title: 'Price-To-Earnings vs Fair Ratio', status: 'success'},
-        {title: 'Below Fair Value', status: 'success'},
-        {title: 'Significantly Below Fair Value', status: 'success'},
-        {title: 'Analyst Forecast', status: 'error'},
-      ],
-      cur_section: {},
-    }
-  },
   props: {
-    section_name: {
-      type: String,
+    section: {
+      type: Object,
       required: true,
     },
   },
-  mounted() {
-    this.cur_section = this.section_list[this.section_name]
-  }
+  computed: {
+    ...mapState({
+      statements: state => state.companyDetail.statements
+    }),
+    filtered_statements(){
+      console.log(this.section.area)
+      return [...this.statements].filter(s => s.area === this.section.area)
+    },
+  },
 })
 </script>
 
@@ -49,14 +36,14 @@ export default defineComponent({
   <div class="detail-section-intro">
 
     <DetailAnalysisTitle class="detail-section-intro__title">
-      <span>{{ this.cur_section.num }}</span>{{ this.cur_section.name }}
+      <span>{{ section.num }}</span>{{ section.name }}
     </DetailAnalysisTitle>
 
     <DetailAnalysisDesc>
-      {{ this.cur_section.desc }}
+      {{ section.desc }}
     </DetailAnalysisDesc>
 
-    <CompanyDetailSectionIntroScore :score_list/>
+    <CompanyDetailSectionIntroScore :statements="filtered_statements"/>
 
   </div>
 </template>
