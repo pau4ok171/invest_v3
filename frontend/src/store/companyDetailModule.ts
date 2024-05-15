@@ -9,6 +9,7 @@ export const companyDetailModule = {
     notes: [],
     statements: [],
     snowflake: [],
+    competitors: [],
     note: {},
     priceChartDataisLoading: true,
     // NotesModalMenu
@@ -44,6 +45,9 @@ export const companyDetailModule = {
     getStatements(state) {
       return state.statements
     },
+    getCompetitors(state) {
+      return state.competitors
+    },
     getNoteSavedContent(state) {
       return state.noteSavedContent
     },
@@ -78,6 +82,9 @@ export const companyDetailModule = {
     },
     setSnowflake(state, snowflake: Array<Number>) {
       state.snowflake = snowflake
+    },
+    setCompetitors(state, competitors: Array<Object>) {
+      state.competitors = competitors
     },
     addNewPortfolio(state, portfolio) {
       state.portfolios.push(portfolio)

@@ -41,6 +41,7 @@ export default {
          this.setStatements(response.data.statements)
          const snowflake = Object.values(response.data.snowflake)
          this.setSnowflake(snowflake)
+         this.setCompetitors(response.data.peers)
          document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
          this.isFetched = true
        })
@@ -54,6 +55,7 @@ export default {
       setNotes: "companyDetail/setNotes",
       setStatements: "companyDetail/setStatements",
       setSnowflake: "companyDetail/setSnowflake",
+      setCompetitors: "companyDetail/setCompetitors",
     })
   },
   async mounted() {
