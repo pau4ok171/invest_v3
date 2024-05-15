@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, Currency
+from statements.models import Statement
+from statements.types import Area, Status
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -254,6 +256,51 @@ class CompanyDetailSerializer(CompanySerializer):
             'reportCurrencySymbol': '',
             'tradingCurrencyISO': '',
             'tradingCurrencySymbol': '',
+        }
+
+
+class CompanyPeersSerializer(CompanySerializer):
+    sector = SectorDetailSerializer(read_only=True)
+    formatting = serializers.SerializerMethodField('get_formatting')
+    snowflake = serializers.SerializerMethodField('get_snowflake')
+
+    class Meta:
+        model = Company
+        fields = (
+            'id',
+            'uid',
+            'ticker',
+            'title',
+            'slug',
+            'country',
+            'market',
+            'sector',
+            'absolute_url',
+            'price_data',
+            'formatting',
+            'snowflake',
+        )
+
+    @staticmethod
+    def get_formatting(obj):
+        return {
+            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencySymbol': obj.country.currency.symbol,
+            'reportCurrencyISO': '',
+            'reportCurrencySymbol': '',
+            'tradingCurrencyISO': '',
+            'tradingCurrencySymbol': '',
+        }
+
+    @staticmethod
+    def get_snowflake(obj):
+        statements = Statement.objects.filter(company=obj)
+        return {
+            "value": statements.filter(area=Area.VALUE, status=Status.PASS).count(),
+            "future": statements.filter(area=Area.FUTURE, status=Status.PASS).count(),
+            "past": statements.filter(area=Area.PAST, status=Status.PASS).count(),
+            "health": statements.filter(area=Area.HEALTH, status=Status.PASS).count(),
+            "dividends": statements.filter(area=Area.DIVIDENDS, status=Status.PASS).count(),
         }
 
 
