@@ -23,13 +23,23 @@ export default defineComponent({
     CompanyDetailSectionIntro,
     CompanyDetailSection
   },
+  data() {
+    return {
+      section: {
+        num: 1,
+        name: 'Valuation',
+        desc: 'Is SBER undervalued compared to its fair value, analyst forecasts and its price relative to the market?',
+        area: 'VALUE',
+      },
+    }
+  },
 })
 </script>
 
 <template>
   <CompanyDetailSection>
 
-    <CompanyDetailSectionIntro :section_name="'valuation'"/>
+    <CompanyDetailSectionIntro :section/>
 
     <ShareVsFairPrice/>
 
