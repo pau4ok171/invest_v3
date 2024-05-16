@@ -21,6 +21,10 @@ export const chartOpts = {
   },
   xAxis: [{
     visible: true,
+    crosshair: {
+      color: '#5C6874',
+      dashStyle: 'dash',
+    },
     labels: {
       style: {
         color: '#fff',
@@ -30,6 +34,10 @@ export const chartOpts = {
   }],
   yAxis: [{
     visible: false,
+    crosshair: {
+      color: '#5C6874',
+      dashStyle : 'dash',
+    }
   }],
   scrollbar: {
     enabled: false
