@@ -112,6 +112,6 @@ export default defineComponent({
 .detail-price-chart .highcharts-navigator-mask-outside {
   fill: rgba(21, 27, 36, .3);
   rx: 4;
-  yx: 4;
+  ry: 4;
 }
 </style>
