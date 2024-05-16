@@ -12,6 +12,11 @@ export const chartOpts = {
       fontFamily: 'inherit',
       fontSize: '1.6rem',
       fontWeight: 'normal'
+    },
+    zooming: {
+      mouseWheel: {
+        enabled: false
+      }
     }
   },
   xAxis: [{
@@ -24,7 +29,7 @@ export const chartOpts = {
     }
   }],
   yAxis: [{
-    visible: false
+    visible: false,
   }],
   scrollbar: {
     enabled: false
