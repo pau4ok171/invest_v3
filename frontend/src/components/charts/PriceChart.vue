@@ -58,7 +58,6 @@ export default defineComponent({
 }
 .detail-price-chart {
   margin-bottom: 24px;
-  margin-top: 24px;
 }
 .detail-price-chart svg {
   width: 100%;
@@ -102,5 +101,17 @@ export default defineComponent({
 .detail-price-chart .price-history-chart-point-box__price {
   fill: #fff;
   font-weight: 900;
+}
+.detail-price-chart .highcharts-navigator-mask-inside {
+  cursor: grab!important;
+  rx: 4;
+  ry: 4;
+  stroke-width: 1;
+  stroke: rgb(35, 148, 223);
+}
+.detail-price-chart .highcharts-navigator-mask-outside {
+  fill: rgba(21, 27, 36, .3);
+  rx: 4;
+  yx: 4;
 }
 </style>
