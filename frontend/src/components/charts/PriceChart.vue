@@ -56,9 +56,6 @@ export default defineComponent({
   display: grid;
   grid-template-columns: repeat(6, auto);
 }
-.detail-price-chart {
-  margin-bottom: 24px;
-}
 .detail-price-chart svg {
   width: 100%;
   height: 100%;
