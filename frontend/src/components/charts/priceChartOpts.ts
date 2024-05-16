@@ -30,34 +30,7 @@ export const chartOpts = {
     enabled: false
   },
   rangeSelector: {
-    floating: true,
-    inputEnabled: false,
-    selected: 2,
-    buttons: [
-      {
-        type: 'month',
-        count: 1,
-        text: '1M',
-      }, {
-        type: 'month',
-        count: 3,
-        text: '3M',
-      }, {
-        type: 'year',
-        count: 1,
-        text: '1Y',
-      }, {
-        type: 'year',
-        count: 3,
-        text: '3Y',
-      }, {
-        type: 'year',
-        count: 5,
-        text: '5Y',
-      }, {
-        type: 'all',
-        text: 'Max'
-    }],
+    enabled: false,
   },
   navigator: {
     xAxis: {
