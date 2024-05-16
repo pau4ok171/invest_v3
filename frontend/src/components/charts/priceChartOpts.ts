@@ -74,11 +74,16 @@ export const chartOpts = {
     },
   },
   tooltip: {
-    backgroundColor: '#000',
-    borderRadius: '8',
+    backgroundColor: 'rgb(11, 14, 19)',
+    borderRadius: '3',
+    padding: 8,
+    borderWidth: 0,
     headerFormat: '',
-    xDateFormat: '%a, %e %b, %Y',
-    pointFormat: '<tspan class="price-history-chart-point-box__date">{point.key}</tspan><br><tspan class="price-history-chart-point-box__price">P{point.y}</tspan>',
-    footerFormat: ''
+    xDateFormat: '%a, %e %b %Y',
+    pointFormat: '<tspan class="price-history-chart-point-box__date">{point.key}</tspan><br><tspan class="price-history-chart-point-box__price">₽{point.y}</tspan>',
+    footerFormat: '',
+    style: {
+      fontSize: '1.4rem',
+    },
   }
 }
