@@ -12,6 +12,7 @@ export const chartOpts = {
   }],
   chart: {
     backgroundColor: "#1b222d",
+    marginTop: 40,
     style: {
       fontFamily: 'inherit',
       fontSize: '1.6rem',
@@ -50,14 +51,27 @@ export const chartOpts = {
     enabled: false,
   },
   navigator: {
+    height: 32,
+    top: 4,
+    outlineWidth: 0,
+    maskFill: 'rgba(35, 148, 223, 0.2)',
+    handles: {
+      enabled: false
+    },
     xAxis: {
+      enabled: false,
+      gridLineWidth: 0,
       labels: {
+        overflow: 'allow',
+        y: -10,
+        align: 'center',
         style: {
           color: '#fff',
           opacity: 1,
+          fontSize: '1.2rem',
         }
       }
-    }
+    },
   },
   tooltip: {
     backgroundColor: '#000',
