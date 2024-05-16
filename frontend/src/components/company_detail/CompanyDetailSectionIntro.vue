@@ -25,7 +25,6 @@ export default defineComponent({
       statements: state => state.companyDetail.statements
     }),
     filtered_statements(){
-      console.log(this.section.area)
       return [...this.statements].filter(s => s.area === this.section.area)
     },
   },
