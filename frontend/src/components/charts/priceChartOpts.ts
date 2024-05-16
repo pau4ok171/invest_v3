@@ -5,6 +5,10 @@ export const chartOpts = {
     tooltip: {
       valueDecimals: 2
     },
+    marker: {
+      radius: 2,
+      fillColor: '#fff',
+    }
   }],
   chart: {
     backgroundColor: "#1b222d",
