@@ -188,7 +188,10 @@ export default {
    }
   },
   mounted() {
-    window.addEventListener('scroll', () => this.changeSidebarOpacity())
+    window.addEventListener('scroll', this.changeSidebarOpacity)
+  },
+  unmounted() {
+    window.removeEventListener('scroll', this.changeSidebarOpacity)
   },
  }
 </script>
