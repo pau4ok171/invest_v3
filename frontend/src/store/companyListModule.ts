@@ -31,7 +31,7 @@ export const companyListModule = {
       return state.filters
     },
     getListUpdated(state) {
-      return state.companies.reduce((prev, cur) => prev.updated > cur.updated ? prev : cur).updated
+      return state.companies.reduce((prev, cur) => prev.updated > cur.updated ? prev : cur, 0).updated
     },
     getTotalCompaniesLength(state) {
       return state.totalCompaniesLength
