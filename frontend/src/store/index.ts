@@ -3,44 +3,44 @@ import {companyDetailModule} from "@/store/companyDetailModule";
 import {companyListModule} from "@/store/companyListModule";
 
 const store = createStore({
-    state: () => ({
-        isAuthenticated: false,
-        isLoading: false,
-        token: '',
-    }),
-    getters: {
-        getIsAuthenticated(state) {
-            return state.isAuthenticated
-        },
+  state: () => ({
+    isAuthenticated: false,
+    isLoading: false,
+    token: '',
+  }),
+  getters: {
+    getIsAuthenticated(state) {
+      return state.isAuthenticated
     },
-    mutations: {
-        initializeStore(state) {
-            if (localStorage.getItem('token')) {
-                state.token = localStorage.getItem('token')
-                state.isAuthenticated = true
-            } else {
-                state.token = ''
-                state.isAuthenticated = false
-            }
-        },
-        setIsLoading(state, status: Boolean) {
-          state.isLoading = status
-        },
-        setToken(state, token) {
-            state.token = token
-            state.isAuthenticated = true
-        },
-        removeToken(state) {
-            state.token = ''
-            state.isAuthenticated = false
-        },
+  },
+  mutations: {
+    initializeStore(state) {
+      const token: string | null = localStorage.getItem('token')
+      if (token) {
+        state.token = token
+        state.isAuthenticated = true
+      } else {
+        state.token = ''
+        state.isAuthenticated = false
+      }
     },
-    actions: {},
-    modules: {
-        companyList: companyListModule,
-        companyDetail: companyDetailModule,
+    setIsLoading(state, status: boolean) {
+      state.isLoading = status
     },
-    namespaced: true,
+    setToken(state, token: string) {
+      state.token = token
+      state.isAuthenticated = true
+    },
+    removeToken(state) {
+      state.token = ''
+      state.isAuthenticated = false
+    },
+  },
+  actions: {},
+  modules: {
+    companyList: companyListModule,
+    companyDetail: companyDetailModule,
+  },
 })
 
 export default store
