@@ -20,6 +20,21 @@ export interface DetailCompany {
     website: String,
 }
 
+export interface ListCompany {
+    absolute_url: String,
+    country: Country,
+    formatting: Formatting,
+    is_watchlisted: Boolean,
+    logo_url: String,
+    market: Market,
+    price_data: PriceData,
+    sector: Sector,
+    ticker: String,
+    title: String,
+    uid: String,
+    updated: String,
+}
+
 export interface AnalystIdea {
     analyst: Analyst,
     company: Number,
