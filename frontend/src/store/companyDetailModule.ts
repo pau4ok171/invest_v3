@@ -1,16 +1,21 @@
 import axios from "axios";
+import type {Module} from "vuex";
 import {toast} from "vue3-toastify";
+import type {Candle, Competitor, DetailCompany, Snowflake} from "@/types/invest";
+import type {Statement} from "@/types/statements";
+import type {Portfolio} from "@/types/portfolios"
+import type {Note} from "@/types/notes";
 
 export const companyDetailModule = {
   state: () => ({
-    companyPriceData: [],
-    company: {},
-    portfolios: [],
-    notes: [],
-    statements: [],
-    snowflake: [],
-    competitors: [],
-    note: {},
+    companyPriceData: [] as Array<Candle>,
+    company: {} as DetailCompany,
+    portfolios: [] as Array<Portfolio>,
+    notes: [] as Array<Note>,
+    statements: [] as Array<Statement>,
+    snowflake: [] as Array<Number>,
+    competitors: [] as Array<Competitor>,
+    note: {} as Note,
     priceChartDataisLoading: true,
     // NotesModalMenu
     notesModalMenuIsOpen: false,
@@ -59,7 +64,7 @@ export const companyDetailModule = {
     },
   },
   mutations: {
-    getCompanyPriceData(state, priceData) {
+    getCompanyPriceData(state, priceData: Array<Candle>) {
       state.companyPriceData = priceData
     },
     setPriceChartDataIsLoading(state, status: Boolean) {
@@ -68,31 +73,31 @@ export const companyDetailModule = {
     setCompany(state, company) {
       state.company = company
     },
-    setPortfolios(state, portfolios) {
+    setPortfolios(state, portfolios: Array<Portfolio>) {
       state.portfolios = portfolios
     },
-    setNotes(state, notes) {
+    setNotes(state, notes: Array<Note>) {
       state.notes = notes
     },
-    setNote(state, note) {
+    setNote(state, note: Note) {
       state.note = note
     },
-    setStatements(state, statements) {
+    setStatements(state, statements: Array<Statement>) {
       state.statements = statements
     },
-    setSnowflake(state, snowflake: Array<Number>) {
+    setSnowflake(state, snowflake: Array<Snowflake>) {
       state.snowflake = snowflake
     },
-    setCompetitors(state, competitors: Array<Object>) {
+    setCompetitors(state, competitors: Array<Competitor>) {
       state.competitors = competitors
     },
-    addNewPortfolio(state, portfolio) {
+    addNewPortfolio(state, portfolio: Portfolio) {
       state.portfolios.push(portfolio)
     },
-    addNewNote(state, note) {
+    addNewNote(state, note: Note) {
       state.notes.push(note)
     },
-    setNoteSavedContent(state, savedContent) {
+    setNoteSavedContent(state, savedContent: String) {
       state.noteSavedContent = savedContent
     },
     setIsWatchlisted(state, status: Boolean) {
@@ -112,9 +117,9 @@ export const companyDetailModule = {
     },
   },
   actions: {
-    updatePortfoliosWithNewPortfolio({state, commit}, portfolio) {
-      let portfolios: Array<Object> = []
-      state.portfolios.forEach((p: {id: Number}) => {
+    updatePortfoliosWithNewPortfolio({state, commit}, portfolio: Portfolio) {
+      let portfolios: Array<Portfolio> = []
+      state.portfolios.forEach((p: Portfolio) => {
         if (p.id === portfolio.id) {
           portfolios.push(portfolio)
         } else {
@@ -123,9 +128,9 @@ export const companyDetailModule = {
       })
       commit('setPortfolios', portfolios)
     },
-    updateNotesWithNewNote({state, commit}, note) {
-      let notes: Array<Object> = []
-      state.notes.forEach((n: {id: Number}) => {
+    updateNotesWithNewNote({state, commit}, note: Note) {
+      let notes: Array<Note> = []
+      state.notes.forEach((n: Note) => {
         if (n.id === note.id) {
           notes.push(note)
         } else {
@@ -134,7 +139,7 @@ export const companyDetailModule = {
       })
       commit('setNotes', notes)
     },
-    async fetchPriceData({state, commit}, slug) {
+    async fetchPriceData({state, commit}, slug: String) {
       await axios
         .get(`api/v1/invest/price_data/${slug}`)
         .then(response => {
@@ -175,10 +180,10 @@ export const companyDetailModule = {
       }
       commit('setWatchlistIsLoading', false)
     },
-    async deleteNote({state, commit}, note) {
+    async deleteNote({state, commit}, note: Note) {
       await axios
         .delete(`/api/v1/notes/${note.id}`)
-        .then(response => {
+        .then(() => {
           commit('setNotes', [...state.notes].filter(n => n.id !== note.id))
         })
         .catch(error => {
@@ -188,4 +193,4 @@ export const companyDetailModule = {
     },
   },
   namespaced: true,
-}
+} as Module<any, any>
