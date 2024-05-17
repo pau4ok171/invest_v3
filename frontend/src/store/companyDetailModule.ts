@@ -85,7 +85,7 @@ export const companyDetailModule = {
     setStatements(state, statements: Array<Statement>) {
       state.statements = statements
     },
-    setSnowflake(state, snowflake: Array<Snowflake>) {
+    setSnowflake(state, snowflake: Array<Number>) {
       state.snowflake = snowflake
     },
     setCompetitors(state, competitors: Array<Competitor>) {
