@@ -21,16 +21,16 @@ export interface DetailCompany {
 }
 
 export interface ListCompany {
-    absolute_url: String,
+    absolute_url: string,
     country: Country,
     formatting: Formatting,
     is_watchlisted: Boolean,
-    logo_url: String,
+    logo_url: string,
     market: Market,
     price_data: PriceData,
     sector: Sector,
     ticker: String,
-    title: String,
+    title: string,
     uid: String,
     updated: String,
 }
@@ -111,7 +111,7 @@ export interface PriceData {
 export interface Sector {
     main_header: String,
     slug: String,
-    title: String,
+    title: string,
 }
 
 export interface Competitor {
