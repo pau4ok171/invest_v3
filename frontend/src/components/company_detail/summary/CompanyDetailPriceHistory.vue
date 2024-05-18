@@ -10,11 +10,7 @@ export default defineComponent({
 </script>
 
 <template>
-   <DetailSectionTitle>Price History & Performance</DetailSectionTitle>
+<DetailSectionTitle>Price History & Performance</DetailSectionTitle>
 
-    <PriceChart/>
+<PriceChart/>
 </template>
-
-<style scoped>
-
-</style>

@@ -11,37 +11,37 @@ export default defineComponent({
 </script>
 
 <template>
-  <DetailSectionTitle>Recent News & Updates</DetailSectionTitle>
+<DetailSectionTitle>Recent News & Updates</DetailSectionTitle>
 
-  <div class="detail-recent-news detail__d-news">
+<div class="detail-recent-news detail__d-news">
 
-    <CompanyDetailNewsItem/>
-    <CompanyDetailNewsItem/>
-    <CompanyDetailNewsItem/>
-    <CompanyDetailNewsItem/>
-    <CompanyDetailNewsItem/>
-    <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
+  <CompanyDetailNewsItem/>
 
-  </div>
+</div>
 
-  <div class="detail-recent-news__button">
-    <RoundedDarkBlueButton :isFullWidth="true">See more updates</RoundedDarkBlueButton>
-  </div>
+<div class="detail-recent-news__button">
+  <RoundedDarkBlueButton :isFullWidth="true">See more updates</RoundedDarkBlueButton>
+</div>
 </template>
 
 <style scoped>
-  .detail-recent-news {
-    margin: 24px -8px 0 -8px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, max-content);
-    align-items: start;
-  }
-  .detail-recent-news__button {
-    width: 100%;
-    display: flex;
-    flex: 0 0 100%;
-    justify-content: center;
-    padding-top: 16px;
-  }
+.detail-recent-news {
+  margin: 24px -8px 0 -8px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(3, max-content);
+  align-items: start;
+}
+.detail-recent-news__button {
+  width: 100%;
+  display: flex;
+  flex: 0 0 100%;
+  justify-content: center;
+  padding-top: 16px;
+}
 </style>

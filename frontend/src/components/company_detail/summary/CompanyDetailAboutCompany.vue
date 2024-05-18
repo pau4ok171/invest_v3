@@ -4,39 +4,39 @@ import CompanyDetailAboutCompanyTable from "@/components/company_detail/summary/
 import CompanyDetailSection from "@/components/company_detail/CompanyDetailSection.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailAboutCompany",
   components: {DetailSectionTitle, RoundedDarkBlueButton, CompanyDetailSection, CompanyDetailAboutCompanyTable},
   computed: {
-    ...mapState({
-      company: state => state.companyDetail.company,
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
     }),
   },
 })
 </script>
 
 <template>
-  <CompanyDetailSection id="about-company-section">
+<CompanyDetailSection id="about-company-section">
 
-    <DetailSectionTitle>About the Company</DetailSectionTitle>
+  <DetailSectionTitle>About the Company</DetailSectionTitle>
 
-    <CompanyDetailAboutCompanyTable/>
+  <CompanyDetailAboutCompanyTable/>
 
-    <div class="detail-about-company__description">
-      {{ company.description }}
-    </div>
+  <div class="detail-about-company__description">
+    {{ company.description }}
+  </div>
 
-    <RoundedDarkBlueButton>Show more</RoundedDarkBlueButton>
+  <RoundedDarkBlueButton>Show more</RoundedDarkBlueButton>
 
-  </CompanyDetailSection>
+</CompanyDetailSection>
 </template>
 
 <style scoped>
-  .detail-about-company__description {
-    font-size: 1.6rem;
-    line-height: 1.5;
-    margin-bottom: 24px;
-  }
+.detail-about-company__description {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
 </style>

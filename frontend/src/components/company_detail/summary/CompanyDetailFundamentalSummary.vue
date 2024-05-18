@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailSection from "@/components/company_detail/CompanyDetailSection.vue";
-import DetailCompanySectionInRowItemBox from "@/components/company_detail/DetailCompanySectionInRowItemBox.vue";
+import DetailCompanySectionInRowItemBox from "@/components/company_detail/CompanySectionInRowItemBox.vue";
 import FundamentalSummaryChart from "@/components/charts/FundamentalSummaryChart.vue";
 import CompanyDetailFundamentalSummaryTable
   from "@/components/company_detail/summary/CompanyDetailFundamentalSummaryTable.vue";
@@ -11,7 +11,7 @@ import CompanyDetailEarningsRevenueTable
 import CompanyDetailDividendsTable from "@/components/company_detail/summary/CompanyDetailDividendsTable.vue";
 import DividendPaydayChart from "@/components/charts/DividendPaydayChart.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailFundamentalSummary",
@@ -27,40 +27,40 @@ export default defineComponent({
     CompanyDetailSection
   },
   computed: {
-    ...mapState({
-      company: state => state.companyDetail.company,
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
     }),
   },
 })
 </script>
 
 <template>
-  <CompanyDetailSection>
-    
-    <DetailSectionTitle>{{ company.title }} Fundamental Summary</DetailSectionTitle>
+<CompanyDetailSection>
 
-    <DetailCompanySectionInRowItemBox>
-      <FundamentalSummaryChart class="detail-section__in-row-item"/>
-      <CompanyDetailFundamentalSummaryTable class="detail-section__in-row-item"/>
-    </DetailCompanySectionInRowItemBox>
+  <DetailSectionTitle>{{ company.title }} Fundamental Summary</DetailSectionTitle>
 
-    <hr>
+  <DetailCompanySectionInRowItemBox>
+    <FundamentalSummaryChart class="detail-section__in-row-item"/>
+    <CompanyDetailFundamentalSummaryTable class="detail-section__in-row-item"/>
+  </DetailCompanySectionInRowItemBox>
 
-    <DetailSectionTitle>Earnings & Revenue</DetailSectionTitle>
+  <hr>
 
-    <DetailCompanySectionInRowItemBox>
-      <EarningsRevenueChart class="detail-section__in-row-item"/>
-      <CompanyDetailEarningsRevenueTable class="detail-section__in-row-item"/>
-    </DetailCompanySectionInRowItemBox>
+  <DetailSectionTitle>Earnings & Revenue</DetailSectionTitle>
 
-    <hr>
+  <DetailCompanySectionInRowItemBox>
+    <EarningsRevenueChart class="detail-section__in-row-item"/>
+    <CompanyDetailEarningsRevenueTable class="detail-section__in-row-item"/>
+  </DetailCompanySectionInRowItemBox>
 
-    <DetailSectionTitle>Dividends</DetailSectionTitle>
+  <hr>
 
-    <DetailCompanySectionInRowItemBox>
-      <CompanyDetailDividendsTable class="detail-section__in-row-item"/>
-      <DividendPaydayChart class="detail-section__in-row-item"/>
-    </DetailCompanySectionInRowItemBox>
+  <DetailSectionTitle>Dividends</DetailSectionTitle>
 
-  </CompanyDetailSection>
+  <DetailCompanySectionInRowItemBox>
+    <CompanyDetailDividendsTable class="detail-section__in-row-item"/>
+    <DividendPaydayChart class="detail-section__in-row-item"/>
+  </DetailCompanySectionInRowItemBox>
+
+</CompanyDetailSection>
 </template>

@@ -26,19 +26,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
+<div>
 
-    <DetailSectionTitle>Shareholder Returns</DetailSectionTitle>
+  <DetailSectionTitle>Shareholder Returns</DetailSectionTitle>
 
-    <CompanyDetailShareholderReturnsTable/>
+  <CompanyDetailShareholderReturnsTable/>
 
-    <RoundedDarkBlueButton :isFullWidth="true">See full shareholders returns</RoundedDarkBlueButton>
+  <RoundedDarkBlueButton :isFullWidth="true">See full shareholders returns</RoundedDarkBlueButton>
 
-    <CompanyDetailStatement :statement_list/>
+  <CompanyDetailStatement :statement_list/>
 
-  </div>
+</div>
 </template>
-
-<style scoped>
-
-</style>

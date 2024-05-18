@@ -5,27 +5,30 @@ import QuestionLink from "@/components/UI/text/QuestionLink.vue";
 
 export default defineComponent({
   name: "CompanyDetailDividendsTable",
-  components: {QuestionLink, QuestionText}
+  components: {
+    QuestionLink,
+    QuestionText,
+  }
 })
 </script>
 
 <template>
-  <div>
-    <div class="detail-dividends-table">
-      <div class="detail-dividends-table__item">
-        <h3 class="detail-dividends-table__title">14.0%</h3>
-        <span class="detail-dividends-table__text">Current Dividend Yield</span>
-      </div>
-      <div class="detail-dividends-table__item">
-        <h3 class="detail-dividends-table__title">35%</h3>
-        <span class="detail-dividends-table__text">Payout Ratio</span>
-      </div>
+<div>
+  <div class="detail-dividends-table">
+    <div class="detail-dividends-table__item">
+      <h3 class="detail-dividends-table__title">14.0%</h3>
+      <span class="detail-dividends-table__text">Current Dividend Yield</span>
     </div>
-    <div>
-      <QuestionText>Does SBER pay a reliable dividends?</QuestionText>
-      <QuestionLink>See SBER dividend history and benchmarks</QuestionLink>
+    <div class="detail-dividends-table__item">
+      <h3 class="detail-dividends-table__title">35%</h3>
+      <span class="detail-dividends-table__text">Payout Ratio</span>
     </div>
   </div>
+  <div>
+    <QuestionText>Does SBER pay a reliable dividends?</QuestionText>
+    <QuestionLink>See SBER dividend history and benchmarks</QuestionLink>
+  </div>
+</div>
 </template>
 
 <style scoped>

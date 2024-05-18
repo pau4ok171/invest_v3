@@ -19,16 +19,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <DetailSectionTitle>Price Volatility</DetailSectionTitle>
+<div>
+  <DetailSectionTitle>Price Volatility</DetailSectionTitle>
 
-    <PriceVolatilityChart/>
+  <PriceVolatilityChart/>
 
-    <CompanyDetailStatement :statement_list/>
+  <CompanyDetailStatement :statement_list/>
 
-  </div>
+</div>
 </template>
-
-<style scoped>
-
-</style>

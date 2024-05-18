@@ -32,13 +32,13 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      company: state => state.companyDetail.company,
-      snowflake: state => state.companyDetail.snowflake,
+      company: 'companyDetail/company',
+      snowflake: 'companyDetail/snowflake',
     }),
   },
   methods: {
     scrollToAboutTheCompanySection() {
-      const goTo = document.querySelector('#about-company-section').getBoundingClientRect()
+      const goTo = (document as any).querySelector('#about-company-section').getBoundingClientRect()
       const windowScroll = document.documentElement.scrollTop
       const scrollTop = goTo.top + windowScroll - 80
       window.scrollTo({top: scrollTop, behavior: 'smooth'})
@@ -48,31 +48,31 @@ export default defineComponent({
 </script>
 
 <template>
-  <CompanyDetailSection :useGrid="true" :useMinH="true">
-    <CompanyDetailContentGroup>
-      <DetailSectionTitle>{{ company.slug.toUpperCase() }} Stock Overview</DetailSectionTitle>
-      <DetailSectionText>{{ company.short_description }}</DetailSectionText>
+<CompanyDetailSection :useGrid="true" :useMinH="true">
+  <CompanyDetailContentGroup>
+    <DetailSectionTitle>{{ company.slug.toUpperCase() }} Stock Overview</DetailSectionTitle>
+    <DetailSectionText>{{ company.short_description }}</DetailSectionText>
 
-      <TextBlueButton @click="scrollToAboutTheCompanySection">
-        <InfoIcon/>
-        <span>About the company</span>
-      </TextBlueButton>
+    <TextBlueButton @click="scrollToAboutTheCompanySection">
+      <InfoIcon/>
+      <span>About the company</span>
+    </TextBlueButton>
 
-    </CompanyDetailContentGroup>
+  </CompanyDetailContentGroup>
 
-    <CompanyDetailContentGroup :useGridRow="true">
+  <CompanyDetailContentGroup :useGridRow="true">
 
-      <CompanyDetailSnowflakeTable v-if="false"/>
+    <CompanyDetailSnowflakeTable v-if="false"/>
 
-      <SnowflakeChart :chartData="snowflake" v-else/>
+    <SnowflakeChart :chartData="snowflake" v-else/>
 
-    </CompanyDetailContentGroup>
+  </CompanyDetailContentGroup>
 
-    <CompanyDetailContentGroup :useGrid="true">
+  <CompanyDetailContentGroup :useGrid="true">
 
-      <CompanyDetailRiskReward/>
+    <CompanyDetailRiskReward/>
 
-    </CompanyDetailContentGroup>
+  </CompanyDetailContentGroup>
 
-  </CompanyDetailSection>
+</CompanyDetailSection>
 </template>
