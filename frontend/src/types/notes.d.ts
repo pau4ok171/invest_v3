@@ -3,5 +3,5 @@ export interface Note {
     company: Number,
     body: String,
     created: String,
-    updated: String,
+    updated: string,
 }
