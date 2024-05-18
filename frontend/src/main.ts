@@ -19,14 +19,15 @@ import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
 axios.defaults.baseURL = 'http://localhost:8000'
 
 const app = createApp(App)
+const hc = Highcharts as any
 
 app.directive('intersection', Vintersection)
 
-highchartsMore(Highcharts)
-loadSolidGauge(Highcharts)
-StockChart(Highcharts)
+highchartsMore(hc)
+loadSolidGauge(hc)
+StockChart(hc)
 
-Highcharts.Templating.helpers.abs = value => Math.abs(value);
+hc.Templating.helpers.abs = (value: number) => Math.abs(value);
 
 Highcharts.setOptions({
   ...defaultChartOpts
