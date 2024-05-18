@@ -1,44 +1,13 @@
-<template>
-<BaseModalMenu>
-<template #content>
-  <div class="auth-form">
-    <h1 class="auth-form__title">Finargo</h1>
-    <h2 class="auth-form__subtitle">Your best invest analysis provider</h2>
-
-    <AuthForm
-      @submitForm="submitForm"
-      :registerIsChosen
-      :errors
-      v-model:formData="formData"
-      v-model:formIsValid="formIsValid"
-    />
-
-    <SocialAuthForm/>
-
-    <div class="auth-form__change-form">
-      <template v-if="!registerIsChosen">Еще нет аккаунта? <span @click="changeForm">Создать</span></template>
-      <template v-else>Уже есть аккаунт? <span @click="changeForm">Войти</span></template>
-    </div>
-
-    <div class="auth-form__conditions">
-        By using Simply Wall St you are agreeing to our <br>
-        <a href="#" target="_blank">terms and conditions</a>.
-        Simply Wall St provides <br>general investment advice only.
-    </div>
-  </div>
-</template>
-</BaseModalMenu>
-</template>
-
 <script lang="ts">
   import SocialAuthForm from "@/components/base/auth/SocialAuthForm.vue";
   import AuthForm from "@/components/base/auth/AuthForm.vue";
-  import store from "@/store";
   import axios, {AxiosError} from "axios";
   import Loader from "@/components/UI/Loader.vue";
   import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
+  import {mapMutations} from "vuex";
+  import {defineComponent} from "vue";
 
-  export default {
+  export default defineComponent({
     name: 'AuthModalMenu',
     components: {
       BaseModalMenu,
@@ -49,7 +18,7 @@
     data() {
       return {
         registerIsChosen: false,
-        errors: [],
+        errors: [] as Array<String>,
         formData: {
           new_username: '',
           new_password1: '',
@@ -66,10 +35,13 @@
       }
     },
     unmounted() {
-      console.log('UNMOUNTED')
       this.cleanModalMenu()
     },
     methods: {
+      ...mapMutations({
+        setIsLoading: "setIsLoading",
+        setToken: "authModule/setToken",
+      }),
       cleanModalMenu() {
         this.formData = this.EMPTY_FORM_DATA
         this.errors = []
@@ -86,7 +58,7 @@
         const formData = new FormData()
         this.errors = []
         if (this.registerIsChosen) {
-          store.commit('setIsLoading', true)
+          this.setIsLoading(true)
 
           // TODO: Проверить на ошибки|На уникальность логина
 
@@ -100,7 +72,7 @@
             .then(() => {})
             .catch(this.catchError)
 
-          store.commit('setIsLoading', false)
+          this.setIsLoading(false)
 
         } else {
           Object.entries({
@@ -113,13 +85,13 @@
         }
     },
     async loginUser(formData: FormData) {
-      store.commit('setIsLoading', true)
+      this.setIsLoading(true)
       await axios
         .post('/api/v1/token/login/', formData)
         .then(response => {
           const token = response.data.auth_token
 
-          store.commit('setToken', token)
+          this.setToken(token)
 
           axios.defaults.headers.common["Authorization"] = `Token ${token}`
 
@@ -128,11 +100,11 @@
           this.cleanModalMenu()
         })
         .catch(this.catchError)
-      store.commit('setIsLoading', false)
+      this.setIsLoading(false)
     },
     catchError(error: AxiosError) {
       if (error.response) {
-        const error_data = error.response.data
+        const error_data = error.response.data as Array<String>
         for (const property in error_data) {this.errors.push(`${property}: ${error_data[property]}`)}
         console.log(JSON.stringify(error.response.data))
 
@@ -142,8 +114,42 @@
       }
     },
   },
-}
+})
 </script>
+
+<template>
+<BaseModalMenu>
+<template #content>
+<div class="auth-form">
+
+  <h1 class="auth-form__title">Finargo</h1>
+  <h2 class="auth-form__subtitle">Your best invest analysis provider</h2>
+
+  <AuthForm
+    @submitForm="submitForm"
+    :registerIsChosen
+    :errors
+    v-model:formData="formData"
+    v-model:formIsValid="formIsValid"
+  />
+
+  <SocialAuthForm/>
+
+  <div class="auth-form__change-form">
+    <template v-if="!registerIsChosen">Еще нет аккаунта? <span @click="changeForm">Создать</span></template>
+    <template v-else>Уже есть аккаунт? <span @click="changeForm">Войти</span></template>
+  </div>
+
+  <div class="auth-form__conditions">
+      By using Simply Wall St you are agreeing to our <br>
+      <a href="#" target="_blank">terms and conditions</a>.
+      Simply Wall St provides <br>general investment advice only.
+  </div>
+
+</div>
+</template>
+</BaseModalMenu>
+</template>
 
 <style scoped>
 .auth-form {
