@@ -1,30 +1,16 @@
-<template>
-  <DropDownMenu>
-    <div class="account-access__dropdown">
-      <nav class="account-access__navigation">
-        <div class="account-access-navigation__inner">
-          <ul class="account-access__list">
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Plans & Pricing</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><button @click="logout">Logout</button></li>
-          </ul>
-        </div>
-      </nav>
-    </div>
-  </DropDownMenu>
-</template>
-
-<script>
+<script lang="ts">
 import axios from "axios";
-import store from "@/store";
 import DropDownMenu from "@/components/UI/DropDownMenu.vue";
+import {mapMutations} from "vuex";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'NavUserDropDown',
   components: {DropDownMenu},
   methods: {
+    ...mapMutations({
+      removeToken: 'authModule/removeToken',
+    }),
     logout() {
       axios.defaults.headers.common['Authorization'] = ''
 
@@ -32,11 +18,29 @@ export default {
       localStorage.removeItem('username')
       localStorage.removeItem('userid')
 
-      store.commit('removeToken')
+      this.removeToken()
     },
   },
-}
+})
 </script>
+
+<template>
+<DropDownMenu>
+<div class="account-access__dropdown">
+  <nav class="account-access__navigation">
+    <div class="account-access-navigation__inner">
+      <ul class="account-access__list">
+        <li><a href="#">Profile</a></li>
+        <li><a href="#">Plans & Pricing</a></li>
+        <li><a href="#">Notifications</a></li>
+        <li><a href="#">Help Center</a></li>
+        <li><button @click="logout">Logout</button></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+</DropDownMenu>
+</template>
 
 <style scoped>
 .account-access__dropdown {
