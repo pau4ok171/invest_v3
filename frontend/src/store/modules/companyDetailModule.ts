@@ -28,19 +28,19 @@ export const companyDetailModule = {
     noteSavedContent: '',
   }),
   getters: {
-    getPageIsReady(state) {
+    getPageIsReady(state): boolean {
       return state.pageIsReady
     },
-    companyPriceData(state) {
+    companyPriceData(state): Array<Candle> {
       return state.companyPriceData.map((F: {time: string, close: string}) => [F['time'], F['close']])
     },
-    getNotesModalMenuIsActive(state) {
+    getNotesModalMenuIsActive(state): boolean {
       return state.notesModalMenuIsOpen
     },
     getNotesModalMenuIsLateral(state) {
       return state.notesModalMenuIsLateral
     },
-    getCompany(state) {
+    getCompany(state): DetailCompany {
       return state.company
     },
     getPortfolios(state) {
