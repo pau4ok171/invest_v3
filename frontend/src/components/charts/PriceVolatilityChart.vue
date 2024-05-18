@@ -6,7 +6,7 @@ export default defineComponent({
   name: "PriceVolatilityChart",
   computed: {
     ...mapGetters({
-      company: 'companyDetail/company',
+      company: 'companyDetail/getCompany',
     }),
   },
 })

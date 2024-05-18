@@ -94,7 +94,7 @@ export interface Market {
 
 export interface Formatting {
     primaryCurrencyISO: String
-    primaryCurrencySymbol: String
+    primaryCurrencySymbol: string
     reportCurrencyISO: String
     reportCurrencySymbol: String
     tradingCurrencyISO: String
@@ -102,10 +102,10 @@ export interface Formatting {
 }
 
 export interface PriceData {
-    capitalisation: Number,
-    last_price: Number,
-    return_1y: Number,
-    return_7d: Number,
+    capitalisation: number,
+    last_price: number,
+    return_1y: number,
+    return_7d: number,
 }
 
 export interface Sector {
@@ -115,7 +115,7 @@ export interface Sector {
 }
 
 export interface Competitor {
-    analyst_ideas: Array<AnalystIdea>,
+    absolute_url: string,
     country: Country,
     formatting: Formatting,
     id: Number,

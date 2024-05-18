@@ -6,7 +6,7 @@ export default defineComponent({
   name: "CompanyDetailBreadcrumbs",
   computed: {
     ...mapGetters({
-      company: 'companyDetail.getCompany',
+      company: 'companyDetail/getCompany',
     }),
   },
 })
