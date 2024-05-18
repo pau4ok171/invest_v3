@@ -3,7 +3,6 @@ import type {Module} from "vuex";
 export const authModule = {
     state: () => ({
     isAuthenticated: false,
-    isLoading: false,
     token: '',
   }),
   getters: {
@@ -12,7 +11,7 @@ export const authModule = {
     },
   },
   mutations: {
-    initializeStore(state) {
+    initializeAuth(state) {
       const token: String | null = localStorage.getItem('token')
       if (token) {
         state.token = token
@@ -21,9 +20,6 @@ export const authModule = {
         state.token = ''
         state.isAuthenticated = false
       }
-    },
-    setIsLoading(state, status: Boolean) {
-      state.isLoading = status
     },
     setToken(state, token: String) {
       state.token = token
@@ -34,5 +30,8 @@ export const authModule = {
       state.isAuthenticated = false
     },
   },
-  actions: {},
+  actions: {
+
+  },
+  namespaced: true,
 } as Module<any, any>
