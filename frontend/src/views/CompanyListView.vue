@@ -1,19 +1,10 @@
-<template>
-<section>
-
-  <CompanyListHeader v-if="pageIsReady"/>
-
-  <CompanyListContent v-if="pageIsReady"/>
-
-</section>
-</template>
-
 <script lang="ts">
 import CompanyListHeader from "@/components/company_list/CompanyListHeader.vue";
 import CompanyListContent from "@/components/company_list/CompanyListContent.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'CompanyList',
   components: {
     CompanyListHeader,
@@ -24,7 +15,6 @@ export default {
     await this.fetchFilters()
     await this.fetchCompanies()
     this.setPageIsReady(true)
-
   },
   methods: {
     ...mapActions({
@@ -40,5 +30,13 @@ export default {
       pageIsReady: "companyList/getPageIsReady",
     }),
   },
-}
+})
 </script>
+
+<template>
+<section>
+  <CompanyListHeader v-if="pageIsReady"/>
+
+  <CompanyListContent v-if="pageIsReady"/>
+</section>
+</template>
