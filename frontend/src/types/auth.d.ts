@@ -1,10 +1,10 @@
 export interface registerAuthData {
-  new_username: String,
-  new_password1: String,
-  new_password2: String,
+  new_username: string,
+  new_password1: string,
+  new_password2: string,
 }
 
 export interface loginAuthData {
-  current_username: String,
-  current_password: String,
+  current_username: string,
+  current_password: string,
 }
