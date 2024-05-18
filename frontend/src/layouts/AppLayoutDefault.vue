@@ -1,31 +1,34 @@
-<template>
-  <BasicHeader :class="{'screen__blured':false}"/>
-  <div class="content">
-    <div class="content__inner">
-        <slot/>
-    </div>
-  </div>
-  <Loader v-if="store.state.isLoading"/>
-</template>
-
 <script lang="ts">
 import BasicHeader from '@/components/base/header/BasicHeader.vue'
-import store from "@/store";
 import Loader from "@/components/UI/Loader.vue";
+import {defineComponent} from "vue";
+import {mapState} from "vuex";
 
-export default {
+export default defineComponent({
   name: 'AppLayoutDefault',
   components: {
     Loader,
     BasicHeader,
   },
   computed: {
-    store () {
-      return store
-    },
+    ...mapState({
+      isLoading: 'isLoading',
+    }),
   },
-}
+})
 </script>
+
+<template>
+<BasicHeader :class="{'screen__blured':false}"/>
+
+<div class="content">
+  <div class="content__inner">
+      <slot/>
+  </div>
+</div>
+
+<Loader v-if="isLoading"/>
+</template>
 
 <style scoped>
 .content {
