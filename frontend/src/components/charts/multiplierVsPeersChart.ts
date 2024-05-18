@@ -1,5 +1,5 @@
-const dataMP = {
-  0: {
+const dataMP = [
+  {
     name: 'ROSBANK',
     pe: 9.8,
     pb: 0.9,
@@ -7,7 +7,7 @@ const dataMP = {
     earningsGrowth: 'n/a',
     salesGrowth: 'n/a',
   },
-  1: {
+  {
     name: 'Credit Bank of Moscow',
     pe: 6.3,
     pb: 0.6,
@@ -15,7 +15,7 @@ const dataMP = {
     earningsGrowth: '26.9%',
     salesGrowth: '28.3%',
   },
-  2: {
+  {
     name: 'Sberbank of Russia',
     pe: 9.8,
     pb: 0.5,
@@ -23,7 +23,7 @@ const dataMP = {
     earningsGrowth: '8.2%',
     salesGrowth: '12.5%',
   },
-  3: {
+  {
     name: 'Gazprom',
     pe: 2.2,
     pb: 0.3,
@@ -31,7 +31,7 @@ const dataMP = {
     earningsGrowth: 'n/a',
     salesGrowth: 'n/a',
   },
-  4: {
+  {
     name: 'VTB Bank',
     pe: 9.8,
     pb: 0.1,
@@ -39,30 +39,32 @@ const dataMP = {
     earningsGrowth: '-2.1%',
     salesGrowth: '10.2%',
   },
-}
+]
 
-const averagesMP = {
-  0: {
+const averagesMP = [
+  {
     averageValue: 4.8,
     maxValue: 9.8,
     max: 10,
   },
-  2: {
-    averageValue: 0.5,
-    maxValue: 0.9,
-    max: 1.2,
-  },
-  1: {
+  {
     averageValue: 1.6,
     maxValue: 3,
     max: 3.2
   },
-}
+  {
+    averageValue: 0.5,
+    maxValue: 0.9,
+    max: 1.2,
+  },
+]
 
 let chartMiddleEls = {}
-let chartXAxisEls = {}
+let chartXAxisEls = {
+  xAxisLabel: null
+}
 
-function setDataSeriesTextFormat() {
+function setDataSeriesTextFormat(this: any) {
   const key = this.key
   const selected = key === 2 ? ' multiple-vs-peers-chart__data-label-name--selected' : ''
   return `` +
@@ -166,7 +168,7 @@ export const chartOpts = {
           fontSize: '1.2rem',
           color: '#fff',
         },
-        formatter: function () {return this.isFirst ? this.chart.yAxis[0].options.firstEl : this.value}},
+        formatter: function (this: any) {return this.isFirst ? this.chart.yAxis[0].options.firstEl : this.value}},
       max: 10, // Макс значение по оси
     },
     xAxis: {
@@ -179,7 +181,7 @@ export const chartOpts = {
           fontSize: '1.2rem',
           color: '#fff',
         },
-        formatter: function () {
+        formatter: function (this: any) {
           const index = Number(this.value)
           if (this.chart.xAxis[0].options.currentSeries === 1) return dataMP[index].salesGrowth
           return dataMP[index].earningsGrowth
@@ -197,13 +199,13 @@ export const chartOpts = {
     }
 }
 
-function drawAdditionalElements() {
+function drawAdditionalElements(this: any) {
   const chart = this
   drawVAxisEls(chart)
   drawMiddleEls(chart)
 }
 
-function drawVAxisEls(chart) {
+function drawVAxisEls(chart: any) {
   const offsetX = 8
   const boxW = 60
   const plotBox = chart.plotBox
@@ -223,7 +225,7 @@ function drawVAxisEls(chart) {
 
 }
 
-function drawXAxisLabel (chart, key=0) {
+function drawXAxisLabel (chart: any, key: number=0) {
   const plotBox = chart.plotBox
   const textOffsetX = 8
   const textOffsetY = 18
@@ -238,7 +240,7 @@ function drawXAxisLabel (chart, key=0) {
   chartXAxisEls.xAxisLabel = chart.renderer.text(textFormat, textX, textY).add()
 }
 
-function drawMiddleEls(chart, key=0) {
+function drawMiddleEls(chart: any, key=0) {
   const plotBox = chart.plotBox
   const averageValue = averagesMP[key].averageValue
   const yMax = averagesMP[key].max
@@ -248,7 +250,7 @@ function drawMiddleEls(chart, key=0) {
   const bgX = plotBox.x// Dynamic
   const bgY = plotBox.y // Dynamic
   const bgH = plotBox.height // Dynamic
-  const bgW = averagePosX
+  const bgW = pointWidth * averageValue
 
   // Background after Vertical Middle Line
   const middleBG = chart.renderer.rect(bgX, bgY, bgW, bgH)
@@ -303,12 +305,14 @@ function drawMiddleEls(chart, key=0) {
 
     })
     .add()
+  chartMiddleEls = {
+    middleBG: middleBG,
+    middleLine: middleLine,
+    middlePolygon: middlePolygon,
+    middleLabel: middleLabel,
+    middleText: middleText,
+  }
 
-  chartMiddleEls.middleBG = middleBG
-  chartMiddleEls.middleLine = middleLine
-  chartMiddleEls.middlePolygon = middlePolygon
-  chartMiddleEls.middleLabel = middleLabel
-  chartMiddleEls.middleText = middleText
 }
 
 

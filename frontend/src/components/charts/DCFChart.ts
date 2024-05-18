@@ -1,6 +1,11 @@
 const data =  {
   currentValue: 133.3,
   fairValue: 329.48,
+  diff: 0,
+  highest: 0,
+  diffType: '',
+  diffClass: '',
+  diffColor: '',
 }
 
 data['diff'] = +((data['fairValue'] - data['currentValue']) / data['fairValue'] * 100).toFixed(2)
@@ -57,9 +62,6 @@ export const chartOpts = {
       linearGradient: []
     }
   },
-  accessibility: {
-    enabled: false
-  },
   title: {
     text: null,
   },
@@ -105,7 +107,7 @@ export const chartOpts = {
   }]
 };
 
-function drawMultipleBgC() {
+function drawMultipleBgC(this: any) {
   // BACKGROUND
   const plotBox = this.plotBox
   const x1 = plotBox.x

@@ -29,9 +29,6 @@ export const chartOpts = {
       load: drawDataLabel
     }
   },
-  accessibility: {
-    enabled: false
-  },
   title: {
    text: ''
   },
@@ -136,7 +133,7 @@ export const chartOpts = {
   ]
 }
 
-function drawDataLabel() {
+function drawDataLabel(this: any) {
   const rDiffX = 10
   const rDiffY = 17
   const rOffsetY = -67
@@ -147,10 +144,8 @@ function drawDataLabel() {
   const rFinishX = rStartX
   const rFinishY = rStartY+rOffsetY
 
-
   this.renderer.path(['M', rStartX, rStartY, 'L', rFinishX, rFinishY]).attr({'stroke-width': 1, stroke: '#71E7D6', fill:'transparent', zIndex: 6}).add()
   this.renderer.circle().attr({cx:rFinishX, cy:rFinishY, fill: '#71E7D6', r: 2.5}).add()
-
 
   const eData = this.series[2].data
   const eStartX = eData[0].plotX + 15
@@ -161,8 +156,6 @@ function drawDataLabel() {
   const eFinishX = eMiddleX + 27
   const eFinishY = eMiddleY
 
-
   this.renderer.path(['M', eStartX, eStartY, 'L', eMiddleX, eMiddleY, 'L', eFinishX, eFinishY]).attr({'stroke-width': 1, stroke: '#2394DF', fill:'transparent', zIndex: 6}).add()
   this.renderer.circle().attr({cx:eFinishX, cy:eFinishY, fill: '#2394DF', r: 2.5}).add()
-
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "PriceVolatilityChart",
   computed: {
-    ...mapState({
-      company: state => state.companyDetail.company,
+    ...mapGetters({
+      company: 'companyDetail/company',
     }),
   },
 })
@@ -24,7 +24,7 @@ export default defineComponent({
           <text x="367" y="51" font-size="14" class="price-volatility-chart__label">High</text>
           <defs>
             <linearGradient id="paint0_linear" x1="35" y1="45.6667" x2="360" y2="45.667" gradientUnits="userSpaceOnUse">
-              <stop class="price-volatility-chart__gradient--start"></stop>
+              <stop offset="0" class="price-volatility-chart__gradient--start"></stop>
               <stop offset="0.491713" class="price-volatility-chart__gradient--middle"></stop>
               <stop offset="1" class="price-volatility-chart__gradient--end"></stop>
             </linearGradient>
@@ -50,40 +50,40 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .price-volatility-chart__wrapper {
-    visibility: visible;
-    height: 224px;
-  }
-  .price-volatility-chart {
-      position: relative;
-      height: 140px;
-  }
-  .price-volatility-chart svg {
+.price-volatility-chart__wrapper {
+  visibility: visible;
+  height: 224px;
+}
+.price-volatility-chart {
+    position: relative;
+    height: 140px;
+}
+.price-volatility-chart svg {
+  width: 100%;
+  height: 100%;
+}
+.price-volatility-chart__svg {
+    margin-top: 50px;
+    max-height: 180px;
+    position: absolute;
+    overflow: visible;
     width: 100%;
-    height: 100%;
-  }
-  .price-volatility-chart__svg {
-      margin-top: 50px;
-      max-height: 180px;
-      position: absolute;
-      overflow: visible;
-      width: 100%;
-      inset: 0;
-  }
-  .price-volatility-chart__label {
-      user-select: none;
-      fill: #fff;
-  }
-  .price-volatility-chart__label--dark {
-      fill: #262e3a;
-  }
-  .price-volatility-chart__gradient--start {
-      stop-color: #2dc97e;
-  }
-  .price-volatility-chart__gradient--middle {
-      stop-color: #eeb219;
-  }
-  .price-volatility-chart__gradient--end {
-      stop-color: #e64141;
-  }
+    inset: 0;
+}
+.price-volatility-chart__label {
+    user-select: none;
+    fill: #fff;
+}
+.price-volatility-chart__label--dark {
+    fill: #262e3a;
+}
+.price-volatility-chart__gradient--start {
+    stop-color: #2dc97e;
+}
+.price-volatility-chart__gradient--middle {
+    stop-color: #eeb219;
+}
+.price-volatility-chart__gradient--end {
+    stop-color: #e64141;
+}
 </style>

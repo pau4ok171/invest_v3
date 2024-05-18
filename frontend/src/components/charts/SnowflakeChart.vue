@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, PropType} from 'vue'
 import chartOpts from "@/components/charts/snowflakeChartOpts";
 import Highcharts from "highcharts";
 
@@ -14,7 +14,7 @@ export default defineComponent({
   },
   props: {
     chartData: {
-      type: Array,
+      type: Object as PropType<Array<number>>,
       required: true,
     },
     isSmall: {
@@ -87,9 +87,7 @@ export default defineComponent({
       xAxis[0].gridLineWidth = 1
       yAxis[0].gridLineWidth = 8
     }
-    const score = this.chartData.reduce((acc: number, data: number) => {
-      return acc += data
-    }, 0)
+    const score = this.chartData.reduce((acc: number, data: number) => acc+data, 0)
 
     switch (true) {
         case score  <= 5:
@@ -118,7 +116,7 @@ export default defineComponent({
 <template>
   <div :class="['snowflake', {'snowflake--small': isSmall}]">
     <div class="snowflake-labels">
-      <svg :width="this.chartW" :height="this.chartH" viewBox="0 0 241 231" fill="none" class="snowflake-labels__inner">
+      <svg :width="chartW" :height="chartH" viewBox="0 0 241 231" fill="none" class="snowflake-labels__inner">
         <g class="snowflake-labels__item snowflake-labels__item--value">
           <path d="M104.414 8.87181L105.614 1.95417L107.24 1.7169L105.391 10.6068L103.961 10.8126L99.7113 2.79367L101.322 2.55652L104.414 8.87181Z" class="snowflake-labels__label-text"></path>
           <path d="M114.142 7.74834L110.828 7.99804L110.286 10.0296L108.734 10.1312L111.337 1.37086L112.663 1.286L116.522 9.56314L114.986 9.67959L114.142 7.74834ZM111.151 6.7641L113.636 6.58058L112.134 3.13725L111.151 6.7641Z" class="snowflake-labels__label-text"></path>
@@ -163,7 +161,7 @@ export default defineComponent({
     <div class="snowflake-chart">
        <charts
         :constructorType="'chart'"
-        :options="this.chartOpts"
+        :options="chartOpts"
       />
     </div>
   </div>
@@ -171,52 +169,52 @@ export default defineComponent({
 </template>
 
 <style>
-  .snowflake{
-    position: relative;
-  }
-  .snowflake svg {
-    width: 280px;
-    height: 280px;
-  }
-  .snowflake--small svg {
-    width: 132px;
-    height: 132px;
-  }
-  .snowflake-chart {
-      margin-top: 3px;
-  }
-  .snowflake-labels {
-      position: absolute;
-      width: 100%;
-  }
-  .snowflake-labels > canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-  }
-  .snowflake-labels__inner {
-      position: absolute;
-      left: 0;
-      right: 0;
-  }
-  .snowflake-labels__item--value {
-      transform: translate(0%, 2%);
-  }
-  .snowflake-labels__item--future {
-      transform: translate(-4%, -1%);
-  }
-  .snowflake-labels__item--past {
-      transform: translate(-2.3%, -5.6%);
-  }
-  .snowflake-labels__item--health {
-      transform: translate(3%, -5%);
-  }
-  .snowflake-labels__item--dividend {
-      transform: translate(4.4%, -1.7%) rotate(0.4deg);
-  }
-  .snowflake-labels__label-text {
-      fill: #fff;
-  }
+.snowflake{
+  position: relative;
+}
+.snowflake svg {
+  width: 280px;
+  height: 280px;
+}
+.snowflake--small svg {
+  width: 132px;
+  height: 132px;
+}
+.snowflake-chart {
+    margin-top: 3px;
+}
+.snowflake-labels {
+    position: absolute;
+    width: 100%;
+}
+.snowflake-labels > canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.snowflake-labels__inner {
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+.snowflake-labels__item--value {
+    transform: translate(0%, 2%);
+}
+.snowflake-labels__item--future {
+    transform: translate(-4%, -1%);
+}
+.snowflake-labels__item--past {
+    transform: translate(-2.3%, -5.6%);
+}
+.snowflake-labels__item--health {
+    transform: translate(3%, -5%);
+}
+.snowflake-labels__item--dividend {
+    transform: translate(4.4%, -1.7%) rotate(0.4deg);
+}
+.snowflake-labels__label-text {
+    fill: #fff;
+}
 </style>

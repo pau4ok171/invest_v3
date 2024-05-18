@@ -1,29 +1,30 @@
-<template>
-  <div>
-    <div class="price-history-chart">
-      <charts
-        :constructorType="'stockChart'"
-        :options="chartOpts"
-      />
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-  import chartOpts from "@/components/charts/smallPriceChartOpts";
-  import store from "@/store";
+import chartOpts from "@/components/charts/smallPriceChartOpts";
+import store from "@/store";
+import {defineComponent} from "vue";
 
-  export default {
-    data() {
-      return {
-        chartOpts: chartOpts
-      }
-    },
-    mounted() {
-      this.chartOpts.series[0].data = store.getters["companyDetail/companyPriceData"]
-    },
-  }
+export default defineComponent({
+  data() {
+    return {
+      chartOpts: chartOpts
+    }
+  },
+  mounted() {
+    this.chartOpts.series[0].data = store.getters["companyDetail/companyPriceData"]
+  },
+})
 </script>
+
+<template>
+<div>
+  <div class="price-history-chart">
+    <charts
+      :constructorType="'stockChart'"
+      :options="chartOpts"
+    />
+  </div>
+</div>
+</template>
 
 <style>
 .price-history-chart {

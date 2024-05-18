@@ -13,26 +13,26 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="detail-multiplier-vs-peers-chart">
-    <charts
-      :options="chartOpts"
-      :constructorType="'chart'"
-    />
-  </div>
+<div class="detail-multiplier-vs-peers-chart">
+  <charts
+    :options="chartOpts"
+    :constructorType="'chart'"
+  />
+</div>
 </template>
 
 <style>
-  .detail-multiplier-vs-peers-chart svg {
-    height: auto;
-    width: auto;
-  }
-  .multiple-vs-peers-chart__v-axis-name {
-    fill: rgb(255, 255, 255);
-    border-bottom: 1px dotted rgb(35, 148, 223);
-    width: fit-content;
-    line-height: 16px;
-    opacity: 0.7;
-    font-size: 1.2rem;
+.detail-multiplier-vs-peers-chart svg {
+  height: auto;
+  width: auto;
+}
+.multiple-vs-peers-chart__v-axis-name {
+  fill: rgb(255, 255, 255);
+  border-bottom: 1px dotted rgb(35, 148, 223);
+  width: fit-content;
+  line-height: 16px;
+  opacity: 0.7;
+  font-size: 1.2rem;
 }
 .multiple-vs-peers-chart__middle-label-name {
   fill: #1b222d;

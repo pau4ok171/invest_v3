@@ -23,7 +23,9 @@ export const chartOpts = {
     labels: {
       step: 4,
       distance: 10,
-      formatter: function () {return this.isLast ? `${this.value}+` : this.value},
+      formatter: function (this: any) {
+        return this.isLast ? `${this.value}+` : this.value
+      },
       style: {
         color: '#fff',
         fontSize: 11,
@@ -119,25 +121,25 @@ export const chartOpts = {
 }
 
 const averagesMI = {
-    0: {
-        labelTextX: 'PE',
-        industryValue: 7.4,
-        companyValue: 2.6,
-        maxY: 48,
-        intervalX: 1.5,
-    },
-    1: {
-        labelTextX: 'PS',
-        industryValue: 2.1,
-        companyValue: 1.2,
-        maxY: 34,
-        intervalX: 0.3,
-    },
-    2: {
-        labelTextX: 'PB',
-        industryValue: 0.7,
-        companyValue: 0.5,
-        maxY: 33,
-        intervalX: 0.2,
-    },
+  0: {
+    labelTextX: 'PE',
+    industryValue: 7.4,
+    companyValue: 2.6,
+    maxY: 48,
+    intervalX: 1.5,
+  },
+  1: {
+    labelTextX: 'PS',
+    industryValue: 2.1,
+    companyValue: 1.2,
+    maxY: 34,
+    intervalX: 0.3,
+  },
+  2: {
+    labelTextX: 'PB',
+    industryValue: 0.7,
+    companyValue: 0.5,
+    maxY: 33,
+    intervalX: 0.2,
+  },
 }

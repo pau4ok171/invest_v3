@@ -13,17 +13,17 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="detail-fair-ratio-chart">
-    <charts
-      :options="chartOpts"
-      :constructorType="'chart'"
-    />
-  </div>
+<div class="detail-fair-ratio-chart">
+  <charts
+    :options="chartOpts"
+    :constructorType="'chart'"
+  />
+</div>
 </template>
 
 <style>
-  .detail-fair-ratio-chart svg {
-    width: auto;
-    height: auto;
-  }
+.detail-fair-ratio-chart svg {
+  width: auto;
+  height: auto;
+}
 </style>

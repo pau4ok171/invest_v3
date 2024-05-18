@@ -5,6 +5,10 @@ import store from "@/store";
 import BaseInvisibleButton from "@/components/UI/buttons/BaseInvisibleButton.vue";
 import { DateTime } from 'luxon';
 
+interface Tab {
+  value: string,
+  min: DateTime,
+}
 
 export default defineComponent({
   name: "PriceChart",
@@ -28,9 +32,10 @@ export default defineComponent({
     this.changeZoom(this.tablist.Y1)
   },
   methods: {
-    changeZoom(tab) {
+    changeZoom(tab: Tab) {
       this.currentPeriod = tab.value
-      const chart = this.$refs.priceChart.chart
+      const priceChart = this.$refs.priceChart as any
+      const chart = priceChart.chart
       const  chartMax = chart.xAxis[1].max || DateTime.now().ts;
       chart.xAxis[0].setExtremes(tab.min.ts, chartMax)
     }

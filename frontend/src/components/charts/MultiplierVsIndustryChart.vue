@@ -13,20 +13,20 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="detail-multiple-vs-industry-chart">
-    <charts
-      :options="chartOpts"
-      :constructorType="'chart'"
-    />
-  </div>
+<div class="detail-multiple-vs-industry-chart">
+  <charts
+    :options="chartOpts"
+    :constructorType="'chart'"
+  />
+</div>
 </template>
 
 <style>
-  .detail-multiple-vs-industry-chart {
-      height: 364px;
-  }
-  .detail-multiple-vs-industry-chart svg {
-    height: auto;
-    width: auto;
-  }
+.detail-multiple-vs-industry-chart {
+    height: 364px;
+}
+.detail-multiple-vs-industry-chart svg {
+  height: auto;
+  width: auto;
+}
 </style>

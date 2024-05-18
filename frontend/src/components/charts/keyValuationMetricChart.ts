@@ -175,7 +175,7 @@ export const chartOpts = {
   },
 }
 
-function drawLines() {
+function drawLines(this: any) {
   const plotOffsetX = this.plotBox.x
   const plotOffsetY = this.plotBox.y
   const lineH = 64

@@ -13,20 +13,20 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="earnings-revenue-chart">
-    <charts
-      :constructorType="'chart'"
-      :options="chartOpts"
-    />
-  </div>
+<div class="earnings-revenue-chart">
+  <charts
+    :constructorType="'chart'"
+    :options="chartOpts"
+  />
+</div>
 </template>
 
 <style>
-  .earnings-revenue-chart {
-    height: 248px;
-  }
-  .earnings-revenue-chart svg {
-    height: auto;
-    width: auto;
-  }
+.earnings-revenue-chart {
+  height: 248px;
+}
+.earnings-revenue-chart svg {
+  height: auto;
+  width: auto;
+}
 </style>
