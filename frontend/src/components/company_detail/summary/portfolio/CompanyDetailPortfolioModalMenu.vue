@@ -8,6 +8,7 @@ import RoundedHighGreyButton from "@/components/UI/buttons/RoundedHighGreyButton
 import NewPortfolioInput from "@/components/UI/inputs/NewPortfolioInput.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
+import type {Portfolio} from "@/types/portfolios";
 
 export default defineComponent({
   name: "CompanyDetailPortfolioModalMenu",
@@ -30,9 +31,10 @@ export default defineComponent({
     },
     async createNewPortfolio() {
       const formData = new FormData()
-      Object.entries({
-          portfolio_name: this.portfolioInputValue,
-      }).forEach(([key, val]) => formData.append(key, val))
+      const formDataFields: Object = {
+        portfolio_name: this.portfolioInputValue,
+      }
+      Object.entries(formDataFields).forEach(([key, val]) => formData.append(key, val))
 
       await axios
         .post('portfolio/api/v1/portfolios/portfolios/', formData)
@@ -47,7 +49,7 @@ export default defineComponent({
           toast.error('Something was wrong...')
         })
     },
-    async updatePortfolio(action: string, portfolio: object) {
+    async updatePortfolio(action: string, portfolio: Portfolio) {
       const formData = new FormData()
       Object.entries({
           action: action,

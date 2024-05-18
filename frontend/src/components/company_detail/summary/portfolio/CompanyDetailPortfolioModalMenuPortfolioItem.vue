@@ -1,5 +1,6 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import type {PropType} from 'vue'
 import RoundedSuccessButton from "@/components/UI/buttons/RoundedSuccessButton.vue";
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import RoundedErrorButton from "@/components/UI/buttons/RoundedErrorButton.vue";
@@ -8,13 +9,14 @@ import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
 import PlusIcon from "@/components/icons/PlusIcon.vue";
 import {mapGetters} from "vuex";
 import MiniLoader from "@/components/UI/MiniLoader.vue";
+import type {Portfolio} from "@/types/portfolios";
 
 export default defineComponent({
   name: "CompanyDetailPortfolioModalMenuPortfolioItem",
   components: {MiniLoader, PlusIcon, RoundedBlueButton, TrashIcon, RoundedErrorButton, CheckedIcon, RoundedSuccessButton},
   props: {
     portfolio: {
-      type: Object,
+      type: Object as PropType<Portfolio>,
       required: true,
     },
   },
