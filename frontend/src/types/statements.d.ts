@@ -2,7 +2,7 @@ export interface Statement {
     area: String,
     company: Number,
     description: String,
-    id: Number,
+    id: number,
     level: String,
     name: String,
     question: String,
@@ -11,3 +11,5 @@ export interface Statement {
     title: String,
     type: String,
 }
+
+export interface Statements extends Array<Statement> {}
