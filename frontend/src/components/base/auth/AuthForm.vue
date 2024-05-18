@@ -21,7 +21,7 @@ export default defineComponent({
       required: true,
     },
     formData: {
-      type: Object as PropType<loginAuthData | registerAuthData>,
+      type: Object as PropType<loginAuthData|registerAuthData>,
       required: true,
     },
     formIsValid: Boolean,
