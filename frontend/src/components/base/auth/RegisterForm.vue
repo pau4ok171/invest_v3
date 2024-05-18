@@ -1,53 +1,14 @@
-<template>
-  <div class="form__fields">
-    <AuthField>
-      <AuthLabel for="username">Username</AuthLabel>
-      <AuthInput
-        :class="{'form__input--success': !checks.username.isError && checks.username.isInit, 'form__input--error': checks.username.isError && checks.username.isInit}"
-        v-model:inputValue="formData.new_username"
-        name="username"
-        autocomplete="username"
-      />
-      <AuthHelpText
-          :check="checks.username"
-      />
-    </AuthField>
-
-    <AuthField>
-      <AuthLabel for="password1">Password</AuthLabel>
-      <AuthInput
-        :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
-        v-model:inputValue="formData.new_password1"
-        type="password"
-        name="password1"
-        autocomplete="new-password"
-      />
-      <AuthHelpText
-        :check="checks.password"
-      />
-    </AuthField>
-
-    <AuthField>
-      <AuthLabel for="password2">Password confirmation</AuthLabel>
-      <AuthInput
-        :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
-        v-model:inputValue="formData.new_password2"
-        type="password"
-        name="password2"
-        autocomplete="new-password"
-      />
-    </AuthField>
-  </div>
-</template>
-
 <script lang="ts">
   import AuthField from "@/components/UI/auth/AuthField.vue";
   import AuthLabel from "@/components/UI/auth/AuthLabel.vue";
   import AuthInput from "@/components/UI/auth/AuthInput.vue";
   import axios from "axios";
   import AuthHelpText from "@/components/UI/auth/AuthHelpText.vue";
+  import type {PropType} from "vue";
+  import type {registerAuthData} from "@/types/auth";
+  import {defineComponent} from "vue";
 
-  export default {
+  export default defineComponent({
     name: 'RegisterForm',
     components: {
       AuthHelpText,
@@ -57,10 +18,8 @@
     },
     props: {
       formData: {
-        type: Object,
-        new_username: String,
-        new_password1: String,
-        new_password2: String,
+        type: Object as PropType<registerAuthData>,
+        required: true,
       },
       formIsValid: Boolean,
     },
@@ -139,6 +98,50 @@
         deep: true
       }
     },
-  }
+  })
 </script>
+
+<template>
+<div class="form__fields">
+
+  <AuthField>
+    <AuthLabel for="username">Username</AuthLabel>
+    <AuthInput
+      :class="{'form__input--success': !checks.username.isError && checks.username.isInit, 'form__input--error': checks.username.isError && checks.username.isInit}"
+      v-model:inputValue="formData.new_username"
+      name="username"
+      autocomplete="username"
+    />
+    <AuthHelpText
+        :check="checks.username"
+    />
+  </AuthField>
+
+  <AuthField>
+    <AuthLabel for="password1">Password</AuthLabel>
+    <AuthInput
+      :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
+      v-model:inputValue="formData.new_password1"
+      type="password"
+      name="password1"
+      autocomplete="new-password"
+    />
+    <AuthHelpText
+      :check="checks.password"
+    />
+  </AuthField>
+
+  <AuthField>
+    <AuthLabel for="password2">Password confirmation</AuthLabel>
+    <AuthInput
+      :class="{'form__input--success': !checks.password.isError && checks.password.isInit, 'form__input--error': checks.password.isError && checks.password.isInit}"
+      v-model:inputValue="formData.new_password2"
+      type="password"
+      name="password2"
+      autocomplete="new-password"
+    />
+  </AuthField>
+
+</div>
+</template>
 
