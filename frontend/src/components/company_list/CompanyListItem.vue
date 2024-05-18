@@ -86,7 +86,7 @@ export default {
   name: 'CompanyListItem',
   computed: {
     ...mapGetters({
-      isAuthenticated: "getIsAuthenticated"
+      isAuthenticated: "authModule/getIsAuthenticated"
     }),
   },
   components: {CircledButton, SolidStarIcon, OutlineStarIcon},
