@@ -1,15 +1,17 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from 'vue';
 import CompanyDetailSnowflakeTable from "@/components/company_detail/summary/CompanyDetailSnowflakeTable.vue";
 import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
 import utils from "@/mixins/utils";
+import type {Competitor} from "@/types/invest";
 
 export default defineComponent({
   name: "TheCompanyDetailCompetitorsItem",
   components: {SnowflakeChart, CompanyDetailSnowflakeTable},
   props: {
     competitor: {
-      type: Object,
+      type: Object as PropType<Competitor>,
       required: true,
     },
   },
@@ -30,7 +32,7 @@ export default defineComponent({
       <p class="detail-competitors__info-text">{{ competitor.title }}</p>
       <p class="detail-competitors__info-text detail-competitors__info-text--medium">{{ competitor.market.title }}:{{ competitor.ticker }}</p>
       <p class="detail-competitors__info-text detail-competitors__info-text--medium detail-competitors__info-text--grey">
-        {{ humanize_financial_val(competitor.price_data.capitalisation) }}
+        {{ humanize_financial_val(competitor.price_data.capitalisation, competitor.formatting.primaryCurrencySymbol) }}
       </p>
     </div>
   </div>

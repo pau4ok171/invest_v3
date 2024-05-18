@@ -4,7 +4,7 @@ import CompanyDetailSection from "@/components/company_detail/CompanyDetailSecti
 import CompanyDetailSnowflakeTable from "@/components/company_detail/summary/CompanyDetailSnowflakeTable.vue";
 import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
-import {mapGetters, mapState} from "vuex";
+import {mapGetters} from "vuex";
 import TheCompanyDetailCompetitorsItem
   from "@/components/company_detail/summary/competitors/TheCompanyDetailCompetitorsItem.vue";
 
@@ -14,10 +14,8 @@ export default defineComponent({
     TheCompanyDetailCompetitorsItem,
     DetailSectionTitle, SnowflakeChart, CompanyDetailSnowflakeTable, CompanyDetailSection},
   computed: {
-    ...mapState({
-      company: state => state.companyDetail.company,
-    }),
     ...mapGetters({
+      company: 'companyDetail/getCompany',
       competitors: "companyDetail/getCompetitors",
     })
   },
@@ -25,15 +23,19 @@ export default defineComponent({
 </script>
 
 <template>
-  <CompanyDetailSection>
+<CompanyDetailSection>
 
-    <DetailSectionTitle>{{ company.slug.toUpperCase() }} Competitors</DetailSectionTitle>
+  <DetailSectionTitle>{{ company.slug.toUpperCase() }} Competitors</DetailSectionTitle>
 
-    <div class="detail-competitors">
-      <TheCompanyDetailCompetitorsItem v-for="competitor in competitors" :key="competitor.id" :competitor/>
-    </div>
+  <div class="detail-competitors">
+    <TheCompanyDetailCompetitorsItem
+        v-for="competitor in competitors"
+        :key="competitor.id"
+        :competitor
+    />
+  </div>
 
-  </CompanyDetailSection>
+</CompanyDetailSection>
 </template>
 
 <style scoped>
