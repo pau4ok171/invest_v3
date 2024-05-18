@@ -1,10 +1,12 @@
+import type {DirectiveBinding} from "vue";
+
 export default {
-    mounted(el, binding) {
+    mounted(el: Element, binding: DirectiveBinding) {
     const options = {
       rootMargin: "0px",
       threshold: 1.0,
     };
-    const callback = (entries, observer) => {
+    const callback = (entries: Array<IntersectionObserverEntry>) => {
       if (entries[0].isIntersecting) {
         binding.value()
       }
