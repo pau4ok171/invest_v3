@@ -10,26 +10,30 @@
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import axios from "axios";
-import store from "@/store";
+import {mapMutations, mapState} from "vuex";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   components: {
     AppLayout,
     RouterView,
   },
-  beforeCreate() {
-    store.commit('initializeStore')
+  mounted() {
+    this.initializeAuth()
 
-    const token = store.state.token
-
-    axios.defaults.headers.common["Authorization"] = token ? `Token ${token}` : ''
+    axios.defaults.headers.common["Authorization"] = this.token ? `Token ${this.token}` : ''
+  },
+  methods: {
+    ...mapMutations({
+      initializeAuth: "authModule/initializeAuth"
+    })
   },
   computed: {
-    store() {
-      return store
-    }
+    ...mapState({
+      token: 'authModule/token',
+    })
   },
-}
+})
 </script>
 
 <style>
