@@ -1,43 +1,19 @@
 import {createStore} from "vuex";
-import {companyDetailModule} from "@/store/companyDetailModule";
-import {companyListModule} from "@/store/companyListModule";
+import {companyDetailModule} from "@/store/modules/companyDetailModule";
+import {companyListModule} from "@/store/modules/companyListModule";
+import {authModule} from "@/store/modules/authModule";
 
 const store = createStore({
   state: () => ({
-    isAuthenticated: false,
     isLoading: false,
-    token: '',
   }),
-  getters: {
-    getIsAuthenticated(state) {
-      return state.isAuthenticated
-    },
-  },
   mutations: {
-    initializeStore(state) {
-      const token: string | null = localStorage.getItem('token')
-      if (token) {
-        state.token = token
-        state.isAuthenticated = true
-      } else {
-        state.token = ''
-        state.isAuthenticated = false
-      }
-    },
-    setIsLoading(state, status: boolean) {
+    setIsLoading(state, status: Boolean) {
       state.isLoading = status
     },
-    setToken(state, token: string) {
-      state.token = token
-      state.isAuthenticated = true
-    },
-    removeToken(state) {
-      state.token = ''
-      state.isAuthenticated = false
-    },
   },
-  actions: {},
   modules: {
+    authModule: authModule,
     companyList: companyListModule,
     companyDetail: companyDetailModule,
   },
