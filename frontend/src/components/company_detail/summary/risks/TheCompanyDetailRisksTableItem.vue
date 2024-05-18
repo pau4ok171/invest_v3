@@ -1,14 +1,16 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from "vue";
 import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "TheCompanyDetailRisksTableItem",
   components: {ArrowDownIcon, RoundedGreyButton},
   props: {
     statement: {
-      type: Object,
+      type: Object as PropType<Statement>,
       required: true,
     },
   },
