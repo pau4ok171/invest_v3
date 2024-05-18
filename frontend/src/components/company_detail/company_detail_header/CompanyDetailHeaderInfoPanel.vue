@@ -32,77 +32,77 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="detail-header__info-panel">
+<div class="detail-header__info-panel">
 
-    <CompanyDetailHeaderInfoItem>
-      <template v-slot:title><p>Last price</p></template>
-      <template v-slot:value><span>₽{{ company.price_data.last_price.toFixed(2) }}</span></template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem>
+    <template v-slot:title><p>Last price</p></template>
+    <template v-slot:value><span>₽{{ company.price_data.last_price.toFixed(2) }}</span></template>
+  </CompanyDetailHeaderInfoItem>
 
-    <CompanyDetailHeaderInfoItem>
-      <template v-slot:title><p>Market cap</p></template>
-      <template v-slot:value><span>
-        {{ humanize_financial_val(company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
-      </span></template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem>
+    <template v-slot:title><p>Market cap</p></template>
+    <template v-slot:value><span>
+      {{ humanize_financial_val(company.price_data.capitalisation, company.formatting.primaryCurrencySymbol) }}
+    </span></template>
+  </CompanyDetailHeaderInfoItem>
 
-    <CompanyDetailHeaderInfoItem>
-      <template v-slot:title><p>7D</p></template>
-      <template v-slot:value>
-        <span :class="[company.price_data.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-          {{ company.price_data.return_7d.toFixed(2)}}%
-        </span>
-      </template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem>
+    <template v-slot:title><p>7D</p></template>
+    <template v-slot:value>
+      <span :class="[company.price_data.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+        {{ company.price_data.return_7d.toFixed(2)}}%
+      </span>
+    </template>
+  </CompanyDetailHeaderInfoItem>
 
-    <CompanyDetailHeaderInfoItem>
-      <template v-slot:title><p>1Y</p></template>
-      <template v-slot:value>
-        <span :class="[company.price_data.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-          {{ company.price_data.return_1y.toFixed(2)}}%
-        </span>
-      </template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem>
+    <template v-slot:title><p>1Y</p></template>
+    <template v-slot:value>
+      <span :class="[company.price_data.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+        {{ company.price_data.return_1y.toFixed(2)}}%
+      </span>
+    </template>
+  </CompanyDetailHeaderInfoItem>
 
-    <SmallPriceChart class="detail-header__info-item"/>
+  <SmallPriceChart class="detail-header__info-item"/>
 
-    <CompanyDetailHeaderInfoItem class="detail-header__info-item--nowrap">
-      <template v-slot:title><p>Updated</p></template>
-      <template v-slot:value>
-        <span class="detail-header__info-item-value--small">
-          <template v-if="company.reports.length">{{ company.reports[0].updated}}</template>
-          <template v-else>n/a</template>
-        </span>
-      </template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem class="detail-header__info-item--nowrap">
+    <template v-slot:title><p>Updated</p></template>
+    <template v-slot:value>
+      <span class="detail-header__info-item-value--small">
+        <template v-if="company.reports.length">{{ company.reports[0].updated}}</template>
+        <template v-else>n/a</template>
+      </span>
+    </template>
+  </CompanyDetailHeaderInfoItem>
 
-    <CompanyDetailHeaderInfoItem class="detail-header__info-item--nowrap">
-      <template v-slot:title><p>Data</p></template>
-      <template v-slot:value>
-        <span class="detail-header__info-item-value--small detail-header__info-item-value--on-row">
-          <span>Financials Company</span>
-          <template v-if="company.analyst_ideas">
-            <span> + </span>
-            <BaseModalMenuContainer>
-              <template #button>
-                <TextButton>{{ totalIdeas }} Analysts</TextButton>
-              </template>
-              <template #menu="menuProps">
-                <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
-              </template>
-            </BaseModalMenuContainer>
-          </template>
-        </span>
-      </template>
-    </CompanyDetailHeaderInfoItem>
+  <CompanyDetailHeaderInfoItem class="detail-header__info-item--nowrap">
+    <template v-slot:title><p>Data</p></template>
+    <template v-slot:value>
+      <span class="detail-header__info-item-value--small detail-header__info-item-value--on-row">
+        <span>Financials Company</span>
+        <template v-if="company.analyst_ideas">
+          <span> + </span>
+          <BaseModalMenuContainer>
+            <template #button>
+              <TextButton>{{ totalIdeas }} Analysts</TextButton>
+            </template>
+            <template #menu="menuProps">
+              <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
+            </template>
+          </BaseModalMenuContainer>
+        </template>
+      </span>
+    </template>
+  </CompanyDetailHeaderInfoItem>
 
-  </div>
+</div>
 </template>
 
 <style scoped>
-  .detail-header__info-panel {
-    padding-left: 76px;
-    display: grid;
-    grid-template: 52px / repeat(4, min-content) 2fr 1fr 1fr;
-  }
+.detail-header__info-panel {
+  padding-left: 76px;
+  display: grid;
+  grid-template: 52px / repeat(4, min-content) 2fr 1fr 1fr;
+}
 </style>

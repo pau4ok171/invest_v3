@@ -55,10 +55,10 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      company: state => state.companyDetail.company,
-      isAuthenticated: state => state.isAuthenticated,
+      isAuthenticated: 'authModule/isAuthenticated',
     }),
     ...mapGetters({
+      company: 'companyDetail/getCompany',
       portfolioModalMenuIsOpen: "companyDetail/getPortfolioModalMenuIsOpen",
       watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
       portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
@@ -68,50 +68,50 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="detail-header__button-list">
+<div class="detail-header__button-list">
 
-    <template v-if="company.is_watchlisted">
-      <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-        <MiniLoader v-if="watchlistIsLoading"/>
-        <SolidStarIcon v-else/>
-      </RoundedBlueButton>
+  <template v-if="company.is_watchlisted">
+    <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+      <MiniLoader v-if="watchlistIsLoading"/>
+      <SolidStarIcon v-else/>
+    </RoundedBlueButton>
 
-      <RoundedBlueButton @click="createNewNote">
-        <PenIcon/>
-        <span>Add note</span>
-      </RoundedBlueButton>
+    <RoundedBlueButton @click="createNewNote">
+      <PenIcon/>
+      <span>Add note</span>
+    </RoundedBlueButton>
+  </template>
+
+  <template v-else>
+    <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
+      <MiniLoader v-if="watchlistIsLoading"/>
+      <OutlineStarIcon v-else/>
+      <span>Add to watchlist</span>
+    </RoundedBlueButton>
+  </template>
+
+  <BaseModalMenuContainer>
+    <template #button>
+      <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
+        <span>Add to portfolio</span>
+      </RoundedWhiteButton>
     </template>
 
-    <template v-else>
-      <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-        <MiniLoader v-if="watchlistIsLoading"/>
-        <OutlineStarIcon v-else/>
-        <span>Add to watchlist</span>
-      </RoundedBlueButton>
+    <template #menu="menuProps">
+      <CompanyDetailPortfolioModalMenu @closeMenu="menuProps.close()" v-if="isAuthenticated"/>
     </template>
+  </BaseModalMenuContainer>
 
-    <BaseModalMenuContainer>
-      <template #button>
-        <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
-          <span>Add to portfolio</span>
-        </RoundedWhiteButton>
-      </template>
+  <DropDownMenuBox>
+    <template #button>
+      <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
+    </template>
+    <template #menu>
+      <TheCompanyDetailHeaderMoreDropDownMenu/>
+    </template>
+  </DropDownMenuBox>
 
-      <template #menu="menuProps">
-        <CompanyDetailPortfolioModalMenu @closeMenu="menuProps.close()" v-if="isAuthenticated"/>
-      </template>
-    </BaseModalMenuContainer>
-
-    <DropDownMenuBox>
-      <template #button>
-        <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
-      </template>
-      <template #menu>
-        <TheCompanyDetailHeaderMoreDropDownMenu/>
-      </template>
-    </DropDownMenuBox>
-
-  </div>
+</div>
 </template>
 
 <style scoped>
