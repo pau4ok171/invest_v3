@@ -1,10 +1,11 @@
 import axios from "axios";
 import type {Module} from "vuex";
 import {toast} from "vue3-toastify";
-import type {Candle, Competitor, DetailCompany, Snowflake} from "@/types/invest";
+import type {Candle, Competitor, DetailCompany} from "@/types/invest";
 import type {Statement} from "@/types/statements";
 import type {Portfolio} from "@/types/portfolios"
 import type {Note} from "@/types/notes";
+import store from "@/store";
 
 export const companyDetailModule = {
   state: () => ({
@@ -146,6 +147,29 @@ export const companyDetailModule = {
           commit("getCompanyPriceData", response.data)
           commit("setPriceChartDataIsLoading", false)
         })
+    },
+    async fetchCompany({state, commit}, company_slug: String) {
+     store.commit('setIsLoading', true)
+
+     await axios
+       .get(`api/v1/invest/companies/${company_slug}`)
+       .then(response => {
+         const company: DetailCompany = response.data.company
+         const portfolios: Array<Portfolio> = response.data.portfolios
+         const notes: Array<Note> = response.data.notes
+         const statements: Array<Statement> = response.data.statements
+         const snowflake: Array<Number> = Object.values(response.data.snowflake as Array<Number>)
+         const competitors: Array<Competitor> = response.data.peers
+
+         commit('setCompany', company)
+         commit('setPortfolios', portfolios)
+         commit('setNotes', notes)
+         commit('setStatements', statements)
+         commit('setSnowflake', snowflake)
+         commit('setCompetitors', competitors)
+       })
+
+     store.commit('setIsLoading', false)
     },
     async toggleToWatchlist({state, commit}) {
       commit('setWatchlistIsLoading', true)
