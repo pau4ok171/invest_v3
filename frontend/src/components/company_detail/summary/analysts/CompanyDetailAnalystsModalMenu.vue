@@ -45,10 +45,10 @@ export default defineComponent({
         </tr>
       </thead>
       <tbody>
-        <tr v-for="analyst in company.analyst_ideas" :key="analyst.id">
-          <td>{{ analyst.analyst.name }}</td>
-          <td>{{ analyst.price_target }}{{ analyst.currency.symbol }}</td>
-          <td>{{ analyst.analyst.score }}/5</td>
+        <tr v-for="idea in company.analyst_ideas" :key="idea.id">
+          <td>{{ idea.analyst.name }}</td>
+          <td>{{ idea.price_target }}{{ idea.currency.symbol }}</td>
+          <td>{{ idea.analyst.score }}/5</td>
         </tr>
       </tbody>
     </table>
