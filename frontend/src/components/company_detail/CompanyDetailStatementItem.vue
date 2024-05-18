@@ -1,11 +1,13 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from "vue";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailStatementItem",
   props: {
     statement: {
-      type: Object,
+      type: Object as PropType<Statement>,
       required: true,
     }
   }
@@ -13,12 +15,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <blockquote class="detail-statement-item">
-    <p class="detail-statement-item__text">
-      <span class="text--error">{{  statement.title }}:</span>
-      <span> {{ statement.description }}</span>
-    </p>
-  </blockquote>
+<blockquote class="detail-statement-item">
+  <p class="detail-statement-item__text">
+    <span class="text--error">{{  statement.title }}:</span>
+    <span> {{ statement.description }}</span>
+  </p>
+</blockquote>
 </template>
 
 <style scoped>

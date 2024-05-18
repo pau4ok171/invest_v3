@@ -1,11 +1,11 @@
 <template>
-  <div class="detail__content">
+<div class="detail__content">
 
-    <CompanyDetailSidebar/>
+  <CompanyDetailSidebar/>
 
-    <CompanyDetailContentList/>
+  <CompanyDetailContentList/>
 
-  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -14,24 +14,27 @@ import CompanyDetailContentList from "@/components/company_detail/CompanyDetailC
 
 export default {
   name: 'CompanyDetailContent',
-  components: {CompanyDetailContentList, CompanyDetailSidebar},
+  components: {
+    CompanyDetailContentList,
+    CompanyDetailSidebar
+  },
 }
 </script>
 
 <style>
-  .detail__content {
-    display: flex;
-    flex-flow: wrap;
-    justify-content: left;
-  }
-  .detail__content-item {
-    position: relative;
-    flex: 0 0 100%;
-    max-width: 100%;
-    width: 100%;
-    min-height: 0;
-  }
-  .detail__point-list {
-    margin-top: 3.2rem;
-  }
+.detail__content {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: left;
+}
+.detail__content-item {
+  position: relative;
+  flex: 0 0 100%;
+  max-width: 100%;
+  width: 100%;
+  min-height: 0;
+}
+.detail__point-list {
+  margin-top: 3.2rem;
+}
 </style>

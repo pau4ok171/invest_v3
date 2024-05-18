@@ -1,21 +1,3 @@
-<template>
-  <div class="detail__summary">
-
-    <CompanyDetailStockOverview/>
-
-    <CompanyDetailNotes/>
-
-    <CompanyDetailCompetitors/>
-
-    <CompanyDetailPriceHistoryPerformance/>
-
-    <CompanyDetailAboutCompany/>
-
-    <CompanyDetailFundamentalSummary/>
-
-</div>
-</template>
-
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailStockOverview from "@/components/company_detail/summary/CompanyDetailStockOverview.vue";
@@ -38,3 +20,21 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+<div class="detail__summary">
+
+  <CompanyDetailStockOverview/>
+
+  <CompanyDetailNotes/>
+
+  <CompanyDetailCompetitors/>
+
+  <CompanyDetailPriceHistoryPerformance/>
+
+  <CompanyDetailAboutCompany/>
+
+  <CompanyDetailFundamentalSummary/>
+
+</div>
+</template>

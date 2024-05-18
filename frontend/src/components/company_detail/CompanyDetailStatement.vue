@@ -15,15 +15,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <section class="detail-statement">
+<section class="detail-statement">
 
-    <CompanyDetailStatementItem v-for="statement in statement_list" :key="statement.id" :statement/>
+  <CompanyDetailStatementItem v-for="statement in statement_list" :key="statement.id" :statement/>
 
-  </section>
+</section>
 </template>
 
 <style scoped>
-  .detail-statement {
-    margin-top: 24px;
-  }
+.detail-statement {
+  margin-top: 24px;
+}
 </style>

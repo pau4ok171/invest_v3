@@ -37,35 +37,35 @@ export default defineComponent({
 </script>
 
 <template>
-  <CompanyDetailSection>
+<CompanyDetailSection>
 
-    <CompanyDetailSectionIntro :section/>
+  <CompanyDetailSectionIntro :section/>
 
-    <ShareVsFairPrice/>
+  <ShareVsFairPrice/>
 
-    <hr>
+  <hr>
 
-    <KeyValuationMetric/>
+  <KeyValuationMetric/>
 
-    <hr>
+  <hr>
 
-    <MultiplierVsPeers/>
+  <MultiplierVsPeers/>
 
-    <hr>
+  <hr>
 
-    <HistoricalMultiplier/>
+  <HistoricalMultiplier/>
 
-    <hr>
+  <hr>
 
-    <MultiplierVsIndustry/>
+  <MultiplierVsIndustry/>
 
-    <hr>
+  <hr>
 
-    <MultiplierVsFair/>
+  <MultiplierVsFair/>
 
-    <hr>
+  <hr>
 
-    <AnalystPriceTargets/>
+  <AnalystPriceTargets/>
 
-  </CompanyDetailSection>
+</CompanyDetailSection>
 </template>

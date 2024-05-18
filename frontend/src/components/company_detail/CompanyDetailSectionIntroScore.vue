@@ -1,17 +1,19 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from "vue";
 import CheckmarkCircleIcon from "@/components/icons/CheckmarkCircleIcon.vue";
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import CheckIcon from "@/components/icons/CheckIcon.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
+import type {Statements} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailSectionIntroScore",
   components: {ArrowDownIcon, CrossIcon, CheckIcon, CheckedIcon, CheckmarkCircleIcon},
   props: {
     statements: {
-      type: Array,
+      type: Object as PropType<Statements>,
       required: true,
     }
   },
