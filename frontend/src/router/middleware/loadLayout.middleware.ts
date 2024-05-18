@@ -1,7 +1,7 @@
 import type {RouteLocationNormalized} from "vue-router";
 import {AppLayoutsEnum, AppLayoutToFileMap} from "@/layouts/layouts.types";
 
-export async function loadLayoutMiddleware(route: RouteLocationNormalized) {
+export async function loadLayoutMiddleware(route: RouteLocationNormalized): Promise<void> {
     const { layout } = route.meta;
     const normalizedLayoutName = layout || AppLayoutsEnum.default;
     const fileName = AppLayoutToFileMap[normalizedLayoutName];
