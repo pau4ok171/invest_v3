@@ -1,68 +1,76 @@
-<template>
-  <div class="navigation__nav-search">
-    <div class="nav-search__inner">
-      <BaseInput
-        type="search"
-        name="search-field"
-        class="nav-search__input"
-        placeholder="Поиск по компаниям"
-        autocomplete="off"
-        :inputValue
-        @updateInput="updateInput"
-      />
-      <span class="nav-search__prefix">
-        <SearchIcon width="24" height="24" class="nav-search__prefix-icon"/>
-      </span>
-      <span class="nav-search__postfix">
-        <InputCrossIcon v-if="inputValue.length" @click="clearInput" width="24" height="24" class="nav-search__postfix-icon"/>
-      </span>
-    </div>
-
-    <NavSearchDropDown
-      v-if="searchResponse.length"
-      :items="searchResponse"
-      @closeDropDownMenu="closeDropDown"
-    />
-  </div>
-</template>
-
 <script lang="ts">
-import axios, {options} from "axios";
-  import NavSearchDropDown from "@/components/base/header/navigation/NavSearchDropDown.vue";
-  import SearchIcon from "@/components/icons/SearchIcon.vue";
-  import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
-  import BaseInput from "@/components/UI/base/BaseInput.vue";
+import axios from "axios";
+import NavSearchDropDown from "@/components/base/header/navigation/NavSearchDropDown.vue";
+import SearchIcon from "@/components/icons/SearchIcon.vue";
+import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
+import BaseInput from "@/components/UI/base/BaseInput.vue";
+import {defineComponent} from "vue";
 
-  export default {
-    components: {BaseInput, InputCrossIcon, SearchIcon, NavSearchDropDown},
-    data() {
-      return {
-        inputValue: "",
-        searchResponse: []
-      }
+export default defineComponent({
+  components: {
+    BaseInput,
+    InputCrossIcon,
+    SearchIcon,
+    NavSearchDropDown
+  },
+  data() {
+    return {
+      inputValue: '',
+      searchResponse: []
+    }
+  },
+  methods: {
+    async updateInput(value: string) {
+      this.inputValue = value
+
+      if (this.inputValue.length) {
+        await axios
+          .get('/api/v1/invest/search_query/', {params: {query: this.inputValue}})
+          .then(response => this.searchResponse = response.data)
+          .catch(err => {console.log(err)})
+        } else this.closeDropDown()
     },
-    methods: {
-      async updateInput(value) {
-        this.inputValue = value
-        if (this.inputValue.length) {
-
-
-          await axios
-            .get('/api/v1/invest/search_query/', {params: {query: this.inputValue}})
-            .then(response => this.searchResponse = response.data)
-            .catch(err => {console.log(err)})
-          } else this.closeDropDown()
-      },
-      closeDropDown() {
-        this.searchResponse = []
-      },
-      clearInput(event: Event) {
-        this.inputValue = ''
-        document.querySelector('input[name="search-field"]').focus()
-      }
+    closeDropDown() {
+      this.searchResponse = []
     },
-  }
+    clearInput() {
+      this.inputValue = '' as string
+      (this.$refs.searchField as any).focus()
+    }
+  },
+})
 </script>
+
+<template>
+<div class="navigation__nav-search">
+
+  <div class="nav-search__inner">
+    <BaseInput
+      type="search"
+      name="search-field"
+      ref="searchField"
+      class="nav-search__input"
+      placeholder="Поиск по компаниям"
+      autocomplete="off"
+      :inputValue
+      @updateInput="updateInput"
+    />
+    <span class="nav-search__prefix">
+      <SearchIcon width="24" height="24" class="nav-search__prefix-icon"/>
+    </span>
+    <span class="nav-search__postfix">
+      <InputCrossIcon v-if="inputValue.length" @click="clearInput" width="24" height="24" class="nav-search__postfix-icon"/>
+    </span>
+  </div>
+
+  <NavSearchDropDown
+    v-if="searchResponse.length"
+    :companies="searchResponse"
+    @closeDropDownMenu="closeDropDown"
+  />
+
+</div>
+</template>
 
 <style scoped>
 .navigation__nav-search {
