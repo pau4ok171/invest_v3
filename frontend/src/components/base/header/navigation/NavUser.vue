@@ -1,10 +1,10 @@
 <script lang="ts">
 import UserIcon from "@/components/icons/UserIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 import {mapGetters} from "vuex";
 import {defineComponent} from "vue";
