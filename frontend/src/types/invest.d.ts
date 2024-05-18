@@ -35,6 +35,18 @@ export interface ListCompany {
     updated: String,
 }
 
+export interface SearchCompany {
+    uid: string,
+    title: String,
+    logo_url: string,
+    country: Country,
+    sector: Sector,
+    market: Market,
+    absolute_url: string,
+}
+
+export interface SearchCompanyItems extends Array<SearchCompany>{}
+
 export interface AnalystIdea {
     analyst: Analyst,
     company: Number,
