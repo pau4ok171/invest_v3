@@ -1,11 +1,3 @@
-<template>
-  <div>
-    <AppLayout>
-      <RouterView/>
-    </AppLayout>
-  </div>
-</template>
-
 <script lang="ts">
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
@@ -35,6 +27,14 @@ export default defineComponent({
   },
 })
 </script>
+
+<template>
+  <div>
+    <AppLayout>
+      <RouterView/>
+    </AppLayout>
+  </div>
+</template>
 
 <style>
   @import 'assets/css/main.css';
