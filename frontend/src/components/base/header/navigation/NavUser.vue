@@ -1,7 +1,37 @@
+<script lang="ts">
+import UserIcon from "@/components/icons/UserIcon.vue";
+import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
+import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
+import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
+import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
+import {mapGetters} from "vuex";
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: 'NavUser',
+  components: {
+    AuthModalMenu,
+    BaseModalMenuContainer,
+    RoundedButton,
+    DropDownMenuBox,
+    NavUserDropDown,
+    ArrowDownIcon,
+    UserIcon
+  },
+  computed: {
+    ...mapGetters({
+      isAuthenticated: 'authModule/getIsAuthenticated',
+    })
+  },
+})
+</script>
+
 <template>
 <div class="navigation__account-access">
   <div class="account-access__inner">
-    <template v-if="store.state.isAuthenticated">
+    <template v-if="isAuthenticated">
       <DropDownMenuBox>
         <template v-slot:button>
           <RoundedButton>
