@@ -1,5 +1,6 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from "vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
@@ -15,7 +16,7 @@ export default defineComponent({
   },
   props: {
     active_filter: {
-      type: Object,
+      type: Object as PropType<any>,
       required: true,
     },
     filter: {

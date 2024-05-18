@@ -1,113 +1,116 @@
-<template>
-  <tr>
-    <td>
-      <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        <div class="company-list__company-logo">
-            <img
-              :src="object.logo_url"
-              class="company-list__logo"
-              alt="Logo"
-            >
-        </div>
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        <b>{{ object.ticker }}</b>
-        <span>{{ object.title }}</span>
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-         {{ object.formatting.primaryCurrencySymbol }}{{ object.price_data.last_price.toFixed(2) }}
-      </RouterLink>
-    </td>
-    <td :class="[object.price_data.return_7d > 0 ? 'company-list__success-color' : 'company-list__error-color']">
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        {{ object.price_data.return_7d.toFixed(2) }}%
-      </RouterLink>
-    </td>
-    <td :class="[object.price_data.return_1y > 0 ? 'company-list__success-color' : 'company-list__error-color']">
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        {{ object.price_data.return_1y.toFixed(2) }}%
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        {{ humanize_financial_val(object.price_data.capitalisation, object.formatting.primaryCurrencySymbol) }}
-      </RouterLink>
-    </td>
-    <td>
-      <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        US$199.23
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        PE 28.7x
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        E 6.1%
-      </RouterLink>
-    </td>
-    <td>
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-        0.6%
-      </RouterLink>
-
-    </td>
-    <td class="company-list__sector-cell">
-       <RouterLink :to="object.absolute_url" class="company-list__company-link">
-         {{ object.sector.title }}
-      </RouterLink>
-    </td>
-    <td>
-      <CircledButton
-          :disabled="!isAuthenticated"
-          @click="toggleToWatchlist(object)"
-      >
-        <SolidStarIcon :style="{fill: '#fff'}" v-if="object.is_watchlisted"/>
-        <OutlineStarIcon v-else/>
-      </CircledButton>
-    </td>
-  </tr>
-</template>
-
-<script>
+<script lang="ts">
 import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import CircledButton from "@/components/UI/buttons/CircledButton.vue";
 import utils from "@/mixins/utils";
 import {mapActions, mapGetters} from "vuex";
+import {defineComponent} from "vue";
+import type {PropType} from "vue";
+import type {ListCompany} from "@/types/invest";
 
-export default {
+export default defineComponent({
   name: 'CompanyListItem',
   computed: {
     ...mapGetters({
       isAuthenticated: "authModule/getIsAuthenticated"
     }),
   },
-  components: {CircledButton, SolidStarIcon, OutlineStarIcon},
+  components: {
+    CircledButton,
+    SolidStarIcon,
+    OutlineStarIcon
+  },
   props: {
     object: {
-      type: Object,
+      type: Object as PropType<ListCompany>,
       required: true,
-      sector: Object,
-      price_data: Object,
-      absolute_url: String,
-      logo_url: String,
     }
   },
   methods: {
     ...mapActions({
-      toggleToWatchlist: "companyList/toggleToWatchlist",
+      toggleToWatchlist: 'companyList/toggleToWatchlist',
     }),
   },
   mixins: [utils,],
-}
+})
 </script>
+
+<template>
+<tr>
+  <td>
+    <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      <div class="company-list__company-logo">
+          <img
+            :src="object.logo_url"
+            class="company-list__logo"
+            alt="Logo"
+          >
+      </div>
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      <b>{{ object.ticker }}</b>
+      <span>{{ object.title }}</span>
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+       {{ object.formatting.primaryCurrencySymbol }}{{ object.price_data.last_price.toFixed(2) }}
+    </RouterLink>
+  </td>
+  <td :class="[object.price_data.return_7d > 0 ? 'company-list__success-color' : 'company-list__error-color']">
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      {{ object.price_data.return_7d.toFixed(2) }}%
+    </RouterLink>
+  </td>
+  <td :class="[object.price_data.return_1y > 0 ? 'company-list__success-color' : 'company-list__error-color']">
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      {{ object.price_data.return_1y.toFixed(2) }}%
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      {{ humanize_financial_val(object.price_data.capitalisation, object.formatting.primaryCurrencySymbol) }}
+    </RouterLink>
+  </td>
+  <td>
+    <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      US$199.23
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      PE 28.7x
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      E 6.1%
+    </RouterLink>
+  </td>
+  <td>
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+      0.6%
+    </RouterLink>
+
+  </td>
+  <td class="company-list__sector-cell">
+     <RouterLink :to="object.absolute_url" class="company-list__company-link">
+       {{ object.sector.title }}
+    </RouterLink>
+  </td>
+  <td>
+    <CircledButton
+        :disabled="!isAuthenticated"
+        @click="toggleToWatchlist(object)"
+    >
+      <SolidStarIcon :style="{fill: '#fff'}" v-if="object.is_watchlisted"/>
+      <OutlineStarIcon v-else/>
+    </CircledButton>
+  </td>
+</tr>
+</template>
 
 <style scoped>
 .company-list-table tbody tr  {

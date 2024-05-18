@@ -24,7 +24,7 @@ export default defineComponent({
 <section class="company-list__options">
   <div></div>
   <div class="company-list__company-count">
-    <p>{{ this.totalCompaniesLength }} companies</p>
+    <p>{{ totalCompaniesLength }} companies</p>
   </div>
   <div class="company-list__view-modes">
 

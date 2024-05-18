@@ -1,48 +1,10 @@
-<template>
-  <div class="dropdown-menu">
-    <div class="dropdown-menu__inner">
-
-      <template v-if="has_search">
-        <div @click.stop class="dropdown-menu__search">
-          <BaseInput
-            type="search"
-            class="dropdown-menu__input"
-            autocomplete="false"
-            placeholder="Type to filter..."
-            :value="searchQuery"
-            @input="searchQuery=$event.target.value"
-          />
-        </div>
-      </template>
-
-      <ul class="dropdown-menu__list">
-          <li
-            class="dropdown-menu__item"
-            v-for="f in filteredFilter"
-            :key="f.slug"
-          >
-            <button
-              class="dropdown-menu__button"
-              @click="changeFilter({filter_name: filter_name, object: f})"
-              :disabled="f.slug === this.active_filter.slug"
-              :value="f.slug"
-            >
-              <CheckedIcon :disabled="f.slug !== this.active_filter.slug"/>
-              <span>{{ f.title }}</span>
-            </button>
-          </li>
-      </ul>
-
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import BaseInput from "@/components/UI/base/BaseInput.vue";
 import {mapActions} from "vuex";
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'CompanyListFilterDropDownMenu',
   components: {BaseInput, CheckedIcon},
   data() {return {
@@ -52,7 +14,7 @@ export default {
     has_search: Boolean,
     filter_name: String,
     filter: {
-      type: Array,
+      type: Array<any>,
       required: true,
     },
     active_filter: {
@@ -70,8 +32,47 @@ export default {
       changeFilter: "companyList/changeFilter"
     }),
   },
-}
+})
 </script>
+
+<template>
+<div class="dropdown-menu">
+  <div class="dropdown-menu__inner">
+
+    <template v-if="has_search">
+      <div @click.stop class="dropdown-menu__search">
+        <BaseInput
+          type="search"
+          class="dropdown-menu__input"
+          autocomplete="false"
+          placeholder="Type to filter..."
+          :value="searchQuery"
+          @input="searchQuery=$event.target.value"
+        />
+      </div>
+    </template>
+
+    <ul class="dropdown-menu__list">
+        <li
+          class="dropdown-menu__item"
+          v-for="f in filteredFilter"
+          :key="f.slug"
+        >
+          <button
+            class="dropdown-menu__button"
+            @click="changeFilter({filter_name: filter_name, object: f})"
+            :disabled="f.slug === active_filter.slug"
+            :value="f.slug"
+          >
+            <CheckedIcon :disabled="f.slug !== active_filter.slug"/>
+            <span>{{ f.title }}</span>
+          </button>
+        </li>
+    </ul>
+
+  </div>
+</div>
+</template>
 
 <style scoped>
 .dropdown-menu {
