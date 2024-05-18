@@ -1,14 +1,16 @@
-<template>
-  <div>
-    HOME VIEW
-  </div>
-</template>
-
 <script lang="ts">
-  export default {
-    name: 'HomeView',
-  }
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: 'HomeView',
+})
 </script>
+
+<template>
+<div>
+  HOME VIEW
+</div>
+</template>
 
 <style scoped>
 
