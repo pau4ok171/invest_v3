@@ -1,30 +1,18 @@
-<template>
-  <div class="form__fields">
-    <AuthField>
-      <AuthLabel  for="username">Username</AuthLabel>
-      <AuthInput v-model:inputValue="formData.current_username" id="username" autocomplete="username"/>
-    </AuthField>
-
-    <AuthField>
-      <AuthLabel for="password">Password</AuthLabel>
-      <AuthInput v-model:inputValue="formData.current_password" type="password" id="password" autocomplete="current-password"/>
-    </AuthField>
-  </div>
-</template>
-
 <script lang="ts">
   import AuthLabel from "@/components/UI/auth/AuthLabel.vue";
   import AuthInput from "@/components/UI/auth/AuthInput.vue";
   import AuthField from "@/components/UI/auth/AuthField.vue";
+  import {defineComponent} from "vue";
+  import type {PropType} from "vue";
+  import type {loginAuthData} from "@/types/auth";
 
-  export default {
+  export default defineComponent({
     name: 'LoginForm',
     components: {AuthField, AuthInput, AuthLabel},
     props: {
       formData: {
-        type: Object,
-        current_username: '',
-        current_password: '',
+        type: Object as PropType<loginAuthData>,
+        required: true,
       },
       formIsValid: Boolean,
     },
@@ -36,7 +24,7 @@
 
           let formIsValid = true
 
-          for (let [key, val] of Object.entries(fieldList)) {
+          for (let val of Object.values(fieldList)) {
             if (val) {
                if (val.trim() === '') {
                 formIsValid = false
@@ -53,5 +41,19 @@
         deep: true
       }
     },
-  }
+  })
 </script>
+
+<template>
+  <div class="form__fields">
+    <AuthField>
+      <AuthLabel  for="username">Username</AuthLabel>
+      <AuthInput v-model:inputValue="formData.current_username" id="username" autocomplete="username"/>
+    </AuthField>
+
+    <AuthField>
+      <AuthLabel for="password">Password</AuthLabel>
+      <AuthInput v-model:inputValue="formData.current_password" type="password" id="password" autocomplete="current-password"/>
+    </AuthField>
+  </div>
+</template>
