@@ -147,9 +147,9 @@ export const companyDetailModule = {
       })
       commit('setNotes', notes)
     },
-    async fetchPriceData({state, commit}, slug: String) {
+    async fetchPriceData({state, commit}, company_slug: String) {
       await axios
-        .get(`api/v1/invest/price_data/${slug}`)
+        .get(`api/v1/invest/price_data/${company_slug}`)
         .then(response => {
           commit("getCompanyPriceData", response.data)
           commit("setPriceChartDataIsLoading", false)
