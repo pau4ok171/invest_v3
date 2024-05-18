@@ -9,6 +9,7 @@ import store from "@/store";
 
 export const companyDetailModule = {
   state: () => ({
+    pageIsReady: false,
     companyPriceData: [] as Array<Candle>,
     company: {} as DetailCompany,
     portfolios: [] as Array<Portfolio>,
@@ -27,6 +28,9 @@ export const companyDetailModule = {
     noteSavedContent: '',
   }),
   getters: {
+    getPageIsReady(state) {
+      return state.pageIsReady
+    },
     companyPriceData(state) {
       return state.companyPriceData.map((F: {time: string, close: string}) => [F['time'], F['close']])
     },
@@ -65,6 +69,9 @@ export const companyDetailModule = {
     },
   },
   mutations: {
+    setPageIsReady(state, status: Boolean) {
+      state.pageIsReady = status
+    },
     getCompanyPriceData(state, priceData: Array<Candle>) {
       state.companyPriceData = priceData
     },
