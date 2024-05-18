@@ -52,15 +52,15 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .detail-multiplier__tab-list {
-    display: flex;
-    justify-content: flex-end;
-    gap: 4px;
-    width: 100%;
-    margin-bottom: 8px;
-  }
-  .detail-multiplier__tab {
-    position: relative;
-    display: inline-block;
-  }
+.detail-multiplier__tab-list {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.detail-multiplier__tab {
+  position: relative;
+  display: inline-block;
+}
 </style>

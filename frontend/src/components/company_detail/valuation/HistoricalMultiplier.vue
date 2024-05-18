@@ -12,29 +12,29 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
-    <DetailAnalysisTitle>
-      <span>1.4</span>Historical Price to Earnings Ratio
-    </DetailAnalysisTitle>
+<section>
+  <DetailAnalysisTitle>
+    <span>1.4</span>Historical Price to Earnings Ratio
+  </DetailAnalysisTitle>
 
-    <DetailAnalysisDesc>
-      Historical Price to Earnings Ratio compares a stock's price to its earnings over time. Higher ratios indicate that investors are willing to pay more for the stock.
-    </DetailAnalysisDesc>
+  <DetailAnalysisDesc>
+    Historical Price to Earnings Ratio compares a stock's price to its earnings over time. Higher ratios indicate that investors are willing to pay more for the stock.
+  </DetailAnalysisDesc>
 
-    <div class="detail__content">
-      <div class="detail__content-item detail-historical-multiplier-chart__wrapper">
+  <div class="detail__content">
+    <div class="detail__content-item detail-historical-multiplier-chart__wrapper">
 
-        <HistoricalMultiplierTabList/>
+      <HistoricalMultiplierTabList/>
 
-        <HistoricalMultiplierChart/>
+      <HistoricalMultiplierChart/>
 
-      </div>
     </div>
-  </section>
+  </div>
+</section>
 </template>
 
 <style scoped>
-  .detail-historical-multiplier-chart__wrapper {
-    height: 454px;
-  }
+.detail-historical-multiplier-chart__wrapper {
+  height: 454px;
+}
 </style>

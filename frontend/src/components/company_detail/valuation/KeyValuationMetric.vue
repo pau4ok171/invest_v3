@@ -19,39 +19,39 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
-    <DetailAnalysisTitle>
-      <span>1.2</span>Key Valuation Metric
-    </DetailAnalysisTitle>
-    <DetailAnalysisDesc>
-      Which metric is best to use when looking at relative valuation for SBER?
-    </DetailAnalysisDesc>
+<section>
+  <DetailAnalysisTitle>
+    <span>1.2</span>Key Valuation Metric
+  </DetailAnalysisTitle>
+  <DetailAnalysisDesc>
+    Which metric is best to use when looking at relative valuation for SBER?
+  </DetailAnalysisDesc>
 
-    <div class="detail__content">
-      <div class="detail__content-item detail-key-valuation-metric">
+  <div class="detail__content">
+    <div class="detail__content-item detail-key-valuation-metric">
 
-        <KeyValuationMetricTabList/>
+      <KeyValuationMetricTabList/>
 
-        <div class="detail-key-valuation-metric__chart-box">
+      <div class="detail-key-valuation-metric__chart-box">
 
-          <KeyValuationMetricChart/>
+        <KeyValuationMetricChart/>
 
-          <KeyValuationMetricTable/>
-
-        </div>
+        <KeyValuationMetricTable/>
 
       </div>
+
     </div>
-  </section>
+  </div>
+</section>
 </template>
 
 <style scoped>
-  .detail-key-valuation-metric {
-    display: grid;
-    grid-template-columns: 35% auto;
-    gap: 20px;
-  }
-  .detail-key-valuation-metric__chart-box {
-    display: grid;
-  }
+.detail-key-valuation-metric {
+  display: grid;
+  grid-template-columns: 35% auto;
+  gap: 20px;
+}
+.detail-key-valuation-metric__chart-box {
+  display: grid;
+}
 </style>

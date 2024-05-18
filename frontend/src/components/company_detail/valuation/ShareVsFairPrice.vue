@@ -7,7 +7,12 @@ import CompanyDetailCheck from "@/components/company_detail/CompanyDetailCheck.v
 
 export default defineComponent({
   name: "ShareVsFairPrice",
-  components: {CompanyDetailCheck, DCFChart, DetailAnalysisDesc, DetailAnalysisTitle},
+  components: {
+    CompanyDetailCheck,
+    DCFChart,
+    DetailAnalysisDesc,
+    DetailAnalysisTitle
+  },
   data() {
     return {
       checks: [
@@ -20,30 +25,30 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
+<section>
 
-    <DetailAnalysisTitle>
-      <span>1.1</span>Share Price vs Fair Value
-    </DetailAnalysisTitle>
-    <DetailAnalysisDesc>
-      What is the Fair Price of MSFT when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
-    </DetailAnalysisDesc>
+  <DetailAnalysisTitle>
+    <span>1.1</span>Share Price vs Fair Value
+  </DetailAnalysisTitle>
+  <DetailAnalysisDesc>
+    What is the Fair Price of MSFT when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
+  </DetailAnalysisDesc>
 
-    <div class="detail__content">
+  <div class="detail__content">
 
-      <div class="detail__content-item">
-        <DCFChart/>
-      </div>
-
-      <div class="detail__content-item detail__point-list">
-        <CompanyDetailCheck
-            v-for="check in checks"
-            :check
-            :key="check.id"
-        />
-      </div>
-
+    <div class="detail__content-item">
+      <DCFChart/>
     </div>
 
-  </section>
+    <div class="detail__content-item detail__point-list">
+      <CompanyDetailCheck
+          v-for="check in checks"
+          :check
+          :key="check.id"
+      />
+    </div>
+
+  </div>
+
+</section>
 </template>

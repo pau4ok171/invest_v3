@@ -18,9 +18,5 @@ export default defineComponent({
 </script>
 
 <template>
-
-  <CompanyDetailDropDownMenu
-      :objects
-  />
-
+<CompanyDetailDropDownMenu :objects/>
 </template>

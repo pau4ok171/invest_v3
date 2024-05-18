@@ -10,7 +10,11 @@ export default defineComponent({
   name: "MultiplierVsPeers",
   components: {
     CompanyDetailCheck,
-    MultiplierVsPeersChart, MultiplierVsPeersTabList, DetailAnalysisDesc, DetailAnalysisTitle},
+    MultiplierVsPeersChart,
+    MultiplierVsPeersTabList,
+    DetailAnalysisDesc,
+    DetailAnalysisTitle
+  },
   data() {
     return {
       checks: [
@@ -22,34 +26,35 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
-    <DetailAnalysisTitle>
-      <span>1.3</span>Price to Earnings Ratio vs Peers
-    </DetailAnalysisTitle>
+<section>
 
-    <DetailAnalysisDesc>
-      How does SBER's PE Ratio compare to its peers?
-    </DetailAnalysisDesc>
+  <DetailAnalysisTitle>
+    <span>1.3</span>Price to Earnings Ratio vs Peers
+  </DetailAnalysisTitle>
 
-    <div class="detail__content">
-      <div class="detail__content-item">
+  <DetailAnalysisDesc>
+    How does SBER's PE Ratio compare to its peers?
+  </DetailAnalysisDesc>
 
-        <MultiplierVsPeersTabList/>
+  <div class="detail__content">
+    <div class="detail__content-item">
 
-        <MultiplierVsPeersChart/>
+      <MultiplierVsPeersTabList/>
 
-      </div>
+      <MultiplierVsPeersChart/>
 
-      <div class="detail__content-item detail__point-list">
-
-        <CompanyDetailCheck
-          v-for="check in checks"
-          :check
-          :key="check.id"
-        />
-
-      </div>
     </div>
 
-  </section>
+    <div class="detail__content-item detail__point-list">
+
+      <CompanyDetailCheck
+        v-for="check in checks"
+        :check
+        :key="check.id"
+      />
+
+    </div>
+  </div>
+
+</section>
 </template>

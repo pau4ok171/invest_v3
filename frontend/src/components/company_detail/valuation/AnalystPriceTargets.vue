@@ -47,13 +47,13 @@ export default defineComponent({
 </template>
 
 <style scoped>
-  .analyst-price-targets-chart {
-    height: 500px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    background-color: rgb(57, 67, 87);
-    font-size: 3rem;
-  }
+.analyst-price-targets-chart {
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: rgb(57, 67, 87);
+  font-size: 3rem;
+}
 </style>

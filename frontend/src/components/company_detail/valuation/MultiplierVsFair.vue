@@ -7,7 +7,12 @@ import MultiplierVsFairChart from "@/components/charts/MultiplierVsFairChart.vue
 
 export default defineComponent({
   name: "MultiplierVsFair",
-  components: {MultiplierVsFairChart, CompanyDetailCheck, DetailAnalysisDesc, DetailAnalysisTitle},
+  components: {
+    MultiplierVsFairChart,
+    CompanyDetailCheck,
+    DetailAnalysisDesc,
+    DetailAnalysisTitle
+  },
   data() {
     return {
       checks: [
@@ -19,33 +24,33 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
+<section>
 
-    <DetailAnalysisTitle>
-      <span>1.6</span>Price to Earnings Ratio vs Fair Ratio
-    </DetailAnalysisTitle>
+  <DetailAnalysisTitle>
+    <span>1.6</span>Price to Earnings Ratio vs Fair Ratio
+  </DetailAnalysisTitle>
 
-    <DetailAnalysisDesc>
-      What is SBER's PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.
-    </DetailAnalysisDesc>
+  <DetailAnalysisDesc>
+    What is SBER's PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.
+  </DetailAnalysisDesc>
 
-    <div class="detail__content">
+  <div class="detail__content">
 
-      <div class="detail__content-item">
+    <div class="detail__content-item">
 
-        <MultiplierVsFairChart/>
-
-      </div>
-
-      <div class="detail__content-item detail__point-list">
-        <CompanyDetailCheck
-          v-for="check in checks"
-          :check
-          :key="check.id"
-        />
-      </div>
+      <MultiplierVsFairChart/>
 
     </div>
 
-  </section>
+    <div class="detail__content-item detail__point-list">
+      <CompanyDetailCheck
+        v-for="check in checks"
+        :check
+        :key="check.id"
+      />
+    </div>
+
+  </div>
+
+</section>
 </template>
