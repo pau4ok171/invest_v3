@@ -52,8 +52,8 @@ export default defineComponent({
     <div class="detail_notes_model_menu_footer__saving_state">{{ saveStatus }}</div>
     <div class="detail_notes_model_menu_footer__volume_state">
       <svg height="24" viewBox="0 0 20 20" width="24">
-        <circle class="detail_notes_model_menu_footer__volume_state_total"></circle>
-        <circle class="detail_notes_model_menu_footer__volume_state_used"></circle>
+        <circle r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_total"></circle>
+        <circle r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_used"></circle>
       </svg>
     </div>
     <RoundedDarkBlueButton @click="setNotesModalIsActive(false)"><span>Close</span></RoundedDarkBlueButton>
@@ -93,10 +93,7 @@ export default defineComponent({
     stroke: rgba(255, 255, 255, .1);
     stroke-width: 2px;
     stroke-linecap: round;
-    r: 9;
     fill: none;
-    cx: 50%;
-    cy: 50%;
 }
 .detail_notes_model_menu_footer__volume_state_used {
     stroke: rgb(35, 148, 223);
@@ -105,9 +102,6 @@ export default defineComponent({
     transition: stroke-dashoffset 0.2s ease 0s, stroke 0.4s ease 0s;
     stroke-width: 2px;
     stroke-linecap: round;
-    r: 9;
     fill: none;
-    cx: 50%;
-    cy: 50%;
 }
 </style>

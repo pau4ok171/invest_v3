@@ -33,6 +33,7 @@ export default defineComponent({
 
 <template>
 <header class="detail_notes_modal_menu_header">
+
   <div class="detail_notes_modal_menu_header__content-group">
     <RoundedButton @click="setNotesModalIsLateral(false)" v-if="notesModalIsLateral"><ExpandIcon/></RoundedButton>
     <RoundedButton @click="setNotesModalIsLateral(true)" v-else><ReduceIcon/></RoundedButton>
@@ -42,6 +43,7 @@ export default defineComponent({
     <RoundedButton><NotificationIcon style="width: 20px; height: 20px;"/></RoundedButton>
     <RoundedButton @click="setNotesModalIsActive(false)"><ModalMenuCloseIcon/></RoundedButton>
   </div>
+
 </header>
 </template>
 

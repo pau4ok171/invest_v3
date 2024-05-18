@@ -1,12 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {EditorContent} from "@tiptap/vue-3";
+import {Editor, EditorContent} from "@tiptap/vue-3";
 
 export default defineComponent({
   name: "CompanyDetailNotesModalMenuMain",
   components: {EditorContent},
   props: {
-    editor: Object,
+    editor: Editor,
   },
 })
 </script>

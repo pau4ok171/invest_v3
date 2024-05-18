@@ -7,8 +7,9 @@ export default defineComponent({
   name: "CompanyDetailNotesToolDropDownMenu",
   components: {DeleteIcon, EditIcon},
   methods: {
-    closeDropDownMenu(event) {
-      if (event.target.parentNode !== this.$el.parentNode) {
+    closeDropDownMenu(event: Event) {
+      const target = event.target as HTMLInputElement
+      if (target.parentNode !== this.$el.parentNode) {
         this.$emit('closeDropDownMenu')
       }
     }

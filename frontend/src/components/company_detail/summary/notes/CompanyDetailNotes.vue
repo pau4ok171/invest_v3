@@ -8,7 +8,7 @@ import PenIcon from "@/components/icons/PenIcon.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
 import CompanyDetailNotesModalMenu from "@/components/company_detail/summary/notes/CompanyDetailNotesModalMenu.vue";
-import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
 import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu

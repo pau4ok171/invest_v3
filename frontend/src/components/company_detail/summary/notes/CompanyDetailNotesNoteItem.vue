@@ -1,17 +1,18 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, PropType} from 'vue'
 import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
 import {mapActions, mapMutations} from "vuex";
 import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
+import type {Note} from "@/types/notes";
 
 export default defineComponent({
   name: "CompanyDetailNotesNoteItem",
   components: {RoundedButton, CompanyDetailNotesToolDropDownMenu, DotsIcon},
   props: {
     note: {
-      type: Object,
+      type: Object as PropType<Note>,
       required: true,
     }
   },

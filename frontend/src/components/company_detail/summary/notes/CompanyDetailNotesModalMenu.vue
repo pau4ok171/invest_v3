@@ -21,8 +21,8 @@ export default defineComponent({
   },
   data() {
     return {
-      editor: null,
-      checkInterval: null,
+      editor: null as any,
+      checkInterval: null as any,
       saveStatus: 'Saved',
       contentLengthMax: 10000,
       isSaving: false,
@@ -54,7 +54,6 @@ export default defineComponent({
         },
       },
     })
-
   },
   beforeUnmount() {
     window.clearInterval(this.checkInterval)
