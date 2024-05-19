@@ -5,7 +5,10 @@ import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
 
 export default defineComponent({
   name: "BaseModalMenu",
-  components: {RoundedGreyButton, ModalMenuCloseIcon},
+  components: {
+    RoundedGreyButton,
+    ModalMenuCloseIcon
+  },
 })
 </script>
 
