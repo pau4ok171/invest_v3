@@ -7,13 +7,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <p class="detail-section__text"><slot/></p>
+<p class="detail-section__text"><slot/></p>
 </template>
 
 <style scoped>
-  .detail-section__text {
-    font-size: 1.6rem;
-    line-height: 1.5;
-    margin-bottom: 8px;
-  }
+.detail-section__text {
+  font-size: 1.6rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
 </style>

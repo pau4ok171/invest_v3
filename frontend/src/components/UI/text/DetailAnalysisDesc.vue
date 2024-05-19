@@ -7,16 +7,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <p class="detail-analysis__desc">
-    <slot/>
-  </p>
+<p class="detail-analysis__desc">
+  <slot/>
+</p>
 </template>
 
 <style>
-  .detail-analysis__desc {
-    color: #fff;
-    font-size: 1.4rem;
-    line-height: 1.7;
-    margin-bottom: 16px;
+.detail-analysis__desc {
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  margin-bottom: 16px;
 }
 </style>
