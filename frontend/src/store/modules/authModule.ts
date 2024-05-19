@@ -1,13 +1,16 @@
 import type {Module} from "vuex";
 
 export const authModule = {
-    state: () => ({
+  state: () => ({
     isAuthenticated: false,
     token: '',
   }),
   getters: {
     getIsAuthenticated(state) {
       return state.isAuthenticated
+    },
+    getToken(state) {
+      return state.token
     },
   },
   mutations: {

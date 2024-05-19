@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import axios from "axios";
-import {mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -21,8 +21,8 @@ export default defineComponent({
     })
   },
   computed: {
-    ...mapState({
-      token: 'authModule/token',
+    ...mapGetters({
+      token: 'authModule/getToken',
     })
   },
 })

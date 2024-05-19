@@ -12,7 +12,7 @@ import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton
 import CompanyDetailRiskReward from "@/components/company_detail/summary/CompanyDetailRiskReward.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
-import {mapState} from "vuex";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailStockOverview",
@@ -31,9 +31,9 @@ export default defineComponent({
     CompanyDetailSection
   },
   computed: {
-    ...mapState({
-      company: 'companyDetail/company',
-      snowflake: 'companyDetail/snowflake',
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+      snowflake: 'companyDetail/getSnowflake',
     }),
   },
   methods: {

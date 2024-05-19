@@ -1,7 +1,17 @@
 import axios from "axios";
 import type {Module} from "vuex";
 import {toast} from "vue3-toastify";
-import type {Candle, Competitor, DetailCompany} from "@/types/invest";
+import type {
+  AnalystIdea,
+  Candle,
+  Competitor,
+  Country,
+  DetailCompany,
+  Formatting,
+  Market,
+  PriceData,
+  Report, Sector
+} from "@/types/invest";
 import type {Statement} from "@/types/statements";
 import type {Portfolio} from "@/types/portfolios"
 import type {Note} from "@/types/notes";
@@ -42,6 +52,9 @@ export const companyDetailModule = {
     },
     getCompany(state): DetailCompany {
       return state.company
+    },
+    getSnowflake(stake) {
+      return stake.snowflake
     },
     getPortfolios(state) {
       return state.portfolios

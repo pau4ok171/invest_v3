@@ -24,7 +24,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      statements: 'companyDetail.getStatements',
+      statements: 'companyDetail/getStatements',
     }),
     filtered_statements(){
       return [...this.statements].filter(s => s.area === this.section.area)

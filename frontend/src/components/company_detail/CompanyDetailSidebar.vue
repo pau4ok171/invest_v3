@@ -26,8 +26,8 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters({
-      company: 'companyDetail.getCompany',
-      isAuthenticated: 'companyDetail/getIsAuthenticated',
+      company: 'companyDetail/getCompany',
+      isAuthenticated: 'authModule/getIsAuthenticated',
       watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
       portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
       sidebarIsVisible: "companyDetail/getSidebarIsVisible",

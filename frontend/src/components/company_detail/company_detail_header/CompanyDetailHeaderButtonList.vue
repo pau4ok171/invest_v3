@@ -6,7 +6,7 @@ import PenIcon from "@/components/icons/PenIcon.vue";
 import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import CompanyDetailPortfolioModalMenu
   from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import MiniLoader from "@/components/UI/MiniLoader.vue";
@@ -54,12 +54,9 @@ export default defineComponent({
     },
   },
   computed: {
-    ...mapState({
-      isAuthenticated: 'authModule/isAuthenticated',
-    }),
     ...mapGetters({
+      isAuthenticated: 'authModule/getIsAuthenticated',
       company: 'companyDetail/getCompany',
-      portfolioModalMenuIsOpen: "companyDetail/getPortfolioModalMenuIsOpen",
       watchlistIsLoading: "companyDetail/getWatchlistIsLoading",
       portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
     }),
@@ -92,7 +89,7 @@ export default defineComponent({
 
   <BaseModalMenuContainer>
     <template #button>
-      <RoundedWhiteButton :disabled="!isAuthenticated" @click="setPortfolioModalMenuIsOpen(true)">
+      <RoundedWhiteButton :disabled="!isAuthenticated">
         <span>Add to portfolio</span>
       </RoundedWhiteButton>
     </template>
