@@ -63,7 +63,7 @@ export default defineComponent({
     setSort(key: string) {
       const { sort } = this;
       if (sort.options[key]) {
-        sort.reverse = (sort.key.localeCompare(key)) ^ sort.reverse;
+        sort.reverse = Number(sort.key === key) ^ sort.reverse;
         sort.key = key;
       }
     }
