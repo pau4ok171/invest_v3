@@ -1,15 +1,12 @@
-<template>
-  <div>
-    <slot/>
-  </div>
-</template>
+<script lang="ts">
+import {defineComponent} from "vue";
 
-<script>
-export default {
+export default defineComponent({
   name: 'DropDownMenu',
   methods: {
-    clickHandler(event) {
-      if (event.target.parentNode !== this.$el.parentNode) {
+    clickHandler(event: Event) {
+      const target = event.target as HTMLDivElement
+      if (target.parentNode !== this.$el.parentNode) {
         this.$emit('closeDropDownMenu')
         document.removeEventListener('click', this.clickHandler)
       }
@@ -18,8 +15,14 @@ export default {
   mounted() {
     document.addEventListener('click', this.clickHandler)
   },
-}
+})
 </script>
+
+<template>
+<div>
+  <slot/>
+</div>
+</template>
 
 <style>
 .dropdown-menu::-webkit-scrollbar {
