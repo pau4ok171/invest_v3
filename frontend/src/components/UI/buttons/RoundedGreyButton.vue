@@ -9,22 +9,22 @@ export default defineComponent({
 </script>
 
 <template>
- <RoundedButton class="button--grey">
-   <slot/>
- </RoundedButton>
+<RoundedButton class="button--grey">
+ <slot/>
+</RoundedButton>
 </template>
 
 <style>
-  .button--grey svg {
-    fill: #92969c;
-  }
-  .button--grey span {
-    color: #000;
-  }
-  .button--grey span {
+.button--grey svg {
+  fill: #92969c;
+}
+.button--grey span {
   color: #000;
 }
-  .button--grey:not([disabled]):hover {
-    background-color: rgba(38, 46, 58, .05);
-  }
+.button--grey span {
+  color: #000;
+}
+.button--grey:not([disabled]):hover {
+  background-color: rgba(38, 46, 58, .05);
+}
 </style>

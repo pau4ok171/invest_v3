@@ -9,14 +9,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <RoundedButton class="button--bordered">
-    <slot/>
-  </RoundedButton>
+<RoundedButton class="button--bordered">
+  <slot/>
+</RoundedButton>
 </template>
 
 <style scoped>
-  .button--bordered {
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, .2);
-  }
+.button--bordered {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, .2);
+}
 </style>

@@ -25,5 +25,4 @@ export default defineComponent({
 .button--bg_grey:not([disabled]):hover {
   background-color: rgba(38, 46, 58, .15);
 }
-
 </style>

@@ -4,7 +4,9 @@ import BaseButton from "@/components/UI/buttons/BaseButton.vue";
 
 export default defineComponent({
   name: "BaseInvisibleButton",
-  components: {BaseButton}
+  components: {
+    BaseButton,
+  }
 })
 </script>
 

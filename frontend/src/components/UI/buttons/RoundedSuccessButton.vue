@@ -4,7 +4,9 @@ import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 
 export default defineComponent({
   name: "RoundedSuccessButton",
-  components: {RoundedButton}
+  components: {
+    RoundedButton,
+  }
 })
 </script>
 
@@ -26,7 +28,5 @@ export default defineComponent({
 }
 .button--success[disabled] {
   opacity: 1;
-}
-.button--success:not([disabled]):hover {
 }
 </style>
