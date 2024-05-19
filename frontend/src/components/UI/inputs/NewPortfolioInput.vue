@@ -17,7 +17,7 @@ export default defineComponent({
     document.removeEventListener('keydown', this.changeInputMode)
   },
   methods: {
-    changeInputMode(event) {
+    changeInputMode(event: Event) {
       if (event.type === 'keydown' && event.code === 'Escape') {
         this.$emit('update:inputMode', false)
       }
@@ -33,12 +33,12 @@ export default defineComponent({
 </script>
 
 <template>
-  <BaseInput
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      class="detail-portfolio-modal-menu__input"
-      placeholder="Например: Мой новый портфель"
-  />
+<BaseInput
+  :value="modelValue"
+  @input="$emit('update:modelValue', $event.target.value)"
+  class="detail-portfolio-modal-menu__input"
+  placeholder="Например: Мой новый портфель"
+/>
 </template>
 
 <style scoped>
