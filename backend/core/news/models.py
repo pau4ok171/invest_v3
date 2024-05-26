@@ -2,7 +2,7 @@ from django.db import models
 
 
 class News(models.Model):
-    company = models.ForeignKey('invest.Company', on_delete=models.CASCADE)
+    company = models.ForeignKey('invest.Company', related_name='company_news', on_delete=models.CASCADE)
     type = models.CharField(
         max_length=255,
         choices={'DIVIDEND': 'dividend', 'UPDATE': 'update', 'ACTION': 'corporate action'}
