@@ -1,10 +1,24 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type { PropType } from "vue";
 import MegaphoneIcon from "@/components/icons/MegaphoneIcon.vue";
+import type {News} from "@/types/invest";
+import {DateTime} from "luxon";
 
 export default defineComponent({
   name: "CompanyDetailNewsItem",
-  components: {MegaphoneIcon}
+  components: {MegaphoneIcon},
+  props: {
+    news_item: {
+      type: Object as PropType<News>,
+      required: true,
+    },
+  },
+  computed: {
+    formatted_date() {
+      return DateTime.fromISO(this.news_item.date).toFormat('LLL dd')
+    }
+  },
 })
 </script>
 
@@ -15,8 +29,8 @@ export default defineComponent({
       <MegaphoneIcon/>
     </div>
     <div class="detail-recent-news__message">
-      <h4 class="detail-recent-news__title">Sberbank of Russia to Report Q2, 2023 Results on Aug 03, 2023</h4>
-      <span class="detail-recent-news__text">Jul 28</span>
+      <h4 class="detail-recent-news__title">{{ news_item.title }}</h4>
+      <span class="detail-recent-news__text">{{ formatted_date }}</span>
     </div>
   </article>
 </button>
