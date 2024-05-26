@@ -18,6 +18,7 @@ export interface DetailCompany {
     description: String,
     short_description: String,
     website: String,
+    company_news: Array<News>,
 }
 
 export interface ListCompany {
@@ -140,4 +141,12 @@ export interface Snowflake {
 export interface Candle {
     close: Number,
     time: Number,
+}
+
+export interface News {
+    id: number,
+    type: string,
+    date: string,
+    title: string,
+    content: string,
 }
