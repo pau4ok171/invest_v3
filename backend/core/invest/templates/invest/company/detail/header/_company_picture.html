@@ -1,8 +1,0 @@
-{% load static %}
-<picture class="detail__picture">
-  <div class="picture__cover"></div>
-  <img class="picture__img"
-     src="{% if company.sector.main_header %}{{ company.sector.main_header.url }}{% else %}{% static 'invest/images/no-img.jpg' %}{% endif %}"
-     alt="Company bg image"
-  >
-</picture>
