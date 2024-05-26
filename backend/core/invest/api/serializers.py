@@ -7,6 +7,7 @@ from rest_framework.fields import empty
 from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, Currency
 from statements.models import Statement
 from statements.types import Area, Status
+from news.api.serializers import NewsSerializer
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -222,6 +223,7 @@ class CompanyDetailSerializer(CompanySerializer):
     reports = ReportSerializer(many=True)
     analyst_ideas = AnalystIdeaSerializer(many=True)
     formatting = serializers.SerializerMethodField('get_formatting')
+    company_news = NewsSerializer(many=True)
 
     class Meta:
         model = Company
@@ -245,6 +247,7 @@ class CompanyDetailSerializer(CompanySerializer):
             'reports',
             'analyst_ideas',
             'formatting',
+            'company_news',
         )
 
     @staticmethod
