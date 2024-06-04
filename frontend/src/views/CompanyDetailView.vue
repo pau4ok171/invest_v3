@@ -3,6 +3,7 @@ import CompanyDetailHeader from "@/components/company_detail/CompanyDetailHeader
 import CompanyDetailContent from "@/components/company_detail/CompanyDetailContent.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {defineComponent} from "vue";
+import {RouteNamesEnum} from "@/router/routes.types";
 
 export default defineComponent({
   name: 'CompanyDetail',
@@ -10,14 +11,17 @@ export default defineComponent({
     CompanyDetailContent,
     CompanyDetailHeader
   },
-  async mounted() {
-    const company_slug = this.$route.params.company_slug as String
-    await this.fetchCompany(company_slug)
-    await this.fetchPriceData(company_slug)
-    document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
-    this.setPageIsReady(true)
-  },
+  mounted() {
+    this.initializeView()
+    },
   methods: {
+    async initializeView() {
+      const company_slug = this.$route.params.company_slug as String
+      await this.fetchCompany(company_slug)
+      await this.fetchPriceData(company_slug)
+      document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
+      this.setPageIsReady(true)
+    },
     ...mapMutations({
       setPageIsReady: 'companyDetail/setPageIsReady'
     }),
@@ -31,6 +35,13 @@ export default defineComponent({
       company: 'companyDetail/getCompany',
       pageIsReady: 'companyDetail/getPageIsReady',
     })
+  },
+  watch: {
+    $route(to, from) {
+      if (to.name === RouteNamesEnum.company_detail) {
+        this.initializeView()
+      }
+    }
   },
 })
 </script>
