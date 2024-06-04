@@ -1,9 +1,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {chartOpts} from "@/components/charts/priceChartOpts";
-import store from "@/store";
 import BaseInvisibleButton from "@/components/UI/buttons/BaseInvisibleButton.vue";
 import { DateTime } from 'luxon';
+import {mapGetters} from "vuex";
 
 interface Tab {
   value: string,
@@ -28,17 +28,27 @@ export default defineComponent({
     }
   },
   mounted() {
-    this.chartOpts.series[0].data = store.getters["companyDetail/companyPriceData"]
+   this.chartOpts.series[0].data = this.priceData
     this.changeZoom(this.tablist.Y1)
+  },
+  watch: {
+    priceData() {
+      this.chartOpts.series[0].data = this.priceData
+    }
   },
   methods: {
     changeZoom(tab: Tab) {
       this.currentPeriod = tab.value
       const priceChart = this.$refs.priceChart as any
       const chart = priceChart.chart
-      const  chartMax = chart.xAxis[1].max || DateTime.now().ts;
+      const  chartMax = chart.xAxis[1].max || DateTime.now().ts
       chart.xAxis[0].setExtremes(tab.min.ts, chartMax)
     }
+  },
+  computed: {
+    ...mapGetters({
+      priceData: 'companyDetail/companyPriceData'
+    }),
   },
 })
 </script>
