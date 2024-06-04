@@ -10,6 +10,12 @@ export default defineComponent({
     ...mapGetters({
       company: 'companyDetail/getCompany',
     }),
+    year_founded() {
+      return this.company.year_founded ? this.company.year_founded : 'n/a'
+    },
+    total_employees_figure() {
+      return this.company.reports.length ? this.humanize_number(this.company.reports[0].total_employees_figure) : 'n/a'
+    }
   },
   methods: {
     humanize_number(val: number) {
@@ -31,8 +37,8 @@ export default defineComponent({
   </thead>
   <tbody>
     <tr>
-      <td>{{ company.year_founded }}</td>
-      <td>{{ humanize_number(company.reports[0].total_employees_figure) }}</td>
+      <td>{{ year_founded }}</td>
+      <td>{{ total_employees_figure }}</td>
       <td>n/a</td>
       <td v-if="company.website">
         <a target="_blank"
