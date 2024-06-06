@@ -1,8 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {mapGetters} from "vuex";
 
 export default defineComponent({
-  name: "CompanyDetailShareholderReturnsTable"
+  name: "CompanyDetailShareholderReturnsTable",
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany'
+    })
+  },
 })
 </script>
 
@@ -11,9 +17,9 @@ export default defineComponent({
   <thead>
     <tr>
       <th></th>
-      <th>SBER</th>
-      <th>RU Banks</th>
-      <th>RU Market</th>
+      <th>{{ company.ticker.toUpperCase() }}</th>
+      <th>{{ company.country.slug.toUpperCase() }} {{ company.sector.title }}</th>
+      <th>{{ company.country.slug.toUpperCase() }} Market</th>
     </tr>
   </thead>
   <tbody>
