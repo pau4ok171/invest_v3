@@ -1,8 +1,46 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {mapGetters} from "vuex";
+import {DateTime} from "luxon";
 
 export default defineComponent({
-  name: "DividendPaydayChart"
+  name: "DividendPaydayChart",
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_ex_dividend_date() {
+      const ex_dividend_date = DateTime.fromISO(this.company.next_dividend.ex_dividend_date)
+      return this.get_formatted_date(ex_dividend_date)
+    },
+    get_pay_date() {
+      const pay_date = DateTime.fromISO(this.company.next_dividend.pay_date)
+      return this.get_formatted_date(pay_date)
+    },
+    get_today() {
+      const today = DateTime.now()
+      return this.get_formatted_date(today)
+    },
+    get_buy_period() {
+      const now = DateTime.now()
+      const today = DateTime.fromObject({
+        year: now.year,
+        month: now.month,
+        day: now.day,
+      })
+      let ex_dividend_date = DateTime.fromISO(this.company.next_dividend.ex_dividend_date)
+      ex_dividend_date = ex_dividend_date.plus({days: 1})
+      if (ex_dividend_date.isValid) {
+        return ex_dividend_date.diff(today, ['days']).toObject().days
+      }
+      return null
+    },
+  },
+  methods: {
+    get_formatted_date(date: DateTime) {
+      return date.toFormat('LLL dd yyyy')
+    },
+  }
 })
 </script>
 
@@ -27,7 +65,7 @@ export default defineComponent({
         <g class="dividend-payday-chart__text" transform="translate(0, 0)">
           <svg x="0" y="24" style="overflow: visible;">
             <text transform="" fill="#fff" text-anchor="end">
-              <tspan x="0" dy="0.71em">Feb 14 2024</tspan>
+              <tspan x="0" dy="0.71em">{{ get_ex_dividend_date }}</tspan>
             </text>
           </svg>
         </g>
@@ -43,7 +81,7 @@ export default defineComponent({
         <g class="dividend-payday-chart__text" transform="translate(0, 0)">
           <svg x="0" y="24" style="overflow: visible;">
             <text transform="" fill="#fff" text-anchor="end">
-              <tspan x="0" dy="0.71em">Mar 14 2024</tspan>
+              <tspan x="0" dy="0.71em">{{ get_pay_date }}</tspan>
             </text>
           </svg>
         </g>
@@ -59,7 +97,7 @@ export default defineComponent({
         <g class="dividend-payday-chart__text" transform="translate(0, 0)">
           <svg x="0" y="24" style="overflow: visible;">
             <text transform="" fill="#fff" text-anchor="start">
-              <tspan x="0" dy="0.71em">Dec 08 2023</tspan>
+              <tspan x="0" dy="0.71em">{{ get_today }}</tspan>
             </text>
           </svg>
         </g>
@@ -71,7 +109,7 @@ export default defineComponent({
         <g class="dividend-payday-chart__text" transform="translate(0, 0)">
           <svg x="20" y="24" style="overflow: visible;">
             <text transform="" y="28" fill="#2394df" text-anchor="start">
-              <tspan x="0" dy="-0.395em">Buy in the next 67 days to</tspan>
+              <tspan x="0" dy="-0.395em">Buy in the next {{ get_buy_period }} days to</tspan>
               <tspan x="0" dy="1.5em">receive the upcoming dividend</tspan>
             </text>
           </svg>
