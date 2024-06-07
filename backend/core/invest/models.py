@@ -34,6 +34,8 @@ class Company(models.Model):
         blank=True
     )
     notes = models.ManyToManyField(User, through=Note)
+    last_reported_earnings = models.DateField(null=True, blank=True)
+    next_earnings = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return self.title
