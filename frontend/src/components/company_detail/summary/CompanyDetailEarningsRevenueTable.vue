@@ -2,10 +2,50 @@
 import {defineComponent} from 'vue'
 import QuestionText from "@/components/UI/text/QuestionText.vue";
 import QuestionLink from "@/components/UI/text/QuestionLink.vue";
+import {mapGetters} from "vuex";
+import {DateTime} from "luxon";
+import type {Report} from "@/types/invest";
 
 export default defineComponent({
   name: "CompanyDetailEarningsRevenueTable",
-  components: {QuestionLink, QuestionText}
+  components: {QuestionLink, QuestionText},
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_last_earnings() {
+      if (this.company.last_reported_earnings) {
+        return DateTime.fromISO(this.company.last_reported_earnings).toFormat('LLL dd, yyyy')
+      }
+      return 'n/a'
+    },
+    get_next_earnings() {
+      if (this.company.next_earnings) {
+        return DateTime.fromISO(this.company.next_earnings).toFormat('LLL dd, yyyy')
+      }
+      return 'n/a'
+    },
+    get_eps() {
+      const report: Report = this.company.reports[0]
+      if (!report) return 'n/a'
+      return (report.income_net * report.scale_unit / report.share_outstanding).toFixed(2)
+    },
+    get_gross_margin() {
+      const report: Report = this.company.reports[0]
+      if (!report) return 'n/a'
+      return `${(report.gross_margin / report.sales * 100).toFixed(2)}%`
+    },
+    get_net_profit_margin() {
+      const report: Report = this.company.reports[0]
+      if (!report) return 'n/a'
+      return `${(report.income_net / report.sales * 100).toFixed(2)}%`
+    },
+    get_debt_equity_ratio() {
+      const report: Report = this.company.reports[0]
+      if (!report) return 'n/a'
+      return `${(report.debt / report.equity * 100).toFixed(2)}%`
+    },
+  },
 })
 </script>
 
@@ -13,30 +53,30 @@ export default defineComponent({
 <section class="detail-earnings-revenue-table__box">
   <div class="detail-earnings-revenue-table__item">
     <p class="detail-earnings-revenue-table__title">Last Reported Earnings</p>
-    <p class="detail-earnings-revenue-table__text">Dec 31, 2021</p>
+    <p class="detail-earnings-revenue-table__text">{{ get_last_earnings }}</p>
   </div>
   <div class="detail-earnings-revenue-table__item">
     <p class="detail-earnings-revenue-table__title">Next Earnings</p>
-    <p class="detail-earnings-revenue-table__text">n/a</p>
+    <p class="detail-earnings-revenue-table__text">{{ get_next_earnings }}</p>
   </div>
 
   <table class="detail-earnings-revenue-table table">
     <tbody>
       <tr>
         <td><span>Earnings per share (EPS)</span></td>
-        <td>51.56</td>
+        <td>{{ get_eps }}</td>
       </tr>
       <tr>
         <td><span>Gross Margin</span></td>
-        <td>98.05%</td>
+        <td>{{ get_gross_margin }}</td>
       </tr>
       <tr>
         <td><span>Net Profit Margin</span></td>
-        <td>47.64%</td>
+        <td>{{ get_net_profit_margin }}</td>
       </tr>
       <tr>
         <td><span>Debt/Equity Ratio</span></td>
-        <td>90.3%</td>
+        <td>{{ get_debt_equity_ratio }}</td>
       </tr>
     </tbody>
   </table>
