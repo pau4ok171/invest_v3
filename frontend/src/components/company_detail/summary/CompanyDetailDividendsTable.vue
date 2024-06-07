@@ -2,13 +2,32 @@
 import {defineComponent} from 'vue'
 import QuestionText from "@/components/UI/text/QuestionText.vue";
 import QuestionLink from "@/components/UI/text/QuestionLink.vue";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailDividendsTable",
   components: {
     QuestionLink,
     QuestionText,
-  }
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany'
+    }),
+     get_dividend_yield() {
+       if (this.company.next_dividend.dividend_yield === undefined) {
+        return 'n/a'
+      }
+      return `${this.company.next_dividend.dividend_yield}%`
+    },
+    get_payout_ratio() {
+      if (this.company.next_dividend.dividend_amount === undefined || !this.company.reports.length) {
+        return 'n/a'
+      }
+      const scale = this.company.next_dividend.scale_unit / this.company.reports[0].scale_unit
+      return `${(this.company.next_dividend.dividend_amount * scale / this.company.reports[0].income_net * 100).toFixed(2)}%`
+    },
+  },
 })
 </script>
 
@@ -16,11 +35,11 @@ export default defineComponent({
 <div>
   <div class="detail-dividends-table">
     <div class="detail-dividends-table__item">
-      <h3 class="detail-dividends-table__title">14.0%</h3>
+      <h3 class="detail-dividends-table__title">{{ get_dividend_yield }}</h3>
       <span class="detail-dividends-table__text">Current Dividend Yield</span>
     </div>
     <div class="detail-dividends-table__item">
-      <h3 class="detail-dividends-table__title">35%</h3>
+      <h3 class="detail-dividends-table__title">{{ get_payout_ratio }}</h3>
       <span class="detail-dividends-table__text">Payout Ratio</span>
     </div>
   </div>
