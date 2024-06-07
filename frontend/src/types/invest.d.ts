@@ -19,6 +19,7 @@ export interface DetailCompany {
     short_description: String,
     website: String,
     company_news: Array<News>,
+    next_dividend: Dividend,
 }
 
 export interface ListCompany {
