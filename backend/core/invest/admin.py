@@ -93,3 +93,8 @@ class AnalystAdmin(admin.ModelAdmin):
 @admin.register(models.AnalystIdea)
 class AnalystIdea(admin.ModelAdmin):
     list_display = ('analyst', 'company', 'idea_created', 'price_target', 'date_target')
+
+
+@admin.register(models.Dividend)
+class DividendAdmin(admin.ModelAdmin):
+    list_display = ('company', 'ex_dividend_date', 'dividend_yield')
