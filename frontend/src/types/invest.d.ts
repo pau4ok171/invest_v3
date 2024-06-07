@@ -20,6 +20,8 @@ export interface DetailCompany {
     website: String,
     company_news: Array<News>,
     next_dividend: Dividend,
+    last_reported_earnings: string,
+    next_earnings: string,
 }
 
 export interface ListCompany {
@@ -77,6 +79,19 @@ export interface Currency {
 export interface Report {
     total_employees_figure: Number,
     updated: String,
+    scale: string,
+    scale_unit: number,
+    income_net: number,
+    sales: number,
+    cost_of_sales: number,
+    equity: number,
+    debt: number,
+    gross_margin: number,
+    operation_expenses: number,
+    operation_income: number,
+    other_income_net: number,
+    taxes: number,
+    share_outstanding: number,
 }
 
 export interface Country {
