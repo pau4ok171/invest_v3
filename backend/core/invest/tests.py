@@ -1,3 +1,4 @@
+import datetime
 from datetime import timedelta
 
 import decouple
@@ -37,27 +38,29 @@ def execute(client):
 
     # Список дивидендов
     dividends: GetDividendsResponse = client.instruments.get_dividends(
-        instrument_id=COMPANY_UID
+        instrument_id=COMPANY_UID,
+        from_=datetime.datetime.utcnow() - timedelta(days=365*30),
+        to=datetime.datetime.utcnow(),
     )
-    # pprint(dividends)
+    pprint(dividends)
 
     # fundamentals data
-    fundamentals_request = GetAssetFundamentalsRequest(
-        assets=[COMPANY_UID]
-    )
-    fundamentals: GetAssetFundamentalsResponse = client.instruments.get_asset_fundamentals(fundamentals_request)
+    # fundamentals_request = GetAssetFundamentalsRequest(
+    #     assets=[COMPANY_UID]
+    # )
+    # fundamentals: GetAssetFundamentalsResponse = client.instruments.get_asset_fundamentals(fundamentals_request)
     # pprint(fundamentals)
 
-    reports_request = GetAssetReportsRequest(
-        instrument_id=COMPANY_UID,
-        from_=now() - timedelta(days=120),
-        to=now()
-    )
-    reports = client.instruments.get_asset_reports(reports_request)
+    # reports_request = GetAssetReportsRequest(
+    #     instrument_id=COMPANY_UID,
+    #     from_=now() - timedelta(days=120),
+    #     to=now()
+    # )
+    # reports = client.instruments.get_asset_reports(reports_request)
     # pprint(reports)
 
-    forecast = client.instruments.get_forecast_by(instrument_id=COMPANY_UID)
-    pprint(forecast)
+    # forecast = client.instruments.get_forecast_by(instrument_id=COMPANY_UID)
+    # pprint(forecast)
 
 
 if __name__ == '__main__':

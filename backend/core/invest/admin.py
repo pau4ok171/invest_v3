@@ -91,7 +91,7 @@ class AnalystAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.AnalystIdea)
-class AnalystIdea(admin.ModelAdmin):
+class AnalystIdeaAdmin(admin.ModelAdmin):
     list_display = ('analyst', 'company', 'idea_created', 'price_target', 'date_target')
 
 
