@@ -230,3 +230,17 @@ class AnalystIdea(models.Model):
 
     def __str__(self):
         return f'{self.analyst}:{self.company}'
+
+
+class Dividend(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='dividends')
+    currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
+    scale = models.CharField(choices=SCALES, max_length=12)
+    scale_unit = models.IntegerField(default=1)
+    dividend_yield = models.FloatField()
+    dividend_amount = models.FloatField()
+    declared_date = models.DateField()
+    ex_dividend_date = models.DateField()
+    pay_date = models.DateField()
