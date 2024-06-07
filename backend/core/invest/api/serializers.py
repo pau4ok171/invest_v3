@@ -224,6 +224,7 @@ class CompanyDetailSerializer(CompanySerializer):
     analyst_ideas = AnalystIdeaSerializer(many=True)
     formatting = serializers.SerializerMethodField('get_formatting')
     company_news = NewsSerializer(many=True)
+    next_dividend = serializers.SerializerMethodField('get_next_dividend')
 
     class Meta:
         model = Company
@@ -248,6 +249,7 @@ class CompanyDetailSerializer(CompanySerializer):
             'analyst_ideas',
             'formatting',
             'company_news',
+            'next_dividend',
         )
 
     @staticmethod
@@ -260,6 +262,14 @@ class CompanyDetailSerializer(CompanySerializer):
             'tradingCurrencyISO': '',
             'tradingCurrencySymbol': '',
         }
+
+    @staticmethod
+    def get_next_dividend(instance: Company):
+        next_dividend = instance.dividends.filter(ex_dividend_date__gte=today())
+        if next_dividend:
+            next_dividend = next_dividend.latest('ex_dividend_date')
+            return DividendSerializer(next_dividend).data
+        return {}
 
 
 class CompanyPeersSerializer(CompanySerializer):
@@ -329,3 +339,19 @@ class SorterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sorter
         fields = '__all__'
+
+
+class DividendSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dividend
+        fields = (
+            'scale',
+            'scale_unit',
+            'dividend_yield',
+            'dividend_amount',
+            'declared_date',
+            'ex_dividend_date',
+            'pay_date',
+            'currency',
+        )
+        depth = 1
