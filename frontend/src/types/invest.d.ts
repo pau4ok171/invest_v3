@@ -150,3 +150,14 @@ export interface News {
     title: string,
     content: string,
 }
+
+export interface  Dividend {
+    scale: string,
+    scale_unit: number,
+    dividend_yield: number,
+    dividend_amount: number,
+    declared_date: string,
+    ex_dividend_date: string,
+    pay_date: string,
+    currency: Currency,
+}
