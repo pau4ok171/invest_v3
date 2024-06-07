@@ -1,10 +1,12 @@
 import time
 
 from dateutil.relativedelta import relativedelta
+from dateutil.utils import today
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, Currency
+from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, \
+    Currency, Dividend
 from statements.models import Statement
 from statements.types import Area, Status
 from news.api.serializers import NewsSerializer
@@ -191,9 +193,23 @@ class ReportSerializer(serializers.ModelSerializer):
         fields = (
             'updated',
             'total_employees_figure',
-                  )
+            'share_outstanding',
+            'scale',
+            'scale_unit',
+            'income_net',
+            'equity',
+            'debt',
+            'sales',
+            'cost_of_sales',
+            'gross_margin',
+            'operation_expenses',
+            'operation_income',
+            'other_income_net',
+            'taxes',
+        )
 
-    def get_updated(self, instance):
+    @staticmethod
+    def get_updated(instance):
         return instance.updated.strftime('%d %b, %Y')
 
 
@@ -250,6 +266,8 @@ class CompanyDetailSerializer(CompanySerializer):
             'formatting',
             'company_news',
             'next_dividend',
+            'last_reported_earnings',
+            'next_earnings',
         )
 
     @staticmethod
