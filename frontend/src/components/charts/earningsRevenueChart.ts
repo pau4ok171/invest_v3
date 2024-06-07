@@ -45,27 +45,7 @@ export const chartOpts = {
     }
   },
   series: [{
-    data: [{
-      name: 'Revenue',
-      color: "#2394DF",
-      y: 2430
-    }, {
-      name: 'Cost of Revenue',
-      color: "rgba(230,65,65,.5)",
-      y: -47.50
-    }, {
-      name: 'Gross Profit',
-      color: "#2DC97E",
-      isIntermediateSum: true,
-    }, {
-      name: 'Other Expenses',
-      color: "rgba(230,65,65,.5)",
-      y: -1200
-    }, {
-      name: 'Earnings',
-      color: "#71E7D6",
-      isSum: true,
-    }],
+    data: [],
     dataLabels: {
       enabled: true,
       color: "#fff",
