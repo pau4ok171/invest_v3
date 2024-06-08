@@ -14,14 +14,20 @@ export default defineComponent({
     }),
     get_pe() {
       const marketCap = this.company.price_data.capitalisation
-      const earnings = this.company.reports[0].income_net
-      const scale_unit = this.company.reports[0].scale_unit
+      const report = this.company.reports[0]
+      if (!report || !marketCap) return 'n/a'
+
+      const earnings = report.income_net
+      const scale_unit = report.scale_unit
       return `${(earnings * scale_unit/marketCap).toFixed(1)}x`
     },
     get_pb() {
       const marketCap = this.company.price_data.capitalisation
-      const bookValue = this.company.reports[0].assets
-      const scale_unit = this.company.reports[0].scale_unit
+      const report = this.company.reports[0]
+      if (!report || !marketCap) return 'n/a'
+
+      const bookValue = report.assets
+      const scale_unit = report.scale_unit
       return `${(bookValue * scale_unit/marketCap).toFixed(1)}x`
     },
   }

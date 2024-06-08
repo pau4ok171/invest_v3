@@ -8,6 +8,7 @@ export default defineComponent({
   data() {
     return {
       chartOpts: chartOpts,
+      dataIsAvailable: true,
     }
   },
   computed: {
@@ -23,6 +24,10 @@ export default defineComponent({
     get_chart_data() {
       const currency_symbol = this.company.formatting.primaryCurrencySymbol
       const report = this.company.reports[0]
+      if (!report) {
+        this.dataIsAvailable = false
+        return null
+      }
       const scale = report.scale
       const market_cap = this.company.price_data.capitalisation / 1000000000
       const revenue = report.sales
@@ -50,6 +55,7 @@ export default defineComponent({
     },
     get_chart_series(): any {
       const chartData = this.get_chart_data()
+      if (!chartData) return null
       return [
         {
           name: 'Market Cap',
@@ -131,6 +137,8 @@ export default defineComponent({
       ]
     },
     draw_labels(event: Event) {
+      if (!this.dataIsAvailable) return null
+
       const chart = event.target as any
       const rDiffX = 10
       const rDiffY = 17
