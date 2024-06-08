@@ -206,6 +206,7 @@ class ReportSerializer(serializers.ModelSerializer):
             'operation_income',
             'other_income_net',
             'taxes',
+            'assets',
         )
 
     @staticmethod
