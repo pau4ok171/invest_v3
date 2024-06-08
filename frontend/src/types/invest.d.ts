@@ -92,6 +92,7 @@ export interface Report {
     other_income_net: number,
     taxes: number,
     share_outstanding: number,
+    assets: number,
 }
 
 export interface Country {
