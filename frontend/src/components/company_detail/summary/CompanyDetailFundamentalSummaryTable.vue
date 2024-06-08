@@ -3,10 +3,28 @@ import {defineComponent} from 'vue'
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import QuestionText from "@/components/UI/text/QuestionText.vue";
 import QuestionLink from "@/components/UI/text/QuestionLink.vue";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailFundamentalSummaryTable",
-  components: {QuestionLink, QuestionText, ArrowDownIcon}
+  components: {QuestionLink, QuestionText, ArrowDownIcon},
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_pe() {
+      const marketCap = this.company.price_data.capitalisation
+      const earnings = this.company.reports[0].income_net
+      const scale_unit = this.company.reports[0].scale_unit
+      return `${(earnings * scale_unit/marketCap).toFixed(1)}x`
+    },
+    get_pb() {
+      const marketCap = this.company.price_data.capitalisation
+      const bookValue = this.company.reports[0].assets
+      const scale_unit = this.company.reports[0].scale_unit
+      return `${(bookValue * scale_unit/marketCap).toFixed(1)}x`
+    },
+  }
 })
 </script>
 
@@ -15,12 +33,12 @@ export default defineComponent({
 
   <div class="detail-fundamental-summary-table__in-row-item-box">
     <div class="detail-fundamental-summary-table__in-row-item">
-      <h3 class="detail-fundamental-summary-table__title">2.6x</h3>
+      <h3 class="detail-fundamental-summary-table__title">{{ get_pe }}</h3>
       <span class="detail-fundamental-summary-table__text">P/E Ratio</span>
     </div>
     <div class="detail-fundamental-summary-table__in-row-item detail-fundamental-summary-table__flex-end">
       <div>
-        <h3 class="detail-fundamental-summary-table__subtitle">0.5x</h3>
+        <h3 class="detail-fundamental-summary-table__subtitle">{{ get_pb }}</h3>
         <span class="detail-fundamental-summary-table__subtext">P/B Ratio</span>
       </div>
     </div>
