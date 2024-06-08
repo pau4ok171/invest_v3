@@ -13,10 +13,15 @@ export default defineComponent({
     ...mapGetters({
       company: 'companyDetail/getCompany',
     }),
+    get_description() {
+      if (!this.company.description) this.descriptionIsAvailable = false
+      return this.company.description
+    },
   },
   data() {
     return {
       isCutting: true,
+      descriptionIsAvailable: true
     }
   },
 })
@@ -28,13 +33,14 @@ export default defineComponent({
   <DetailSectionTitle>About the Company</DetailSectionTitle>
 
   <CompanyDetailAboutCompanyTable/>
+  <div v-if="descriptionIsAvailable">
+    <div class="detail-about-company__description" :class="{'detail-about-company__description--cut': isCutting}">
+      {{ get_description }}
+    </div>
 
-  <div class="detail-about-company__description" :class="{'detail-about-company__description--cut': isCutting}">
-    {{ company.description }}
+    <RoundedDarkBlueButton @click="isCutting=!isCutting" v-if="isCutting">Show more</RoundedDarkBlueButton>
+    <RoundedDarkBlueButton @click="isCutting=!isCutting" v-else>Show less</RoundedDarkBlueButton>
   </div>
-
-  <RoundedDarkBlueButton @click="isCutting=!isCutting" v-if="isCutting">Show more</RoundedDarkBlueButton>
-  <RoundedDarkBlueButton @click="isCutting=!isCutting" v-else>Show less</RoundedDarkBlueButton>
 
 </CompanyDetailSection>
 </template>
