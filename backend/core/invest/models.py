@@ -36,6 +36,13 @@ class Company(models.Model):
     notes = models.ManyToManyField(User, through=Note)
     last_reported_earnings = models.DateField(null=True, blank=True)
     next_earnings = models.DateField(null=True, blank=True)
+    return_7d = models.FloatField(null=True, blank=True)
+    return_30d = models.FloatField(null=True, blank=True)
+    return_90d = models.FloatField(null=True, blank=True)
+    return_1y = models.FloatField(null=True, blank=True)
+    return_3y = models.FloatField(null=True, blank=True)
+    return_5y = models.FloatField(null=True, blank=True)
+    average_weekly_mouvement = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -61,6 +68,13 @@ class Market(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
     country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='markets', null=True)
+    return_7d = models.FloatField(null=True, blank=True)
+    return_30d = models.FloatField(null=True, blank=True)
+    return_90d = models.FloatField(null=True, blank=True)
+    return_1y = models.FloatField(null=True, blank=True)
+    return_3y = models.FloatField(null=True, blank=True)
+    return_5y = models.FloatField(null=True, blank=True)
+    average_weekly_mouvement = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -70,6 +84,21 @@ class Market(models.Model):
         indexes = [
             models.Index(fields=['slug'])
         ]
+
+
+class SectorMarket(models.Model):
+    sector = models.ForeignKey('Sector', on_delete=models.CASCADE)
+    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    return_7d = models.FloatField(null=True, blank=True)
+    return_30d = models.FloatField(null=True, blank=True)
+    return_90d = models.FloatField(null=True, blank=True)
+    return_1y = models.FloatField(null=True, blank=True)
+    return_3y = models.FloatField(null=True, blank=True)
+    return_5y = models.FloatField(null=True, blank=True)
+    average_weekly_mouvement = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.market.title} - {self.sector.title}'
 
 
 class Sector(models.Model):
@@ -153,6 +182,9 @@ class Report(models.Model):
 
     def __str__(self):
         return f'{self.company} - {self.quarter} - {self.year}'
+
+    class Meta:
+        ordering = ['-year', '-quarter']
 
 
 class Country(models.Model):
