@@ -7,7 +7,20 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany'
-    })
+    }),
+  },
+  methods: {
+    get_formatted_percent(value: number) {
+      return `${(value * 100).toFixed(2)}%`
+    },
+    get_color_class(value: number) {
+      if (value > 0) {
+        return 'text--success'
+      }
+      if (value < 0) {
+        return 'text--error'
+      }
+    }
   },
 })
 </script>
@@ -25,15 +38,15 @@ export default defineComponent({
   <tbody>
     <tr>
       <td>7D</td>
-      <td>0%</td>
-      <td>0%</td>
-      <td>0%</td>
+      <td :class="get_color_class(company.return_7d)">{{ get_formatted_percent(company.return_7d) }}</td>
+      <td :class="get_color_class(company.sector_market.return_7d)">{{ get_formatted_percent(company.sector_market.return_7d) }}</td>
+      <td :class="get_color_class(company.market.return_7d)">{{ get_formatted_percent(company.market.return_7d) }}</td>
     </tr>
     <tr>
       <td>1Y</td>
-      <td class="text--error">-63.2%</td>
-      <td class="text--error">-60.5%</td>
-      <td class="text--error">-38.2%</td>
+      <td :class="get_color_class(company.return_1y)">{{ get_formatted_percent(company.return_1y) }}</td>
+      <td :class="get_color_class(company.sector_market.return_1y)">{{ get_formatted_percent(company.sector_market.return_1y) }}</td>
+      <td :class="get_color_class(company.market.return_1y)">{{ get_formatted_percent(company.market.return_1y) }}</td>
     </tr>
   </tbody>
 </table>
