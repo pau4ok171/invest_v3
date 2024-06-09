@@ -4,6 +4,7 @@ export interface DetailCompany {
     country: Country,
     formatting: Formatting,
     market: Market,
+    sector_market: SectorMarket,
     price_data: PriceData,
     sector: Sector,
     id: Number,
@@ -22,6 +23,13 @@ export interface DetailCompany {
     next_dividend: Dividend,
     last_reported_earnings: string,
     next_earnings: string,
+    return_7d: number,
+    return_30d: number,
+    return_90d: number,
+    return_1y: number,
+    return_3y: number,
+    return_5y: number,
+    average_weekly_mouvement: number,
 }
 
 export interface ListCompany {
@@ -108,6 +116,13 @@ export interface Market {
     id: Number,
     slug: String,
     title: String,
+    return_7d: number,
+    return_30d: number,
+    return_90d: number,
+    return_1y: number,
+    return_3y: number,
+    return_5y: number,
+    average_weekly_mouvement: number,
 }
 
 export interface Formatting {
@@ -177,4 +192,14 @@ export interface  Dividend {
     ex_dividend_date: string,
     pay_date: string,
     currency: Currency,
+}
+
+export interface SectorMarket {
+    return_7d: number,
+    return_30d: number,
+    return_90d: number,
+    return_1y: number,
+    return_3y: number,
+    return_5y: number,
+    average_weekly_mouvement: number,
 }
