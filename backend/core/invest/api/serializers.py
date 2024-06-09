@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.fields import empty
 
 from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, \
-    Currency, Dividend
+    Currency, Dividend, SectorMarket
 from statements.models import Statement
 from statements.types import Area, Status
 from news.api.serializers import NewsSerializer
@@ -47,7 +47,30 @@ class SectorDetailSerializer(serializers.ModelSerializer):
 class MarketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Market
-        fields = ['title']
+        fields = (
+            'title',
+            'return_7d',
+            'return_30d',
+            'return_90d',
+            'return_1y',
+            'return_3y',
+            'return_5y',
+            'average_weekly_mouvement',
+        )
+
+
+class SectorMarketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SectorMarket
+        fields = (
+            'return_7d',
+            'return_30d',
+            'return_90d',
+            'return_1y',
+            'return_3y',
+            'return_5y',
+            'average_weekly_mouvement',
+        )
 
 
 class PriceDataSerialize(serializers.ModelSerializer):
@@ -237,6 +260,7 @@ class AnalystIdeaSerializer(serializers.ModelSerializer):
 
 class CompanyDetailSerializer(CompanySerializer):
     sector = SectorDetailSerializer(read_only=True)
+    sector_market = serializers.SerializerMethodField('get_sector_market')
     reports = ReportSerializer(many=True)
     analyst_ideas = AnalystIdeaSerializer(many=True)
     formatting = serializers.SerializerMethodField('get_formatting')
@@ -258,6 +282,7 @@ class CompanyDetailSerializer(CompanySerializer):
             'logo_url',
             'country',
             'market',
+            'sector_market',
             'sector',
             'absolute_url',
             'is_watchlisted',
@@ -269,6 +294,13 @@ class CompanyDetailSerializer(CompanySerializer):
             'next_dividend',
             'last_reported_earnings',
             'next_earnings',
+            'return_7d',
+            'return_30d',
+            'return_90d',
+            'return_1y',
+            'return_3y',
+            'return_5y',
+            'average_weekly_mouvement',
         )
 
     @staticmethod
@@ -289,6 +321,11 @@ class CompanyDetailSerializer(CompanySerializer):
             next_dividend = next_dividend.latest('ex_dividend_date')
             return DividendSerializer(next_dividend).data
         return {}
+
+    @staticmethod
+    def get_sector_market(instance: Company):
+        sector_market = SectorMarket.objects.get(market_id=instance.market.id, sector_id=instance.sector.id)
+        return SectorMarketSerializer(sector_market).data
 
 
 class CompanyPeersSerializer(CompanySerializer):
