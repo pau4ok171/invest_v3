@@ -19,7 +19,7 @@ export default defineComponent({
 
       const earnings = report.income_net
       const scale_unit = report.scale_unit
-      return `${(earnings * scale_unit/marketCap).toFixed(1)}x`
+      return `${(marketCap/(earnings * scale_unit)).toFixed(1)}x`
     },
     get_pb() {
       const marketCap = this.company.price_data.capitalisation
@@ -28,7 +28,7 @@ export default defineComponent({
 
       const bookValue = report.assets
       const scale_unit = report.scale_unit
-      return `${(bookValue * scale_unit/marketCap).toFixed(1)}x`
+      return `${(marketCap/(bookValue * scale_unit)).toFixed(1)}x`
     },
   }
 })
