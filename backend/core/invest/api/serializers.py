@@ -56,6 +56,8 @@ class MarketSerializer(serializers.ModelSerializer):
             'return_3y',
             'return_5y',
             'average_weekly_mouvement',
+            'volatility_10p',
+            'volatility_90p',
         )
 
 
