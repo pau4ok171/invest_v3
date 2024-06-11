@@ -123,6 +123,8 @@ export interface Market {
     return_3y: number,
     return_5y: number,
     average_weekly_mouvement: number,
+    volatility_10p: number,
+    volatility_90p: number,
 }
 
 export interface Formatting {
