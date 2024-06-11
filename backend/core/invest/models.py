@@ -75,6 +75,14 @@ class Market(models.Model):
     return_3y = models.FloatField(null=True, blank=True)
     return_5y = models.FloatField(null=True, blank=True)
     average_weekly_mouvement = models.FloatField(null=True, blank=True)
+    # percents
+    volatility_0p = models.FloatField(null=True, blank=True)
+    volatility_10p = models.FloatField(null=True, blank=True)
+    volatility_25p = models.FloatField(null=True, blank=True)
+    volatility_50p = models.FloatField(null=True, blank=True)
+    volatility_75p = models.FloatField(null=True, blank=True)
+    volatility_90p = models.FloatField(null=True, blank=True)
+    volatility_100p = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -96,6 +104,14 @@ class SectorMarket(models.Model):
     return_3y = models.FloatField(null=True, blank=True)
     return_5y = models.FloatField(null=True, blank=True)
     average_weekly_mouvement = models.FloatField(null=True, blank=True)
+    # percents
+    volatility_0p = models.FloatField(null=True, blank=True)
+    volatility_10p = models.FloatField(null=True, blank=True)
+    volatility_25p = models.FloatField(null=True, blank=True)
+    volatility_50p = models.FloatField(null=True, blank=True)
+    volatility_75p = models.FloatField(null=True, blank=True)
+    volatility_90p = models.FloatField(null=True, blank=True)
+    volatility_100p = models.FloatField(null=True, blank=True)
 
     def __str__(self):
         return f'{self.market.title} - {self.sector.title}'
