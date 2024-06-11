@@ -1,4 +1,5 @@
 import datetime
+import numpy as np
 
 from invest.models import Market, Company, Sector, SectorMarket
 
@@ -69,10 +70,15 @@ def get_aggregate_price_data(companies, market, sector=None):
         if len(companies) != 0 else 0 for key in PERIODS.keys()
     }
     average_weekly_mouvement = 0
+    percent_units = [0, 10, 25, 50, 75, 90, 100]
+    percent_data = {f'volatility_{key}p': 0 for key in percent_units}
     if companies:
         average_weekly_mouvement = sum(map(lambda x: x['average_weekly_mouvement'], companies)) / len(companies)
+        a = np.array(list(map(lambda x: x['average_weekly_mouvement'], companies)))
+        percent_data = {f'volatility_{key}p': np.percentile(a, key) for key in percent_units}
 
     price_data['average_weekly_mouvement'] = average_weekly_mouvement
+    price_data = price_data | percent_data
     price_data['market_id'] = market.id
     if sector:
         price_data['sector_id'] = sector.id
