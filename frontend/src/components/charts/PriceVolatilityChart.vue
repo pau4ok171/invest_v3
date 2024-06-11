@@ -9,6 +9,21 @@ export default defineComponent({
       company: 'companyDetail/getCompany',
     }),
   },
+  methods: {
+     get_label_position(value: number) {
+      const l = 320
+      const low = this.company.market.volatility_10p
+      const high = this.company.market.volatility_90p
+      const label_position = (value-low) / (high-low) * l - (0.5 * l)
+      if (label_position > 320 / 2) {
+        return 320 / 2
+      }
+      if (label_position < -320 / 2) {
+        return -320 / 2
+      }
+      return label_position
+    },
+  }
 })
 </script>
 
@@ -30,16 +45,16 @@ export default defineComponent({
             </linearGradient>
           </defs>
         </g>
-          <svg fill="rgb(35, 148, 223)" color="#fff" x="-99.42313820314592" tabindex="0" class="price-volatility-chart__svg">
+          <svg fill="rgb(35, 148, 223)" color="#fff" :x="get_label_position(company.average_weekly_mouvement)" tabindex="0" class="price-volatility-chart__svg">
             <rect x="159" width="81" height="32" rx="2" fill="#2394df" ></rect>
             <rect x="199" y="24" width="10.2426" fill="#2394df" height="10.2426" transform="rotate(45 199 24)"></rect>
             <text x="200" y="22" font-size="16" text-anchor="middle" class="price-volatility-chart__label">{{ company.slug.toUpperCase() }}</text>
           </svg>
-          <svg x="-36.32293387459944" y="55" class="price-volatility-chart__svg">
+          <svg :x="get_label_position(company.market.average_weekly_mouvement)" y="55" class="price-volatility-chart__svg">
             <rect x="198" y="-6" width="1" height="68" fill="white"></rect>
             <text x="198" y="80" font-size="14" text-anchor="middle" tabindex="0" class="price-volatility-chart__label">Avg. Market Volatility</text>
           </svg>
-          <svg x="-3.9191134193289514" tabindex="0" class="price-volatility-chart__svg">
+          <svg :x="get_label_position(company.sector_market.average_weekly_mouvement)" tabindex="0" class="price-volatility-chart__svg">
             <rect x="159" y="61" width="83" height="32" rx="2" fill="#71e7d6"></rect>
             <rect x="194" y="43" width="10.2426" height="10.2426" fill="#71e7d6" transform="rotate(45 183 54)"></rect>
             <text x="170" y="83" font-size="16" class="price-volatility- price-volatility-chart__label--dark">Industry</text>
