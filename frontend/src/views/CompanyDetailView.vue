@@ -33,7 +33,6 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
-      pageIsReady: 'companyDetail/getPageIsReady',
     })
   },
   watch: {
@@ -49,5 +48,5 @@ export default defineComponent({
 <template>
 <CompanyDetailHeader/>
 
-<CompanyDetailContent v-if="pageIsReady && false"/>
+<CompanyDetailContent/>
 </template>

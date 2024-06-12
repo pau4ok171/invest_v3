@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import CompanyDetailSidebar from "@/components/company_detail/CompanyDetailSidebar.vue";
+import CompanyDetailSidebar from "@/components/company_detail/sidebar/CompanyDetailSidebar.vue";
 import CompanyDetailContentList from "@/components/company_detail/CompanyDetailContentList.vue";
 
 export default {
