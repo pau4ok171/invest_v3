@@ -15,6 +15,11 @@
    from "@/components/company_detail/company_detail_header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
  import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 
+ interface Section {
+   name: string,
+   key: string,
+ }
+
 export default defineComponent({
   name: 'CompanyDetailSidebar',
   components: {
@@ -114,7 +119,7 @@ export default defineComponent({
        {key: 'management', name: '6 Management'},
        {key: 'owners', name: '7 Ownership'},
        {key: 'other', name: 'Other Information'},
-     ],
+     ] as Array<Section>,
      activeSection: 'overview',
      previousSection: 'overview',
      nextSection: 'overview',
@@ -128,12 +133,10 @@ export default defineComponent({
         this.previousSection = entry.boundingClientRect.top >= 0 ? this.activeSection: this.previousSection
         this.activeSection = entry.target.getAttribute('id') as string
         this.previousSection = entry.boundingClientRect.top < 0 ? this.activeSection: this.previousSection
-        this.nextSection = this.activeSection
+        this.nextSection = entry.boundingClientRect.top >= 0 ? this.activeSection : this.nextSection
       } else {
         if (entry.boundingClientRect.top < 0) {
-          const tempSection = this.activeSection
           this.activeSection = this.nextSection
-          this.nextSection = tempSection
         } else {
           this.activeSection = this.previousSection
         }
@@ -221,9 +224,7 @@ export default defineComponent({
             v-for="section in sections"
             :key="section.key"
         >
-          <a :href="`#${section.key}`">
-            {{ section.name }}
-          </a>
+          {{ section.name }}
         </li>
       </ul>
     </nav>
