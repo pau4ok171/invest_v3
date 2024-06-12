@@ -12,7 +12,7 @@
  import {toast} from "vue3-toastify";
  import {defineComponent} from "vue";
  import TheCompanyDetailHeaderMoreDropDownMenu
-   from "@/components/company_detail/company_detail_header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
+   from "@/components/company_detail/header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
  import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 
  interface Section {
