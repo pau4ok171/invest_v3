@@ -5,6 +5,15 @@ import {DateTime} from "luxon";
 
 export default defineComponent({
   name: "DividendPaydayChart",
+  data() {
+    return {
+      dividendTooltip: {
+        content: 'You must be a shareholder of the company before this date to receive the next dividend payment',
+        theme: 'black',
+        maxWidth: 225,
+      },
+    }
+  },
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
@@ -49,7 +58,7 @@ export default defineComponent({
   <div class="dividend-payday-chart">
     <svg height="168" width="100%" shape-rendering="crispEdges">
       <svg x="69.0888224509714%" y="12" shape-rendering="geometricPrecision" class="dividend-payday-chart__label">
-        <g transform="translate(-20 -2)" tabindex="0">
+        <g v-tippy="dividendTooltip" transform="translate(-20 -2)" tabindex="0" style="outline: none; user-select: none">
           <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="dividend-payday-chart__more-info-icon">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M5 12C5 15.866 8.13401 19 12 19C15.866 19 19 15.866 19 12C19 8.13401 15.866 5 12 5C8.13401 5 5 8.13401 5 12ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4ZM13 8V10H11V8H13ZM13 16V11H11V16H13Z"></path>
           </svg>
