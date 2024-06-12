@@ -11,10 +11,14 @@
  import MiniLoader from "@/components/UI/MiniLoader.vue";
  import {toast} from "vue3-toastify";
  import {defineComponent} from "vue";
+ import TheCompanyDetailHeaderMoreDropDownMenu
+   from "@/components/company_detail/company_detail_header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
+ import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 
 export default defineComponent({
   name: 'CompanyDetailSidebar',
   components: {
+    DropDownMenuBox, TheCompanyDetailHeaderMoreDropDownMenu,
     MiniLoader,
     DotsIcon,
     SolidStarIcon,
@@ -197,9 +201,14 @@ export default defineComponent({
           </RoundedBlueButton>
         </template>
 
-        <RoundedWhiteButton>
-          <DotsIcon/>
-        </RoundedWhiteButton>
+        <DropDownMenuBox>
+          <template #button>
+            <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
+          </template>
+          <template #menu>
+            <TheCompanyDetailHeaderMoreDropDownMenu/>
+          </template>
+        </DropDownMenuBox>
       </section>
   </main>
 
