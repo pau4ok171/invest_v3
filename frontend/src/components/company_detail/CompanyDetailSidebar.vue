@@ -100,22 +100,50 @@ export default defineComponent({
   mixins: [utils,],
   data() {
    return {
-     activeHeader: 'Company Overview',
-     contentListHeaders: [
-       'Company Overview',
-       '1 Valuation',
-       '2 Future Growth',
-       '3 Past Performance',
-       '4 Financial Health',
-       '5 Dividend',
-       '6 Management',
-       '7 Ownership',
-       'Other Information'
-    ]
+     sections: [
+       {key: 'overview', name: 'Company Overview'},
+       {key: 'value', name: '1 Valuation'},
+       {key: 'future', name: '2 Future Growth'},
+       {key: 'past', name: '3 Past Performance'},
+       {key: 'health', name: '4 Financial Health'},
+       {key: 'dividend', name: '5 Dividend'},
+       {key: 'management', name: '6 Management'},
+       {key: 'owners', name: '7 Ownership'},
+       {key: 'other', name: 'Other Information'},
+     ],
+     activeSection: 'overview',
+     previousSection: 'overview',
+     nextSection: 'overview',
    }
   },
   mounted() {
     window.addEventListener('scroll', this.changeSidebarOpacity)
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0]
+      if (entry.intersectionRatio > 0) {
+        this.previousSection = entry.boundingClientRect.top >= 0 ? this.activeSection: this.previousSection
+        this.activeSection = entry.target.getAttribute('id') as string
+        this.previousSection = entry.boundingClientRect.top < 0 ? this.activeSection: this.previousSection
+        this.nextSection = this.activeSection
+      } else {
+        if (entry.boundingClientRect.top < 0) {
+          const tempSection = this.activeSection
+          this.activeSection = this.nextSection
+          this.nextSection = tempSection
+        } else {
+          this.activeSection = this.previousSection
+        }
+      }
+
+    })
+    document.querySelectorAll('.section_observer').forEach((section) => {
+          observer.observe(section)
+        },
+        {
+          rootMargin: '-50% 0px -50% 0px',
+          threshold: [.1],
+        }
+    )
   },
   unmounted() {
     window.removeEventListener('scroll', this.changeSidebarOpacity)
@@ -180,12 +208,13 @@ export default defineComponent({
       <ul>
         <li
             class="detail-sidebar__list-item"
-            :class="{'detail-sidebar__list-item--active': header === activeHeader}"
-            v-once
-            v-for="header in contentListHeaders"
-            :key="header"
+            :class="{'detail-sidebar__list-item--active': section.key === activeSection}"
+            v-for="section in sections"
+            :key="section.key"
         >
-          {{ header }}
+          <a :href="`#${section.key}`">
+            {{ section.name }}
+          </a>
         </li>
       </ul>
     </nav>
