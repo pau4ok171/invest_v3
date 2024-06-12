@@ -70,20 +70,25 @@ export default defineComponent({
   height: 224px;
 }
 .price-volatility-chart {
-    position: relative;
-    height: 140px;
+  position: relative;
+  height: 140px;
 }
 .price-volatility-chart svg {
   width: 100%;
   height: 100%;
+  outline: none;
+  user-select: none;
 }
 .price-volatility-chart__svg {
-    margin-top: 50px;
-    max-height: 180px;
-    position: absolute;
-    overflow: visible;
-    width: 100%;
-    inset: 0;
+  margin-top: 50px;
+  max-height: 180px;
+  position: absolute;
+  overflow: visible;
+  inset: 0;
+}
+.price-volatility-chart__svg > text {
+  user-select: none;
+  outline: none;
 }
 .price-volatility-chart__label {
     user-select: none;
