@@ -7,6 +7,9 @@ import axios from "axios";
 import Vue3Toastify, {toast, type ToastContainerOptions} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 
+import VueTippy from 'vue-tippy';
+import 'tippy.js/dist/tippy.css';
+
 import Vintersection from "@/directives/Vintersection";
 
 import HighchartsVue from 'highcharts-vue';
@@ -51,5 +54,18 @@ app
       },
       theme: 'colored',
     } as ToastContainerOptions
+  )
+  .use(
+    VueTippy,
+    {
+      directive: 'tippy',
+      component: 'tippy',
+      componentSingleton: 'tippy-singleton',
+      defaultProps: {
+        placement: 'top',
+        allowHTML: false,
+        followCursor: 'horizontal',
+      }
+    }
   )
   .mount('#app')
