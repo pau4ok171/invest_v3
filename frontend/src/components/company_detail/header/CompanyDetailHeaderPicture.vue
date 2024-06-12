@@ -13,7 +13,7 @@ export default defineComponent({
 </script>
 
 <template>
-<picture class="detail-header__picture">
+<picture class="detail-header__picture" v-if="company.sector">
   <div class="detail-header__cover"></div>
   <img
     :src="company.sector.main_header"

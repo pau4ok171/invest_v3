@@ -1,14 +1,14 @@
 <script lang="ts">
 import CompanyDetailHeaderPicture
-  from "@/components/company_detail/company_detail_header/CompanyDetailHeaderPicture.vue";
+  from "@/components/company_detail/header/CompanyDetailHeaderPicture.vue";
 import CompanyDetailBreadcrumbs
-  from "@/components/company_detail/company_detail_header/CompanyDetailHeaderBreadcrumbs.vue";
-import CompanyDetailHeaderLogo from "@/components/company_detail/company_detail_header/CompanyDetailHeaderLogo.vue";
-import CompanyDetailHeaderTitle from "@/components/company_detail/company_detail_header/CompanyDetailHeaderTitle.vue";
+  from "@/components/company_detail/header/CompanyDetailHeaderBreadcrumbs.vue";
+import CompanyDetailHeaderLogo from "@/components/company_detail/header/CompanyDetailHeaderLogo.vue";
+import CompanyDetailHeaderTitle from "@/components/company_detail/header/CompanyDetailHeaderTitle.vue";
 import CompanyDetailHeaderButtonList
-  from "@/components/company_detail/company_detail_header/CompanyDetailHeaderButtonList.vue";
+  from "@/components/company_detail/header/CompanyDetailHeaderButtonList.vue";
 import CompanyDetailHeaderInfoPanel
-  from "@/components/company_detail/company_detail_header/CompanyDetailHeaderInfoPanel.vue";
+  from "@/components/company_detail/header/CompanyDetailHeaderInfoPanel.vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({

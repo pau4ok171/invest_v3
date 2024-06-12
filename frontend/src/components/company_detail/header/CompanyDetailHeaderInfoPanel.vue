@@ -1,21 +1,17 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailHeaderInfoItem
-  from "@/components/company_detail/company_detail_header/CompanyDetailHeaderInfoItem.vue";
+  from "@/components/company_detail/header/CompanyDetailHeaderInfoItem.vue";
 import SmallPriceChart from "@/components/charts/SmallPriceChart.vue";
-import TextButton from "@/components/UI/buttons/TextButton.vue";
 import utils from "@/mixins/utils";
 import {mapGetters} from "vuex";
-import CompanyDetailAnalystsModalMenu
-  from "@/components/company_detail/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import CompanyDetailHeaderAnalystsButtonModalMenuContainer
+  from "@/components/company_detail/header/CompanyDetailHeaderAnalystModalMenuContainer.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderInfoPanel",
   components: {
-    BaseModalMenuContainer,
-    CompanyDetailAnalystsModalMenu,
-    TextButton,
+    CompanyDetailHeaderAnalystsButtonModalMenuContainer,
     SmallPriceChart,
     CompanyDetailHeaderInfoItem
   },
@@ -32,11 +28,11 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="detail-header__info-panel">
+<div class="detail-header__info-panel" v-if="company.price_data">
 
   <CompanyDetailHeaderInfoItem>
     <template v-slot:title><p>Last price</p></template>
-    <template v-slot:value><span>₽{{ company.price_data.last_price.toFixed(2) }}</span></template>
+    <template v-slot:value><span>{{ company.formatting.primaryCurrencySymbol }}{{ company.price_data.last_price.toFixed(2) }}</span></template>
   </CompanyDetailHeaderInfoItem>
 
   <CompanyDetailHeaderInfoItem>
@@ -49,8 +45,8 @@ export default defineComponent({
   <CompanyDetailHeaderInfoItem>
     <template v-slot:title><p>7D</p></template>
     <template v-slot:value>
-      <span :class="[company.price_data.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-        {{ company.price_data.return_7d.toFixed(2)}}%
+      <span :class="[company.return_7d > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+        {{ company.return_7d.toFixed(2)}}%
       </span>
     </template>
   </CompanyDetailHeaderInfoItem>
@@ -58,8 +54,8 @@ export default defineComponent({
   <CompanyDetailHeaderInfoItem>
     <template v-slot:title><p>1Y</p></template>
     <template v-slot:value>
-      <span :class="[company.price_data.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
-        {{ company.price_data.return_1y.toFixed(2)}}%
+      <span :class="[company.return_1y > 0 ? 'detail-header__success-color' : 'detail-header__error-color']">
+        {{ company.return_1y.toFixed(2)}}%
       </span>
     </template>
   </CompanyDetailHeaderInfoItem>
@@ -83,14 +79,7 @@ export default defineComponent({
         <span>Financials Company</span>
         <template v-if="company.analyst_ideas">
           <span> + </span>
-          <BaseModalMenuContainer>
-            <template #button>
-              <TextButton>{{ totalIdeas }} Analysts</TextButton>
-            </template>
-            <template #menu="menuProps">
-              <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
-            </template>
-          </BaseModalMenuContainer>
+         <CompanyDetailHeaderAnalystsButtonModalMenuContainer/>
         </template>
       </span>
     </template>

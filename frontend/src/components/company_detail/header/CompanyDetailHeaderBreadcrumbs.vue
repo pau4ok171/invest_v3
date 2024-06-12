@@ -19,7 +19,7 @@ export default defineComponent({
       <RouterLink to="/">Stocks</RouterLink>
     </li>
     <li>
-      <RouterLink to="/">{{ company.sector.title }}</RouterLink>
+      <RouterLink v-if="company.sector" to="/">{{ company.sector.title }}</RouterLink>
     </li>
   </ul>
 </div>

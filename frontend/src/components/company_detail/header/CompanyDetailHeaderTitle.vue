@@ -16,7 +16,7 @@ export default defineComponent({
   <div>
     <h1 class="detail-header__company-title">
       {{ company.title }}
-      <span class="detail-header__company-desc">{{ company.market.title }}:{{ company.slug.toUpperCase() }} Stock Report</span>
+      <span v-if="company.market" class="detail-header__company-desc">{{ company.market.title }}:{{ company.slug.toUpperCase() }} Stock Report</span>
     </h1>
   </div>
 </template>
