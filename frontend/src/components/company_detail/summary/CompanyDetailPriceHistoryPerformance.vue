@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import CompanyDetailSection from "@/components/company_detail/CompanyDetailSection.vue";
 import CompanyDetailPriceHistory from "@/components/company_detail/summary/CompanyDetailPriceHistory.vue";
 import CompanyDetailRecentNews from "@/components/company_detail/summary/news/CompanyDetailRecentNews.vue";
-import CompanyDetailShareholderReturns from "@/components/company_detail/summary/CompanyDetailShareholderReturns.vue";
+import CompanyDetailShareholderReturns from "@/components/company_detail/summary/shareholder_returns/CompanyDetailShareholderReturns.vue";
 import CompanyDetailPriceVolatility from "@/components/company_detail/summary/CompanyDetailPriceVolatility.vue";
 import DetailCompanySectionInRowItemBox from "@/components/company_detail/CompanySectionInRowItemBox.vue";
 
