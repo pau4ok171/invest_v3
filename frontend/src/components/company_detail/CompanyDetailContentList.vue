@@ -1,23 +1,29 @@
 <template>
 <div class="detail__content-list">
   <article>
+    <CompanyDetailSummary id="overview" class="detail__summary section_observer"/>
 
-    <CompanyDetailSummary/>
+    <CompanyDetailValuation id="value" class="section_observer"/>
 
-    <CompanyDetailValuation/>
-
+    <div id="future" class="section_observer"></div>
     <div class="detail__future"></div>
 
+    <div id="past" class="section_observer"></div>
     <div class="detail__past"></div>
 
+    <div id="health" class="section_observer"></div>
     <div class="detail__health"></div>
 
+    <div id="dividend" class="section_observer"></div>
     <div class="detail__dividend"></div>
 
+    <div id="management" class="section_observer"></div>
     <div class="detail__management"></div>
 
+    <div id="owners" class="section_observer"></div>
     <div class="detail__ownership"></div>
 
+    <div id="other" class="section_observer"></div>
     <div class="detail__other"></div>
 
   </article>
