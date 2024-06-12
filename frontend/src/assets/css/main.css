@@ -2,5 +2,4 @@
 @import 'reset.css';
 @import 'base.css';
 
-@import "notification/notification.css";
-
+@import "tippy.css";
