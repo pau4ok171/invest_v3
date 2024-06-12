@@ -2,13 +2,18 @@
 import {defineComponent} from 'vue'
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import CompanyDetailShareholderReturnsTable
-  from "@/components/company_detail/summary/CompanyDetailShareholderReturnsTable.vue";
+  from "@/components/company_detail/summary/shareholder_returns/CompanyDetailShareholderReturnsTable.vue";
 import CompanyDetailStatement from "@/components/company_detail/CompanyDetailStatement.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import CompanyDetailShareholderReturnsModalMenu
+  from "@/components/company_detail/summary/shareholder_returns/CompanyDetailShareholderReturnsModalMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailShareholderReturns",
   components: {
+    CompanyDetailShareholderReturnsModalMenu,
+    BaseModalMenuContainer,
     DetailSectionTitle,
     CompanyDetailStatement,
     CompanyDetailShareholderReturnsTable,
@@ -32,7 +37,16 @@ export default defineComponent({
 
   <CompanyDetailShareholderReturnsTable/>
 
-  <RoundedDarkBlueButton :isFullWidth="true">See full shareholders returns</RoundedDarkBlueButton>
+  <BaseModalMenuContainer>
+    <template #button>
+      <RoundedDarkBlueButton :isFullWidth="true">
+        <span>See full shareholders returns</span>
+      </RoundedDarkBlueButton>
+    </template>
+    <template #menu="menuProps">
+      <CompanyDetailShareholderReturnsModalMenu @closeMenu="menuProps.close()"/>
+    </template>
+  </BaseModalMenuContainer>
 
   <CompanyDetailStatement :statement_list/>
 
