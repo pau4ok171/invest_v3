@@ -11,7 +11,7 @@ export default defineComponent({
   },
   methods: {
     get_formatted_percent(value: number) {
-      return `${(value * 100).toFixed(2)}%`
+      return `${(value * 100).toFixed(1)}%`
     },
     get_color_class(value: number) {
       if (value > 0) {
