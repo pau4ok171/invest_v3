@@ -1,5 +1,5 @@
 <script lang="ts">
-import CompanyDetailHeader from "@/components/company_detail/CompanyDetailHeader.vue";
+import CompanyDetailHeader from "@/components/company_detail/header/CompanyDetailHeader.vue";
 import CompanyDetailContent from "@/components/company_detail/CompanyDetailContent.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {defineComponent} from "vue";
@@ -37,7 +37,7 @@ export default defineComponent({
     })
   },
   watch: {
-    $route(to, from) {
+    $route(to) {
       if (to.name === RouteNamesEnum.company_detail) {
         this.initializeView()
       }
@@ -47,7 +47,7 @@ export default defineComponent({
 </script>
 
 <template>
-<CompanyDetailHeader v-if="pageIsReady"/>
+<CompanyDetailHeader/>
 
-<CompanyDetailContent v-if="pageIsReady"/>
+<CompanyDetailContent v-if="pageIsReady && false"/>
 </template>
