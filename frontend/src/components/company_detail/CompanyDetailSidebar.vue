@@ -105,6 +105,15 @@ export default defineComponent({
       }
       return opacity
     },
+  changeSection(section: Section) {
+    this.activeSection = section.key
+    this.previousSection = section.key
+    this.nextSection = section.key
+    const goTo = (document as any).querySelector(`#${section.key}`).getBoundingClientRect()
+    const windowScroll = document.documentElement.scrollTop
+    const scrollTop = goTo.top + windowScroll - 80
+    window.scrollTo({top: scrollTop})
+  },
   },
   mixins: [utils,],
   data() {
@@ -223,6 +232,7 @@ export default defineComponent({
             :class="{'detail-sidebar__list-item--active': section.key === activeSection}"
             v-for="section in sections"
             :key="section.key"
+            @click="changeSection(section)"
         >
           {{ section.name }}
         </li>
