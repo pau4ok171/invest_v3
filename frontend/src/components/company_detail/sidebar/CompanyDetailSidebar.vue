@@ -1,5 +1,4 @@
 <script lang="ts">
- import {mapGetters} from "vuex";
  import {defineComponent} from "vue";
  import CompanyDetailSidebarHeader from "@/components/company_detail/sidebar/CompanyDetailSidebarHeader.vue";
  import CompanyDetailSidebarMain from "@/components/company_detail/sidebar/CompanyDetailSidebarMain.vue";
@@ -15,9 +14,8 @@ export default defineComponent({
   methods: {
     changeSidebarOpacity() {
       const opacity = String(this.calculateSidebarOpacity())
-      const sidebar_header = this.$refs.sidebar_header as HTMLElement
-      const sidebar_body = this.$refs.sidebar_main as HTMLElement
-      console.log(sidebar_body, sidebar_header)
+      const sidebar_header = (this.$refs.sidebar_header as any).$el as HTMLElement
+      const sidebar_body = (this.$refs.sidebar_main as any).$el as HTMLElement
       sidebar_header.style.setProperty('opacity', opacity)
       sidebar_body.style.setProperty('opacity', opacity)
 
@@ -51,10 +49,10 @@ export default defineComponent({
     },
   },
   mounted() {
-    // window.addEventListener('scroll', this.changeSidebarOpacity)
+    window.addEventListener('scroll', this.changeSidebarOpacity)
   },
   unmounted() {
-    // window.removeEventListener('scroll', this.changeSidebarOpacity)
+    window.removeEventListener('scroll', this.changeSidebarOpacity)
   },
  })
 </script>
