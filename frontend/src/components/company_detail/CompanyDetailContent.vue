@@ -1,3 +1,17 @@
+<script lang="ts">
+import CompanyDetailSidebar from "@/components/company_detail/sidebar/CompanyDetailSidebar.vue";
+import CompanyDetailContentList from "@/components/company_detail/content_list/CompanyDetailContentList.vue";
+import {defineComponent} from "vue";
+
+export default defineComponent({
+  name: 'CompanyDetailContent',
+  components: {
+    CompanyDetailContentList,
+    CompanyDetailSidebar
+  },
+})
+</script>
+
 <template>
 <div class="detail__content">
 
@@ -7,19 +21,6 @@
 
 </div>
 </template>
-
-<script lang="ts">
-import CompanyDetailSidebar from "@/components/company_detail/sidebar/CompanyDetailSidebar.vue";
-import CompanyDetailContentList from "@/components/company_detail/CompanyDetailContentList.vue";
-
-export default {
-  name: 'CompanyDetailContent',
-  components: {
-    CompanyDetailContentList,
-    CompanyDetailSidebar
-  },
-}
-</script>
 
 <style>
 .detail__content {
