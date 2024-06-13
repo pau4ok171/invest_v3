@@ -142,7 +142,6 @@ export default defineComponent({
     },
     draw_labels(event: Event) {
       if (!this.dataIsAvailable) return null
-
       const chart = event.target as any
       const rDiffX = 10
       const rDiffY = 17

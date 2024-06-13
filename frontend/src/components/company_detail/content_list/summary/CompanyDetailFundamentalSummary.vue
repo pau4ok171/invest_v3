@@ -29,6 +29,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
+      pageIsReady: 'companyDetail/getPageIsReady',
     }),
   },
 })
@@ -40,7 +41,7 @@ export default defineComponent({
   <DetailSectionTitle>{{ company.title }} Fundamental Summary</DetailSectionTitle>
 
   <DetailCompanySectionInRowItemBox>
-    <FundamentalSummaryChart class="detail-section__in-row-item"/>
+    <FundamentalSummaryChart v-if="pageIsReady" class="detail-section__in-row-item"/>
     <CompanyDetailFundamentalSummaryTable class="detail-section__in-row-item"/>
   </DetailCompanySectionInRowItemBox>
 
@@ -49,7 +50,7 @@ export default defineComponent({
   <DetailSectionTitle>Earnings & Revenue</DetailSectionTitle>
 
   <DetailCompanySectionInRowItemBox>
-    <EarningsRevenueChart class="detail-section__in-row-item"/>
+    <EarningsRevenueChart v-if="pageIsReady" class="detail-section__in-row-item"/>
     <CompanyDetailEarningsRevenueTable class="detail-section__in-row-item"/>
   </DetailCompanySectionInRowItemBox>
 
