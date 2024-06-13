@@ -17,7 +17,7 @@ export default defineComponent({
       const opacity = String(this.calculateSidebarOpacity())
       const sidebar_header = this.$refs.sidebar_header as HTMLElement
       const sidebar_body = this.$refs.sidebar_main as HTMLElement
-
+      console.log(sidebar_body, sidebar_header)
       sidebar_header.style.setProperty('opacity', opacity)
       sidebar_body.style.setProperty('opacity', opacity)
 
@@ -51,10 +51,10 @@ export default defineComponent({
     },
   },
   mounted() {
-    window.addEventListener('scroll', this.changeSidebarOpacity)
+    // window.addEventListener('scroll', this.changeSidebarOpacity)
   },
   unmounted() {
-    window.removeEventListener('scroll', this.changeSidebarOpacity)
+    // window.removeEventListener('scroll', this.changeSidebarOpacity)
   },
  })
 </script>
