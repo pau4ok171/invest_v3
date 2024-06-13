@@ -22,12 +22,16 @@ export default defineComponent({
   },
   methods: {
     get_chart_data() {
-      const currency_symbol = this.company.formatting.primaryCurrencySymbol
+      if (!this.company.reports) {
+        this.dataIsAvailable = false
+        return null
+      }
       const report = this.company.reports[0]
       if (!report) {
         this.dataIsAvailable = false
         return null
       }
+      const currency_symbol = this.company.formatting.primaryCurrencySymbol
       const scale = report.scale
       const market_cap = this.company.price_data.capitalisation / 1000000000
       const revenue = report.sales

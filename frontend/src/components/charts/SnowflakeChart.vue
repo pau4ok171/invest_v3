@@ -1,7 +1,23 @@
 <script lang="ts">
-import {defineComponent, PropType} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from 'vue';
 import chartOpts from "@/components/charts/snowflakeChartOpts";
 import Highcharts from "highcharts";
+
+const snowflakeChartColor5 = '#6bc51a'
+const snowflakeChartBorderColor5 = '#79ee04'
+
+const snowflakeChartColor4 = '#b2c319'
+const snowflakeChartBorderColor4 = '#def30b'
+
+const snowflakeChartColor3 = '#c7a028'
+const snowflakeChartBorderColor3 = '#ffc413'
+
+const snowflakeChartColor2 = '#c75633'
+const snowflakeChartBorderColor2 = '#ff5a23'
+
+const snowflakeChartColor1 = '#c74a35'
+const snowflakeChartBorderColor1 = '#fb4a27'
 
 export default defineComponent({
   name: "SnowflakeChart",
@@ -11,6 +27,32 @@ export default defineComponent({
       chartH: 280,
       chartW: 280,
     }
+  },
+  watch: {
+    chartData() {
+      this.chartOpts.series[0].data = this.chartData
+      const score = this.chartData.reduce((acc: number, data: number) => acc+data, 0)
+      const series = this.chartOpts.series
+
+      switch (true) {
+          case score  <= 5:
+              series[0].fillColor = snowflakeChartColor1
+              series[0].lineColor = snowflakeChartBorderColor1
+              break
+          case score <= 10:
+              series[0].fillColor = snowflakeChartColor2
+              series[0].lineColor = snowflakeChartBorderColor2
+              break
+          case score <= 15:
+              series[0].fillColor = snowflakeChartColor3
+              series[0].lineColor = snowflakeChartBorderColor3
+              break
+          case score <= 20:
+              series[0].fillColor = snowflakeChartColor4
+              series[0].lineColor = snowflakeChartBorderColor4
+              break
+      }
+    },
   },
   props: {
     chartData: {
@@ -23,22 +65,6 @@ export default defineComponent({
     },
   },
   mounted() {
-
-    const snowflakeChartColor5 = '#6bc51a'
-    const snowflakeChartBorderColor5 = '#79ee04'
-
-    const snowflakeChartColor4 = '#b2c319'
-    const snowflakeChartBorderColor4 = '#def30b'
-
-    const snowflakeChartColor3 = '#c7a028'
-    const snowflakeChartBorderColor3 = '#ffc413'
-
-    const snowflakeChartColor2 = '#c75633'
-    const snowflakeChartBorderColor2 = '#ff5a23'
-
-    const snowflakeChartColor1 = '#c74a35'
-    const snowflakeChartBorderColor1 = '#fb4a27'
-
     const series = [{
         type: 'areaspline',
         clip: false,

@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import TextButton from "@/components/UI/buttons/TextButton.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import CompanyDetailAnalystsModalMenu
-  from "@/components/company_detail/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
+  from "@/components/company_detail/content_list/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
 import {mapGetters} from "vuex";
 
 export default defineComponent({

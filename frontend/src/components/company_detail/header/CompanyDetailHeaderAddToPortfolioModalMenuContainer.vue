@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import RoundedWhiteButton from "@/components/UI/buttons/RoundedWhiteButton.vue";
 import CompanyDetailPortfolioModalMenu
-  from "@/components/company_detail/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
+  from "@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import {mapGetters} from "vuex";
 
 export default defineComponent({

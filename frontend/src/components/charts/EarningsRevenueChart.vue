@@ -12,6 +12,7 @@ export default defineComponent({
     }
   },
   mounted() {
+    if (!this.company.reports) return null
     const report: Report = this.company.reports[0]
     if (!report) return null
     const others_expenses = Number((report.gross_margin-report.income_net).toFixed(1))

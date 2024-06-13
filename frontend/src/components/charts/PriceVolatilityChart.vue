@@ -30,6 +30,7 @@ export default defineComponent({
   },
   methods: {
      get_label_position(value: number) {
+       if (!this.company.market) return 0
       const l = 320
       const low = this.company.market.volatility_10p
       const high = this.company.market.volatility_90p
@@ -52,7 +53,7 @@ export default defineComponent({
 <template>
   <div class="price-volatility-chart__wrapper">
     <div id="price-volatility-chart" class="price-volatility-chart">
-      <svg viewBox="0 0 396 137" xmlns="http://www.w3.org/2000/svg" class="price-volatility-chart__svg">
+      <svg v-if="company.market" viewBox="0 0 396 137" xmlns="http://www.w3.org/2000/svg" class="price-volatility-chart__svg">
         <g>
           <path d="M35 49V45H360V49H35Z" fill="url(#paint0_linear)"></path>
           <rect x="34" y="43" width="1" height="8" fill="white"></rect>
@@ -70,7 +71,7 @@ export default defineComponent({
           <svg v-tippy="get_company_tooltip" fill="rgb(35, 148, 223)" color="#fff" :x="get_label_position(company.average_weekly_mouvement)" tabindex="0" class="price-volatility-chart__svg">
             <rect x="159" width="81" height="32" rx="2" fill="#2394df" ></rect>
             <rect x="199" y="24" width="10.2426" fill="#2394df" height="10.2426" transform="rotate(45 199 24)"></rect>
-            <text x="200" y="22" font-size="16" text-anchor="middle" class="price-volatility-chart__label">{{ company.slug.toUpperCase() }}</text>
+            <text x="200" y="22" font-size="16" text-anchor="middle" class="price-volatility-chart__label">{{ company.ticker }}</text>
           </svg>
           <svg :x="get_label_position(company.market.average_weekly_mouvement)" y="55" class="price-volatility-chart__svg">
             <rect x="198" y="-6" width="1" height="68" fill="white"></rect>

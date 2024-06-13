@@ -1,7 +1,7 @@
 <script lang="ts">
 import chartOpts from "@/components/charts/smallPriceChartOpts";
-import store from "@/store";
 import {defineComponent} from "vue";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   data() {
@@ -9,8 +9,18 @@ export default defineComponent({
       chartOpts: chartOpts
     }
   },
+  computed: {
+    ...mapGetters({
+      companyPriceData: 'companyDetail/companyPriceData',
+    }),
+  },
+  watch: {
+    companyPriceData() {
+      this.chartOpts.series[0].data = this.companyPriceData
+    },
+  },
   mounted() {
-    this.chartOpts.series[0].data = store.getters["companyDetail/companyPriceData"]
+    this.chartOpts.series[0].data = this.companyPriceData
   },
 })
 </script>

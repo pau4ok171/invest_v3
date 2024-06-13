@@ -19,18 +19,22 @@ export default defineComponent({
       company: 'companyDetail/getCompany',
     }),
     get_ex_dividend_date() {
+      if (!this.company.next_dividend) return null
       const ex_dividend_date = DateTime.fromISO(this.company.next_dividend.ex_dividend_date)
       return this.get_formatted_date(ex_dividend_date)
     },
     get_pay_date() {
+      if (!this.company.next_dividend) return null
       const pay_date = DateTime.fromISO(this.company.next_dividend.pay_date)
       return this.get_formatted_date(pay_date)
     },
     get_today() {
+      if (!this.company.next_dividend) return null
       const today = DateTime.now()
       return this.get_formatted_date(today)
     },
     get_buy_period() {
+      if (!this.company.next_dividend) return null
       const now = DateTime.now()
       const today = DateTime.fromObject({
         year: now.year,
