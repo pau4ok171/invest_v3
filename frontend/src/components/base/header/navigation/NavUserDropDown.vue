@@ -19,6 +19,7 @@ export default defineComponent({
       localStorage.removeItem('userid')
 
       this.removeToken()
+      document.location.reload()
     },
   },
 })

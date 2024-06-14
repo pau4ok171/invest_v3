@@ -98,6 +98,8 @@
           localStorage.setItem("token", token)
 
           this.cleanModalMenu()
+
+          document.location.reload()
         })
         .catch(this.catchError)
       this.setIsLoading(false)
