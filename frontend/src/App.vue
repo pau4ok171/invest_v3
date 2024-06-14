@@ -2,7 +2,7 @@
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import axios from "axios";
-import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapGetters, mapMutations} from "vuex";
 import {defineComponent} from "vue";
 
 export default defineComponent({
@@ -12,7 +12,6 @@ export default defineComponent({
   },
   mounted() {
     this.initializeAuth()
-
     axios.defaults.headers.common["Authorization"] = this.token ? `Token ${this.token}` : ''
   },
   methods: {
@@ -29,11 +28,11 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
-    <AppLayout>
-      <RouterView/>
-    </AppLayout>
-  </div>
+<div>
+  <AppLayout>
+    <RouterView/>
+  </AppLayout>
+</div>
 </template>
 
 <style>
