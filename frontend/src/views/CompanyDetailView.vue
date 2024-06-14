@@ -16,6 +16,7 @@ export default defineComponent({
     },
   methods: {
     async initializeView() {
+      this.setPageIsReady(false)
       const company_slug = this.$route.params.company_slug as String
       await this.fetchCompany(company_slug)
       await this.fetchPriceData(company_slug)
