@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import axios from "axios";
+import VueAxios from "vue-axios";
 
 import Vue3Toastify, {toast, type ToastContainerOptions} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
@@ -39,7 +40,7 @@ Highcharts.setOptions({
 app
   .use(router)
   .use(store)
-  .use(axios)
+  .use(VueAxios, axios)
   .use(HighchartsVue, {tagName: 'charts'})
   .use(
     Vue3Toastify,
