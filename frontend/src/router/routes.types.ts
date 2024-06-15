@@ -17,6 +17,7 @@ export enum RouteNamesEnum {
     company_detail = 'company_detail',
     watchlist = 'watchlist',
     screener = 'screener',
+    page_not_found = 'page_not_found',
 }
 
 export enum RoutesHeaderEnum {
