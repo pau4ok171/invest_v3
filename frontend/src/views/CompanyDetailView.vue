@@ -16,6 +16,9 @@ export default defineComponent({
   mounted() {
     this.initializeView()
     },
+  unmounted() {
+    this.setPageNotFound(false)
+  },
   methods: {
     async initializeView() {
       this.setPageIsReady(false)
@@ -28,7 +31,8 @@ export default defineComponent({
       this.setPageIsReady(true)
     },
     ...mapMutations({
-      setPageIsReady: 'companyDetail/setPageIsReady'
+      setPageIsReady: 'companyDetail/setPageIsReady',
+      setPageNotFound: 'companyDetail/setPageNotFound',
     }),
     ...mapActions({
       fetchCompany: 'companyDetail/fetchCompany',
