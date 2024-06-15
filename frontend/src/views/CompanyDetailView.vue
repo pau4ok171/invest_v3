@@ -4,10 +4,12 @@ import CompanyDetailContent from "@/components/company_detail/CompanyDetailConte
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {defineComponent} from "vue";
 import {RouteNamesEnum} from "@/router/routes.types";
+import PageNotFound from "@/components/base/page_not_found/PageNotFound.vue";
 
 export default defineComponent({
   name: 'CompanyDetail',
   components: {
+    PageNotFound,
     CompanyDetailContent,
     CompanyDetailHeader
   },
@@ -19,8 +21,10 @@ export default defineComponent({
       this.setPageIsReady(false)
       const company_slug = this.$route.params.company_slug as String
       await this.fetchCompany(company_slug)
-      await this.fetchPriceData(company_slug)
-      document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
+      if (!this.pageNotFound) {
+        await this.fetchPriceData(company_slug)
+        document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
+      }
       this.setPageIsReady(true)
     },
     ...mapMutations({
@@ -34,6 +38,7 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
+      pageNotFound: 'companyDetail/getPageNotFound',
     })
   },
   watch: {
@@ -47,7 +52,10 @@ export default defineComponent({
 </script>
 
 <template>
-<CompanyDetailHeader/>
+<PageNotFound v-if="pageNotFound"/>
+<div v-else>
+  <CompanyDetailHeader/>
+  <CompanyDetailContent/>
+</div>
 
-<CompanyDetailContent/>
 </template>
