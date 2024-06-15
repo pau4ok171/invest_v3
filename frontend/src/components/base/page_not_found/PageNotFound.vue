@@ -2,7 +2,10 @@
 import {defineComponent} from 'vue'
 
 export default defineComponent({
-  name: "PageNotFound"
+  name: "PageNotFound",
+  mounted() {
+    document.title = 'Page Not Found - Finargo'
+  },
 })
 </script>
 
