@@ -50,7 +50,13 @@ const router = createRouter({
       path: '/screener',
       name: RouteNamesEnum.screener,
       component: () => import('@/views/HomeView.vue')
-    }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      alias:'/:pathMatch(.*)*',
+      name: RouteNamesEnum.page_not_found,
+      component: () => import('@/views/PageNotFoundView.vue')
+    },
   ]
 })
 
