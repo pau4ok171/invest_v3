@@ -2,9 +2,11 @@
 import {defineComponent} from 'vue'
 import {chartOpts} from "@/components/charts/fundamentalSummaryChart";
 import {mapGetters} from "vuex";
+import DataNotAvailable from "@/components/charts/DataNotAvailable.vue";
 
 export default defineComponent({
   name: "FundamentalSummaryChart",
+  components: {DataNotAvailable},
   data() {
     return {
       chartOpts: chartOpts,
@@ -174,7 +176,9 @@ export default defineComponent({
 
 <template>
 <div class="fundamental-summary-chart">
+  <DataNotAvailable v-if="!dataIsAvailable" chart-name="Fundamental Summary Chart"/>
   <charts
+    v-else
     ref="fundamentalSummaryChart"
     :constructorType="'chart'"
     :options="chartOpts"

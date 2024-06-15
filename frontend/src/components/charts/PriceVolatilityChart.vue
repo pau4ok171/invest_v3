@@ -1,9 +1,11 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {mapGetters} from "vuex";
+import DataNotAvailable from "@/components/charts/DataNotAvailable.vue";
 
 export default defineComponent({
   name: "PriceVolatilityChart",
+  components: {DataNotAvailable},
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
@@ -26,11 +28,19 @@ export default defineComponent({
         theme: 'black'
       }
     },
-
+    getDataIsAvailable() {
+      return (
+          !!this.company.market &&
+          !!this.company.sector_market &&
+          !!this.company.average_weekly_mouvement &&
+          !!this.company.market.average_weekly_mouvement &&
+          !!this.company.sector_market.average_weekly_mouvement
+      );
+    },
   },
   methods: {
      get_label_position(value: number) {
-       if (!this.company.market) return 0
+      if (!this.company.market) return 0
       const l = 320
       const low = this.company.market.volatility_10p
       const high = this.company.market.volatility_90p
@@ -51,7 +61,8 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="price-volatility-chart__wrapper">
+  <DataNotAvailable v-if="!getDataIsAvailable" chart-name="Price Volatility Chart"/>
+  <div v-else class="price-volatility-chart__wrapper">
     <div id="price-volatility-chart" class="price-volatility-chart">
       <svg v-if="company.market" viewBox="0 0 396 137" xmlns="http://www.w3.org/2000/svg" class="price-volatility-chart__svg">
         <g>

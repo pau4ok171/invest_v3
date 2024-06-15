@@ -2,11 +2,14 @@
 import {defineComponent} from 'vue'
 import {mapGetters} from "vuex";
 import {DateTime} from "luxon";
+import DataNotAvailable from "@/components/charts/DataNotAvailable.vue";
 
 export default defineComponent({
   name: "DividendPaydayChart",
+  components: {DataNotAvailable},
   data() {
     return {
+      dataIsAvailable: true,
       dividendTooltip: {
         content: 'You must be a shareholder of the company before this date to receive the next dividend payment',
         theme: 'black',
@@ -21,11 +24,13 @@ export default defineComponent({
     get_ex_dividend_date() {
       if (!this.company.next_dividend) return null
       const ex_dividend_date = DateTime.fromISO(this.company.next_dividend.ex_dividend_date)
+      if (!ex_dividend_date.isValid) this.dataIsAvailable = false
       return this.get_formatted_date(ex_dividend_date)
     },
     get_pay_date() {
       if (!this.company.next_dividend) return null
       const pay_date = DateTime.fromISO(this.company.next_dividend.pay_date)
+      if (!pay_date.isValid) this.dataIsAvailable = false
       return this.get_formatted_date(pay_date)
     },
     get_today() {
@@ -59,7 +64,8 @@ export default defineComponent({
 
 <template>
 <div class="dividend-payday-chart__wrapper">
-  <div class="dividend-payday-chart">
+  <DataNotAvailable v-if="!dataIsAvailable" chart-name="Dividend Payday Chart"/>
+  <div v-else class="dividend-payday-chart">
     <svg height="168" width="100%" shape-rendering="crispEdges">
       <svg x="69.0888224509714%" y="12" shape-rendering="geometricPrecision" class="dividend-payday-chart__label">
         <g v-tippy="dividendTooltip" transform="translate(-20 -2)" tabindex="0" style="outline: none; user-select: none">
