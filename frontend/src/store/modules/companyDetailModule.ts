@@ -30,6 +30,8 @@ export const companyDetailModule = {
     portfolioIsLoading: false,
     // NotesModalMenu
     noteSavedContent: '',
+    // PageNotFound
+    pageNotFound: false,
   }),
   getters: {
     getPageIsReady(state): boolean {
@@ -73,6 +75,9 @@ export const companyDetailModule = {
     },
     getPortfolioIsLoading(state) {
       return state.portfolioIsLoading
+    },
+    getPageNotFound(state) {
+      return state.pageNotFound
     },
   },
   mutations: {
@@ -154,36 +159,38 @@ export const companyDetailModule = {
       })
       commit('setNotes', notes)
     },
-    async fetchPriceData({state, commit}, company_slug: String) {
+    async fetchPriceData({state, commit, dispatch}, company_slug: String) {
       await axios
         .get(`api/v1/invest/price_data/${company_slug}`)
         .then(response => {
           commit("getCompanyPriceData", response.data)
           commit("setPriceChartDataIsLoading", false)
         })
+        .catch(error => dispatch('catchAxiosError', error))
     },
-    async fetchCompany({state, commit}, company_slug: String) {
-     store.commit('setIsLoading', true)
+    async fetchCompany({state, commit, dispatch}, company_slug: String) {
+      store.commit('setIsLoading', true)
 
-     await axios
-       .get(`api/v1/invest/companies/${company_slug}`)
-       .then(response => {
-         const company: DetailCompany = response.data.company
-         const portfolios: Array<Portfolio> = response.data.portfolios
-         const notes: Array<Note> = response.data.notes
-         const statements: Array<Statement> = response.data.statements
-         const snowflake: Array<Number> = Object.values(response.data.snowflake as Array<Number>)
-         const competitors: Array<Competitor> = response.data.peers
+      await axios
+        .get(`api/v1/invest/companies/${company_slug}`)
+        .then(response => {
+          const company: DetailCompany = response.data.company
+          const portfolios: Array<Portfolio> = response.data.portfolios
+          const notes: Array<Note> = response.data.notes
+          const statements: Array<Statement> = response.data.statements
+          const snowflake: Array<Number> = Object.values(response.data.snowflake as Array<Number>)
+          const competitors: Array<Competitor> = response.data.peers
 
-         commit('setCompany', company)
-         commit('setPortfolios', portfolios)
-         commit('setNotes', notes)
-         commit('setStatements', statements)
-         commit('setSnowflake', snowflake)
-         commit('setCompetitors', competitors)
-       })
+          commit('setCompany', company)
+          commit('setPortfolios', portfolios)
+          commit('setNotes', notes)
+          commit('setStatements', statements)
+          commit('setSnowflake', snowflake)
+          commit('setCompetitors', competitors)
+        })
+        .catch(error => dispatch('catchAxiosError', error))
 
-     store.commit('setIsLoading', false)
+        store.commit('setIsLoading', false)
     },
     async toggleToWatchlist({state, commit}) {
       commit('setWatchlistIsLoading', true)
@@ -228,6 +235,22 @@ export const companyDetailModule = {
           console.log(error)
           toast.error('Something was wrong...')
           })
+    },
+    async catchAxiosError({state, commit}, error) {
+      // client received an error response (5xx, 4xx)
+      if (error.response) {
+        if (error.response.status === 404) {
+          state.pageNotFound = true
+        }
+        // client never received a response, or request never left
+      } else if (error.request) {
+        console.log(error)
+        toast.error('Something was wrong... Please reload page')
+        // anything else
+      } else {
+        console.log(error)
+        toast.error('Something was wrong... Please reload page')
+      }
     },
   },
   namespaced: true,
