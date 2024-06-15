@@ -135,6 +135,9 @@ export const companyDetailModule = {
     setPortfolioIsLoading(state, status: Boolean) {
       state.portfolioIsLoading = status
     },
+    setPageNotFound(state, status: Boolean) {
+      state.pageNotFound = status
+    },
   },
   actions: {
     updatePortfoliosWithNewPortfolio({state, commit}, portfolio: Portfolio) {
