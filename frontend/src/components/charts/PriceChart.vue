@@ -4,6 +4,7 @@ import {chartOpts} from "@/components/charts/priceChartOpts";
 import BaseInvisibleButton from "@/components/UI/buttons/BaseInvisibleButton.vue";
 import { DateTime } from 'luxon';
 import {mapGetters} from "vuex";
+import FetchingData from "@/components/charts/FetchingData.vue";
 
 interface Tab {
   value: string,
@@ -12,7 +13,7 @@ interface Tab {
 
 export default defineComponent({
   name: "PriceChart",
-  components: {BaseInvisibleButton},
+  components: {FetchingData, BaseInvisibleButton},
   data() {
     return {
       chartOpts: chartOpts,
@@ -27,14 +28,10 @@ export default defineComponent({
       }
     }
   },
-  mounted() {
-   this.chartOpts.series[0].data = this.priceData
-    this.changeZoom(this.tablist.Y1)
-  },
   watch: {
     priceData() {
       this.chartOpts.series[0].data = this.priceData
-    }
+    },
   },
   methods: {
     changeZoom(tab: Tab) {
@@ -43,30 +40,45 @@ export default defineComponent({
       const chart = priceChart.chart
       const  chartMax = chart.xAxis[1].max || DateTime.now().ts
       chart.xAxis[0].setExtremes(tab.min.ts, chartMax)
-    }
+    },
+    afterCreate(chart: any) {
+      this.chartOpts.series[0].data = this.priceData
+      const  chartMax = chart.xAxis[1].max || DateTime.now().ts
+      chart.xAxis[0].setExtremes(this.tablist['Y1'].min.ts, chartMax)
+    },
   },
   computed: {
     ...mapGetters({
-      priceData: 'companyDetail/companyPriceData'
+      priceData: 'companyDetail/companyPriceData',
+      pageIsReady: 'companyDetail/getPageIsReady',
     }),
   },
 })
 </script>
 
 <template>
-  <div role="tablist" class="detail-price-chart__tablist">
-    <BaseInvisibleButton @click="changeZoom(tab)" :disabled="tab.value === currentPeriod" v-for="tab in tablist" :key="tab.value">{{ tab.value }}</BaseInvisibleButton>
-  </div>
-  <div class="detail-price-chart">
-    <charts
-      ref="priceChart"
-      :constructorType="'stockChart'"
-      :options="chartOpts"
-    />
-  </div>
+<div class="detail-price-chart__wrapper">
+  <FetchingData v-if="!pageIsReady"/>
+  <template v-else>
+    <div role="tablist" class="detail-price-chart__tablist">
+      <BaseInvisibleButton @click="changeZoom(tab)" :disabled="tab.value === currentPeriod" v-for="tab in tablist" :key="tab.value">{{ tab.value }}</BaseInvisibleButton>
+    </div>
+    <div class="detail-price-chart">
+      <charts
+        ref="priceChart"
+        :constructorType="'stockChart'"
+        :options="chartOpts"
+        :callback="afterCreate"
+      />
+    </div>
+  </template>
+</div>
 </template>
 
 <style>
+.detail-price-chart__wrapper {
+  height: 430px;
+}
 .detail-price-chart__tablist {
   display: grid;
   grid-template-columns: repeat(6, auto);
