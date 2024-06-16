@@ -77,7 +77,7 @@ export default defineComponent({
     <template v-slot:value>
       <span class="detail-header__info-item-value--small detail-header__info-item-value--on-row">
         <span>Financials Company</span>
-        <template v-if="company.analyst_ideas">
+        <template v-if="!!totalIdeas">
           <span> + </span>
          <CompanyDetailHeaderAnalystsButtonModalMenuContainer/>
         </template>
