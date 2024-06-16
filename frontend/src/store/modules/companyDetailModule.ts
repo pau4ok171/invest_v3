@@ -172,8 +172,6 @@ export const companyDetailModule = {
         .catch(error => dispatch('catchAxiosError', error))
     },
     async fetchCompany({state, commit, dispatch}, company_slug: String) {
-      store.commit('setIsLoading', true)
-
       await axios
         .get(`api/v1/invest/companies/${company_slug}`)
         .then(response => {
@@ -192,8 +190,6 @@ export const companyDetailModule = {
           commit('setCompetitors', competitors)
         })
         .catch(error => dispatch('catchAxiosError', error))
-
-        store.commit('setIsLoading', false)
     },
     async toggleToWatchlist({state, commit}) {
       commit('setWatchlistIsLoading', true)

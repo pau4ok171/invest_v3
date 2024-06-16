@@ -21,6 +21,7 @@ export default defineComponent({
   },
   methods: {
     async initializeView() {
+      this.setIsLoading(true)
       this.setPageIsReady(false)
       const company_slug = this.$route.params.company_slug as String
       await this.fetchCompany(company_slug)
@@ -28,11 +29,13 @@ export default defineComponent({
         await this.fetchPriceData(company_slug)
         document.title = `${this.company.title} (${this.company.market.title}:${this.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
       }
+      this.setIsLoading(false)
       this.setPageIsReady(true)
     },
     ...mapMutations({
       setPageIsReady: 'companyDetail/setPageIsReady',
       setPageNotFound: 'companyDetail/setPageNotFound',
+      setIsLoading: 'setIsLoading',
     }),
     ...mapActions({
       fetchCompany: 'companyDetail/fetchCompany',
