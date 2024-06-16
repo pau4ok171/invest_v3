@@ -1,13 +1,13 @@
 <script lang="ts">
-import CompanyDetailSummary from "@/components/company_detail/content_list/summary/CompanyDetailSummary.vue";
-import CompanyDetailValuation from "@/components/company_detail/content_list/valuation/CompanyDetailValuation.vue";
-import {defineComponent} from "vue";
+import {defineAsyncComponent, defineComponent} from "vue";
 
 export default defineComponent({
   name: 'CompanyDetailContentList',
   components: {
-    CompanyDetailValuation,
-    CompanyDetailSummary
+    CompanyDetailSummary: defineAsyncComponent(() =>
+        import("@/components/company_detail/content_list/summary/CompanyDetailSummary.vue")),
+    CompanyDetailValuation: defineAsyncComponent(() =>
+        import("@/components/company_detail/content_list/valuation/CompanyDetailValuation.vue")),
   },
 })
 </script>
@@ -16,6 +16,7 @@ export default defineComponent({
 <div class="detail__content-list">
 <article>
   <CompanyDetailSummary id="overview" class="detail__summary section_observer"/>
+
   <template v-if="false">
 
   <CompanyDetailValuation id="value" class="section_observer"/>
