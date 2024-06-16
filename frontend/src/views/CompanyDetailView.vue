@@ -13,9 +13,9 @@ export default defineComponent({
     CompanyDetailContent,
     CompanyDetailHeader
   },
-  mounted() {
-    this.initializeView()
-    },
+  async mounted() {
+    await this.initializeView()
+  },
   unmounted() {
     this.setPageNotFound(false)
   },
