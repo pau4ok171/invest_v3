@@ -16,6 +16,7 @@
     "@tiptap/starter-kit": "^2.3.0",
     "@tiptap/vue-3": "^2.3.0",
     "axios": "^1.7.2",
+    "epic-spinners": "^2.0.0",
     "highcharts-vue": "^2.0.1",
     "luxon": "^3.4.4",
     "vue": "^3.4.21",
