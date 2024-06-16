@@ -16,6 +16,7 @@ export default defineComponent({
 <div class="detail__content-list">
 <article>
   <CompanyDetailSummary id="overview" class="detail__summary section_observer"/>
+  <template v-if="false">
 
   <CompanyDetailValuation id="value" class="section_observer"/>
 
@@ -39,6 +40,8 @@ export default defineComponent({
 
   <div id="other" class="section_observer"></div>
   <div class="detail__other"></div>
+
+  </template>
 
 </article>
 </div>
