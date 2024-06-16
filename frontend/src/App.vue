@@ -2,11 +2,13 @@
 import { RouterView } from 'vue-router';
 import AppLayout from '@/layouts/AppLayout.vue';
 import axios from "axios";
-import {mapGetters, mapMutations} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
+import Loader from "@/components/UI/Loader.vue";
 
 export default defineComponent({
   components: {
+    Loader,
     AppLayout,
     RouterView,
   },
@@ -22,7 +24,10 @@ export default defineComponent({
   computed: {
     ...mapGetters({
       token: 'authModule/getToken',
-    })
+    }),
+    ...mapState({
+      isLoading: 'isLoading',
+    }),
   },
 })
 </script>
@@ -32,6 +37,8 @@ export default defineComponent({
   <AppLayout>
     <RouterView/>
   </AppLayout>
+
+  <Loader v-if="isLoading"/>
 </div>
 </template>
 
