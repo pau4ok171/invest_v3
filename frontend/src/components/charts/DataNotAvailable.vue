@@ -20,9 +20,14 @@ export default defineComponent({
 
 <style scoped>
 .chart-data-not-available {
-  display: grid;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
   height: 100%;
-  place-items: center;
+  background-color: var(--bg-color);
+  border-radius: 8px;
 }
 .chart-data-not-available p {
   font-size: 1.4rem;
