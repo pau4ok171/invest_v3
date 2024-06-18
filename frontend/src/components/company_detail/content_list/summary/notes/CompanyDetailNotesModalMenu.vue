@@ -12,6 +12,7 @@ import {Placeholder} from "@tiptap/extension-placeholder";
 import {CharacterCount} from '@tiptap/extension-character-count';
 import axios from "axios";
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import {toast} from "vue3-toastify";
 
 export default defineComponent({
   name: "CompanyDetailNotesModalMenu",
@@ -127,6 +128,7 @@ export default defineComponent({
             this.setNoteSavedContent(response.data.body)
             this.setNote(response.data)
             this.updateNotesWithNewNote(response.data)
+            toast.success('Note successfully saved')
           })
           .catch(error => console.log(error))
       } else {
@@ -136,6 +138,7 @@ export default defineComponent({
             this.setNote(response.data)
             this.setNoteSavedContent(response.data.body)
             this.addNewNote(this.note)
+            toast.success('Note successfully saved')
           })
           .catch(error => console.log(error))
       }

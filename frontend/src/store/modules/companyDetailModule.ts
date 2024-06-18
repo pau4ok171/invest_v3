@@ -229,6 +229,7 @@ export const companyDetailModule = {
         .delete(`/notes/api/v1/notes/${note.id}`)
         .then(() => {
           commit('setNotes', [...state.notes].filter(n => n.id !== note.id))
+          toast.success('Note was successfully deleted')
         })
         .catch(error => {
           console.log(error)
