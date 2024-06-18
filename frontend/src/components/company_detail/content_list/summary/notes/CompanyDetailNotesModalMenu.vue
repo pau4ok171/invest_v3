@@ -33,11 +33,12 @@ export default defineComponent({
   },
   mounted() {
     this.setNoteSavedContent(this.note.body)
-    this.checkInterval = setInterval(() => this.checkIfChanged(), 5000)
 
     this.editor = new Editor({
       content: this.note.body,
       onUpdate: () => {
+        if (this.checkInterval) window.clearTimeout(this.checkInterval)
+        this.checkInterval = setTimeout(() => this.checkIfChanged(), 2000)
         if (this.note.body !== this.editor.getHTML()) {
           this.note.body = this.editor.getHTML()
           this.note.text = this.editor.getText()
@@ -63,7 +64,7 @@ export default defineComponent({
     })
   },
   beforeUnmount() {
-    window.clearInterval(this.checkInterval)
+    window.clearTimeout(this.checkInterval)
     this.checkIfChanged()
     this.editor.destroy()
     const new_note = {
