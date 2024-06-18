@@ -36,6 +36,7 @@ export default defineComponent({
       notesModalMenuIsOpen: "companyDetail/getNotesModalMenuIsActive",
       notes: 'companyDetail/getNotes',
       note: "companyDetail/getNote",
+      isAuthenticated: 'authModule/getIsAuthenticated',
     }),
     getNoteListClass() {
       return `detail-notes__note-list-${this.notes.slice(0, 3).length}-el`
@@ -73,7 +74,7 @@ export default defineComponent({
     <div v-else class="detail-notes__empty">
       <BookIcon class="detail-notes__empty-image"/>
       <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
-      <RoundedDarkBlueButton @click="setNotesModalMenuIsOpen(true)">
+      <RoundedDarkBlueButton :disabled="!isAuthenticated" @click="setNotesModalMenuIsOpen(true)">
         <PenIcon/>
         <span>Add note</span>
       </RoundedDarkBlueButton>
@@ -82,7 +83,7 @@ export default defineComponent({
   </CompanyDetailContentGroup>
 </CompanyDetailSection>
 
-<CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen"/>
+<CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen && isAuthenticated"/>
 </template>
 
 <style scoped>
