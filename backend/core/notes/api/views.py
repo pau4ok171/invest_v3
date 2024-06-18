@@ -27,8 +27,9 @@ class NotesViewSet(ModelViewSet):
             company = Company.objects.get(pk=form.cleaned_data['company_id'])
             user = self.request.user
             body = form.cleaned_data['content']
+            text = form.cleaned_data.get('text', '')
 
-            note = Note.objects.create(company=company, user=user, body=body)
+            note = Note.objects.create(company=company, user=user, body=body, text=text)
             serializer = NoteSerializer(note)
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -39,9 +40,10 @@ class NotesViewSet(ModelViewSet):
         if form.is_valid():
             note_id = form.cleaned_data['note_id']
             body = form.cleaned_data['content']
+            text = form.cleaned_data.get('text', '')
             updated = form.cleaned_data['updated']
 
-            Note.objects.filter(pk=note_id).update(body=body, updated=updated)
+            Note.objects.filter(pk=note_id).update(body=body, text=text, updated=updated)
             serializer = self.serializer_class(Note.objects.get(pk=note_id))
             return Response(serializer.data)
         return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
