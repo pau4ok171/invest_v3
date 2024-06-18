@@ -18,6 +18,8 @@ export default defineComponent({
   props: {
     editor: Object,
     saveStatus: String,
+    usedVolume: Number,
+    limitIsExceeded: Boolean,
   },
 })
 </script>
@@ -53,7 +55,7 @@ export default defineComponent({
     <div class="detail_notes_model_menu_footer__volume_state">
       <svg height="24" viewBox="0 0 20 20" width="24">
         <circle r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_total"></circle>
-        <circle r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_used"></circle>
+        <circle :stroke-dasharray="usedVolume"  r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_used" :class="{'detail_notes_model_menu_footer__volume_state_used--exceeded': limitIsExceeded}"></circle>
       </svg>
     </div>
     <RoundedDarkBlueButton @click="setNotesModalIsActive(false)"><span>Close</span></RoundedDarkBlueButton>
@@ -98,10 +100,12 @@ export default defineComponent({
 .detail_notes_model_menu_footer__volume_state_used {
     stroke: rgb(35, 148, 223);
     stroke-dashoffset: 56.248;
-    stroke-dasharray: 56.2705;
     transition: stroke-dashoffset 0.2s ease 0s, stroke 0.4s ease 0s;
     stroke-width: 2px;
     stroke-linecap: round;
     fill: none;
+}
+.detail_notes_model_menu_footer__volume_state_used--exceeded {
+  stroke: #e64141;
 }
 </style>
