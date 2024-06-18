@@ -150,15 +150,19 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="detail_modal_menu__wrapper" v-if="!notesModalIsLateral"></div>
+<teleport to="body">
 
-<div class="detail_modal_menu" :class="{'detail_modal_menu--lateral': notesModalIsLateral}">
-  <CompanyDetailNotesModalMenuHeader/>
+  <div class="detail_modal_menu__wrapper" v-if="!notesModalIsLateral"></div>
 
-  <CompanyDetailNotesModalMenuMain :editor/>
+  <div class="detail_modal_menu" :class="{'detail_modal_menu--lateral': notesModalIsLateral}">
+    <CompanyDetailNotesModalMenuHeader/>
 
-  <CompanyDetailNotesModalMenuFooter :saveStatus :editor/>
+    <CompanyDetailNotesModalMenuMain :editor/>
+
+    <CompanyDetailNotesModalMenuFooter :limitIsExceeded :usedVolume :saveStatus :editor/>
 </div>
+
+</teleport>
 </template>
 
 <style>
