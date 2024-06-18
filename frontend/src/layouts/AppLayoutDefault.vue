@@ -2,12 +2,18 @@
 import BasicHeader from '@/components/base/header/BasicHeader.vue'
 import Loader from "@/components/UI/Loader.vue";
 import {defineComponent} from "vue";
+import {mapState} from "vuex";
 
 export default defineComponent({
   name: 'AppLayoutDefault',
   components: {
     Loader,
     BasicHeader,
+  },
+  computed: {
+    ...mapState({
+      lateralMenuIsOpen: "lateralMenuIsOpen",
+    }),
   },
 })
 </script>
@@ -16,7 +22,7 @@ export default defineComponent({
 <BasicHeader/>
 
 <div class="content">
-  <div class="content__inner">
+  <div class="content__inner" :class="{'content__inner--moved': lateralMenuIsOpen}">
       <slot/>
   </div>
 </div>
@@ -39,5 +45,8 @@ export default defineComponent({
   color: #fff;
   padding: 0 24px 24px;
   transition: all .6s cubic-bezier(.83, 0, .17, 1) 0s;
+}
+.content__inner--moved {
+  max-width: 1582px;
 }
 </style>
