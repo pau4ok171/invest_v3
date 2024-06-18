@@ -28,6 +28,7 @@ export default defineComponent({
       saveStatus: 'Saved',
       contentLengthMax: 10000,
       isSaving: false,
+      limitIsExceeded: false,
     }
   },
   mounted() {
@@ -87,7 +88,14 @@ export default defineComponent({
   },
   computed: {
     contentLength() {
-      this.note.body.length
+      return this.note?.text?.length
+    },
+    usedVolume() {
+      const circleMin = 56.248
+      const circleMax = 111.248
+      const circleDashArray = circleMin + (this.contentLength / this.contentLengthMax * (circleMax - circleMin)) || circleMin
+      this.limitIsExceeded = this.contentLength >= this.contentLengthMax
+      return  circleDashArray < circleMax ?  circleDashArray : circleMax
     },
     ...mapGetters({
       company: "companyDetail/getCompany",
