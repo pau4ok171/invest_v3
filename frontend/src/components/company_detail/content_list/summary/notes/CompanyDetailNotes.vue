@@ -14,10 +14,15 @@ import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
 import CompanyDetailNotesNoteItem from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesNoteItem.vue";
+import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
+import CompanyDetailNotesLateralMenu
+  from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesLateralMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotes",
   components: {
+    CompanyDetailNotesLateralMenu,
+    BaseLateralMenuContainer,
     CompanyDetailNotesNoteItem,
     CompanyDetailNotesToolDropDownMenu,
     DotsIcon,
@@ -68,7 +73,15 @@ export default defineComponent({
           :key="note.id"
         />
       </div>
-      <RoundedDarkBlueButton :isFullWidth="true">See more</RoundedDarkBlueButton>
+
+      <BaseLateralMenuContainer>
+        <template #button>
+          <RoundedDarkBlueButton :isFullWidth="true">See more</RoundedDarkBlueButton>
+        </template>
+        <template #menu="menuProps">
+          <CompanyDetailNotesLateralMenu @closeMenu="menuProps.close()"/>
+        </template>
+      </BaseLateralMenuContainer>
     </template>
 
     <div v-else class="detail-notes__empty">
