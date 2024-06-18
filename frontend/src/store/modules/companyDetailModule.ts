@@ -226,7 +226,7 @@ export const companyDetailModule = {
     },
     async deleteNote({state, commit}, note: Note) {
       await axios
-        .delete(`/api/v1/notes/${note.id}`)
+        .delete(`/notes/api/v1/notes/${note.id}`)
         .then(() => {
           commit('setNotes', [...state.notes].filter(n => n.id !== note.id))
         })
