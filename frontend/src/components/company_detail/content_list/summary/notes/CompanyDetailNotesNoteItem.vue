@@ -44,7 +44,9 @@ export default defineComponent({
 <template>
 <section class="detail-notes__note-item">
   <div class="detail-notes__note-main" >
-    <button v-html="note.body" @click="editNote" class="detail-notes__note-button"/>
+    <button @click="editNote" class="detail-notes__note-button">
+      {{ note.text }}
+    </button>
   </div>
 
   <footer class="detail-notes__note-footer">
@@ -95,6 +97,7 @@ export default defineComponent({
   width: 100%;
   height: 100%;
   color: #fff;
+  text-align: left;
   transition: all .3s ease 0s;
   overflow: visible;
   cursor: pointer;
