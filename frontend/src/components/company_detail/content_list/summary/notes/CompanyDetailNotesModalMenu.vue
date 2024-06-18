@@ -9,6 +9,7 @@ import CompanyDetailNotesModalMenuFooter
 import {Editor} from "@tiptap/vue-3";
 import {StarterKit} from "@tiptap/starter-kit";
 import {Placeholder} from "@tiptap/extension-placeholder";
+import {CharacterCount} from '@tiptap/extension-character-count';
 import axios from "axios";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 
@@ -44,6 +45,9 @@ export default defineComponent({
           Placeholder.configure({
             emptyEditorClass: 'is-editor-empty',
             placeholder: 'Write your thoughts, links, and company narrative',
+          }),
+          CharacterCount.configure({
+            limit: this.contentLengthMax,
           }),
       ],
     })
