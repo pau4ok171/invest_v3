@@ -47,4 +47,7 @@ class NotesViewSet(ModelViewSet):
             serializer = self.serializer_class(Note.objects.get(pk=note_id))
             return Response(serializer.data)
         return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+    def destroy(self, request, *args, **kwargs):
+        Note.objects.get(pk=kwargs.get('pk')).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
