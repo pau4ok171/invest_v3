@@ -60,9 +60,18 @@ export default defineComponent({
 
 <template>
 <PageNotFound v-if="pageNotFound"/>
-<div v-else>
-  <CompanyDetailHeader/>
-  <CompanyDetailContent/>
-</div>
 
+<template v-else>
+  <div :class="{'detail--lateral-is-actif': true}" >
+    <CompanyDetailHeader/>
+    <CompanyDetailContent/>
+  </div>
 </template>
+</template>
+
+<style scoped>
+.detail--lateral-is-actif {
+  width: 100%;
+  max-width: 1167px;
+}
+</style>
