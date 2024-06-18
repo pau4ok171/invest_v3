@@ -21,4 +21,7 @@ export default defineComponent({
   height: 32px;
   font-size: 1.2rem;
 }
+.is-active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
 </style>
