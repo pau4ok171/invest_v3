@@ -39,6 +39,7 @@ export default defineComponent({
       onUpdate: () => {
         if (this.note.body !== this.editor.getHTML()) {
           this.note.body = this.editor.getHTML()
+          this.note.text = this.editor.getText()
         }
       },
       extensions: [
@@ -67,6 +68,7 @@ export default defineComponent({
     const new_note = {
       id: null,
       body: null,
+      text: null,
       created: null,
       updated: null,
       company: this.company.id,
@@ -114,8 +116,9 @@ export default defineComponent({
       const formData = new FormData()
       Object.entries({
         note_id: this.note.id,
-        company_id: this.note.company,
+        company_id: this.note.company || this.company.id,
         content: this.note.body,
+        text : this.note.text,
         updated: new Date().toISOString(),
       }).forEach(([key, val]) => formData.append(key, val))
 
