@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import {chartOpts} from "@/components/charts/priceChartOpts";
 import BaseInvisibleButton from "@/components/UI/buttons/BaseInvisibleButton.vue";
 import { DateTime } from 'luxon';
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import FetchingData from "@/components/charts/FetchingData.vue";
 
 interface Tab {
@@ -25,7 +25,8 @@ export default defineComponent({
         Y3: {value: '3Y', min: DateTime.now().minus({years: 3})},
         Y5: {value: '5Y', min: DateTime.now().minus({years: 5})},
         MAX: {value: 'Max', min: DateTime.now().minus({years: 50})},
-      }
+      },
+      chartDataUpdateInterval: 0,
     }
   },
   watch: {
@@ -34,6 +35,9 @@ export default defineComponent({
     },
   },
   methods: {
+    ...mapActions({
+      fetchPriceData: 'companyDetail/fetchPriceData',
+    }),
     changeZoom(tab: Tab) {
       this.currentPeriod = tab.value
       const priceChart = this.$refs.priceChart as any
@@ -45,13 +49,23 @@ export default defineComponent({
       this.chartOpts.series[0].data = this.priceData
       const  chartMax = chart.xAxis[1].max || DateTime.now().ts
       chart.xAxis[0].setExtremes(this.tablist['Y1'].min.ts, chartMax)
+      this.setChartDataUpdateInterval()
     },
+    setChartDataUpdateInterval() {
+      const company_slug = this.$route.params.company_slug as String
+      this.chartDataUpdateInterval = setInterval(() => this.fetchPriceData(company_slug), 1000*60*5) // 5min
+    }
   },
   computed: {
     ...mapGetters({
       priceData: 'companyDetail/companyPriceData',
       pageIsReady: 'companyDetail/getPageIsReady',
     }),
+  },
+  unmounted() {
+    if (this.chartDataUpdateInterval){
+      window.clearInterval(this.chartDataUpdateInterval)
+    }
   },
 })
 </script>
