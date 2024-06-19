@@ -4,7 +4,7 @@ export interface Statement {
     description: String,
     id: number,
     level: String,
-    name: String,
+    name: string,
     question: String,
     severity: String,
     status: String,
