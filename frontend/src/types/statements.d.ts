@@ -1,14 +1,14 @@
 export interface Statement {
     area: String,
     company: Number,
-    description: String,
+    description: string,
     id: number,
     level: String,
     name: string,
     question: String,
     severity: String,
     status: String,
-    title: String,
+    title: string,
     type: String,
 }
 
