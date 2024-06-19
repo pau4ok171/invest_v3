@@ -7,6 +7,8 @@ from statements.checks.value import (
     PriceToEarningsVsPeersCheck,
     PriceToEarningsVsIndustryCheck,
     PriceToEarningsVsFairRatioCheck,
+    ReturnVsMarketCheck,
+    ReturnVsIndustryCheck,
 )
 from statements.checks.future import (
     EarningsVsSavingRateCheck,
@@ -23,6 +25,8 @@ from statements.checks.past import (
     AcceleratingGrowthCheck,
     EarningsVsIndustryCheck,
     HighROECheck,
+    StableSharePriceCheck,
+    VolatilityOverTimeCheck,
 )
 from statements.checks.health import (
     ShortTermLiabilitiesCheck,
@@ -33,7 +37,7 @@ from statements.checks.health import (
     InterestCoverageCheck,
 )
 from statements.checks.dividend import (
-    NotableDividendCheck,
+    SignificantDividendCheck,
     HighDividendCheck,
     StableDividendCheck,
     GrowingDividendCheck,
@@ -60,6 +64,8 @@ def main(companies: list[Company] = None):
             PriceToEarningsVsPeersCheck(fields),
             PriceToEarningsVsIndustryCheck(fields),
             PriceToEarningsVsFairRatioCheck(fields),
+            ReturnVsMarketCheck(fields),
+            ReturnVsIndustryCheck(fields),
             # FUTURE
             EarningsVsSavingRateCheck(fields),
             EarningsVsMarketCheck(fields),
@@ -74,6 +80,8 @@ def main(companies: list[Company] = None):
             AcceleratingGrowthCheck(fields),
             EarningsVsIndustryCheck(fields),
             HighROECheck(fields),
+            StableSharePriceCheck(fields),
+            VolatilityOverTimeCheck(fields),
             # HEALTH
             ShortTermLiabilitiesCheck(fields),
             LongTermLiabilitiesCheck(fields),
@@ -82,7 +90,7 @@ def main(companies: list[Company] = None):
             DebtCoverageCheck(fields),
             InterestCoverageCheck(fields),
             # DIVIDEND
-            NotableDividendCheck(fields),
+            SignificantDividendCheck(fields),
             HighDividendCheck(fields),
             StableDividendCheck(fields),
             GrowingDividendCheck(fields),
@@ -108,6 +116,9 @@ def get_fields(company_object):
         peers_pe=4.8,
         industry_pe=4.8,
         company_fair_pe=4.8,
+        return_1y=0.33,
+        market_return_1y=0.282,
+        sector_market_return_1y=0.299,
         # Future
         company_forecast_earnings_growth=0.082,
         country_saving_rate=0.075,
@@ -123,6 +134,10 @@ def get_fields(company_object):
         company_earnings_growth=0.524,
         industry_earnings_growth=0.146,
         company_roe=0.209,
+        volatility_3m=0.017,
+        volatility_1y=0.29,
+        volatility_1y_past_year=0.17,
+        sector_market_volatility_3m=0.032,
         # Health
         company_short_term_assets=6_271_400_000_000,
         company_short_term_liabilities=31_154_700_000_000,
