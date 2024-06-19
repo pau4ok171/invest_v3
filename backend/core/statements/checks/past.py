@@ -207,3 +207,66 @@ class HighROECheck(BaseCheck):
             'success': f'{formatted_slug}\'s Return on Equity ({formatted_roe}) is considered high.',
             'error': f'{formatted_slug}\'s Return on Equity ({formatted_roe}) is considered low.',
         }
+
+
+class StableSharePriceCheck(BaseCheck):
+    def check(self) -> None:
+        if self.volatility_3m < self.sector_market_volatility_3m:
+            self.statement['status'] = status.PASS
+            self.statement['description'] = self.descriptions['success']
+        else:
+            self.statement['status'] = status.FAIL
+            self.statement['description'] = self.descriptions['error']
+
+    def populate(self) -> None:
+        self.statement = types.Statement(
+            company=self.company_object,
+            name='HasPriceStability',
+            title='Stable Share Price',
+            description='',
+            question=f'Has {self.slug.upper()} had a stable share price over the past 3 months?',
+            level=level.GLOBAL,
+            area=area.PAST,
+            type=type_.STATEMENTS,
+            status=status.FAIL,
+            severity=severity.NONE,
+        )
+        slug = self.slug.upper()
+
+        self.descriptions = {
+            'success': f'{slug} has not had significant price volatility in the past 3 months.',
+            'error': f'{slug}\' share price has been volatile over the past 3 months',
+        }
+
+
+class VolatilityOverTimeCheck(BaseCheck):
+    def check(self) -> None:
+        if self.volatility_1y < self.volatility_1y_past_year:
+            self.statement['status'] = status.PASS
+            self.statement['description'] = self.descriptions['success']
+        else:
+            self.statement['status'] = status.FAIL
+            self.statement['description'] = self.descriptions['error']
+
+    def populate(self) -> None:
+        self.statement = types.Statement(
+            company=self.company_object,
+            name='HasReturnsVolatilityImprovedOverPastYear',
+            title='Volatility Over Time',
+            description='',
+            question=f'Has {self.slug.upper()}\' volatility of returns improved over the past year?',
+            level=level.GLOBAL,
+            area=area.PAST,
+            type=type_.STATEMENTS,
+            status=status.FAIL,
+            severity=severity.NONE,
+        )
+        slug = self.slug.upper()
+        volatility_1y = self.get_percent_format(self.volatility_1y)
+        volatility_1y_past_year = self.get_percent_format(self.volatility_1y_past_year)
+
+        self.descriptions = {
+            'success': f'{slug}\'s weekly volatility (7%) has been stable over the past year.',
+            'error': f'{slug}\'s weekly volatility has increased '
+                     f'from {volatility_1y_past_year} to {volatility_1y} over the past year.',
+        }

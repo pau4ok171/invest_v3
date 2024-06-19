@@ -8,7 +8,7 @@ status = types.Status
 severity = types.Severity
 
 
-class NotableDividendCheck(BaseCheck):
+class SignificantDividendCheck(BaseCheck):
     def check(self) -> None:
         if self.company_dividend_yield > self.market_dividend_yield_p25:
             self.statement['status'] = status.PASS

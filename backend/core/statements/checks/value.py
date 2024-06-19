@@ -133,14 +133,18 @@ class PriceToEarningsVsIndustryCheck(BaseCheck):
             severity=severity.NONE,
         )
         formatted_slug = self.slug.upper()
+        country_adjectif = self.market_country_adjectif.capitalize()
+        sector_name = self.sector_company_name.capitalize()
         formatted_pe = self.get_multiple_format(self.company_pe)
         formatted_industry_pe = self.get_multiple_format(self.industry_pe)
 
         self.descriptions = {
             'success': f'{formatted_slug} is good value based on its Price-To-Earnings Ratio '
-                       f'({formatted_pe}) compared to the European Banks industry average ({formatted_industry_pe}).',
+                       f'({formatted_pe}) compared to the '
+                       f'{country_adjectif} {sector_name} industry average ({formatted_industry_pe}).',
             'error': f'{formatted_slug} is expensive based on its Price-To-Earnings Ratio '
-                     f'({formatted_pe}) compared to the US Semiconductor industry average ({formatted_industry_pe}).',
+                     f'({formatted_pe}) compared to the '
+                     f'{country_adjectif} {sector_name} industry average ({formatted_industry_pe}).',
         }
 
 
@@ -176,4 +180,71 @@ class PriceToEarningsVsFairRatioCheck(BaseCheck):
             'error': f'{formatted_slug} is expensive based on its Price-To-Earnings Ratio '
                      f'({formatted_pe}) '
                      f'compared to the estimated Fair Price-To-Earnings Ratio ({formatted_fair_pe}).',
+        }
+
+
+class ReturnVsIndustryCheck(BaseCheck):
+    def check(self) -> None:
+        if self.return_1y < self.sector_market_return_1y:
+            self.statement['status'] = status.PASS
+            self.statement['description'] = self.descriptions['success']
+        else:
+            self.statement['description'] = self.descriptions['error']
+
+    def populate(self) -> None:
+        self.statement = types.Statement(
+            company=self.company_object,
+            name='Is1YearReturnInLineOrAboveIndustry',
+            title='Return vs Industry',
+            description='',
+            question=f'Is {self.slug.upper()}\'s 1 year returns above the industry?',
+            level=level.GLOBAL,
+            area=area.VALUE,
+            type=type_.STATEMENTS,
+            status=status.FAIL,
+            severity=severity.NONE,
+        )
+        slug = self.slug.upper()
+        country_adjectif = self.market_country_adjectif.capitalize()
+        sector_name = self.sector_company_name.capitalize()
+        sector_market_return_1y = self.get_percent_format(self.sector_market_return_1y)
+
+        self.descriptions = {
+            'success': f'{slug} exceeded the {country_adjectif} {sector_name} industry which returned'
+                       f' {sector_market_return_1y} over the past year.',
+            'error': f'{slug} underperformed the {country_adjectif} {sector_name} industry which returned'
+                     f' {sector_market_return_1y} over the past year.',
+        }
+
+
+class ReturnVsMarketCheck(BaseCheck):
+    def check(self) -> None:
+        if self.return_1y < self.market_return_1y:
+            self.statement['status'] = status.PASS
+            self.statement['description'] = self.descriptions['success']
+        else:
+            self.statement['description'] = self.descriptions['error']
+
+    def populate(self) -> None:
+        self.statement = types.Statement(
+            company=self.company_object,
+            name='Is1YearReturnInLineOrAboveMarket',
+            title='Return vs Market',
+            description='',
+            question=f'Is {self.slug.upper()}\'s 1 year returns above the market?',
+            level=level.GLOBAL,
+            area=area.VALUE,
+            type=type_.STATEMENTS,
+            status=status.FAIL,
+            severity=severity.NONE,
+        )
+        slug = self.slug.upper()
+        country_adjectif = self.market_country_adjectif.capitalize()
+        market_return_1y = self.get_percent_format(self.market_return_1y)
+
+        self.descriptions = {
+            'success': f'{slug} exceeded the {country_adjectif} Market which returned'
+                       f' {market_return_1y} over the past year.',
+            'error': f'{slug} underperformed the {country_adjectif} Market which returned'
+                     f' {market_return_1y} over the past year.',
         }
