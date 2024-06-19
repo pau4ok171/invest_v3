@@ -101,7 +101,7 @@ export default defineComponent({
 <style scoped>
 .price-volatility-chart__wrapper {
   visibility: visible;
-  height: 224px;
+  height: 170px;
 }
 .price-volatility-chart {
   position: relative;
