@@ -139,8 +139,6 @@ export interface Formatting {
 export interface PriceData {
     capitalisation: number,
     last_price: number,
-    return_1y: number,
-    return_7d: number,
 }
 
 export interface Sector {
