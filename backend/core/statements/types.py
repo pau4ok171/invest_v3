@@ -84,6 +84,9 @@ class Fields(TypedDict):
     company_forecast_revenue_growth: float
     market_forecast_revenue_growth: float
     company_future_roe_3y: float
+    return_1y: float
+    market_return_1y: float
+    sector_market_return_1y: float
     # Past
     company_earnings: float
     company_profit_margins: float
@@ -92,6 +95,10 @@ class Fields(TypedDict):
     company_earnings_growth: float
     industry_earnings_growth: float
     company_roe: float
+    volatility_3m: float
+    volatility_1y: float
+    volatility_1y_past_year: float
+    sector_market_volatility_3m: float
     # Health
     company_short_term_assets: float
     company_short_term_liabilities: float
