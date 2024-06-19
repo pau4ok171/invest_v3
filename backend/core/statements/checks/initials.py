@@ -10,7 +10,7 @@ severity = types.Severity
 
 class HasFinancialDataCheck(BaseCheck):
     def check(self) -> None:
-        if self.company_object.reports.all().exists():
+        if self.company_object.reports.exists():
             self.statement['status'] = status.PASS
             self.statement['description'] = self.descriptions['success']
         else:
