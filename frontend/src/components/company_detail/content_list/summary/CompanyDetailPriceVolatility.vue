@@ -14,7 +14,7 @@ export default defineComponent({
         {id: 4, title: 'Volatility Over Time', description: 'Insufficient data to determine SBER\'s volatility change over the past year', status: 'failed'},
       ]
     }
-  }
+  },
 })
 </script>
 
@@ -24,7 +24,8 @@ export default defineComponent({
 
   <PriceVolatilityChart/>
 
-  <CompanyDetailStatement :statement_list/>
+  <CompanyDetailStatement name="HasPriceStability"/>
+  <CompanyDetailStatement name="HasReturnsVolatilityImprovedOverPastYear"/>
 
 </div>
 </template>
