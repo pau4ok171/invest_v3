@@ -6,10 +6,15 @@ import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import {mapGetters} from "vuex";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import DetailNewsItemModalMenu from "@/components/company_detail/content_list/summary/news/DetailNewsItemModalMenu.vue";
+import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
+import CompanyDetailNewsLateralMenu
+  from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsLateralMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailRecentNews",
   components: {
+    CompanyDetailNewsLateralMenu,
+    BaseLateralMenuContainer,
     DetailNewsItemModalMenu,
     BaseModalMenuContainer, DetailSectionTitle, CompanyDetailNewsItem, RoundedDarkBlueButton},
   computed: {
@@ -36,10 +41,16 @@ export default defineComponent({
     </BaseModalMenuContainer>
 
   </div>
-
-  <div class="detail-recent-news__button">
-    <RoundedDarkBlueButton :isFullWidth="true">See more updates</RoundedDarkBlueButton>
-  </div>
+  <BaseLateralMenuContainer>
+    <template #button>
+      <div class="detail-recent-news__button">
+        <RoundedDarkBlueButton :isFullWidth="true">See more updates</RoundedDarkBlueButton>
+      </div>
+    </template>
+    <template #menu="menuProps">
+      <CompanyDetailNewsLateralMenu @closeMenu="menuProps.close()"/>
+    </template>
+  </BaseLateralMenuContainer>
 </div>
 </template>
 </template>
