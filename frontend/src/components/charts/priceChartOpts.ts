@@ -2,7 +2,6 @@ export const chartOpts = {
   series: [{
     data: [],
     threshold: null,
-    enableMouseTracking: false,
     tooltip: {
       valueDecimals: 2
     },
@@ -23,7 +22,7 @@ export const chartOpts = {
       mouseWheel: {
         enabled: false
       }
-    }
+    },
   },
   xAxis: [{
     visible: true,
