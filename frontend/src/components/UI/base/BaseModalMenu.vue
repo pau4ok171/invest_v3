@@ -42,7 +42,7 @@ export default defineComponent({
   left: 0;
   position: fixed;
   height: 100%;
-  z-index: 9999;
+  z-index: 1000;
   display: flex;
   flex-flow: wrap;
   justify-content: center;
