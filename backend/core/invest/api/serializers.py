@@ -143,14 +143,10 @@ class CompanySerializer(serializers.ModelSerializer):
         if self.candles:
             return {
                 "last_price": self.get_last_price(instance),
-                "return_7d": self.get_return_7d(instance),
-                "return_1y": self.get_return_1y(instance),
                 "capitalisation": self.get_capitalisation(instance),
             }
         return {
             "last_price": 0,
-            "return_7d": 0,
-            "return_1y": 0,
             "capitalisation": 0,
         }
 
@@ -158,18 +154,6 @@ class CompanySerializer(serializers.ModelSerializer):
         if self.candles is None:
             self.get_candles(instance)
         return self.candles.latest("time").close or 0
-
-    def get_return_7d(self, instance):
-        if self.candles is None:
-            self.get_candles(instance)
-
-        return self.get_closest_available_return(days=7)
-
-    def get_return_1y(self, instance):
-        if self.candles is None:
-            self.get_candles(instance)
-
-        return self.get_closest_available_return(years=1)
 
     def get_capitalisation(self, instance):
         if self.candles is None:
