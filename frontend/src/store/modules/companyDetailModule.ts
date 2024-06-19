@@ -9,7 +9,6 @@ import type {
 import type {Statement} from "@/types/statements";
 import type {Portfolio} from "@/types/portfolios"
 import type {Note} from "@/types/notes";
-import store from "@/store";
 
 export const companyDetailModule = {
   state: () => ({
@@ -18,7 +17,7 @@ export const companyDetailModule = {
     company: {} as DetailCompany,
     portfolios: [] as Array<Portfolio>,
     notes: [] as Array<Note>,
-    statements: [] as Array<Statement>,
+    statements: {} as { [ name: string]: Statement },
     snowflake: [] as Array<Number>,
     competitors: [] as Array<Competitor>,
     note: {} as Note,
@@ -102,7 +101,7 @@ export const companyDetailModule = {
     setNote(state, note: Note) {
       state.note = note
     },
-    setStatements(state, statements: Array<Statement>) {
+    setStatements(state, statements: { [ name: string]: Statement }) {
       state.statements = statements
     },
     setSnowflake(state, snowflake: Array<Number>) {
@@ -178,7 +177,10 @@ export const companyDetailModule = {
           const company: DetailCompany = response.data.company
           const portfolios: Array<Portfolio> = response.data.portfolios
           const notes: Array<Note> = response.data.notes
-          const statements: Array<Statement> = response.data.statements
+          const statements: { [name: string]: Statement } = response.data.statements.reduce((result: { [name: string]: Statement}, item: Statement) => {
+            result[item.name] = item
+            return result
+          }, {})
           const snowflake: Array<Number> = Object.values(response.data.snowflake as Array<Number>)
           const competitors: Array<Competitor> = response.data.peers
 
