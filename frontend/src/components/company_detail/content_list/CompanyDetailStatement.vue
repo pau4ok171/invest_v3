@@ -5,29 +5,26 @@ import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailStatement",
-  data() {
-    return {
-      title: '',
-      description: '',
-    }
-  },
   props: {
     name: {
       type: String,
       required: true,
     },
   },
-  watch: {
-    statements() {
-      const statement: Statement = this.statements[this.name]
-      this.title = statement.title
-      this.description = statement.description
-    },
-  },
   computed: {
     ...mapGetters({
       statements: 'companyDetail/getStatements',
     }),
+    get_title() {
+      const statement: Statement = this.statements[this.name]
+      if (statement) return statement.title
+      return ''
+    },
+    get_description() {
+      const statement: Statement = this.statements[this.name]
+      if (statement) return statement.description
+      return ''
+    },
   },
 })
 </script>
@@ -37,8 +34,8 @@ export default defineComponent({
 
   <blockquote class="detail-statement-item">
     <p class="detail-statement-item__text">
-      <span class="text--error">{{  title }}: </span>
-      <span>{{ description }}</span>
+      <span class="text--error">{{  get_title }}: </span>
+      <span>{{ get_description }}</span>
     </p>
   </blockquote>
 
