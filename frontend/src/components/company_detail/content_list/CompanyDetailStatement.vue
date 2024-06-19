@@ -1,16 +1,34 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
-import type {PropType} from 'vue';
 import type {Statement} from "@/types/statements";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailStatement",
-  props: {
-    statement: {
-      type: Object as PropType<Statement>,
-      required: true,
+  data() {
+    return {
+      title: '',
+      description: '',
     }
-  }
+  },
+  props: {
+    name: {
+      type: String,
+      required: true,
+    },
+  },
+  watch: {
+    statements() {
+      const statement: Statement = this.statements[this.name]
+      this.title = statement.title
+      this.description = statement.description
+    },
+  },
+  computed: {
+    ...mapGetters({
+      statements: 'companyDetail/getStatements',
+    }),
+  },
 })
 </script>
 
@@ -19,8 +37,8 @@ export default defineComponent({
 
   <blockquote class="detail-statement-item">
     <p class="detail-statement-item__text">
-      <span class="text--error">{{  statement.title }}: </span>
-      <span>{{ statement.description }}</span>
+      <span class="text--error">{{  title }}: </span>
+      <span>{{ description }}</span>
     </p>
   </blockquote>
 
