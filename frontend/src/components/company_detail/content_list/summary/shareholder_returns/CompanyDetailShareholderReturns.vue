@@ -19,14 +19,6 @@ export default defineComponent({
     CompanyDetailShareholderReturnsTable,
     RoundedDarkBlueButton
   },
-  data() {
-    return {
-      statement_list : [
-        {id: 1, title: 'Return vs Industry', description: 'SBER underperformed the Russian Banks industry which returned -60.5% over the past year', status: 'failed'},
-        {id: 2, title: 'Return vs Market', description: 'SBER underperformed the Russian Market which returned -38.2% over the past year', status: 'failed'},
-      ]
-    }
-  }
 })
 </script>
 
@@ -48,7 +40,8 @@ export default defineComponent({
     </template>
   </BaseModalMenuContainer>
 
-  <CompanyDetailStatement :statement_list/>
+  <CompanyDetailStatement name="Is1YearReturnInLineOrAboveIndustry"/>
+  <CompanyDetailStatement name="Is1YearReturnInLineOrAboveMarket"/>
 
 </div>
 </template>
