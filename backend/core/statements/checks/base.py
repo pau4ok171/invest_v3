@@ -20,6 +20,9 @@ class BaseCheck:
         self.peers_pe: float | None = None
         self.industry_pe: float | None = None
         self.company_fair_pe: float | None = None
+        self.return_1y: float | None = None
+        self.market_return_1y: float | None = None
+        self.sector_market_return_1y: float | None = None
         # Future
         self.company_forecast_earnings_growth: float | None = None
         self.country_saving_rate: float | None = None
@@ -35,6 +38,10 @@ class BaseCheck:
         self.company_earnings_growth: float | None = None
         self.industry_earnings_growth: float | None = None
         self.company_roe: float | None = None
+        self.volatility_3m: float | None = None
+        self.volatility_1y: float | None = None
+        self.volatility_1y_past_year: float | None = None
+        self.sector_market_volatility_3m: float | None = None
         # Health
         self.company_short_term_assets: float | None = None
         self.company_short_term_liabilities: float | None = None
