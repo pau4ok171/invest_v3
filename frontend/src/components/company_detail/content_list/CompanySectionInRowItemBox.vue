@@ -21,7 +21,7 @@ export default defineComponent({
 .detail-section__in-row-item {
   padding-bottom: 24px;
   margin-top: 32px;
-  max-width: 100%;
+  max-width: 50%;
   flex: 0 0 50%;
 }
 .detail-section__in-row-item:first-child {
