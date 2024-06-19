@@ -33,11 +33,11 @@ export default defineComponent({
   <DetailSectionTitle>About the Company</DetailSectionTitle>
 
   <CompanyDetailAboutCompanyTable/>
-  <div v-if="descriptionIsAvailable">
     <div class="detail-about-company__description" :class="{'detail-about-company__description--cut': isCutting}">
       {{ get_description }}
     </div>
 
+  <div v-if="descriptionIsAvailable">
     <RoundedDarkBlueButton @click="isCutting=!isCutting" v-if="isCutting">Show more</RoundedDarkBlueButton>
     <RoundedDarkBlueButton @click="isCutting=!isCutting" v-else>Show less</RoundedDarkBlueButton>
   </div>
