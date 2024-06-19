@@ -22,9 +22,9 @@ export default defineComponent({
     Notes
   </template>
   <template #content>
-    <div class="base-lateral-menu-content">
+    <div class="detail-notes-lateral-menu-content">
       <CompanyDetailNotesNoteItem
-        v-for="note in notes.slice(0, 3)"
+        v-for="note in notes"
         :note
         :key="note.id"
       />
@@ -35,7 +35,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.base-lateral-menu-content {
+.detail-notes-lateral-menu-content {
   display: grid;
   gap: 8px;
 }
