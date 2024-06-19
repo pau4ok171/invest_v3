@@ -2,6 +2,7 @@ export const chartOpts = {
   series: [{
     data: [],
     threshold: null,
+    enableMouseTracking: false,
     tooltip: {
       valueDecimals: 2
     },
