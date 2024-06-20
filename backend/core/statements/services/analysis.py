@@ -111,6 +111,7 @@ def get_fields(company_object):
         sector_company_name='banks',
         # Value
         company_current_price=company_object.candles.order_by('-time')[0].close,
+        average_price_target_1y=400,
         company_fair_price=329.48,
         company_pe=5.0,
         peers_pe=4.8,
