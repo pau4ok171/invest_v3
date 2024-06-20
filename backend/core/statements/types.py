@@ -72,6 +72,7 @@ class Fields(TypedDict):
     sector_company_name: str
     # Value
     company_current_price: float
+    average_price_target_1y: float
     company_fair_price: float
     company_pe: float
     peers_pe: float
