@@ -183,6 +183,35 @@ class PriceToEarningsVsFairRatioCheck(BaseCheck):
         }
 
 
+class AnalystForecastCheck(BaseCheck):
+    def check(self) -> None:
+        if self.company_current_price < self.average_price_target_1y:
+            self.statement['status'] = status.PASS
+            self.statement['description'] = self.descriptions['success']
+        else:
+            self.statement['description'] = self.descriptions['error']
+
+    def populate(self) -> None:
+        self.statement = types.Statement(
+            company=self.company_object,
+            name='IsAnalystForecastTrustworthy',
+            title='Analyst Forecast',
+            description='',
+            question=f'What are the analyst 12m forecasts and can we trust them?',
+            level=level.GLOBAL,
+            area=area.VALUE,
+            type=type_.STATEMENTS,
+            status=status.FAIL,
+            severity=severity.NONE,
+        )
+
+        self.descriptions = {
+            'success': f'Target price is more than 20% higher than the current share price '
+                       f'and analysts are within a statistically confident range of agreement',
+            'error': f'Target price is less than 20% higher than the current share price',
+        }
+
+
 class ReturnVsIndustryCheck(BaseCheck):
     def check(self) -> None:
         if self.return_1y < self.sector_market_return_1y:
