@@ -15,6 +15,7 @@ class BaseCheck:
         self.sector_company_name: str | None = None
         # Value
         self.company_current_price: float | None = None
+        self.average_price_target_1y: float | None = None
         self.company_fair_price: float | None = None
         self.company_pe: float | None = None
         self.peers_pe: float | None = None
