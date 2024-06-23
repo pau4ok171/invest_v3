@@ -29,6 +29,7 @@ class BelowFairValueCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_current_price = self.get_finance_format(self.company_current_price)
@@ -67,6 +68,7 @@ class SignificantlyBelowFairValueCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_current_price = self.get_finance_format(self.company_current_price)
@@ -98,6 +100,7 @@ class PriceToEarningsVsPeersCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_pe = self.get_multiple_format(self.company_pe)
@@ -131,6 +134,7 @@ class PriceToEarningsVsIndustryCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         country_adjectif = self.market_country_adjectif.capitalize()
@@ -168,6 +172,7 @@ class PriceToEarningsVsFairRatioCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_pe = self.get_multiple_format(self.company_pe)
@@ -203,6 +208,7 @@ class AnalystForecastCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
 
         self.descriptions = {
@@ -232,6 +238,7 @@ class ReturnVsIndustryCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1003,
         )
         slug = self.slug.upper()
         country_adjectif = self.market_country_adjectif.capitalize()
@@ -266,6 +273,7 @@ class ReturnVsMarketCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1003,
         )
         slug = self.slug.upper()
         country_adjectif = self.market_country_adjectif.capitalize()

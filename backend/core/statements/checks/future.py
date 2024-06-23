@@ -29,6 +29,7 @@ class EarningsVsSavingRateCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_forecast_earnings_growth = self.get_percent_format(self.company_forecast_earnings_growth)
@@ -65,6 +66,7 @@ class EarningsVsMarketCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_country_adjectif = self.market_country_adjectif.capitalize()
@@ -104,6 +106,7 @@ class HighGrowthEarningsCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         self.descriptions = {
             'success': f'{self.slug.upper()}\'s earnings are expected to grow significantly over the next 3 years.',
@@ -132,6 +135,7 @@ class RevenueVsMarketCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_country_adjectif = self.market_country_adjectif.capitalize()
@@ -173,6 +177,7 @@ class HighGrowthRevenueCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_forecast_revenue_growth = self.get_percent_format(self.company_forecast_revenue_growth)
@@ -208,6 +213,7 @@ class FutureROECheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_future_roe_3y = self.get_percent_format(self.company_future_roe_3y)

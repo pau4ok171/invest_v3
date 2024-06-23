@@ -29,6 +29,7 @@ class SignificantDividendCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_country_adjectif = self.market_country_adjectif.capitalize()
@@ -68,6 +69,7 @@ class HighDividendCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_country_adjectif = self.market_country_adjectif.capitalize()
@@ -107,6 +109,7 @@ class StableDividendCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         self.descriptions = {
             'success': f'{self.slug.upper()}\'s dividends per share have been stable in the past 10 years.',
@@ -135,6 +138,7 @@ class GrowingDividendCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         self.descriptions = {
             'success': f'{self.slug.upper()}\'s dividend payments have increased over the past 10 years.',
@@ -163,6 +167,7 @@ class EarningsCoverageCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_payout_ratio = self.get_percent_format(self.company_payout_ratio)
@@ -196,6 +201,7 @@ class CashFlowCoverageCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_payout_ratio = self.get_percent_format(self.company_cash_payout_ratio)

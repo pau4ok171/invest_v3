@@ -29,6 +29,7 @@ class ShortTermLiabilitiesCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_short_term_assets = self.get_finance_format_with_unit(self.company_short_term_assets)
@@ -65,6 +66,7 @@ class LongTermLiabilitiesCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_short_term_assets = self.get_finance_format_with_unit(self.company_short_term_assets)
@@ -101,6 +103,7 @@ class DebtLevelCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_net_debt_to_equity_ratio = self.get_percent_format(self.company_net_debt_to_equity_ratio)
@@ -136,6 +139,7 @@ class ReducingDebtCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_debt_to_equity_ratio = self.get_percent_format(self.company_debt_to_equity_ratio)
@@ -172,6 +176,7 @@ class DebtCoverageCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_operating_cash_flow = self.get_percent_format(self.company_operating_cash_flow / self.company_debt)
@@ -204,6 +209,7 @@ class InterestCoverageCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_debt_coverage = self.get_multiple_format(self.company_ebit / self.company_debt)

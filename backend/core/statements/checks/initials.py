@@ -29,6 +29,7 @@ class HasBeenGrowingProfitOrRevenueCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         earnings_growth_1y = self.get_percent_format(self.company_earnings_growth)
 
@@ -59,6 +60,7 @@ class IsDividendAttractiveCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         company_payout_ratio = self.get_percent_format(self.company_payout_ratio)
 
@@ -89,6 +91,7 @@ class IsGoodRelativeValueCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         self.descriptions = {
             'success': f'Trading at good value compared to peers and industry',
@@ -117,6 +120,7 @@ class IsGoodValueCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         value = (self.company_current_price - self.company_fair_price)/self.company_current_price
         formatted_value = self.get_percent_format(abs(value))
@@ -147,6 +151,7 @@ class IsGoodValueComparedToIndustryCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         self.descriptions = {
             'success': f'Trading at good value vs. industry average Price-To-Earnings ratio',
@@ -175,6 +180,7 @@ class IsGoodValueComparedToPeersCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         self.descriptions = {
             'success': f'Trading at good value vs. peer average Price-To-Earnings ratio',
@@ -203,6 +209,7 @@ class IsGrowingProfitOrRevenueCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         forecast_earnings_growth = self.get_percent_format(self.company_forecast_earnings_growth)
 
@@ -233,6 +240,7 @@ class IsTradingBelowAnalystPriceTargetsCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         value = (self.average_price_target_1y-self.company_current_price)/self.average_price_target_1y
         formatted_value = self.get_percent_format(value)
@@ -263,6 +271,7 @@ class IsTradingBelowFairRatioCheck(BaseCheck):
             type=type_.REWARDS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         self.descriptions = {
             'success': f'Trading below our calculated fair Price-To-Earnings ratio',
@@ -291,6 +300,7 @@ class AreRevenueAndEarningsExpectedToGrowCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         earnings_growth_per_year_forecast_3y = self.get_percent_format(self.earnings_growth_per_year_forecast_3y)
 
@@ -323,6 +333,7 @@ class HasCapitalisationRateIncreasedSignificantlyCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
         self.descriptions = {
             'success': f'Yes',
@@ -354,6 +365,7 @@ class HasCashFromOperationGrownSlowerThanNetIncomeCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
         self.descriptions = {
             'success': f'Yes',
@@ -384,6 +396,7 @@ class HasDecliningGrossProfitMarginsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         gross_profit_margin = self.get_multiple_format(self.gross_profit_margin)
         gross_profit_margin_1y = self.get_multiple_format(self.gross_profit_margin_1y)
@@ -419,6 +432,7 @@ class HasDecliningProfitMarginsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         profit_margin = self.get_percent_format(self.company_profit_margins)
         profit_margin_1y = self.get_percent_format(self.past_profit_margins)
@@ -461,6 +475,7 @@ class HasFiledWithinMonthsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         diff = self.get_report_diff()
 
@@ -503,6 +518,7 @@ class HasFiledWithinPastYearCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
         diff = self.get_report_diff()
 
@@ -534,6 +550,7 @@ class HasFinancialDataCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         self.descriptions = {
             'success': f'{self.slug.upper()} has financial data available.',
@@ -568,6 +585,7 @@ class HasHighAccrualsRatioCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -600,6 +618,7 @@ class HasHighQualityEarningsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -632,6 +651,7 @@ class HasInventoryGrownSignificantlyFasterThanSalesCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -663,6 +683,7 @@ class HasLargeDecreaseInUnearnedRevenueCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -694,6 +715,7 @@ class HasLargeIncreaseInAccountsReceivableCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -725,6 +747,7 @@ class HasLargeNegativeOneTimeChargesCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -756,6 +779,7 @@ class HasLargeOneTimeChargesCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -787,6 +811,7 @@ class HasLargePositiveOneTimeChargesCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -818,6 +843,7 @@ class HasLargePositiveOneTimeChargesAndProfitableCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -857,6 +883,7 @@ class HasMeaningfulMarketCapCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         market_cap = self.get_finance_format_with_unit(self.market_cap)
 
@@ -889,6 +916,7 @@ class HasMeaningfulRevenueCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
         revenue = self.get_finance_format_with_unit(self.revenue)
 
@@ -921,6 +949,7 @@ class HasNegativeGrossMarginCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -952,6 +981,7 @@ class HasNetProfitMarginImprovedOverPastYearCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -983,6 +1013,7 @@ class HasNoConcerningRecentEventsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1014,6 +1045,7 @@ class HasNoSubstantialInsiderSellingOverPastQuarterCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1045,6 +1077,7 @@ class HasNotDilutedOverPastYearCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
 
         self.descriptions = {
@@ -1076,6 +1109,7 @@ class HasSignificantNonOperatingRevenueCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1107,6 +1141,7 @@ class HasStableSharePriceCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
 
         self.descriptions = {
@@ -1138,6 +1173,7 @@ class HasStableSharePriceOverPast3MonthsCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1176,6 +1212,7 @@ class HasSufficientFinancialDataCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1207,6 +1244,7 @@ class IsAbleToAchieveProfitabilityCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
 
         self.descriptions = {
@@ -1217,7 +1255,7 @@ class IsAbleToAchieveProfitabilityCheck(BaseCheck):
 
 class IsDividendSustainableCheck(BaseCheck):
     def check(self) -> None:
-        if not self.company_dividend_is_volatile_in_10y and self.company_dividend_yield > 0:
+        if not self.company_dividend_is_volatile_in_10y and self.company_dividend_yield > 0.05:
             self.statement['status'] = status.PASS
             self.statement['description'] = self.descriptions['success']
             self.statement['severity'] = severity.NONE
@@ -1238,6 +1276,7 @@ class IsDividendSustainableCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
         dividend_yield = self.get_percent_format(self.company_dividend_yield)
 
@@ -1271,6 +1310,7 @@ class IsInAGoodFinancialPositionCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1001,
         )
 
         self.descriptions = {
@@ -1303,6 +1343,7 @@ class IsProfitableOnAverageOrCurrentCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
@@ -1334,9 +1375,10 @@ class HasNoNegativeEquityCheck(BaseCheck):
             type=type_.RISKS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1000,
         )
 
         self.descriptions = {
-            'success': f'',
-            'error': f'',
+            'success': f'{self.slug.upper()} does not have negative shareholders equity.',
+            'error': f'{self.slug.upper()} have negative shareholders equity.',
         }
