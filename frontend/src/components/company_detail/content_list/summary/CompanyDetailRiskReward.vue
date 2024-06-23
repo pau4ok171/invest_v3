@@ -5,12 +5,31 @@ import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import TheCompanyDetailRisksModalMenu
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksModalMenu.vue";
+import {mapGetters} from "vuex";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailRiskReward",
   components: {
     TheCompanyDetailRisksModalMenu,
-    BaseModalMenuContainer, RoundedDarkBlueButton, CompanyDetailRiskRewardItem}
+    BaseModalMenuContainer,
+    RoundedDarkBlueButton,
+    CompanyDetailRiskRewardItem
+  },
+  computed: {
+    ...mapGetters({
+      statements: 'companyDetail/getStatements',
+    }),
+    get_rewards() {
+      return Object.fromEntries(Object.entries((this.statements as {[name: string]: Statement}))
+          .filter(([, s]) => s.type === 'REWARDS' && s.status === 'PASS' && s.outcome > 1000))
+    },
+    get_risks() {
+      const filtered = Object.fromEntries(Object.entries(this.statements as {[name: string]: Statement})
+          .filter(([, s]) => s.type === 'RISKS' && s.status === 'FAIL' && s.outcome > 1000))
+      return Object.fromEntries(Object.entries(filtered).sort(([, s1], [, s2]) => s1.severity === 'MAJOR' ? -1: 1))
+    },
+  },
 })
 </script>
 
@@ -19,30 +38,11 @@ export default defineComponent({
 
   <h3 class="risk-reward__title">Rewards</h3>
 
-  <CompanyDetailRiskRewardItem status="reward">
-    Trading at 59.5% below our estimate of its fair value
-  </CompanyDetailRiskRewardItem>
-  <CompanyDetailRiskRewardItem status="reward">
-    Earnings are forecast to grow 8.24% per year
-  </CompanyDetailRiskRewardItem>
-  <CompanyDetailRiskRewardItem status="reward">
-    Earnings grew by 52.4% over the past year
-  </CompanyDetailRiskRewardItem>
-  <CompanyDetailRiskRewardItem status="reward">
-    Trading at good value compared to peers and industry
-  </CompanyDetailRiskRewardItem>
+  <CompanyDetailRiskRewardItem v-for="statement in get_rewards" :statement :key="statement.id"/>
 
   <h3 class="risk-reward__title">Risk Analysis</h3>
 
-  <CompanyDetailRiskRewardItem status="high_risk">
-    Shares are highly illiquid
-  </CompanyDetailRiskRewardItem>
-  <CompanyDetailRiskRewardItem status="risk">
-    Unstable dividend track record
-  </CompanyDetailRiskRewardItem>
-  <CompanyDetailRiskRewardItem status="risk">
-    Latest financial reports are more than 6 months old
-  </CompanyDetailRiskRewardItem>
+  <CompanyDetailRiskRewardItem v-for="statement in get_risks" :statement :key="statement.id"/>
 
   <br>
 
