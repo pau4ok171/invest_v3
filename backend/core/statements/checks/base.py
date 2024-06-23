@@ -1,3 +1,6 @@
+import calendar
+import datetime
+
 from invest.models import Company
 from statements import models
 from statements.types import Statement
@@ -63,6 +66,30 @@ class BaseCheck:
         self.company_dividend_amount_10y_ago: float | None = None
         self.company_payout_ratio: float | None = None
         self.company_cash_payout_ratio: float | None = None
+        # Risks
+        self.earnings_growth_per_year_forecast_3y: float | None = None
+        self.capitalisation_rate: float | None = None
+        self.capitalisation_rate_1y: float | None = None
+        self.operating_cash_flow_growth: float | None = None
+        self.gross_profit_margin: float | None = None
+        self.gross_profit_margin_1y: float | None = None
+        self.sloan_ratio: float | None = None
+        self.inventory_growth: float | None = None
+        self.sales_growth: float | None = None
+        self.unearned_revenue_growth: float | None = None
+        self.accounts_receivable_growth: float | None = None
+        self.one_off_charges: float | None = None
+        self.market_cap: float | None = None
+        self.market_cap_usd: float | None = None
+        self.revenue: float | None = None
+        self.events_was_occurred: bool | None = None
+        self.substantial_insider_selling_was_occurred: bool | None = None
+        self.has_diluted_over_past_year: bool | None = None
+        self.non_operating_revenue: float | None = None
+        self.operating_revenue: float | None = None
+        self.cash_and_cash_equivalents: float | None = None
+        self.cash_expenses: float | None = None
+        self.equity: float | None = None
 
         for k, v in fields.items():
             setattr(self, k, v)
@@ -110,3 +137,12 @@ class BaseCheck:
                 return f'{self.currency}{value:.3f}{unit}'
             value /= 1000
         return f'{self.currency}{value:.2f}Q'
+
+    def get_report_diff(self) -> datetime.timedelta | None:
+        reports = self.company_object.reports
+        if reports.exists():
+            report = reports.latest('year', 'quarter')
+            month = 12 if report.quarter == 0 else report.quarter * 3
+            _, last_day = calendar.monthrange(report.year, month)
+            report_date = datetime.datetime(report.year, month, last_day)
+            return datetime.datetime.now() - report_date
