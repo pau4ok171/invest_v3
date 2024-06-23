@@ -10,6 +10,7 @@ export interface Statement {
     status: String,
     title: string,
     type: String,
+    outcome: number,
 }
 
 export interface Statements extends Array<Statement> {}
