@@ -20,3 +20,4 @@ class Statement(models.Model):
     type = models.CharField(choices=TYPE_CHOICES, max_length=255)
     status = models.CharField(choices=STATUS_CHOICES, max_length=255)
     severity = models.CharField(choices=SEVERITY_CHOICES, max_length=255)
+    outcome = models.IntegerField()
