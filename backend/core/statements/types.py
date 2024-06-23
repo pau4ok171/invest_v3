@@ -61,6 +61,7 @@ class Statement(TypedDict):
     type: Type
     status: Status
     severity: Severity
+    outcome: int
 
 
 class Fields(TypedDict):
