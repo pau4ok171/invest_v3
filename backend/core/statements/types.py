@@ -120,3 +120,27 @@ class Fields(TypedDict):
     company_dividend_amount_10y_ago: float
     company_payout_ratio: float
     company_cash_payout_ratio: float
+    # Risks
+    earnings_growth_per_year_forecast_3y: float
+    capitalisation_rate: float
+    capitalisation_rate_1y: float
+    operating_cash_flow_growth: float
+    gross_profit_margin: float
+    gross_profit_margin_1y: float
+    sloan_ratio: float
+    inventory_growth: float
+    sales_growth: float
+    unearned_revenue_growth: float
+    accounts_receivable_growth: float
+    one_off_charges: float
+    market_cap: float
+    market_cap_usd: float
+    revenue: float
+    events_was_occurred: bool
+    substantial_insider_selling_was_occurred: bool
+    has_diluted_over_past_year: bool
+    non_operating_revenue: float
+    operating_revenue: float
+    cash_and_cash_equivalents: float
+    cash_expenses: float
+    equity: float
