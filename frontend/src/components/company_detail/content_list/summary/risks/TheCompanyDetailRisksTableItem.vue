@@ -46,7 +46,7 @@ export default defineComponent({
         <span>{{ statement.description }}</span>
       </div>
 
-      <RoundedGreyButton>
+      <RoundedGreyButton style="width: 15%">
         <span>{{ statement.area.toLowerCase()  }}</span>
         <ArrowDownIcon class="detail-risks-table__icon"/>
       </RoundedGreyButton>
@@ -57,44 +57,45 @@ export default defineComponent({
 
 <style scoped>
 .detail-risks-table__content {
-    display: flex;
-    flex-flow: wrap;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
+  display: flex;
+  flex-flow: wrap;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  gap: 8px;
 }
 .detail-risks-table__description {
-    width: 77%;
+  width: 75%;
 }
 .detail-risks-table__question {
-    font-size: 1.4rem;
-    line-height: 1.5;
-    font-weight: 500;
-    margin-bottom: 3px;
+  font-size: 1.4rem;
+  line-height: 1.5;
+  font-weight: 500;
+  margin-bottom: 3px;
 }
 .detail-risks-table__icon {
-    width: 16px;
-    height: 16px;
-    transform: rotate(-90deg);
+  width: 16px;
+  height: 16px;
+  transform: rotate(-90deg);
 }
 .detail-risks-table__status mark {
-    border-radius: 4px;
-    padding: 3px 7px;
-    color: #fff;
-    line-height: 1.5;
-    text-align: right;
-    white-space: nowrap;
-    font-size: 1.4rem;
+  border-radius: 4px;
+  padding: 3px 7px;
+  color: #fff;
+  line-height: 1.5;
+  text-align: right;
+  white-space: nowrap;
+  font-size: 1.4rem;
 }
 .detail-risks-table__status--success {
-    background-color: rgb(45, 201, 126);
+  background-color: rgb(45, 201, 126);
 }
 .detail-risks-table__status--high-error {
-    background-color: rgb(230, 65, 65);
+  background-color: rgb(230, 65, 65);
 }
 .detail-risks-table__status--error {
-    background-color: rgb(255, 146, 18);
+  background-color: rgb(255, 146, 18);
 }
 .detail-risks-table__status--no-data {
-    background-color: rgb(201, 203, 207);
+  background-color: rgb(201, 203, 207);
 }
 </style>
