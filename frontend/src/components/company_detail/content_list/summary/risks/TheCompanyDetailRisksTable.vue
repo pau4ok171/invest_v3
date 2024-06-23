@@ -8,6 +8,7 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import TheCompanyDetailRisksTableItem
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksTableItem.vue";
 import {mapGetters} from "vuex";
+import {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "TheCompanyDetailRisksTable",
@@ -19,7 +20,11 @@ export default defineComponent({
     ...mapGetters({
       company: "companyDetail/getCompany",
       statements: "companyDetail/getStatements",
-    })
+    }),
+    get_rewards_and_risks() {
+      return Object.fromEntries(Object.entries((this.statements as {[name: string]: Statement}))
+          .filter(([, s]) => s.outcome > 1000 && (s.type === 'REWARDS' || s.type === 'RISKS')))
+    },
   },
 })
 </script>
@@ -34,7 +39,7 @@ export default defineComponent({
     </tr>
   </thead>
   <tbody>
-    <TheCompanyDetailRisksTableItem v-for="statement in statements" :statement :key="statement.id"/>
+    <TheCompanyDetailRisksTableItem v-for="statement in get_rewards_and_risks" :statement :key="statement.id"/>
   </tbody>
 </table>
 </template>
