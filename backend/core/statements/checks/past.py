@@ -29,6 +29,7 @@ class QualityEarningsCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         self.descriptions = {
             'success': f'{self.slug.upper()} has high quality earnings.',
@@ -57,6 +58,7 @@ class GrowingProfitMarginCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_profit_margins = self.get_percent_format(self.company_profit_margins)
@@ -93,6 +95,7 @@ class EarningsTrendCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_earnings_growth_5y = self.get_percent_format(self.company_earnings_growth_5y)
@@ -126,6 +129,7 @@ class AcceleratingGrowthCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_earnings_growth = self.get_percent_format(self.company_earnings_growth)
@@ -162,6 +166,7 @@ class EarningsVsIndustryCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_earnings_growth = self.get_percent_format(self.company_earnings_growth)
@@ -199,6 +204,7 @@ class HighROECheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1002,
         )
         formatted_slug = self.slug.upper()
         formatted_roe = self.get_percent_format(self.company_roe)
@@ -230,6 +236,7 @@ class StableSharePriceCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1003,
         )
         slug = self.slug.upper()
 
@@ -260,6 +267,7 @@ class VolatilityOverTimeCheck(BaseCheck):
             type=type_.STATEMENTS,
             status=status.FAIL,
             severity=severity.NONE,
+            outcome=1003,
         )
         slug = self.slug.upper()
         volatility_1y = self.get_percent_format(self.volatility_1y)
