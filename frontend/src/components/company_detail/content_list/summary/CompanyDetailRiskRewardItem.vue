@@ -1,25 +1,25 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from 'vue';
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailRiskRewardItem",
   components: {ArrowDownIcon, SolidStarIcon},
   props: {
-    status: {
-     type: String,
+    statement: {
+     type: Object as PropType<Statement>,
      required: true,
     }
   },
   methods: {
     getStatusClass() {
-      const status_list: any = {
-        reward: 'risk-reward-item__status-icon--reward',
-        risk: 'risk-reward-item__status-icon--minor-risk',
-        high_risk: 'risk-reward-item__status-icon--major-risk',
-      }
-      return status_list[this.status]
+      if (this.statement.type === 'REWARDS') return 'risk-reward-item__status-icon--reward'
+      if (this.statement.type === 'RISKS' && this.statement.severity === 'MINOR') return 'risk-reward-item__status-icon--minor-risk'
+      if (this.statement.type === 'RISKS' && this.statement.severity === 'MAJOR') return 'risk-reward-item__status-icon--major-risk'
+      return ''
     }
   }
 })
@@ -32,7 +32,7 @@ export default defineComponent({
   </div>
   <div class="risk-reward-item__desc">
       <a href="#" class="risk-reward-item__link">
-        <span><slot/></span>
+        <span>{{ statement.description }}</span>
         <ArrowDownIcon class="risk-reward-item__arrow-icon"/>
       </a>
   </div>
