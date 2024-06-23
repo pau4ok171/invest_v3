@@ -126,6 +126,12 @@ class CompanySerializer(serializers.ModelSerializer):
             'price_data',
             'formatting',
             'updated',
+            'return_7d',
+            'return_30d',
+            'return_90d',
+            'return_1y',
+            'return_3y',
+            'return_5y',
         )
 
     def __init__(self, instance=None, data=empty, **kwargs):

@@ -59,14 +59,14 @@ export default defineComponent({
        {{ object.formatting.primaryCurrencySymbol }}{{ object.price_data.last_price.toFixed(2) }}
     </RouterLink>
   </td>
-  <td :class="[object.price_data.return_7d > 0 ? 'company-list__success-color' : 'company-list__error-color']">
+  <td :class="[object.return_7d > 0 ? 'company-list__success-color' : 'company-list__error-color']">
      <RouterLink :to="object.absolute_url" class="company-list__company-link">
-      {{ object.price_data.return_7d.toFixed(2) }}%
+      {{ object.return_7d.toFixed(2) }}%
     </RouterLink>
   </td>
-  <td :class="[object.price_data.return_1y > 0 ? 'company-list__success-color' : 'company-list__error-color']">
+  <td :class="[object.return_1y > 0 ? 'company-list__success-color' : 'company-list__error-color']">
      <RouterLink :to="object.absolute_url" class="company-list__company-link">
-      {{ object.price_data.return_1y.toFixed(2) }}%
+      {{ object.return_1y.toFixed(2) }}%
     </RouterLink>
   </td>
   <td>
