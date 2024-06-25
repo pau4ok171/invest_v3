@@ -4,10 +4,13 @@ import DetailAnalysisTitle from "@/components/UI/text/DetailAnalysisTitle.vue";
 import DetailAnalysisDesc from "@/components/UI/text/DetailAnalysisDesc.vue";
 import DCFChart from "@/components/charts/DCFChart.vue";
 import CompanyDetailCheck from "@/components/company_detail/content_list/CompanyDetailCheck.vue";
+import {mapGetters} from "vuex";
+import FetchingData from "@/components/charts/FetchingData.vue";
 
 export default defineComponent({
   name: "ShareVsFairPrice",
   components: {
+    FetchingData,
     CompanyDetailCheck,
     DCFChart,
     DetailAnalysisDesc,
@@ -15,12 +18,20 @@ export default defineComponent({
   },
   data() {
     return {
-      checks: [
-          {id: 1, status: 'passed', title: 'Below Fair Value', description: 'SBER is trading below our estimate of fair value'},
-          {id: 2, status: 'passed', title: 'Significantly Below Fair Value', description: 'SBER is trading below fair value by more than 20%'},
-      ]
+      sectionDesc: '',
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+      pageIsReady: 'companyDetail/getPageIsReady',
+    }),
+  },
+  watch: {
+    company() {
+      this.sectionDesc = `What is the Fair Price of ${this.company.slug.toUpperCase()} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`
+    },
+  },
 })
 </script>
 
@@ -31,21 +42,19 @@ export default defineComponent({
     <span>1.1</span>Share Price vs Fair Value
   </DetailAnalysisTitle>
   <DetailAnalysisDesc>
-    What is the Fair Price of MSFT when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.
+    {{ sectionDesc }}
   </DetailAnalysisDesc>
 
   <div class="detail__content">
 
     <div class="detail__content-item">
-      <DCFChart/>
+      <DCFChart v-if="pageIsReady"/>
+      <FetchingData v-else/>
     </div>
 
     <div class="detail__content-item detail__point-list">
-      <CompanyDetailCheck
-          v-for="check in checks"
-          :check
-          :key="check.id"
-      />
+      <CompanyDetailCheck name="IsUndervaluedBasedOnDCF"/>
+      <CompanyDetailCheck name="IsHighlyUndervaluedBasedOnDCF"/>
     </div>
 
   </div>
