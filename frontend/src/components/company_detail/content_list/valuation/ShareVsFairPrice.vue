@@ -48,7 +48,7 @@ export default defineComponent({
   <div class="detail__content">
 
     <div class="detail__content-item">
-      <DCFChart v-if="!pageIsReady"/>
+      <DCFChart v-if="pageIsReady"/>
       <FetchingData style="height: 358px"  v-else/>
     </div>
 
