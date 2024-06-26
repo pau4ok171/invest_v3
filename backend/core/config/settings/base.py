@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'notes.apps.NotesConfig',
     'statements.apps.StatementsConfig',
     'news.apps.NewsConfig',
+    'analysis.apps.AnalysisConfig',
     # External apps
     'rest_framework',
     'rest_framework.authtoken',
