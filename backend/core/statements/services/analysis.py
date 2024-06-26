@@ -50,6 +50,7 @@ from statements.checks.value import (
     PriceToEarningsVsPeersCheck,
     PriceToEarningsVsIndustryCheck,
     PriceToEarningsVsFairRatioCheck,
+    AnalystForecastCheck,
     ReturnVsMarketCheck,
     ReturnVsIndustryCheck,
 )
@@ -148,6 +149,7 @@ def main(companies: list[Company] = None):
             PriceToEarningsVsPeersCheck(fields),
             PriceToEarningsVsIndustryCheck(fields),
             PriceToEarningsVsFairRatioCheck(fields),
+            AnalystForecastCheck(fields),
             ReturnVsMarketCheck(fields),
             ReturnVsIndustryCheck(fields),
             # FUTURE
