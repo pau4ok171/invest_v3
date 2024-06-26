@@ -9,6 +9,7 @@ import HistoricalMultiplier from "@/components/company_detail/content_list/valua
 import MultiplierVsIndustry from "@/components/company_detail/content_list/valuation/MultiplierVsIndustry.vue";
 import MultiplierVsFair from "@/components/company_detail/content_list/valuation/MultiplierVsFair.vue";
 import AnalystPriceTargets from "@/components/company_detail/content_list/valuation/AnalystPriceTargets.vue";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailValuation",
@@ -28,10 +29,21 @@ export default defineComponent({
       section: {
         num: 1,
         name: 'Valuation',
-        desc: 'Is SBER undervalued compared to its fair value, analyst forecasts and its price relative to the market?',
+        desc: '',
         area: 'VALUE',
       },
     }
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_section() {
+      if (this.company.slug) {
+        this.section.desc = `Is ${this.company.slug.toUpperCase()} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`
+      }
+      return this.section
+    },
   },
 })
 </script>
@@ -39,7 +51,7 @@ export default defineComponent({
 <template>
 <CompanyDetailSection>
 
-  <CompanyDetailSectionIntro :section/>
+  <CompanyDetailSectionIntro :section="get_section"/>
 
   <ShareVsFairPrice/>
 
