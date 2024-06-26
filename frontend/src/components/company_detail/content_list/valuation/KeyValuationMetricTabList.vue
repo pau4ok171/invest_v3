@@ -1,22 +1,47 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import type {PropType} from 'vue'
 import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
+import {mapGetters} from "vuex";
+import type {Tab} from "@/components/company_detail/content_list/valuation/KeyValuationMetric.vue";
 
 export default defineComponent({
   name: "KeyValuationMetricTabList",
   components: {
     SolidStarIcon
-  }
+  },
+  props: {
+    tabs: {
+      type: Object as PropType<{[p: string]: Tab}>,
+      required: true,
+    },
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_key_metric() {
+      return Object.values(this.tabs).find(t => t.active)?.metric
+    }
+  },
 })
 </script>
 
 <template>
 <div class="detail-key-valuation-metric__tab-list">
   <div role="tablist" class="detail-key-valuation-metric__tab-button-list">
-    <button role="tab" value="1" class="detail-key-valuation-metric__tab-button" disabled>PE</button>
-    <button role="tab" value="2" class="detail-key-valuation-metric__tab-button">PB</button>
-    <button role="tab" value="3" class="detail-key-valuation-metric__tab-button">PS</button>
-    <button role="tab" value="4" class="detail-key-valuation-metric__tab-button">Others</button>
+
+    <button
+      role="tab"
+      class="detail-key-valuation-metric__tab-button"
+      v-for="tab in tabs"
+      :key="tab.id"
+      :disabled="tab.active"
+      @click="$emit('changeTab', tab)"
+    >
+      {{ tab.name }}
+    </button>
+
   </div>
   <div class="detail-key-valuation-metric__tab-desc">
 
@@ -27,7 +52,7 @@ export default defineComponent({
     <div class="detail-key-valuation-metric__text">
       <p class="detail-key-valuation-metric__text-desc">
         <mark class="detail-key-valuation-metric__text-mark">Key metric: </mark>
-        <span>As SBER is profitable we use its Price-To-Earnings Ratio for relative valuation analysis</span>
+        <span>{{ get_key_metric }}</span>
       </p>
     </div>
 
