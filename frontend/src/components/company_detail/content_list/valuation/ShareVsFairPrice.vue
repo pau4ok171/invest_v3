@@ -16,20 +16,14 @@ export default defineComponent({
     DetailAnalysisDesc,
     DetailAnalysisTitle
   },
-  data() {
-    return {
-      sectionDesc: '',
-    }
-  },
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
       pageIsReady: 'companyDetail/getPageIsReady',
     }),
-  },
-  watch: {
-    company() {
-      this.sectionDesc = `What is the Fair Price of ${this.company.slug.toUpperCase()} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`
+    get_section_desc() {
+      if (!this.company.slug) return ''
+      return `What is the Fair Price of ${this.company.slug.toUpperCase()} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`
     },
   },
 })
@@ -42,7 +36,7 @@ export default defineComponent({
     <span>1.1</span>Share Price vs Fair Value
   </DetailAnalysisTitle>
   <DetailAnalysisDesc>
-    {{ sectionDesc }}
+    {{ get_section_desc }}
   </DetailAnalysisDesc>
 
   <div class="detail__content">
