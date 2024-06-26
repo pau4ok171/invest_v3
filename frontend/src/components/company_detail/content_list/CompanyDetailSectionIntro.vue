@@ -7,6 +7,7 @@ import DetailAnalysisTitle from "@/components/UI/text/DetailAnalysisTitle.vue";
 import DetailAnalysisDesc from "@/components/UI/text/DetailAnalysisDesc.vue";
 import {mapGetters} from "vuex";
 import type {Section} from "@/types/section";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailSectionIntro",
@@ -27,7 +28,7 @@ export default defineComponent({
       statements: 'companyDetail/getStatements',
     }),
     filtered_statements(){
-      return [...this.statements].filter(s => s.area === this.section.area)
+      return Object.fromEntries(Object.entries(this.statements as {[name: string]: Statement}).filter(([, s]) => s.area === this.section.area && s.outcome === 1002))
     },
   },
 })
