@@ -6,20 +6,26 @@ import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import CheckIcon from "@/components/icons/CheckIcon.vue";
 import CrossIcon from "@/components/icons/CrossIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-import type {Statements} from "@/types/statements";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "CompanyDetailSectionIntroScore",
-  components: {ArrowDownIcon, CrossIcon, CheckIcon, CheckedIcon, CheckmarkCircleIcon},
+  components: {
+    ArrowDownIcon,
+    CrossIcon,
+    CheckIcon,
+    CheckedIcon,
+    CheckmarkCircleIcon
+  },
   props: {
     statements: {
-      type: Object as PropType<Statements>,
+      type: Object as PropType<{ [name: string]: Statement }>,
       required: true,
-    }
+    },
   },
   computed: {
     statementPassCount() {
-      return this.statements.reduce((acc, s) => {
+      return Object.values(this.statements).reduce((acc, s) => {
         if (s.status === 'PASS') {
           acc += 1
         }
