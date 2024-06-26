@@ -43,8 +43,7 @@ export default defineComponent({
     }),
     get_section_desc() {
       if (!this.company.slug) return ''
-      const slug = this.company.slug.toUpperCase()
-      return `Which metric is best to use when looking at relative valuation for ${slug}?`
+      return `Which metric is best to use when looking at relative valuation for ${this.company.slug.toUpperCase()}?`
     },
     get_tabs() {
       const tabs = {...this.tabs}
