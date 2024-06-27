@@ -4,6 +4,7 @@ import {chartOpts} from "@/components/charts/keyValuationMetricChart";
 import type {PropType} from "vue";
 import type {Tab} from "@/components/company_detail/content_list/valuation/KeyValuationMetric.vue";
 import {mapGetters} from "vuex";
+import DataNotAvailable from "@/components/charts/DataNotAvailable.vue";
 
 interface ChartData {
   name: string,
@@ -15,6 +16,7 @@ interface ChartData {
 
 export default defineComponent({
   name: "KeyValuationMetricChart",
+  components: {DataNotAvailable},
   data() {
     return {
       chartOpts: chartOpts,
@@ -36,11 +38,13 @@ export default defineComponent({
       return Object.values(this.tabs).find(t => t.active)
     },
     get_multiplier_value() {
+      if (!this.dataIsAvailable) return null
       if (this.tabs.pe.active) return this.chartData.earnings.mult
       if (this.tabs.pb.active) return this.chartData.book.mult
       if (this.tabs.ps.active) return this.chartData.sales.mult
     },
     get_multiplier_name() {
+      if (!this.dataIsAvailable) return null
       if (this.tabs.pe.active) return 'PE'
       if (this.tabs.pb.active) return 'PB'
       if (this.tabs.ps.active) return 'PS'
@@ -48,7 +52,7 @@ export default defineComponent({
   },
   beforeMount() {
     this.chartData = this.get_data()
-
+    if (!this.dataIsAvailable) return null
     this.chartOpts.series = this.get_series() as any
     this.chartOpts.yAxis = this.get_y_axis() as any
     this.chartOpts.chart.events = {load: this.drawLines}
@@ -56,6 +60,7 @@ export default defineComponent({
   watch: {
     tabs: {
       handler() {
+        if (!this.dataIsAvailable) return null
         const chart = (this.$refs.keyValuationMetricChart as any).chart
         chart.series[1].visible = false
         chart.series[2].visible = false
@@ -71,7 +76,7 @@ export default defineComponent({
   },
   methods: {
     get_data(): {[p: string]: ChartData} {
-      if (!this.company.reports.length) {
+      if (!this.company.reports.length && !this.company.price_data?.capitalisation) {
         this.dataIsAvailable = false
         return {}
       } else {
@@ -125,7 +130,6 @@ export default defineComponent({
     },
     get_series() {
       const data = this.chartData
-      if (!data) return null
 
       return [{
         name: 'Market Cap',
@@ -234,7 +238,6 @@ export default defineComponent({
     },
     get_y_axis() {
       const data = this.chartData
-      if (!data) return  {}
 
       return {
         min: 0,
@@ -276,7 +279,8 @@ export default defineComponent({
 
 <template>
 <div class="detail-key-valuation-metric__chart-wrapper">
-  <div class="detail-key-valuation-metric__chart">
+  <DataNotAvailable v-if="!dataIsAvailable" chart-name="Key Valuation Metric  Chart"/>
+  <div v-else class="detail-key-valuation-metric__chart">
 
     <charts
       :options="chartOpts"

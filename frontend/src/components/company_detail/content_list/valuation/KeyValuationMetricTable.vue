@@ -51,7 +51,7 @@ export default defineComponent({
 
 <style scoped>
 .key-valuation-metrics__table-wrapper {
-  min-height: 326px;
+  min-height: 280px;
 }
 .key-valuation-metrics__table {
   line-height: 1.5;
