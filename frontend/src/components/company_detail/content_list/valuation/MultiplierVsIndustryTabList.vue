@@ -3,13 +3,10 @@ import {defineComponent} from 'vue'
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
-import MultiplierVsPeersTabListDropDownMenu
-  from "@/components/company_detail/content_list/valuation/MultiplierVsPeersTabListDropDownMenu.vue";
 
 export default defineComponent({
   name: "MultiplierVsIndustryTabList",
   components: {
-    MultiplierVsPeersTabListDropDownMenu,
     RoundedBorderedButton,
     DropDownMenuBox,
     ArrowDownIcon,
@@ -29,7 +26,6 @@ export default defineComponent({
         </RoundedBorderedButton>
       </template>
       <template v-slot:menu>
-        <MultiplierVsPeersTabListDropDownMenu/>
       </template>
     </DropDownMenuBox>
   </div>
