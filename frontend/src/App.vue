@@ -38,7 +38,7 @@ export default defineComponent({
     <RouterView/>
   </AppLayout>
 
-  <Loader v-if="isLoading"/>
+<!--  <Loader v-if="isLoading"/>-->
 </div>
 </template>
 
