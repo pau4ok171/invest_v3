@@ -17,11 +17,33 @@ export default defineComponent({
   },
   data() {
     return {
-      checks: [
-          {id: 3, status: 'passed', title: 'Price-To-Earnings vs Peers', description: 'SBER is good value based on its Price-To-Earnings Ratio (2.6x) compared to the peer average (7.9x)'},
-      ]
+      tabs: {
+        pe: {name: 'Price to Earnings', short_name: 'PE', id: 'price_to_earnings', value: 1, active: true,},
+        pb: {name: 'Price to Book', short_name: 'PB', id: 'price_to_book', value: 2, active: false,},
+        ps: {name: 'Price to Sales', short_name: 'PS', id: 'price_to_sales', value: 3, active: false,},
+      } as {[p: string]: Tab}
     }
-  }
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+      pageIsReady: 'companyDetail/getPageIsReady',
+    }),
+    get_section_desc() {
+      if (!this.company.slug) return ''
+      const short_name = Object.values(this.tabs).find(t => t.active)?.short_name.toUpperCase() || ''
+      return `How does ${this.company.slug.toUpperCase()}'s ${short_name} Ratio compare to its peers?`
+    },
+  },
+  methods: {
+    changeMode(tab: Tab) {
+      // Во всех tabs поставить режим false
+      Object.values(this.tabs).forEach(tab => tab.active = false)
+      // Активировать нажатый таб
+      const clicked_tab = Object.values(this.tabs).find(t => t.id === tab.id)
+      if (clicked_tab) clicked_tab.active = true
+    }
+  },
 })
 </script>
 
