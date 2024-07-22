@@ -34,13 +34,7 @@ export default defineComponent({
     </div>
 
     <div class="detail__content-item detail__point-list">
-
-      <CompanyDetailCheck
-        v-for="check in checks"
-        :check
-        :key="check.id"
-      />
-
+      <CompanyDetailCheck name="IsAnalystForecastTrustworthy"/>
     </div>
   </div>
 </section>
