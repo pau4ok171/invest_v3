@@ -31,6 +31,7 @@ export default defineComponent({
   <nav class="account-access__navigation">
     <div class="account-access-navigation__inner">
       <ul class="account-access__list">
+        <li><RouterLink :to="{name: 'admin'}">Admin Panel</RouterLink></li>
         <li><a href="#">Profile</a></li>
         <li><a href="#">Plans & Pricing</a></li>
         <li><a href="#">Notifications</a></li>
