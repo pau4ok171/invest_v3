@@ -23,6 +23,7 @@ urlpatterns = [
     path('watchlist/', include('watchlist.urls', namespace='watchlist')),
     path('api/v1/watchlist/', include('watchlist.api.urls', namespace='watchlist_api')),
     path('', include('django.contrib.auth.urls')),
+    path('api/v1/admin/', include('site_admin.api.urls', namespace='admin_api')),
     path('', views.HomePageView.as_view(), name='home'),
 ]
 
