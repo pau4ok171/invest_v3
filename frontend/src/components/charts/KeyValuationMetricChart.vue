@@ -45,9 +45,7 @@ export default defineComponent({
     },
     get_multiplier_name() {
       if (!this.dataIsAvailable) return null
-      if (this.tabs.pe.active) return 'PE'
-      if (this.tabs.pb.active) return 'PB'
-      if (this.tabs.ps.active) return 'PS'
+      return this.get_active_tab?.name
     },
   },
   beforeMount() {
