@@ -1,6 +1,8 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {chartOpts} from "@/components/charts/multiplierVsPeersChart";
+import {PropType} from "vue";
+import type {Tab} from "@/components/company_detail/content_list/valuation/MultiplierVsPeers.vue";
 
 export default defineComponent({
   name: "MultiplierVsPeersChart",
@@ -8,6 +10,12 @@ export default defineComponent({
     return {
       chartOpts: chartOpts
     }
+  },
+  props: {
+    tabs: {
+      required: true,
+      type: Object as PropType<{[p: string]: Tab}>
+    },
   },
 })
 </script>
