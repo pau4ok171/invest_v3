@@ -3,6 +3,8 @@ import {defineComponent} from 'vue'
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import EditIcon from "@/components/icons/EditIcon.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
+import type {AdminDetailCompany} from "@/types/admin";
+import AdminModelHeader from "@/components/admin/models/AdminModelHeader.vue";
 
 export default defineComponent({
   name: "AdminModel",
@@ -27,7 +29,7 @@ export default defineComponent({
         currencySymbol: null,
         created: null,
         updated: null,
-      }
+      } as AdminDetailCompany
     }
   },
 })
