@@ -2,8 +2,6 @@
 import {defineComponent} from 'vue'
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import MultiplierVsPeersTabListDropDownMenu
-  from "@/components/company_detail/content_list/valuation/MultiplierVsPeersTabListDropDownMenu.vue";
 import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
 
@@ -11,7 +9,7 @@ export default defineComponent({
   name: "HistoricalMultiplierTabList",
   components: {
     RoundedBorderedButton,
-    RoundedButton, MultiplierVsPeersTabListDropDownMenu, DropDownMenuBox, ArrowDownIcon}
+    RoundedButton, DropDownMenuBox, ArrowDownIcon}
 })
 </script>
 
@@ -31,7 +29,6 @@ export default defineComponent({
         </template>
 
         <template v-slot:menu>
-          <MultiplierVsPeersTabListDropDownMenu/>
         </template>
 
       </DropDownMenuBox>
