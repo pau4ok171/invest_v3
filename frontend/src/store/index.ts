@@ -2,6 +2,7 @@ import {createStore} from "vuex";
 import {companyDetailModule} from "@/store/modules/companyDetailModule";
 import {companyListModule} from "@/store/modules/companyListModule";
 import {authModule} from "@/store/modules/authModule";
+import {adminModule} from "@/store/modules/adminModule";
 
 const store = createStore({
   state: () => ({
@@ -17,6 +18,7 @@ const store = createStore({
     },
   },
   modules: {
+    adminModule: adminModule,
     authModule: authModule,
     companyList: companyListModule,
     companyDetail: companyDetailModule,
