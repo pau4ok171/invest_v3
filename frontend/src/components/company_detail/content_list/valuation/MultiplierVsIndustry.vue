@@ -5,19 +5,26 @@ import DetailAnalysisDesc from "@/components/UI/text/DetailAnalysisDesc.vue";
 import CompanyDetailCheck from "@/components/company_detail/content_list/CompanyDetailCheck.vue";
 import MultiplierVsIndustryTabList from "@/components/company_detail/content_list/valuation/MultiplierVsIndustryTabList.vue";
 import MultiplierVsIndustryChart from "@/components/charts/MultiplierVsIndustryChart.vue";
+import {mapGetters} from "vuex";
 
 export default defineComponent({
   name: "MultiplierVsIndustry",
   components: {
     MultiplierVsIndustryChart,
-    MultiplierVsIndustryTabList, CompanyDetailCheck, DetailAnalysisDesc, DetailAnalysisTitle},
-  data() {
-    return {
-      checks: [
-          {id: 4, status: 'passed', title: 'Price-To-Earnings vs Industry', description: 'SBER is good value based on its Price-To-Earnings Ratio (2.6x) compared to the European Banks industry average (7.3x)'},
-      ]
-    }
-  }
+    MultiplierVsIndustryTabList,
+    CompanyDetailCheck,
+    DetailAnalysisDesc,
+    DetailAnalysisTitle
+  },
+  computed: {
+    ...mapGetters({
+      company: 'companyDetail/getCompany',
+    }),
+    get_section_desc() {
+      if (!this.company.slug) return ''
+      return `How does ${this.company.slug.toUpperCase()}'s PE Ratio compare vs other companies in the European Banks Industry?`
+    },
+  },
 })
 </script>
 
@@ -28,7 +35,7 @@ export default defineComponent({
   </DetailAnalysisTitle>
 
   <DetailAnalysisDesc>
-    How does SBER's PE Ratio compare vs other companies in the European Banks Industry?
+    {{ get_section_desc }}
   </DetailAnalysisDesc>
 
   <div class="detail__content">
@@ -44,13 +51,7 @@ export default defineComponent({
     </div>
 
     <div class="detail__content-item detail__point-list">
-
-      <CompanyDetailCheck
-          v-for="check in checks"
-          :check
-          :key="check.id"
-      />
-
+      <CompanyDetailCheck name="IsGoodValueComparingPriceToEarningsToIndustry"/>
     </div>
   </div>
 </section>
