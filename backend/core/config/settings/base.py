@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'statements.apps.StatementsConfig',
     'news.apps.NewsConfig',
     'analysis.apps.AnalysisConfig',
+    'site_admin.apps.AdminConfig',
     # External apps
     'rest_framework',
     'rest_framework.authtoken',
