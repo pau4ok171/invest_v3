@@ -66,7 +66,7 @@ export default defineComponent({
   </DetailAnalysisTitle>
 
   <DetailAnalysisDesc>
-    How does SBER's PE Ratio compare to its peers?
+    {{ get_section_desc }}
   </DetailAnalysisDesc>
 
   <div class="detail__content">
@@ -87,6 +87,7 @@ export default defineComponent({
       />
 
     </div>
+
   </div>
 
 </section>
