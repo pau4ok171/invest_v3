@@ -5,10 +5,21 @@ import DetailAnalysisDesc from "@/components/UI/text/DetailAnalysisDesc.vue";
 import MultiplierVsPeersTabList from "@/components/company_detail/content_list/valuation/MultiplierVsPeersTabList.vue";
 import MultiplierVsPeersChart from "@/components/charts/MultiplierVsPeersChart.vue";
 import CompanyDetailCheck from "@/components/company_detail/content_list/CompanyDetailCheck.vue";
+import {mapGetters} from "vuex";
+import FetchingData from "@/components/charts/FetchingData.vue";
+
+export interface Tab {
+  name: string,
+  short_name: string,
+  id: string,
+  value: number,
+  active: boolean,
+}
 
 export default defineComponent({
   name: "MultiplierVsPeers",
   components: {
+    FetchingData,
     CompanyDetailCheck,
     MultiplierVsPeersChart,
     MultiplierVsPeersTabList,
@@ -61,9 +72,9 @@ export default defineComponent({
   <div class="detail__content">
     <div class="detail__content-item">
 
-      <MultiplierVsPeersTabList/>
-
-      <MultiplierVsPeersChart/>
+      <MultiplierVsPeersTabList @changeMode="changeMode" :tabs/>
+      <MultiplierVsPeersChart v-if="pageIsReady" :tabs/>
+      <FetchingData style="height: 362px" v-else/>
 
     </div>
 
