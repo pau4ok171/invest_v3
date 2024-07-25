@@ -31,3 +31,8 @@ export interface AdminDetailCompany {
   created: string | null,
   updated: string | null,
 }
+
+export interface SelectorOption {
+  name: string,
+  slug: string,
+}
