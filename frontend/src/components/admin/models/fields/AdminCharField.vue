@@ -4,6 +4,13 @@ import {defineComponent} from 'vue'
 export default defineComponent({
   name: "AdminCharField",
   props: {
+    label: {
+      type: String,
+      default: 'Label',
+    },
+    helpText: {
+      type: String
+    },
     isRequired: {
       type: Boolean,
       default: false,
