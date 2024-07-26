@@ -61,21 +61,30 @@ export default defineComponent({
 </script>
 
 <template>
-<DropDownMenuBox>
-  <template v-slot:button>
-    <RoundedButton>
-      <span>{{ activeOption.name }}</span>
-      <ArrowDownIcon/>
-    </RoundedButton>
-  </template>
-  <template v-slot:menu>
-    <AdminSelectorDropDownMenu
-        v-model:activeOption="activeOption"
-        :options
-        :hasSearch
-    />
-  </template>
-</DropDownMenuBox>
+<div class="admin-selector-fieldset">
+  <DropDownMenuBox>
+    <template v-slot:button>
+        <button
+            class="admin-selector-field"
+            :disabled="isDisabled"
+        >
+          <span>{{ activeOption.name }}</span>
+          <ArrowDownIcon/>
+        </button>
+       <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !activeOption.slug.length}]">
+         {{ label }}{{ isRequired?'*':'' }}
+       </label>
+    </template>
+    <template v-slot:menu>
+      <AdminSelectorDropDownMenu
+          v-model:activeOption="activeOption"
+          :options
+          :hasSearch
+      />
+    </template>
+  </DropDownMenuBox>
+  <div v-if="helpText" class="admin-selector-field__help-text">{{ helpText }}</div>
+</div>
 </template>
 
 <style scoped>
