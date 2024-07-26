@@ -4,7 +4,6 @@ import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import BaseInput from "@/components/UI/base/BaseInput.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {SelectorOption} from "@/types/admin";
@@ -14,7 +13,6 @@ export default defineComponent({
   components: {
     AdminSelectorDropDownMenu,
     CompanyListFilterDropDownMenu,
-    RoundedButton,
     DropDownMenuBox,
     ArrowDownIcon,
     BaseInput,
