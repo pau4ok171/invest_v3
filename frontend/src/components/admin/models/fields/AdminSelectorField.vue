@@ -34,6 +34,13 @@ export default defineComponent({
       type: Array<SelectorOption>,
       required: true,
     },
+    label: {
+      type: String,
+      default: 'Label',
+    },
+    helpText: {
+      type: String
+    },
     isRequired: {
       type: Boolean,
       default: false,
