@@ -1,14 +1,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import EditIcon from "@/components/icons/EditIcon.vue";
-import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import type {AdminDetailCompany} from "@/types/admin";
 import AdminModelHeader from "@/components/admin/models/AdminModelHeader.vue";
+import AdminModelForm from "@/components/admin/models/AdminModelForm.vue";
 
 export default defineComponent({
   name: "AdminModel",
-  components: {AdminModelHeader, DeleteIcon, EditIcon, RoundedDarkBlueButton},
+  components: {
+    AdminModelForm,
+    AdminModelHeader
+  },
   data() {
     return {
       adminCompany: {
