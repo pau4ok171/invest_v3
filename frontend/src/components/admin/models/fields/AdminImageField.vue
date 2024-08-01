@@ -3,6 +3,12 @@ import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: "AdminImageField",
+  components: {RoundedBlueButton, DeleteIcon, UploadIcon},
+  data() {
+    return {
+      isDrugOver: false,
+    }
+  },
   props: {
      label: {
       type: String,
