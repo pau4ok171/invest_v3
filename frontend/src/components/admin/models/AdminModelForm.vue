@@ -1,5 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue";
+import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue";
+import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
+import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
+import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
+import type {SelectorOption} from "@/types/admin";
+import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 
 export default defineComponent({
   name: "AdminModelForm",
