@@ -5,10 +5,11 @@ import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import type {AdminDetailCompany} from "@/types/admin";
+import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",
-  components: {DeleteIcon, RoundedDarkBlueButton, EditIcon},
+  components: {AdminModelIndicator, DeleteIcon, RoundedDarkBlueButton, EditIcon},
   props: {
     adminCompany: {
       type: Object as PropType<AdminDetailCompany>,
@@ -42,6 +43,10 @@ export default defineComponent({
     <div class="admin-model-header__item">Currency Symbol</div>
   </div>
   <div class="admin-model-header__last-column">
+    <div class="admin-model-header__indicator">
+      <AdminModelIndicator/>
+    </div>
+
     <div class="admin-model-header__last-column-info">
       <div class="admin-model-header__item">Created: 00.00.0000 00:00:00</div>
       <div class="admin-model-header__item">Updated: 00.00.0000 00:00:00</div>
@@ -139,5 +144,11 @@ export default defineComponent({
   display: flex;
   justify-content: end;
   gap: 8px;
+}
+.admin-model-header__indicator {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: end;
 }
 </style>
