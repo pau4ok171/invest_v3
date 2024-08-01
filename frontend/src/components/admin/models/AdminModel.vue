@@ -43,5 +43,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
+.admin-model {
+  margin-top: 16px;
+}
 </style>
