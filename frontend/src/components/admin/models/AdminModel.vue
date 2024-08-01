@@ -38,6 +38,7 @@ export default defineComponent({
 <template>
 <div class="admin-model">
   <AdminModelHeader :adminCompany/>
+  <AdminModelForm/>
 </div>
 </template>
 
