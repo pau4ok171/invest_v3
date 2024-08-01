@@ -25,6 +25,33 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    modelValue: {
+      type: Object as PropType<File>,
+      required: true,
+    },
+  },
+  methods: {
+    uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
+      if (currentTarget.files) {
+        this.$emit('update:modelValue', currentTarget.files[0])
+      }
+      if (currentTarget.value) {
+        currentTarget.value = ''
+      }
+      this.isDrugOver = false
+    },
+    getLogoURL() {
+      try {
+        return URL.createObjectURL(this.modelValue)
+      } catch {
+        return ''
+      }
+    },
+    removeLogo() {
+      if (this.modelValue?.size) {
+        this.$emit('update:modelValue', {})
+      }
+    },
   },
 })
 </script>
