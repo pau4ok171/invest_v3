@@ -68,7 +68,9 @@ export default defineComponent({
 .admin-text-field__textarea {
   position: relative;
   min-height: 200px;
+  max-height: 800px;
   min-width: 600px;
+  max-width: 800px;
   font-size: 1.4rem;
   scroll-padding: 50px 0 50px 0;
   color: #fff;
