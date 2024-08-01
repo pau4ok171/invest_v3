@@ -134,5 +134,9 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
+.admin-model__admin-model-form {
+  background-color: #1b222d;
+  border-radius: 8px;
+  padding: 16px 32px;
+}
 </style>
