@@ -1,5 +1,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import type {PropType} from 'vue'
+import UploadIcon from "@/components/icons/UploadIcon.vue";
+import DeleteIcon from "@/components/icons/DeleteIcon.vue";
+import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
 
 export default defineComponent({
   name: "AdminImageField",
