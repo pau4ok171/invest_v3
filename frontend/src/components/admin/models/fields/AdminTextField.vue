@@ -132,6 +132,7 @@ export default defineComponent({
 }
 .admin-text-field__label {
   color: #fff;
+  border-radius: 20px;
   font-size: 1.4rem;
   text-transform: uppercase;
   position: absolute;

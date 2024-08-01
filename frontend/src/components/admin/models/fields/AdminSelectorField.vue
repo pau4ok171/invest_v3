@@ -128,6 +128,7 @@ export default defineComponent({
 }
 .admin-selector-field__label {
   color: #fff;
+  border-radius: 20px;
   font-size: 1.4rem;
   text-transform: uppercase;
   position: absolute;
