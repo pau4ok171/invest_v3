@@ -7,6 +7,8 @@ import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorFi
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
 import type {SelectorOption} from "@/types/admin";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
+import _ from 'lodash';
+import getSlug from 'speakingurl';
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -39,7 +41,7 @@ export default defineComponent({
   },
   watch: {
     ticker(value) {
-      this.slug = value.toLowerCase()
+      this.slug = getSlug(_.kebabCase(value))
     },
   },
 })
