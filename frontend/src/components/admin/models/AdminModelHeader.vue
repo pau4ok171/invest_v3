@@ -1,10 +1,8 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import type {PropType} from 'vue'
 import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
-import type {AdminDetailCompany} from "@/types/admin";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
 
 export default defineComponent({
@@ -111,6 +109,7 @@ export default defineComponent({
   min-width: 56px;
   min-height: 56px;
   border: 1px solid #fff;
+  background-color: #fff;
   border-radius: 8px;
   object-fit: scale-down;
   vertical-align: text-bottom;
