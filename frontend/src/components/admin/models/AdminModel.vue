@@ -10,35 +10,12 @@ export default defineComponent({
     AdminModelForm,
     AdminModelHeader
   },
-  data() {
-    return {
-      adminCompany: {
-        id: null,
-        ticker: null,
-        slug: null,
-        uid: null,
-        title: null,
-        shortTitle: null,
-        isVisible: null,
-        logo: null,
-        isFund: null,
-        marketName: null,
-        sectorName: null,
-        industryName: null,
-        absoluteURL: null,
-        country_flag: null,
-        currencySymbol: null,
-        created: null,
-        updated: null,
-      } as AdminDetailCompany
-    }
-  },
 })
 </script>
 
 <template>
 <div class="admin-model">
-  <AdminModelHeader :adminCompany/>
+  <AdminModelHeader/>
   <AdminModelForm/>
 </div>
 </template>
