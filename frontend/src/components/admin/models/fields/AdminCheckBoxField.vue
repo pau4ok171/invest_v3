@@ -5,7 +5,7 @@ export default defineComponent({
   name: "AdminCheckBoxField",
   props: {
     label: {
-      string: '',
+      type: String,
       default: 'Label',
     },
     modelValue: {
