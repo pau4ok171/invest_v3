@@ -1,5 +1,6 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent} from 'vue';
+import type {PropType} from 'vue';
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import BaseInput from "@/components/UI/base/BaseInput.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
@@ -61,7 +62,6 @@ export default defineComponent({
       deep: true
     },
   },
-
 })
 </script>
 
