@@ -47,6 +47,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    modelValue: {
+      type: Object as PropType<SelectorOption>,
+      default: {name: '', slug: ''},
+      required: true,
+    },
   },
   watch: {
     activeOption: {
@@ -68,16 +73,17 @@ export default defineComponent({
             class="admin-selector-field"
             :disabled="isDisabled"
         >
-          <span>{{ activeOption.name }}</span>
+          <span>{{ modelValue.name }}</span>
           <ArrowDownIcon/>
         </button>
-       <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !activeOption.slug.length}]">
+       <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !modelValue.slug}]">
          {{ label }}{{ isRequired?'*':'' }}
        </label>
     </template>
     <template v-slot:menu>
       <AdminSelectorDropDownMenu
-          v-model:activeOption="activeOption"
+          :model-value="modelValue"
+          @update:model-value="(option: SelectorOption) => $emit('update:modelValue', option)"
           :options
           :hasSearch
       />

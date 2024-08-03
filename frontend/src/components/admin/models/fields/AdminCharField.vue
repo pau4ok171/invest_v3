@@ -19,6 +19,11 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    modelValue: {
+      type: String,
+      default: '',
+      required: true,
+    },
   },
 })
 </script>
@@ -29,7 +34,7 @@ export default defineComponent({
     <input
         :required="isRequired"
         :disabled="isDisabled"
-        :value="$attrs.modelValue"
+        :value="modelValue"
         @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
         class="admin-char-field__input"
         placeholder=" "

@@ -7,7 +7,11 @@ export default defineComponent({
     label: {
       string: '',
       default: 'Label',
-    }
+    },
+    modelValue: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
@@ -21,14 +25,14 @@ export default defineComponent({
         <input
           type="checkbox"
           class="admin-checkbox-field__input"
-          :checked="($attrs.modelValue as boolean)"
+          :checked="modelValue"
           @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).checked)"
         />
         <div class="admin-checkbox-field__outer"></div>
         <div class="admin-checkbox-field__inner"></div>
       </div>
     </div>
-    <div class="admin-checkbox-value">{{ $attrs.modelValue?'Yes': 'No' }}</div>
+    <div class="admin-checkbox-value">{{ modelValue?'Yes': 'No' }}</div>
   </div>
 </div>
 </template>

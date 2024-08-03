@@ -20,8 +20,9 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    activeOption: {
-      type: Object as PropType<SelectorOption>
+    modelValue: {
+      type: Object as PropType<SelectorOption>,
+      required: true,
     },
     options: {
       type: Array<SelectorOption>,
@@ -60,11 +61,11 @@ export default defineComponent({
       >
         <button
           class="dropdown-menu__button"
-          @click="$emit('update:activeOption', option)"
-          :disabled="option.slug === activeOption.slug"
+          @click="$emit('update:modelValue', option)"
+          :disabled="option.slug === modelValue.slug"
           :value="option.slug"
         >
-          <CheckedIcon :disabled="option.slug !== activeOption.slug"/>
+          <CheckedIcon :disabled="option.slug !== modelValue.slug"/>
           <span>{{ option.name }}</span>
         </button>
       </li>
