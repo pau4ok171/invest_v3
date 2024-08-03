@@ -2,9 +2,11 @@
 import {defineComponent} from 'vue'
 import type {PropType} from "vue";
 import type {AdminCompany} from "@/types/admin";
+import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
 
 export default defineComponent({
   name: "AdminModelsCompanyItem",
+  components: {AdminModelIndicator},
   props: {
     company: {
       type: Object as PropType<AdminCompany>,
@@ -28,7 +30,7 @@ export default defineComponent({
   </td>
   <td>{{ company.market_name }}</td>
   <td>{{ company.sector_name }}</td>
-  <td>{{ company.is_visible }}</td>
+  <td><AdminModelIndicator :is-active="company.is_visible"/></td>
 </tr>
 </template>
 
