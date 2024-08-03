@@ -20,7 +20,7 @@ export interface AdminDetailCompany {
   title: string | null,
   shortTitle: string | null,
   isVisible: boolean | null,
-  logo: string | null,
+  logo: File | null,
   isFund: boolean | null,
   marketName: string | null,
   sectorName: string | null,
