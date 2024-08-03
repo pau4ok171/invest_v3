@@ -5,7 +5,6 @@ import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue"
 import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
-import type {SelectorOption} from "@/types/admin";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import _ from 'lodash';
 import getSlug from 'speakingurl';
