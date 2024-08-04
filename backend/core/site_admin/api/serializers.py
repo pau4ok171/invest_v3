@@ -2,10 +2,63 @@ from django.conf import settings
 
 from rest_framework import serializers
 
-from invest.models import Company
-
+from invest.models import Company, Country, Industry, Market, Sector, Currency
 
 URL_PREFIX = settings.URL_PREFIX
+
+
+class CurrencySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = (
+            'name',
+            'symbol',
+        )
+
+
+class CountrySerializer(serializers.ModelSerializer):
+    currency = CurrencySerializer()
+    flag_url = serializers.CharField(source='get_flag_url', read_only=True)
+
+    class Meta:
+        model = Country
+        fields = (
+            'id',
+            'name',
+            'name_iso',
+            'currency',
+            'flag_url',
+        )
+
+
+class IndustrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Industry
+        fields = (
+            'title',
+            'slug',
+            'sector',
+        )
+
+
+class MarketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Market
+        fields = (
+            'title',
+            'slug',
+            'country',
+        )
+
+
+class SectorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sector
+        fields = (
+            'id',
+            'title',
+            'slug',
+        )
 
 
 class CompaniesSerializer(serializers.ModelSerializer):
@@ -40,53 +93,32 @@ class CompaniesSerializer(serializers.ModelSerializer):
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    market_name = serializers.SerializerMethodField('get_market_name')
-    sector_name = serializers.SerializerMethodField('get_sector_name')
-    industry_name = serializers.SerializerMethodField('get_industry_name')
-    country_flag = serializers.SerializerMethodField('get_country_flag')
-    currency_symbol = serializers.SerializerMethodField('get_currency_symbol')
-    absolute_url = serializers.CharField(source='get_absolute_url', read_only=True)
+    country = CountrySerializer()
+    industry = IndustrySerializer()
+    market = MarketSerializer()
+    sector = SectorSerializer()
 
     class Meta:
         model = Company
         fields = (
-            'id',
             'ticker',
             'slug',
             'uid',
             'title',
             'short_title',
+            'short_title_genitive',
+            'description',
+            'short_description',
+            'city',
+            'country',
+            'market',
+            'sector',
+            'industry',
+            'created',
+            'updated',
             'is_visible',
             'logo',
             'is_fund',
-            'market_name',
-            'sector_name',
-            'industry_name',
-            'absolute_url',
-            'country_flag',
-            'currency_symbol',
-            'created',
-            'updated',
+            'website',
+            'year_founded',
         )
-
-    @staticmethod
-    def get_market_name(instance):
-        return instance.market.title
-
-    @staticmethod
-    def get_sector_name(instance):
-        return instance.sector.title
-
-    @staticmethod
-    def get_industry_name(instance):
-        return instance.industry.title
-
-    @staticmethod
-    def get_country_flag(instance):
-        icon = instance.country.flag_icon
-        return icon.url if icon else ''
-
-    @staticmethod
-    def get_currency_symbol(instance):
-        return instance.country.currency.symbol
-
