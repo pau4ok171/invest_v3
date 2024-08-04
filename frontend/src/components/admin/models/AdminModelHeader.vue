@@ -4,6 +4,9 @@ import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
+import {mapState} from "vuex";
+import {DateTime} from "luxon";
+import type {FormattedDetailCompany} from "@/types/admin";
 
 export default defineComponent({
   name: "AdminModelHeader",
