@@ -1,6 +1,5 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import type {AdminDetailCompany} from "@/types/admin";
 import AdminModelHeader from "@/components/admin/models/AdminModelHeader.vue";
 import AdminModelForm from "@/components/admin/models/AdminModelForm.vue";
 
