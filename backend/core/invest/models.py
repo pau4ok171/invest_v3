@@ -389,6 +389,11 @@ class Country(models.Model):
     def __str__(self):
         return self.name
 
+    def get_flag_url(self):
+        if self.flag_icon:
+            return URL_PREFIX + self.flag_icon.url
+        return ''
+
     class Meta:
         ordering = ['name']
 
