@@ -37,9 +37,52 @@ export default defineComponent({
       countries: [] as Array<FormattedCountry>,
     }
   },
-  watch: {
-    ticker(value) {
-      this.slug = getSlug(_.kebabCase(value))
+  computed: {
+    ...mapState({
+      companyFormData: state => state.adminModule.companyFormData,
+      companyUID: state => state.companyUID,
+    }),
+    filteredMarkets() {
+      return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
+    },
+    filteredIndustries() {
+      return [...this.industries].filter((i: FormattedIndustry) => i.key === this.companyFormData.sector.key)
+    },
+  },
+  async mounted() {
+    await this.fetchCompanyByUID(this.companyUID)
+    await this.fetchSelectorOptions()
+  },
+  methods: {
+    ...mapMutations({
+      setIsVisible: 'adminModule/setCompanyModelIsVisible',
+      setCompanyName: 'adminModule/setCompanyModelCompanyName',
+      setShortCompanyName: 'adminModule/setCompanyModelShortCompanyName',
+      setShortCompanyNameGenitive: 'adminModule/setCompanyModelShortCompanyNameGenitive',
+      setTicker: 'adminModule/setCompanyModelTicker',
+      setSlug: 'adminModule/setCompanyModelSlug',
+      setUID: 'adminModule/setCompanyModelUID',
+      setCountry: 'adminModule/setCompanyModelCountry',
+      setMarket: 'adminModule/setCompanyModelMarket',
+      setSector: 'adminModule/setCompanyModelSector',
+      setIndustry: 'adminModule/setCompanyModelIndustry',
+      setLogo: 'adminModule/setCompanyModelLogo',
+      setDescription: 'adminModule/setCompanyModelDescription',
+      setShortDescription: 'adminModule/setCompanyModelShortDescription',
+      setIsFund: 'adminModule/setCompanyModelIsFund',
+      setCity: 'adminModule/setCompanyModelCity',
+      setWebsite: 'adminModule/setCompanyModelWebsite',
+      setFounded: 'adminModule/setCompanyModelFounded',
+    }),
+    ...mapActions({
+      fetchCompanyByUID: 'adminModule/fetchCompany',
+    }),
+    async fetchSelectorOptions() {
+      const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
+      this.countries = selectorOptions['countries'].map((c: FetchedCountry): FormattedCountry => ({name: c.name, slug: c.name_iso, key: c.id, flagURL: c.flag_url, currency: c.currency}))
+      this.markets = selectorOptions['markets'].map((m: FetchedMarket): FormattedMarket => ({name: m.title, slug: m.slug, key: m.country}))
+      this.sectors = selectorOptions['sectors'].map((s: FetchedSector): FormattedSector => ({name: s.title, slug: s.slug, key: s.id}))
+      this.industries = selectorOptions['industries'].map((i: FetchedIndustry): FormattedIndustry => ({name: i.title, slug: i.slug, key: i.sector}))
     },
   },
 })
@@ -48,93 +91,121 @@ export default defineComponent({
 <template>
 <div class="admin-model__admin-model-form">
   <AdminCheckBoxField
-      v-model="isVisible"
+      :model-value="companyFormData.isVisible"
+      @update:model-value="setIsVisible"
       label="Company is publicly visible"
   />
   <AdminCharField
-      v-model="companyName"
-      :is-required="true"
-      label="Company Name"
-  />
-  <AdminCharField
-      v-model="ticker"
+      :model-value="companyFormData.ticker"
+      @update:model-value="setTicker"
       :is-required="true"
       label="Ticker"
   />
   <AdminCharField
-      v-model="slug"
+      :model-value="companyFormData.slug"
+      @update:model-value="setSlug"
       :is-required="true"
       :is-disabled="true"
       label="Slug"
   />
   <AdminCharField
-      v-model="uid"
+      :model-value="companyFormData.uid"
+      @update:model-value="setUID"
       :is-required="true"
       label="UID"
       help-text="UID of type 00000000-0000-0000-0000-000000000000"
   />
-  <AdminSelectorField
-      @changeOption="(option: SelectorOption) => country = option"
+  <AdminCharField
+      :model-value="companyFormData.companyName"
+      @update:model-value="setCompanyName"
       :is-required="true"
-      :options="[{slug: 'test1', name: 'name1'}, {slug: 'test2', name: 'name2'}, {slug: 'test3', name: 'name3'}]"
+      label="Company Name"
+  />
+  <AdminCharField
+      :model-value="companyFormData.shortCompanyName"
+      @update:model-value="setShortCompanyName"
+      label="Short Company Name"
+  />
+  <AdminCharField
+      :model-value="companyFormData.shortCompanyNameGenitive"
+      @update:model-value="setShortCompanyNameGenitive"
+      label="Short Company Name Genitive"
+  />
+  <AdminTextField
+      :model-value="companyFormData.description"
+      @update:model-value="setDescription"
+      label="Description"
+  />
+  <AdminTextField
+      :model-value="companyFormData.shortDescription"
+      @update:model-value="setShortDescription"
+      label="Short Description"
+  />
+  <AdminSelectorField
+      :model-value="companyFormData.country"
+      @update:model-value="setCountry"
+      :is-required="true"
+      :options="countries"
       :has-search="true"
       label="Country"
   />
-<!--  <div>market(Заполняется в зависимости от Страны; Фильтруется в зав от Страны; Селектор)</div>-->
   <AdminSelectorField
-      @changeOption="(option: SelectorOption) => market = option"
+      :model-value="companyFormData.market"
+      @update:model-value="setMarket"
       :is-required="true"
-      :is-disabled="!country.slug.length"
-      :options="[{slug: 'test1', name: 'name1'}, {slug: 'test2', name: 'name2'}, {slug: 'test3', name: 'name3'}]"
+      :is-disabled="!companyFormData.country?.slug.length"
+      :options="filteredMarkets"
       :has-search="true"
       label="Market"
       help-text="Is unblocked after filling the country field"
   />
   <AdminSelectorField
-      @changeOption="(option: SelectorOption) => sector = option"
+      :model-value="companyFormData.sector"
+      @update:model-value="setSector"
       :is-required="true"
-      :options="[{slug: 'test1', name: 'name1'}, {slug: 'test2', name: 'name2'}, {slug: 'test3', name: 'name3'}]"
+      :options="sectors"
       :has-search="true"
       label="Sector"
   />
-<!--  <div>industry(Недоступен до выбора Сектора; Фильтруется в зав от Сектора; Селектор)</div>-->
   <AdminSelectorField
-      @changeOption="(option: SelectorOption) => industry = option"
+      :model-value="companyFormData.industry"
+      @update:model-value="setIndustry"
       :is-required="true"
-      :is-disabled="!sector.slug.length"
-      :options="[{slug: 'test1', name: 'name1'}, {slug: 'test2', name: 'name2'}, {slug: 'test3', name: 'name3'}]"
+      :is-disabled="!companyFormData.sector?.slug.length"
+      :options="filteredIndustries"
       :has-search="true"
       label="Industry"
+      help-text="Is unblocked after filling the sector field"
   />
   <AdminImageField
-      v-model="logo"
-      label="Logo"
+      :model-value="companyFormData.logo"
+      @update:model-value="setLogo"
       help-text="Drag the photo into the input zone or click there to chose the photo"
-  />
-
-  <AdminTextField
-      v-model="description"
-      label="Description"
+      label="Logo"
   />
   <AdminCheckBoxField
-      v-model="isFund"
+      :model-value="companyFormData.isFund"
+      @update:model-value="setIsFund"
       label="Company is a fund"
   />
   <AdminCharField
-      v-model="city"
+      :model-value="companyFormData.city"
+      @update:model-value="setCity"
       label="City"
   />
   <AdminCharField
-      v-model="website"
+      :model-value="companyFormData.website"
+      @update:model-value="setWebsite"
       label="Website"
   />
   <AdminCharField
-      v-model="founded"
+      :model-value="companyFormData.founded"
+      @update:model-value="setFounded"
       label="Founded"
       help-text="Year of company foundation"
   />
 
-  <RoundedDarkBlueButton disabled>
+  <RoundedDarkBlueButton :is-full-width="true" disabled>
     <span>Save</span>
   </RoundedDarkBlueButton>
 </div>
