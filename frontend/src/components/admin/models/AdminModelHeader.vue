@@ -8,11 +8,22 @@ import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.v
 export default defineComponent({
   name: "AdminModelHeader",
   components: {AdminModelIndicator, DeleteIcon, RoundedDarkBlueButton, EditIcon},
-  props: {
-    adminCompany: {
-      type: Object as PropType<AdminDetailCompany>,
-      required: true,
+  methods: {
+    getURLFromFile(image: File): string {
+      try {
+        return URL.createObjectURL(image)
+      } catch {
+        return ''
+      }
     },
+    getFormattedDate(isoDateTime: string) {
+      return DateTime.fromISO(isoDateTime).toFormat('dd LLL yyyy')
+    }
+  },
+  computed: {
+    ...mapState({
+      companyFormData: state => state.adminModule.companyFormData as FormattedDetailCompany,
+    }),
   },
 })
 </script>
@@ -21,33 +32,40 @@ export default defineComponent({
 <div class="admin-model__admin-model-header">
   <div>
     <div class="admin-model-header__breadcrumbs">
-      {{ adminCompany.sectorName?adminCompany.sectorName:'Sector'  }}
+      {{ companyFormData.sector.slug?companyFormData.sector.name:'Sector'  }}
       /
-      {{ adminCompany.industryName?adminCompany.industryName:'Industry' }}
+      {{ companyFormData.industry.slug?companyFormData.industry.name:'Industry' }}
     </div>
     <div class="admin-model-header__block-company-name">
       <div class="admin-header__logo-wrapper">
-        <img class="admin-header__logo" :src="adminCompany.logo" alt="LOGO" v-if="adminCompany.logo">
+        <img class="admin-header__logo" :src="getURLFromFile(companyFormData.logo)" alt="LOGO" v-if="companyFormData.logo?.size">
         <span class="admin-header__logo-text" v-else>Logo</span>
       </div>
       <div>
-        <div class="admin-model-header__company-name">{{ adminCompany.title?adminCompany.title:'Company Name' }}</div>
-        <div class="admin-model-header__ticker">{{ adminCompany.ticker?adminCompany.ticker:'Ticker' }}</div>
+        <div class="admin-model-header__company-name">{{ companyFormData.companyName?companyFormData.companyName:'Company Name' }}</div>
+        <div class="admin-model-header__ticker">
+          <span>{{ companyFormData.market.slug?companyFormData.market.slug.toUpperCase():'Market' }}</span>
+          <span>:</span>
+          <span>{{ companyFormData.ticker?companyFormData.ticker:'Ticker' }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="admin-model-header__item">{{ adminCompany.uid?adminCompany.uid:'0000-0000-0000-0000' }}</div>
-    <div class="admin-model-header__item">Country</div>
-    <div class="admin-model-header__item">Currency Symbol</div>
+    <div class="admin-model-header__item">{{ companyFormData.uid?companyFormData.uid:'0000-0000-0000-0000' }}</div>
+    <div class="admin-model-header__item">
+      <img class="admin-model-header__country-flag-icon" :src="companyFormData.country.flagURL" alt="Country" v-if="companyFormData.country.flagURL">
+      {{ companyFormData.country.slug?companyFormData.country.name:'Country' }}
+    </div>
+    <div class="admin-model-header__item">{{ companyFormData.country.currency?.name?`${companyFormData.country.currency.name} (${companyFormData.country.currency.symbol})`:'Currency Symbol' }}</div>
   </div>
   <div class="admin-model-header__last-column">
     <div class="admin-model-header__indicator">
-      <AdminModelIndicator/>
+      <AdminModelIndicator :is-active="companyFormData.isVisible"/>
     </div>
 
     <div class="admin-model-header__last-column-info">
-      <div class="admin-model-header__item">Created: 00.00.0000 00:00:00</div>
-      <div class="admin-model-header__item">Updated: 00.00.0000 00:00:00</div>
+      <div class="admin-model-header__item">Created: {{ companyFormData.created?getFormattedDate(companyFormData.created):'00.00.0000 00:00:00' }}</div>
+      <div class="admin-model-header__item">Updated: {{ companyFormData.updated?getFormattedDate(companyFormData.updated):'00.00.0000 00:00:00' }}</div>
     </div>
 
     <div class="admin-model-header__action-list">
