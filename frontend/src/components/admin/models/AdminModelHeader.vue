@@ -171,4 +171,8 @@ export default defineComponent({
   flex-direction: column;
   align-items: end;
 }
+.admin-model-header__country-flag-icon {
+  height: 10px;
+  width: 15px;
+}
 </style>
