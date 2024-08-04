@@ -6,8 +6,18 @@ import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxFi
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import _ from 'lodash';
-import getSlug from 'speakingurl';
+import {mapActions, mapMutations, mapState} from "vuex";
+import axios from "axios";
+import type {
+  FetchedCountry,
+  FetchedIndustry,
+  FetchedMarket,
+  FetchedSector,
+  FormattedCountry,
+  FormattedIndustry,
+  FormattedMarket,
+  FormattedSector,
+} from "@/types/admin";
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -21,21 +31,10 @@ export default defineComponent({
   },
   data() {
     return {
-      isVisible: false,
-      companyName: '',
-      ticker: '',
-      slug: '',
-      uid: '',
-      country: {name: '', slug: ''} as SelectorOption,
-      market: {name: '', slug: ''} as SelectorOption,
-      sector: {name: '', slug: ''} as SelectorOption,
-      industry: {name: '', slug: ''} as SelectorOption,
-      logo: {} as File,
-      description: '',
-      isFund: false,
-      city: '',
-      website: '',
-      founded: '',
+      sectors: [] as Array<FormattedSector>,
+      markets: [] as Array<FormattedMarket>,
+      industries: [] as Array<FormattedIndustry>,
+      countries: [] as Array<FormattedCountry>,
     }
   },
   watch: {
