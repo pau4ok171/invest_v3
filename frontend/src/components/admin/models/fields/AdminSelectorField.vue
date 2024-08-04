@@ -19,11 +19,6 @@ export default defineComponent({
     BaseInput,
     CheckedIcon
   },
-  data() {
-    return {
-      activeOption: {name: '', slug: ''} as SelectorOption,
-    }
-  },
   props: {
     hasSearch: {
       type: Boolean,
