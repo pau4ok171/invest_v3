@@ -7,7 +7,7 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
-import type {SelectorOption} from "@/types/admin";
+import type {FormattedSector, FormattedSelector} from "@/types/admin";
 
 export default defineComponent({
   name: "AdminSelectorField",
@@ -30,7 +30,7 @@ export default defineComponent({
       default: false,
     },
     options: {
-      type: Array<SelectorOption>,
+      type: Array<FormattedSector>,
       required: true,
     },
     label: {
@@ -49,18 +49,15 @@ export default defineComponent({
       default: false,
     },
     modelValue: {
-      type: Object as PropType<SelectorOption>,
-      default: {name: '', slug: ''},
+      type: Object as PropType<FormattedSelector>,
+      default: {name: '', slug: '', key: ''},
       required: true,
     },
   },
-  watch: {
-    activeOption: {
-      handler(option: SelectorOption) {
-        this.$emit('changeOption', option)
-      },
-      deep: true
-    },
+  methods: {
+    updateSelectorOption(option: FormattedSelector) {
+      this.$emit('update:modelValue', option)
+    }
   },
 })
 </script>
@@ -83,7 +80,7 @@ export default defineComponent({
     <template v-slot:menu>
       <AdminSelectorDropDownMenu
           :model-value="modelValue"
-          @update:model-value="(option: SelectorOption) => $emit('update:modelValue', option)"
+          @update:model-value="updateSelectorOption"
           :options
           :hasSearch
       />
