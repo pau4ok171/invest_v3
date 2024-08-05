@@ -31,6 +31,22 @@ export default defineComponent({
     ...mapState({
       companyFormData: state => state.adminModule.companyFormData as FormattedDetailCompany,
     }),
+    getModerFullName() {
+      if (this.companyFormData.updatedBy.lastName.length) {
+        return `${this.companyFormData.updatedBy.lastName} ${this.companyFormData.updatedBy.firstName}`
+      }
+      if (this.companyFormData.createdBy.lastName.length) {
+        return `${this.companyFormData.createdBy.lastName} ${this.companyFormData.createdBy.firstName}`
+      }
+      return 'Admin Name'
+    },
+    getNameOfModification() {
+      if (this.companyFormData.updatedBy.lastName.length) {
+        return 'Modified by:'
+      }
+      return 'Created by:'
+
+    },
   },
 })
 </script>
@@ -79,6 +95,12 @@ export default defineComponent({
     <div class="admin-model-header__last-column-info">
       <div class="admin-model-header__item">Created: {{ companyFormData.created?getFormattedDate(companyFormData.created):'00.00.0000 00:00:00' }}</div>
       <div class="admin-model-header__item">Updated: {{ companyFormData.updated?getFormattedDate(companyFormData.updated):'00.00.0000 00:00:00' }}</div>
+      <div class="admin-model-header__item">
+        <div class="admin-model-header__item-modified-by">
+          <div class="admin-model-header__item-modified-by-title" v-text="getNameOfModification"></div>
+          <div class="admin-model-header__item-modified-by-value" v-text="getModerFullName"></div>
+        </div>
+      </div>
     </div>
 
     <div class="admin-model-header__action-list">
@@ -190,5 +212,20 @@ export default defineComponent({
 .admin-model-header__country-flag-icon {
   height: 10px;
   width: 15px;
+}
+.admin-model-header__item-modified-by {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  min-width: 130px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px;
+  background-image: linear-gradient(#1b222d, #1b222d), linear-gradient(315deg, #ee4297, #9176c6);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
 }
 </style>
