@@ -43,6 +43,14 @@ class Company(models.Model):
     return_3y = models.FloatField(null=True, blank=True)
     return_5y = models.FloatField(null=True, blank=True)
     average_weekly_mouvement = models.FloatField(null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='company_created_by')
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='company_updated_by',
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         return self.title
