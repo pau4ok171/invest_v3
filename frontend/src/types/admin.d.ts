@@ -28,6 +28,8 @@ export interface FetchedDetailCompany {
   industry: FetchedIndustry,
   created: string,
   updated: string,
+  createdBy: FetchedUser,
+  updatedBy: FetchedUser,
   is_visible: boolean,
   logo: string,
   is_fund: boolean,
@@ -66,6 +68,11 @@ export interface FetchedCurrency {
   symbol: string,
 }
 
+export interface FetchedUser {
+  first_name: string,
+  last_name: string,
+}
+
 export interface FormattedDetailCompany {
   ticker: string,
   slug: string,
@@ -82,6 +89,8 @@ export interface FormattedDetailCompany {
   industry: FormattedIndustry,
   created: string,
   updated: string,
+  createdBy: FormattedUser,
+  updatedBy: FormattedUser,
   isVisible: boolean,
   logo: File,
   isFund: boolean,
@@ -113,4 +122,9 @@ export interface FormattedIndustry extends FormattedSelector{
 export interface FormattedCurrency {
   name: string,
   symbol: string,
+}
+
+export interface FormattedUser {
+  firstName: string,
+  lastName: string,
 }
