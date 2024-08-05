@@ -7,6 +7,7 @@ import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.v
 import {mapState} from "vuex";
 import {DateTime} from "luxon";
 import type {FormattedDetailCompany} from "@/types/admin";
+import {toast} from "vue3-toastify";
 
 export default defineComponent({
   name: "AdminModelHeader",
@@ -21,7 +22,10 @@ export default defineComponent({
     },
     getFormattedDate(isoDateTime: string) {
       return DateTime.fromISO(isoDateTime).toFormat('dd LLL yyyy')
-    }
+    },
+    copyValue({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
+      navigator.clipboard.writeText(currentTarget.innerText).then(() => toast.success('Value Copied')).catch(err => console.log(err))
+    },
   },
   computed: {
     ...mapState({
@@ -54,7 +58,13 @@ export default defineComponent({
       </div>
     </div>
 
-    <div class="admin-model-header__item">{{ companyFormData.uid?companyFormData.uid:'0000-0000-0000-0000' }}</div>
+    <div
+        v-tippy="{content: 'Click to copy UID'}"
+        class="admin-model-header__item admin-model-header__item--tooltip"
+        @click="copyValue"
+    >
+      {{ companyFormData.uid?companyFormData.uid:'0000-0000-0000-0000' }}
+    </div>
     <div class="admin-model-header__item">
       <img class="admin-model-header__country-flag-icon" :src="companyFormData.country.flagURL" alt="Country" v-if="companyFormData.country.flagURL">
       {{ companyFormData.country.slug?companyFormData.country.name:'Country' }}
@@ -89,7 +99,7 @@ export default defineComponent({
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .admin-model__admin-model-header {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -149,6 +159,12 @@ export default defineComponent({
 .admin-model-header__item {
   font-size: 1.4rem;
   margin-bottom: 5px;
+
+  &--tooltip {
+    border-bottom: 1px dotted rgb(35, 148, 223);
+    width: max-content;
+    cursor: pointer;
+  }
 }
 .admin-model-header__last-column {
   display: flex;
