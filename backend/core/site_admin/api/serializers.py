@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
@@ -61,6 +62,15 @@ class SectorSerializer(serializers.ModelSerializer):
         )
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'first_name',
+            'last_name',
+        )
+
+
 class CompaniesSerializer(serializers.ModelSerializer):
     market_name = serializers.SerializerMethodField('get_market_name')
     sector_name = serializers.SerializerMethodField('get_sector_name')
@@ -97,6 +107,8 @@ class CompanySerializer(serializers.ModelSerializer):
     industry = IndustrySerializer()
     market = MarketSerializer()
     sector = SectorSerializer()
+    created_by = UserSerializer()
+    updated_by = UserSerializer()
 
     class Meta:
         model = Company
@@ -116,6 +128,8 @@ class CompanySerializer(serializers.ModelSerializer):
             'industry',
             'created',
             'updated',
+            'created_by',
+            'updated_by',
             'is_visible',
             'logo',
             'is_fund',
