@@ -6,6 +6,7 @@ import type {
   FormattedIndustry,
   FormattedMarket,
   FormattedSector,
+  FormattedUser,
 } from "@/types/admin";
 import axios from "axios";
 import getSlug from "speakingurl";
@@ -30,6 +31,8 @@ export const adminModule = {
         industry: {name: '', slug: '', key: 0} as FormattedIndustry,
         created: '',
         updated: '',
+        createdBy: {firstName: '', lastName: ''} as FormattedUser,
+        updatedBy: {firstName: '', lastName: ''} as FormattedUser,
         isVisible: false,
         logo: {} as File,
         isFund: false,
@@ -148,6 +151,14 @@ export const adminModule = {
         },
         created: company.created,
         updated: company.updated,
+        createdBy: {
+          firstName: company.created_by.first_name,
+          lastName: company.created_by.last_name,
+        },
+        updatedBy: {
+          firstName: company.updated_by.first_name,
+          lastName: company.updated_by.last_name,
+        },
         isVisible: company.is_visible,
         logo: file,
         isFund: company.is_fund,
