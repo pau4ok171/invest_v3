@@ -5,7 +5,6 @@ import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue"
 import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import {mapActions, mapMutations, mapState} from "vuex";
 import axios from "axios";
 import type {
@@ -18,6 +17,8 @@ import type {
   FormattedMarket,
   FormattedSector,
 } from "@/types/admin";
+import ResetIcon from "@/components/icons/ResetIcon.vue";
+import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -213,8 +214,9 @@ export default defineComponent({
 
 <style scoped>
 .admin-model__admin-model-form {
+  position: relative;
   background-color: #1b222d;
   border-radius: 8px;
-  padding: 16px 32px;
+  padding: 24px 32px;
 }
 </style>
