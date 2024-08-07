@@ -24,6 +24,7 @@ export default defineComponent({
   name: "AdminModelForm",
   components: {
     RoundedDarkBlueButton,
+    ResetIcon,
     AdminImageField,
     AdminSelectorField,
     AdminCheckBoxField,
@@ -91,6 +92,13 @@ export default defineComponent({
 
 <template>
 <div class="admin-model__admin-model-form">
+  <button
+      class="admin-model-form__reset-button"
+      v-tippy="{content: 'Click to reset all changes'}"
+  >
+    <ResetIcon/>
+  </button>
+
   <AdminCheckBoxField
       :model-value="companyFormData.isVisible"
       @update:model-value="setIsVisible"
@@ -218,5 +226,30 @@ export default defineComponent({
   background-color: #1b222d;
   border-radius: 8px;
   padding: 24px 32px;
+}
+.admin-model-form__reset-button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 24px;
+  right: 32px;
+  padding: 5px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  background-color: rgba(53, 110, 233, .1);
+  transition: background-color .4s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(53, 110, 233, .2);
+  }
+
+  & svg {
+    fill: var(--blue);
+    width: 32px;
+    height: 32px;
+    user-select: none;
+  }
 }
 </style>
