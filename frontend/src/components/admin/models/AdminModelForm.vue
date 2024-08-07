@@ -220,7 +220,7 @@ export default defineComponent({
 </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .admin-model__admin-model-form {
   position: relative;
   background-color: #1b222d;
