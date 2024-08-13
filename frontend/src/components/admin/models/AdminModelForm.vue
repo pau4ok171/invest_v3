@@ -19,6 +19,8 @@ import type {
 } from "@/types/admin";
 import ResetIcon from "@/components/icons/ResetIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
+import { useVuelidate } from '@vuelidate/core'
+import {required, url, numeric, helpers} from "@vuelidate/validators";
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -30,6 +32,11 @@ export default defineComponent({
     AdminCheckBoxField,
     AdminTextField,
     AdminCharField
+  },
+  setup() {
+    return {
+      v$: useVuelidate({ $lazy: true, $autoDirty: true })
+    }
   },
   data() {
     return {
@@ -121,6 +128,11 @@ export default defineComponent({
     },
   },
 })
+
+const isImageValidator = (file: File) => {
+  if (!file?.size) return true
+  return file.type.startsWith('image')
+}
 </script>
 
 <template>
@@ -271,7 +283,7 @@ export default defineComponent({
       help-text="Year of company foundation"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" disabled>
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid">
     <span>Save</span>
   </RoundedDarkBlueButton>
 </div>
