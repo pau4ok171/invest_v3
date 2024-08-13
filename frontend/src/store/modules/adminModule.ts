@@ -15,32 +15,13 @@ import _ from "lodash";
 export const adminModule = {
   state: () => ({
       companyUID: '',
-      companyFormData: {
-        ticker: '',
-        slug: '',
-        uid: '',
-        companyName: '',
-        shortCompanyName: '',
-        shortCompanyNameGenitive: '',
-        description: '',
-        shortDescription: '',
-        city: '',
-        country: {name: '', slug: '', key: 0} as FormattedCountry,
-        market: {name: '', slug: '', key: 0} as FormattedMarket,
-        sector: {name: '', slug: '', key: 0} as FormattedSector,
-        industry: {name: '', slug: '', key: 0} as FormattedIndustry,
-        created: '',
-        updated: '',
-        createdBy: {firstName: '', lastName: ''} as FormattedUser,
-        updatedBy: {firstName: '', lastName: ''} as FormattedUser,
-        isVisible: false,
-        logo: {} as File,
-        isFund: false,
-        website: '',
-        founded: '',
-      } as FormattedDetailCompany,
+      companyFormData: getEmptyCompanyFormData(),
   }),
-  getters: {},
+  getters: {
+    getCompanyUID(state) {
+      return state.companyUID
+    },
+  },
   mutations: {
       setCompanyUID(state, payload: string) {
         state.companyUID = payload
@@ -170,3 +151,31 @@ export const adminModule = {
   },
   namespaced: true,
 } as Module<any, any>
+
+
+const getEmptyCompanyFormData = (): FormattedDetailCompany => {
+  return {
+    ticker: '',
+    slug: '',
+    uid: '',
+    companyName: '',
+    shortCompanyName: '',
+    shortCompanyNameGenitive: '',
+    description: '',
+    shortDescription: '',
+    city: '',
+    country: {name: '', slug: '', key: 0} as FormattedCountry,
+    market: {name: '', slug: '', key: 0} as FormattedMarket,
+    sector: {name: '', slug: '', key: 0} as FormattedSector,
+    industry: {name: '', slug: '', key: 0} as FormattedIndustry,
+    created: '',
+    updated: '',
+    createdBy: {firstName: '', lastName: ''} as FormattedUser,
+    updatedBy: {firstName: '', lastName: ''} as FormattedUser,
+    isVisible: false,
+    logo: {} as File,
+    isFund: false,
+    website: '',
+    founded: '',
+  }
+}
