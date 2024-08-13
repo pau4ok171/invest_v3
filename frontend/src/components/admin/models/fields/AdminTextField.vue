@@ -1,5 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {PropType} from "vue/dist/vue";
+import {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminTextField",
@@ -24,6 +26,9 @@ export default defineComponent({
       default: '',
       required: true,
     },
+    errors: {
+      type: Object as PropType<ErrorObject[]>,
+    },
   },
 })
 </script>
@@ -46,6 +51,15 @@ export default defineComponent({
   </div>
 
   <div v-if="helpText" class="admin-text-field__help-text">{{ helpText }}</div>
+  <div v-if="errors?.length" class="admin-text-field__errors">
+    <div
+        v-for="error in errors"
+        :key="error.$validator"
+        class="admin-text-field__error"
+    >
+      {{ error.$message }}
+    </div>
+  </div>
 </div>
 </template>
 
@@ -155,5 +169,29 @@ export default defineComponent({
   font-size: 1.2rem;
   padding-left: 20px;
   margin-top: 4px;
+}
+.admin-text-field__errors {
+  width: max-content;
+  margin: 10px 0 0 20px;
+  border: 1px solid #c92432;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+.admin-text-field__error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  color: #c92432;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    margin-right: 1px;
+    width: 5px;
+    height: 5px;
+    background-color: #c92432;
+    border-radius: 2.5px;
+  }
 }
 </style>

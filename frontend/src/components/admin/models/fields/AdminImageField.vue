@@ -4,6 +4,7 @@ import type {PropType} from 'vue'
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
+import {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminImageField",
@@ -66,7 +67,7 @@ export default defineComponent({
 
     <div
         class="admin-image-field__input-box"
-        :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue.size}"
+        :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue.size, 'admin-image-field__input-box--disabled': isDisabled}"
         @dragover="isDrugOver = true"
         @dragleave="isDrugOver = false"
     >
@@ -90,6 +91,7 @@ export default defineComponent({
         <RoundedBlueButton
             class="admin-image-field__remove-button"
             @click="removeLogo()"
+            :disabled="isDisabled"
         >
           <DeleteIcon/>
         </RoundedBlueButton>
@@ -100,6 +102,15 @@ export default defineComponent({
     <label class="admin-image-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
   </div>
   <div v-if="helpText" class="admin-image-field__help-text">{{ helpText }}</div>
+  <div v-if="errors?.length" class="admin-image-field__errors">
+    <div
+        v-for="error in errors"
+        :key="error.$validator"
+        class="admin-image-field__error"
+    >
+      {{ error.$message }}
+    </div>
+  </div>
 </div>
 </template>
 
@@ -157,7 +168,7 @@ export default defineComponent({
     outline: none;
   }
 
-  &:disabled {
+  &--disabled {
     background: #1b222d;
     border-color: #92969c;
   }
@@ -209,5 +220,29 @@ export default defineComponent({
   position: absolute;
   top: 4px;
   right: 4px;
+}
+.admin-image-field__errors {
+  width: max-content;
+  margin: 10px 0 0 20px;
+  border: 1px solid #c92432;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+.admin-image-field__error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  color: #c92432;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    margin-right: 1px;
+    width: 5px;
+    height: 5px;
+    background-color: #c92432;
+    border-radius: 2.5px;
+  }
 }
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {PropType} from "vue/dist/vue";
+import {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminCheckBoxField",
@@ -12,6 +14,16 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    helpText: {
+      type: String
+    },
+    errors: {
+      type: Object as PropType<ErrorObject[]>,
+    },
   },
 })
 </script>
@@ -20,12 +32,13 @@ export default defineComponent({
 <div>
   <div class="admin-checkbox-label">{{ label }}</div>
   <div class="admin-checkbox-fieldset">
-    <div class="admin-checkbox-field">
+    <div :class="['admin-checkbox-field', {'admin-checkbox-field--disabled': isDisabled}]">
       <div class="admin-checkbox-field__wrapper">
         <input
           type="checkbox"
           class="admin-checkbox-field__input"
           :checked="modelValue"
+          :disabled="isDisabled"
           @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).checked)"
         />
         <div class="admin-checkbox-field__outer"></div>
@@ -33,6 +46,17 @@ export default defineComponent({
       </div>
     </div>
     <div class="admin-checkbox-value">{{ modelValue?'Yes': 'No' }}</div>
+  </div>
+
+ <div v-if="helpText" class="admin-checkbox-field__help-text">{{ helpText }}</div>
+  <div v-if="errors?.length" class="admin-checkbox-field__errors">
+    <div
+        v-for="error in errors"
+        :key="error.$validator"
+        class="admin-checkbox-field__error"
+    >
+      {{ error.$message }}
+    </div>
   </div>
 </div>
 </template>
@@ -147,5 +171,43 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
 }
 .admin-checkbox-value {
   font-size: 1.4rem;
+}
+.admin-checkbox-field--disabled {
+  & .admin-checkbox-field__outer:before,
+  .admin-checkbox-field__input ~ .admin-checkbox-field__outer:before,
+  .admin-checkbox-field__input ~ .admin-checkbox-field__outer {
+    background: #242f3c;
+    border-color: #92969c;
+  }
+}
+.admin-checkbox-field__help-text {
+  color: #92969c;
+  font-size: 1.2rem;
+  padding-left: 20px;
+  margin-top: 4px;
+}
+.admin-checkbox-field__errors {
+  width: max-content;
+  margin: 10px 0 0 20px;
+  border: 1px solid #c92432;
+  border-radius: 8px;
+  font-size: 1.2rem;
+}
+.admin-checkbox-field__error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  color: #c92432;
+
+  &::before {
+    content: '';
+    display: inline-block;
+    margin-right: 1px;
+    width: 5px;
+    height: 5px;
+    background-color: #c92432;
+    border-radius: 2.5px;
+  }
 }
 </style>
