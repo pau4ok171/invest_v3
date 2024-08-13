@@ -37,7 +37,31 @@ export default defineComponent({
       markets: [] as Array<FormattedMarket>,
       industries: [] as Array<FormattedIndustry>,
       countries: [] as Array<FormattedCountry>,
+      formModified: false,
+      isNewRecord: false,
     }
+  },
+  validations () {
+    return {
+      companyFormData: {
+        ticker: { required },
+        uid: { required },
+        companyName: { required },
+        country: { slug: { required } },
+        market: { slug: { required } },
+        sector: { slug: { required } },
+        industry: { slug: { required } },
+        logo: { isImageValidator: helpers.withMessage('Logo must be an image', isImageValidator) },
+        website: { url },
+        founded: { numeric },
+      }
+    }
+  },
+  props: {
+    editModeActivated: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
     ...mapState({
@@ -102,12 +126,15 @@ export default defineComponent({
   <AdminCheckBoxField
       :model-value="companyFormData.isVisible"
       @update:model-value="setIsVisible"
+      :is-disabled="!editModeActivated"
       label="Company is publicly visible"
   />
   <AdminCharField
       :model-value="companyFormData.ticker"
       @update:model-value="setTicker"
       :is-required="true"
+      :is-disabled="!editModeActivated"
+      :errors="v$.companyFormData.ticker.$errors"
       label="Ticker"
   />
   <AdminCharField
@@ -121,6 +148,8 @@ export default defineComponent({
       :model-value="companyFormData.uid"
       @update:model-value="setUID"
       :is-required="true"
+      :errors="v$.companyFormData.uid.$errors"
+      :is-disabled="!editModeActivated"
       label="UID"
       help-text="UID of type 00000000-0000-0000-0000-000000000000"
   />
@@ -128,32 +157,40 @@ export default defineComponent({
       :model-value="companyFormData.companyName"
       @update:model-value="setCompanyName"
       :is-required="true"
+      :errors="v$.companyFormData.companyName.$errors"
+      :is-disabled="!editModeActivated"
       label="Company Name"
   />
   <AdminCharField
       :model-value="companyFormData.shortCompanyName"
       @update:model-value="setShortCompanyName"
+      :is-disabled="!editModeActivated"
       label="Short Company Name"
   />
   <AdminCharField
       :model-value="companyFormData.shortCompanyNameGenitive"
       @update:model-value="setShortCompanyNameGenitive"
+      :is-disabled="!editModeActivated"
       label="Short Company Name Genitive"
   />
   <AdminTextField
       :model-value="companyFormData.description"
       @update:model-value="setDescription"
+      :is-disabled="!editModeActivated"
       label="Description"
   />
   <AdminTextField
       :model-value="companyFormData.shortDescription"
       @update:model-value="setShortDescription"
+      :is-disabled="!editModeActivated"
       label="Short Description"
   />
   <AdminSelectorField
       :model-value="companyFormData.country"
       @update:model-value="setCountry"
       :is-required="true"
+      :errors="v$.companyFormData.country.$errors"
+      :is-disabled="!editModeActivated"
       :options="countries"
       :has-search="true"
       label="Country"
@@ -162,7 +199,8 @@ export default defineComponent({
       :model-value="companyFormData.market"
       @update:model-value="setMarket"
       :is-required="true"
-      :is-disabled="!companyFormData.country?.slug.length"
+      :is-disabled="!companyFormData.country?.slug.length || !editModeActivated"
+      :errors="v$.companyFormData.market.$errors"
       :options="filteredMarkets"
       :has-search="true"
       label="Market"
@@ -172,6 +210,8 @@ export default defineComponent({
       :model-value="companyFormData.sector"
       @update:model-value="setSector"
       :is-required="true"
+      :is-disabled="!editModeActivated"
+      :errors="v$.companyFormData.sector.$errors"
       :options="sectors"
       :has-search="true"
       label="Sector"
@@ -180,7 +220,8 @@ export default defineComponent({
       :model-value="companyFormData.industry"
       @update:model-value="setIndustry"
       :is-required="true"
-      :is-disabled="!companyFormData.sector?.slug.length"
+      :is-disabled="!companyFormData.sector?.slug.length || !editModeActivated"
+      :errors="v$.companyFormData.industry.$errors"
       :options="filteredIndustries"
       :has-search="true"
       label="Industry"
@@ -189,27 +230,35 @@ export default defineComponent({
   <AdminImageField
       :model-value="companyFormData.logo"
       @update:model-value="setLogo"
+      :is-disabled="!editModeActivated"
+      :errors="v$.companyFormData.logo.$errors"
       help-text="Drag the photo into the input zone or click there to chose the photo"
       label="Logo"
   />
   <AdminCheckBoxField
       :model-value="companyFormData.isFund"
       @update:model-value="setIsFund"
+      :is-disabled="!editModeActivated"
       label="Company is a fund"
   />
   <AdminCharField
       :model-value="companyFormData.city"
       @update:model-value="setCity"
+      :is-disabled="!editModeActivated"
       label="City"
   />
   <AdminCharField
       :model-value="companyFormData.website"
       @update:model-value="setWebsite"
+      :is-disabled="!editModeActivated"
+      :errors="v$.companyFormData.website.$errors"
       label="Website"
   />
   <AdminCharField
       :model-value="companyFormData.founded"
       @update:model-value="setFounded"
+      :is-disabled="!editModeActivated"
+      :errors="v$.companyFormData.founded.$errors"
       label="Founded"
       help-text="Year of company foundation"
   />
