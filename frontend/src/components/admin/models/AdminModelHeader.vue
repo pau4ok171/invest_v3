@@ -12,6 +12,12 @@ import {toast} from "vue3-toastify";
 export default defineComponent({
   name: "AdminModelHeader",
   components: {AdminModelIndicator, DeleteIcon, RoundedDarkBlueButton, EditIcon},
+  props: {
+    editModeActivated: {
+      type: Boolean,
+      required: true,
+    },
+  },
   methods: {
     getURLFromFile(image: File): string {
       try {
@@ -105,13 +111,18 @@ export default defineComponent({
 
     <div class="admin-model-header__action-list">
       <div class="admin-model-header__item">
-        <RoundedDarkBlueButton>
+        <RoundedDarkBlueButton
+          @click="$emit('update:editModeActivated', true)"
+          :disabled="editModeActivated"
+        >
           <EditIcon/>
           <span>Edit</span>
         </RoundedDarkBlueButton>
       </div>
       <div class="admin-model-header__item">
-        <RoundedDarkBlueButton>
+        <RoundedDarkBlueButton
+          :disabled="editModeActivated"
+        >
           <DeleteIcon/>
           <span>Delete</span>
         </RoundedDarkBlueButton>
