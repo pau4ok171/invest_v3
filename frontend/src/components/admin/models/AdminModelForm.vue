@@ -5,7 +5,7 @@ import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue"
 import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import axios from "axios";
 import type {
   FetchedCountry,
@@ -66,7 +66,9 @@ export default defineComponent({
   computed: {
     ...mapState({
       companyFormData: state => state.adminModule.companyFormData,
-      companyUID: state => state.companyUID,
+    }),
+    ...mapGetters({
+      companyUID: 'adminModule/getCompanyUID',
     }),
     filteredMarkets() {
       return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
@@ -76,7 +78,14 @@ export default defineComponent({
     },
   },
   async mounted() {
-    await this.fetchCompanyByUID(this.companyUID)
+    if (!this.companyUID.length) {
+      this.isNewRecord = true
+      this.$emit('update:editModeActivated', true)
+    } else {
+      this.isNewRecord = false
+      this.$emit('update:editModeActivated', false)
+      await this.fetchCompanyByUID(this.companyUID)
+    }
     await this.fetchSelectorOptions()
   },
   methods: {
@@ -140,7 +149,6 @@ export default defineComponent({
   <AdminCharField
       :model-value="companyFormData.slug"
       @update:model-value="setSlug"
-      :is-required="true"
       :is-disabled="true"
       label="Slug"
   />
