@@ -34,6 +34,9 @@ export default defineComponent({
       type: Object as PropType<File>,
       required: true,
     },
+    errors: {
+      type: Object as PropType<ErrorObject[]>,
+    },
   },
   methods: {
     uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
