@@ -88,6 +88,9 @@ export const adminModule = {
       },
   },
   actions: {
+    initAdminStore({commit}) {
+      commit('setCompanyFormData', getEmptyCompanyFormData())
+    },
     async fetchCompany({state, commit}) {
       const companyUID = state.companyUID
       const company: FetchedDetailCompany = await axios
