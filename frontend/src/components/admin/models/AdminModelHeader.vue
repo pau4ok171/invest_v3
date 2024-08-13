@@ -35,7 +35,8 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      companyFormData: state => state.adminModule.companyFormData as FormattedDetailCompany,
+      companyFormData: (state: any) => state.adminModule.companyFormData as FormattedDetailCompany,
+      companyUID: (state: any) => state.adminModule.companyUID,
     }),
     getModerFullName() {
       if (this.companyFormData.updatedBy.lastName.length) {
@@ -47,6 +48,9 @@ export default defineComponent({
       return 'Admin Name'
     },
     getNameOfModification() {
+      if (!this.companyUID.length) {
+        return 'Creating by:'
+      }
       if (this.companyFormData.updatedBy.lastName.length) {
         return 'Modified by:'
       }
