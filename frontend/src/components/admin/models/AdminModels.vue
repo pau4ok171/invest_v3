@@ -37,7 +37,7 @@ export default defineComponent({
 <div class="admin-models">
   <div class="admin-models__header">
     <h1>Select Company to change</h1>
-    <RoundedDarkBlueButton>
+    <RoundedDarkBlueButton @click="$emit('openModel', '')">
       <span>ADD COMPANY</span>
     </RoundedDarkBlueButton>
   </div>
