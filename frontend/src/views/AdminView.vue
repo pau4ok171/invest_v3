@@ -4,7 +4,7 @@ import AdminModels from "@/components/admin/models/AdminModels.vue";
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
 import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
-import {mapMutations} from "vuex";
+import {mapActions, mapMutations} from "vuex";
 import AdminModel from "@/components/admin/models/AdminModel.vue";
 
 export default defineComponent({
@@ -26,9 +26,13 @@ export default defineComponent({
   },
   methods: {
     ...mapMutations({
-      setCompanyUID: 'adminModule/setCompanyUID'
+      setCompanyUID: 'adminModule/setCompanyUID',
+    }),
+    ...mapActions({
+      initAdminStore: 'adminModule/initAdminStore',
     }),
     openModel(company_uid: string) {
+      this.initAdminStore()
       this.setCompanyUID(company_uid)
       this.activeComponent = 'AdminModel'
     },
