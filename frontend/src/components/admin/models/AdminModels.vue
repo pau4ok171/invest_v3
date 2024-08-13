@@ -108,14 +108,8 @@ export default defineComponent({
 .admin-models__content-list table th > * {
   display: inline-block;
 }
-.admin-models__content-list table th.admin-models__content-list table__empty {
-  cursor: default;
-}
 .admin-models__content-list table th:hover {
   background-color: var(--header-color);
-}
-.admin-models__content-list table th.admin-models__content-list table__empty:hover {
-  background-color: var(--bg-color);
 }
 .admin-models__content-list table th:first-child {
   height: 55px;
@@ -123,11 +117,6 @@ export default defineComponent({
 }
 .admin-models__content-list table th:nth-child(2) {
   width: 116px;
-}
-.admin-models__content-list .table__icon-box {
-  width: 16px;
-  height: 16px;
-  margin-left: 2px;
 }
 .admin-models__content-list table th svg {
   width: 16px;
