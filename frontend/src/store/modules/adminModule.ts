@@ -23,69 +23,72 @@ export const adminModule = {
     },
   },
   mutations: {
-      setCompanyUID(state, payload: string) {
-        state.companyUID = payload
-      },
-      setCompanyFormData(state, payload: FormattedDetailCompany) {
-        state.companyFormData = payload
-      },
-      setCompanyModelIsVisible(state, payload: boolean) {
-        state.companyFormData.isVisible = payload
-      },
-      setCompanyModelCompanyName(state, payload: string) {
-        state.companyFormData.companyName = payload
-      },
-      setCompanyModelShortCompanyName(state, payload: string) {
-        state.companyFormData.shortCompanyName = payload
-      },
-      setCompanyModelShortCompanyNameGenitive(state, payload: string) {
-        state.companyFormData.shortCompanyNameGenitive = payload
-      },
-      setCompanyModelTicker(state, payload: string) {
-        state.companyFormData.ticker = payload
-        state.companyFormData.slug = getSlug(_.kebabCase(payload))
-      },
-      setCompanyModelSlug(state, payload: string) {
-        state.companyFormData.slug = payload
-      },
-      setCompanyModelUID(state, payload: string) {
-        state.companyFormData.uid = payload
-      },
-      setCompanyModelCountry(state, payload: FormattedCountry) {
-        state.companyFormData.market = {name: '', slug: '', key: ''}
-        state.companyFormData.country = payload
-      },
-      setCompanyModelMarket(state, payload: FormattedMarket) {
-        state.companyFormData.market = payload
-      },
-      setCompanyModelSector(state, payload: FormattedSector) {
-        state.companyFormData.industry = {name: '', slug: '', key: ''}
-        state.companyFormData.sector = payload
-      },
-      setCompanyModelIndustry(state, payload: FormattedIndustry) {
-        state.companyFormData.industry = payload
-      },
-      setCompanyModelLogo(state, payload: File) {
-        state.companyFormData.logo = payload
-      },
-      setCompanyModelDescription(state, payload: string) {
-        state.companyFormData.description = payload
-      },
-      setCompanyModelShortDescription(state, payload: string) {
-        state.companyFormData.shorDescription = payload
-      },
-      setCompanyModelIsFund(state, payload: boolean) {
-        state.companyFormData.isFund = payload
-      },
-      setCompanyModelCity(state, payload: string) {
-        state.companyFormData.city = payload
-      },
-      setCompanyModelWebsite(state, payload: string) {
-        state.companyFormData.website = payload
-      },
-      setCompanyModelFounded(state, payload: number) {
-        state.companyFormData.founded = payload
-      },
+    setCompanyUID(state, payload: string) {
+      state.companyUID = payload
+    },
+    setCompanyFormData(state, payload: FormattedDetailCompany) {
+      state.companyFormData = payload
+    },
+    setModelIsSaving(state, payload: boolean) {
+      state.modelIsSaving = payload
+    },
+    setCompanyModelIsVisible(state, payload: boolean) {
+      state.companyFormData.isVisible = payload
+    },
+    setCompanyModelCompanyName(state, payload: string) {
+      state.companyFormData.companyName = payload
+    },
+    setCompanyModelShortCompanyName(state, payload: string) {
+      state.companyFormData.shortCompanyName = payload
+    },
+    setCompanyModelShortCompanyNameGenitive(state, payload: string) {
+      state.companyFormData.shortCompanyNameGenitive = payload
+    },
+    setCompanyModelTicker(state, payload: string) {
+      state.companyFormData.ticker = payload
+      state.companyFormData.slug = getSlug(_.kebabCase(payload))
+    },
+    setCompanyModelSlug(state, payload: string) {
+      state.companyFormData.slug = payload
+    },
+    setCompanyModelUID(state, payload: string) {
+      state.companyFormData.uid = payload
+    },
+    setCompanyModelCountry(state, payload: FormattedCountry) {
+      state.companyFormData.market = {name: '', slug: '', key: ''}
+      state.companyFormData.country = payload
+    },
+    setCompanyModelMarket(state, payload: FormattedMarket) {
+      state.companyFormData.market = payload
+    },
+    setCompanyModelSector(state, payload: FormattedSector) {
+      state.companyFormData.industry = {name: '', slug: '', key: ''}
+      state.companyFormData.sector = payload
+    },
+    setCompanyModelIndustry(state, payload: FormattedIndustry) {
+      state.companyFormData.industry = payload
+    },
+    setCompanyModelLogo(state, payload: File) {
+      state.companyFormData.logo = payload
+    },
+    setCompanyModelDescription(state, payload: string) {
+      state.companyFormData.description = payload
+    },
+    setCompanyModelShortDescription(state, payload: string) {
+      state.companyFormData.shorDescription = payload
+    },
+    setCompanyModelIsFund(state, payload: boolean) {
+      state.companyFormData.isFund = payload
+    },
+    setCompanyModelCity(state, payload: string) {
+      state.companyFormData.city = payload
+    },
+    setCompanyModelWebsite(state, payload: string) {
+      state.companyFormData.website = payload
+    },
+    setCompanyModelFounded(state, payload: number) {
+      state.companyFormData.founded = payload
+    },
   },
   actions: {
     initAdminStore({commit}) {
