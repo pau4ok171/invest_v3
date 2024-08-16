@@ -70,7 +70,7 @@ export default defineComponent({
 
     <div
         class="admin-image-field__input-box"
-        :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue.size, 'admin-image-field__input-box--disabled': isDisabled}"
+        :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue?.size, 'admin-image-field__input-box--disabled': isDisabled}"
         @dragover="isDrugOver = true"
         @dragleave="isDrugOver = false"
     >
