@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {PropType} from "vue/dist/vue";
-import {ErrorObject} from "@vuelidate/core";
+import type {PropType} from "vue";
+import type {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminCheckBoxField",
@@ -10,16 +10,16 @@ export default defineComponent({
       type: String,
       default: 'Label',
     },
-    modelValue: {
-      type: Boolean,
-      default: false,
+    helpText: {
+      type: String
     },
     isDisabled: {
       type: Boolean,
       default: false,
     },
-    helpText: {
-      type: String
+    modelValue: {
+      type: Boolean,
+      default: false,
     },
     errors: {
       type: Object as PropType<ErrorObject[]>,
@@ -52,7 +52,7 @@ export default defineComponent({
   <div v-if="errors?.length" class="admin-checkbox-field__errors">
     <div
         v-for="error in errors"
-        :key="error.$validator"
+        :key="error.$uid"
         class="admin-checkbox-field__error"
     >
       {{ error.$message }}

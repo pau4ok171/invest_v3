@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import {PropType} from "vue/dist/vue";
-import {ErrorObject} from "@vuelidate/core";
+import type {PropType} from "vue";
+import type {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminTextField",
@@ -41,6 +41,7 @@ export default defineComponent({
         :required="isRequired"
         :disabled="isDisabled"
         @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
+        @blur="$emit('blur')"
         :value="modelValue"
         class="admin-text-field__textarea"
         cols="50"
@@ -54,7 +55,7 @@ export default defineComponent({
   <div v-if="errors?.length" class="admin-text-field__errors">
     <div
         v-for="error in errors"
-        :key="error.$validator"
+        :key="error.$uid"
         class="admin-text-field__error"
     >
       {{ error.$message }}

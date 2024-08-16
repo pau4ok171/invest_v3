@@ -8,7 +8,7 @@ import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {FormattedSector, FormattedSelector} from "@/types/admin";
-import {ErrorObject} from "@vuelidate/core";
+import type {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminSelectorField",
@@ -89,7 +89,7 @@ export default defineComponent({
   <div v-if="errors?.length" class="admin-selector-field__errors">
     <div
         v-for="error in errors"
-        :key="error.$validator"
+        :key="error.$uid"
         class="admin-selector-field__error"
     >
       {{ error.$message }}

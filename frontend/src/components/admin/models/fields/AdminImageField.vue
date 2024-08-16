@@ -4,7 +4,7 @@ import type {PropType} from 'vue'
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import {ErrorObject} from "@vuelidate/core";
+import type {ErrorObject} from "@vuelidate/core";
 
 export default defineComponent({
   name: "AdminImageField",
@@ -108,7 +108,7 @@ export default defineComponent({
   <div v-if="errors?.length" class="admin-image-field__errors">
     <div
         v-for="error in errors"
-        :key="error.$validator"
+        :key="error.$uid"
         class="admin-image-field__error"
     >
       {{ error.$message }}

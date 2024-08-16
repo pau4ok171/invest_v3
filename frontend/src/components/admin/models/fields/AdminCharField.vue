@@ -42,6 +42,7 @@ export default defineComponent({
         :disabled="isDisabled"
         :value="modelValue"
         @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
+        @blur="$emit('blur')"
         class="admin-char-field__input"
         placeholder=" "
     />
@@ -52,7 +53,7 @@ export default defineComponent({
   <div v-if="errors?.length" class="admin-char-field__errors">
     <div
         v-for="error in errors"
-        :key="error.$validator"
+        :key="error.$uid"
         class="admin-char-field__error"
     >
       {{ error.$message }}
