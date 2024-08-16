@@ -19,8 +19,8 @@ import type {
 } from "@/types/admin";
 import ResetIcon from "@/components/icons/ResetIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import { useVuelidate } from '@vuelidate/core'
-import {required, url, numeric, helpers} from "@vuelidate/validators";
+import {useVuelidate} from '@vuelidate/core'
+import {helpers, numeric, required, url} from "@vuelidate/validators";
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -33,11 +33,7 @@ export default defineComponent({
     AdminTextField,
     AdminCharField
   },
-  setup() {
-    return {
-      v$: useVuelidate({ $lazy: true, $autoDirty: true })
-    }
-  },
+  setup: () => ({ v$: useVuelidate({ $autoDirty: true, $rewardEarly: true })}),
   data() {
     return {
       sectors: [] as Array<FormattedSector>,
@@ -58,7 +54,7 @@ export default defineComponent({
         market: { slug: { required } },
         sector: { slug: { required } },
         industry: { slug: { required } },
-        logo: { isImageValidator: helpers.withMessage('Logo must be an image', isImageValidator) },
+        logo: { isImageValidator: helpers.withMessage('Field must be an image', isImageValidator) },
         website: { url },
         founded: { numeric },
       }
@@ -88,7 +84,8 @@ export default defineComponent({
     if (!this.companyUID.length) {
       this.isNewRecord = true
       this.$emit('update:editModeActivated', true)
-    } else {
+      this.v$.$commit()
+      } else {
       this.isNewRecord = false
       this.$emit('update:editModeActivated', false)
       await this.fetchCompanyByUID(this.companyUID)
@@ -143,7 +140,6 @@ const isImageValidator = (file: File) => {
   >
     <ResetIcon/>
   </button>
-
   <AdminCheckBoxField
       :model-value="companyFormData.isVisible"
       @update:model-value="setIsVisible"
@@ -153,6 +149,7 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.ticker"
       @update:model-value="setTicker"
+      @blur="v$.companyFormData.ticker.$commit()"
       :is-required="true"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.ticker.$errors"
@@ -167,6 +164,7 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.uid"
       @update:model-value="setUID"
+      @blur="v$.companyFormData.uid.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.uid.$errors"
       :is-disabled="!editModeActivated"
@@ -176,6 +174,7 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.companyName"
       @update:model-value="setCompanyName"
+      @blur="v$.companyFormData.companyName.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.companyName.$errors"
       :is-disabled="!editModeActivated"
@@ -283,8 +282,9 @@ const isImageValidator = (file: File) => {
       help-text="Year of company foundation"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid">
-    <span>Save</span>
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving" @click="createNewCompany()">
+    <span v-if="!modelIsSaving">Save</span>
+    <span v-else>Saving...</span>
   </RoundedDarkBlueButton>
 </div>
 </template>
