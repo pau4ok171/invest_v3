@@ -103,13 +103,6 @@ class CompaniesSerializer(serializers.ModelSerializer):
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    country = CountrySerializer()
-    industry = IndustrySerializer()
-    market = MarketSerializer()
-    sector = SectorSerializer()
-    created_by = UserSerializer()
-    updated_by = UserSerializer()
-
     class Meta:
         model = Company
         fields = (
@@ -136,3 +129,13 @@ class CompanySerializer(serializers.ModelSerializer):
             'website',
             'year_founded',
         )
+
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        response['country'] = CountrySerializer(instance.country).data
+        response['industry'] = IndustrySerializer(instance.industry).data
+        response['market'] = MarketSerializer(instance.market).data
+        response['sector'] = SectorSerializer(instance.sector).data
+        response['created_by'] = UserSerializer(instance.created_by).data
+        response['updated_by'] = UserSerializer(instance.updated_by).data
+        return response
