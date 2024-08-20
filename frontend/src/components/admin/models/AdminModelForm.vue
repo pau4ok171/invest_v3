@@ -21,10 +21,12 @@ import ResetIcon from "@/components/icons/ResetIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import {useVuelidate} from '@vuelidate/core'
 import {helpers, numeric, required, url} from "@vuelidate/validators";
+import {AtomSpinner} from "epic-spinners";
 
 export default defineComponent({
   name: "AdminModelForm",
   components: {
+    AtomSpinner,
     RoundedDarkBlueButton,
     ResetIcon,
     AdminImageField,
@@ -286,7 +288,13 @@ const isImageValidator = (file: File) => {
       help-text="Year of company foundation"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving" @click="createNewCompany()">
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving" @click="proceedModelSaving()">
+    <atom-spinner
+      v-show="modelIsSaving"
+      :animation-duration="1250"
+      :size="30"
+      color="#ff1d5e"
+    />
     <span v-if="!modelIsSaving">Save</span>
     <span v-else>Saving...</span>
   </RoundedDarkBlueButton>
