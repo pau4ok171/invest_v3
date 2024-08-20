@@ -72,6 +72,7 @@ export default defineComponent({
     }),
     ...mapGetters({
       companyUID: 'adminModule/getCompanyUID',
+      editModeActivated: 'adminModule/getEditModeActivated',
     }),
     filteredMarkets() {
       return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
@@ -82,12 +83,12 @@ export default defineComponent({
   },
   async mounted() {
     if (!this.companyUID.length) {
-      this.isNewRecord = true
-      this.$emit('update:editModeActivated', true)
+      this.setEditModeActivated(true)
+      this.setIsNewModel(true)
       this.v$.$commit()
       } else {
-      this.isNewRecord = false
-      this.$emit('update:editModeActivated', false)
+      this.setEditModeActivated(false)
+      this.setIsNewModel(false)
       await this.fetchCompanyByUID(this.companyUID)
     }
     await this.fetchSelectorOptions()
@@ -112,9 +113,12 @@ export default defineComponent({
       setCity: 'adminModule/setCompanyModelCity',
       setWebsite: 'adminModule/setCompanyModelWebsite',
       setFounded: 'adminModule/setCompanyModelFounded',
+      setEditModeActivated: 'adminModule/setEditModeActivated',
+      setIsNewModel: 'adminModule/setIsNewModel',
     }),
     ...mapActions({
       fetchCompanyByUID: 'adminModule/fetchCompany',
+      saveModelForm: 'adminModule/saveModelForm',
     }),
     async fetchSelectorOptions() {
       const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
