@@ -61,12 +61,6 @@ export default defineComponent({
       }
     }
   },
-  props: {
-    editModeActivated: {
-      type: Boolean,
-      required: true,
-    },
-  },
   computed: {
     ...mapState({
       companyFormData: (state: any) => state.adminModule.companyFormData,
