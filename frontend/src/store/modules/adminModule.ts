@@ -7,19 +7,29 @@ import type {
   FormattedMarket,
   FormattedSector,
   FormattedUser,
+  CompanyDataToRequest,
 } from "@/types/admin";
 import axios from "axios";
 import getSlug from "speakingurl";
 import _ from "lodash";
+import {toast} from "vue3-toastify";
+
 
 export const adminModule = {
   state: () => ({
-      companyUID: '',
-      companyFormData: getEmptyCompanyFormData(),
+    companyUID: '',
+    companyFormData: getEmptyCompanyFormData(),
+    // MODEL
+    modelIsSaving: false,
+    editModeActivated: false,
+    isNewModel: false,
   }),
   getters: {
     getCompanyUID(state) {
       return state.companyUID
+    },
+    getEditModeActivated(state) {
+      return state.editModeActivated
     },
   },
   mutations: {
@@ -31,6 +41,12 @@ export const adminModule = {
     },
     setModelIsSaving(state, payload: boolean) {
       state.modelIsSaving = payload
+    },
+    setIsNewModel(state, payload: boolean) {
+      state.isNewModel = payload
+    },
+    setEditModeActivated(state, payload: boolean) {
+      state.editModeActivated = payload
     },
     setCompanyModelIsVisible(state, payload: boolean) {
       state.companyFormData.isVisible = payload
@@ -104,6 +120,68 @@ export const adminModule = {
       const companyFormData = await getFormattedCompanyData(company)
 
       commit('setCompanyFormData', companyFormData)
+    },
+    async saveModelForm({state, commit, dispatch}) {
+      let company: FetchedDetailCompany
+      // Set ModelIsSaving
+      commit('setModelIsSaving', true)
+      // PrepareData
+      const companyData: FormattedDetailCompany = state.companyFormData
+      const preparedCompanyData = await getCompanyDataToRequest(companyData)
+      // CreateDataObject
+      const formData = getCompanyFormData(preparedCompanyData)
+      // If NewModel => POST Request
+      try {
+        if (state.isNewModel) {
+          company = await axios
+            .post('api/v1/admin/companies/', formData)
+            .then(response => {
+              commit('setCompanyUID', response.data.uid)
+              toast.success('Company is successfully created')
+              return response.data
+            })
+            .catch(error => dispatch('catchAxiosError', error))
+        }
+        // If OldModel => PATCH Request
+        else {
+          const companyUID = state.companyUID
+          company = await axios
+            .patch(`api/v1/admin/companies/${companyUID}/`, formData)
+            .then(response => {
+              commit('setCompanyUID', response.data.uid)
+              toast.success('Company is successfully saved')
+              return response.data
+            })
+            .catch(error => dispatch('catchAxiosError', error))
+        }
+        const companyFormData = await getFormattedCompanyData(company)
+
+        commit('setEditModeActivated', false)
+        commit('setCompanyFormData', companyFormData)
+        commit('setIsNewModel', false)
+
+      } finally {
+        // Reset ModelIsSaving
+        commit('setModelIsSaving', false)
+      }
+
+      // Reset ModelIsSaving
+      commit('setModelIsSaving', false)
+    },
+    async catchAxiosError({state, commit}, error) {
+      // client received an error response (5xx, 4xx)
+      if (error.response) {
+        console.log(error)
+        toast.error('Something was wrong... Please reload page')
+        // client never received a response, or request never left
+      } else if (error.request) {
+        console.log(error)
+        toast.error('Something was wrong... Please reload page')
+        // anything else
+      } else {
+        console.log(error)
+        toast.error('Something was wrong... Please reload page')
+      }
     },
   },
   namespaced: true,
