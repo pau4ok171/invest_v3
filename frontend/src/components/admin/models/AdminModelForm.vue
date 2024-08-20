@@ -69,7 +69,9 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      companyFormData: state => state.adminModule.companyFormData,
+      companyFormData: (state: any) => state.adminModule.companyFormData,
+      modelIsSaving: (state: any) => state.adminModule.modelIsSaving,
+      isNewModel: (state: any) => state.adminModule.isNewModel,
     }),
     ...mapGetters({
       companyUID: 'adminModule/getCompanyUID',
