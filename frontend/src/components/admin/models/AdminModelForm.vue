@@ -43,7 +43,6 @@ export default defineComponent({
       industries: [] as Array<FormattedIndustry>,
       countries: [] as Array<FormattedCountry>,
       formModified: false,
-      isNewRecord: false,
     }
   },
   validations () {
