@@ -128,3 +128,24 @@ export interface FormattedUser {
   firstName: string,
   lastName: string,
 }
+
+export interface CompanyDataToRequest {
+  ticker: string,
+  slug: string,
+  uid: string,
+  title: string,
+  short_title: string,
+  short_title_genitive: string,
+  description: string,
+  short_description: string,
+  city: string,
+  country_name_iso: string,
+  market_slug: string,
+  sector_slug: string,
+  industry_slug: string,
+  is_visible: boolean,
+  logo: File,
+  is_fund: boolean,
+  website: string,
+  year_founded: string,
+}
