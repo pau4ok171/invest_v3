@@ -9,18 +9,13 @@ export default defineComponent({
     AdminModelForm,
     AdminModelHeader
   },
-  data() {
-    return {
-      editModeActivated: false,
-    }
-  },
 })
 </script>
 
 <template>
 <div class="admin-model">
-  <AdminModelHeader v-model:edit-mode-activated="editModeActivated"/>
-  <AdminModelForm v-model:edit-mode-activated="editModeActivated"/>
+  <AdminModelHeader/>
+  <AdminModelForm/>
 </div>
 </template>
 
