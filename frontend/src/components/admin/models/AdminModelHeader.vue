@@ -4,21 +4,23 @@ import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
-import {mapState} from "vuex";
+import {mapGetters, mapMutations, mapState} from "vuex";
 import {DateTime} from "luxon";
 import type {FormattedDetailCompany} from "@/types/admin";
 import {toast} from "vue3-toastify";
 
 export default defineComponent({
   name: "AdminModelHeader",
-  components: {AdminModelIndicator, DeleteIcon, RoundedDarkBlueButton, EditIcon},
-  props: {
-    editModeActivated: {
-      type: Boolean,
-      required: true,
-    },
+  components: {
+    AdminModelIndicator,
+    DeleteIcon,
+    RoundedDarkBlueButton,
+    EditIcon
   },
   methods: {
+    ...mapMutations({
+      setEditModeActivated: 'adminModule/setEditModeActivated',
+    }),
     getURLFromFile(image: File): string {
       try {
         return URL.createObjectURL(image)
@@ -37,6 +39,9 @@ export default defineComponent({
     ...mapState({
       companyFormData: (state: any) => state.adminModule.companyFormData as FormattedDetailCompany,
       companyUID: (state: any) => state.adminModule.companyUID,
+    }),
+    ...mapGetters({
+      editModeActivated: 'adminModule/getEditModeActivated',
     }),
     getModerFullName() {
       if (this.companyFormData.updatedBy.lastName.length) {
@@ -116,7 +121,7 @@ export default defineComponent({
     <div class="admin-model-header__action-list">
       <div class="admin-model-header__item">
         <RoundedDarkBlueButton
-          @click="$emit('update:editModeActivated', true)"
+          @click="setEditModeActivated(true)"
           :disabled="editModeActivated"
         >
           <EditIcon/>
