@@ -100,58 +100,9 @@ export const adminModule = {
         .get(`api/v1/admin/companies/${companyUID}`)
         .then(response => response.data)
         .catch(error => console.log(error))
-      let file = await fetch(company.logo).then(r => r.blob()).then(blobFile => new File([blobFile], "CompanyLogo", { type: "image/png" }))
-      const companyFormData: FormattedDetailCompany = {
-        ticker: company.ticker,
-        slug: company.slug,
-        uid: company.uid,
-        companyName: company.title,
-        shortCompanyName: company.short_title,
-        shortCompanyNameGenitive: company.short_title_genitive,
-        description: company.description,
-        shortDescription: company.short_description,
-        city: company.city,
-        country: {
-          name: company.country.name,
-          slug: company.country.name_iso,
-          key: company.country.id,
-          currency: {
-            name: company.country.currency.name,
-            symbol: company.country.currency.symbol
-          },
-          flagURL: company.country.flag_url
-        },
-        market: {
-          name: company.market.title,
-          slug: company.market.slug,
-          key: company.market.country
-        },
-        sector: {
-          name: company.sector.title,
-          slug: company.sector.slug,
-          key: company.sector.id
-        },
-        industry: {
-          name: company.industry.title,
-          slug: company.industry.slug,
-          key: company.industry.sector
-        },
-        created: company.created,
-        updated: company.updated,
-        createdBy: {
-          firstName: company.created_by.first_name,
-          lastName: company.created_by.last_name,
-        },
-        updatedBy: {
-          firstName: company.updated_by.first_name,
-          lastName: company.updated_by.last_name,
-        },
-        isVisible: company.is_visible,
-        logo: file,
-        isFund: company.is_fund,
-        website: company.website,
-        founded: String(company.year_founded),
-      }
+
+      const companyFormData = await getFormattedCompanyData(company)
+
       commit('setCompanyFormData', companyFormData)
     },
   },
@@ -183,5 +134,94 @@ const getEmptyCompanyFormData = (): FormattedDetailCompany => {
     isFund: false,
     website: '',
     founded: '',
+  }
+}
+
+const getCompanyFormData = (object: any) => Object.keys(object).reduce((formData, key) => {
+  if (key === 'logo' && typeof object[key] === 'object') {
+    // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
+    formData.append(key, object[key], 'logo.png')
+    return formData
+  }
+
+  formData.append(key, object[key])
+  return formData
+}, new FormData())
+
+const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<FormattedDetailCompany> => {
+  let file = await fetch(company.logo).then(r => r.blob()).then(blobFile => new File([blobFile], "CompanyLogo", {type: "image/png"}))
+  return {
+    ticker: company.ticker  || '',
+    slug: company.slug  || '',
+    uid: company.uid  || '',
+    companyName: company.title  || '',
+    shortCompanyName: company.short_title  || '',
+    shortCompanyNameGenitive: company.short_title_genitive  || '',
+    description: company.description  || '',
+    shortDescription: company.short_description  || '',
+    city: company.city  || '',
+    country: {
+      name: company.country.name  || '',
+      slug: company.country.name_iso  || '',
+      key: company.country.id  || '',
+      currency: {
+        name: company.country.currency.name  || '',
+        symbol: company.country.currency.symbol  || '',
+      },
+      flagURL: company.country.flag_url
+    },
+    market: {
+      name: company.market.title || '',
+      slug: company.market.slug || '',
+      key: company.market.country || '',
+    },
+    sector: {
+      name: company.sector.title || '',
+      slug: company.sector.slug || '',
+      key: company.sector.id  || '',
+    },
+    industry: {
+      name: company.industry.title  || '',
+      slug: company.industry.slug  || '',
+      key: company.industry.sector  || '',
+    },
+    created: company.created  || '',
+    updated: company.updated  || '',
+    createdBy: {
+      firstName: company.created_by.first_name  || '',
+      lastName: company.created_by.last_name  || '',
+    },
+    updatedBy: {
+      firstName: company.updated_by.first_name  || '',
+      lastName: company.updated_by.last_name  || '',
+    },
+    isVisible: company.is_visible  || false,
+    logo: file,
+    isFund: company.is_fund || false,
+    website: company.website || '',
+    founded: company.year_founded || '',
+  } as FormattedDetailCompany
+}
+
+const getCompanyDataToRequest = async (companyData: FormattedDetailCompany): Promise<CompanyDataToRequest> => {
+  return {
+    ticker: companyData.ticker.trim().toUpperCase(),
+    slug: companyData.slug.trim(),
+    uid: companyData.uid.trim(),
+    title: companyData.companyName.trim(),
+    short_title: companyData.shortCompanyName.trim(),
+    short_title_genitive: companyData.shortCompanyNameGenitive.trim(),
+    description: companyData.description.trim(),
+    short_description: companyData.shortDescription.trim(),
+    city: companyData.city.trim(),
+    country_name_iso: companyData.country.slug,
+    market_slug: companyData.market.slug,
+    sector_slug: companyData.sector.slug,
+    industry_slug: companyData.industry.slug,
+    is_visible: companyData.isVisible,
+    logo: companyData.logo,
+    is_fund: companyData.isFund,
+    website: companyData.website.trim(),
+    year_founded: companyData.founded.trim(),
   }
 }
