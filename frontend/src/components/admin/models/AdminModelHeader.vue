@@ -119,23 +119,52 @@ export default defineComponent({
     </div>
 
     <div class="admin-model-header__action-list">
-      <div class="admin-model-header__item">
-        <RoundedDarkBlueButton
-          @click="setEditModeActivated(true)"
-          :disabled="editModeActivated"
-        >
-          <EditIcon/>
-          <span>Edit</span>
-        </RoundedDarkBlueButton>
-      </div>
-      <div class="admin-model-header__item">
-        <RoundedDarkBlueButton
-          :disabled="editModeActivated"
-        >
-          <DeleteIcon/>
-          <span>Delete</span>
-        </RoundedDarkBlueButton>
-      </div>
+      <template v-if="!editModeActivated">
+        <div class="admin-model-header__item">
+          <RoundedDarkBlueButton
+            @click="activateEditMode()"
+          >
+            <EditIcon/>
+            <span>Edit</span>
+          </RoundedDarkBlueButton>
+        </div>
+        <BaseModalMenuContainer>
+          <template #button>
+          <div class="admin-model-header__item">
+            <RoundedErrorButton :disabled="isNewModel">
+              <DeleteIcon/>
+              <span>Delete</span>
+            </RoundedErrorButton>
+          </div>
+          </template>
+          <template #menu="menuProps">
+            <BaseModalMenu @closeMenu="menuProps.close()">
+              <template #title>Confirm the action</template>
+              <template #content>
+                <div class="admin-model-modal-menu__content">
+                  <div class="admin-model-modal-menu__description">
+                    Are you sure to definitely delete the current model?
+                  </div>
+                  <div class="admin-model-modal-menu__actions">
+                    <RoundedErrorButton @click="deleteModel()">YES, I want to delete</RoundedErrorButton>
+                    <RoundedDarkBlueButton @click="menuProps.close()">NO</RoundedDarkBlueButton>
+                  </div>
+                </div>
+              </template>
+            </BaseModalMenu>
+          </template>
+        </BaseModalMenuContainer>
+      </template>
+      <template v-else>
+        <div class="admin-model-header__item">
+          <RoundedDarkBlueButton
+            @click="deactivateEditMode()"
+          >
+            <ResetIcon/>
+            <span>Close Edit Mode Without Saving</span>
+          </RoundedDarkBlueButton>
+        </div>
+      </template>
     </div>
   </div>
 </div>
@@ -247,5 +276,19 @@ export default defineComponent({
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
+}
+.admin-model-modal-menu__content {
+  padding: 16px;
+}
+.admin-model-modal-menu__description {
+  font-size: 1.6rem;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.admin-model-modal-menu__actions {
+  display: flex;
+  justify-content: end;
+  gap: 4px;
+  margin-right: 20px;
 }
 </style>
