@@ -190,6 +190,25 @@ export const adminModule = {
         commit('setModelIsSaving', false)
       }
     },
+    async deleteModel({state, commit, dispatch}) {
+      // Get Company UID
+      const companyUID = state.companyUID
+      // Send DELETE Request
+      try {
+        await axios
+            .delete(`api/v1/admin/companies/${companyUID}/`)
+            .then(async r => {
+              // Open Models Component
+              commit('setActiveComponent', 'AdminModels')
+              // Notify Client
+              toast.success('Company is successfully deleted')
+            })
+            .catch(e => console.log(e))
+      }
+      catch (e) {
+        console.log(e)
+      }
+    },
     async catchAxiosError({state, commit}, error) {
       // client received an error response (5xx, 4xx)
       if (error.response) {
