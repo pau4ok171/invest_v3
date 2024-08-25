@@ -184,7 +184,7 @@ export const adminModule = {
         commit('setCompanyFormData', companyFormData)
         commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
         commit('setIsNewModel', false)
-
+        window.scrollTo({top: 0, behavior: 'smooth'})
       } finally {
         // Reset ModelIsSaving
         commit('setModelIsSaving', false)
