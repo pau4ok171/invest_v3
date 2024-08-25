@@ -4,22 +4,32 @@ import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
-import {mapGetters, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 import {DateTime} from "luxon";
 import type {FormattedDetailCompany} from "@/types/admin";
 import {toast} from "vue3-toastify";
+import ResetIcon from "@/components/icons/ResetIcon.vue";
+import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
+import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
+import RoundedErrorButton from "@/components/UI/buttons/RoundedErrorButton.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",
   components: {
+    RoundedErrorButton,
+    BaseModalMenu,
+    BaseModalMenuContainer,
+    ResetIcon,
     AdminModelIndicator,
     DeleteIcon,
     RoundedDarkBlueButton,
     EditIcon
   },
   methods: {
-    ...mapMutations({
-      setEditModeActivated: 'adminModule/setEditModeActivated',
+    ...mapActions({
+      activateEditMode: 'adminModule/activateEditMode',
+      deactivateEditMode: 'adminModule/deactivateEditMode',
+      deleteModel: 'adminModule/deleteModel',
     }),
     getURLFromFile(image: File): string {
       try {
@@ -39,6 +49,7 @@ export default defineComponent({
     ...mapState({
       companyFormData: (state: any) => state.adminModule.companyFormData as FormattedDetailCompany,
       companyUID: (state: any) => state.adminModule.companyUID,
+      isNewModel: (state: any) => state.adminModule.isNewModel,
     }),
     ...mapGetters({
       editModeActivated: 'adminModule/getEditModeActivated',
