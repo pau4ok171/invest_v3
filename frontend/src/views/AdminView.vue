@@ -32,8 +32,8 @@ export default defineComponent({
     ...mapActions({
       initAdminStore: 'adminModule/initAdminStore',
     }),
-    openModel(company_uid: string) {
-      this.initAdminStore()
+    async openModel(company_uid: string) {
+      await this.initAdminStore()
       this.setCompanyUID(company_uid)
       this.setActiveComponent('AdminModel')
     },
