@@ -137,6 +137,39 @@ export default defineComponent({
       this.sectors = selectorOptions['sectors'].map((s: FetchedSector): FormattedSector => ({name: s.title, slug: s.slug, key: s.id}))
       this.industries = selectorOptions['industries'].map((i: FetchedIndustry): FormattedIndustry => ({name: i.title, slug: i.slug, key: i.sector}))
     },
+    async proceedModelSaving() {
+      const isFormCorrect = await this.v$.$validate()
+      if (!isFormCorrect) return
+
+      await this.saveModelForm()
+    },
+  },
+  watch: {
+    companyFormData: {
+      handler(companyFormData) {
+        // Check if values in CompanyFormData was modified
+        if (this.editModeActivated) {
+          const previousCompanyFormData = {...this.previousCompanyFormData}
+
+          Object.entries(companyFormData).forEach(([k, v]: [k: string, v: any]) => {
+            if (Object.hasOwn(previousCompanyFormData[k].value, 'slug')) {
+              previousCompanyFormData[k].wasModified = previousCompanyFormData[k].value.slug !== v.slug
+              return
+            }
+            previousCompanyFormData[k].wasModified = previousCompanyFormData[k].value !== v
+          })
+        }
+        console.log(this.v$)
+        console.log(this.v$.companyFormData.$errors)
+      },
+      deep: true
+    },
+    editModeActivated(val) {
+      // If editMode was activated
+      if (val === true) {
+        this.v$.$commit()
+      }
+    }
   },
 })
 
