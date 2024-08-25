@@ -128,6 +128,12 @@ export const adminModule = {
       commit('setCompanyFormData', getEmptyCompanyFormData())
       commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
     },
+    async deleteModelData({commit}) {
+      commit('setCompanyUID', '')
+      commit('setCompanyFormData', getEmptyCompanyFormData())
+      commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
+      commit('setIsNewModel', false)
+    },
     async fetchCompany({state, commit}) {
       const companyUID = state.companyUID
       const company: FetchedDetailCompany = await axios
