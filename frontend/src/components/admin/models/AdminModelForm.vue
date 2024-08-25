@@ -42,7 +42,6 @@ export default defineComponent({
       markets: [] as Array<FormattedMarket>,
       industries: [] as Array<FormattedIndustry>,
       countries: [] as Array<FormattedCountry>,
-      formModified: false,
     }
   },
   validations () {
