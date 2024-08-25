@@ -61,6 +61,20 @@ export default defineComponent({
       }
     }
   },
+  async mounted() {
+    if (!this.companyUID.length) {
+      await this.activateEditMode()
+      this.setIsNewModel(true)
+      } else {
+      await this.deactivateEditMode()
+      this.setIsNewModel(false)
+      await this.fetchCompanyByUID(this.companyUID)
+    }
+    await this.fetchSelectorOptions()
+  },
+  async unmounted() {
+    await this.deleteModelData()
+  },
   computed: {
     ...mapState({
       companyFormData: (state: any) => state.adminModule.companyFormData,
