@@ -189,9 +189,6 @@ export const adminModule = {
         // Reset ModelIsSaving
         commit('setModelIsSaving', false)
       }
-
-      // Reset ModelIsSaving
-      commit('setModelIsSaving', false)
     },
     async catchAxiosError({state, commit}, error) {
       // client received an error response (5xx, 4xx)
