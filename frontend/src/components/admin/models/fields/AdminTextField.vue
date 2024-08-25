@@ -2,9 +2,11 @@
 import {defineComponent} from 'vue'
 import type {PropType} from "vue";
 import type {ErrorObject} from "@vuelidate/core";
+import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminTextField",
+  components: {ResetIcon},
   props: {
     label: {
       type: String,
@@ -29,12 +31,26 @@ export default defineComponent({
     errors: {
       type: Object as PropType<ErrorObject[]>,
     },
+    wasModified: {
+      type: Boolean,
+      default: false,
+    },
   },
 })
 </script>
 
 <template>
 <div class="admin-text-fieldset">
+
+  <button
+    class="admin-text__reset-button"
+    v-show="wasModified"
+    @click="$emit('resetField')"
+    v-tippy="{content: 'Click to reset field changes'}"
+  >
+    <ResetIcon/>
+  </button>
+
   <div class="admin-text-field">
     <div class="admin-text-field__tab"></div>
     <textarea
@@ -66,7 +82,10 @@ export default defineComponent({
 
 <style scoped>
 .admin-text-fieldset {
+  position: relative;
+  width: max-content;
   margin: 16px 0;
+  padding: 2px 18px 0 0;
 }
 .admin-text-field {
   position: relative;
@@ -193,6 +212,30 @@ export default defineComponent({
     height: 5px;
     background-color: #c92432;
     border-radius: 2.5px;
+  }
+}
+.admin-text__reset-button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: rgba(53, 110, 233, .1);
+  transition: background-color .4s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(53, 110, 233, .2);
+  }
+
+  & svg {
+    fill: var(--blue);
+    width: 16px;
+    height: 16px;
+    user-select: none;
   }
 }
 </style>

@@ -5,10 +5,11 @@ import UploadIcon from "@/components/icons/UploadIcon.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
 import type {ErrorObject} from "@vuelidate/core";
+import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminImageField",
-  components: {RoundedBlueButton, DeleteIcon, UploadIcon},
+  components: {ResetIcon, RoundedBlueButton, DeleteIcon, UploadIcon},
   data() {
     return {
       isDrugOver: false,
@@ -36,6 +37,10 @@ export default defineComponent({
     },
     errors: {
       type: Object as PropType<ErrorObject[]>,
+    },
+    wasModified: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {
@@ -67,6 +72,15 @@ export default defineComponent({
 <template>
 <div class="admin-image-fieldset">
   <div class="admin-image-field">
+
+    <button
+      class="admin-image__reset-button"
+      v-show="wasModified"
+      @click="$emit('resetField')"
+      v-tippy="{content: 'Click to reset field changes'}"
+    >
+      <ResetIcon/>
+    </button>
 
     <div
         class="admin-image-field__input-box"
@@ -120,10 +134,16 @@ export default defineComponent({
 <style scoped lang="scss">
 .admin-image-fieldset {
   margin: 16px 0;
+  width: max-content;
+  max-width: calc(280px + 18px + 18px);
+  position: relative;
+  padding: 2px 18px 0 0;
 }
 .admin-image-field {
   position: relative;
   line-height: 1.4rem;
+  max-width: max-content;
+  padding-right: 18px;
 }
 .admin-image-field__input {
   width: 100%;
@@ -246,6 +266,30 @@ export default defineComponent({
     height: 5px;
     background-color: #c92432;
     border-radius: 2.5px;
+  }
+}
+.admin-image__reset-button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: rgba(53, 110, 233, .1);
+  transition: background-color .4s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(53, 110, 233, .2);
+  }
+
+  & svg {
+    fill: var(--blue);
+    width: 16px;
+    height: 16px;
+    user-select: none;
   }
 }
 </style>

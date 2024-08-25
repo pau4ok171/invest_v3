@@ -9,10 +9,12 @@ import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyList
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {FormattedSector, FormattedSelector} from "@/types/admin";
 import type {ErrorObject} from "@vuelidate/core";
+import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminSelectorField",
   components: {
+    ResetIcon,
     AdminSelectorDropDownMenu,
     CompanyListFilterDropDownMenu,
     DropDownMenuBox,
@@ -52,6 +54,10 @@ export default defineComponent({
     errors: {
       type: Object as PropType<ErrorObject[]>,
     },
+    wasModified: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     updateSelectorOption(option: FormattedSelector) {
@@ -63,6 +69,15 @@ export default defineComponent({
 
 <template>
 <div class="admin-selector-fieldset">
+  <button
+    class="admin-selector__reset-button"
+    v-show="wasModified"
+    @click="$emit('resetField')"
+    v-tippy="{content: 'Click to reset field changes'}"
+  >
+    <ResetIcon/>
+  </button>
+
   <DropDownMenuBox>
     <template v-slot:button>
         <button
@@ -100,7 +115,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .admin-selector-fieldset {
+  position: relative;
+  width: max-content;
   margin: 16px 0;
+  padding: 2px 18px 0 0;
 }
 .admin-selector-field {
   display: flex;
@@ -183,6 +201,30 @@ export default defineComponent({
     height: 5px;
     background-color: #c92432;
     border-radius: 2.5px;
+  }
+}
+.admin-selector__reset-button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  right: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: rgba(53, 110, 233, .1);
+  transition: background-color .4s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(53, 110, 233, .2);
+  }
+
+  & svg {
+    fill: var(--blue);
+    width: 16px;
+    height: 16px;
+    user-select: none;
   }
 }
 </style>
