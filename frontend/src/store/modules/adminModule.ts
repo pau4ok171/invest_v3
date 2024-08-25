@@ -7,7 +7,6 @@ import type {
   FormattedMarket,
   FormattedSector,
   FormattedUser,
-  CompanyDataToRequest,
 } from "@/types/admin";
 import axios from "axios";
 import getSlug from "speakingurl";
@@ -109,7 +108,7 @@ export const adminModule = {
       state.companyFormData.description = payload
     },
     setCompanyModelShortDescription(state, payload: string) {
-      state.companyFormData.shorDescription = payload
+      state.companyFormData.shortDescription = payload
     },
     setCompanyModelIsFund(state, payload: boolean) {
       state.companyFormData.isFund = payload
@@ -125,14 +124,14 @@ export const adminModule = {
     },
   },
   actions: {
-    initAdminStore({commit}) {
+    async initAdminStore({commit}) {
       commit('setCompanyFormData', getEmptyCompanyFormData())
       commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
     },
     async fetchCompany({state, commit}) {
       const companyUID = state.companyUID
       const company: FetchedDetailCompany = await axios
-        .get(`api/v1/admin/companies/${companyUID}`)
+        .get(`api/v1/admin/companies/${companyUID}/`)
         .then(response => response.data)
         .catch(error => console.log(error))
 
@@ -192,15 +191,15 @@ export const adminModule = {
       // client received an error response (5xx, 4xx)
       if (error.response) {
         console.log(error)
-        toast.error('Something was wrong... Please reload page')
+        toast.error('Something was wrong...')
         // client never received a response, or request never left
       } else if (error.request) {
         console.log(error)
-        toast.error('Something was wrong... Please reload page')
+        toast.error('Something was wrong...')
         // anything else
       } else {
         console.log(error)
-        toast.error('Something was wrong... Please reload page')
+        toast.error('Something was wrong...')
       }
     },
   },
