@@ -367,7 +367,7 @@ const isImageValidator = (file: File) => {
       help-text="Year of company foundation"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving" @click="proceedModelSaving()">
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving()">
     <atom-spinner
       v-show="modelIsSaving"
       :animation-duration="1250"
