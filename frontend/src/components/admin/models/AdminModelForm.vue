@@ -83,6 +83,8 @@ export default defineComponent({
     ...mapGetters({
       companyUID: 'adminModule/getCompanyUID',
       editModeActivated: 'adminModule/getEditModeActivated',
+      modelWasModified: 'adminModule/getModelWasModified',
+      previousCompanyFormData: 'adminModule/getPreviousCompanyFormData',
     }),
     filteredMarkets() {
       return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
@@ -183,6 +185,8 @@ const isImageValidator = (file: File) => {
 <div class="admin-model__admin-model-form">
   <button
       class="admin-model-form__reset-button"
+      v-show="modelWasModified"
+      @click="resetField('__all__')"
       v-tippy="{content: 'Click to reset all changes'}"
   >
     <ResetIcon/>
@@ -190,12 +194,16 @@ const isImageValidator = (file: File) => {
   <AdminCheckBoxField
       :model-value="companyFormData.isVisible"
       @update:model-value="setIsVisible"
+      @resetField="resetField('isVisible')"
+      :wasModified="previousCompanyFormData.isVisible.wasModified"
       :is-disabled="!editModeActivated"
       label="Company is publicly visible"
   />
   <AdminCharField
       :model-value="companyFormData.ticker"
       @update:model-value="setTicker"
+      @resetField="resetField('ticker')"
+      :wasModified="previousCompanyFormData.ticker.wasModified"
       @blur="v$.companyFormData.ticker.$commit()"
       :is-required="true"
       :is-disabled="!editModeActivated"
@@ -211,6 +219,8 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.uid"
       @update:model-value="setUID"
+      @resetField="resetField('uid')"
+      :wasModified="previousCompanyFormData.uid.wasModified"
       @blur="v$.companyFormData.uid.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.uid.$errors"
@@ -221,6 +231,8 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.companyName"
       @update:model-value="setCompanyName"
+      @resetField="resetField('companyName')"
+      :wasModified="previousCompanyFormData.companyName.wasModified"
       @blur="v$.companyFormData.companyName.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.companyName.$errors"
@@ -230,30 +242,40 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.shortCompanyName"
       @update:model-value="setShortCompanyName"
+      @resetField="resetField('shortCompanyName')"
+      :wasModified="previousCompanyFormData.shortCompanyName.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Company Name"
   />
   <AdminCharField
       :model-value="companyFormData.shortCompanyNameGenitive"
       @update:model-value="setShortCompanyNameGenitive"
+      @resetField="resetField('shortCompanyNameGenitive')"
+      :wasModified="previousCompanyFormData.shortCompanyNameGenitive.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Company Name Genitive"
   />
   <AdminTextField
       :model-value="companyFormData.description"
       @update:model-value="setDescription"
+      @resetField="resetField('description')"
+      :wasModified="previousCompanyFormData.description.wasModified"
       :is-disabled="!editModeActivated"
       label="Description"
   />
   <AdminTextField
       :model-value="companyFormData.shortDescription"
       @update:model-value="setShortDescription"
+      @resetField="resetField('shortDescription')"
+      :wasModified="previousCompanyFormData.shortDescription.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Description"
   />
   <AdminSelectorField
       :model-value="companyFormData.country"
       @update:model-value="setCountry"
+      @resetField="resetField('country')"
+      :wasModified="previousCompanyFormData.country.wasModified"
       :is-required="true"
       :errors="v$.companyFormData.country.$errors"
       :is-disabled="!editModeActivated"
@@ -264,6 +286,8 @@ const isImageValidator = (file: File) => {
   <AdminSelectorField
       :model-value="companyFormData.market"
       @update:model-value="setMarket"
+      @resetField="resetField('market')"
+      :wasModified="previousCompanyFormData.market.wasModified"
       :is-required="true"
       :is-disabled="!companyFormData.country?.slug.length || !editModeActivated"
       :errors="v$.companyFormData.market.$errors"
@@ -275,6 +299,8 @@ const isImageValidator = (file: File) => {
   <AdminSelectorField
       :model-value="companyFormData.sector"
       @update:model-value="setSector"
+      @resetField="resetField('sector')"
+      :wasModified="previousCompanyFormData.sector.wasModified"
       :is-required="true"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.sector.$errors"
@@ -285,6 +311,8 @@ const isImageValidator = (file: File) => {
   <AdminSelectorField
       :model-value="companyFormData.industry"
       @update:model-value="setIndustry"
+      @resetField="resetField('industry')"
+      :wasModified="previousCompanyFormData.industry.wasModified"
       :is-required="true"
       :is-disabled="!companyFormData.sector?.slug.length || !editModeActivated"
       :errors="v$.companyFormData.industry.$errors"
@@ -296,6 +324,8 @@ const isImageValidator = (file: File) => {
   <AdminImageField
       :model-value="companyFormData.logo"
       @update:model-value="setLogo"
+      @resetField="resetField('logo')"
+      :wasModified="previousCompanyFormData.logo.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.logo.$errors"
       help-text="Drag the photo into the input zone or click there to chose the photo"
@@ -304,18 +334,24 @@ const isImageValidator = (file: File) => {
   <AdminCheckBoxField
       :model-value="companyFormData.isFund"
       @update:model-value="setIsFund"
+      @resetField="resetField('isFund')"
+      :wasModified="previousCompanyFormData.isFund.wasModified"
       :is-disabled="!editModeActivated"
       label="Company is a fund"
   />
   <AdminCharField
       :model-value="companyFormData.city"
       @update:model-value="setCity"
+      @resetField="resetField('city')"
+      :wasModified="previousCompanyFormData.city.wasModified"
       :is-disabled="!editModeActivated"
       label="City"
   />
   <AdminCharField
       :model-value="companyFormData.website"
       @update:model-value="setWebsite"
+      @resetField="resetField('website')"
+      :wasModified="previousCompanyFormData.website.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.website.$errors"
       label="Website"
@@ -323,6 +359,8 @@ const isImageValidator = (file: File) => {
   <AdminCharField
       :model-value="companyFormData.founded"
       @update:model-value="setFounded"
+      @resetField="resetField('founded')"
+      :wasModified="previousCompanyFormData.founded.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.founded.$errors"
       label="Founded"
