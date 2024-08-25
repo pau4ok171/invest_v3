@@ -4,16 +4,11 @@ import AdminModels from "@/components/admin/models/AdminModels.vue";
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
 import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
-import {mapActions, mapMutations} from "vuex";
+import {mapActions, mapMutations, mapState} from "vuex";
 import AdminModel from "@/components/admin/models/AdminModel.vue";
 
 export default defineComponent({
   name: "AdminView",
-  data() {
-    return {
-      activeComponent: 'AdminDashboard',
-    }
-  },
   components: {
     AdminDashboard,
     AdminModels,
@@ -24,9 +19,15 @@ export default defineComponent({
   mounted() {
     document.title = 'ADMIN PANEL'
   },
+  computed: {
+    ...mapState({
+      activeComponent: (state: any) => state.adminModule.activeComponent,
+    }),
+  },
   methods: {
     ...mapMutations({
       setCompanyUID: 'adminModule/setCompanyUID',
+      setActiveComponent: 'adminModule/setActiveComponent',
     }),
     ...mapActions({
       initAdminStore: 'adminModule/initAdminStore',
@@ -34,7 +35,7 @@ export default defineComponent({
     openModel(company_uid: string) {
       this.initAdminStore()
       this.setCompanyUID(company_uid)
-      this.activeComponent = 'AdminModel'
+      this.setActiveComponent('AdminModel')
     },
   },
 })
@@ -46,10 +47,10 @@ export default defineComponent({
     <div class="admin-sidebar__navigation">
 
       <ul class="admin-sidebar__menu">
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminDashboard'}]" @click="activeComponent = 'AdminDashboard'">Dashboard</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminModels'}]" @click="activeComponent = 'AdminModels'">Models</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminStaff'}]" @click="activeComponent = 'AdminStaff'">Staff</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminSettings'}]" @click="activeComponent = 'AdminSettings'">Settings</li>
+        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminDashboard'}]" @click="setActiveComponent('AdminDashboard')">Dashboard</li>
+        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminModels'}]" @click="setActiveComponent('AdminModels')">Models</li>
+        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminStaff'}]" @click="setActiveComponent('AdminStaff')">Staff</li>
+        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminSettings'}]" @click="setActiveComponent('AdminSettings')">Settings</li>
       </ul>
 
     </div>

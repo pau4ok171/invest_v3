@@ -17,6 +17,7 @@ import {toast} from "vue3-toastify";
 
 export const adminModule = {
   state: () => ({
+    activeComponent: 'AdminDashboard',
     companyUID: '',
     companyFormData: getEmptyCompanyFormData(),
     // MODEL
@@ -33,6 +34,9 @@ export const adminModule = {
     },
   },
   mutations: {
+    setActiveComponent(state, payload: string) {
+      state.activeComponent = payload
+    },
     setCompanyUID(state, payload: string) {
       state.companyUID = payload
     },
