@@ -224,6 +224,37 @@ export const adminModule = {
         toast.error('Something was wrong...')
       }
     },
+    async activateEditMode({state, commit}) {
+      commit('setPreviousCompanyFormData', getPreviousCompanyFormData(state.companyFormData))
+      commit('setEditModeActivated', true)
+    },
+    async deactivateEditMode({state, commit, dispatch}) {
+      await dispatch('resetField', '__all__')
+      commit('setEditModeActivated', false)
+      if (state.isNewModel) {
+        await dispatch('deleteModelData')
+        commit('setActiveComponent', 'AdminModels')
+      }
+    },
+    async resetField({state, commit}, key: string) {
+      const companyFormData = {...state.companyFormData}
+
+      if (key === '__all__') {
+        Object.keys(companyFormData).forEach(k => companyFormData[k] = state.previousCompanyFormData[k].value)
+      } else {
+        companyFormData[key] = state.previousCompanyFormData[key].value
+      }
+      if (key === 'market') {
+        companyFormData['country'] = state.previousCompanyFormData['country'].value
+      }
+      if (key === 'industry') {
+        companyFormData['sector'] = state.previousCompanyFormData['sector'].value
+      }
+      if (key === 'ticker') {
+        companyFormData['slug'] = state.previousCompanyFormData['slug'].value
+      }
+      commit('setCompanyFormData', companyFormData)
+    }
   },
   namespaced: true,
 } as Module<any, any>
