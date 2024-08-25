@@ -38,6 +38,11 @@ export default defineComponent({
       this.setActiveComponent('AdminModel')
     },
   },
+  watch: {
+    activeComponent() {
+      window.scrollTo(0, 0)
+    }
+  },
 })
 </script>
 
