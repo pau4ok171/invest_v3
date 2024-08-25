@@ -20,10 +20,12 @@ export const adminModule = {
     activeComponent: 'AdminDashboard',
     companyUID: '',
     companyFormData: getEmptyCompanyFormData(),
+    previousCompanyFormData: getPreviousCompanyFormData(),
     // MODEL
     modelIsSaving: false,
     editModeActivated: false,
     isNewModel: false,
+    modelWasModified: false,
   }),
   getters: {
     getCompanyUID(state) {
@@ -31,6 +33,12 @@ export const adminModule = {
     },
     getEditModeActivated(state) {
       return state.editModeActivated
+    },
+    getModelWasModified(state) {
+      return Object.values({...state.previousCompanyFormData}).some((v: any) => v.wasModified)
+    },
+    getPreviousCompanyFormData(state) {
+      return state.previousCompanyFormData
     },
   },
   mutations: {
@@ -43,8 +51,14 @@ export const adminModule = {
     setCompanyFormData(state, payload: FormattedDetailCompany) {
       state.companyFormData = payload
     },
+    setPreviousCompanyFormData(state, payload: FormattedDetailCompany) {
+      state.previousCompanyFormData = payload
+    },
     setModelIsSaving(state, payload: boolean) {
       state.modelIsSaving = payload
+    },
+    setModelWasModified(state, payload: boolean) {
+      state.modelWasModified = payload
     },
     setIsNewModel(state, payload: boolean) {
       state.isNewModel = payload
@@ -113,6 +127,7 @@ export const adminModule = {
   actions: {
     initAdminStore({commit}) {
       commit('setCompanyFormData', getEmptyCompanyFormData())
+      commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
     },
     async fetchCompany({state, commit}) {
       const companyUID = state.companyUID
@@ -131,7 +146,7 @@ export const adminModule = {
       commit('setModelIsSaving', true)
       // PrepareData
       const companyData: FormattedDetailCompany = state.companyFormData
-      const preparedCompanyData = await getCompanyDataToRequest(companyData)
+      const preparedCompanyData = await getCompanyDataToRequest(companyData, state.previousCompanyFormData)
       // CreateDataObject
       const formData = getCompanyFormData(preparedCompanyData)
       // If NewModel => POST Request
@@ -162,6 +177,7 @@ export const adminModule = {
 
         commit('setEditModeActivated', false)
         commit('setCompanyFormData', companyFormData)
+        commit('setPreviousCompanyFormData', getPreviousCompanyFormData())
         commit('setIsNewModel', false)
 
       } finally {
@@ -217,6 +233,13 @@ const getEmptyCompanyFormData = (): FormattedDetailCompany => {
     website: '',
     founded: '',
   }
+}
+
+const getPreviousCompanyFormData = (company: FormattedDetailCompany|undefined = undefined) => {
+  return Object.entries(company || getEmptyCompanyFormData()).reduce((obj: {[name: string]: Object}, [k, v]) => {
+    obj[k] = {value: v, wasModified: false}
+    return obj
+  }, {})
 }
 
 const getCompanyFormData = (object: any) => Object.keys(object).reduce((formData, key) => {
@@ -285,25 +308,28 @@ const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<F
   } as FormattedDetailCompany
 }
 
-const getCompanyDataToRequest = async (companyData: FormattedDetailCompany): Promise<CompanyDataToRequest> => {
-  return {
-    ticker: companyData.ticker.trim().toUpperCase(),
-    slug: companyData.slug.trim(),
-    uid: companyData.uid.trim(),
-    title: companyData.companyName.trim(),
-    short_title: companyData.shortCompanyName.trim(),
-    short_title_genitive: companyData.shortCompanyNameGenitive.trim(),
-    description: companyData.description.trim(),
-    short_description: companyData.shortDescription.trim(),
-    city: companyData.city.trim(),
-    country_name_iso: companyData.country.slug,
-    market_slug: companyData.market.slug,
-    sector_slug: companyData.sector.slug,
-    industry_slug: companyData.industry.slug,
-    is_visible: companyData.isVisible,
-    logo: companyData.logo,
-    is_fund: companyData.isFund,
-    website: companyData.website.trim(),
-    year_founded: companyData.founded.trim(),
+const getCompanyDataToRequest = async (companyData: FormattedDetailCompany, previousCompanyData: any): Promise<{ [p: string]: any }> => {
+  const companyDataToRequest: { [name: string]: any } = {
+    ticker: previousCompanyData['ticker'].wasModified?companyData.ticker.trim().toUpperCase():null,
+    slug: previousCompanyData['slug'].wasModified?companyData.slug.trim():null,
+    uid: previousCompanyData['uid'].wasModified?companyData.uid.trim():null,
+    title: previousCompanyData['companyName'].wasModified?companyData.companyName.trim():null,
+    short_title: previousCompanyData['shortCompanyName'].wasModified?companyData.shortCompanyName.trim():null,
+    short_title_genitive: previousCompanyData['shortCompanyNameGenitive'].wasModified?companyData.shortCompanyNameGenitive.trim():null,
+    description: previousCompanyData['description'].wasModified?companyData.description.trim():null,
+    short_description: previousCompanyData['shortDescription'].wasModified?companyData.shortDescription.trim():null,
+    city: previousCompanyData['city'].wasModified?companyData.city.trim():null,
+    country_name_iso: previousCompanyData['country'].wasModified?companyData.country.slug:null,
+    market_slug: previousCompanyData['market'].wasModified?companyData.market.slug:null,
+    sector_slug: previousCompanyData['sector'].wasModified?companyData.sector.slug:null,
+    industry_slug: previousCompanyData['industry'].wasModified?companyData.industry.slug:null,
+    is_visible: previousCompanyData['isVisible'].wasModified?companyData.isVisible:null,
+    logo: previousCompanyData['logo'].wasModified?companyData.logo:null,
+    is_fund: previousCompanyData['isFund'].wasModified?companyData.isFund:null,
+    website: previousCompanyData['website'].wasModified?companyData.website.trim():null,
+    year_founded: previousCompanyData['founded'].wasModified?companyData.founded.trim():null,
   }
+  return Object.keys(companyDataToRequest)
+      .filter(k => companyDataToRequest[k] !== null)
+      .reduce((a, k) => ({...a, [k]: companyDataToRequest[k]}), {})
 }
