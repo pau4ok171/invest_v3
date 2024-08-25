@@ -93,20 +93,9 @@ export default defineComponent({
       return [...this.industries].filter((i: FormattedIndustry) => i.key === this.companyFormData.sector.key)
     },
   },
-  async mounted() {
-    if (!this.companyUID.length) {
-      this.setEditModeActivated(true)
-      this.setIsNewModel(true)
-      this.v$.$commit()
-      } else {
-      this.setEditModeActivated(false)
-      this.setIsNewModel(false)
-      await this.fetchCompanyByUID(this.companyUID)
-    }
-    await this.fetchSelectorOptions()
-  },
   methods: {
     ...mapMutations({
+      setCompanyFormData: 'adminModule/setCompanyFormData',
       setIsVisible: 'adminModule/setCompanyModelIsVisible',
       setCompanyName: 'adminModule/setCompanyModelCompanyName',
       setShortCompanyName: 'adminModule/setCompanyModelShortCompanyName',
@@ -131,6 +120,10 @@ export default defineComponent({
     ...mapActions({
       fetchCompanyByUID: 'adminModule/fetchCompany',
       saveModelForm: 'adminModule/saveModelForm',
+      deleteModelData: 'adminModule/deleteModelData',
+      activateEditMode: 'adminModule/activateEditMode',
+      deactivateEditMode: 'adminModule/deactivateEditMode',
+      resetField: 'adminModule/resetField',
     }),
     async fetchSelectorOptions() {
       const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
