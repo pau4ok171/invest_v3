@@ -190,14 +190,14 @@ export const adminModule = {
         commit('setModelIsSaving', false)
       }
     },
-    async deleteModel({state, commit, dispatch}) {
+    async deleteModel({state, commit}) {
       // Get Company UID
       const companyUID = state.companyUID
       // Send DELETE Request
       try {
         await axios
             .delete(`api/v1/admin/companies/${companyUID}/`)
-            .then(async r => {
+            .then(async () => {
               // Open Models Component
               commit('setActiveComponent', 'AdminModels')
               // Notify Client
