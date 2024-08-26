@@ -101,7 +101,7 @@ export default defineComponent({
     </div>
 
     <div
-        v-tippy="{content: 'Click to copy UID'}"
+        v-tippy="{content: 'Click to copy UID', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
         class="admin-model-header__item admin-model-header__item--tooltip"
         @click="copyValue"
     >
@@ -286,7 +286,6 @@ export default defineComponent({
   background-image: linear-gradient(#1b222d, #1b222d), linear-gradient(315deg, #ee4297, #9176c6);
   background-origin: border-box;
   background-clip: padding-box, border-box;
-
 }
 .admin-model-modal-menu__content {
   padding: 16px;

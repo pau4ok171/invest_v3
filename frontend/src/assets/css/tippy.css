@@ -6,3 +6,14 @@
 .tippy-box[data-theme~='black'][data-placement^='top'] > .tippy-arrow::before {
   border-top-color: black;
 }
+.tippy-box[data-theme~='tooltip-theme-paper'] {
+  background-color: #616161;
+  opacity: .9;
+  color: white;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 1.8rem;
+  text-transform: none;
+  margin: 8px;
+  word-break: normal;
+}
