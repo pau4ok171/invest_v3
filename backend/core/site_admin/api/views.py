@@ -102,8 +102,8 @@ def get_data(request):
         data['sector'] = Sector.objects.get(slug=data.pop('sector_slug')).pk
     if data.get('industry_slug'):
         data['industry'] = Industry.objects.get(slug=data.pop('industry_slug')).pk
-    if type(data.get('logo')) == str and type(data.get('logo')) is not None:
-        data.pop('logo')
+    if data.get('logo') == '__delete__':
+        data['logo'] = None
 
     data['created_by'] = request.user.pk
     data['updated_by'] = request.user.pk

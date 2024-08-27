@@ -295,9 +295,13 @@ const getPreviousCompanyFormData = (company: FormattedDetailCompany|undefined = 
 }
 
 const getCompanyFormData = (object: any) => Object.keys(object).reduce((formData, key) => {
-  if (key === 'logo' && typeof object[key] === 'object') {
-    // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
-    formData.append(key, object[key], 'logo.png')
+  if (key === 'logo') {
+    if (object[key] instanceof File) {
+      // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
+      formData.append(key, object[key], 'logo.png')
+    } else {
+      formData.append(key, '__delete__')
+    }
     return formData
   }
 
