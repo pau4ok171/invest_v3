@@ -1,3 +1,5 @@
+import os
+
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
@@ -5,6 +7,10 @@ from .model_choices import QUARTERS, REPORT_TYPES, REPORT_FORMS, SCALES
 from notes.models import Note
 
 URL_PREFIX = settings.URL_PREFIX
+
+
+def logo_directory_path(instance, filename):
+    return f'companies/logos/small/{instance.ticker.upper()}_{filename}'
 
 
 class Company(models.Model):
