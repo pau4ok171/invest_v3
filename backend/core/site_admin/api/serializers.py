@@ -107,7 +107,10 @@ class CompaniesSerializer(serializers.ModelSerializer):
 
 
 class CompanySerializer(serializers.ModelSerializer):
-    logo = serializers.ImageField(allow_null=True, default='companies/logos/small/default.png')
+    logo = serializers.ImageField(
+        allow_null=True,
+        default=os.path.join(settings.MEDIA_ROOT, 'companies/logos/default.png')
+    )
 
     class Meta:
         model = Company
@@ -159,7 +162,7 @@ class CompanySerializer(serializers.ModelSerializer):
             if attr in info.relations and info.relations[attr].to_many:
                 m2m_fields.append((attr, value))
             elif attr == 'logo' and value is None:
-                img_path = os.path.join(settings.MEDIA_ROOT, 'companies/logos/small/default.png')
+                img_path = os.path.join(settings.MEDIA_ROOT, 'companies/logos/default.png')
                 setattr(instance, attr, img_path)
             else:
                 setattr(instance, attr, value)

@@ -24,7 +24,11 @@ class Company(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
-    logo = models.ImageField(upload_to='companies/logos/small', blank=True, default='companies/logos/small/default.png')
+    logo = models.ImageField(
+        upload_to=logo_directory_path,
+        blank=True,
+        default=os.path.join(settings.MEDIA_ROOT, 'companies/logos/default.png')
+    )
     is_fund = models.BooleanField(default=False)
     website = models.URLField(null=True, blank=True)
     year_founded = models.IntegerField(null=True, blank=True)
@@ -242,7 +246,7 @@ class Report(models.Model):
     property_and_plant_and_equipment = models.FloatField(default=0)
     retained_earnings = models.FloatField(default=0)
     securities_and_investments = models.FloatField(default=0)
-    share_outstanding_eop = models.FloatField(default=0) # end of period
+    share_outstanding_eop = models.FloatField(default=0)  # end of period
     short_term_capital_lease_obligation = models.FloatField(default=0)
     short_term_debt = models.FloatField(default=0)
     short_term_debt_and_capital_lease_obligation = models.FloatField(default=0)
