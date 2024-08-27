@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_celery_beat',
     'django_celery_results',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
