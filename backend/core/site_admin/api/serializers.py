@@ -142,6 +142,7 @@ class CompanySerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['country'] = CountrySerializer(instance.country).data
+        response['logo'] = instance.get_logo()
         response['industry'] = IndustrySerializer(instance.industry).data
         response['market'] = MarketSerializer(instance.market).data
         response['sector'] = SectorSerializer(instance.sector).data
