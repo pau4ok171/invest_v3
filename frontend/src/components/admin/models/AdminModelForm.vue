@@ -54,9 +54,15 @@ export default defineComponent({
         market: { slug: { required } },
         sector: { slug: { required } },
         industry: { slug: { required } },
-        logo: { isImageValidator: helpers.withMessage('Field must be an image', isImageValidator) },
+        logo: {
+          isImageValidator: helpers.withMessage('Field must be an image', isImageValidator),
+          maxVolumeValidator: helpers.withMessage('Field must be 100Kb max', maxVolumeValidator),
+        },
         website: { url },
-        founded: { numeric },
+        founded: {
+          numeric,
+          isYearValidator: helpers.withMessage('Field must be an year without text. P.e: 1925', isYearValidator)
+        },
       }
     }
   },
@@ -171,6 +177,15 @@ export default defineComponent({
 const isImageValidator = (file: File) => {
   if (!file?.size) return true
   return file.type.startsWith('image')
+}
+const maxVolumeValidator = (file: File|Object) => {
+  if (file instanceof File && file.type.startsWith('image')) {
+    return file.size < 100 * 1024
+  }
+  return true
+}
+const isYearValidator = (val: any) => {
+  return val.length === 4 || val.length === 0
 }
 </script>
 
