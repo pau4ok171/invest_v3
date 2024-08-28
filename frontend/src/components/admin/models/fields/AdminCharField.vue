@@ -58,7 +58,7 @@ export default defineComponent({
         :disabled="isDisabled"
         :value="modelValue"
         @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
-        @blur="$emit('blur')"
+        @blur="$emit('commitValidator')"
         class="admin-char-field__input"
         placeholder=" "
     />

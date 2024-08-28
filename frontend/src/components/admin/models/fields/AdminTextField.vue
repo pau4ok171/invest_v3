@@ -57,7 +57,7 @@ export default defineComponent({
         :required="isRequired"
         :disabled="isDisabled"
         @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
-        @blur="$emit('blur')"
+        @blur="$emit('commitValidator')"
         :value="modelValue"
         class="admin-text-field__textarea"
         cols="50"

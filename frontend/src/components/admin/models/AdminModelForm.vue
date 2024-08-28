@@ -48,16 +48,24 @@ export default defineComponent({
     return {
       companyFormData: {
         ticker: { required },
+        slug: {},
         uid: { required },
         companyName: { required },
+        shortCompanyName: {},
+        shortCompanyNameGenitive: {},
+        description: {},
+        shortDescription: {},
+        city: {},
         country: { slug: { required } },
         market: { slug: { required } },
         sector: { slug: { required } },
         industry: { slug: { required } },
+        isVisible: {},
         logo: {
           isImageValidator: helpers.withMessage('Field must be an image', isImageValidator),
           maxVolumeValidator: helpers.withMessage('Field must be 100Kb max', maxVolumeValidator),
         },
+        isFund: {},
         website: { url },
         founded: {
           numeric,
@@ -203,6 +211,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.isVisible"
       @update:model-value="setIsVisible"
       @resetField="resetField('isVisible')"
+      @commitValidator="v$.companyFormData.isVisible.$commit()"
       :wasModified="previousCompanyFormData.isVisible.wasModified"
       :is-disabled="!editModeActivated"
       label="Company is publicly visible"
@@ -212,7 +221,7 @@ const isYearValidator = (val: any) => {
       @update:model-value="setTicker"
       @resetField="resetField('ticker')"
       :wasModified="previousCompanyFormData.ticker.wasModified"
-      @blur="v$.companyFormData.ticker.$commit()"
+      @commitValidator="v$.companyFormData.ticker.$commit()"
       :is-required="true"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.ticker.$errors"
@@ -221,6 +230,7 @@ const isYearValidator = (val: any) => {
   <AdminCharField
       :model-value="companyFormData.slug"
       @update:model-value="setSlug"
+      @commitValidator="v$.companyFormData.slug.$commit()"
       :is-disabled="true"
       label="Slug"
   />
@@ -229,7 +239,7 @@ const isYearValidator = (val: any) => {
       @update:model-value="setUID"
       @resetField="resetField('uid')"
       :wasModified="previousCompanyFormData.uid.wasModified"
-      @blur="v$.companyFormData.uid.$commit()"
+      @commitValidator="v$.companyFormData.uid.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.uid.$errors"
       :is-disabled="!editModeActivated"
@@ -241,7 +251,7 @@ const isYearValidator = (val: any) => {
       @update:model-value="setCompanyName"
       @resetField="resetField('companyName')"
       :wasModified="previousCompanyFormData.companyName.wasModified"
-      @blur="v$.companyFormData.companyName.$commit()"
+      @commitValidator="v$.companyFormData.companyName.$commit()"
       :is-required="true"
       :errors="v$.companyFormData.companyName.$errors"
       :is-disabled="!editModeActivated"
@@ -251,6 +261,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.shortCompanyName"
       @update:model-value="setShortCompanyName"
       @resetField="resetField('shortCompanyName')"
+      @commitValidator="v$.companyFormData.shortCompanyName.$commit()"
       :wasModified="previousCompanyFormData.shortCompanyName.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Company Name"
@@ -259,6 +270,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.shortCompanyNameGenitive"
       @update:model-value="setShortCompanyNameGenitive"
       @resetField="resetField('shortCompanyNameGenitive')"
+      @commitValidator="v$.companyFormData.shortCompanyNameGenitive.$commit()"
       :wasModified="previousCompanyFormData.shortCompanyNameGenitive.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Company Name Genitive"
@@ -267,6 +279,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.description"
       @update:model-value="setDescription"
       @resetField="resetField('description')"
+      @commitValidator="v$.companyFormData.description.$commit()"
       :wasModified="previousCompanyFormData.description.wasModified"
       :is-disabled="!editModeActivated"
       label="Description"
@@ -275,6 +288,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.shortDescription"
       @update:model-value="setShortDescription"
       @resetField="resetField('shortDescription')"
+      @commitValidator="v$.companyFormData.shortDescription.$commit()"
       :wasModified="previousCompanyFormData.shortDescription.wasModified"
       :is-disabled="!editModeActivated"
       label="Short Description"
@@ -283,6 +297,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.country"
       @update:model-value="setCountry"
       @resetField="resetField('country')"
+      @commitValidator="v$.companyFormData.country.$commit()"
       :wasModified="previousCompanyFormData.country.wasModified"
       :is-required="true"
       :errors="v$.companyFormData.country.$errors"
@@ -295,6 +310,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.market"
       @update:model-value="setMarket"
       @resetField="resetField('market')"
+      @commitValidator="v$.companyFormData.market.$commit()"
       :wasModified="previousCompanyFormData.market.wasModified"
       :is-required="true"
       :is-disabled="!companyFormData.country?.slug.length || !editModeActivated"
@@ -308,6 +324,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.sector"
       @update:model-value="setSector"
       @resetField="resetField('sector')"
+      @commitValidator="v$.companyFormData.sector.$commit()"
       :wasModified="previousCompanyFormData.sector.wasModified"
       :is-required="true"
       :is-disabled="!editModeActivated"
@@ -320,6 +337,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.industry"
       @update:model-value="setIndustry"
       @resetField="resetField('industry')"
+      @commitValidator="v$.companyFormData.industry.$commit()"
       :wasModified="previousCompanyFormData.industry.wasModified"
       :is-required="true"
       :is-disabled="!companyFormData.sector?.slug.length || !editModeActivated"
@@ -333,6 +351,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.logo"
       @update:model-value="setLogo"
       @resetField="resetField('logo')"
+      @commitValidator="v$.companyFormData.logo.$commit()"
       :wasModified="previousCompanyFormData.logo.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.logo.$errors"
@@ -343,6 +362,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.isFund"
       @update:model-value="setIsFund"
       @resetField="resetField('isFund')"
+      @commitValidator="v$.companyFormData.isFund.$commit()"
       :wasModified="previousCompanyFormData.isFund.wasModified"
       :is-disabled="!editModeActivated"
       label="Company is a fund"
@@ -351,6 +371,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.city"
       @update:model-value="setCity"
       @resetField="resetField('city')"
+      @commitValidator="v$.companyFormData.city.$commit()"
       :wasModified="previousCompanyFormData.city.wasModified"
       :is-disabled="!editModeActivated"
       label="City"
@@ -359,6 +380,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.website"
       @update:model-value="setWebsite"
       @resetField="resetField('website')"
+      @commitValidator="v$.companyFormData.website.$commit()"
       :wasModified="previousCompanyFormData.website.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.website.$errors"
@@ -368,6 +390,7 @@ const isYearValidator = (val: any) => {
       :model-value="companyFormData.founded"
       @update:model-value="setFounded"
       @resetField="resetField('founded')"
+      @commitValidator="v$.companyFormData.founded.$commit()"
       :wasModified="previousCompanyFormData.founded.wasModified"
       :is-disabled="!editModeActivated"
       :errors="v$.companyFormData.founded.$errors"

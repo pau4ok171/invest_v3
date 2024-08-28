@@ -46,6 +46,7 @@ export default defineComponent({
   methods: {
     uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
       if (currentTarget.files) {
+        this.$emit('commitValidator')
         this.$emit('update:modelValue', currentTarget.files[0])
       }
       if (currentTarget.value) {
