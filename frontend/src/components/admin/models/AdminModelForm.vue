@@ -69,7 +69,7 @@ export default defineComponent({
         website: { url },
         founded: {
           numeric,
-          isYearValidator: helpers.withMessage('Field must be an year without text. P.e: 1925', isYearValidator)
+          isYearValidator: helpers.withMessage('Field must be an year without text', isYearValidator),
         },
       }
     }
