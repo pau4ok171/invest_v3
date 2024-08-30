@@ -49,7 +49,7 @@ export default defineComponent({
     AdminSelectorField,
     AdminCheckBoxField,
     AdminTextField,
-    AdminCharField
+    AdminCharField,
   },
   setup: () => ({ v$: useVuelidate({ $autoDirty: true, $rewardEarly: true })}),
   data() {
@@ -244,11 +244,9 @@ export default defineComponent({
   background-color: rgba(53, 110, 233, .1);
   transition: background-color .4s;
   cursor: pointer;
-
   &:hover {
     background-color: rgba(53, 110, 233, .2);
   }
-
   & svg {
     fill: var(--blue);
     width: 32px;
