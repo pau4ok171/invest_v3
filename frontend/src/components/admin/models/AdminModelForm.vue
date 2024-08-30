@@ -192,195 +192,23 @@ export default defineComponent({
   >
     <ResetIcon/>
   </button>
-  <AdminCheckBoxField
-      :model-value="companyFormData.isVisible"
-      @update:model-value="setIsVisible"
-      @resetField="resetField('isVisible')"
-      @commitValidator="v$.companyFormData.isVisible.$commit()"
-      :wasModified="previousCompanyFormData.isVisible.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Company is publicly visible"
-  />
-  <AdminCharField
-      :model-value="companyFormData.ticker"
-      @update:model-value="setTicker"
-      @resetField="resetField('ticker')"
-      :wasModified="previousCompanyFormData.ticker.wasModified"
-      @commitValidator="v$.companyFormData.ticker.$commit()"
-      :is-required="true"
-      :is-disabled="!editModeActivated"
-      :errors="v$.companyFormData.ticker.$errors"
-      label="Ticker"
-  />
-  <AdminCharField
-      :model-value="companyFormData.slug"
-      @update:model-value="setSlug"
-      @commitValidator="v$.companyFormData.slug.$commit()"
-      :is-disabled="true"
-      label="Slug"
-  />
-  <AdminCharField
-      :model-value="companyFormData.uid"
-      @update:model-value="setUID"
-      @resetField="resetField('uid')"
-      :wasModified="previousCompanyFormData.uid.wasModified"
-      @commitValidator="v$.companyFormData.uid.$commit()"
-      :is-required="true"
-      :errors="v$.companyFormData.uid.$errors"
-      :is-disabled="!editModeActivated"
-      label="UID"
-      help-text="UID of type 00000000-0000-0000-0000-000000000000"
-  />
-  <AdminCharField
-      :model-value="companyFormData.companyName"
-      @update:model-value="setCompanyName"
-      @resetField="resetField('companyName')"
-      :wasModified="previousCompanyFormData.companyName.wasModified"
-      @commitValidator="v$.companyFormData.companyName.$commit()"
-      :is-required="true"
-      :errors="v$.companyFormData.companyName.$errors"
-      :is-disabled="!editModeActivated"
-      label="Company Name"
-  />
-  <AdminCharField
-      :model-value="companyFormData.shortCompanyName"
-      @update:model-value="setShortCompanyName"
-      @resetField="resetField('shortCompanyName')"
-      @commitValidator="v$.companyFormData.shortCompanyName.$commit()"
-      :wasModified="previousCompanyFormData.shortCompanyName.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Short Company Name"
-  />
-  <AdminCharField
-      :model-value="companyFormData.shortCompanyNameGenitive"
-      @update:model-value="setShortCompanyNameGenitive"
-      @resetField="resetField('shortCompanyNameGenitive')"
-      @commitValidator="v$.companyFormData.shortCompanyNameGenitive.$commit()"
-      :wasModified="previousCompanyFormData.shortCompanyNameGenitive.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Short Company Name Genitive"
-  />
-  <AdminTextField
-      :model-value="companyFormData.description"
-      @update:model-value="setDescription"
-      @resetField="resetField('description')"
-      @commitValidator="v$.companyFormData.description.$commit()"
-      :wasModified="previousCompanyFormData.description.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Description"
-  />
-  <AdminTextField
-      :model-value="companyFormData.shortDescription"
-      @update:model-value="setShortDescription"
-      @resetField="resetField('shortDescription')"
-      @commitValidator="v$.companyFormData.shortDescription.$commit()"
-      :wasModified="previousCompanyFormData.shortDescription.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Short Description"
-  />
-  <AdminSelectorField
-      :model-value="companyFormData.country"
-      @update:model-value="setCountry"
-      @resetField="resetField('country')"
-      @commitValidator="v$.companyFormData.country.$commit()"
-      :wasModified="previousCompanyFormData.country.wasModified"
-      :is-required="true"
-      :errors="v$.companyFormData.country.$errors"
-      :is-disabled="!editModeActivated"
-      :options="countries"
-      :has-search="true"
-      label="Country"
-  />
-  <AdminSelectorField
-      :model-value="companyFormData.market"
-      @update:model-value="setMarket"
-      @resetField="resetField('market')"
-      @commitValidator="v$.companyFormData.market.$commit()"
-      :wasModified="previousCompanyFormData.market.wasModified"
-      :is-required="true"
-      :is-disabled="!companyFormData.country?.slug.length || !editModeActivated"
-      :errors="v$.companyFormData.market.$errors"
-      :options="filteredMarkets"
-      :has-search="true"
-      label="Market"
-      help-text="Is unblocked after filling the country field"
-  />
-  <AdminSelectorField
-      :model-value="companyFormData.sector"
-      @update:model-value="setSector"
-      @resetField="resetField('sector')"
-      @commitValidator="v$.companyFormData.sector.$commit()"
-      :wasModified="previousCompanyFormData.sector.wasModified"
-      :is-required="true"
-      :is-disabled="!editModeActivated"
-      :errors="v$.companyFormData.sector.$errors"
-      :options="sectors"
-      :has-search="true"
-      label="Sector"
-  />
-  <AdminSelectorField
-      :model-value="companyFormData.industry"
-      @update:model-value="setIndustry"
-      @resetField="resetField('industry')"
-      @commitValidator="v$.companyFormData.industry.$commit()"
-      :wasModified="previousCompanyFormData.industry.wasModified"
-      :is-required="true"
-      :is-disabled="!companyFormData.sector?.slug.length || !editModeActivated"
-      :errors="v$.companyFormData.industry.$errors"
-      :options="filteredIndustries"
-      :has-search="true"
-      label="Industry"
-      help-text="Is unblocked after filling the sector field"
-  />
-  <AdminImageField
-      :model-value="companyFormData.logo"
-      @update:model-value="setLogo"
-      @resetField="resetField('logo')"
-      @commitValidator="v$.companyFormData.logo.$commit()"
-      :wasModified="previousCompanyFormData.logo.wasModified"
-      :is-disabled="!editModeActivated"
-      :errors="v$.companyFormData.logo.$errors"
-      help-text="Drag the photo into the input zone or click there to chose the photo"
-      label="Logo"
-  />
-  <AdminCheckBoxField
-      :model-value="companyFormData.isFund"
-      @update:model-value="setIsFund"
-      @resetField="resetField('isFund')"
-      @commitValidator="v$.companyFormData.isFund.$commit()"
-      :wasModified="previousCompanyFormData.isFund.wasModified"
-      :is-disabled="!editModeActivated"
-      label="Company is a fund"
-  />
-  <AdminCharField
-      :model-value="companyFormData.city"
-      @update:model-value="setCity"
-      @resetField="resetField('city')"
-      @commitValidator="v$.companyFormData.city.$commit()"
-      :wasModified="previousCompanyFormData.city.wasModified"
-      :is-disabled="!editModeActivated"
-      label="City"
-  />
-  <AdminCharField
-      :model-value="companyFormData.website"
-      @update:model-value="setWebsite"
-      @resetField="resetField('website')"
-      @commitValidator="v$.companyFormData.website.$commit()"
-      :wasModified="previousCompanyFormData.website.wasModified"
-      :is-disabled="!editModeActivated"
-      :errors="v$.companyFormData.website.$errors"
-      label="Website"
-  />
-  <AdminCharField
-      :model-value="companyFormData.founded"
-      @update:model-value="setFounded"
-      @resetField="resetField('founded')"
-      @commitValidator="v$.companyFormData.founded.$commit()"
-      :wasModified="previousCompanyFormData.founded.wasModified"
-      :is-disabled="!editModeActivated"
-      :errors="v$.companyFormData.founded.$errors"
-      label="Founded"
-      help-text="Year of company foundation"
+
+  <component
+    v-for="field in model"
+    @update:model-value="(value: any) => updateModel(field.modelValue, value)"
+    @resetField="resetField(field.modelValue)"
+    @commitValidator="v$.companyFormData[field.modelValue].$commit()"
+    :key="field.modelValue"
+    :is="field.field"
+    :model-value="companyFormData[field.modelValue]"
+    :is-required="field.isRequired"
+    :is-disabled="field.isDisabled"
+    :label="field.label"
+    :help-text="field.helpText"
+    :options="field.options"
+    :has-search="field.hasSearch"
+    :errors="v$.companyFormData[field.modelValue].$errors"
+    :was-modified="field.wasModifiedIsNeeded?previousCompanyFormData[field.modelValue].wasModified:false"
   />
 
   <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving()">
