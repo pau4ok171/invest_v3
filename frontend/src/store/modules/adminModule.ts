@@ -238,17 +238,18 @@ export const adminModule = {
     },
     async resetField({state, commit}, key: string) {
       const companyFormData = {...state.companyFormData}
-
       if (key === '__all__') {
         Object.keys(companyFormData).forEach(k => companyFormData[k] = state.previousCompanyFormData[k].value)
       } else {
         companyFormData[key] = state.previousCompanyFormData[key].value
       }
-      if (key === 'market') {
+      if (key === 'country' || key === 'market') {
         companyFormData['country'] = state.previousCompanyFormData['country'].value
+        companyFormData['market'] = state.previousCompanyFormData['market'].value
       }
-      if (key === 'industry') {
+      if (key === 'sector' || key === 'industry') {
         companyFormData['sector'] = state.previousCompanyFormData['sector'].value
+        companyFormData['industry'] = state.previousCompanyFormData['industry'].value
       }
       if (key === 'ticker') {
         companyFormData['slug'] = state.previousCompanyFormData['slug'].value
