@@ -63,31 +63,8 @@ export default defineComponent({
   validations () {
     return {
       companyFormData: {
-        ticker: { required },
-        slug: {},
-        uid: { required },
-        companyName: { required },
-        shortCompanyName: {},
-        shortCompanyNameGenitive: {},
-        description: {},
-        shortDescription: {},
-        city: {},
-        country: { slug: { required } },
-        market: { slug: { required } },
-        sector: { slug: { required } },
-        industry: { slug: { required } },
-        isVisible: {},
-        logo: {
-          isImageValidator: helpers.withMessage('Field must be an image', isImageValidator),
-          maxVolumeValidator: helpers.withMessage('Field must be 100Kb max', maxVolumeValidator),
-        },
-        isFund: {},
-        website: { url },
-        founded: {
-          numeric,
-          isYearValidator: helpers.withMessage('Field must be an year without text', isYearValidator),
-        },
-      }
+        ...Object.entries(getModel()).reduce((obj, [k, v]: [string, any]) => ({[k]: v.validators, ...obj}), {})
+      },
     }
   },
   async mounted() {
