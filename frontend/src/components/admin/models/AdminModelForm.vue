@@ -128,6 +128,16 @@ export default defineComponent({
       deactivateEditMode: 'adminModule/deactivateEditMode',
       resetField: 'adminModule/resetField',
     }),
+    updateModel(key: string, value: any) {
+      const companyFormData = {...this.companyFormData}
+      companyFormData[key] = value
+      // DEPENDING FIELDS
+      if (key === 'ticker') companyFormData['slug'] = getSlug(_.kebabCase(value))
+      if (key === 'country') companyFormData['market'] = {name: '', slug: '', key: ''}
+      if (key === 'sector') companyFormData['industry'] = {name: '', slug: '', key: ''}
+      // END DEPENDING FIELDS
+      this.setCompanyFormData(companyFormData)
+    },
     async fetchSelectorOptions() {
       const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
       this.countries = selectorOptions['countries'].map((c: FetchedCountry): FormattedCountry => ({name: c.name, slug: c.name_iso, key: c.id, flagURL: c.flag_url, currency: c.currency}))
