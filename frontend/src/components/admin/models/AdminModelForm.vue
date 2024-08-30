@@ -93,6 +93,20 @@ export default defineComponent({
       modelWasModified: 'adminModule/getModelWasModified',
       previousCompanyFormData: 'adminModule/getPreviousCompanyFormData',
     }),
+    model() {
+      const model = getModel()
+      Object.entries(model).forEach(([k, v]: [k: string, v: any]) => {
+        if (v.options) {
+          model[k].options = (this as any)[v.options]
+        }
+        if(typeof v.isDisabled === "string") {
+            model[k].isDisabled = v.isDisabled.startsWith('!') ? !(this as any)[v.isDisabled.slice(1)] : (this as any)[v.isDisabled]
+        } else {
+          model[k].isDisabled = v.isDisabled
+        }
+      })
+      return model
+    },
     filteredMarkets() {
       return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
     },
