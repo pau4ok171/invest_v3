@@ -19,8 +19,10 @@ import type {
 } from "@/types/admin";
 import ResetIcon from "@/components/icons/ResetIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import {useVuelidate} from '@vuelidate/core'
-import {helpers, numeric, required, url} from "@vuelidate/validators";
+import {useVuelidate} from "@vuelidate/core";
+import getSlug from "speakingurl";
+import _ from "lodash";
+import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
 import {AtomSpinner} from "epic-spinners";
 
 export default defineComponent({
