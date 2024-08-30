@@ -64,6 +64,11 @@ export default defineComponent({
       this.$emit('update:modelValue', option)
     }
   },
+  computed: {
+    areOptionsEmpty () {
+      return !this.options.length
+    }
+  },
 })
 </script>
 
@@ -82,7 +87,7 @@ export default defineComponent({
     <template v-slot:button>
         <button
             class="admin-selector-field"
-            :disabled="isDisabled"
+            :disabled="isDisabled || areOptionsEmpty"
         >
           <span>{{ modelValue.name }}</span>
           <ArrowDownIcon/>
