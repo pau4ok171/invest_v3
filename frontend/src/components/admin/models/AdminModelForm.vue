@@ -25,6 +25,20 @@ import _ from "lodash";
 import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
 import {AtomSpinner} from "epic-spinners";
 
+const getModel = () => {
+  const model: any = {...companyModel}
+  Object.keys(model).forEach((k) => {
+    model[k] = Object.assign({...defaultModelFieldData}, model[k])
+    model[k].modelValue = k
+    if (Object.hasOwn(model[k].validators, 'slug')) {
+      model[k].isRequired = Object.hasOwn(model[k].validators.slug, 'required')
+    } else {
+      model[k].isRequired = Object.hasOwn(model[k].validators, 'required')
+    }
+  })
+  return model
+}
+
 export default defineComponent({
   name: "AdminModelForm",
   components: {
