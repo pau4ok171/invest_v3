@@ -17,6 +17,7 @@ import {toast} from "vue3-toastify";
 export const adminModule = {
   state: () => ({
     activeComponent: 'AdminDashboard',
+    previousComponent: '',
     companyUID: '',
     companyFormData: getEmptyCompanyFormData(),
     previousCompanyFormData: getPreviousCompanyFormData(),
@@ -39,10 +40,16 @@ export const adminModule = {
     getPreviousCompanyFormData(state) {
       return state.previousCompanyFormData
     },
+    getPreviousComponent(state) {
+      return state.previousComponent
+    },
   },
   mutations: {
     setActiveComponent(state, payload: string) {
       state.activeComponent = payload
+    },
+    setPreviousComponent(state, payload: string) {
+      state.previousComponent = payload
     },
     setCompanyUID(state, payload: string) {
       state.companyUID = payload
