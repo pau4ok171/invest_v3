@@ -1,8 +1,10 @@
 import type {Module} from "vuex";
+import axios from "axios";
 
 export const authModule = {
   state: () => ({
     isAuthenticated: false,
+    userInfo: {},
     token: '',
   }),
   getters: {
@@ -28,13 +30,21 @@ export const authModule = {
       state.token = token
       state.isAuthenticated = true
     },
+    setUserInfo(state, payload: Object) {
+      state.userInfo = payload
+    },
     removeToken(state) {
       state.token = ''
       state.isAuthenticated = false
     },
   },
   actions: {
-
+    async fetchUserInfo({state, commit}) {
+      await axios
+          .get('api/v1/admin/users/')
+          .then(r => commit('setUserInfo', r.data))
+          .catch(e => console.log(e))
+    },
   },
   namespaced: true,
 } as Module<any, any>
