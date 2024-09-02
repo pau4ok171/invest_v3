@@ -13,6 +13,8 @@ import 'tippy.js/dist/tippy.css';
 
 import Vintersection from "@/directives/Vintersection";
 
+import { createPinia } from 'pinia';
+
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts'
 import StockChart from 'highcharts/modules/stock';
@@ -23,6 +25,7 @@ import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
 axios.defaults.baseURL = 'http://localhost:8000'
 
 const app = createApp(App)
+const pinia = createPinia()
 const hc = Highcharts as any
 
 app.directive('intersection', Vintersection)
@@ -40,6 +43,7 @@ Highcharts.setOptions({
 app
   .use(router)
   .use(store)
+  .use(pinia)
   .use(VueAxios, axios)
   .use(HighchartsVue, {tagName: 'charts'})
   .use(

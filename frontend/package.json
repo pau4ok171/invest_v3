@@ -23,6 +23,7 @@
     "highcharts-vue": "^2.0.1",
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
+    "pinia": "^2.2.2",
     "speakingurl": "^14.0.1",
     "vue": "^3.4.21",
     "vue-axios": "^3.5.2",
