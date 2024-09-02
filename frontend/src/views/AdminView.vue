@@ -9,6 +9,8 @@ import AdminModel from "@/components/admin/models/AdminModel.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
 import {previousComponentList} from "@/components/admin/models/components";
+import store from "@/store";
+import {RouteNamesEnum} from "@/router/routes.types";
 
 
 export default defineComponent({
@@ -24,6 +26,13 @@ export default defineComponent({
   },
   mounted() {
     document.title = 'ADMIN PANEL'
+  },
+  beforeRouteEnter(to, from, next) {
+    const userInfo = store.state.authModule.userInfo
+    if (!Object.hasOwn(userInfo, 'is_staff') || !userInfo.is_staff) {
+      next(RouteNamesEnum.page_not_found)
+    }
+    next()
   },
   computed: {
     ...mapState({
