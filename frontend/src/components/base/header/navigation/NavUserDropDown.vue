@@ -1,12 +1,19 @@
 <script lang="ts">
 import axios from "axios";
 import DropDownMenu from "@/components/UI/DropDownMenu.vue";
-import {mapMutations} from "vuex";
+import {mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
 
 export default defineComponent({
   name: 'NavUserDropDown',
-  components: {DropDownMenu},
+  components: {
+    DropDownMenu,
+  },
+  computed: {
+    ...mapState({
+      userInfo: (state: any) => state.authModule.userInfo,
+    }),
+  },
   methods: {
     ...mapMutations({
       removeToken: 'authModule/removeToken',
@@ -31,7 +38,7 @@ export default defineComponent({
   <nav class="account-access__navigation">
     <div class="account-access-navigation__inner">
       <ul class="account-access__list">
-        <li><RouterLink :to="{name: 'admin'}">Admin Panel</RouterLink></li>
+        <li v-if="userInfo.is_staff"><RouterLink :to="{name: 'admin'}">Admin Panel</RouterLink></li>
         <li><a href="#">Profile</a></li>
         <li><a href="#">Plans & Pricing</a></li>
         <li><a href="#">Notifications</a></li>
