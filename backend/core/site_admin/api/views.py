@@ -1,9 +1,10 @@
 import datetime
 
+from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveAPIView
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAdminUser
 from .serializers import (
@@ -13,6 +14,7 @@ from .serializers import (
     MarketSerializer,
     SectorSerializer,
     IndustrySerializer,
+    UserSerializer,
 )
 from invest.models import Company, Country, Market, Sector, Industry
 
@@ -111,3 +113,14 @@ def get_data(request):
     data['updated'] = datetime.datetime.utcnow()
 
     return data
+
+
+class UserRetrieveAPIView(RetrieveAPIView):
+    authentication_classes = [TokenAuthentication]
+    serializer_class = UserSerializer
+
+    def get_object(self):
+        user = self.request.user
+        if not user.is_anonymous:
+            return User.objects.get(pk=user.pk)
+        return None
