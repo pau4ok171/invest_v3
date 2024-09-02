@@ -50,6 +50,7 @@ export default defineComponent({
       companyFormData: (state: any) => state.adminModule.companyFormData as FormattedDetailCompany,
       companyUID: (state: any) => state.adminModule.companyUID,
       isNewModel: (state: any) => state.adminModule.isNewModel,
+      userInfo: (state: any) => state.authModule.userInfo,
     }),
     ...mapGetters({
       editModeActivated: 'adminModule/getEditModeActivated',
@@ -61,7 +62,7 @@ export default defineComponent({
       if (this.companyFormData.createdBy.lastName.length) {
         return `${this.companyFormData.createdBy.lastName} ${this.companyFormData.createdBy.firstName}`
       }
-      return 'Admin Name'
+      return `${this.userInfo.last_name} ${this.userInfo.first_name}`
     },
     getNameOfModification() {
       if (!this.companyUID.length) {
