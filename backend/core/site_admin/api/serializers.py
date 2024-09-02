@@ -1,4 +1,5 @@
 import os.path
+import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -67,12 +68,27 @@ class SectorSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
+    stage_in_days = serializers.SerializerMethodField(source='get_stage_in_days', read_only=True)
+    is_staff = serializers.SerializerMethodField(source='get_is_staff', read_only=True)
+
     class Meta:
         model = User
         fields = (
             'first_name',
             'last_name',
+            'is_staff',
+            'is_anonymous',
+            'stage_in_days',
         )
+
+    @staticmethod
+    def get_stage_in_days(obj) -> int:
+        now = datetime.datetime.now(tz=datetime.UTC)
+        return (now - obj.date_joined).days
+
+    @staticmethod
+    def get_is_staff(obj):
+        return obj.is_staff
 
 
 class CompaniesSerializer(serializers.ModelSerializer):
