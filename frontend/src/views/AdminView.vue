@@ -4,12 +4,18 @@ import AdminModels from "@/components/admin/models/AdminModels.vue";
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
 import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
-import {mapActions, mapMutations, mapState} from "vuex";
+import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import AdminModel from "@/components/admin/models/AdminModel.vue";
+import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
+import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
+import {previousComponentList} from "@/components/admin/models/components";
+
 
 export default defineComponent({
   name: "AdminView",
   components: {
+    BackArrowIcon,
+    RoundedDarkBlueButton,
     AdminDashboard,
     AdminModels,
     AdminStaff,
@@ -23,11 +29,15 @@ export default defineComponent({
     ...mapState({
       activeComponent: (state: any) => state.adminModule.activeComponent,
     }),
+    ...mapGetters({
+      previousComponent: 'adminModule/getPreviousComponent',
+    }),
   },
   methods: {
     ...mapMutations({
       setCompanyUID: 'adminModule/setCompanyUID',
       setActiveComponent: 'adminModule/setActiveComponent',
+      setPreviousComponent: 'adminModule/setPreviousComponent',
     }),
     ...mapActions({
       initAdminStore: 'adminModule/initAdminStore',
@@ -37,9 +47,13 @@ export default defineComponent({
       this.setCompanyUID(company_uid)
       this.setActiveComponent('AdminModel')
     },
+    async changeComponent(componentIs: string) {
+      this.setActiveComponent(componentIs)
+    },
   },
   watch: {
     activeComponent() {
+      this.setPreviousComponent(previousComponentList[this.activeComponent])
       window.scrollTo(0, 0)
     }
   },
@@ -61,6 +75,16 @@ export default defineComponent({
     </div>
   </div>
   <div class="admin-content">
+    <div class="admin-content__back">
+      <RoundedDarkBlueButton
+          :disabled="!previousComponent"
+          v-tippy="{content: 'Click to turn back', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
+          @click="changeComponent(previousComponent)"
+      >
+        <BackArrowIcon class="admin-content__back-icon"/>
+      </RoundedDarkBlueButton>
+    </div>
+
     <component @openModel="openModel" :is="activeComponent"/>
   </div>
 </div>
@@ -111,5 +135,13 @@ export default defineComponent({
   background-color: var(--blue);
   border-radius: 4px;
   margin-left: -12px;
+}
+.admin-content__back {
+  margin-top: 20px;
+}
+.admin-content__back-icon {
+  margin-right: 32px;
+  width: 16px;
+  height: 16px;
 }
 </style>
