@@ -1,19 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import type {PropType} from "vue";
-import type {ErrorObject} from "@vuelidate/core";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminTextField",
-  components: {ResetIcon},
   props: {
     label: {
       type: String,
       default: 'Label',
-    },
-    helpText: {
-      type: String
     },
     isRequired: {
       type: Boolean,
@@ -28,71 +21,34 @@ export default defineComponent({
       default: '',
       required: true,
     },
-    errors: {
-      type: Object as PropType<ErrorObject[]>,
-    },
-    wasModified: {
-      type: Boolean,
-      default: false,
-    },
   },
 })
 </script>
 
 <template>
-<div class="admin-text-fieldset">
-
-  <button
-    class="admin-text__reset-button"
-    v-show="wasModified"
-    @click="$emit('resetField')"
-    v-tippy="{content: 'Click to reset field changes'}"
-  >
-    <ResetIcon/>
-  </button>
-
-  <div class="admin-text-field">
-    <div class="admin-text-field__tab"></div>
-    <textarea
-        :required="isRequired"
-        :disabled="isDisabled"
-        @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
-        @blur="$emit('commitValidator')"
-        :value="modelValue"
-        class="admin-text-field__textarea"
-        cols="50"
-        rows="15"
-        placeholder=" "
-    />
-    <label class="admin-text-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
-  </div>
-
-  <div v-if="helpText" class="admin-text-field__help-text">{{ helpText }}</div>
-  <div v-if="errors?.length" class="admin-text-field__errors">
-    <div
-        v-for="error in errors"
-        :key="error.$uid"
-        class="admin-text-field__error"
-    >
-      {{ error.$message }}
-    </div>
-  </div>
+<div class="admin-text-field">
+  <div class="admin-text-field__tab"></div>
+  <textarea
+      :required="isRequired"
+      :disabled="isDisabled"
+      @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
+      @blur="$emit('commitValidator')"
+      :value="modelValue"
+      class="admin-text-field__textarea"
+      cols="50"
+      rows="15"
+      placeholder=" "
+  />
+  <label class="admin-text-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
 </div>
 </template>
 
-<style scoped>
-.admin-text-fieldset {
-  position: relative;
-  width: max-content;
-  margin: 16px 0;
-  padding: 2px 18px 0 0;
-}
+<style scoped lang="scss">
 .admin-text-field {
   position: relative;
   display: inline-block;
   line-height: 1.4rem;
-}
-.admin-text-field:after {
+  &::after {
     content: "";
     border-top: 2px solid #555;
     width: 16px;
@@ -103,6 +59,7 @@ export default defineComponent({
     bottom: 16px;
     pointer-events: none;
     border-radius: 25%;
+  }
 }
 .admin-text-field__textarea {
   position: relative;
@@ -183,59 +140,5 @@ export default defineComponent({
   background: #1b222d;
   transition: transform .1s ease;
   transform: translateY(-20px);
-}
-.admin-text-field__help-text {
-  color: #92969c;
-  font-size: 1.2rem;
-  padding-left: 20px;
-  margin-top: 4px;
-}
-.admin-text-field__errors {
-  width: max-content;
-  margin: 10px 0 0 20px;
-  border: 1px solid #c92432;
-  border-radius: 8px;
-  font-size: 1.2rem;
-}
-.admin-text-field__error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  color: #c92432;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    margin-right: 1px;
-    width: 5px;
-    height: 5px;
-    background-color: #c92432;
-    border-radius: 2.5px;
-  }
-}
-.admin-text__reset-button {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-
-  & svg {
-    fill: var(--blue);
-    width: 16px;
-    height: 16px;
-    user-select: none;
-  }
 }
 </style>

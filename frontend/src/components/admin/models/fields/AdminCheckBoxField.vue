@@ -1,19 +1,16 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import type {PropType} from "vue";
-import type {ErrorObject} from "@vuelidate/core";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminCheckBoxField",
-  components: {ResetIcon},
   props: {
     label: {
       type: String,
       default: 'Label',
     },
-    helpText: {
-      type: String
+    isRequired: {
+      type: Boolean,
+      default: false,
     },
     isDisabled: {
       type: Boolean,
@@ -23,71 +20,34 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
-    errors: {
-      type: Object as PropType<ErrorObject[]>,
-    },
-    wasModified: {
-      type: Boolean,
-      default: false,
-    },
   },
 })
 </script>
 
 <template>
-<div class="admin-checkbox-fieldset">
+<div>
+<div class="admin-checkbox-label">{{ label }}</div>
 
-  <button
-    class="admin-checkbox__reset-button"
-    v-show="wasModified"
-    @click="$emit('resetField')"
-    v-tippy="{content: 'Click to reset field changes'}"
-  >
-    <ResetIcon/>
-  </button>
-
-  <div class="admin-checkbox-label">{{ label }}</div>
-
-  <div class="admin-checkbox-field">
-    <div :class="['admin-checkbox-button', {'admin-checkbox-button--disabled': isDisabled}]">
-      <div class="admin-checkbox-button__wrapper">
-        <input
-          type="checkbox"
-          class="admin-checkbox-button__input"
-          :checked="modelValue"
-          :disabled="isDisabled"
-          @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).checked)"
-        />
-        <div class="admin-checkbox-button__outer"></div>
-        <div class="admin-checkbox-button__inner"></div>
-      </div>
-    </div>
-    <div class="admin-checkbox-value">{{ modelValue?'Yes': 'No' }}</div>
-  </div>
-
-  <div v-if="helpText" class="admin-checkbox__help-text">{{ helpText }}</div>
-
-  <div v-if="errors?.length" class="admin-checkbox__errors">
-    <div
-        v-for="error in errors"
-        :key="error.$uid"
-        class="admin-checkbox__error"
-    >
-      {{ error.$message }}
+<div class="admin-checkbox-field">
+  <div :class="['admin-checkbox-button', {'admin-checkbox-button--disabled': isDisabled}]">
+    <div class="admin-checkbox-button__wrapper">
+      <input
+        type="checkbox"
+        class="admin-checkbox-button__input"
+        :checked="modelValue"
+        :disabled="isDisabled"
+        @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).checked)"
+      />
+      <div class="admin-checkbox-button__outer"></div>
+      <div class="admin-checkbox-button__inner"></div>
     </div>
   </div>
-
+  <div class="admin-checkbox-value">{{ modelValue?'Yes': 'No' }}</div>
+</div>
 </div>
 </template>
 
 <style scoped lang="scss">
-.admin-checkbox-fieldset {
-  position: relative;
-  padding: 2px 18px 0 0;
-  width: max-content;
-  margin: 16px 0;
-}
-
 $checkbox_width: 40px;
 $checkbox_height: 20px;
 $checkbox_wrapper_left: calc(50% - $checkbox_width / 2);
@@ -204,60 +164,6 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
   .admin-checkbox-button__input ~ .admin-checkbox-button__outer {
     background: #242f3c;
     border-color: #92969c;
-  }
-}
-.admin-checkbox__help-text {
-  color: #92969c;
-  font-size: 1.2rem;
-  padding-left: 20px;
-  margin-top: 4px;
-}
-.admin-checkbox__errors {
-  width: max-content;
-  margin: 10px 0 0 20px;
-  border: 1px solid #c92432;
-  border-radius: 8px;
-  font-size: 1.2rem;
-}
-.admin-checkbox__error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  color: #c92432;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    margin-right: 1px;
-    width: 5px;
-    height: 5px;
-    background-color: #c92432;
-    border-radius: 2.5px;
-  }
-}
-.admin-checkbox__reset-button {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: -4px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-
-  & svg {
-    fill: var(--blue);
-    width: 16px;
-    height: 16px;
-    user-select: none;
   }
 }
 </style>

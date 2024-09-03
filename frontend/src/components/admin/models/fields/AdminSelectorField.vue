@@ -2,24 +2,19 @@
 import {defineComponent} from 'vue';
 import type {PropType} from 'vue';
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
-import BaseInput from "@/components/UI/base/BaseInput.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {FormattedSector, FormattedSelector} from "@/types/admin";
-import type {ErrorObject} from "@vuelidate/core";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminSelectorField",
   components: {
-    ResetIcon,
     AdminSelectorDropDownMenu,
     CompanyListFilterDropDownMenu,
     DropDownMenuBox,
     ArrowDownIcon,
-    BaseInput,
     CheckedIcon
   },
   props: {
@@ -35,9 +30,6 @@ export default defineComponent({
       type: String,
       default: 'Label',
     },
-    helpText: {
-      type: String
-    },
     isRequired: {
       type: Boolean,
       default: false,
@@ -50,13 +42,6 @@ export default defineComponent({
       type: Object as PropType<FormattedSelector>,
       default: {name: '', slug: '', key: ''},
       required: true,
-    },
-    errors: {
-      type: Object as PropType<ErrorObject[]>,
-    },
-    wasModified: {
-      type: Boolean,
-      default: false,
     },
   },
   methods: {
@@ -73,58 +58,31 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="admin-selector-fieldset">
-  <button
-    class="admin-selector__reset-button"
-    v-show="wasModified"
-    @click="$emit('resetField')"
-    v-tippy="{content: 'Click to reset field changes'}"
-  >
-    <ResetIcon/>
-  </button>
-
-  <DropDownMenuBox>
-    <template v-slot:button>
-        <button
-            class="admin-selector-field"
-            :disabled="isDisabled || areOptionsEmpty"
-        >
-          <span>{{ modelValue.name }}</span>
-          <ArrowDownIcon/>
-        </button>
-       <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !modelValue.slug}]">
-         {{ label }}{{ isRequired?'*':'' }}
-       </label>
-    </template>
-    <template v-slot:menu>
-      <AdminSelectorDropDownMenu
-          :model-value="modelValue"
-          @update:model-value="updateSelectorOption"
-          :options
-          :hasSearch
-      />
-    </template>
-  </DropDownMenuBox>
-  <div v-if="helpText" class="admin-selector-field__help-text">{{ helpText }}</div>
-  <div v-if="errors?.length" class="admin-selector-field__errors">
-    <div
-        v-for="error in errors"
-        :key="error.$uid"
-        class="admin-selector-field__error"
+<DropDownMenuBox>
+  <template v-slot:button>
+    <button
+      class="admin-selector-field"
+      :disabled="isDisabled || areOptionsEmpty"
     >
-      {{ error.$message }}
-    </div>
-  </div>
-</div>
+      <span>{{ modelValue.name }}</span>
+      <ArrowDownIcon/>
+    </button>
+   <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !modelValue.slug}]">
+     {{ label }}{{ isRequired?'*':'' }}
+   </label>
+  </template>
+  <template v-slot:menu>
+    <AdminSelectorDropDownMenu
+      :model-value="modelValue"
+      @update:model-value="updateSelectorOption"
+      :options
+      :hasSearch
+    />
+  </template>
+</DropDownMenuBox>
 </template>
 
 <style scoped lang="scss">
-.admin-selector-fieldset {
-  position: relative;
-  width: max-content;
-  margin: 16px 0;
-  padding: 2px 18px 0 0;
-}
 .admin-selector-field {
   display: flex;
   position: relative;
@@ -178,58 +136,4 @@ export default defineComponent({
 .admin-selector-field__label--active {
     transform: translateY(0);
   }
-.admin-selector-field__help-text {
-  color: #92969c;
-  font-size: 1.2rem;
-  padding-left: 20px;
-  margin-top: 4px;
-}
-.admin-selector-field__errors {
-  width: max-content;
-  margin: 10px 0 0 20px;
-  border: 1px solid #c92432;
-  border-radius: 8px;
-  font-size: 1.2rem;
-}
-.admin-selector-field__error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  color: #c92432;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    margin-right: 1px;
-    width: 5px;
-    height: 5px;
-    background-color: #c92432;
-    border-radius: 2.5px;
-  }
-}
-.admin-selector__reset-button {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-
-  & svg {
-    fill: var(--blue);
-    width: 16px;
-    height: 16px;
-    user-select: none;
-  }
-}
 </style>

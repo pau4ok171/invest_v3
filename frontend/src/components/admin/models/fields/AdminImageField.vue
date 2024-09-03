@@ -4,12 +4,14 @@ import type {PropType} from 'vue'
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import type {ErrorObject} from "@vuelidate/core";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 
 export default defineComponent({
   name: "AdminImageField",
-  components: {ResetIcon, RoundedBlueButton, DeleteIcon, UploadIcon},
+  components: {
+    RoundedBlueButton,
+    DeleteIcon,
+    UploadIcon
+  },
   data() {
     return {
       isDrugOver: false,
@@ -19,9 +21,6 @@ export default defineComponent({
      label: {
       type: String,
       default: 'Label',
-    },
-    helpText: {
-      type: String
     },
     isRequired: {
       type: Boolean,
@@ -34,13 +33,6 @@ export default defineComponent({
     modelValue: {
       type: Object as PropType<File>,
       required: true,
-    },
-    errors: {
-      type: Object as PropType<ErrorObject[]>,
-    },
-    wasModified: {
-      type: Boolean,
-      default: false,
     },
   },
   methods: {
@@ -71,75 +63,46 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="admin-image-fieldset">
-  <div class="admin-image-field">
+<div class="admin-image-field">
+  <div
+    class="admin-image-field__input-box"
+    :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue?.size, 'admin-image-field__input-box--disabled': isDisabled}"
+    @dragover="isDrugOver = true"
+    @dragleave="isDrugOver = false"
+  >
 
-    <button
-      class="admin-image__reset-button"
-      v-show="wasModified"
-      @click="$emit('resetField')"
-      v-tippy="{content: 'Click to reset field changes'}"
-    >
-      <ResetIcon/>
-    </button>
+    <template v-if="!modelValue?.size">
+      <input
+        class="admin-image-field__input"
+        id="admin-image-field"
+        type="file"
+        title=""
+        accept="image/*"
+        :required="isRequired"
+        :disabled="isDisabled"
+        @change="uploadFile"
+      >
+      <UploadIcon class="admin-image-field__icon"/>
+    </template>
 
-    <div
-        class="admin-image-field__input-box"
-        :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue?.size, 'admin-image-field__input-box--disabled': isDisabled}"
-        @dragover="isDrugOver = true"
-        @dragleave="isDrugOver = false"
-    >
+    <template v-else>
+      <img class="admin-image-field__logo" :src="getLogoURL()" alt="logo">
+      <RoundedBlueButton
+        class="admin-image-field__remove-button"
+        @click="removeLogo()"
+        :disabled="isDisabled"
+      >
+        <DeleteIcon/>
+      </RoundedBlueButton>
+    </template>
 
-      <template v-if="!modelValue?.size">
-        <input
-            class="admin-image-field__input"
-            id="admin-image-field"
-            type="file"
-            title=""
-            accept="image/*"
-            :required="isRequired"
-            :disabled="isDisabled"
-            @change="uploadFile"
-        >
-        <UploadIcon class="admin-image-field__icon"/>
-      </template>
-
-      <template v-else>
-        <img class="admin-image-field__logo" :src="getLogoURL()" alt="logo">
-        <RoundedBlueButton
-            class="admin-image-field__remove-button"
-            @click="removeLogo()"
-            :disabled="isDisabled"
-        >
-          <DeleteIcon/>
-        </RoundedBlueButton>
-      </template>
-
-    </div>
-
-    <label class="admin-image-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
   </div>
-  <div v-if="helpText" class="admin-image-field__help-text">{{ helpText }}</div>
-  <div v-if="errors?.length" class="admin-image-field__errors">
-    <div
-        v-for="error in errors"
-        :key="error.$uid"
-        class="admin-image-field__error"
-    >
-      {{ error.$message }}
-    </div>
-  </div>
+
+  <label class="admin-image-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
 </div>
 </template>
 
 <style scoped lang="scss">
-.admin-image-fieldset {
-  margin: 16px 0;
-  width: max-content;
-  max-width: calc(280px + 18px + 18px);
-  position: relative;
-  padding: 2px 18px 0 0;
-}
 .admin-image-field {
   position: relative;
   line-height: 1.4rem;
@@ -229,12 +192,6 @@ export default defineComponent({
   transition: transform .1s ease;
   transform: translateY(-20px);
 }
-.admin-image-field__help-text {
-  color: #92969c;
-  font-size: 1.2rem;
-  padding-left: 20px;
-  margin-top: 4px;
-}
 .admin-image-field__logo {
   width: 160px;
   height: 160px;
@@ -244,53 +201,5 @@ export default defineComponent({
   position: absolute;
   top: 4px;
   right: 4px;
-}
-.admin-image-field__errors {
-  width: max-content;
-  margin: 10px 0 0 20px;
-  border: 1px solid #c92432;
-  border-radius: 8px;
-  font-size: 1.2rem;
-}
-.admin-image-field__error {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  color: #c92432;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    margin-right: 1px;
-    width: 5px;
-    height: 5px;
-    background-color: #c92432;
-    border-radius: 2.5px;
-  }
-}
-.admin-image__reset-button {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  right: 0;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-
-  & svg {
-    fill: var(--blue);
-    width: 16px;
-    height: 16px;
-    user-select: none;
-  }
 }
 </style>
