@@ -163,6 +163,12 @@ class CompanySerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Must be a valid Year')
         return value
 
+    @staticmethod
+    def validate_logo(value):
+        if value.size > 100 * 1024:
+            serializers.ValidationError('The image must be max 100Kb')
+        return value
+
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['country'] = CountrySerializer(instance.country).data
