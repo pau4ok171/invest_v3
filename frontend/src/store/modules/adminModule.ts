@@ -368,7 +368,7 @@ const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<F
     logo: file,
     isFund: company.is_fund || false,
     website: company.website || '',
-    founded: company.year_founded || '',
+    founded: String(company.year_founded) || '',
   } as FormattedDetailCompany
 }
 
