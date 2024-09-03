@@ -121,7 +121,7 @@ export const companyModel = {
     validators: { url },
   },
   founded: {
-    field: 'AdminCharField',
+    field: 'AdminYearField',
     isDisabled: '!editModeActivated',
     label: 'Founded',
     helpText: 'Year of company foundation',
