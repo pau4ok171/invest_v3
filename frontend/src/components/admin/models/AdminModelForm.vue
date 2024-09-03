@@ -1,10 +1,5 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue";
-import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue";
-import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
-import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
-import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import axios from "axios";
 import type {
@@ -24,6 +19,7 @@ import getSlug from "speakingurl";
 import _ from "lodash";
 import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
 import {AtomSpinner} from "epic-spinners";
+import AdminField from "@/components/admin/models/fields/AdminField.vue";
 
 const getModel = () => {
   const model: any = {...companyModel}
@@ -42,14 +38,10 @@ const getModel = () => {
 export default defineComponent({
   name: "AdminModelForm",
   components: {
+    AdminField,
     AtomSpinner,
     RoundedDarkBlueButton,
     ResetIcon,
-    AdminImageField,
-    AdminSelectorField,
-    AdminCheckBoxField,
-    AdminTextField,
-    AdminCharField,
   },
   setup: () => ({ v$: useVuelidate({ $autoDirty: true, $rewardEarly: true })}),
   data() {
@@ -100,7 +92,7 @@ export default defineComponent({
           model[k].options = (this as any)[v.options]
         }
         if(typeof v.isDisabled === "string") {
-            model[k].isDisabled = v.isDisabled.startsWith('!') ? !(this as any)[v.isDisabled.slice(1)] : (this as any)[v.isDisabled]
+          model[k].isDisabled = v.isDisabled.startsWith('!') ? !(this as any)[v.isDisabled.slice(1)] : (this as any)[v.isDisabled]
         } else {
           model[k].isDisabled = v.isDisabled
         }
@@ -192,23 +184,23 @@ export default defineComponent({
   >
     <ResetIcon/>
   </button>
-
-  <component
-    v-for="field in model"
-    @update:model-value="(value: any) => updateModel(field.modelValue, value)"
-    @resetField="resetField(field.modelValue)"
-    @commitValidator="v$.companyFormData[field.modelValue].$commit()"
-    :key="field.modelValue"
-    :is="field.field"
-    :model-value="companyFormData[field.modelValue]"
-    :is-required="field.isRequired"
-    :is-disabled="field.isDisabled"
-    :label="field.label"
-    :help-text="field.helpText"
-    :options="field.options"
-    :has-search="field.hasSearch"
-    :errors="v$.companyFormData[field.modelValue].$errors"
-    :was-modified="field.wasModifiedIsNeeded?previousCompanyFormData[field.modelValue].wasModified:false"
+  
+  <AdminField
+    v-for="m in model"
+    :key="m.modelValue"
+    :field="m.field"
+    :model-value="companyFormData[m.modelValue]"
+    @update:model-value="(value: any) => updateModel(m.modelValue, value)"
+    @resetField="resetField(m.modelValue)"
+    @commitValidator="v$.companyFormData[m.modelValue].$commit()"
+    :is-required="m.isRequired"
+    :is-disabled="m.isDisabled"
+    :label="m.label"
+    :help-text="m.helpText"
+    :options="m.options"
+    :has-search="m.hasSearch"
+    :errors="v$.companyFormData[m.modelValue].$errors"
+    :was-modified="m.wasModifiedIsNeeded?previousCompanyFormData[m.modelValue].wasModified:false"
   />
 
   <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving()">
