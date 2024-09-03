@@ -59,15 +59,15 @@ export default defineComponent({
 <template>
 <div class="admin-year-field">
   <div
-    :class="['admin-year-field__inputs', {'admin-year-field__inputs--focus': isFocused}]"
+    :class="['admin-year-field__inputs', {'admin-year-field__inputs--focus': isFocused, 'admin-year-field__inputs--disabled': isDisabled}]"
     @focus.capture="isFocused=true"
     @blur.capture="processBlur"
     @input.capture="processInput"
   >
-    <input class="admin-year-field__input" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="1" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="2" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="2" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="2" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="1" placeholder="•">
   </div>
   <label class="admin-year-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
 </div>
@@ -93,7 +93,7 @@ export default defineComponent({
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
-  &:disabled {
+  &--disabled {
     background: #1b222d;
     border-color: #92969c;
   }
