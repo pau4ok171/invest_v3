@@ -37,7 +37,7 @@ class Company(models.Model):
     )
     is_fund = models.BooleanField(default=False)
     website = models.URLField(null=True, blank=True)
-    year_founded = models.IntegerField(null=True, blank=True)
+    year_founded = models.PositiveSmallIntegerField(null=True, blank=True)
     users_watchlist = models.ManyToManyField(
         User,
         related_name='companies_watchlisted',
