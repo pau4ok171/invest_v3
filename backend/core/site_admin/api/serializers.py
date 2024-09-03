@@ -3,6 +3,7 @@ import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.serializers import raise_errors_on_nested_writes
@@ -154,6 +155,13 @@ class CompanySerializer(serializers.ModelSerializer):
             'website',
             'year_founded',
         )
+
+    @staticmethod
+    def validate_year_founded(value):
+        current_year = timezone.now().year
+        if value > current_year or value < 1000:
+            raise serializers.ValidationError('Must be a valid Year')
+        return value
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
