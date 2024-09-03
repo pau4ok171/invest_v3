@@ -8,6 +8,8 @@ export const maxVolumeValidator = (file: File|Object) => {
   }
   return true
 }
-export const isYearValidator = (val: any) => {
-  return val.length === 4 || val.length === 0
+export const isYearValidator = (val: string) => {
+  if (val.length === 0) return true
+
+  return val.length === 4 && Number(val) >= 1000 && Number(val) <= new Date().getFullYear()
 }
