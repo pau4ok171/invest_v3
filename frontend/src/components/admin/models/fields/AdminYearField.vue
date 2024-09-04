@@ -33,6 +33,14 @@ export default defineComponent({
       const next: HTMLInputElement | any = target.nextSibling
       const previous: HTMLHtmlElement | any = target.previousSibling
 
+      if (target.value.length === 1 && !/\d/.exec(target.value)) {
+        target.value = ''
+        return false
+      }
+      if (target.value.length > 1 && !/\d/.exec(target.value[1])) {
+        target.value = target.value[0]
+        return false
+      }
       if (target.value.length > 1 && next) {
         const value = target.value
         target.value = value[0]
