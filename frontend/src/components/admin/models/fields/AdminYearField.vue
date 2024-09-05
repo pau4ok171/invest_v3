@@ -44,7 +44,7 @@ export default defineComponent({
       if (target.value.length > 1 && next) {
         const value = target.value
         target.value = value[0]
-        next.value = value[1]
+        next.value = value.slice(1)
         next.focus()
       }
       if (!target.value && previous) {
@@ -56,7 +56,7 @@ export default defineComponent({
       }, '')
       this.$emit('update:model-value', value)
     },
-    processBlur(event: Event) {
+    processBlur() {
       this.isFocused = false
       this.$emit('commitValidator')
     }
@@ -72,10 +72,10 @@ export default defineComponent({
     @blur.capture="processBlur"
     @input.capture="processInput"
   >
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="2" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="1" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="4" placeholder="•">
   </div>
   <label class="admin-year-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
 </div>
