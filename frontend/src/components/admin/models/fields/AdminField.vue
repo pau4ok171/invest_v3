@@ -91,6 +91,7 @@ export default defineComponent({
   />
 
   <div v-if="helpText" class="admin-field__help-text">{{ helpText }}</div>
+
   <div v-if="errors?.length" class="admin-field__errors">
     <div
         v-for="error in errors"
@@ -100,6 +101,7 @@ export default defineComponent({
       {{ error.$message }}
     </div>
   </div>
+
 </div>
 </template>
 
