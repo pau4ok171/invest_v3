@@ -159,8 +159,6 @@ export default defineComponent({
             previousCompanyFormData[k].wasModified = previousCompanyFormData[k].value !== v
           })
         }
-        console.log(this.v$)
-        console.log(this.v$.companyFormData.$errors)
       },
       deep: true
     },
