@@ -202,7 +202,7 @@ export default defineComponent({
     :was-modified="m.wasModifiedIsNeeded?previousCompanyFormData[m.modelValue].wasModified:false"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving()">
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving">
     <atom-spinner
       v-show="modelIsSaving"
       :animation-duration="1250"
