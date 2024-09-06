@@ -41,7 +41,6 @@ export default defineComponent({
         this.$emit('update:modelValue', currentTarget.files[0])
         this.$emit('touch')
         this.$emit('commitValidator')
-        this.$emit('update:modelValue', currentTarget.files[0])
       }
       if (currentTarget.value) {
         currentTarget.value = ''
