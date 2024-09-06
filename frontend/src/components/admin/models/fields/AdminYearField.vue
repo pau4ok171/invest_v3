@@ -71,6 +71,7 @@ export default defineComponent({
         this.$emit('commitValidator')
       }
   },
+  },
 })
 </script>
 
