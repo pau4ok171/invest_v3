@@ -162,6 +162,12 @@ export default defineComponent({
       },
       deep: true
     },
+    editModeActivated(val) {
+      // If editMode was activated
+      if (val === true) {
+        this.v$.$commit()
+      }
+    }
   },
 })
 </script>
