@@ -22,6 +22,12 @@ export default defineComponent({
       required: true,
     },
   },
+  methods: {
+    updateModelValue(event: Event) {
+      this.$emit('update:modelValue', (event.target as HTMLInputElement).value)
+      this.$emit('touch')
+    },
+  },
 })
 </script>
 
@@ -31,7 +37,7 @@ export default defineComponent({
   <textarea
       :required="isRequired"
       :disabled="isDisabled"
-      @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).value)"
+      @input="updateModelValue"
       @blur="$emit('commitValidator')"
       :value="modelValue"
       class="admin-text-field__textarea"

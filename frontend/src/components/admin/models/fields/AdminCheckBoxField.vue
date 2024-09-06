@@ -21,6 +21,13 @@ export default defineComponent({
       default: false,
     },
   },
+  methods: {
+    updateModelValue(event: Event) {
+      this.$emit('update:modelValue', (event.target as HTMLInputElement).checked)
+      this.$emit('touch')
+      this.$emit('commitValidator')
+    },
+  },
 })
 </script>
 
@@ -36,7 +43,7 @@ export default defineComponent({
         class="admin-checkbox-button__input"
         :checked="modelValue"
         :disabled="isDisabled"
-        @input="(event: Event) => $emit('update:modelValue', (event.target as HTMLInputElement).checked)"
+        @input="updateModelValue"
       />
       <div class="admin-checkbox-button__outer"></div>
       <div class="admin-checkbox-button__inner"></div>

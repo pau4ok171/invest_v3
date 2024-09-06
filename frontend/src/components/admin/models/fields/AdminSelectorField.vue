@@ -47,6 +47,8 @@ export default defineComponent({
   methods: {
     updateSelectorOption(option: FormattedSelector) {
       this.$emit('update:modelValue', option)
+      this.$emit('touch')
+      this.$emit('commitValidator')
     }
   },
   computed: {

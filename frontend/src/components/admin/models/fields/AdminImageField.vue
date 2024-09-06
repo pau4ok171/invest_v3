@@ -38,6 +38,8 @@ export default defineComponent({
   methods: {
     uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
       if (currentTarget.files) {
+        this.$emit('update:modelValue', currentTarget.files[0])
+        this.$emit('touch')
         this.$emit('commitValidator')
         this.$emit('update:modelValue', currentTarget.files[0])
       }
@@ -56,6 +58,7 @@ export default defineComponent({
     removeLogo() {
       if (this.modelValue?.size) {
         this.$emit('update:modelValue', {})
+        this.$emit('touch')
       }
     },
   },

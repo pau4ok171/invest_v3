@@ -54,7 +54,9 @@ export default defineComponent({
         acc+= String(el.value)
         return acc
       }, '')
+
       this.$emit('update:model-value', value)
+      this.$emit('touch')
     },
     processBlur() {
       this.isFocused = false
