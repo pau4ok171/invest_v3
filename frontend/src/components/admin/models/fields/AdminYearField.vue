@@ -25,6 +25,7 @@ export default defineComponent({
   data() {
     return {
       isFocused: false,
+      timeoutID: 0,
     }
   },
   methods: {
@@ -59,9 +60,16 @@ export default defineComponent({
       this.$emit('touch')
     },
     processBlur() {
-      this.isFocused = false
-      this.$emit('commitValidator')
-    }
+      if (this.timeoutID !== 0) {
+        clearTimeout(this.timeoutID)
+      }
+      this.timeoutID = setTimeout(this.checkIfBlured, 50)
+    },
+    checkIfBlured() {
+      if (document.activeElement?.parentNode !== this.$refs.adminYearField) {
+        this.isFocused = false
+        this.$emit('commitValidator')
+      }
   },
 })
 </script>
@@ -73,6 +81,7 @@ export default defineComponent({
     @focus.capture="isFocused=true"
     @blur.capture="processBlur"
     @input.capture="processInput"
+    ref="adminYearField"
   >
     <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="4" placeholder="•">
     <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="4" placeholder="•">
