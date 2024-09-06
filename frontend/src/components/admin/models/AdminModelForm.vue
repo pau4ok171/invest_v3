@@ -43,7 +43,7 @@ export default defineComponent({
     RoundedDarkBlueButton,
     ResetIcon,
   },
-  setup: () => ({ v$: useVuelidate({ $autoDirty: true, $rewardEarly: true })}),
+  setup: () => ({ v$: useVuelidate({ $rewardEarly: true, $lazy: true })}),
   data() {
     return {
       sectors: [] as Array<FormattedSector>,
@@ -184,6 +184,7 @@ export default defineComponent({
     :model-value="companyFormData[m.modelValue]"
     @update:model-value="(value: any) => updateModel(m.modelValue, value)"
     @resetField="resetField(m.modelValue)"
+    @touch="v$.companyFormData[m.modelValue].$touch"
     @commitValidator="v$.companyFormData[m.modelValue].$commit()"
     :is-required="m.isRequired"
     :is-disabled="m.isDisabled"

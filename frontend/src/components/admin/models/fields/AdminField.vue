@@ -88,6 +88,7 @@ export default defineComponent({
     :hasSearch
     @update:model-value="(value: any) => $emit('update:modelValue', value)"
     @commitValidator="$emit('commitValidator')"
+    @touch="$emit('touch')"
   />
 
   <div v-if="helpText" class="admin-field__help-text">{{ helpText }}</div>
