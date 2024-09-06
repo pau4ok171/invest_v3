@@ -127,7 +127,7 @@ export const companyModel = {
     helpText: 'Year of company foundation',
     validators: {
       numeric,
-      isYearValidator: helpers.withMessage('Field must be an year without text', isYearValidator),
+      isYearValidator: helpers.withMessage(`Field must be an year between 1000 and ${new Date().getFullYear()}`, isYearValidator),
     }
   },
 }
