@@ -180,6 +180,9 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
     background: #242f3c;
     border-color: #92969c;
   }
+  & .admin-checkbox-button__input {
+    cursor: auto;
+  }
 }
 .admin-checkbox-field--valid {
   & .admin-checkbox-button__input:checked ~ .admin-checkbox-button__outer:before {
