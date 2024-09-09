@@ -43,6 +43,10 @@ export default defineComponent({
       default: {name: '', slug: '', key: ''},
       required: true,
     },
+    fieldStatus: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     updateSelectorOption(option: FormattedSelector) {
@@ -64,6 +68,7 @@ export default defineComponent({
   <template v-slot:button>
     <button
       class="admin-selector-field"
+      :class="{'admin-selector-field--valid': fieldStatus === 'valid', 'admin-selector-field--invalid': fieldStatus === 'invalid'}"
       :disabled="isDisabled || areOptionsEmpty"
     >
       <span>{{ modelValue.name }}</span>
@@ -96,12 +101,18 @@ export default defineComponent({
   outline: none;
   border: 3px solid transparent;
   border-radius: 20px;
-  background-image: linear-gradient(#1b222d, #1b222d), linear-gradient(315deg, #ee4297, #9176c6);
+  background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-default-gradient-color-start), var(--admin-field-default-gradient-color-finish));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
   font-size: 1.4rem;
   color: #fff;
+  &--valid {
+    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-success-gradient-color-start), var(--admin-field-success-gradient-color-finish));
+  }
+  &--invalid {
+    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-error-gradient-color-start), var(--admin-field-error-gradient-color-finish));
+  }
 
   & > * {
     pointer-events: none;
@@ -113,6 +124,8 @@ export default defineComponent({
   &:focus {
     border-color: #2b96f1;
     box-shadow: inset 1px 2px 4px 0 rgb(179 30 30 / 10%), 3px 5px 12px 2px rgb(43 150 241 / 40%);
+    background-image: linear-gradient(var(--admin-field-focus-backgroud-color), var(--admin-field-focus-backgroud-color)), linear-gradient(315deg, var(--admin-field-default-gradient-color-start), var(--admin-field-default-gradient-color-finish));
+
 
     & + label {
       color: #2b96f1;

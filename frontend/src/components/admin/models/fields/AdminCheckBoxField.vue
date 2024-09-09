@@ -20,6 +20,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    fieldStatus: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     updateModelValue(event: Event) {
@@ -35,7 +39,11 @@ export default defineComponent({
 <div>
 <div class="admin-checkbox-label">{{ label }}</div>
 
-<div class="admin-checkbox-field">
+<div
+  class="admin-checkbox-field"
+  :class="{'admin-checkbox-field--valid': fieldStatus === 'valid', 'admin-checkbox-field--invalid': fieldStatus === 'invalid'}"
+
+>
   <div :class="['admin-checkbox-button', {'admin-checkbox-button--disabled': isDisabled}]">
     <div class="admin-checkbox-button__wrapper">
       <input
@@ -171,6 +179,28 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
   .admin-checkbox-button__input ~ .admin-checkbox-button__outer {
     background: #242f3c;
     border-color: #92969c;
+  }
+}
+.admin-checkbox-field--valid {
+  & .admin-checkbox-button__input:checked ~ .admin-checkbox-button__outer:before {
+    background: linear-gradient(to left, #03001e, var(--admin-field-success-gradient-color-finish), var(--admin-field-success-gradient-color-start));
+  }
+  & .admin-checkbox-button__outer {
+    background: linear-gradient(to right, #03001e, var(--admin-field-success-gradient-color-finish), var(--admin-field-success-gradient-color-start));
+  }
+  & .admin-checkbox-button__outer::before {
+    background: linear-gradient(to right, #03001e, var(--admin-field-success-gradient-color-finish), var(--admin-field-success-gradient-color-start));
+  }
+}
+.admin-checkbox-field--invalid {
+  & .admin-checkbox-button__input:checked ~ .admin-checkbox-button__outer:before {
+    background: linear-gradient(to left, #03001e, var(--admin-field-error-gradient-color-finish), var(--admin-field-error-gradient-color-start));
+  }
+  & .admin-checkbox-button__outer {
+    background: linear-gradient(to right, #03001e, var(--admin-field-error-gradient-color-finish), var(--admin-field-error-gradient-color-start));
+  }
+  & .admin-checkbox-button__outer::before {
+    background: linear-gradient(to right, #03001e, var(--admin-field-error-gradient-color-finish), var(--admin-field-error-gradient-color-start));
   }
 }
 </style>

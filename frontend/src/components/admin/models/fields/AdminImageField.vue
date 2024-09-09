@@ -34,6 +34,10 @@ export default defineComponent({
       type: Object as PropType<File>,
       required: true,
     },
+    fieldStatus: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
@@ -65,7 +69,10 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="admin-image-field">
+<div
+    class="admin-image-field"
+    :class="{'admin-image-field--valid': fieldStatus === 'valid', 'admin-image-field--invalid': fieldStatus === 'invalid'}"
+>
   <div
     class="admin-image-field__input-box"
     :class="{'admin-image-field__input-box--drag': isDrugOver, 'admin-image-field__input-box--filled': modelValue?.size, 'admin-image-field__input-box--disabled': isDisabled}"
@@ -110,6 +117,12 @@ export default defineComponent({
   line-height: 1.4rem;
   max-width: max-content;
   padding-right: 18px;
+  &--valid .admin-image-field__input-box {
+    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-success-gradient-color-start), var(--admin-field-success-gradient-color-finish));
+  }
+  &--invalid .admin-image-field__input-box {
+    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-error-gradient-color-start), var(--admin-field-error-gradient-color-finish));
+  }
 }
 .admin-image-field__input {
   width: 100%;

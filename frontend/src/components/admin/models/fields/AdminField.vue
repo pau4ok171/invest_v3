@@ -63,6 +63,20 @@ export default defineComponent({
       default: [],
     },
   },
+  computed: {
+    getFieldStatus() {
+      if (this.isDisabled) {
+        return 'disabled'
+      }
+      if (this.errors?.length) {
+        return 'invalid'
+      }
+      if (this.wasModified && !this.errors?.length) {
+        return 'valid'
+      }
+      return 'virgin'
+    }
+  },
 })
 </script>
 
@@ -86,6 +100,7 @@ export default defineComponent({
     :modelValue
     :options
     :hasSearch
+    :fieldStatus="getFieldStatus"
     @update:model-value="(value: any) => $emit('update:modelValue', value)"
     @commitValidator="$emit('commitValidator')"
     @touch="$emit('touch')"
@@ -105,7 +120,18 @@ export default defineComponent({
 
 </div>
 </template>
-
+<style>
+:root {
+  --admin-field-default-gradient-color-start: #ee4297;
+  --admin-field-default-gradient-color-finish: #9176c6;
+  --admin-field-success-gradient-color-start: #71a13a;
+  --admin-field-success-gradient-color-finish: #09461d;
+  --admin-field-error-gradient-color-start: #ff0000;
+  --admin-field-error-gradient-color-finish: #2a1910;
+  --admin-field-default-backgroud-color: #1b222d;
+  --admin-field-focus-backgroud-color: #0d4370;
+}
+</style>
 <style scoped lang="scss">
 .admin-field__fieldset {
   margin: 16px 0;
