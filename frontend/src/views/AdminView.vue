@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {computed, defineComponent} from 'vue'
 import AdminModels from "@/components/admin/models/AdminModels.vue";
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
@@ -10,6 +10,8 @@ import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
 import {previousComponentList} from "@/components/admin/models/components";
 import store from "@/store";
 import {RouteNamesEnum} from "@/router/routes.types";
+import {useAdminStore} from "@/store/admin";
+import {AdminComponentName} from "@/types/admin.types";
 
 const vuexStore = store
 
@@ -24,6 +26,15 @@ export default defineComponent({
     AdminSettings,
     AdminModel,
   },
+  setup: () => {
+    const store = useAdminStore()
+    const WatchActiveComponent = computed(() => store.activeComponent)
+
+    return {
+      store,
+      WatchActiveComponent
+    }
+  },
   mounted() {
     document.title = 'ADMIN PANEL'
   },
@@ -36,17 +47,17 @@ export default defineComponent({
   },
   methods: {
     async openModel(company_uid: string) {
-      await this.initAdminStore()
-      this.setCompanyUID(company_uid)
-      this.setActiveComponent('AdminModel')
+      await this.store.initAdminStore()
+      this.store.companyUID = company_uid
+      this.store.activeComponent = AdminComponentName.MODEL
     },
-    async changeComponent(componentIs: string) {
-      this.setActiveComponent(componentIs)
+    async changeComponent(componentIs: AdminComponentName) {
+      this.store.activeComponent = componentIs
     },
   },
   watch: {
-    activeComponent() {
-      this.setPreviousComponent(previousComponentList[this.activeComponent])
+    WatchActiveComponent() {
+      this.store.previousComponent = previousComponentList[this.store.activeComponent]
       window.scrollTo(0, 0)
     }
   },
@@ -70,15 +81,15 @@ export default defineComponent({
   <div class="admin-content">
     <div class="admin-content__back">
       <RoundedDarkBlueButton
-          :disabled="!previousComponent"
+          :disabled="!store.previousComponent"
           v-tippy="{content: 'Click to turn back', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
-          @click="changeComponent(previousComponent)"
+          @click="changeComponent(store.previousComponent)"
       >
         <BackArrowIcon class="admin-content__back-icon"/>
       </RoundedDarkBlueButton>
     </div>
 
-    <component @openModel="openModel" :is="activeComponent"/>
+    <component @openModel="openModel" :is="store.activeComponent"/>
   </div>
 </div>
 </template>
