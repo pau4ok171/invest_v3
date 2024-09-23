@@ -27,19 +27,6 @@ import {companyModel, defaultModelFieldData} from "@/components/admin/models/mod
 import {AtomSpinner} from "epic-spinners";
 import AdminField from "@/components/admin/models/fields/AdminField.vue";
 
-const getModel = () => {
-  const model: any = {...companyModel}
-  Object.keys(model).forEach((k) => {
-    model[k] = Object.assign({...defaultModelFieldData}, model[k])
-    model[k].modelValue = k
-    if (Object.hasOwn(model[k].validators, 'slug')) {
-      model[k].isRequired = Object.hasOwn(model[k].validators.slug, 'required')
-    } else {
-      model[k].isRequired = Object.hasOwn(model[k].validators, 'required')
-    }
-  })
-  return model
-}
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -91,19 +78,27 @@ export default defineComponent({
       modelWasModified: 'adminModule/getModelWasModified',
       previousCompanyFormData: 'adminModule/getPreviousCompanyFormData',
     }),
-    model() {
-      const model = getModel()
-      Object.entries(model).forEach(([k, v]: [k: string, v: any]) => {
-        if (v.options) {
-          model[k].options = (this as any)[v.options]
+    model(): IAdminModel {
+      const model = {...companyModel}
+      return Object.entries(model).reduce((acc, [key, fieldFromModel]) => {
+        // Unite field with defaultField
+        const field: IAdminUnitedField = Object.assign({...defaultModelFieldData, ...fieldFromModel})
+        // MODEL VALUE
+        field.modelValue = key
+        // VALIDATORS
+        if (isAdminValidatorType(field.validators)) {
+          if (isBaseValidators(field.validators)) {
+            field.isRequired = Object.hasOwn(field.validators, 'required')
+          } else {
+            field.isRequired = Object.hasOwn(field.validators.slug, 'required')
+          }
         }
-        if(typeof v.isDisabled === "string") {
-          model[k].isDisabled = v.isDisabled.startsWith('!') ? !(this as any)[v.isDisabled.slice(1)] : (this as any)[v.isDisabled]
-        } else {
-          model[k].isDisabled = v.isDisabled
+        // OPTIONS
+        if (field.options && typeof field.options === 'string') {
+          field.options = (this as any)[field.options]
         }
-      })
-      return model
+        return {...acc, [key]: field}
+      }, {})
     },
     filteredMarkets() {
       return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
