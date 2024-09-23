@@ -39,7 +39,7 @@ export const authModule = {
     },
   },
   actions: {
-    async fetchUserInfo({state, commit}) {
+    async fetchUserInfo({commit}) {
       await axios
           .get('api/v1/admin/users/')
           .then(r => commit('setUserInfo', r.data))
