@@ -3,15 +3,21 @@ import {defineComponent} from 'vue'
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import axios from "axios";
 import type {
+  AdminModelValue,
   FetchedCountry,
   FetchedIndustry,
   FetchedMarket,
   FetchedSector,
   FormattedCountry,
+  FormattedDetailCompany,
   FormattedIndustry,
   FormattedMarket,
   FormattedSector,
-} from "@/types/admin";
+  IAdminField,
+  IAdminModel,
+  IAdminUnitedField,
+  PreviousFormattedDetailCompany,
+} from "@/types/admin.types";
 import ResetIcon from "@/components/icons/ResetIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import {useVuelidate} from "@vuelidate/core";
