@@ -4,7 +4,6 @@ import AdminModels from "@/components/admin/models/AdminModels.vue";
 import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
 import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import AdminModel from "@/components/admin/models/AdminModel.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
@@ -35,23 +34,7 @@ export default defineComponent({
     }
     next()
   },
-  computed: {
-    ...mapState({
-      activeComponent: (state: any) => state.adminModule.activeComponent,
-    }),
-    ...mapGetters({
-      previousComponent: 'adminModule/getPreviousComponent',
-    }),
-  },
   methods: {
-    ...mapMutations({
-      setCompanyUID: 'adminModule/setCompanyUID',
-      setActiveComponent: 'adminModule/setActiveComponent',
-      setPreviousComponent: 'adminModule/setPreviousComponent',
-    }),
-    ...mapActions({
-      initAdminStore: 'adminModule/initAdminStore',
-    }),
     async openModel(company_uid: string) {
       await this.initAdminStore()
       this.setCompanyUID(company_uid)
