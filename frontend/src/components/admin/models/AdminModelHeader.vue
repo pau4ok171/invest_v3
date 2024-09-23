@@ -4,14 +4,14 @@ import EditIcon from "@/components/icons/EditIcon.vue";
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
-import {mapActions, mapGetters, mapState} from "vuex";
+import {mapState} from "vuex";
 import {DateTime} from "luxon";
-import type {FormattedDetailCompany} from "@/types/admin";
 import {toast} from "vue3-toastify";
 import ResetIcon from "@/components/icons/ResetIcon.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import RoundedErrorButton from "@/components/UI/buttons/RoundedErrorButton.vue";
+import {useAdminStore} from "@/store/admin";
 
 export default defineComponent({
   name: "AdminModelHeader",
@@ -25,12 +25,8 @@ export default defineComponent({
     RoundedDarkBlueButton,
     EditIcon
   },
+  setup:() => ({store: useAdminStore()}),
   methods: {
-    ...mapActions({
-      activateEditMode: 'adminModule/activateEditMode',
-      deactivateEditMode: 'adminModule/deactivateEditMode',
-      deleteModel: 'adminModule/deleteModel',
-    }),
     getURLFromFile(image: File): string {
       try {
         return URL.createObjectURL(image)
@@ -47,28 +43,22 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      companyFormData: (state: any) => state.adminModule.companyFormData as FormattedDetailCompany,
-      companyUID: (state: any) => state.adminModule.companyUID,
-      isNewModel: (state: any) => state.adminModule.isNewModel,
       userInfo: (state: any) => state.authModule.userInfo,
     }),
-    ...mapGetters({
-      editModeActivated: 'adminModule/getEditModeActivated',
-    }),
     getModerFullName() {
-      if (this.companyFormData.updatedBy.lastName.length) {
-        return `${this.companyFormData.updatedBy.lastName} ${this.companyFormData.updatedBy.firstName}`
+      if (this.store.companyFormData.updatedBy.lastName.length) {
+        return `${this.store.companyFormData.updatedBy.lastName} ${this.store.companyFormData.updatedBy.firstName}`
       }
-      if (this.companyFormData.createdBy.lastName.length) {
-        return `${this.companyFormData.createdBy.lastName} ${this.companyFormData.createdBy.firstName}`
+      if (this.store.companyFormData.createdBy.lastName.length) {
+        return `${this.store.companyFormData.createdBy.lastName} ${this.store.companyFormData.createdBy.firstName}`
       }
       return `${this.userInfo.last_name} ${this.userInfo.first_name}`
     },
     getNameOfModification() {
-      if (!this.companyUID.length) {
+      if (!this.store.companyUID.length) {
         return 'Creating by:'
       }
-      if (this.companyFormData.updatedBy.lastName.length) {
+      if (this.store.companyFormData.updatedBy.lastName.length) {
         return 'Modified by:'
       }
       return 'Created by:'
@@ -82,21 +72,21 @@ export default defineComponent({
 <div class="admin-model__admin-model-header">
   <div>
     <div class="admin-model-header__breadcrumbs">
-      {{ companyFormData.sector.slug?companyFormData.sector.name:'Sector'  }}
+      {{ store.companyFormData.sector.slug?store.companyFormData.sector.name:'Sector'  }}
       /
-      {{ companyFormData.industry.slug?companyFormData.industry.name:'Industry' }}
+      {{ store.companyFormData.industry.slug?store.companyFormData.industry.name:'Industry' }}
     </div>
     <div class="admin-model-header__block-company-name">
       <div class="admin-header__logo-wrapper">
-        <img class="admin-header__logo" :src="getURLFromFile(companyFormData.logo)" alt="LOGO" v-if="companyFormData.logo?.size">
+        <img class="admin-header__logo" :src="getURLFromFile(store.companyFormData.logo)" alt="LOGO" v-if="store.companyFormData.logo?.size">
         <span class="admin-header__logo-text" v-else>Logo</span>
       </div>
       <div>
-        <div class="admin-model-header__company-name">{{ companyFormData.companyName?companyFormData.companyName:'Company Name' }}</div>
+        <div class="admin-model-header__company-name">{{ store.companyFormData.companyName?store.companyFormData.companyName:'Company Name' }}</div>
         <div class="admin-model-header__ticker">
-          <span>{{ companyFormData.market.slug?companyFormData.market.slug.toUpperCase():'Market' }}</span>
+          <span>{{ store.companyFormData.market.slug?store.companyFormData.market.slug.toUpperCase():'Market' }}</span>
           <span>:</span>
-          <span>{{ companyFormData.ticker?companyFormData.ticker:'Ticker' }}</span>
+          <span>{{ store.companyFormData.ticker?store.companyFormData.ticker:'Ticker' }}</span>
         </div>
       </div>
     </div>
@@ -106,22 +96,22 @@ export default defineComponent({
         class="admin-model-header__item admin-model-header__item--tooltip"
         @click="copyValue"
     >
-      {{ companyFormData.uid?companyFormData.uid:'0000-0000-0000-0000' }}
+      {{ store.companyFormData.uid?store.companyFormData.uid:'0000-0000-0000-0000' }}
     </div>
     <div class="admin-model-header__item">
-      <img class="admin-model-header__country-flag-icon" :src="companyFormData.country.flagURL" alt="Country" v-if="companyFormData.country.flagURL">
-      {{ companyFormData.country.slug?companyFormData.country.name:'Country' }}
+      <img class="admin-model-header__country-flag-icon" :src="store.companyFormData.country.flagURL" alt="Country" v-if="store.companyFormData.country.flagURL">
+      {{ store.companyFormData.country.slug?store.companyFormData.country.name:'Country' }}
     </div>
-    <div class="admin-model-header__item">{{ companyFormData.country.currency?.name?`${companyFormData.country.currency.name} (${companyFormData.country.currency.symbol})`:'Currency Symbol' }}</div>
+    <div class="admin-model-header__item">{{ store.companyFormData.country.currency?.name?`${store.companyFormData.country.currency.name} (${store.companyFormData.country.currency.symbol})`:'Currency Symbol' }}</div>
   </div>
   <div class="admin-model-header__last-column">
     <div class="admin-model-header__indicator">
-      <AdminModelIndicator :is-active="companyFormData.isVisible"/>
+      <AdminModelIndicator :is-active="store.companyFormData.isVisible"/>
     </div>
 
     <div class="admin-model-header__last-column-info">
-      <div class="admin-model-header__item">Created: {{ companyFormData.created?getFormattedDate(companyFormData.created):'00.00.0000 00:00:00' }}</div>
-      <div class="admin-model-header__item">Updated: {{ companyFormData.updated?getFormattedDate(companyFormData.updated):'00.00.0000 00:00:00' }}</div>
+      <div class="admin-model-header__item">Created: {{ store.companyFormData.created?getFormattedDate(store.companyFormData.created):'00.00.0000 00:00:00' }}</div>
+      <div class="admin-model-header__item">Updated: {{ store.companyFormData.updated?getFormattedDate(store.companyFormData.updated):'00.00.0000 00:00:00' }}</div>
       <div class="admin-model-header__item">
         <div class="admin-model-header__item-modified-by">
           <div class="admin-model-header__item-modified-by-title" v-text="getNameOfModification"></div>
@@ -131,10 +121,10 @@ export default defineComponent({
     </div>
 
     <div class="admin-model-header__action-list">
-      <template v-if="!editModeActivated">
+      <template v-if="!store.editModeActivated">
         <div class="admin-model-header__item">
           <RoundedDarkBlueButton
-            @click="activateEditMode()"
+            @click="store.activateEditMode()"
           >
             <EditIcon/>
             <span>Edit</span>
@@ -143,7 +133,7 @@ export default defineComponent({
         <BaseModalMenuContainer>
           <template #button>
           <div class="admin-model-header__item">
-            <RoundedErrorButton :disabled="isNewModel">
+            <RoundedErrorButton :disabled="store.isNewModel">
               <DeleteIcon/>
               <span>Delete</span>
             </RoundedErrorButton>
@@ -158,7 +148,7 @@ export default defineComponent({
                     Are you sure to definitely delete the current model?
                   </div>
                   <div class="admin-model-modal-menu__actions">
-                    <RoundedErrorButton @click="deleteModel()">YES, I want to delete</RoundedErrorButton>
+                    <RoundedErrorButton @click="store.deleteModel()">YES, I want to delete</RoundedErrorButton>
                     <RoundedDarkBlueButton @click="menuProps.close()">NO</RoundedDarkBlueButton>
                   </div>
                 </div>
@@ -170,7 +160,7 @@ export default defineComponent({
       <template v-else>
         <div class="admin-model-header__item">
           <RoundedDarkBlueButton
-            @click="deactivateEditMode()"
+            @click="store.deactivateEditMode()"
           >
             <ResetIcon/>
             <span>Close Edit Mode Without Saving</span>
