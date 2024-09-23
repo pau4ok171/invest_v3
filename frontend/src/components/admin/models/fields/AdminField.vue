@@ -78,6 +78,11 @@ export default defineComponent({
       return FieldStatusEnum.VIRGIN
     }
   },
+  methods: {
+    updateModelValue(value: AdminModelValue) {
+      this.$emit('update:modelValue', value)
+    }
+  },
 })
 </script>
 
@@ -102,7 +107,7 @@ export default defineComponent({
     :options
     :hasSearch
     :fieldStatus="getFieldStatus"
-    @update:model-value="(value: any) => $emit('update:modelValue', value)"
+    @update:model-value="updateModelValue"
     @commitValidator="$emit('commitValidator')"
     @touch="$emit('touch')"
   />
