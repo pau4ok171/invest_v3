@@ -6,7 +6,7 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
-import type {FormattedSector, FormattedSelector} from "@/types/admin";
+import type {FormattedSector, FormattedSelector} from "@/types/admin.types";
 
 export default defineComponent({
   name: "AdminSelectorField",
