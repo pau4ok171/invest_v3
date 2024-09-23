@@ -1,102 +1,105 @@
 import {helpers, numeric, required, url} from "@vuelidate/validators";
 import {isImageValidator, isYearValidator, maxVolumeValidator} from "@/components/admin/models/validators";
+import {AdminFieldType} from "@/types/admin.types";
+import type {IAdminModelDeclared, IDefaultField} from "@/types/admin.types";
 
-export const defaultModelFieldData = {
-  field: '',
+
+export const defaultModelFieldData: IDefaultField = {
+  modelValue: undefined,
   isDisabled: false,
   isRequired: false,
   label: '',
   helpText: '',
   validators: {},
-  options: null,
-  hasSearch: null,
+  options: undefined,
+  hasSearch: undefined,
   wasModifiedIsNeeded: true,
 }
 
-export const companyModel = {
+export const companyModel: IAdminModelDeclared = {
   isVisible: {
-    field: 'AdminCheckBoxField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHECKBOX,
+    isDisabled: 'editModeActivated',
     label: 'Company is publicly visible',
   },
   ticker: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'Ticker',
     validators: { required },
   },
   slug: {
-    field: 'AdminCharField',
+    field: AdminFieldType.CHAR,
     isDisabled: true,
     label: 'Slug',
     wasModifiedIsNeeded: false,
   },
   uid: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'UID',
     helpText: 'UID of type 00000000-0000-0000-0000-000000000000',
     validators: { required },
   },
   companyName: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'Company Name',
     validators: { required },
   },
   shortCompanyName: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'Short Company Name',
   },
   shortCompanyNameGenitive: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'Short Company Name Genitive',
   },
   description: {
-    field: 'AdminTextField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.TEXT,
+    isDisabled: 'editModeActivated',
     label: 'Description',
   },
   shortDescription: {
-    field: 'AdminTextField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.TEXT,
+    isDisabled: 'editModeActivated',
     label: 'Short Description',
   },
   country: {
-    field: 'AdminSelectorField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.SELECTOR,
+    isDisabled: 'editModeActivated',
     label: 'Country',
     validators: { slug: { required } },
     options: 'countries',
   },
   market: {
-    field: 'AdminSelectorField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.SELECTOR,
+    isDisabled: 'editModeActivated',
     label: 'Market',
     helpText: 'Is unblocked after filling the country field',
     validators: { slug: { required } },
     options: 'filteredMarkets',
   },
   sector: {
-    field: 'AdminSelectorField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.SELECTOR,
+    isDisabled: 'editModeActivated',
     label: 'Sector',
     validators: { slug: { required } },
     options: 'sectors',
   },
   industry: {
-    field: 'AdminSelectorField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.SELECTOR,
+    isDisabled: 'editModeActivated',
     label: 'Industry',
     helpText: 'Is unblocked after filling the sector field',
     validators: { slug: { required } },
     options: 'filteredIndustries'
   },
   logo: {
-    field: 'AdminImageField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.IMAGE,
+    isDisabled: 'editModeActivated',
     label: 'Logo',
     helpText: 'Drag the photo into the input zone or click there to chose the photo',
     validators: {
@@ -105,24 +108,24 @@ export const companyModel = {
     },
   },
   isFund: {
-    field: 'AdminCheckBoxField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHECKBOX,
+    isDisabled: 'editModeActivated',
     label: 'Company is a fund',
   },
   city: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'City',
   },
   website: {
-    field: 'AdminCharField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.CHAR,
+    isDisabled: 'editModeActivated',
     label: 'Website',
     validators: { url },
   },
   founded: {
-    field: 'AdminYearField',
-    isDisabled: '!editModeActivated',
+    field: AdminFieldType.YEAR,
+    isDisabled: 'editModeActivated',
     label: 'Founded',
     helpText: 'Year of company foundation',
     validators: {
