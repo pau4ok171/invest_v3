@@ -12,6 +12,7 @@ import {previousComponentList} from "@/components/admin/models/components";
 import store from "@/store";
 import {RouteNamesEnum} from "@/router/routes.types";
 
+const vuexStore = store
 
 export default defineComponent({
   name: "AdminView",
@@ -28,7 +29,7 @@ export default defineComponent({
     document.title = 'ADMIN PANEL'
   },
   beforeRouteEnter(to, from, next) {
-    const userInfo = store.state.authModule.userInfo
+    const userInfo = vuexStore.state.authModule.userInfo
     if (!Object.hasOwn(userInfo, 'is_staff') || !userInfo.is_staff) {
       next(RouteNamesEnum.page_not_found)
     }
