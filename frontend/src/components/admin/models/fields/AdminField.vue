@@ -1,7 +1,7 @@
 <script lang="ts">
+import type {PropType} from "vue";
 import {defineComponent} from 'vue'
 import ResetIcon from "@/components/icons/ResetIcon.vue";
-import type {PropType} from "vue";
 import type {ErrorObject} from "@vuelidate/core";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
@@ -9,7 +9,8 @@ import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxFi
 import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue";
 import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue";
 import AdminYearField from "@/components/admin/models/fields/AdminYearField.vue";
-import type {FormattedSector} from "@/types/admin";
+import {FieldStatusEnum} from "@/types/admin.types";
+import type {AdminModelValue, FormattedSector} from "@/types/admin.types";
 
 export default defineComponent({
   name: "AdminField",
@@ -64,17 +65,17 @@ export default defineComponent({
     },
   },
   computed: {
-    getFieldStatus() {
+    getFieldStatus(): FieldStatusEnum {
       if (this.isDisabled) {
-        return 'disabled'
+        return FieldStatusEnum.DISABLED
       }
       if (this.errors?.length) {
-        return 'invalid'
+        return FieldStatusEnum.INVALID
       }
       if (this.wasModified && !this.errors?.length) {
-        return 'valid'
+        return FieldStatusEnum.VALID
       }
-      return 'virgin'
+      return FieldStatusEnum.VIRGIN
     }
   },
 })
