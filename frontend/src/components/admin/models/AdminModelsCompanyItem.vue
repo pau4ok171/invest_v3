@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import type {PropType} from "vue";
-import type {AdminCompany} from "@/types/admin";
+import type {AdminCompany} from "@/types/admin.types";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
 
 export default defineComponent({
