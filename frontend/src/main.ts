@@ -8,7 +8,7 @@ import VueAxios from "vue-axios";
 import Vue3Toastify, {toast, type ToastContainerOptions} from "vue3-toastify";
 import 'vue3-toastify/dist/index.css';
 
-import VueTippy from 'vue-tippy';
+import VueTippy, {directive} from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 
 import Vintersection from "@/directives/Vintersection";
@@ -29,6 +29,7 @@ const pinia = createPinia()
 const hc = Highcharts as any
 
 app.directive('intersection', Vintersection)
+app.directive('tippy', directive)
 
 highchartsMore(hc)
 loadSolidGauge(hc)
