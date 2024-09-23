@@ -26,7 +26,7 @@ import _ from "lodash";
 import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
 import {AtomSpinner} from "epic-spinners";
 import AdminField from "@/components/admin/models/fields/AdminField.vue";
-
+import {useAdminStore} from "@/store/admin";
 
 export default defineComponent({
   name: "AdminModelForm",
@@ -36,7 +36,19 @@ export default defineComponent({
     RoundedDarkBlueButton,
     ResetIcon,
   },
-  setup: () => ({ v$: useVuelidate({ $rewardEarly: true, $lazy: true })}),
+  setup: () => {
+    const store = useAdminStore()
+    const v$ = useVuelidate({ $rewardEarly: true, $lazy: true})
+    const watchCompanyFormData = computed(() => store.companyFormData)
+    const watchEditModeActivated = computed(() => store.editModeActivated)
+
+    return {
+      v$,
+      store,
+      watchCompanyFormData,
+      watchEditModeActivated,
+    }
+  },
   data() {
     return {
       sectors: [] as Array<FormattedSector>,
@@ -47,37 +59,26 @@ export default defineComponent({
   },
   validations () {
     return {
-      companyFormData: {
-        ...Object.entries(getModel()).reduce((obj, [k, v]: [string, any]) => ({[k]: v.validators, ...obj}), {})
+      watchCompanyFormData: {
+        ...Object.entries(this.model).reduce((obj, [k, v]) => ({[k]: v.validators, ...obj}), {})
       },
     }
   },
   async mounted() {
-    if (!this.companyUID.length) {
-      await this.activateEditMode()
-      this.setIsNewModel(true)
+    if (!this.store.companyUID.length) {
+      await this.store.activateEditMode()
+      this.store.isNewModel = true
       } else {
-      await this.deactivateEditMode()
-      this.setIsNewModel(false)
-      await this.fetchCompanyByUID(this.companyUID)
+      await this.store.deactivateEditMode()
+      this.store.isNewModel = false
+      await this.store.fetchCompany()
     }
     await this.fetchSelectorOptions()
   },
   async unmounted() {
-    await this.deleteModelData()
+    await this.store.deleteModelData()
   },
   computed: {
-    ...mapState({
-      companyFormData: (state: any) => state.adminModule.companyFormData,
-      modelIsSaving: (state: any) => state.adminModule.modelIsSaving,
-      isNewModel: (state: any) => state.adminModule.isNewModel,
-    }),
-    ...mapGetters({
-      companyUID: 'adminModule/getCompanyUID',
-      editModeActivated: 'adminModule/getEditModeActivated',
-      modelWasModified: 'adminModule/getModelWasModified',
-      previousCompanyFormData: 'adminModule/getPreviousCompanyFormData',
-    }),
     model(): IAdminModel {
       const model = {...companyModel}
       return Object.entries(model).reduce((acc, [key, fieldFromModel]) => {
@@ -101,35 +102,28 @@ export default defineComponent({
       }, {})
     },
     filteredMarkets() {
-      return [...this.markets].filter((m: FormattedMarket) => m.key === this.companyFormData.country.key)
+      return [...this.markets].filter((m: FormattedMarket) => m.key === this.store.companyFormData.country.key)
     },
     filteredIndustries() {
-      return [...this.industries].filter((i: FormattedIndustry) => i.key === this.companyFormData.sector.key)
+      return [...this.industries].filter((i: FormattedIndustry) => i.key === this.store.companyFormData.sector.key)
     },
   },
   methods: {
-    ...mapMutations({
-      setCompanyFormData: 'adminModule/setCompanyFormData',
-      setEditModeActivated: 'adminModule/setEditModeActivated',
-      setIsNewModel: 'adminModule/setIsNewModel',
-    }),
-    ...mapActions({
-      fetchCompanyByUID: 'adminModule/fetchCompany',
-      saveModelForm: 'adminModule/saveModelForm',
-      deleteModelData: 'adminModule/deleteModelData',
-      activateEditMode: 'adminModule/activateEditMode',
-      deactivateEditMode: 'adminModule/deactivateEditMode',
-      resetField: 'adminModule/resetField',
-    }),
-    updateModel(key: string, value: any) {
-      const companyFormData = {...this.companyFormData}
-      companyFormData[key] = value
+    getModelValue(m: IAdminField) {
+      return this.store.companyFormData[m.modelValue as keyof FormattedDetailCompany]
+    },
+    updateModel(field: IAdminField, value: AdminModelValue) {
+      const key = field.modelValue
+      let companyFormData = {...this.store.companyFormData}
+
+      companyFormData = {...companyFormData, [key]: value}
+
       // DEPENDING FIELDS
-      if (key === 'ticker') companyFormData['slug'] = getSlug(_.kebabCase(value))
-      if (key === 'country') companyFormData['market'] = {name: '', slug: '', key: ''}
-      if (key === 'sector') companyFormData['industry'] = {name: '', slug: '', key: ''}
+      if (key === 'ticker' && typeof value === 'string') companyFormData['slug'] = getSlug(_.kebabCase(value))
+      if (key === 'country') companyFormData['market'] = {name: '', slug: '', key: 0}
+      if (key === 'sector') companyFormData['industry'] = {name: '', slug: '', key: 0}
       // END DEPENDING FIELDS
-      this.setCompanyFormData(companyFormData)
+      this.store.companyFormData = companyFormData
     },
     async fetchSelectorOptions() {
       const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
@@ -142,28 +136,31 @@ export default defineComponent({
       const isFormCorrect = await this.v$.$validate()
       if (!isFormCorrect) return
 
-      await this.saveModelForm()
+      await this.store.saveModelForm()
     },
   },
   watch: {
-    companyFormData: {
-      handler(companyFormData) {
+    watchCompanyFormData: {
+      handler(companyFormData: FormattedDetailCompany) {
         // Check if values in CompanyFormData was modified
-        if (this.editModeActivated) {
-          const previousCompanyFormData = {...this.previousCompanyFormData}
+        if (this.store.editModeActivated) {
+          const previousCompanyFormData: PreviousFormattedDetailCompany = {...this.store.previousCompanyFormData}
 
-          Object.entries(companyFormData).forEach(([k, v]: [k: string, v: any]) => {
-            if (Object.hasOwn(previousCompanyFormData[k].value, 'slug')) {
-              previousCompanyFormData[k].wasModified = previousCompanyFormData[k].value.slug !== v.slug
-              return
+          Object.entries(companyFormData).forEach(([k, v]) => {
+            if (isKeyOfPreviousFormattedDetailCompany(previousCompanyFormData, k)) {
+              const value = previousCompanyFormData[k].value
+              if (typeof value == 'object' && 'slug' in value) {
+                previousCompanyFormData[k].wasModified = value.slug !== v.slug
+                return
+              }
+              previousCompanyFormData[k].wasModified = value !== v
             }
-            previousCompanyFormData[k].wasModified = previousCompanyFormData[k].value !== v
           })
         }
       },
       deep: true
     },
-    editModeActivated(val) {
+    watchEditModeActivated(val) {
       // If editMode was activated
       if (val === true) {
         this.v$.$commit()
@@ -177,8 +174,8 @@ export default defineComponent({
 <div class="admin-model__admin-model-form">
   <button
       class="admin-model-form__reset-button"
-      v-show="modelWasModified"
-      @click="resetField('__all__')"
+      v-show="store.getModelWasModified"
+      @click="store.resetField('__all__')"
       v-tippy="{content: 'Click to reset all changes'}"
   >
     <ResetIcon/>
@@ -188,29 +185,29 @@ export default defineComponent({
     v-for="m in model"
     :key="m.modelValue"
     :field="m.field"
-    :model-value="companyFormData[m.modelValue]"
-    @update:model-value="(value: any) => updateModel(m.modelValue, value)"
-    @resetField="resetField(m.modelValue)"
-    @touch="v$.companyFormData[m.modelValue].$touch"
-    @commitValidator="v$.companyFormData[m.modelValue].$commit"
+    :model-value="getModelValue(m)"
+    @update:model-value="(value: any) => updateModel(m, value)"
+    @resetField="store.resetField(m.modelValue)"
+    @touch="v$.watchCompanyFormData[m.modelValue].$touch"
+    @commitValidator="v$.watchCompanyFormData[m.modelValue].$commit"
     :is-required="m.isRequired"
-    :is-disabled="m.isDisabled"
+    :is-disabled="typeof m.isDisabled == 'string'?!store[m.isDisabled as keyof typeof store]:m.isDisabled"
     :label="m.label"
     :help-text="m.helpText"
     :options="m.options"
     :has-search="m.hasSearch"
-    :errors="v$.companyFormData[m.modelValue].$errors"
-    :was-modified="m.wasModifiedIsNeeded?previousCompanyFormData[m.modelValue].wasModified:false"
+    :errors="v$.watchCompanyFormData[m.modelValue].$errors"
+    :was-modified="m.wasModifiedIsNeeded?store.previousCompanyFormData[m.modelValue].wasModified:false"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || modelIsSaving || !modelWasModified" @click="proceedModelSaving">
+  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || store.modelIsSaving || !store.getModelWasModified" @click="proceedModelSaving">
     <atom-spinner
-      v-show="modelIsSaving"
+      v-show="store.modelIsSaving"
       :animation-duration="1250"
       :size="30"
       color="#ff1d5e"
     />
-    <span v-if="!modelIsSaving">Save</span>
+    <span v-if="!store.modelIsSaving">Save</span>
     <span v-else>Saving...</span>
   </RoundedDarkBlueButton>
 </div>
