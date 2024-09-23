@@ -101,14 +101,24 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+$bg-default-color: var(--admin-field-default-backgroud-color);
+$bg-focus-color: var(--admin-field-focus-backgroud-color);
+$gradient-color-default-start: var(--admin-field-default-gradient-color-start);
+$gradient-color-default-finish: var(--admin-field-default-gradient-color-finish);
+$gradient-color-success-start: var(--admin-field-success-gradient-color-start);
+$gradient-color-success-finish: var(--admin-field-success-gradient-color-finish);
+$gradient-color-error-start: var(--admin-field-error-gradient-color-start);
+$gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
+
+
 .admin-year-field {
   position: relative;
   line-height: 1.4rem;
   &--valid .admin-year-field__inputs {
-    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-success-gradient-color-start), var(--admin-field-success-gradient-color-finish));
+    background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-success-start, $gradient-color-success-finish);
   }
   &--invalid .admin-year-field__inputs {
-    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-error-gradient-color-start), var(--admin-field-error-gradient-color-finish));
+    background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-error-start, $gradient-color-error-finish);
   }
 }
 .admin-year-field__inputs {
@@ -122,7 +132,7 @@ export default defineComponent({
   padding: 5px 10px;
   border: 3px solid transparent;
   border-radius: 20px;
-  background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-default-gradient-color-start), var(--admin-field-default-gradient-color-finish));
+  background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-default-start, $gradient-color-default-finish);
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
@@ -133,7 +143,7 @@ export default defineComponent({
   &--focus {
     border-color: #2b96f1;
     box-shadow: inset 1px 2px 4px 0 rgb(179 30 30 / 10%), 3px 5px 12px 2px rgb(43 150 241 / 40%);
-    background-image: linear-gradient(var(--admin-field-focus-backgroud-color), var(--admin-field-focus-backgroud-color)), linear-gradient(315deg, var(--admin-field-default-gradient-color-start), var(--admin-field-default-gradient-color-finish));
+    background-image: linear-gradient($bg-focus-color, $bg-focus-color), linear-gradient(315deg, $gradient-color-default-start, $gradient-color-default-finish);
   }
 }
 .admin-year-field__input {

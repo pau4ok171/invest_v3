@@ -112,16 +112,25 @@ export default defineComponent({
 </template>
 
 <style scoped lang="scss">
+$bg-default-color: var(--admin-field-default-backgroud-color);
+$bg-focus-color: var(--admin-field-focus-backgroud-color);
+$gradient-color-default-start: var(--admin-field-default-gradient-color-start);
+$gradient-color-default-finish: var(--admin-field-default-gradient-color-finish);
+$gradient-color-success-start: var(--admin-field-success-gradient-color-start);
+$gradient-color-success-finish: var(--admin-field-success-gradient-color-finish);
+$gradient-color-error-start: var(--admin-field-error-gradient-color-start);
+$gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
+
 .admin-image-field {
   position: relative;
   line-height: 1.4rem;
   max-width: max-content;
   padding-right: 18px;
   &--valid .admin-image-field__input-box {
-    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-success-gradient-color-start), var(--admin-field-success-gradient-color-finish));
+    background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-success-start, $gradient-color-success-finish);
   }
   &--invalid .admin-image-field__input-box {
-    background-image: linear-gradient(var(--admin-field-default-backgroud-color), var(--admin-field-default-backgroud-color)), linear-gradient(315deg, var(--admin-field-error-gradient-color-start), var(--admin-field-error-gradient-color-finish));
+    background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-error-start, $gradient-color-error-finish);
   }
 }
 .admin-image-field__input {
