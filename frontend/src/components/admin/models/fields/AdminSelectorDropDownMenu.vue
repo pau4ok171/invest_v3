@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
-import type {FormattedSelector} from "@/types/admin";
+import type {FormattedSelector} from "@/types/admin.types";
 
 
 export default defineComponent({
