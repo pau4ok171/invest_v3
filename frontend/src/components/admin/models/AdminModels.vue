@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import AdminModelsCompanyItem from "@/components/admin/models/AdminModelsCompanyItem.vue";
 import axios from "axios";
-import type {AdminCompany} from "@/types/admin";
+import type {AdminCompany} from "@/types/admin.types";
 
 
 export default defineComponent({
