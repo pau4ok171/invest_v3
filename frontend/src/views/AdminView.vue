@@ -45,6 +45,16 @@ export default defineComponent({
     }
     next()
   },
+  data() {
+    return {
+      navigationHeaders: [
+        AdminComponentName.DASHBOARD,
+        AdminComponentName.MODELS,
+        AdminComponentName.STAFF,
+        AdminComponentName.SETTINGS,
+      ]
+    }
+  },
   methods: {
     async openModel(company_uid: string) {
       await this.store.initAdminStore()
@@ -70,10 +80,14 @@ export default defineComponent({
     <div class="admin-sidebar__navigation">
 
       <ul class="admin-sidebar__menu">
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminDashboard'}]" @click="setActiveComponent('AdminDashboard')">Dashboard</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminModels'}]" @click="setActiveComponent('AdminModels')">Models</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminStaff'}]" @click="setActiveComponent('AdminStaff')">Staff</li>
-        <li :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': activeComponent === 'AdminSettings'}]" @click="setActiveComponent('AdminSettings')">Settings</li>
+        <li
+          v-for="header in navigationHeaders"
+          :key="header"
+          :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': store.activeComponent === header}]"
+          @click="store.activeComponent = header"
+        >
+          {{ header.slice(5) }}
+        </li>
       </ul>
 
     </div>
