@@ -1,6 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
+import {computed, defineComponent} from 'vue'
 import axios from "axios";
 import type {
   AdminModelValue,
@@ -24,9 +23,15 @@ import {useVuelidate} from "@vuelidate/core";
 import getSlug from "speakingurl";
 import _ from "lodash";
 import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
+// @ts-ignore
 import {AtomSpinner} from "epic-spinners";
 import AdminField from "@/components/admin/models/fields/AdminField.vue";
 import {useAdminStore} from "@/store/admin";
+import {
+  isAdminValidatorType,
+  isBaseValidators,
+  isKeyOfPreviousFormattedDetailCompany
+} from "@/types/admin.types";
 
 export default defineComponent({
   name: "AdminModelForm",
