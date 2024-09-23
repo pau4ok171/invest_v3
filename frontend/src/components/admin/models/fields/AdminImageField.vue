@@ -51,7 +51,7 @@ export default defineComponent({
       }
       this.isDrugOver = false
     },
-    getLogoURL() {
+    getURLFromFile(): string {
       try {
         return URL.createObjectURL(this.modelValue)
       } catch {
@@ -95,7 +95,7 @@ export default defineComponent({
     </template>
 
     <template v-else>
-      <img class="admin-image-field__logo" :src="getLogoURL()" alt="logo">
+      <img class="admin-image-field__logo" :src="getURLFromFile()" alt="logo">
       <RoundedBlueButton
         class="admin-image-field__remove-button"
         @click="removeLogo()"
