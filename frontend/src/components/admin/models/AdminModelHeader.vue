@@ -37,8 +37,9 @@ export default defineComponent({
     getFormattedDate(isoDateTime: string) {
       return DateTime.fromISO(isoDateTime).toFormat('dd LLL yyyy TT')
     },
-    copyValue({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
-      navigator.clipboard.writeText(currentTarget.innerText).then(() => toast.success('Value Copied')).catch(err => console.log(err))
+    copyValue(event: MouseEvent) {
+      const target = event.target as HTMLHtmlElement
+      navigator.clipboard.writeText(target.innerText).then(() => toast.success('Value Copied')).catch(err => console.log(err))
     },
   },
   computed: {
