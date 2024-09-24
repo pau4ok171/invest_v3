@@ -43,6 +43,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isDirty: {
+      type: Boolean,
+      required: true
+    },
     modelValue: {
       type: [String, Boolean, Object],
       default: '',
@@ -72,7 +76,7 @@ export default defineComponent({
       if (this.errors?.length) {
         return FieldStatusEnum.INVALID
       }
-      if (this.wasModified && !this.errors?.length) {
+      if (this.wasModified && this.isDirty && !this.errors?.length) {
         return FieldStatusEnum.VALID
       }
       return FieldStatusEnum.VIRGIN

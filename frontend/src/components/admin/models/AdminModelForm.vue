@@ -220,6 +220,7 @@ export default defineComponent({
     :options="m.options"
     :has-search="m.hasSearch"
     :errors="v$.watchCompanyFormData[m.modelValue].$errors"
+    :is-dirty="v$.watchCompanyFormData[m.modelValue].$dirty"
     :was-modified="m.wasModifiedIsNeeded?store.previousCompanyFormData[m.modelValue].wasModified:false"
   />
 
