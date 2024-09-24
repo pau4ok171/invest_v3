@@ -159,6 +159,8 @@ class CompanySerializer(serializers.ModelSerializer):
 
     @staticmethod
     def validate_year_founded(value):
+        if value is None:
+            return value
         current_year = timezone.now().year
         if value > current_year or value < 1000:
             raise serializers.ValidationError('Must be a valid Year')
