@@ -106,6 +106,8 @@ def get_data(request):
         data['industry'] = Industry.objects.get(slug=data.pop('industry_slug')).pk
     if data.get('logo') == '__delete__':
         data['logo'] = None
+    if data.get('year_founded') == '__delete__':
+        data['year_founded'] = None
 
     data['created_by'] = request.user.pk
     data['updated_by'] = request.user.pk
