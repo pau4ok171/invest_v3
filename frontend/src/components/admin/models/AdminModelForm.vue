@@ -143,6 +143,24 @@ export default defineComponent({
 
       await this.store.saveModelForm()
     },
+    resetField(key: '__all__' | string) {
+      this.store.resetField(key)
+
+      if (key === '__all__') {
+        this.v$.watchCompanyFormData.$reset()
+      }
+      else if (key === 'country') {
+        this.v$.watchCompanyFormData[key].$reset()
+        this.v$.watchCompanyFormData['market'].$reset()
+      }
+      else if (key === 'sector') {
+        this.v$.watchCompanyFormData[key].$reset()
+        this.v$.watchCompanyFormData['industry'].$reset()
+      }
+      else {
+        this.v$.watchCompanyFormData[key].$reset()
+      }
+    }
   },
   watch: {
     watchCompanyFormData: {
@@ -192,7 +210,7 @@ export default defineComponent({
     :field="m.field"
     :model-value="getModelValue(m)"
     @update:model-value="(value: any) => updateModel(m, value)"
-    @resetField="store.resetField(m.modelValue)"
+    @resetField="resetField(m.modelValue)"
     @touch="v$.watchCompanyFormData[m.modelValue].$touch"
     @commitValidator="v$.watchCompanyFormData[m.modelValue].$commit"
     :is-required="m.isRequired"
