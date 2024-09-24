@@ -3,6 +3,7 @@ import datetime
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.utils import timezone
 
 from rest_framework import serializers
@@ -164,7 +165,10 @@ class CompanySerializer(serializers.ModelSerializer):
         return value
 
     @staticmethod
-    def validate_logo(value):
+    def validate_logo(value: InMemoryUploadedFile | str | None):
+        if not isinstance(value, InMemoryUploadedFile):
+            return value
+
         if value.size > 100 * 1024:
             serializers.ValidationError('The image must be max 100Kb')
         return value
