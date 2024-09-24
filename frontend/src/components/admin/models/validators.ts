@@ -13,3 +13,5 @@ export const isYearValidator = (val: string) => {
 
   return val.length === 4 && Number(val) >= 1000 && Number(val) <= new Date().getFullYear()
 }
+
+export const emptyValidator = () => true

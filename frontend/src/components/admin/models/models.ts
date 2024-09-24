@@ -1,5 +1,10 @@
 import {helpers, numeric, required, url} from "@vuelidate/validators";
-import {isImageValidator, isYearValidator, maxVolumeValidator} from "@/components/admin/models/validators";
+import {
+  emptyValidator,
+  isImageValidator,
+  isYearValidator,
+  maxVolumeValidator
+} from "@/components/admin/models/validators";
 import {AdminFieldType} from "@/types/admin.types";
 import type {IAdminModelDeclared, IDefaultField} from "@/types/admin.types";
 
@@ -10,7 +15,7 @@ export const defaultModelFieldData: IDefaultField = {
   isRequired: false,
   label: '',
   helpText: '',
-  validators: {},
+  validators: { emptyValidator },
   options: undefined,
   hasSearch: undefined,
   wasModifiedIsNeeded: true,
