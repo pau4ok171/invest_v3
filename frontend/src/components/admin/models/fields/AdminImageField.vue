@@ -125,7 +125,6 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
   position: relative;
   line-height: 1.4rem;
   max-width: max-content;
-  padding-right: 18px;
   &--valid .admin-image-field__input-box {
     background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-success-start, $gradient-color-success-finish);
   }

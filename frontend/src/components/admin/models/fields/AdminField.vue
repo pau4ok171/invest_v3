@@ -92,29 +92,30 @@ export default defineComponent({
 
 <template>
 <div class="admin-field__fieldset">
+  <div class="admin-field__field-wrapper">
+    <button
+      class="admin-field__reset-button"
+      v-show="wasModified"
+      @click="$emit('resetField')"
+      v-tippy="{content: 'Click to reset field changes'}"
+    >
+      <ResetIcon/>
+    </button>
 
-  <button
-    class="admin-field__reset-button"
-    v-show="wasModified"
-    @click="$emit('resetField')"
-    v-tippy="{content: 'Click to reset field changes'}"
-  >
-    <ResetIcon/>
-  </button>
-
-  <component
-    :is="field"
-    :label
-    :isRequired
-    :isDisabled
-    :modelValue
-    :options
-    :hasSearch
-    :fieldStatus="getFieldStatus"
-    @update:model-value="updateModelValue"
-    @commitValidator="$emit('commitValidator')"
-    @touch="$emit('touch')"
-  />
+    <component
+      :is="field"
+      :label
+      :isRequired
+      :isDisabled
+      :modelValue
+      :options
+      :hasSearch
+      :fieldStatus="getFieldStatus"
+      @update:model-value="updateModelValue"
+      @commitValidator="$emit('commitValidator')"
+      @touch="$emit('touch')"
+    />
+  </div>
 
   <div v-if="helpText" class="admin-field__help-text">{{ helpText }}</div>
 
@@ -148,6 +149,10 @@ export default defineComponent({
   position: relative;
   width: max-content;
   padding: 2px 18px 0 0;
+}
+.admin-field__field-wrapper {
+  position: relative;
+  width: max-content;
 }
 .admin-field__help-text {
   color: #92969c;
@@ -184,10 +189,10 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 0;
-  right: 0;
+  top: -9px;
+  right: -15px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 8px;
   background-color: rgba(53, 110, 233, .1);
   transition: background-color .4s;
   cursor: pointer;
