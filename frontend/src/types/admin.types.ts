@@ -253,12 +253,6 @@ export interface IAdminModel {
   [p: string]: IAdminField
 }
 
-export const isAdminModel = (model: IAdminModelDeclared | IAdminModel): model is IAdminModel => {
-  return Object.values(model).every(field => {
-    return typeof field.isDisabled == 'boolean' && typeof field.options != 'string'
-  })
-}
-
 export const isKeyOfFormattedDetailCompany = (obj: FormattedDetailCompany,  key: string): key is keyof FormattedDetailCompany => {
   return Object.hasOwn(obj, key)
 }
