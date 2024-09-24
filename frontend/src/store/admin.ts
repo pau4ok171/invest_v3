@@ -216,6 +216,10 @@ const getFormDataFromRequestData = (object: CompanyDataToRequest) => Object.keys
     }
     return formData
   }
+  if (key === 'year_founded' && typeof obj == 'string' && !obj.length) {
+    formData.append(key, '__delete__')
+    return formData
+  }
   if (typeof obj == 'string') {
     formData.append(key, obj)
     return formData
@@ -278,7 +282,7 @@ const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<F
     logo: file,
     isFund: company.is_fund || false,
     website: company.website || '',
-    founded: String(company.year_founded) || '',
+    founded: company.year_founded !== null ? String(company.year_founded) : '',
   } as FormattedDetailCompany
 }
 
