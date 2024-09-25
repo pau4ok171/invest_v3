@@ -91,10 +91,10 @@ export default defineComponent({
     @input.capture="processInput"
     ref="adminYearField"
   >
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="4" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="4" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="4" placeholder="•">
-    <input class="admin-year-field__input" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" tabindex="0" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[0]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" tabindex="-1" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[1]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" tabindex="-1" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[2]" pattern="[0-9]" maxlength="4" placeholder="•">
+    <input class="admin-year-field__input" tabindex="-1" :required="isRequired" :disabled="isDisabled" :value="String(modelValue)[3]" pattern="[0-9]" maxlength="4" placeholder="•">
   </div>
   <label class="admin-year-field__label">{{ label }}{{ isRequired?'*':'' }}</label>
 </div>
