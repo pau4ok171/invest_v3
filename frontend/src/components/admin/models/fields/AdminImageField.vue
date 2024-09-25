@@ -182,7 +182,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
     background: #1b222d;
     border-color: #92969c;
   }
-  &:focus {
+  &:focus-within {
     border-color: #2b96f1;
     box-shadow: inset 1px 2px 4px 0 rgb(179 30 30 / 10%), 3px 5px 12px 2px rgb(43 150 241 / 40%);
 
@@ -222,7 +222,12 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 }
 .admin-image-field__remove-button {
   position: absolute;
+  outline: none;
   top: 4px;
   right: 4px;
+  &:focus {
+    box-shadow: 0 0 10px 10px rgba(255, 255, 255, .2);
+    border: 2px solid #fff;
+  }
 }
 </style>

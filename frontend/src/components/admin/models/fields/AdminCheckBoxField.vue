@@ -108,6 +108,12 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
   opacity: 0;
   cursor: pointer;
 }
+.admin-checkbox-button__input:focus {
+  & ~ .admin-checkbox-button__outer {
+    box-shadow: 0 0 10px 10px rgba(26, 97, 212, .2);
+    border: 2px solid #2b96f1;
+  }
+}
 .admin-checkbox-button__input:checked ~ .admin-checkbox-button__outer {
   animation: shift 0.8s ease-in-out 1 forwards;
   transform: rotate(180deg);
