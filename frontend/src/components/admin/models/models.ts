@@ -78,6 +78,7 @@ export const companyModel: IAdminModelDeclared = {
     label: 'Country',
     validators: { slug: { required } },
     options: 'countries',
+    hasSearch: true,
   },
   market: {
     field: AdminFieldType.SELECTOR,
@@ -86,6 +87,7 @@ export const companyModel: IAdminModelDeclared = {
     helpText: 'Is unblocked after filling the country field',
     validators: { slug: { required } },
     options: 'filteredMarkets',
+    hasSearch: true,
   },
   sector: {
     field: AdminFieldType.SELECTOR,
@@ -93,6 +95,7 @@ export const companyModel: IAdminModelDeclared = {
     label: 'Sector',
     validators: { slug: { required } },
     options: 'sectors',
+    hasSearch: true,
   },
   industry: {
     field: AdminFieldType.SELECTOR,
@@ -100,7 +103,8 @@ export const companyModel: IAdminModelDeclared = {
     label: 'Industry',
     helpText: 'Is unblocked after filling the sector field',
     validators: { slug: { required } },
-    options: 'filteredIndustries'
+    options: 'filteredIndustries',
+    hasSearch: true,
   },
   logo: {
     field: AdminFieldType.IMAGE,
