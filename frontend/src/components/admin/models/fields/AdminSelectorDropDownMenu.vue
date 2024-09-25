@@ -75,7 +75,7 @@ export default defineComponent({
 </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .dropdown-menu {
   position: absolute;
   top: 40px;
@@ -84,6 +84,7 @@ export default defineComponent({
   max-height: 300px;
   overflow-y: auto;
   border-radius: 8px;
+  box-shadow: 0 10px 15px 10px rgba(26, 97, 212, .2);
 }
 .dropdown-menu__inner {
   background-color: #212529;
@@ -130,6 +131,7 @@ export default defineComponent({
 .dropdown-menu__button {
   display: flex;
   align-items: center;
+  outline: none;
   gap: 8px;
   width: 100%;
   text-align: left;
@@ -137,6 +139,9 @@ export default defineComponent({
   color: inherit;
 }
 .dropdown-menu__button:not([disabled]):hover {
+  background-color: var(--blue);
+}
+.dropdown-menu__button:not([disabled]):focus {
   background-color: var(--blue);
 }
 .dropdown-menu__button:is([disabled]) {
