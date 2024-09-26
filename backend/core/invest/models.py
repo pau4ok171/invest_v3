@@ -27,8 +27,8 @@ class Company(models.Model):
     market = models.ForeignKey('Market', on_delete=models.PROTECT)
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(null=False, blank=True, editable=False)
+    updated = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
     logo = models.ImageField(
         upload_to=logo_directory_path,
@@ -53,13 +53,20 @@ class Company(models.Model):
     return_3y = models.FloatField(null=True, blank=True)
     return_5y = models.FloatField(null=True, blank=True)
     average_weekly_mouvement = models.FloatField(null=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT, related_name='company_created_by')
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='company_created_by',
+        null=False,
+        blank=True,
+        editable=False,
+    )
     updated_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
         related_name='company_updated_by',
         null=True,
-        blank=True
+        blank=True,
     )
 
     def __str__(self):

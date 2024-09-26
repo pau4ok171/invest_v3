@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import admin
 from . import models
 from django.utils.safestring import mark_safe
@@ -25,6 +27,7 @@ class CompanyAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('ticker',)}
     list_display_links = ('title',)
     list_editable = ('is_visible',)
+    readonly_fields = ('created', 'updated', 'created_by', 'updated_by')
     actions = [check_company]
 
     def get_html_image(self, obj):
@@ -32,6 +35,16 @@ class CompanyAdmin(admin.ModelAdmin):
             return mark_safe(f'<img src="{obj.logo.url}" width="50">')
 
     get_html_image.short_description = 'Logo'
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            obj.updated_by = request.user
+            obj.updated = datetime.datetime.utcnow()
+        else:
+            obj.created_by = request.user
+            obj.created = datetime.datetime.utcnow()
+
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(models.Market)
