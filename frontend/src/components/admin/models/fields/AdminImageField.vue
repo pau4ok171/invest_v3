@@ -40,14 +40,15 @@ export default defineComponent({
     },
   },
   methods: {
-    uploadFile({currentTarget}: Event & { currentTarget: HTMLInputElement }) {
-      if (currentTarget.files) {
-        this.$emit('update:modelValue', currentTarget.files[0])
+    uploadFile(event: Event) {
+      const target = event.target as HTMLInputElement
+      if (target.files) {
+        this.$emit('update:modelValue', target.files[0])
         this.$emit('touch')
         this.$emit('commitValidator')
       }
-      if (currentTarget.value) {
-        currentTarget.value = ''
+      if (target.value) {
+        target.value = ''
       }
       this.isDrugOver = false
     },
