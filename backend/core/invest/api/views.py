@@ -18,7 +18,7 @@ from invest.api.serializers import (
     CompanyPeersSerializer
 )
 from invest.api.paginators import StandardResultsSetPagination
-from invest.models import Company, CandlePerDay, Sorter, Country, Sector
+from invest.models import Company, CandlePerDay, Country, Sector
 from invest.api.forms import (
     SearchListForm,
     UsernameVerificationForm,

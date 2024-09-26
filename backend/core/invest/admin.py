@@ -27,9 +27,9 @@ class CompanyAdmin(admin.ModelAdmin):
     list_editable = ('is_visible',)
     actions = [check_company]
 
-    def get_html_image(self, object):
-        if object.logo:
-            return mark_safe(f'<img src="{object.logo.url}" width="50">')
+    def get_html_image(self, obj):
+        if obj.logo:
+            return mark_safe(f'<img src="{obj.logo.url}" width="50">')
 
     get_html_image.short_description = 'Logo'
 
@@ -396,7 +396,7 @@ class ReportAdmin(admin.ModelAdmin):
                     'capital_expenditure',
                     'free_cash_flow',
                 ]
-    }),
+        }),
         ('CashFlow Other', {
             'fields': [
                 'all_taxes_paid',
