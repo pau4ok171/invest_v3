@@ -39,6 +39,7 @@ export default defineComponent({
     document.title = 'ADMIN PANEL'
   },
   beforeRouteEnter(to, from, next) {
+    // TODO: Replace vuex by pinia
     const userInfo = vuexStore.state.authModule.userInfo
     if (!Object.hasOwn(userInfo, 'is_staff') || !userInfo.is_staff) {
       next(RouteNamesEnum.page_not_found)
