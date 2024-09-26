@@ -3,15 +3,15 @@ import {computed, defineComponent} from 'vue'
 import axios from "axios";
 import type {
   AdminModelValue,
-  FetchedCountry,
-  FetchedIndustry,
-  FetchedMarket,
-  FetchedSector,
-  FormattedCountry,
-  FormattedDetailCompany,
-  FormattedIndustry,
-  FormattedMarket,
-  FormattedSector,
+  IFetchedCountry,
+  IFetchedIndustry,
+  IFetchedMarket,
+  IFetchedSector,
+  IFormattedCountry,
+  IFormattedDetailCompany,
+  IFormattedIndustry,
+  IFormattedMarket,
+  IFormattedSector,
   IAdminField,
   IAdminModel,
   IAdminUnitedField,
@@ -56,10 +56,10 @@ export default defineComponent({
   },
   data() {
     return {
-      sectors: [] as Array<FormattedSector>,
-      markets: [] as Array<FormattedMarket>,
-      industries: [] as Array<FormattedIndustry>,
-      countries: [] as Array<FormattedCountry>,
+      sectors: [] as Array<IFormattedSector>,
+      markets: [] as Array<IFormattedMarket>,
+      industries: [] as Array<IFormattedIndustry>,
+      countries: [] as Array<IFormattedCountry>,
     }
   },
   validations () {
@@ -107,15 +107,15 @@ export default defineComponent({
       }, {})
     },
     filteredMarkets() {
-      return [...this.markets].filter((m: FormattedMarket) => m.key === this.store.companyFormData.country.key)
+      return [...this.markets].filter((m: IFormattedMarket) => m.key === this.store.companyFormData.country.key)
     },
     filteredIndustries() {
-      return [...this.industries].filter((i: FormattedIndustry) => i.key === this.store.companyFormData.sector.key)
+      return [...this.industries].filter((i: IFormattedIndustry) => i.key === this.store.companyFormData.sector.key)
     },
   },
   methods: {
     getModelValue(m: IAdminField) {
-      return this.store.companyFormData[m.modelValue as keyof FormattedDetailCompany]
+      return this.store.companyFormData[m.modelValue as keyof IFormattedDetailCompany]
     },
     updateModel(field: IAdminField, value: AdminModelValue) {
       const key = field.modelValue
@@ -132,10 +132,10 @@ export default defineComponent({
     },
     async fetchSelectorOptions() {
       const selectorOptions = await axios.get('api/v1/admin/selector_options/').then(r => r.data).catch(e => console.log(e))
-      this.countries = selectorOptions['countries'].map((c: FetchedCountry): FormattedCountry => ({name: c.name, slug: c.name_iso, key: c.id, flagURL: c.flag_url, currency: c.currency}))
-      this.markets = selectorOptions['markets'].map((m: FetchedMarket): FormattedMarket => ({name: m.title, slug: m.slug, key: m.country}))
-      this.sectors = selectorOptions['sectors'].map((s: FetchedSector): FormattedSector => ({name: s.title, slug: s.slug, key: s.id}))
-      this.industries = selectorOptions['industries'].map((i: FetchedIndustry): FormattedIndustry => ({name: i.title, slug: i.slug, key: i.sector}))
+      this.countries = selectorOptions['countries'].map((c: IFetchedCountry): IFormattedCountry => ({name: c.name, slug: c.name_iso, key: c.id, flagURL: c.flag_url, currency: c.currency}))
+      this.markets = selectorOptions['markets'].map((m: IFetchedMarket): IFormattedMarket => ({name: m.title, slug: m.slug, key: m.country}))
+      this.sectors = selectorOptions['sectors'].map((s: IFetchedSector): IFormattedSector => ({name: s.title, slug: s.slug, key: s.id}))
+      this.industries = selectorOptions['industries'].map((i: IFetchedIndustry): IFormattedIndustry => ({name: i.title, slug: i.slug, key: i.sector}))
     },
     async proceedModelSaving() {
       const isFormCorrect = await this.v$.$validate()
@@ -164,7 +164,7 @@ export default defineComponent({
   },
   watch: {
     watchCompanyFormData: {
-      handler(companyFormData: FormattedDetailCompany) {
+      handler(companyFormData: IFormattedDetailCompany) {
         // Check if values in CompanyFormData was modified
         if (this.store.editModeActivated) {
           const previousCompanyFormData: PreviousFormattedDetailCompany = {...this.store.previousCompanyFormData}

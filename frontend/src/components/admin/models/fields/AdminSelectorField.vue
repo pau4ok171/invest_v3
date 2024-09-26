@@ -6,7 +6,7 @@ import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
-import type {FormattedSector, FormattedSelector} from "@/types/admin.types";
+import type {IFormattedSector, IFormattedSelector} from "@/types/admin.types";
 
 export default defineComponent({
   name: "AdminSelectorField",
@@ -23,7 +23,7 @@ export default defineComponent({
       default: false,
     },
     options: {
-      type: Array<FormattedSector>,
+      type: Array<IFormattedSector>,
       required: true,
     },
     label: {
@@ -39,7 +39,7 @@ export default defineComponent({
       default: false,
     },
     modelValue: {
-      type: Object as PropType<FormattedSelector>,
+      type: Object as PropType<IFormattedSelector>,
       default: {name: '', slug: '', key: ''},
       required: true,
     },
@@ -49,7 +49,7 @@ export default defineComponent({
     },
   },
   methods: {
-    updateSelectorOption(option: FormattedSelector) {
+    updateSelectorOption(option: IFormattedSelector) {
       this.$emit('update:modelValue', option)
       this.$emit('touch')
       this.$emit('commitValidator')

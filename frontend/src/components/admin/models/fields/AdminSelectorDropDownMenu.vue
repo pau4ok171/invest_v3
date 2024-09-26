@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
-import type {FormattedSelector} from "@/types/admin.types";
+import type {IFormattedSelector} from "@/types/admin.types";
 
 
 export default defineComponent({
@@ -21,11 +21,11 @@ export default defineComponent({
       default: false,
     },
     modelValue: {
-      type: Object as PropType<FormattedSelector>,
+      type: Object as PropType<IFormattedSelector>,
       required: true,
     },
     options: {
-      type: Array<FormattedSelector>,
+      type: Array<IFormattedSelector>,
       required: true,
     },
   },

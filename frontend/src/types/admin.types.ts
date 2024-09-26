@@ -1,6 +1,6 @@
 import type {ValidationRule} from "@vuelidate/core";
 
-export interface AdminCompany {
+export interface IAdminCompany {
   id: number,
   ticker: string,
   slug: string,
@@ -14,7 +14,7 @@ export interface AdminCompany {
   sector_name: string,
 }
 
-export interface FetchedDetailCompany {
+export interface IFetchedDetailCompany {
   ticker: string,
   slug: string,
   uid: string,
@@ -24,14 +24,14 @@ export interface FetchedDetailCompany {
   description: string,
   short_description: string,
   city: string,
-  country: FetchedCountry,
-  market: FetchedMarket,
-  sector: FetchedSector,
-  industry: FetchedIndustry,
+  country: IFetchedCountry,
+  market: IFetchedMarket,
+  sector: IFetchedSector,
+  industry: IFetchedIndustry,
   created: string,
   updated: string,
-  created_by: FetchedUser,
-  updated_by: FetchedUser,
+  created_by: IFetchedUser,
+  updated_by: IFetchedUser,
   is_visible: boolean,
   logo: string,
   is_fund: boolean,
@@ -39,43 +39,43 @@ export interface FetchedDetailCompany {
   year_founded: string,
 }
 
-export interface FetchedCountry {
+export interface IFetchedCountry {
   id: number,
   name: string,
   name_iso: string,
-  currency: FetchedCurrency,
+  currency: IFetchedCurrency,
   flag_url: string,
 }
 
-export interface FetchedMarket {
+export interface IFetchedMarket {
   title: string,
   slug: string,
   country: number,
 }
 
-export interface FetchedSector {
+export interface IFetchedSector {
   id: number,
   title: string,
   slug: string,
 }
 
-export interface FetchedIndustry {
+export interface IFetchedIndustry {
   title: string,
   slug: string,
   sector: number,
 }
 
-export interface FetchedCurrency {
+export interface IFetchedCurrency {
   name: string,
   symbol: string,
 }
 
-export interface FetchedUser {
+export interface IFetchedUser {
   first_name: string,
   last_name: string,
 }
 
-export interface FormattedDetailCompany {
+export interface IFormattedDetailCompany {
   ticker: string,
   slug: string,
   uid: string,
@@ -85,14 +85,14 @@ export interface FormattedDetailCompany {
   description: string,
   shortDescription: string,
   city: string,
-  country: FormattedCountry,
-  market: FormattedMarket,
-  sector: FormattedSector,
-  industry: FormattedIndustry,
+  country: IFormattedCountry,
+  market: IFormattedMarket,
+  sector: IFormattedSector,
+  industry: IFormattedIndustry,
   created: string,
   updated: string,
-  createdBy: FormattedUser,
-  updatedBy: FormattedUser,
+  createdBy: IFormattedUser,
+  updatedBy: IFormattedUser,
   isVisible: boolean,
   logo: File,
   isFund: boolean,
@@ -102,40 +102,40 @@ export interface FormattedDetailCompany {
 export type toPrevious<T> = {
 	[P in keyof T]: {value: T[P], wasModified: boolean}
 }
-export type PreviousFormattedDetailCompany = toPrevious<FormattedDetailCompany>
+export type PreviousFormattedDetailCompany = toPrevious<IFormattedDetailCompany>
 
-export interface FormattedSelector {
+export interface IFormattedSelector {
   key: number,
   name: string,
   slug: string,
 }
 
-export interface FormattedCountry extends FormattedSelector{
+export interface IFormattedCountry extends IFormattedSelector{
   flagURL: string,
-  currency: FormattedCurrency,
+  currency: IFormattedCurrency,
 }
 
-export interface FormattedMarket extends FormattedSelector{
+export interface IFormattedMarket extends IFormattedSelector{
 
 }
 
-export interface FormattedSector extends FormattedSelector{
+export interface IFormattedSector extends IFormattedSelector{
 }
 
-export interface FormattedIndustry extends FormattedSelector{
+export interface IFormattedIndustry extends IFormattedSelector{
 }
 
-export interface FormattedCurrency {
+export interface IFormattedCurrency {
   name: string,
   symbol: string,
 }
 
-export interface FormattedUser {
+export interface IFormattedUser {
   firstName: string,
   lastName: string,
 }
 
-export interface CompanyDataToRequest {
+export interface ICompanyDataToRequest {
   ticker?: string,
   slug?: string,
   uid?: string,
@@ -172,7 +172,7 @@ export enum AdminComponentName {
   SETTINGS = 'AdminSettings',
 }
 
-export type AdminModelValue = string | number | boolean | File | FormattedSelector
+export type AdminModelValue = string | number | boolean | File | IFormattedSelector
 
 export enum AdminFieldType {
   CHECKBOX='AdminCheckBoxField',
@@ -197,7 +197,7 @@ export interface IAdminFieldDeclared {
   validators?: AdminValidatorType,
   wasModifiedIsNeeded?: boolean,
   hasSearch?: boolean,
-  options?: string | FormattedSelector[],
+  options?: string | IFormattedSelector[],
 }
 
 export interface IDefaultField {
@@ -222,12 +222,12 @@ export interface IAdminUnitedField {
   validators: AdminValidatorType | {},
   wasModifiedIsNeeded: boolean,
   hasSearch: boolean | null,
-  options: string | FormattedSelector[] | null,
+  options: string | IFormattedSelector[] | null,
 }
 
 export interface IAdminField {
   field: AdminFieldType,
-  modelValue: keyof FormattedDetailCompany,
+  modelValue: keyof IFormattedDetailCompany,
   isRequired: boolean,
   isDisabled: boolean | string,
   label: string,
@@ -235,7 +235,7 @@ export interface IAdminField {
   validators: AdminValidatorType | {},
   wasModifiedIsNeeded: boolean,
   hasSearch: boolean | undefined,
-  options: FormattedSelector[] | undefined,
+  options: IFormattedSelector[] | undefined,
 }
 export const isAdminValidatorType = (validators: AdminValidatorType | {}): validators is AdminValidatorType => {
   return !!Object.keys(validators).length
@@ -243,7 +243,6 @@ export const isAdminValidatorType = (validators: AdminValidatorType | {}): valid
 export const isBaseValidators = (validators: AdminValidatorType): validators is AdminBaseValidatorType => {
   return !Object.hasOwn(validators, 'slug')
 }
-
 
 export interface IAdminModelDeclared {
   [p: string]: IAdminFieldDeclared
@@ -253,7 +252,7 @@ export interface IAdminModel {
   [p: string]: IAdminField
 }
 
-export const isKeyOfFormattedDetailCompany = (obj: FormattedDetailCompany,  key: string): key is keyof FormattedDetailCompany => {
+export const isKeyOfFormattedDetailCompany = (obj: IFormattedDetailCompany, key: string): key is keyof IFormattedDetailCompany => {
   return Object.hasOwn(obj, key)
 }
 

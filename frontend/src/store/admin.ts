@@ -1,13 +1,13 @@
 import {defineStore} from "pinia";
 import type {
-  CompanyDataToRequest,
-  FetchedDetailCompany,
-  FormattedCountry,
-  FormattedDetailCompany,
-  FormattedIndustry,
-  FormattedMarket,
-  FormattedSector,
-  FormattedUser,
+  ICompanyDataToRequest,
+  IFetchedDetailCompany,
+  IFormattedCountry,
+  IFormattedDetailCompany,
+  IFormattedIndustry,
+  IFormattedMarket,
+  IFormattedSector,
+  IFormattedUser,
   PreviousFormattedDetailCompany
 } from "@/types/admin.types";
 import {AdminComponentName, isKeyOfFormattedDetailCompany} from "@/types/admin.types";
@@ -44,7 +44,7 @@ export const useAdminStore = defineStore({
     },
     async fetchCompany() {
       const companyUID = this.companyUID
-      const company: FetchedDetailCompany = await axios
+      const company: IFetchedDetailCompany = await axios
         .get(`api/v1/admin/companies/${companyUID}/`)
         .then(response => response.data)
         .catch(error => console.log(error))
@@ -52,11 +52,11 @@ export const useAdminStore = defineStore({
       this.companyFormData = await getFormattedCompanyData(company)
     },
     async saveModelForm() {
-      let company: FetchedDetailCompany
+      let company: IFetchedDetailCompany
       // Set ModelIsSaving
       this.modelIsSaving = true
       // PrepareData
-      const companyData: FormattedDetailCompany = this.companyFormData
+      const companyData: IFormattedDetailCompany = this.companyFormData
       const preparedCompanyData = await getCompanyDataToRequest(companyData, this.previousCompanyFormData)
       // CreateDataObject
       const formData = getFormDataFromRequestData(preparedCompanyData)
@@ -141,13 +141,13 @@ export const useAdminStore = defineStore({
       }
     },
     async resetField(key: '__all__' | string) {
-      let companyFormData: FormattedDetailCompany = {...this.companyFormData}
+      let companyFormData: IFormattedDetailCompany = {...this.companyFormData}
       const previousCompanyFormData: PreviousFormattedDetailCompany = {...this.previousCompanyFormData}
 
       if (key === '__all__') {
         companyFormData = Object.keys(companyFormData).reduce((obj, k) => {
           return {...obj, [k]: previousCompanyFormData[k as keyof PreviousFormattedDetailCompany].value}
-        }, {} as FormattedDetailCompany)
+        }, {} as IFormattedDetailCompany)
         this.companyFormData = companyFormData
         return
       }
@@ -172,7 +172,7 @@ export const useAdminStore = defineStore({
   },
 })
 
-const getEmptyCompanyFormData = (): FormattedDetailCompany => {
+const getEmptyCompanyFormData = (): IFormattedDetailCompany => {
   return {
     ticker: '',
     slug: '',
@@ -183,14 +183,14 @@ const getEmptyCompanyFormData = (): FormattedDetailCompany => {
     description: '',
     shortDescription: '',
     city: '',
-    country: {name: '', slug: '', key: 0} as FormattedCountry,
-    market: {name: '', slug: '', key: 0} as FormattedMarket,
-    sector: {name: '', slug: '', key: 0} as FormattedSector,
-    industry: {name: '', slug: '', key: 0} as FormattedIndustry,
+    country: {name: '', slug: '', key: 0} as IFormattedCountry,
+    market: {name: '', slug: '', key: 0} as IFormattedMarket,
+    sector: {name: '', slug: '', key: 0} as IFormattedSector,
+    industry: {name: '', slug: '', key: 0} as IFormattedIndustry,
     created: '',
     updated: '',
-    createdBy: {firstName: '', lastName: ''} as FormattedUser,
-    updatedBy: {firstName: '', lastName: ''} as FormattedUser,
+    createdBy: {firstName: '', lastName: ''} as IFormattedUser,
+    updatedBy: {firstName: '', lastName: ''} as IFormattedUser,
     isVisible: false,
     logo: {} as File,
     isFund: false,
@@ -199,14 +199,14 @@ const getEmptyCompanyFormData = (): FormattedDetailCompany => {
   }
 }
 
-const getPreviousCompanyFormData = (company: FormattedDetailCompany|undefined = undefined): PreviousFormattedDetailCompany => {
+const getPreviousCompanyFormData = (company: IFormattedDetailCompany|undefined = undefined): PreviousFormattedDetailCompany => {
   return Object.entries(company || getEmptyCompanyFormData()).reduce((obj, [k, v]) => {
     return {...obj, [k]: {value: v, wasModified: false}}
   }, {} as PreviousFormattedDetailCompany)
 }
 
-const getFormDataFromRequestData = (object: CompanyDataToRequest) => Object.keys(object).reduce((formData, key) => {
-  const obj = object[key as keyof CompanyDataToRequest]
+const getFormDataFromRequestData = (object: ICompanyDataToRequest) => Object.keys(object).reduce((formData, key) => {
+  const obj = object[key as keyof ICompanyDataToRequest]
   if (key === 'logo') {
     if (obj != undefined && obj instanceof File) {
       // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
@@ -231,7 +231,7 @@ const getFormDataFromRequestData = (object: CompanyDataToRequest) => Object.keys
   return formData
 }, new FormData())
 
-const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<FormattedDetailCompany> => {
+const getFormattedCompanyData = async (company: IFetchedDetailCompany): Promise<IFormattedDetailCompany> => {
   let file = await fetch(company.logo).then(r => r.blob()).then(blobFile => new File([blobFile], "CompanyLogo", {type: "image/png"}))
   return {
     ticker: company.ticker  || '',
@@ -283,10 +283,10 @@ const getFormattedCompanyData = async (company: FetchedDetailCompany): Promise<F
     isFund: company.is_fund || false,
     website: company.website || '',
     founded: company.year_founded !== null ? String(company.year_founded) : '',
-  } as FormattedDetailCompany
+  } as IFormattedDetailCompany
 }
 
-const getCompanyDataToRequest = async (companyData: FormattedDetailCompany, previousCompanyData: PreviousFormattedDetailCompany): Promise<CompanyDataToRequest> => {
+const getCompanyDataToRequest = async (companyData: IFormattedDetailCompany, previousCompanyData: PreviousFormattedDetailCompany): Promise<ICompanyDataToRequest> => {
   const companyDataToRequest = {
     ticker: previousCompanyData['ticker'].wasModified?companyData.ticker.trim().toUpperCase():null,
     slug: previousCompanyData['slug'].wasModified?companyData.slug.trim():null,
@@ -308,6 +308,6 @@ const getCompanyDataToRequest = async (companyData: FormattedDetailCompany, prev
     year_founded: previousCompanyData['founded'].wasModified?companyData.founded.trim():null,
   }
   return Object.keys(companyDataToRequest)
-      .filter(k => companyDataToRequest[k as keyof CompanyDataToRequest] !== null)
-      .reduce((a, k) => ({...a, [k]: companyDataToRequest[k as keyof CompanyDataToRequest]}), {})
+      .filter(k => companyDataToRequest[k as keyof ICompanyDataToRequest] !== null)
+      .reduce((a, k) => ({...a, [k]: companyDataToRequest[k as keyof ICompanyDataToRequest]}), {})
 }

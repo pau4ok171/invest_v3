@@ -10,7 +10,7 @@ import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue"
 import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue";
 import AdminYearField from "@/components/admin/models/fields/AdminYearField.vue";
 import {FieldStatusEnum} from "@/types/admin.types";
-import type {AdminModelValue, FormattedSector} from "@/types/admin.types";
+import type {AdminModelValue, IFormattedSector} from "@/types/admin.types";
 
 export default defineComponent({
   name: "AdminField",
@@ -64,7 +64,7 @@ export default defineComponent({
       default: false,
     },
     options: {
-      type: Array<FormattedSector>,
+      type: Array<IFormattedSector>,
       default: [],
     },
   },
