@@ -27,7 +27,7 @@ class Company(models.Model):
     market = models.ForeignKey('Market', on_delete=models.PROTECT)
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT)
-    created = models.DateTimeField(null=False, blank=True, editable=False)
+    created = models.DateTimeField(null=False, blank=True)
     updated = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
     logo = models.ImageField(
@@ -59,7 +59,6 @@ class Company(models.Model):
         related_name='company_created_by',
         null=False,
         blank=True,
-        editable=False,
     )
     updated_by = models.ForeignKey(
         User,
