@@ -86,6 +86,7 @@ class CompanySearchSerializer(serializers.ModelSerializer):
     market = MarketSerializer(read_only=True)
     sector = SectorSerializer(read_only=True)
     logo_url = serializers.CharField(source='get_logo', read_only=True)
+    absolute_url = serializers.CharField(source='get_absolute_url', read_only=True)
 
     class Meta:
         model = Company
@@ -96,6 +97,7 @@ class CompanySearchSerializer(serializers.ModelSerializer):
             'country',
             'sector',
             'market',
+            'absolute_url',
         )
 
 

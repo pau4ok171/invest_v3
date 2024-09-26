@@ -7,6 +7,7 @@ import BaseInput from "@/components/UI/base/BaseInput.vue";
 import {defineComponent} from "vue";
 
 export default defineComponent({
+  name: "NavSearch",
   components: {
     BaseInput,
     InputCrossIcon,
@@ -34,8 +35,7 @@ export default defineComponent({
       this.searchResponse = []
     },
     clearInput() {
-      this.inputValue = '' as string
-      (this.$refs.searchField as any).focus()
+      this.inputValue = ''
     }
   },
 })
