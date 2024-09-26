@@ -27,7 +27,7 @@ class CompaniesListAPIView(ListCreateAPIView):
 
     def create(self, request, *args, **kwargs):
         # Prepare Data
-        data = get_data(request)
+        data = get_data(request, create=True)
 
         # Create Serializer
         serializer = CompanySerializer(data=data)
@@ -47,7 +47,7 @@ class CompanyAPIView(RetrieveUpdateDestroyAPIView):
         return Company.objects.get(uid=company_uid) if company_uid else None
 
     def update(self, request, *args, **kwargs):
-        data = get_data(request)
+        data = get_data(request, create=False)
 
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -93,7 +93,7 @@ class SelectorOptionsAPIView(APIView):
         )
 
 
-def get_data(request):
+def get_data(request, create: bool):
     data = {key: val for key, val in request.data.items() if val}
 
     if data.get('country_name_iso'):
@@ -109,10 +109,12 @@ def get_data(request):
     if data.get('year_founded') == '__delete__':
         data['year_founded'] = None
 
-    data['created_by'] = request.user.pk
-    data['updated_by'] = request.user.pk
-    data['created'] = datetime.datetime.utcnow()
-    data['updated'] = datetime.datetime.utcnow()
+    if create:
+        data['created'] = datetime.datetime.utcnow()
+        data['created_by'] = request.user.pk
+    else:
+        data['updated'] = datetime.datetime.utcnow()
+        data['updated_by'] = request.user.pk
 
     return data
 
