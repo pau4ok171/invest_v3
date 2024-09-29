@@ -49,7 +49,8 @@ export interface ListCompany {
 
 export interface SearchCompany {
     uid: string,
-    title: String,
+    title: string,
+    ticker: string,
     logo_url: string,
     country: Country,
     sector: Sector,

@@ -93,6 +93,7 @@ class CompanySearchSerializer(serializers.ModelSerializer):
         fields = (
             'uid',
             'title',
+            'ticker',
             'logo_url',
             'country',
             'sector',
