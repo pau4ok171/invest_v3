@@ -12,6 +12,7 @@ import VueTippy, {directive} from 'vue-tippy';
 import 'tippy.js/dist/tippy.css';
 
 import Vintersection from "@/directives/Vintersection";
+import Vdebounce from "@/directives/Vdebounce";
 
 import { createPinia } from 'pinia';
 
@@ -29,6 +30,7 @@ const pinia = createPinia()
 const hc = Highcharts as any
 
 app.directive('intersection', Vintersection)
+app.directive('debounce', Vdebounce)
 app.directive('tippy', directive)
 
 highchartsMore(hc)
