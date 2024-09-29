@@ -40,10 +40,10 @@ export default defineComponent({
       <img :src="company.logo_url" alt="company_icon" class="nav-search__dropdown-link-icon">
       <div class="nav-search__dropdown-info">
         <div class="nav-search__dropdown-desc">
-          <div class="nav-search__dropdown-title">{{ company.title }}</div>
+          <div class="nav-search__dropdown-title" v-html="company.title"/>
           <div class="nav-search__dropdown-market">
             <img class="nav-search__dropdown-market-img" src="../../../../assets/img/flags/ru.svg" alt="RU">
-            <p class="nav-search__dropdown-market-title">{{ company.market.title }}</p>
+            <p class="nav-search__dropdown-market-title" v-html="`${company.market.title}:${company.ticker}`"/>
           </div>
         </div>
         <div class="nav-search__dropdown-sector">Bank</div>
@@ -56,7 +56,7 @@ export default defineComponent({
 </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .dropdown-menu::-webkit-scrollbar {
   width: 10px;
 }
@@ -129,10 +129,6 @@ export default defineComponent({
   width: 205px;
 }
 .nav-search__dropdown-title {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: left;
-
   width: 100%;
   padding-right: 10px;
   white-space: nowrap;

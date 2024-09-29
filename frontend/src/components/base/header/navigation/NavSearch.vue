@@ -5,6 +5,7 @@ import SearchIcon from "@/components/icons/SearchIcon.vue";
 import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
 import BaseInput from "@/components/UI/base/BaseInput.vue";
 import {defineComponent} from "vue";
+import type {SearchCompany} from "@/types/invest";
 
 export default defineComponent({
   name: "NavSearch",
@@ -17,17 +18,20 @@ export default defineComponent({
   data() {
     return {
       inputValue: '',
-      searchResponse: []
+      searchResponse: [] as SearchCompany[]
     }
   },
   methods: {
-    async updateInput(value: string) {
-      this.inputValue = value
+    async updateInput(event: InputEvent) {
+      const target = event.target as HTMLInputElement
+      this.inputValue = target.value
 
       if (this.inputValue.length) {
         await axios
           .get('/api/v1/invest/search_query/', {params: {query: this.inputValue}})
-          .then(response => this.searchResponse = response.data)
+          .then(response => {
+            this.searchResponse = this.highlightSearchResponse(response.data)
+          })
           .catch(err => {console.log(err)})
         } else this.closeDropDown()
     },
@@ -36,7 +40,15 @@ export default defineComponent({
     },
     clearInput() {
       this.inputValue = ''
-    }
+    },
+    highlightSearchResponse(searchResponse: SearchCompany[]) {
+      const regex = new RegExp(this.inputValue, 'gi')
+      return searchResponse.map(c => {
+        c.title = c.title.replace(regex, `<span class="nav-search__highlight">$&</span>`)
+        c.ticker = c.ticker.replace(regex, `<span class="nav-search__highlight">$&</span>`)
+        return c
+      })
+    },
   },
 })
 </script>
@@ -53,7 +65,8 @@ export default defineComponent({
       placeholder="Поиск по компаниям"
       autocomplete="off"
       :inputValue
-      @updateInput="updateInput"
+      @change="updateInput"
+      v-debounce="300"
     />
     <span class="nav-search__prefix">
       <SearchIcon width="24" height="24" class="nav-search__prefix-icon"/>
@@ -118,7 +131,7 @@ export default defineComponent({
     fill: #2394df;
 }
 .nav-search__postfix {
-    position: absolute;
+  position: absolute;
   right: 12px;
   font-size: 20px;
   color: var(--blue);
@@ -133,5 +146,9 @@ export default defineComponent({
 }
 .nav-search__postfix-icon use {
   pointer-events: none;
+}
+:global(.nav-search__highlight) {
+  background-color: yellow;
+  color: black;
 }
 </style>
