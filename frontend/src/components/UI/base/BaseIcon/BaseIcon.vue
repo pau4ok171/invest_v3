@@ -39,6 +39,7 @@ import TileModeIcon from "@/components/icons/TileModeIcon.vue";
 import TrashIcon from "@/components/icons/TrashIcon.vue";
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import UserIcon from "@/components/icons/UserIcon.vue";
+import {IBaseIcon} from "@/components/UI/base/BaseIcon/baseIcon";
 
 export default defineComponent({
   name: "BaseIcon",
@@ -83,18 +84,30 @@ export default defineComponent({
   },
   props: {
     icon: {
-      type: String as PropType<IconValue>,
+      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
       required: true,
     }
-  }
+  },
+  computed: {
+    classObject() {
+      const classObj = []
+      const size = typeof this.icon == 'string' ? 'default' : this.icon.size
+      classObj.push('base-icon')
+      classObj.push(`base-icon--size-${size}`)
+      return classObj
+    },
+    iconName() {
+      return typeof this.icon == 'string' ? this.icon : this.icon.value
+    },
+  },
 })
 </script>
 
 <template>
-<i class="base-icon"><component class="base-icon__svg" :is="icon"/></i>
+<i :class="classObject"><component class="base-icon__svg" :is="iconName"/></i>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .base-icon {
   font-size: calc(var(--base-icon-size-multiplier) * 1.5em);
   align-items: center;
@@ -112,6 +125,23 @@ export default defineComponent({
   vertical-align: middle;
   width: 1em;
   min-width: 1em;
+}
+.base-icon--size {
+  &-x-large{
+  --base-icon-size-multiplier: 1.5;
+  }
+  &-large {
+    --base-icon-size-multiplier: 1.2;
+  }
+  &-default {
+    --base-icon-size-multiplier: 1;
+  }
+  &-small {
+    --base-icon-size-multiplier: 0.8;
+  }
+  &-x-small {
+    --base-icon-size-multiplier: 0.5;
+  }
 }
 .base-icon__svg {
   fill: currentColor;
