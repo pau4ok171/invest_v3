@@ -1,7 +1,6 @@
 <script lang="ts">
 import type {PropType} from "vue";
 import {defineComponent} from 'vue'
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 import type {ErrorObject} from "@vuelidate/core";
 import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
 import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
@@ -11,17 +10,18 @@ import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue"
 import AdminYearField from "@/components/admin/models/fields/AdminYearField.vue";
 import {FieldStatusEnum} from "@/types/admin.types";
 import type {AdminModelValue, IFormattedSector} from "@/types/admin.types";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminField",
   components: {
+    BaseButton,
     AdminImageField,
     AdminSelectorField,
     AdminCheckBoxField,
     AdminTextField,
     AdminCharField,
     AdminYearField,
-    ResetIcon,
   },
   props: {
     field: {
@@ -93,14 +93,17 @@ export default defineComponent({
 <template>
 <div class="admin-field__fieldset">
   <div class="admin-field__field-wrapper">
-    <button
-      class="admin-field__reset-button"
-      v-show="wasModified"
-      @click="$emit('resetField')"
-      v-tippy="{content: 'Click to reset field changes'}"
-    >
-      <ResetIcon/>
-    </button>
+    <div class="admin-field__reset-button-wrapper">
+      <base-button
+        icon="ResetIcon"
+        size="x-small"
+        density="compact"
+        theme="dark-blue"
+        v-show="wasModified"
+        @click="$emit('resetField')"
+        v-tippy="{content: 'Click to reset field changes'}"
+      />
+    </div>
 
     <component
       :is="field"
@@ -184,28 +187,9 @@ export default defineComponent({
     border-radius: 2.5px;
   }
 }
-.admin-field__reset-button {
+.admin-field__reset-button-wrapper {
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   top: -9px;
   right: -15px;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-
-  & svg {
-    fill: var(--blue);
-    width: 16px;
-    height: 16px;
-    user-select: none;
-  }
 }
 </style>

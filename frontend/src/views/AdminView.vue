@@ -5,21 +5,19 @@ import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
 import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
 import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
 import AdminModel from "@/components/admin/models/AdminModel.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
 import {previousComponentList} from "@/components/admin/models/components";
 import store from "@/store";
 import {RouteNamesEnum} from "@/router/routes.types";
 import {useAdminStore} from "@/store/admin";
 import {AdminComponentName} from "@/types/admin.types";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 const vuexStore = store
 
 export default defineComponent({
   name: "AdminView",
   components: {
-    BackArrowIcon,
-    RoundedDarkBlueButton,
+    BaseButton,
     AdminDashboard,
     AdminModels,
     AdminStaff,
@@ -95,13 +93,15 @@ export default defineComponent({
   </div>
   <div class="admin-content">
     <div class="admin-content__back">
-      <RoundedDarkBlueButton
-          :disabled="!store.previousComponent"
-          v-tippy="{content: 'Click to turn back', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
-          @click="changeComponent(store.previousComponent)"
-      >
-        <BackArrowIcon class="admin-content__back-icon"/>
-      </RoundedDarkBlueButton>
+      <base-button
+        prepend-icon="BackArrowIcon"
+        theme="dark-blue"
+        text=""
+        density="comfortable"
+        :disabled="!store.previousComponent"
+        v-tippy="{content: 'Click to turn back', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
+        @click="changeComponent(store.previousComponent)"
+      />
     </div>
 
     <component @openModel="openModel" :is="store.activeComponent"/>

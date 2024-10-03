@@ -1,16 +1,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import AdminModelsCompanyItem from "@/components/admin/models/AdminModelsCompanyItem.vue";
 import axios from "axios";
 import type {IAdminCompany} from "@/types/admin.types";
-
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminModels",
   components: {
+    BaseButton,
     AdminModelsCompanyItem,
-    RoundedDarkBlueButton
   },
   data() {
     return {
@@ -37,9 +36,13 @@ export default defineComponent({
 <div class="admin-models">
   <div class="admin-models__header">
     <h1>Select Company to change</h1>
-    <RoundedDarkBlueButton @click="$emit('openModel', '')">
-      <span>ADD COMPANY</span>
-    </RoundedDarkBlueButton>
+    <base-button
+      text="add company"
+      theme="dark-blue"
+      rounded="large"
+      size="small"
+      @click="$emit('openModel', '')"
+    />
   </div>
   <div v-if="isFetched" class="admin-models__content-list">
     <table>

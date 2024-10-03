@@ -17,14 +17,10 @@ import type {
   IAdminUnitedField,
   PreviousFormattedDetailCompany,
 } from "@/types/admin.types";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import {useVuelidate} from "@vuelidate/core";
 import getSlug from "speakingurl";
 import _ from "lodash";
 import {companyModel, defaultModelFieldData} from "@/components/admin/models/models";
-// @ts-ignore
-import {AtomSpinner} from "epic-spinners";
 import AdminField from "@/components/admin/models/fields/AdminField.vue";
 import {useAdminStore} from "@/store/admin";
 import {
@@ -32,14 +28,13 @@ import {
   isBaseValidators,
   isKeyOfPreviousFormattedDetailCompany
 } from "@/types/admin.types";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminModelForm",
   components: {
+    BaseButton,
     AdminField,
-    AtomSpinner,
-    RoundedDarkBlueButton,
-    ResetIcon,
   },
   setup: () => {
     const store = useAdminStore()
@@ -195,15 +190,18 @@ export default defineComponent({
 
 <template>
 <div class="admin-model__admin-model-form">
-  <button
-      class="admin-model-form__reset-button"
+  <div class="admin-model-form__reset-button-wrapper">
+    <base-button
+      :icon="{value: 'ResetIcon', size: 'large'}"
+      theme="dark-blue"
+      rounded="x-small"
+      density="comfortable"
       v-show="store.getModelWasModified"
       @click="store.resetField('__all__')"
       v-tippy="{content: 'Click to reset all changes'}"
-  >
-    <ResetIcon/>
-  </button>
-  
+    />
+  </div>
+
   <AdminField
     v-for="m in model"
     :key="m.modelValue"
@@ -224,16 +222,15 @@ export default defineComponent({
     :was-modified="m.wasModifiedIsNeeded?store.previousCompanyFormData[m.modelValue].wasModified:false"
   />
 
-  <RoundedDarkBlueButton :is-full-width="true" :disabled="v$.$invalid || store.modelIsSaving || !store.getModelWasModified" @click="proceedModelSaving">
-    <atom-spinner
-      v-show="store.modelIsSaving"
-      :animation-duration="1250"
-      :size="30"
-      color="#ff1d5e"
-    />
-    <span v-if="!store.modelIsSaving">Save</span>
-    <span v-else>Saving...</span>
-  </RoundedDarkBlueButton>
+  <base-button
+    text="save"
+    theme="dark-blue"
+    rounded="large"
+    block
+    :loading="store.modelIsSaving"
+    :disabled="v$.$invalid || !store.getModelWasModified"
+    @click="proceedModelSaving"
+  />
 </div>
 </template>
 
@@ -244,27 +241,9 @@ export default defineComponent({
   border-radius: 8px;
   padding: 24px 32px;
 }
-.admin-model-form__reset-button {
+.admin-model-form__reset-button-wrapper {
   position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   top: 24px;
   right: 32px;
-  padding: 5px;
-  border: 1px solid transparent;
-  border-radius: 16px;
-  background-color: rgba(53, 110, 233, .1);
-  transition: background-color .4s;
-  cursor: pointer;
-  &:hover {
-    background-color: rgba(53, 110, 233, .2);
-  }
-  & svg {
-    fill: var(--blue);
-    width: 32px;
-    height: 32px;
-    user-select: none;
-  }
 }
 </style>

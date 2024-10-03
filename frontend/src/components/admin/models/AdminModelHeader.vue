@@ -1,29 +1,21 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import EditIcon from "@/components/icons/EditIcon.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import DeleteIcon from "@/components/icons/DeleteIcon.vue";
 import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
 import {mapState} from "vuex";
 import {DateTime} from "luxon";
 import {toast} from "vue3-toastify";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
-import RoundedErrorButton from "@/components/UI/buttons/RoundedErrorButton.vue";
 import {useAdminStore} from "@/store/admin";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",
   components: {
-    RoundedErrorButton,
+    BaseButton,
     BaseModalMenu,
     BaseModalMenuContainer,
-    ResetIcon,
     AdminModelIndicator,
-    DeleteIcon,
-    RoundedDarkBlueButton,
-    EditIcon
   },
   setup:() => ({store: useAdminStore()}),
   methods: {
@@ -124,20 +116,24 @@ export default defineComponent({
     <div class="admin-model-header__action-list">
       <template v-if="!store.editModeActivated">
         <div class="admin-model-header__item">
-          <RoundedDarkBlueButton
+          <base-button
+            theme="dark-blue"
+            prepend-icon="EditIcon"
+            text="edit"
+            rounded="large"
             @click="store.activateEditMode()"
-          >
-            <EditIcon/>
-            <span>Edit</span>
-          </RoundedDarkBlueButton>
+          />
         </div>
         <BaseModalMenuContainer>
           <template #button>
           <div class="admin-model-header__item">
-            <RoundedErrorButton :disabled="store.isNewModel">
-              <DeleteIcon/>
-              <span>Delete</span>
-            </RoundedErrorButton>
+            <base-button
+              theme="error"
+              prepend-icon="DeleteIcon"
+              text="delete"
+              rounded="large"
+              :disabled="store.isNewModel"
+            />
           </div>
           </template>
           <template #menu="menuProps">
@@ -149,8 +145,20 @@ export default defineComponent({
                     Are you sure to definitely delete the current model?
                   </div>
                   <div class="admin-model-modal-menu__actions">
-                    <RoundedErrorButton @click="store.deleteModel()">YES, I want to delete</RoundedErrorButton>
-                    <RoundedDarkBlueButton @click="menuProps.close()">NO</RoundedDarkBlueButton>
+                    <base-button
+                        text="Yes, I want to delete"
+                        theme="error"
+                        size="small"
+                        rounded="large"
+                        @click="store.deleteModel()"
+                    />
+                    <base-button
+                        text="No"
+                        theme="dark-blue"
+                        size="small"
+                        rounded="large"
+                        @click="menuProps.close()"
+                    />
                   </div>
                 </div>
               </template>
@@ -160,12 +168,14 @@ export default defineComponent({
       </template>
       <template v-else>
         <div class="admin-model-header__item">
-          <RoundedDarkBlueButton
+          <base-button
+            prepend-icon="ResetIcon"
+            text="Close Edit Mode Without Saving"
+            theme="dark-blue"
+            rounded="large"
+            size="small"
             @click="store.deactivateEditMode()"
-          >
-            <ResetIcon/>
-            <span>Close Edit Mode Without Saving</span>
-          </RoundedDarkBlueButton>
+          />
         </div>
       </template>
     </div>

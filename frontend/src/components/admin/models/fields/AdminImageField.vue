@@ -2,14 +2,12 @@
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
 import UploadIcon from "@/components/icons/UploadIcon.vue";
-import DeleteIcon from "@/components/icons/DeleteIcon.vue";
-import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminImageField",
   components: {
-    RoundedBlueButton,
-    DeleteIcon,
+    BaseButton,
     UploadIcon
   },
   data() {
@@ -97,13 +95,17 @@ export default defineComponent({
 
     <template v-else>
       <img class="admin-image-field__logo" :src="getURLFromFile()" alt="logo">
-      <RoundedBlueButton
-        class="admin-image-field__remove-button"
-        @click="removeLogo()"
-        :disabled="isDisabled"
-      >
-        <DeleteIcon/>
-      </RoundedBlueButton>
+      <div class="admin-image-field__remove-button-wrapper">
+        <base-button
+          icon="DeleteIcon"
+          variant="flat"
+          theme="blue"
+          rounded="x-small"
+          density="comfortable"
+          @click="removeLogo()"
+          :disabled="isDisabled"
+        />
+      </div>
     </template>
 
   </div>
@@ -221,14 +223,10 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
   height: 160px;
   background-color: white;
 }
-.admin-image-field__remove-button {
+.admin-image-field__remove-button-wrapper {
   position: absolute;
-  outline: none;
+  color: white;
   top: 4px;
   right: 4px;
-  &:focus {
-    box-shadow: 0 0 10px 10px rgba(255, 255, 255, .2);
-    border: 2px solid #fff;
-  }
 }
 </style>
