@@ -298,6 +298,10 @@ export default defineComponent({
   align-items: center;
   display: flex;
   transition: transform, opacity .2s cubic-bezier(.4, 0, .2, 1);
+  pointer-events: none;
+}
+.base-button__icon {
+  pointer-events: none;
 }
 .base-button__prepend {
   grid-area: prepend;
