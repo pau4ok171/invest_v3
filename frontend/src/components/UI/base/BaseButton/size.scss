@@ -1,0 +1,74 @@
+.base-button--size{
+  &-x-small {
+    --base-button-size: 1rem;
+    --base-button-height: 20px;
+    font-size: var(--base-button-size);
+    min-width: 36px;
+    padding: 0 8px;
+  }
+  &-small {
+    --base-button-size: 1.2rem;
+    --base-button-height: 28px;
+    font-size: var(--base-button-size);
+    min-width: 50px;
+    padding: 0 12px;
+  }
+  &-default {
+    --base-button-size: 1.4rem;
+    --base-button-height: 36px;
+    font-size: var(--base-button-size);
+    min-width: 64px;
+    padding: 0 16px;
+  }
+  &-large {
+    --base-button-size: 1.6rem;
+    --base-button-height: 44px;
+    font-size: var(--base-button-size);
+    min-width: 78px;
+    padding: 0 20px;
+  }
+  &-x-large {
+    --base-button-size: 1.8rem;
+    --base-button-height: 52px;
+    font-size: var(--base-button-size);
+    min-width: 92px;
+    padding: 0 24px;
+  }
+}
+.base-button--stacked.base-button--size {
+  &-x-small {
+    --base-button-size: 1rem;
+    --base-button-height: 56px;
+    font-size: var(--base-button-size);
+    min-width: 56px;
+    padding: 0 12px;
+  }
+  &-small {
+    --base-button-size: 1.2rem;
+    --base-button-height: 64px;
+    font-size: var(--base-button-size);
+    min-width: 64px;
+    padding: 0 14px;
+  }
+  &-default {
+    --base-button-size: 1.4rem;
+    --base-button-height: 72px;
+    font-size: var(--base-button-size);
+    min-width: 72px;
+    padding: 0 16px;
+  }
+  &-large {
+    --base-button-size: 1.6rem;
+    --base-button-height: 80px;
+    font-size: var(--base-button-size);
+    min-width: 80px;
+    padding: 0 18px;
+  }
+  &-x-large {
+    --base-button-size: 1.8rem;
+    --base-button-height: 80px;
+    font-size: var(--base-button-size);
+    min-width: 88px;
+    padding: 0 20px;
+  }
+}

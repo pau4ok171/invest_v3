@@ -1,0 +1,47 @@
+.base-button {
+  &--variant-elevated {
+    color: rgba(var(--base-theme-on-surface), var(--base-high-emphasis-opacity));
+    background: rgb(var(--base-theme-surface));
+  }
+  &--variant-flat {
+    color: rgba(var(--base-theme-on-surface), var(--base-high-emphasis-opacity));
+    background: rgb(var(--base-theme-surface));
+  }
+  &--variant-outlined {
+    border: thin solid currentColor;
+    background: transparent;
+    color: inherit;
+  }
+  &--variant-tonal {
+    background: transparent;
+    color: inherit;
+
+    & > .base-button__underlay {
+      background: currentColor;
+      opacity: var(--base-activated-opacity);
+      border-radius: inherit;
+      inset: 0;
+      pointer-events: none;
+    }
+  }
+  &--variant-text {
+    background: transparent;
+    color: inherit;
+
+    & > .base-button__overlay {
+      background: currentColor;
+    }
+  }
+  &--variant-plain {
+    background: transparent;
+    color: inherit;
+    opacity: .62;
+
+    & > .base-button__overlay {
+      display: none;
+    }
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

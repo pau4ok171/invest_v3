@@ -1,0 +1,18 @@
+.base-button.base-button--density-compact {
+    height: calc(var(--base-button-height) + -12px);
+}
+.base-button.base-button--density-comfortable {
+    height: calc(var(--base-button-height) + -8px);
+}
+.base-button.base-button--density-default {
+    height: calc(var(--base-button-height) + 0px);
+}
+.base-button--stacked.base-button--density-default {
+  height: calc(var(--base-button-height) + 0px);
+}
+.base-button--stacked.base-button--density-comfortable {
+  height: calc(var(--base-button-height) + -16px);
+}
+.base-button--stacked.base-button--density-compact {
+  height: calc(var(--base-button-height) + -24px);
+}

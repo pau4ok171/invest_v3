@@ -1,0 +1,17 @@
+.base-button.base-button--rounded{
+  &-0 {
+    border-radius: 0;
+  }
+  &-x-small {
+    border-radius: 2px;
+  }
+  &-default {
+    border-radius: 4px;
+  }
+  &-large {
+    border-radius: 8px;
+  }
+  &-x-large {
+    border-radius: 24px;
+  }
+}
