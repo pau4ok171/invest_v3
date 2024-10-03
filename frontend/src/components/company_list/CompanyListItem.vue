@@ -1,12 +1,10 @@
 <script lang="ts">
-import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
-import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
-import CircledButton from "@/components/UI/buttons/CircledButton.vue";
 import utils from "@/mixins/utils";
 import {mapActions, mapGetters} from "vuex";
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
 import type {ListCompany} from "@/types/invest";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: 'CompanyListItem',
@@ -16,9 +14,7 @@ export default defineComponent({
     }),
   },
   components: {
-    CircledButton,
-    SolidStarIcon,
-    OutlineStarIcon
+    BaseButton,
   },
   props: {
     object: {
@@ -101,13 +97,12 @@ export default defineComponent({
     </RouterLink>
   </td>
   <td>
-    <CircledButton
-        :disabled="!isAuthenticated"
-        @click="toggleToWatchlist(object)"
-    >
-      <SolidStarIcon :style="{fill: '#fff'}" v-if="object.is_watchlisted"/>
-      <OutlineStarIcon v-else/>
-    </CircledButton>
+    <base-button
+      :icon="{value: object.is_watchlisted ? 'SolidStarIcon' : 'OutlineStarIcon', size: 'large'}"
+      variant="text"
+      :disabled="!isAuthenticated"
+      @click="toggleToWatchlist(object)"
+    />
   </td>
 </tr>
 </template>

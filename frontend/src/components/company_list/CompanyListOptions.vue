@@ -1,16 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import TileModeIcon from "@/components/icons/TileModeIcon.vue";
-import CircledButton from "@/components/UI/buttons/CircledButton.vue";
-import TableModeIcon from "@/components/icons/TableModeIcon.vue";
 import {mapGetters} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyListOptions",
   components: {
-    TableModeIcon,
-    CircledButton,
-    TileModeIcon,
+    BaseButton,
   },
   computed: {
     ...mapGetters({
@@ -28,13 +24,16 @@ export default defineComponent({
   </div>
   <div class="company-list__view-modes">
 
-    <CircledButton disabled>
-      <TableModeIcon/>
-    </CircledButton>
+    <base-button
+      :icon="{value: 'TableModeIcon', size: 'large'}"
+      variant="text"
+      disabled
+    />
 
-    <CircledButton>
-      <TileModeIcon/>
-    </CircledButton>
+    <base-button
+      :icon="{value: 'TileModeIcon', size: 'large'}"
+      variant="text"
+    />
 
   </div>
 </section>

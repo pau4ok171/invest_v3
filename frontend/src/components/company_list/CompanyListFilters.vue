@@ -1,7 +1,6 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseButton from "@/components/UI/buttons/BaseButton.vue";
-import FilterIcon from "@/components/icons/FilterIcon.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 import {mapGetters} from "vuex";
 import TheCompanyListBasicFilter from "@/components/company_list/TheCompanyListBasicFilter.vue";
 
@@ -9,7 +8,6 @@ export default defineComponent({
   name: "CompanyListFilters",
   components: {
     TheCompanyListBasicFilter,
-    FilterIcon,
     BaseButton
   },
   computed: {
@@ -40,12 +38,12 @@ export default defineComponent({
 
   </div>
 
-  <div>
-    <BaseButton>
-      <span>Advanced filters</span>
-      <FilterIcon/>
-    </BaseButton>
-  </div>
+  <base-button
+    text="advanced filters"
+    append-icon="FilterIcon"
+    variant="text"
+    rounded="large"
+  />
 
 </section>
 </template>
@@ -57,6 +55,8 @@ export default defineComponent({
   grid-template-rows: 40px;
   justify-content: space-between;
   align-items: center;
+  color: #92969c;
+  margin-top: 16px;
 }
 .company-list__basic-filters {
   display: grid;

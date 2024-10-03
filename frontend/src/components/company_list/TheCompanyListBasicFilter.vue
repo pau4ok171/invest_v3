@@ -2,16 +2,14 @@
 import {defineComponent} from 'vue';
 import type {PropType} from "vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "TheCompanyListBasicFilter",
   components: {
-    RoundedButton,
+    BaseButton,
     CompanyListFilterDropDownMenu,
-    ArrowDownIcon,
     DropDownMenuBox
   },
   props: {
@@ -39,10 +37,11 @@ export default defineComponent({
 <div class="company-list__basic-filter">
   <DropDownMenuBox>
     <template v-slot:button>
-      <RoundedButton>
-        <span>{{ active_filter.title }}</span>
-        <ArrowDownIcon/>
-      </RoundedButton>
+      <base-button
+        :text="active_filter.title"
+        append-icon="ArrowDownIcon"
+        variant="outlined"
+      />
     </template>
     <template v-slot:menu>
       <CompanyListFilterDropDownMenu
