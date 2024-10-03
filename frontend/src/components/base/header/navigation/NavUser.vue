@@ -1,24 +1,20 @@
 <script lang="ts">
-import UserIcon from "@/components/icons/UserIcon.vue";
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 import {mapGetters} from "vuex";
 import {defineComponent} from "vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: 'NavUser',
   components: {
+    BaseButton,
     AuthModalMenu,
     BaseModalMenuContainer,
-    RoundedButton,
     DropDownMenuBox,
     NavUserDropDown,
-    ArrowDownIcon,
-    UserIcon
   },
   computed: {
     ...mapGetters({
@@ -34,10 +30,11 @@ export default defineComponent({
     <template v-if="isAuthenticated">
       <DropDownMenuBox>
         <template v-slot:button>
-          <RoundedButton>
-            <span><UserIcon/></span>
-            <span><ArrowDownIcon/></span>
-          </RoundedButton>
+          <base-button
+            icon="UserIcon"
+            variant="text"
+            rounded="x-small"
+          />
         </template>
         <template v-slot:menu>
           <NavUserDropDown/>
@@ -47,7 +44,11 @@ export default defineComponent({
     <template v-else>
       <BaseModalMenuContainer>
         <template #button>
-          <button class="account-access__button">Вход</button>
+          <base-button
+            text="login"
+            rounded="large"
+            theme="blue"
+          />
         </template>
         <template #menu="menuProps">
           <AuthModalMenu @closeMenu="menuProps.close()"/>
@@ -64,6 +65,7 @@ export default defineComponent({
 }
 .account-access__inner {
   display: flex;
+  color: #92969c;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -71,15 +73,5 @@ export default defineComponent({
   padding-left: 8px;
   user-select: none;
   cursor: pointer;
-}
-.account-access__button {
-  font-size: 1.4rem;
-  background-color: rgb(35, 148, 223);
-  border-radius: 6px;
-  height: 40px;
-  font-weight: 500;
-  line-height: 40px;
-  color: #fff;
-  padding: 0 16px;
 }
 </style>
