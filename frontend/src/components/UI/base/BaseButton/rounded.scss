@@ -15,3 +15,20 @@
     border-radius: 24px;
   }
 }
+.base-button.base-button--icon.base-button--rounded {
+  &-0 {
+    border-radius: 0;
+  }
+  &-x-small {
+    border-radius: 25%;
+  }
+  &-default {
+    border-radius: 50%;
+  }
+  &-large {
+    border-radius: 50%;
+  }
+  &-x-large {
+    border-radius: 50%;
+  }
+}
