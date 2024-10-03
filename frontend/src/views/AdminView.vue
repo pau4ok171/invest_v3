@@ -94,7 +94,7 @@ export default defineComponent({
   <div class="admin-content">
     <div class="admin-content__back">
       <base-button
-        prepend-icon="BackArrowIcon"
+        :prepend-icon="{value: 'BackArrowIcon', size: 'small'}"
         theme="dark-blue"
         text=""
         density="comfortable"
