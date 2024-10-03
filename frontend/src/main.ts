@@ -22,6 +22,7 @@ import StockChart from 'highcharts/modules/stock';
 import highchartsMore from 'highcharts/highcharts-more'
 import loadSolidGauge from 'highcharts/modules/solid-gauge'
 import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
+import Ripple from "@/directives/ripple";
 
 axios.defaults.baseURL = 'http://localhost:8000'
 
@@ -32,6 +33,7 @@ const hc = Highcharts as any
 app.directive('intersection', Vintersection)
 app.directive('debounce', Vdebounce)
 app.directive('tippy', directive)
+app.directive('ripple', Ripple)
 
 highchartsMore(hc)
 loadSolidGauge(hc)
