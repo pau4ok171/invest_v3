@@ -4,7 +4,7 @@ import type {PropType} from 'vue'
 // @ts-ignore
 import {AtomSpinner} from "epic-spinners";
 import BaseIcon from "@/components/UI/base/BaseIcon/BaseIcon.vue";
-import type {IconValue} from "@/components/UI/base/BaseIcon/baseIcon";
+import type {IBaseIcon, IconValue} from "@/components/UI/base/BaseIcon/baseIcon";
 import type {Density, Elevation, Rounded, Size, Variant} from "@/components/UI/base/BaseButton/baseButton";
 import type {Theme} from "@/components/UI/base/BaseTheme/baseTheme";
 
@@ -24,15 +24,15 @@ export default defineComponent({
       default: 'Button'
     },
     icon: {
-      type: String as PropType<IconValue>,
+      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
       default: undefined,
     },
     appendIcon: {
-      type: String as PropType<IconValue>,
+      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
       default: undefined,
     },
     prependIcon: {
-      type: String as PropType<IconValue>,
+      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
       default: undefined,
     },
     stacked: Boolean,
@@ -165,17 +165,28 @@ export default defineComponent({
   user-select: none;
   cursor: pointer;
   overflow: visible;
-  & .base-icon {
-    --base-icon-size-multiplier: .8571428571;
-  }
   &.base-button--icon {
     border-radius: 50%;
     min-width: 0;
     padding: 0;
     height: calc(var(--base-button-height) + 12px);
     width: calc(var(--base-button-height) + 12px);
-    & .base-icon {
-      --base-icon-size-multiplier: 1;
+    & .base-icon--size {
+      &-x-large{
+      --base-icon-size-multiplier: 1.5;
+      }
+      &-large {
+        --base-icon-size-multiplier: 1.2;
+      }
+      &-default {
+        --base-icon-size-multiplier: 1;
+      }
+      &-small {
+        --base-icon-size-multiplier: 0.8;
+      }
+      &-x-small {
+        --base-icon-size-multiplier: 0.5;
+      }
     }
   }
   &.base-button--icon.base-button--density-comfortable {
