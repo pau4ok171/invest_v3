@@ -1,13 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import type {PropType} from "vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import type {Statement} from "@/types/statements";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "TheCompanyDetailRisksTableItem",
-  components: {ArrowDownIcon, RoundedGreyButton},
+  components: {
+    BaseButton,
+  },
   props: {
     statement: {
       type: Object as PropType<Statement>,
@@ -46,10 +47,14 @@ export default defineComponent({
         <span>{{ statement.description }}</span>
       </div>
 
-      <RoundedGreyButton style="width: 15%">
-        <span>{{ statement.area.toLowerCase()  }}</span>
-        <ArrowDownIcon class="detail-risks-table__icon"/>
-      </RoundedGreyButton>
+      <base-button
+        :text="statement.area"
+        append-icon="ArrowDownIcon"
+        variant="text"
+        rounded="large"
+        size="small"
+        theme="dark"
+      />
     </div>
   </td>
 </tr>
@@ -71,11 +76,6 @@ export default defineComponent({
   line-height: 1.5;
   font-weight: 500;
   margin-bottom: 3px;
-}
-.detail-risks-table__icon {
-  width: 16px;
-  height: 16px;
-  transform: rotate(-90deg);
 }
 .detail-risks-table__status mark {
   border-radius: 4px;

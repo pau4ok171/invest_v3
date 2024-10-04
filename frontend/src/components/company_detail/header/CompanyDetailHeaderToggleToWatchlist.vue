@@ -1,15 +1,11 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
-import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
-import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import MiniLoader from "@/components/UI/MiniLoader.vue";
-import PenIcon from "@/components/icons/PenIcon.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderToggleToWatchlist",
-  components: {PenIcon, MiniLoader, RoundedBlueButton, SolidStarIcon, OutlineStarIcon},
+  components: {BaseButton},
   computed: {
     ...mapGetters({
       isAuthenticated: 'authModule/getIsAuthenticated',
@@ -43,22 +39,38 @@ export default defineComponent({
 
 <template>
 <template v-if="company.is_watchlisted">
-  <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-    <MiniLoader v-if="watchlistIsLoading"/>
-    <SolidStarIcon v-else/>
-  </RoundedBlueButton>
+  <base-button
+    icon="SolidStarIcon"
+    theme="blue"
+    rounded="x-small"
+    density="compact"
+    :loading="watchlistIsLoading"
+    :disabled="!isAuthenticated"
+    @click="toggleToWatchlist"
+  />
 
-  <RoundedBlueButton @click="createNewNote">
-    <PenIcon/>
-    <span>Add note</span>
-  </RoundedBlueButton>
+  <base-button
+    prepend-icon="PenIcon"
+    text="Add Note"
+    theme="blue"
+    rounded="large"
+    size="small"
+    lower
+    @click="createNewNote"
+  />
 </template>
 
 <template v-else>
-  <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-    <MiniLoader v-if="watchlistIsLoading"/>
-    <OutlineStarIcon v-else/>
-    <span>Add to watchlist</span>
-  </RoundedBlueButton>
+  <base-button
+    prepend-icon="OutlineStarIcon"
+    text="Add to watchlist"
+    theme="blue"
+    rounded="large"
+    size="small"
+    lower
+    :loading="watchlistIsLoading"
+    :disabled="!isAuthenticated"
+    @click="toggleToWatchlist"
+  />
 </template>
 </template>

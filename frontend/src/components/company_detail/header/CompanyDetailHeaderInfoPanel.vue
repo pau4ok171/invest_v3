@@ -75,7 +75,7 @@ export default defineComponent({
   <CompanyDetailHeaderInfoItem class="detail-header__info-item--nowrap">
     <template v-slot:title><p>Data</p></template>
     <template v-slot:value>
-      <span class="detail-header__info-item-value--small detail-header__info-item-value--on-row">
+      <span class="detail-header__info-item-value--small detail-header__info-item-value--on-row detail-header__info-panel-total-ideas">
         <span>Financials Company</span>
         <template v-if="!!totalIdeas">
           <span> + </span>
@@ -93,5 +93,8 @@ export default defineComponent({
   padding-left: 76px;
   display: grid;
   grid-template: 52px / repeat(4, min-content) 2fr 1fr 1fr;
+}
+.detail-header__info-panel-total-ideas {
+  align-items: flex-end;
 }
 </style>

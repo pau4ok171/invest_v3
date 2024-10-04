@@ -4,14 +4,20 @@ import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import CompanyDetailPortfolioModalMenuPortfolioItem
   from "@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenuPortfolioItem.vue";
-import RoundedHighGreyButton from "@/components/UI/buttons/RoundedHighGreyButton.vue";
 import NewPortfolioInput from "@/components/UI/inputs/NewPortfolioInput.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
 import type {Portfolio} from "@/types/portfolios";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailPortfolioModalMenu",
+  components: {
+    BaseButton,
+    NewPortfolioInput,
+    CompanyDetailPortfolioModalMenuPortfolioItem,
+    BaseModalMenu,
+  },
   data() {
     return {
       inputMode: false,
@@ -74,12 +80,6 @@ export default defineComponent({
       this.setPortfolioIsLoading(false)
     },
   },
-  components: {
-    NewPortfolioInput,
-    RoundedHighGreyButton,
-    CompanyDetailPortfolioModalMenuPortfolioItem,
-    BaseModalMenu,
-  },
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
@@ -109,9 +109,15 @@ export default defineComponent({
         v-model:inputMode="inputMode"
         @createNewPortfolio="createNewPortfolio"
       />
-      <RoundedHighGreyButton @click.stop="changeMode" v-else>
-        <span>New Portfolio</span>
-      </RoundedHighGreyButton>
+
+      <base-button
+        v-else
+        text="new portfolio"
+        theme="grey"
+        color="#000"
+        rounded="large"
+        @click.stop="changeMode"
+      />
     </div>
   </template>
 

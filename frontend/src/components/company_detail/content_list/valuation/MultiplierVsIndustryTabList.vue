@@ -1,15 +1,13 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "MultiplierVsIndustryTabList",
   components: {
-    RoundedBorderedButton,
+    BaseButton,
     DropDownMenuBox,
-    ArrowDownIcon,
   }
 })
 </script>
@@ -20,10 +18,14 @@ export default defineComponent({
   <div class="detail-multiplier__tab">
     <DropDownMenuBox>
       <template v-slot:button>
-        <RoundedBorderedButton>
-          <span>Price to Earnings</span>
-          <ArrowDownIcon/>
-        </RoundedBorderedButton>
+        <base-button
+          text="Price to Earnings"
+          append-icon="ArrowDownIcon"
+          variant="outlined"
+          rounded="x-large"
+          size="small"
+          lower
+        />
       </template>
       <template v-slot:menu>
       </template>

@@ -1,22 +1,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
 import type {Tab} from "@/components/company_detail/content_list/valuation/MultiplierVsPeers.vue";
 import CompanyDetailMultiplierDropDownMenu
   from "@/components/company_detail/content_list/CompanyDetailMultiplierDropDownMenu.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "MultiplierVsPeersTabList",
   components: {
+    BaseButton,
     CompanyDetailMultiplierDropDownMenu,
-    RoundedBorderedButton,
     DropDownMenuBox,
-    ArrowDownIcon,
-    RoundedButton
   },
   props: {
     tabs: {
@@ -38,10 +34,14 @@ export default defineComponent({
 
     <DropDownMenuBox>
       <template v-slot:button>
-        <RoundedBorderedButton>
-          <span>{{ get_mode_name }}</span>
-          <ArrowDownIcon/>
-        </RoundedBorderedButton>
+        <base-button
+          :text="get_mode_name"
+          append-icon="ArrowDownIcon"
+          variant="outlined"
+          rounded="x-large"
+          size="small"
+          lower
+        />
       </template>
       <template v-slot:menu>
         <CompanyDetailMultiplierDropDownMenu @changeMode="(tab: Tab) => $emit('changeMode', tab)" :tabs/>

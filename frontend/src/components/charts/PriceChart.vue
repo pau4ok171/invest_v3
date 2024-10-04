@@ -1,10 +1,10 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {chartOpts} from "@/components/charts/priceChartOpts";
-import BaseInvisibleButton from "@/components/UI/buttons/BaseInvisibleButton.vue";
 import { DateTime } from 'luxon';
 import {mapActions, mapGetters} from "vuex";
 import FetchingData from "@/components/charts/FetchingData.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 interface Tab {
   value: string,
@@ -13,7 +13,7 @@ interface Tab {
 
 export default defineComponent({
   name: "PriceChart",
-  components: {FetchingData, BaseInvisibleButton},
+  components: {BaseButton, FetchingData},
   data() {
     return {
       chartOpts: chartOpts,
@@ -75,7 +75,14 @@ export default defineComponent({
   <FetchingData v-if="!pageIsReady"/>
   <template v-else>
     <div role="tablist" class="detail-price-chart__tablist">
-      <BaseInvisibleButton @click="changeZoom(tab)" :disabled="tab.value === currentPeriod" v-for="tab in tablist" :key="tab.value">{{ tab.value }}</BaseInvisibleButton>
+      <base-button
+        v-for="tab in tablist"
+        :key="tab.value"
+        :text="tab.value"
+        variant="text"
+        :disabled="tab.value === currentPeriod"
+        @click="changeZoom(tab)"
+      />
     </div>
     <div class="detail-price-chart">
       <charts

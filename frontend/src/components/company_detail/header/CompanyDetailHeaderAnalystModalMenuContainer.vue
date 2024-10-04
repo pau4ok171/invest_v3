@@ -1,14 +1,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import TextButton from "@/components/UI/buttons/TextButton.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import CompanyDetailAnalystsModalMenu
   from "@/components/company_detail/content_list/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
 import {mapGetters} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderAnalystsButtonModalMenuContainer",
-  components: {CompanyDetailAnalystsModalMenu, BaseModalMenuContainer, TextButton},
+  components: {
+    BaseButton,
+    CompanyDetailAnalystsModalMenu,
+    BaseModalMenuContainer
+  },
   computed: {
     totalIdeas() {
       return this.company.analyst_ideas.length
@@ -21,16 +25,28 @@ export default defineComponent({
 </script>
 
 <template>
+<div class="detail-analyst__modal-menu-container">
+
  <BaseModalMenuContainer>
   <template #button>
-    <TextButton>{{ totalIdeas }} Analysts</TextButton>
+    <base-button
+      variant="text"
+      :text="`${totalIdeas} Analysts`"
+      density="comfortable"
+      size="small"
+      lower
+    />
   </template>
   <template #menu="menuProps">
     <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
   </template>
 </BaseModalMenuContainer>
+</div>
 </template>
 
 <style scoped>
-
+.detail-analyst__modal-menu-container {
+  margin-bottom: -1px;
+  margin-left: -4px;
+}
 </style>

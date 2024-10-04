@@ -1,6 +1,5 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import CompanyDetailNewsItem from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsItem.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import {mapGetters} from "vuex";
@@ -9,14 +8,19 @@ import DetailNewsItemModalMenu from "@/components/company_detail/content_list/su
 import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
 import CompanyDetailNewsLateralMenu
   from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsLateralMenu.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailRecentNews",
   components: {
+    BaseButton,
     CompanyDetailNewsLateralMenu,
     BaseLateralMenuContainer,
     DetailNewsItemModalMenu,
-    BaseModalMenuContainer, DetailSectionTitle, CompanyDetailNewsItem, RoundedDarkBlueButton},
+    BaseModalMenuContainer,
+    DetailSectionTitle,
+    CompanyDetailNewsItem,
+  },
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
@@ -44,7 +48,12 @@ export default defineComponent({
   <BaseLateralMenuContainer>
     <template #button>
       <div class="detail-recent-news__button">
-        <RoundedDarkBlueButton :isFullWidth="true">See more updates</RoundedDarkBlueButton>
+        <base-button
+          text="See More Updated"
+          theme="dark-blue"
+          rounded="large"
+          block
+        />
       </div>
     </template>
     <template #menu="menuProps">

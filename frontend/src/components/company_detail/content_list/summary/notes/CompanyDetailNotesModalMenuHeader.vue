@@ -1,20 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ExpandIcon from "@/components/icons/ExpandIcon.vue";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
-import NotificationIcon from "@/components/icons/NotificationIcon.vue";
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
-import ReduceIcon from "@/components/icons/ReduceIcon.vue";
 import {mapGetters, mapMutations} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesModalMenuHeader",
   components: {
-    ReduceIcon,
-    ModalMenuCloseIcon,
-    NotificationIcon,
-    RoundedButton,
-    ExpandIcon,
+    BaseButton,
   },
   computed: {
     ...mapGetters({
@@ -35,13 +27,29 @@ export default defineComponent({
 <header class="detail_notes_modal_menu_header">
 
   <div class="detail_notes_modal_menu_header__content-group">
-    <RoundedButton @click="setNotesModalIsLateral(false)" v-if="notesModalIsLateral"><ExpandIcon/></RoundedButton>
-    <RoundedButton @click="setNotesModalIsLateral(true)" v-else><ReduceIcon/></RoundedButton>
+    <base-button
+      :icon="notesModalIsLateral ? {value: 'ExpandIcon', size: 'large'} : {value: 'ReduceIcon', size: 'large'}"
+      rounded="x-small"
+      variant="text"
+      density="comfortable"
+      @click="setNotesModalIsLateral(!notesModalIsLateral)"
+    />
     <p class="detail_notes_modal_menu_header__title">MISC:SBER</p>
   </div>
   <div class="detail_notes_modal_menu_header__content-group">
-    <RoundedButton><NotificationIcon style="width: 20px; height: 20px;"/></RoundedButton>
-    <RoundedButton @click="setNotesModalIsActive(false)"><ModalMenuCloseIcon/></RoundedButton>
+    <base-button
+      icon="NotificationIcon"
+      rounded="x-small"
+      variant="text"
+      density="comfortable"
+    />
+    <base-button
+      :icon="{value: 'ModalMenuCloseIcon', size: 'large'}"
+      rounded="x-small"
+      variant="text"
+      density="comfortable"
+      @click="setNotesModalIsActive(false)"
+    />
   </div>
 
 </header>

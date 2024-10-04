@@ -1,16 +1,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue';
 import type {PropType} from 'vue';
-import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
 import {mapActions, mapMutations} from "vuex";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
 import type {Note} from "@/types/notes";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesNoteItem",
-  components: {RoundedButton, CompanyDetailNotesToolDropDownMenu, DotsIcon},
+  components: {
+    BaseButton,
+    CompanyDetailNotesToolDropDownMenu,
+  },
   props: {
     note: {
       type: Object as PropType<Note>,
@@ -56,7 +58,13 @@ export default defineComponent({
       <time :datetime="note.updated">{{ new Date(note.updated).toLocaleDateString('ru-RU') }}</time>
     </p>
     <div class="detail-notes__note-actions">
-    <RoundedButton @click="dropDownMenuIsActive=!dropDownMenuIsActive"><DotsIcon/></RoundedButton>
+    <base-button
+      icon="DotsIcon"
+      variant="text"
+      density="comfortable"
+      rounded="x-small"
+      @click="dropDownMenuIsActive=!dropDownMenuIsActive"
+    />
     <CompanyDetailNotesToolDropDownMenu
       v-if="dropDownMenuIsActive"
       @closeDropDownMenu="closeDropDownMenu"

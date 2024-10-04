@@ -1,11 +1,12 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "BaseLateralMenu",
-  components: {RoundedGreyButton, ModalMenuCloseIcon}
+  components: {
+    BaseButton,
+  }
 })
 </script>
 
@@ -16,9 +17,15 @@ export default defineComponent({
       <h3 class="base-lateral-menu__title">
         <slot name="title"/>
       </h3>
-      <RoundedGreyButton class="base-lateral-menu__close-button" @click="$emit('closeMenu')">
-        <ModalMenuCloseIcon/>
-      </RoundedGreyButton>
+      <base-button
+        icon="ModalMenuCloseIcon"
+        variant="text"
+        color="#92969c"
+        rounded="x-small"
+        density="comfortable"
+        theme="grey"
+        @click="$emit('closeMenu')"
+      />
     </header>
     <main class="base-lateral-menu__main">
       <slot name="content"/>
@@ -55,11 +62,5 @@ export default defineComponent({
   font-weight: normal;
   color: rgb(255, 255, 255);
   line-height: 1.5;
-}
-.base-lateral-menu__close-button svg {
-  width: 20px;
-  height: 20px;
-  fill: white;
-  opacity: 0.5;
 }
 </style>

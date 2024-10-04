@@ -1,15 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
-import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "HistoricalMultiplierTabList",
   components: {
-    RoundedBorderedButton,
-    RoundedButton, DropDownMenuBox, ArrowDownIcon}
+    BaseButton,
+    DropDownMenuBox,
+  }
 })
 </script>
 
@@ -22,10 +21,14 @@ export default defineComponent({
       <DropDownMenuBox>
 
         <template v-slot:button>
-          <RoundedBorderedButton>
-            <span>Price to Earnings</span>
-            <ArrowDownIcon/>
-          </RoundedBorderedButton>
+          <base-button
+            text="Price to Earnings"
+            append-icon="ArrowDownIcon"
+            variant="outlined"
+            rounded="x-large"
+            size="small"
+            lower
+          />
         </template>
 
         <template v-slot:menu>

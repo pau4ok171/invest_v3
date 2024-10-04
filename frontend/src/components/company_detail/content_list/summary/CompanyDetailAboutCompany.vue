@@ -2,13 +2,18 @@
 import {defineComponent} from 'vue'
 import CompanyDetailAboutCompanyTable from "@/components/company_detail/content_list/summary/CompanyDetailAboutCompanyTable.vue";
 import CompanyDetailSection from "@/components/company_detail/content_list/CompanyDetailSection.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import {mapGetters} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailAboutCompany",
-  components: {DetailSectionTitle, RoundedDarkBlueButton, CompanyDetailSection, CompanyDetailAboutCompanyTable},
+  components: {
+    BaseButton,
+    DetailSectionTitle,
+    CompanyDetailSection,
+    CompanyDetailAboutCompanyTable,
+  },
   computed: {
     ...mapGetters({
       company: 'companyDetail/getCompany',
@@ -37,10 +42,15 @@ export default defineComponent({
       {{ get_description }}
     </div>
 
-  <div v-if="descriptionIsAvailable">
-    <RoundedDarkBlueButton @click="isCutting=!isCutting" v-if="isCutting">Show more</RoundedDarkBlueButton>
-    <RoundedDarkBlueButton @click="isCutting=!isCutting" v-else>Show less</RoundedDarkBlueButton>
-  </div>
+  <base-button
+    v-if="descriptionIsAvailable"
+    :text="isCutting ? 'Show More' : 'Show Less'"
+    theme="dark-blue"
+    rounded="large"
+    lower
+    size="small"
+    @click="isCutting=!isCutting"
+  />
 
 </CompanyDetailSection>
 </template>

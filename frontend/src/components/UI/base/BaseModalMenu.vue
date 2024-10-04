@@ -1,13 +1,11 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "BaseModalMenu",
   components: {
-    RoundedGreyButton,
-    ModalMenuCloseIcon
+    BaseButton,
   },
 })
 </script>
@@ -20,9 +18,16 @@ export default defineComponent({
       <h1 class="base_modal_menu__title">
         <slot name="title"/>
       </h1>
-      <RoundedGreyButton @click="$emit('closeMenu')">
-        <ModalMenuCloseIcon/>
-      </RoundedGreyButton>
+      <base-button
+        icon="ModalMenuCloseIcon"
+        variant="text"
+        color="#92969c"
+        rounded="x-small"
+        density="comfortable"
+        theme="grey"
+       @click="$emit('closeMenu')"
+      />
+
     </header>
 
     <main class="base_modal_menu__main">

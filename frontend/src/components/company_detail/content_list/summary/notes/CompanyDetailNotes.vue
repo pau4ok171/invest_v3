@@ -3,35 +3,29 @@ import {defineComponent} from 'vue'
 import CompanyDetailSection from "@/components/company_detail/content_list/CompanyDetailSection.vue";
 import CompanyDetailContentGroup from "@/components/company_detail/content_list/CompanyDetailContentGroup.vue";
 import BookIcon from "@/components/icons/BookIcon.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
-import PenIcon from "@/components/icons/PenIcon.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
 import CompanyDetailNotesModalMenu from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesModalMenu.vue";
 import {mapGetters, mapMutations} from "vuex";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
-import DotsIcon from "@/components/icons/DotsIcon.vue";
 import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
 import CompanyDetailNotesNoteItem from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesNoteItem.vue";
 import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
 import CompanyDetailNotesLateralMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesLateralMenu.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotes",
   components: {
+    BaseButton,
     CompanyDetailNotesLateralMenu,
     BaseLateralMenuContainer,
     CompanyDetailNotesNoteItem,
     CompanyDetailNotesToolDropDownMenu,
-    DotsIcon,
-    RoundedGreyButton,
     CompanyDetailNotesModalMenu,
     DetailSectionText,
     DetailSectionTitle,
-    PenIcon,
-    RoundedDarkBlueButton,
     BookIcon,
     CompanyDetailContentGroup,
     CompanyDetailSection
@@ -76,7 +70,12 @@ export default defineComponent({
 
       <BaseLateralMenuContainer>
         <template #button>
-          <RoundedDarkBlueButton :isFullWidth="true">See more</RoundedDarkBlueButton>
+          <base-button
+            text="See More"
+            theme="dark-blue"
+            block
+            rounded="large"
+          />
         </template>
         <template #menu="menuProps">
           <CompanyDetailNotesLateralMenu @closeMenu="menuProps.close()"/>
@@ -87,10 +86,17 @@ export default defineComponent({
     <div v-else class="detail-notes__empty">
       <BookIcon class="detail-notes__empty-image"/>
       <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
-      <RoundedDarkBlueButton :disabled="!isAuthenticated" @click="setNotesModalMenuIsOpen(true)">
-        <PenIcon/>
-        <span>Add note</span>
-      </RoundedDarkBlueButton>
+
+      <base-button
+        prepend-icon="PenIcon"
+        text="Add Note"
+        theme="dark-blue"
+        rounded="large"
+        lower
+        :disabled="!isAuthenticated"
+        @click="setNotesModalMenuIsOpen(true)"
+      />
+
     </div>
 
   </CompanyDetailContentGroup>

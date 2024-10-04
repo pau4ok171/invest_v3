@@ -1,19 +1,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
-import RoundedSuccessButton from "@/components/UI/buttons/RoundedSuccessButton.vue";
-import CheckedIcon from "@/components/icons/CheckedIcon.vue";
-import RoundedErrorButton from "@/components/UI/buttons/RoundedErrorButton.vue";
-import TrashIcon from "@/components/icons/TrashIcon.vue";
-import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import PlusIcon from "@/components/icons/PlusIcon.vue";
 import {mapGetters} from "vuex";
-import MiniLoader from "@/components/UI/MiniLoader.vue";
 import type {Portfolio} from "@/types/portfolios";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailPortfolioModalMenuPortfolioItem",
-  components: {MiniLoader, PlusIcon, RoundedBlueButton, TrashIcon, RoundedErrorButton, CheckedIcon, RoundedSuccessButton},
+  components: {
+    BaseButton,
+  },
   props: {
     portfolio: {
       type: Object as PropType<Portfolio>,
@@ -43,23 +39,33 @@ export default defineComponent({
 
   <div class="detail-portfolio-modal-menu-item__actions">
     <template v-if="isCompanyInPortfolio">
-      <RoundedSuccessButton disabled>
-        <CheckedIcon/>
-        <span>Added</span>
-      </RoundedSuccessButton>
+      <base-button
+        prepend-icon="CheckedIcon"
+        text="added"
+        theme="success"
+        rounded="large"
+        disabled
+      />
 
-      <RoundedErrorButton @click="$emit('updatePortfolio', 'exclude', portfolio)">
-        <MiniLoader v-if="portfolioIsLoading"/>
-        <TrashIcon v-else style="width: 20px; height: 20px;"/>
-      </RoundedErrorButton>
+      <base-button
+        icon="TrashIcon"
+        theme="error"
+        rounded="x-small"
+        density="comfortable"
+        :loading="portfolioIsLoading"
+        @click="$emit('updatePortfolio', 'exclude', portfolio)"
+      />
     </template>
 
     <template v-else>
-      <RoundedBlueButton @click="$emit('updatePortfolio', 'include', portfolio)">
-        <MiniLoader v-if="portfolioIsLoading"/>
-        <PlusIcon v-else style="width: 20px; height: 20px;"/>
-        <span>Add</span>
-      </RoundedBlueButton>
+      <base-button
+        prepend-icon="PlusIcon"
+        text="add"
+        theme="blue"
+        rounded="large"
+        :loading="portfolioIsLoading"
+        @click="$emit('updatePortfolio', 'include', portfolio)"
+      />
     </template>
   </div>
 </div>

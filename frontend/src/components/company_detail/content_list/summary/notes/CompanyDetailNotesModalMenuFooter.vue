@@ -1,15 +1,13 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import RoundedButton from "@/components/UI/buttons/RoundedButton.vue";
-import HeaderIcon from "@/components/icons/HeaderIcon.vue";
-import BoldIcon from "@/components/icons/BoldIcon.vue";
-import ListIcon from "@/components/icons/ListIcon.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import {mapMutations} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesModalMenuFooter",
-  components: {RoundedDarkBlueButton, ListIcon, BoldIcon, HeaderIcon, RoundedButton},
+  components: {
+    BaseButton,
+  },
   methods: {
     ...mapMutations({
       setNotesModalIsActive: 'companyDetail/setNotesModalMenuIsOpen'
@@ -29,23 +27,33 @@ export default defineComponent({
 
   <div v-if="editor" class="detail_notes_model_menu_footer__content_group">
 
-    <RoundedButton
-      @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-    >
-      <HeaderIcon/>
-    </RoundedButton>
+    <base-button
+      icon="HeaderIcon"
+      variant="text"
+      rounded="x-small"
+      density="comfortable"
+      @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+      :active="editor.isActive('heading', { level: 1 })"
+    />
 
-    <RoundedButton
-      @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }"
-    >
-      <BoldIcon/>
-    </RoundedButton>
+    <base-button
+      icon="BoldIcon"
+      variant="text"
+      rounded="x-small"
+      density="comfortable"
+      @click="editor.chain().focus().toggleBold().run()"
+      :active="editor.isActive('bold')"
+      :disabled="!editor.can().chain().focus().toggleBold().run()"
+    />
 
-    <RoundedButton
-      @click="editor.chain().focus().toggleBulletList().run()" :class="{ 'is-active': editor.isActive('bulletList') }"
-    >
-      <ListIcon/>
-    </RoundedButton>
+    <base-button
+      icon="ListIcon"
+      variant="text"
+      rounded="x-small"
+      density="comfortable"
+      @click="editor.chain().focus().toggleBulletList().run()"
+      :active="editor.isActive('bulletList')"
+    />
 
   </div>
 
@@ -58,7 +66,12 @@ export default defineComponent({
         <circle :stroke-dasharray="usedVolume"  r="9" cx="50%" cy="50%" class="detail_notes_model_menu_footer__volume_state_used" :class="{'detail_notes_model_menu_footer__volume_state_used--exceeded': limitIsExceeded}"></circle>
       </svg>
     </div>
-    <RoundedDarkBlueButton @click="setNotesModalIsActive(false)"><span>Close</span></RoundedDarkBlueButton>
+    <base-button
+      text="Close"
+      theme="dark-blue"
+      rounded="large"
+      @click="setNotesModalIsActive(false)"
+    />
 
   </div>
 

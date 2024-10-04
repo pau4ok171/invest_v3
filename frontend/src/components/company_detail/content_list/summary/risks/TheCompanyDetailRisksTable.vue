@@ -1,20 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import RoundedBorderedButton from "@/components/UI/buttons/RoundedBorderedButton.vue";
-import RoundedWhiteButton from "@/components/UI/buttons/RoundedWhiteButton.vue";
-import RoundedGreyButton from "@/components/UI/buttons/RoundedGreyButton.vue";
-import RoundedHighGreyButton from "@/components/UI/buttons/RoundedHighGreyButton.vue";
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import TheCompanyDetailRisksTableItem
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksTableItem.vue";
 import {mapGetters} from "vuex";
-import {Statement} from "@/types/statements";
+import type {Statement} from "@/types/statements";
 
 export default defineComponent({
   name: "TheCompanyDetailRisksTable",
   components: {
     TheCompanyDetailRisksTableItem,
-    ArrowDownIcon, RoundedHighGreyButton, RoundedGreyButton, RoundedWhiteButton, RoundedBorderedButton
   },
   computed: {
     ...mapGetters({

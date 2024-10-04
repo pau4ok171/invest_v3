@@ -1,33 +1,21 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
-import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
 import TheCompanyDetailHeaderMoreDropDownMenu
   from "@/components/company_detail/header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
 import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import RoundedBlueButton from "@/components/UI/buttons/RoundedBlueButton.vue";
-import RoundedWhiteButton from "@/components/UI/buttons/RoundedWhiteButton.vue";
-import DotsIcon from "@/components/icons/DotsIcon.vue";
-import MiniLoader from "@/components/UI/MiniLoader.vue";
 import CopyIcon from "@/components/icons/CopyIcon.vue";
-import PenIcon from "@/components/icons/PenIcon.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {toast} from "vue3-toastify";
 import utils from "@/mixins/utils";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailSidebarMain",
   components: {
-    PenIcon,
+    BaseButton,
     CopyIcon,
-    MiniLoader,
-    DotsIcon,
-    RoundedWhiteButton,
-    RoundedBlueButton,
     DropDownMenuBox,
     TheCompanyDetailHeaderMoreDropDownMenu,
-    SolidStarIcon,
-    OutlineStarIcon
   },
   computed: {
     ...mapGetters({
@@ -81,28 +69,49 @@ export default defineComponent({
 
     <section class="detail-sidebar__button-list">
       <template v-if="company.is_watchlisted">
-        <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading"  @click="toggleToWatchlist">
-          <MiniLoader v-if="watchlistIsLoading"/>
-          <SolidStarIcon v-else/>
-        </RoundedBlueButton>
+        <base-button
+          icon="SolidStarIcon"
+          theme="blue"
+          rounded="x-small"
+          density="compact"
+          :loading="watchlistIsLoading"
+          :disabled="!isAuthenticated"
+          @click="toggleToWatchlist"
+        />
 
-        <RoundedBlueButton @click="createNewNote">
-          <PenIcon/>
-          <span>Add note</span>
-        </RoundedBlueButton>
+        <base-button
+          prepend-icon="PenIcon"
+          text="Add Note"
+          theme="blue"
+          rounded="large"
+          size="small"
+          lower
+          @click="createNewNote"
+        />
       </template>
 
       <template v-else>
-        <RoundedBlueButton :disabled="!isAuthenticated || watchlistIsLoading" @click="toggleToWatchlist">
-          <MiniLoader v-if="watchlistIsLoading"/>
-          <OutlineStarIcon v-else/>
-          <span>Add to watchlist</span>
-        </RoundedBlueButton>
+        <base-button
+          prepend-icon="OutlineStarIcon"
+          text="Add to watchlist"
+          theme="blue"
+          rounded="large"
+          size="small"
+          lower
+          :loading="watchlistIsLoading"
+          :disabled="!isAuthenticated"
+          @click="toggleToWatchlist"
+        />
       </template>
 
       <DropDownMenuBox>
         <template #button>
-          <RoundedWhiteButton><DotsIcon/></RoundedWhiteButton>
+          <base-button
+          :icon="{value: 'DotsIcon', size: 'large'}"
+          color="#000"
+          rounded="x-small"
+          density="compact"
+        />
         </template>
         <template #menu>
           <TheCompanyDetailHeaderMoreDropDownMenu/>

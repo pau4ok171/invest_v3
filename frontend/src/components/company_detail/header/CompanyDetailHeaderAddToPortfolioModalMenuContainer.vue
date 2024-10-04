@@ -1,14 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
-import RoundedWhiteButton from "@/components/UI/buttons/RoundedWhiteButton.vue";
 import CompanyDetailPortfolioModalMenu
   from "@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import {mapGetters} from "vuex";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderAddToPortfolioModalMenuContainer",
-  components: {CompanyDetailPortfolioModalMenu, RoundedWhiteButton, BaseModalMenuContainer},
+  components: {BaseButton, CompanyDetailPortfolioModalMenu, BaseModalMenuContainer},
   computed: {
     ...mapGetters({
       isAuthenticated: 'authModule/getIsAuthenticated',
@@ -20,9 +20,14 @@ export default defineComponent({
 <template>
 <BaseModalMenuContainer>
   <template #button>
-    <RoundedWhiteButton :disabled="!isAuthenticated">
-      <span>Add to portfolio</span>
-    </RoundedWhiteButton>
+    <base-button
+      text="Add to portfolio"
+      color="#000"
+      rounded="large"
+      size="small"
+      lower
+      :disabled="!isAuthenticated"
+    />
   </template>
 
   <template #menu="menuProps">

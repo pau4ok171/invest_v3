@@ -1,19 +1,19 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailRiskRewardItem from "@/components/company_detail/content_list/summary/CompanyDetailRiskRewardItem.vue";
-import RoundedDarkBlueButton from "@/components/UI/buttons/RoundedDarkBlueButton.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import TheCompanyDetailRisksModalMenu
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksModalMenu.vue";
 import {mapGetters} from "vuex";
 import type {Statement} from "@/types/statements";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailRiskReward",
   components: {
+    BaseButton,
     TheCompanyDetailRisksModalMenu,
     BaseModalMenuContainer,
-    RoundedDarkBlueButton,
     CompanyDetailRiskRewardItem
   },
   computed: {
@@ -48,9 +48,14 @@ export default defineComponent({
 
   <BaseModalMenuContainer>
     <template #button>
-      <RoundedDarkBlueButton>
-        <span>See All Risk Checks</span>
-      </RoundedDarkBlueButton>
+      <base-button
+        text="See All Risk Checks"
+        theme="dark-blue"
+        lower
+        rounded="large"
+        size="small"
+      />
+
     </template>
     <template #menu="menuProps">
       <TheCompanyDetailRisksModalMenu @closeMenu="menuProps.close()"/>
