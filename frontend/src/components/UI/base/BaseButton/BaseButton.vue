@@ -68,7 +68,18 @@ export default defineComponent({
     theme: {
       type: String as PropType<Theme>,
       default: 'light',
-    }
+    },
+    color: {
+      type: String,
+    },
+    lower: {
+      type: Boolean,
+      default: false,
+    },
+    active: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     classObject() {
@@ -99,7 +110,15 @@ export default defineComponent({
       if (this.loading) {
         classObj.push('base-button--loading')
       }
-
+      if (this.color) {
+        classObj.push('base-button--color')
+      }
+      if (this.lower) {
+        classObj.push('base-button--lower')
+      }
+      if (this.active) {
+        classObj.push('base-button--active')
+      }
       return classObj
     }
   },
