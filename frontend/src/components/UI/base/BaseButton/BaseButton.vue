@@ -24,16 +24,13 @@ export default defineComponent({
       default: 'Button'
     },
     icon: {
-      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
-      default: undefined,
+      type: [String, Object] as PropType<IconValue | IBaseIcon>,
     },
     appendIcon: {
-      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
-      default: undefined,
+      type: [String, Object] as PropType<IconValue | IBaseIcon>,
     },
     prependIcon: {
-      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
-      default: undefined,
+      type: [String, Object] as PropType<IconValue | IBaseIcon>,
     },
     stacked: Boolean,
     density: {
