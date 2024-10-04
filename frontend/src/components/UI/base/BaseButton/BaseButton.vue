@@ -238,6 +238,15 @@ export default defineComponent({
     flex: 1 0 auto;
     min-width: 100%;
   }
+  &.base-button--color {
+    color: v-bind(color);
+  }
+  &.base-button--lower {
+    letter-spacing: normal;
+    text-transform: none;
+    font-weight: normal;
+    text-indent: inherit;
+  }
 }
 @supports selector(:focus-visible) {
   .base-button:focus-visible::after {
