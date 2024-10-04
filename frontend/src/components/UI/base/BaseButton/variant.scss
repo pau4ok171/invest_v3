@@ -1,4 +1,4 @@
-.base-button {
+.base-button.base-button {
   &--variant-elevated {
     color: rgba(var(--base-theme-on-surface), var(--base-high-emphasis-opacity));
     background: rgb(var(--base-theme-surface));
@@ -30,6 +30,9 @@
 
     & > .base-button__overlay {
       background: currentColor;
+    }
+    &:hover > .base-button__overlay {
+      opacity: 0.14;
     }
   }
   &--variant-plain {
