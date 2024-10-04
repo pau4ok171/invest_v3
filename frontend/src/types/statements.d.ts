@@ -1,16 +1,14 @@
 export interface Statement {
-    area: String,
-    company: Number,
+    area: string,
+    company: number,
     description: string,
     id: number,
-    level: String,
+    level: string,
     name: string,
-    question: String,
-    severity: String,
-    status: String,
+    question: string,
+    severity: string,
+    status: string,
     title: string,
-    type: String,
+    type: string,
     outcome: number,
 }
-
-export interface Statements extends Array<Statement> {}
