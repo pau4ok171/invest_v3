@@ -247,6 +247,9 @@ export default defineComponent({
     font-weight: normal;
     text-indent: inherit;
   }
+  &.base-button--active > .base-button__overlay {
+    opacity: calc(var(--base-activated-opacity) * var(--base-theme-overlay-multiplier));
+  }
 }
 @supports selector(:focus-visible) {
   .base-button:focus-visible::after {

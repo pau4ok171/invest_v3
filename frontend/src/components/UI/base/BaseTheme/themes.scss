@@ -1,6 +1,7 @@
 .base-theme--light {
   --base-theme-surface: 255, 255, 255;
   --base-theme-on-surface: 0, 0, 0;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 0, 0, 0;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -13,6 +14,7 @@
 .base-theme--blue {
   --base-theme-surface: 35, 148, 223;
   --base-theme-on-surface: 255, 255, 255;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 255, 255, 255;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -25,6 +27,7 @@
 .base-theme--dark {
   --base-theme-surface: 33,33,33;
   --base-theme-on-surface: 255,255,255;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 255, 255, 255;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -37,6 +40,7 @@
 .base-theme--dark-blue {
   --base-theme-surface: 53,110,233, 0.1;
   --base-theme-on-surface: 35, 148, 223;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 35, 148, 223;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -49,6 +53,7 @@
 .base-theme--error {
   --base-theme-surface: 230, 65, 65;
   --base-theme-on-surface: 255,255,255;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 255,255,255;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -61,6 +66,7 @@
 .base-theme--success {
   --base-theme-surface: 45, 201, 126;
   --base-theme-on-surface: 0,0,0;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 0,0,0;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
@@ -73,6 +79,7 @@
 .base-theme--grey {
   --base-theme-surface: 232, 232, 232;
   --base-theme-on-surface: 255,255,255;
+  --base-theme-overlay-multiplier: 1;
   --base-border-color: 255,255,255;
   --base-border-opacity: .12;
   --base-activated-opacity: .12;
