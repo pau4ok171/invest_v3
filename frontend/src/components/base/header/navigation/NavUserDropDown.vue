@@ -1,14 +1,10 @@
 <script lang="ts">
 import axios from "axios";
-import DropDownMenu from "@/components/UI/DropDownMenu.vue";
 import {mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
 
 export default defineComponent({
   name: 'NavUserDropDown',
-  components: {
-    DropDownMenu,
-  },
   computed: {
     ...mapState({
       userInfo: (state: any) => state.authModule.userInfo,
@@ -33,7 +29,6 @@ export default defineComponent({
 </script>
 
 <template>
-<DropDownMenu>
 <div class="account-access__dropdown">
   <nav class="account-access__navigation">
     <div class="account-access-navigation__inner">
@@ -48,7 +43,6 @@ export default defineComponent({
     </div>
   </nav>
 </div>
-</DropDownMenu>
 </template>
 
 <style scoped>

@@ -1,18 +1,18 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
-import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import type {Tab} from "@/components/company_detail/content_list/valuation/MultiplierVsPeers.vue";
 import CompanyDetailMultiplierDropDownMenu
   from "@/components/company_detail/content_list/CompanyDetailMultiplierDropDownMenu.vue";
 import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "MultiplierVsPeersTabList",
   components: {
+    BaseMenu,
     BaseButton,
     CompanyDetailMultiplierDropDownMenu,
-    DropDownMenuBox,
   },
   props: {
     tabs: {
@@ -32,8 +32,8 @@ export default defineComponent({
 <div class="detail-multiplier__tab-list">
   <div class="detail-multiplier__tab">
 
-    <DropDownMenuBox>
-      <template v-slot:button>
+    <base-menu>
+      <template v-slot:activator>
         <base-button
           :text="get_mode_name"
           append-icon="ArrowDownIcon"
@@ -43,10 +43,10 @@ export default defineComponent({
           lower
         />
       </template>
-      <template v-slot:menu>
+      <template v-slot:list>
         <CompanyDetailMultiplierDropDownMenu @changeMode="(tab: Tab) => $emit('changeMode', tab)" :tabs/>
       </template>
-    </DropDownMenuBox>
+    </base-menu>
 
   </div>
 </div>

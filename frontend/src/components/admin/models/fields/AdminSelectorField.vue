@@ -3,17 +3,15 @@ import {defineComponent} from 'vue';
 import type {PropType} from 'vue';
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
-import CompanyListFilterDropDownMenu from "@/components/company_list/CompanyListFilterDropDownMenu.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {IFormattedSector, IFormattedSelector} from "@/types/admin.types";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "AdminSelectorField",
   components: {
+    BaseMenu,
     AdminSelectorDropDownMenu,
-    CompanyListFilterDropDownMenu,
-    DropDownMenuBox,
     ArrowDownIcon,
     CheckedIcon
   },
@@ -64,29 +62,30 @@ export default defineComponent({
 </script>
 
 <template>
-<DropDownMenuBox>
-  <template v-slot:button>
-    <button
-      class="admin-selector-field"
-      :class="{'admin-selector-field--valid': fieldStatus === 'valid', 'admin-selector-field--invalid': fieldStatus === 'invalid'}"
-      :disabled="isDisabled || areOptionsEmpty"
-    >
-      <span>{{ modelValue.name }}</span>
-      <ArrowDownIcon/>
-    </button>
-   <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !modelValue.slug}]">
-     {{ label }}{{ isRequired?'*':'' }}
-   </label>
-  </template>
-  <template v-slot:menu>
-    <AdminSelectorDropDownMenu
-      :model-value="modelValue"
-      @update:model-value="updateSelectorOption"
-      :options
-      :hasSearch
-    />
-  </template>
-</DropDownMenuBox>
+  <base-menu>
+    <template #activator>
+      <button
+        class="admin-selector-field"
+        :class="{'admin-selector-field--valid': fieldStatus === 'valid', 'admin-selector-field--invalid': fieldStatus === 'invalid'}"
+        :disabled="isDisabled || areOptionsEmpty"
+      >
+        <span>{{ modelValue.name }}</span>
+        <ArrowDownIcon/>
+      </button>
+
+      <label :class="['admin-selector-field__label', {'admin-selector-field__label--active': !modelValue.slug}]">
+        {{ label }}{{ isRequired?'*':'' }}
+      </label>
+    </template>
+    <template #list>
+      <AdminSelectorDropDownMenu
+        :model-value="modelValue"
+        @update:model-value="updateSelectorOption"
+        :options
+        :hasSearch
+      />
+    </template>
+  </base-menu>
 </template>
 
 <style scoped lang="scss">

@@ -1,19 +1,19 @@
 <script lang="ts">
-import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 import {mapGetters} from "vuex";
 import {defineComponent} from "vue";
 import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: 'NavUser',
   components: {
+    BaseMenu,
     BaseButton,
     AuthModalMenu,
     BaseModalMenuContainer,
-    DropDownMenuBox,
     NavUserDropDown,
   },
   computed: {
@@ -28,18 +28,18 @@ export default defineComponent({
 <div class="navigation__account-access">
   <div class="account-access__inner">
     <template v-if="isAuthenticated">
-      <DropDownMenuBox>
-        <template v-slot:button>
+      <base-menu>
+        <template #activator>
           <base-button
             icon="UserIcon"
             variant="text"
             rounded="x-small"
           />
         </template>
-        <template v-slot:menu>
+        <template #list>
           <NavUserDropDown/>
         </template>
-      </DropDownMenuBox>
+      </base-menu>
     </template>
     <template v-else>
       <BaseModalMenuContainer>

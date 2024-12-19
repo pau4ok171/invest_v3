@@ -2,19 +2,19 @@
 import {defineComponent} from 'vue'
 import TheCompanyDetailHeaderMoreDropDownMenu
   from "@/components/company_detail/header/TheCompanyDetailHeaderMoreDropDownMenu.vue";
-import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import CopyIcon from "@/components/icons/CopyIcon.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {toast} from "vue3-toastify";
 import utils from "@/mixins/utils";
 import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailSidebarMain",
   components: {
+    BaseMenu,
     BaseButton,
     CopyIcon,
-    DropDownMenuBox,
     TheCompanyDetailHeaderMoreDropDownMenu,
   },
   computed: {
@@ -104,19 +104,19 @@ export default defineComponent({
         />
       </template>
 
-      <DropDownMenuBox>
-        <template #button>
+      <base-menu>
+        <template #activator>
           <base-button
-          :icon="{value: 'DotsIcon', size: 'large'}"
-          color="#000"
-          rounded="x-small"
-          density="compact"
-        />
+            :icon="{value: 'DotsIcon', size: 'large'}"
+            color="#000"
+            rounded="x-small"
+            density="compact"
+          />
         </template>
-        <template #menu>
+        <template #list>
           <TheCompanyDetailHeaderMoreDropDownMenu/>
         </template>
-      </DropDownMenuBox>
+      </base-menu>
     </section>
 </main>
 </template>

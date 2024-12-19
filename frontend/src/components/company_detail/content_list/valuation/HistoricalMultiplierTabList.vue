@@ -1,13 +1,13 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import DropDownMenuBox from "@/components/UI/DropDownMenuBox.vue";
 import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "HistoricalMultiplierTabList",
   components: {
+    BaseMenu,
     BaseButton,
-    DropDownMenuBox,
   }
 })
 </script>
@@ -17,10 +17,8 @@ export default defineComponent({
 
   <div class="detail-historical-multiplier-chart__tab-list">
     <div class="detail-historical-multiplier-chart__tab">
-
-      <DropDownMenuBox>
-
-        <template v-slot:button>
+      <base-menu>
+        <template v-slot:activator>
           <base-button
             text="Price to Earnings"
             append-icon="ArrowDownIcon"
@@ -31,11 +29,9 @@ export default defineComponent({
           />
         </template>
 
-        <template v-slot:menu>
+        <template v-slot:list>
         </template>
-
-      </DropDownMenuBox>
-
+      </base-menu>
     </div>
   </div>
 

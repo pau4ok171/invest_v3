@@ -1,13 +1,15 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
-import {mapGetters} from "vuex";
-import TheCompanyListBasicFilter from "@/components/company_list/TheCompanyListBasicFilter.vue";
+import {mapActions, mapGetters} from "vuex";
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
+import BaseList from "@/components/UI/base/BaseList/BaseList.vue";
 
 export default defineComponent({
   name: "CompanyListFilters",
   components: {
-    TheCompanyListBasicFilter,
+    BaseList,
+    BaseMenu,
     BaseButton
   },
   computed: {
@@ -15,6 +17,15 @@ export default defineComponent({
       active_filters: "companyList/getActiveFilters",
       filters: "companyList/getFilters",
     }),
+  },
+  methods: {
+    ...mapActions({
+      changeFilter: "companyList/changeFilter"
+    }),
+    setActiveFilter(activeItem: any, filterName: string) {
+      const activeFilter = {slug: activeItem.id, title: activeItem.title}
+      this.changeFilter({filter_name: filterName, object:  activeFilter})
+    }
   },
 })
 </script>
@@ -24,17 +35,41 @@ export default defineComponent({
 
   <div class="company-list__basic-filters">
 
-    <TheCompanyListBasicFilter
-        filter_name="country"
-        :active_filter="active_filters.country"
-        :filter="filters.country"
-    />
+    <base-menu>
+      <template #activator>
+        <base-button
+          :text="active_filters.country.title"
+          append-icon="ArrowDownIcon"
+          variant="outlined"
+        />
+      </template>
+      <template #list>
+        <base-list
+          :active-item="{id: active_filters.country.slug, title: active_filters.country.title}"
+          :items="filters.country.map((i: any) => ({id: i.slug, title: i.title}))"
+          :has-search=true
+          @setActiveItem="(activeItem: any) => setActiveFilter(activeItem, 'country')"
+        />
+      </template>
+    </base-menu>
 
-    <TheCompanyListBasicFilter
-        filter_name="sector"
-        :active_filter="active_filters.sector"
-        :filter="filters.sector"
-    />
+    <base-menu>
+      <template #activator>
+        <base-button
+          :text="active_filters.sector.title"
+          append-icon="ArrowDownIcon"
+          variant="outlined"
+        />
+      </template>
+      <template #list>
+        <base-list
+          :active-item="{id: active_filters.sector.slug, title: active_filters.sector.title}"
+          :items="filters.sector.map((i: any) => ({id: i.slug, title: i.title}))"
+          :has-search=true
+          @setActiveItem="(activeItem: any) => setActiveFilter(activeItem, 'sector')"
+        />
+      </template>
+    </base-menu>
 
   </div>
 
