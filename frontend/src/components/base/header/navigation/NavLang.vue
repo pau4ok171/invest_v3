@@ -1,11 +1,25 @@
+<script setup lang="ts">
+import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
+import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseList from "@/components/UI/base/BaseList/BaseList.vue";
+</script>
+
 <template>
 <div class="navigation__nav-lang">
-
-  <button class="nav-lang__nav-button">
-    <span class="nav-button__flag"><img src="../../../../assets/img/flags/ru.svg" alt="RU"></span>
-    <span class="nav-button__lang-code">RU</span>
-  </button>
-
+  <base-menu>
+    <template #activator>
+      <base-button
+        text="RU"
+        variant="text"
+      />
+    </template>
+    <template #list>
+      <base-list
+        :items="[{id: 'ru', title: 'Russian'}, {id: 'fr', title: 'French'}, {id: 'de', title: 'German'}]"
+        :active-item="{id: 'ru', title: 'Russian'}"
+      />
+    </template>
+  </base-menu>
 </div>
 </template>
 
@@ -15,22 +29,5 @@
   display: flex;
   align-items: center;
   padding: 0 16px;
-}
-.nav-lang__nav-button {
-  display: flex;
-  padding: 0 16px;
-  line-height: 1.5;
-}
-.nav-button__flag {
-  display: inline-block;
-  font-size: 1.4rem;
-}
-.nav-button__flag img {
-  height: 12px;
-}
-.nav-button__lang-code {
-  padding-left: 8px;
-  color: #fff;
-  font-size: 1.4rem;
 }
 </style>
