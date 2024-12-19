@@ -69,7 +69,7 @@ export default defineComponent({
       </div>
     </template>
 
-    <ul class="base-list__items">
+    <ul v-if="filteredItems.length" class="base-list__items">
       <li
         class="base-list__item"
         :key=item.id
@@ -91,6 +91,7 @@ export default defineComponent({
         </button>
       </li>
     </ul>
+    <div v-else class="base-list__no-items">NOTHING HERE...</div>
   </div>
 </div>
 </template>
@@ -143,6 +144,12 @@ export default defineComponent({
   overflow-y: auto;
   max-height: 250px;
   margin-right: 8px;
+}
+.base-list__no-items {
+  font-size: 1.2rem;
+  font-weight: 400;
+  text-align: center;
+  padding: 8px 0 8px 0;
 }
 .base-list__item {
   list-style: none;
