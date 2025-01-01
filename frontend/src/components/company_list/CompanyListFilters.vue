@@ -9,6 +9,7 @@ import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vu
 export default defineComponent({
   name: "CompanyListFilters",
   components: {
+    BaseDialog,
     BaseList,
     BaseMenu,
     BaseButton
@@ -74,12 +75,22 @@ export default defineComponent({
 
   </div>
 
-  <base-button
-    text="advanced filters"
-    append-icon="FilterIcon"
-    variant="text"
-    rounded="large"
-  />
+  <base-dialog
+    max-width="500"
+    title="Advanced filters"
+  >
+    <template #activator>
+      <base-button
+        text="advanced filters"
+        append-icon="FilterIcon"
+        variant="text"
+        rounded="large"
+      />
+    </template>
+    <template #dialog>
+      <div class="company-list__advanced-filter-text">TO BE ADDED</div>
+    </template>
+  </base-dialog>
 
 </section>
 </template>
@@ -98,5 +109,10 @@ export default defineComponent({
   display: grid;
   column-gap: 8px;
   grid-template-columns: auto auto;
+}
+.company-list__advanced-filter-text {
+  font-size: 1.6rem;
+  letter-spacing: 0.03125rem;
+  line-height: inherit;
 }
 </style>
