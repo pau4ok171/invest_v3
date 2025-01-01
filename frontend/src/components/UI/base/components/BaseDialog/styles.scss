@@ -1,7 +1,7 @@
 @use '../BaseTheme/themes';
 
 .base-dialog {
-  max-width: 400px;
+  max-width: var(--base-dialog-max-width, 400px);
   max-height: 530px;
   min-width: 300px;
   min-height: 200px;
@@ -34,6 +34,8 @@
   padding: 16px 24px;
   line-height: inherit;
   font-size: inherit;
+  overflow-y: auto;
+  box-shadow: 0 5px 10px 2px rgba(0, 0, 0, 0.2) inset;
 }
 .base-dialog__main::-webkit-scrollbar {
   width: 10px;

@@ -10,6 +10,7 @@ export default defineComponent({
   data() {
     return {
       contentEl: {} as HTMLElement,
+      scrollablePosY: 0,
     }
   },
   props: {
@@ -161,10 +162,17 @@ export default defineComponent({
     isActive() {
       if (this.isActive) {
         if (!this.scrollable) {
+          this.scrollablePosY = window.scrollY
+          document.body.style.top = `-${this.scrollablePosY}px`
           document.body.classList.add('base-overlay--scroll-blocked')
         }
       } else {
         document.body.classList.remove('base-overlay--scroll-blocked')
+        if (!this.scrollable) {
+          document.body.style.removeProperty('top')
+          window.scrollTo(0, this.scrollablePosY)
+          this.scrollablePosY = 0
+        }
       }
     }
   },

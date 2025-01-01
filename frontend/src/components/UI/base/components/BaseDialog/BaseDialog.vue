@@ -1,7 +1,7 @@
 <script lang="ts">
+import type {PropType} from 'vue';
 import {defineComponent} from 'vue';
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import type {PropType} from 'vue';
 import type {Theme} from "@/components/UI/base/components/BaseTheme/baseTheme";
 import type {FooterType, HeaderType} from "@/components/UI/base/components/BaseDialog/baseDialog";
 import BaseOverlay from "@/components/UI/base/components/BaseOverlay/BaseOverlay.vue";
@@ -62,6 +62,13 @@ export default defineComponent({
       }
       return classObj
     },
+    dialogStyleObject() {
+      const styleObj: Record<string, string> = {}
+      if (this.maxWidth) {
+        styleObj['--base-dialog-max-width'] = this.maxWidth.endsWith('px') ? this.maxWidth : `${this.maxWidth}px`
+      }
+      return styleObj
+    },
   },
   methods: {
     processButtonClick(buttonName: string, close: boolean = true) {
@@ -87,7 +94,7 @@ export default defineComponent({
     :theme="theme"
   >
     <template #content>
-      <div :class="dialogClassObject">
+      <div :style="dialogStyleObject" :class="dialogClassObject">
         <header v-if="headerType !== 'withoutHeader'" class="base-dialog__header">
           <h1 class="base-dialog__title">{{ title }}</h1>
           <base-button
@@ -108,8 +115,8 @@ export default defineComponent({
           <base-button v-if="footerType === 'withOk'" @click.stop="processButtonClick('ok')" text="Ok" variant="text"/>
           <base-button v-if="footerType === 'withClose'" @click.stop="processButtonClick('close')" text="Close" variant="text"/>
           <template v-if="footerType === 'withYesNo'">
-            <base-button @click.stop="processButtonClick('yes')" text="Yes" variant="text"/>
-            <base-button @click.stop="processButtonClick('no')" variant="text"/>
+            <base-button @click.stop="processButtonClick('yes')" theme="success" text="Yes" variant="flat"/>
+            <base-button @click.stop="processButtonClick('no')" theme="error" text="No" variant="flat"/>
           </template>
           <template v-if="footerType === 'withYesNoCancel'">
             <base-button @click.stop="processButtonClick('yes')" text="Yes" variant="text"/>
