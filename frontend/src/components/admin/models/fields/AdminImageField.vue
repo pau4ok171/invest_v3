@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
 import UploadIcon from "@/components/icons/UploadIcon.vue";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminImageField",

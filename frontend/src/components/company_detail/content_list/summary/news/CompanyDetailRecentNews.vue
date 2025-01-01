@@ -8,7 +8,7 @@ import DetailNewsItemModalMenu from "@/components/company_detail/content_list/su
 import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
 import CompanyDetailNewsLateralMenu
   from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsLateralMenu.vue";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailRecentNews",

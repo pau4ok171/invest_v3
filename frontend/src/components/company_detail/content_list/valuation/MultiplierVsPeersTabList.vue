@@ -4,8 +4,8 @@ import type {PropType} from 'vue'
 import type {Tab} from "@/components/company_detail/content_list/valuation/MultiplierVsPeers.vue";
 import CompanyDetailMultiplierDropDownMenu
   from "@/components/company_detail/content_list/CompanyDetailMultiplierDropDownMenu.vue";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
-import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "MultiplierVsPeersTabList",

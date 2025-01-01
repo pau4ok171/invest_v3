@@ -6,7 +6,7 @@ import TheCompanyDetailRisksModalMenu
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksModalMenu.vue";
 import {mapGetters} from "vuex";
 import type {Statement} from "@/types/statements";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailRiskReward",

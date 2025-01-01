@@ -4,7 +4,7 @@ import {chartOpts} from "@/components/charts/priceChartOpts";
 import { DateTime } from 'luxon';
 import {mapActions, mapGetters} from "vuex";
 import FetchingData from "@/components/charts/FetchingData.vue";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 interface Tab {
   value: string,

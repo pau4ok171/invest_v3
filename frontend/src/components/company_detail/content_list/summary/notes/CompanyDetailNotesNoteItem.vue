@@ -5,7 +5,7 @@ import CompanyDetailNotesToolDropDownMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
 import {mapActions, mapMutations} from "vuex";
 import type {Note} from "@/types/notes";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesNoteItem",

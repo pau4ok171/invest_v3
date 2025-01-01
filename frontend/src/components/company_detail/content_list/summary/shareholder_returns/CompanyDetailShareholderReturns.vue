@@ -7,7 +7,7 @@ import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import CompanyDetailShareholderReturnsModalMenu
   from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsModalMenu.vue";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailShareholderReturns",

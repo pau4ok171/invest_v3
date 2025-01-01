@@ -3,7 +3,7 @@ import {defineComponent} from 'vue'
 import AdminModelsCompanyItem from "@/components/admin/models/AdminModelsCompanyItem.vue";
 import axios from "axios";
 import type {IAdminCompany} from "@/types/admin.types";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminModels",

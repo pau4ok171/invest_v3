@@ -3,10 +3,10 @@ import {defineComponent} from 'vue'
 import type {PropType} from 'vue'
 // @ts-ignore
 import {AtomSpinner} from "epic-spinners";
-import BaseIcon from "@/components/UI/base/BaseIcon/BaseIcon.vue";
-import type {IBaseIcon, IconValue} from "@/components/UI/base/BaseIcon/baseIcon";
-import type {Density, Elevation, Rounded, Size, Variant} from "@/components/UI/base/BaseButton/baseButton";
-import type {Theme} from "@/components/UI/base/BaseTheme/baseTheme";
+import BaseIcon from "@/components/UI/base/components/BaseIcon/BaseIcon.vue";
+import type {IBaseIcon, IconValue} from "@/components/UI/base/components/BaseIcon/baseIcon";
+import type {Density, Elevation, Rounded, Size, Variant} from "@/components/UI/base/components/BaseButton/baseButton";
+import type {Theme} from "@/components/UI/base/components/BaseTheme/baseTheme";
 
 export default defineComponent({
   name: "BaseButton",
@@ -143,12 +143,12 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@use  '@/components/UI/base/BaseTheme/themes';
-@use '@/components/UI/base/BaseButton/size';
-@use '@/components/UI/base/BaseButton/density';
-@use '@/components/UI/base/BaseButton/variant';
-@use '@/components/UI/base/BaseButton/rounded';
-@use '@/components/UI/base/BaseButton/elevation';
+@use '../BaseTheme/themes';
+@use 'size';
+@use 'density';
+@use 'variant';
+@use 'rounded';
+@use 'elevation';
 /* BASE BUTTON */
 .base-button {
   /* Position */

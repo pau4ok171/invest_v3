@@ -4,7 +4,7 @@ import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuCont
 import CompanyDetailAnalystsModalMenu
   from "@/components/company_detail/content_list/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
 import {mapGetters} from "vuex";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderAnalystsButtonModalMenuContainer",

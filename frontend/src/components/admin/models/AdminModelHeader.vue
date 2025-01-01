@@ -7,7 +7,7 @@ import {toast} from "vue3-toastify";
 import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {useAdminStore} from "@/store/admin";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",

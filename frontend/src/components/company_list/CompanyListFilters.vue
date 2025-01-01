@@ -1,9 +1,10 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 import {mapActions, mapGetters} from "vuex";
-import BaseMenu from "@/components/UI/base/BaseMenu/BaseMenu.vue";
-import BaseList from "@/components/UI/base/BaseList/BaseList.vue";
+import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
+import BaseList from "@/components/UI/base/components/BaseList/BaseList.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "CompanyListFilters",

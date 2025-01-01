@@ -4,7 +4,7 @@ import type {PropType} from 'vue'
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
 import BoldIcon from "@/components/icons/BoldIcon.vue";
-import type {IconValue} from "@/components/UI/base/BaseIcon/baseIcon";
+import type {IconValue} from "@/components/UI/base/components/BaseIcon/baseIcon";
 import CheckIcon from "@/components/icons/CheckIcon.vue";
 import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import CheckmarkCircleIcon from "@/components/icons/CheckmarkCircleIcon.vue";
@@ -39,7 +39,7 @@ import TileModeIcon from "@/components/icons/TileModeIcon.vue";
 import TrashIcon from "@/components/icons/TrashIcon.vue";
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import UserIcon from "@/components/icons/UserIcon.vue";
-import {IBaseIcon} from "@/components/UI/base/BaseIcon/baseIcon";
+import {IBaseIcon} from "@/components/UI/base/components/BaseIcon/baseIcon";
 
 export default defineComponent({
   name: "BaseIcon",

@@ -2,7 +2,7 @@
 import {defineComponent} from 'vue';
 import type {PropType} from 'vue';
 import BaseInput from "@/components/UI/base/BaseInput.vue";
-import BaseIcon from "@/components/UI/base/BaseIcon/BaseIcon.vue";
+import BaseIcon from "@/components/UI/base/components/BaseIcon/BaseIcon.vue";
 
 interface ListItem {
   id: number | string,

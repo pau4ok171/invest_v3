@@ -4,7 +4,7 @@ import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuCont
 import CompanyDetailPortfolioModalMenu
   from "@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenu.vue";
 import {mapGetters} from "vuex";
-import BaseButton from "@/components/UI/base/BaseButton/BaseButton.vue";
+import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderAddToPortfolioModalMenuContainer",
