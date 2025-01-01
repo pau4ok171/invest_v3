@@ -1,0 +1,54 @@
+@use "../BaseTheme/themes";
+
+.base-overlay-container {
+  contain: layout;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  position: absolute;
+  display: contents;
+}
+.base-overlay {
+  border-radius: inherit;
+  display: flex;
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+  z-index: 2400;
+}
+.base-overlay--scroll-blocked {
+  padding-inline-end: 0;
+}
+:global(body.base-overlay--scroll-blocked) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.base-overlay__scrim {
+  pointer-events: auto;
+  background: rgb(var(--base-theme-on-surface));
+  border-radius: inherit;
+  inset: 0;
+  opacity: 0.32;
+  position: fixed;
+}
+.base-overlay--role-dialog > .base-overlay__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: calc(100% - 48px);
+  width: calc(100% - 48px);
+  max-width: calc(100% - 48px);
+  margin: 24px;
+}
+.base-overlay__content {
+  outline: none;
+  position: absolute;
+  pointer-events: auto;
+  contain: layout;
+}
