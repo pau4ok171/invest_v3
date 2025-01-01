@@ -1,13 +1,9 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {mapGetters, mapMutations} from "vuex";
 
 export default defineComponent({
   name: "CompanyDetailAnalystsModalMenu",
-  components: {
-    BaseModalMenu
-  },
   computed: {
     ...mapGetters({
       company: "companyDetail/getCompany",
@@ -25,13 +21,6 @@ export default defineComponent({
 </script>
 
 <template>
-<BaseModalMenu>
-
-  <template #title>
-    Analyst Sources
-  </template>
-
-  <template #content>
   <div class="detail-analysts-modal-menu__content">
     <div class="detail-analysts-modal-menu__description">
       {{ company.title }} is covered by {{ totalIdeas }} analysts.
@@ -53,14 +42,11 @@ export default defineComponent({
       </tbody>
     </table>
   </div>
-  </template>
-
-</BaseModalMenu>
 </template>
 
 <style scoped>
 .detail-analysts-modal-menu__content {
-  padding: 32px 24px;
+  width: 650px;
 }
 .detail-analysts-modal-menu__description {
   font-size: 1.6rem;

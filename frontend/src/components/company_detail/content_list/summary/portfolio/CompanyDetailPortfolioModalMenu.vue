@@ -1,6 +1,5 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import CompanyDetailPortfolioModalMenuPortfolioItem
   from "@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenuPortfolioItem.vue";
@@ -16,7 +15,6 @@ export default defineComponent({
     BaseButton,
     NewPortfolioInput,
     CompanyDetailPortfolioModalMenuPortfolioItem,
-    BaseModalMenu,
   },
   data() {
     return {
@@ -90,38 +88,30 @@ export default defineComponent({
 </script>
 
 <template>
-<BaseModalMenu>
+<CompanyDetailPortfolioModalMenuPortfolioItem
+  v-for="portfolio in portfolios"
+  :portfolio
+  :key="portfolio.id"
+  @updatePortfolio="updatePortfolio"
+/>
 
-  <template #title>Add SBER to Portfolio</template>
+<div class="detail-portfolio-modal-menu__new">
+  <NewPortfolioInput
+    v-if="inputMode"
+    v-model="portfolioInputValue"
+    v-model:inputMode="inputMode"
+    @createNewPortfolio="createNewPortfolio"
+  />
 
-  <template #content>
-    <CompanyDetailPortfolioModalMenuPortfolioItem
-      v-for="portfolio in portfolios"
-      :portfolio
-      :key="portfolio.id"
-      @updatePortfolio="updatePortfolio"
-    />
-
-    <div class="detail-portfolio-modal-menu__new">
-      <NewPortfolioInput
-        v-if="inputMode"
-        v-model="portfolioInputValue"
-        v-model:inputMode="inputMode"
-        @createNewPortfolio="createNewPortfolio"
-      />
-
-      <base-button
-        v-else
-        text="new portfolio"
-        theme="grey"
-        color="#000"
-        rounded="large"
-        @click.stop="changeMode"
-      />
-    </div>
-  </template>
-
-</BaseModalMenu>
+  <base-button
+    v-else
+    text="new portfolio"
+    theme="grey"
+    color="#000"
+    rounded="large"
+    @click.stop="changeMode"
+  />
+</div>
 </template>
 
 <style scoped>
@@ -129,5 +119,6 @@ export default defineComponent({
   display: flex;
   justify-content: flex-start;
   padding: 16px 16px 16px 24px;
+  width: 600px;
 }
 </style>

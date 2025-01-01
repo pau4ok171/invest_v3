@@ -3,21 +3,23 @@ import {defineComponent} from 'vue'
 import CompanyDetailNewsItem from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsItem.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import {mapGetters} from "vuex";
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import DetailNewsItemModalMenu from "@/components/company_detail/content_list/summary/news/DetailNewsItemModalMenu.vue";
 import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
 import CompanyDetailNewsLateralMenu
   from "@/components/company_detail/content_list/summary/news/CompanyDetailNewsLateralMenu.vue";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
+import {DateTime} from "luxon";
+import type {News} from "@/types/invest";
 
 export default defineComponent({
   name: "CompanyDetailRecentNews",
   components: {
+    BaseDialog,
     BaseButton,
     CompanyDetailNewsLateralMenu,
     BaseLateralMenuContainer,
     DetailNewsItemModalMenu,
-    BaseModalMenuContainer,
     DetailSectionTitle,
     CompanyDetailNewsItem,
   },
@@ -25,6 +27,11 @@ export default defineComponent({
     ...mapGetters({
       company: 'companyDetail/getCompany',
     }),
+  },
+  methods: {
+    getNewsTitle(news_item: News) {
+      return DateTime.fromISO(news_item.date).toFormat('ccc, dd LLL yyyy')
+    }
   },
 })
 </script>
@@ -35,15 +42,19 @@ export default defineComponent({
   <DetailSectionTitle>Recent News & Updates</DetailSectionTitle>
 
   <div class="detail-recent-news detail__d-news">
-    <BaseModalMenuContainer v-for="news_item in company.company_news" :key="news_item.id">
-      <template #button>
+    <base-dialog
+      v-for="news_item in company.company_news"
+      :key="news_item.id"
+      max-width="700"
+      :title="getNewsTitle(news_item)"
+    >
+      <template #activator>
         <CompanyDetailNewsItem :news_item/>
       </template>
-      <template #menu="menuProps">
-        <DetailNewsItemModalMenu @closeMenu="menuProps.close()" :news_item/>
+      <template #dialog>
+        <DetailNewsItemModalMenu :news_item/>
       </template>
-    </BaseModalMenuContainer>
-
+    </base-dialog>
   </div>
   <BaseLateralMenuContainer>
     <template #button>

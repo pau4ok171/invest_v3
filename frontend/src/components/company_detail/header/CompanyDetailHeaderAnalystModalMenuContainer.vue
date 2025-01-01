@@ -1,17 +1,17 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import CompanyDetailAnalystsModalMenu
   from "@/components/company_detail/content_list/summary/analysts/CompanyDetailAnalystsModalMenu.vue";
 import {mapGetters} from "vuex";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "CompanyDetailHeaderAnalystsButtonModalMenuContainer",
   components: {
+    BaseDialog,
     BaseButton,
     CompanyDetailAnalystsModalMenu,
-    BaseModalMenuContainer
   },
   computed: {
     totalIdeas() {
@@ -27,20 +27,24 @@ export default defineComponent({
 <template>
 <div class="detail-analyst__modal-menu-container">
 
- <BaseModalMenuContainer>
-  <template #button>
-    <base-button
-      variant="text"
-      :text="`${totalIdeas} Analysts`"
-      density="comfortable"
-      size="small"
-      lower
-    />
-  </template>
-  <template #menu="menuProps">
-    <CompanyDetailAnalystsModalMenu @closeMenu="menuProps.close()"/>
-  </template>
-</BaseModalMenuContainer>
+  <base-dialog
+    title="Analyst Sources"
+    max-width="700"
+  >
+    <template #activator>
+      <base-button
+        variant="text"
+        :text="`${totalIdeas} Analysts`"
+        density="comfortable"
+        size="small"
+        lower
+      />
+    </template>
+    <template #dialog>
+       <CompanyDetailAnalystsModalMenu/>
+    </template>
+  </base-dialog>
+
 </div>
 </template>
 

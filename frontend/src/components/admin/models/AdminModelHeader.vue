@@ -4,17 +4,15 @@ import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.v
 import {mapState} from "vuex";
 import {DateTime} from "luxon";
 import {toast} from "vue3-toastify";
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
-import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {useAdminStore} from "@/store/admin";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",
   components: {
+    BaseDialog,
     BaseButton,
-    BaseModalMenu,
-    BaseModalMenuContainer,
     AdminModelIndicator,
   },
   setup:() => ({store: useAdminStore()}),
@@ -124,9 +122,14 @@ export default defineComponent({
             @click="store.activateEditMode()"
           />
         </div>
-        <BaseModalMenuContainer>
-          <template #button>
-          <div class="admin-model-header__item">
+
+        <base-dialog
+          title="Confirm the action"
+          max-width="500"
+          footer-type="withYesNo"
+          @click:yes="store.deleteModel()"
+        >
+          <template #activator>
             <base-button
               theme="error"
               prepend-icon="DeleteIcon"
@@ -134,37 +137,16 @@ export default defineComponent({
               rounded="large"
               :disabled="store.isNewModel"
             />
-          </div>
           </template>
-          <template #menu="menuProps">
-            <BaseModalMenu @closeMenu="menuProps.close()">
-              <template #title>Confirm the action</template>
-              <template #content>
-                <div class="admin-model-modal-menu__content">
-                  <div class="admin-model-modal-menu__description">
-                    Are you sure to definitely delete the current model?
-                  </div>
-                  <div class="admin-model-modal-menu__actions">
-                    <base-button
-                        text="Yes, I want to delete"
-                        theme="error"
-                        size="small"
-                        rounded="large"
-                        @click="store.deleteModel()"
-                    />
-                    <base-button
-                        text="No"
-                        theme="dark-blue"
-                        size="small"
-                        rounded="large"
-                        @click="menuProps.close()"
-                    />
-                  </div>
-                </div>
-              </template>
-            </BaseModalMenu>
+          <template #dialog>
+            <div class="admin-model-modal-menu__content">
+              <div class="admin-model-modal-menu__description">
+                Are you sure to definitely delete the current model?
+              </div>
+            </div>
           </template>
-        </BaseModalMenuContainer>
+        </base-dialog>
+
       </template>
       <template v-else>
         <div class="admin-model-header__item">

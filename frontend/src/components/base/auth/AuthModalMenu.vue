@@ -3,14 +3,12 @@
   import AuthForm from "@/components/base/auth/AuthForm.vue";
   import axios, {AxiosError} from "axios";
   import Loader from "@/components/UI/Loader.vue";
-  import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
   import {mapMutations} from "vuex";
   import {defineComponent} from "vue";
 
   export default defineComponent({
     name: 'AuthModalMenu',
     components: {
-      BaseModalMenu,
       Loader,
       AuthForm,
       SocialAuthForm,
@@ -120,8 +118,6 @@
 </script>
 
 <template>
-<BaseModalMenu>
-<template #content>
 <div class="auth-form">
 
   <h1 class="auth-form__title">Finargo</h1>
@@ -150,12 +146,10 @@
 
 </div>
 </template>
-</BaseModalMenu>
-</template>
 
 <style scoped>
 .auth-form {
-  padding: 36px;
+  width: 600px;
 }
 .auth-form__title {
   font-size: 2.2rem;

@@ -46,7 +46,7 @@
   margin-bottom: 16px;
   font-size: 1.6rem;
   line-height: 1.5;
-  text-align: left;
+  text-align: center;
   font-weight: normal;
   color: #000;
 }

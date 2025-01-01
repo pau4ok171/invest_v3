@@ -1,19 +1,19 @@
 <script lang="ts">
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
 import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 import {mapGetters} from "vuex";
 import {defineComponent} from "vue";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
 import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: 'NavUser',
   components: {
+    BaseDialog,
     BaseMenu,
     BaseButton,
     AuthModalMenu,
-    BaseModalMenuContainer,
     NavUserDropDown,
   },
   computed: {
@@ -42,18 +42,21 @@ export default defineComponent({
       </base-menu>
     </template>
     <template v-else>
-      <BaseModalMenuContainer>
-        <template #button>
+      <base-dialog
+        max-width="700"
+        footer-type="withoutFooter"
+      >
+        <template #activator>
           <base-button
             text="login"
             rounded="large"
             theme="blue"
           />
         </template>
-        <template #menu="menuProps">
-          <AuthModalMenu @closeMenu="menuProps.close()"/>
+        <template #dialog>
+          <AuthModalMenu/>
         </template>
-      </BaseModalMenuContainer>
+      </base-dialog>
     </template>
   </div>
 </div>

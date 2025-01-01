@@ -1,19 +1,19 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import CompanyDetailRiskRewardItem from "@/components/company_detail/content_list/summary/CompanyDetailRiskRewardItem.vue";
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
 import TheCompanyDetailRisksModalMenu
   from "@/components/company_detail/content_list/summary/risks/TheCompanyDetailRisksModalMenu.vue";
 import {mapGetters} from "vuex";
 import type {Statement} from "@/types/statements";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "CompanyDetailRiskReward",
   components: {
+    BaseDialog,
     BaseButton,
     TheCompanyDetailRisksModalMenu,
-    BaseModalMenuContainer,
     CompanyDetailRiskRewardItem
   },
   computed: {
@@ -46,8 +46,11 @@ export default defineComponent({
 
   <br>
 
-  <BaseModalMenuContainer>
-    <template #button>
+  <base-dialog
+    title="Risk Checks"
+    max-width="700"
+  >
+    <template #activator>
       <base-button
         text="See All Risk Checks"
         theme="dark-blue"
@@ -55,12 +58,11 @@ export default defineComponent({
         rounded="large"
         size="small"
       />
-
     </template>
-    <template #menu="menuProps">
-      <TheCompanyDetailRisksModalMenu @closeMenu="menuProps.close()"/>
+    <template #dialog>
+      <TheCompanyDetailRisksModalMenu/>
     </template>
-  </BaseModalMenuContainer>
+  </base-dialog>
 
 </div>
 </template>

@@ -1,6 +1,5 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseModalMenu from "@/components/UI/base/BaseModalMenu.vue";
 import {mapGetters} from "vuex";
 
 interface Period {
@@ -10,7 +9,6 @@ interface Period {
 
 export default defineComponent({
   name: "CompanyDetailShareholderReturnsModalMenu",
-  components: {BaseModalMenu},
   data() {
     return {
       periods: [
@@ -29,7 +27,7 @@ export default defineComponent({
     }),
   },
   methods: {
-    get_formatted_return(obj: Object, p: Period) {
+    get_formatted_return(obj: Record<string, number>, p: Period) {
       const value = obj[p.key]
       return `${(value * 100).toFixed(1)}%`
     }
@@ -38,40 +36,34 @@ export default defineComponent({
 </script>
 
 <template>
-<BaseModalMenu>
-  <template #title>
-    Shareholder Returns
-  </template>
 
-  <template #content>
-    <div class="detail-analysts-modal-menu__content">
-      <table class="detail-analysts-modal-menu__table">
-        <thead>
-          <tr>
-            <th></th>
-            <th>{{ company.ticker }}</th>
-            <th>Industry</th>
-            <th>Market</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="p in periods" :key="p.key">
-            <td class="detail-shareholder-returns-modal-menu__period_title">{{ p.name }}</td>
-            <td>{{ get_formatted_return(company, p) }}</td>
-            <td>{{ get_formatted_return(company.sector_market, p) }}</td>
-            <td>{{ get_formatted_return(company.market, p) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </template>
+<div class="detail-analysts-modal-menu__content">
+  <table class="detail-analysts-modal-menu__table">
+    <thead>
+      <tr>
+        <th></th>
+        <th>{{ company.ticker }}</th>
+        <th>Industry</th>
+        <th>Market</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="p in periods" :key="p.key">
+        <td class="detail-shareholder-returns-modal-menu__period_title">{{ p.name }}</td>
+        <td>{{ get_formatted_return(company, p) }}</td>
+        <td>{{ get_formatted_return(company.sector_market, p) }}</td>
+        <td>{{ get_formatted_return(company.market, p) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-</BaseModalMenu>
 </template>
 
 <style scoped>
 .detail-analysts-modal-menu__content {
   padding: 32px 24px;
+  width: 700px;
 }
 .detail-analysts-modal-menu__table {
   width: 100%;

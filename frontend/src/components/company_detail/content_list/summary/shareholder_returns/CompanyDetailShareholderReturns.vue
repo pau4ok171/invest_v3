@@ -4,17 +4,17 @@ import CompanyDetailShareholderReturnsTable
   from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsTable.vue";
 import CompanyDetailStatement from "@/components/company_detail/content_list/CompanyDetailStatement.vue";
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
-import BaseModalMenuContainer from "@/components/UI/modal_menu/BaseModalMenuContainer.vue";
-import CompanyDetailShareholderReturnsModalMenu
-  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsModalMenu.vue";
+import CompanyDetailShareholderReturnsDialogContent
+  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsDialogContent.vue";
 import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "CompanyDetailShareholderReturns",
   components: {
+    BaseDialog,
     BaseButton,
-    CompanyDetailShareholderReturnsModalMenu,
-    BaseModalMenuContainer,
+    CompanyDetailShareholderReturnsDialogContent,
     DetailSectionTitle,
     CompanyDetailStatement,
     CompanyDetailShareholderReturnsTable,
@@ -29,8 +29,11 @@ export default defineComponent({
 
   <CompanyDetailShareholderReturnsTable/>
 
-  <BaseModalMenuContainer>
-    <template #button>
+  <base-dialog
+    title="Shareholder Returns"
+    max-width="750"
+  >
+    <template #activator>
       <base-button
         text="See full shareholders returns"
         theme="dark-blue"
@@ -38,10 +41,10 @@ export default defineComponent({
         block
       />
     </template>
-    <template #menu="menuProps">
-      <CompanyDetailShareholderReturnsModalMenu @closeMenu="menuProps.close()"/>
+    <template #dialog>
+      <CompanyDetailShareholderReturnsDialogContent/>
     </template>
-  </BaseModalMenuContainer>
+  </base-dialog>
 
   <CompanyDetailStatement name="Is1YearReturnInLineOrAboveIndustry"/>
   <CompanyDetailStatement name="Is1YearReturnInLineOrAboveMarket"/>
