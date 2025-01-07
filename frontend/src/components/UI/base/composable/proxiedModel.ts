@@ -61,7 +61,7 @@ export function useProxiedModel<
       internal.value = newValue
       vm?.emit(`update:${prop}`, newValue)
     },
-  }) as any as Ref<InnerVal<Inner>> & { readonly externalValue: Props[Prop]}
+  }) as any as Ref<InnerVal<Inner>> & { readonly externalValue: Props[Prop] }
 
   Object.defineProperty(model, 'externalValue', {
     get: () => isControlled.value ? props[prop] : internal.value

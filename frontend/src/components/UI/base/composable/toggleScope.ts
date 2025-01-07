@@ -9,7 +9,7 @@ export function useToggleScope(source: WatchSource<boolean>, fn: (reset: () => v
   function start() {
     scope = effectScope()
     scope.run(() => fn.length
-      ? fn(() => {scope?.stop(); start()})
+      ? fn(() => { scope?.stop(); start() })
       : (fn as any)()
     )
   }
@@ -21,7 +21,7 @@ export function useToggleScope(source: WatchSource<boolean>, fn: (reset: () => v
       scope?.stop()
       scope = undefined
     }
-  }, {immediate: true})
+  }, { immediate: true })
 
   onScopeDispose(() => {
     scope?.stop()
