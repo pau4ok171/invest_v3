@@ -1,208 +1,227 @@
 <script lang="ts">
-import {defineComponent, nextTick} from 'vue'
-import type {PropType} from 'vue'
+// Utilities
+import {computed, defineComponent, nextTick, ref, watch} from 'vue'
 import BaseField from "@/components/UI/base/components/BaseField/BaseField.vue";
 import {useProxiedModel} from "@/components/UI/base/composable/proxiedModel";
+import {focusChild} from "@/components/UI/base/util";
+import {useFocus} from "@/components/UI/base/composable/focus";
+import {allowedThemes} from "@/components/UI/base/components/BaseTheme/baseTheme.d";
+import {allowedVariants} from "@/components/UI/base/components/BaseField/BaseField.types";
 
+// Types
+import type {PropType} from 'vue'
+import type {Theme} from "@/components/UI/base/components/BaseTheme/baseTheme.d";
+import type {Variant} from "@/components/UI/base/components/BaseField/BaseField.types";
+
+// Component
 export default defineComponent({
-  name: "BaseOtpInput",
-  components: {
-    BaseField,
-  },
-  data() {
-    return {
-      isFocused: false,
-      focusIndex: -1,
-      model: useProxiedModel(
-          this.$props,
-          'modelValue',
-          '',
-          val => val == null ? [] : String(val).split(''),
-          val => val.join('')
-      ),
-      inputRef: [] as HTMLInputElement[],
-    }
-  },
-  props: {
-    autofocus: Boolean,
-    divider: String,
-    focusAll: Boolean,
-    disabled: Boolean,
-    label: {
-      type: String,
-      default: 'Please enter OTP character',
+    name: "BaseOtpInput",
+    components: {
+      BaseField,
     },
-    length: {
-      type: [Number, String],
-      default: 4,
+    props: {
+      autofocus: Boolean,
+      divider: String,
+      focusAll: Boolean,
+      disabled: Boolean,
+      label: {
+        type: String,
+        default: 'Please enter OTP character',
+      },
+      length: {
+        type: [Number, String],
+        default: 4,
+      },
+      modelValue: {
+        type: [Number, String],
+        default: undefined,
+      },
+      placeholder: String,
+      type: {
+        type: String as PropType<'text' | 'password' | 'number'>,
+        default: 'number'
+      },
+      focused: Boolean,
+      variant: {
+        type: String as PropType<Variant>,
+        default: 'filled',
+        validator: (v: any) => allowedVariants.includes(v),
+      },
+      baseColor: String,
+      bgColor: String,
+      color: String,
+      error: Boolean,
+      loading: Boolean,
+      rounded: Boolean,
+      theme: {
+        type: String as PropType<Theme>,
+        default: 'light',
+        validator: (v: any) => allowedThemes.includes(v)
+      },
     },
-    modelValue: {
-      type: [Number, String],
-      default: undefined,
+    emits: {
+      finish: (val: string) => true,
+      'update:focused': (val: boolean) => true,
+      'update:modelValue': (val: string) => true,
     },
-    placeholder: String,
-    type: {
-      type: String as PropType<'text' | 'password' | 'number'>,
-      default: 'number'
-    },
-  },
-  computed: {
-    fields() {
-      return Array(Number(this.length)).fill(0)
-    },
-    current() {
-      return this.inputRef[this.focusIndex].value
-    },
-  },
-  methods: {
-    onInput(e: Event) {
-      // The maxlength attribute doesn't work for the number type input, so the text type is used.
-      // The following logic simulates the behavior of a number input.
-      const inputTarget = e.target as HTMLInputElement
-      console.log(inputTarget)
-      console.log(this.current)
-      console.log(this.isValidNumber(this.current))
-      if (this.isValidNumber(this.current)) {
-        inputTarget.value = ''
-        return
+    setup(props, { emit }) {
+      const { isFocused, focus, blur } = useFocus(props)
+      const model = useProxiedModel(
+        props,
+        'modelValue',
+        '',
+        val => val == null ? [] : String(val).split(''),
+        val => val.join('')
+      )
+
+      const length = computed(() => Number(props.length))
+      const fields = computed(() => Array(length.value).fill(0))
+      const focusIndex = ref(-1)
+      const contentRef = ref<HTMLElement>()
+      const inputRef = ref<HTMLInputElement[]>([])
+      const current = computed(() => inputRef.value[focusIndex.value])
+
+      function onInput() {
+        // The maxlength attribute doesn't work for the number type input, so the text type is used.
+        // The following logic simulates the behavior of a number input.
+        if (isValidNumber(current.value.value)) {
+          current.value.value = ''
+          return
+        }
+
+        const array = model.value.slice()
+        const value = current.value.value
+
+        array[focusIndex.value] = value
+
+        let target: any = null
+
+        if (focusIndex.value > model.value.length) {
+          target = model.value.length + 1
+        } else if (focusIndex.value + 1 !== length.value) {
+          target = 'next'
+        }
+
+        model.value = array
+
+        if (target) focusChild(contentRef.value!, target)
       }
 
-      const array = this.model.slice()
-      array[this.focusIndex] = this.current
+      function onKeyDown(e: KeyboardEvent) {
+        const array = model.value.slice()
+        const index = focusIndex.value
+        let target: 'next' | 'prev' | 'first' | 'last' | number | null = null
 
-      let target: any = null
+        if (![
+          'ArrowLeft',
+          'ArrowRight',
+          'Backspace',
+          'Delete',
+        ].includes(e.key)) return
 
-      if (this.focusIndex > this.model.value.length) {
-        target = this.model.value.length + 1
-      } else if (this.focusIndex + 1 !== this.length) {
-        target = 'next'
-      }
+        e.preventDefault()
 
-      this.model = array
+        if (e.key === 'ArrowLeft') {
+          target = 'prev'
+        } else if (e.key === 'ArrowRight') {
+          target = 'next'
+        } else if (['Backspace', 'Delete'].includes(e.key)) {
+          array[focusIndex.value] = ''
 
-      if (target) this.focusChild(this.$refs.contentRef as Element, target)
+          model.value = array
 
-    },
-    onFocus(e: FocusEvent, index: number) {
-      focus()
+          if (focusIndex.value > 0 && e.key === 'Backspace') {
+            target = 'prev'
+          } else {
+            requestAnimationFrame(() => {
+              inputRef.value[index]?.select()
+            })
+          }
+        }
 
-      this.focusIndex = index
-
-    },
-    onBlur() {
-      blur()
-
-      this.focusIndex = -1
-    },
-    onKeyDown(e: KeyboardEvent) {
-      const array = this.model.value.slice()
-      const index = this.focusIndex
-      let target: 'next' | 'prev' | 'first' | 'last' | number | null = null
-
-      if (![
-        'ArrowLeft',
-        'ArrowRight',
-        'Backspace',
-        'Delete',
-      ].includes(e.key)) return
-
-      e.preventDefault()
-
-      if (e.key === 'ArrowLeft') {
-        target = 'prev'
-      } else if (e.key === 'ArrowRight') {
-        target = 'next'
-      } else if (['Backspace', 'Delete'].includes(e.key)) {
-        array[this.focusIndex] = ''
-      }
-
-      this.model = array
-
-      if (this.focusIndex > 0 && e.key === 'Backspace') {
-        target = 'prev'
-      } else {
         requestAnimationFrame(() => {
-          this.inputRef[index]?.select()
+          if (target != null) {
+            focusChild(contentRef.value!, target)
+          }
         })
       }
 
-      requestAnimationFrame(() => {
-        if (target != null) {
-          this.focusChild(this.$refs.contentRef as HTMLElement, target)
-        }
+      function onPaste(e: ClipboardEvent, index: number) {
+        e.preventDefault()
+        e.stopPropagation()
+
+        const clipboardText = e?.clipboardData?.getData('Text').slice(0, length.value) ?? ''
+
+        if (isValidNumber(clipboardText)) return
+
+        model.value = clipboardText.split('')
+
+        inputRef.value?.[index].blur()
+      }
+
+      function reset () {
+        model.value = []
+      }
+
+      function onFocus(e: FocusEvent, index: number) {
+        focus()
+
+        focusIndex.value = index
+
+      }
+
+      function onBlur() {
+        blur()
+
+        focusIndex.value = -1
+      }
+
+      function isValidNumber(value: string) {
+        return props.type === 'number' && /[^0-9]/g.test(value)
+      }
+
+      watch(model, val => {
+        if (val.length === length.value) emit('finish', val.join(''))
+      }, { deep:true })
+
+      watch(focusIndex, val => {
+        if (val < 0) return
+
+        nextTick(() => {
+          inputRef.value[val]?.select()
+        })
       })
-    },
-    onPaste(e: ClipboardEvent, index: number) {
-      e.preventDefault()
-      e.stopPropagation()
 
-      const clipboardText = e?.clipboardData?.getData('Text').slice(0, length) ?? ''
-
-      if (this.isValidNumber(clipboardText)) return
-
-      this.model.value = clipboardText.split('')
-
-      this.inputRef[index].blur()
-    },
-    isValidNumber(value: string) {
-      return this.type === 'number' && /[^0-9]/g.test(value)
-    },
-    focusChild(el: Element, location?: 'next' | 'prev' | 'first' | 'last' | number) {
-      const focusable = this.focusableChildren(el)
-
-      if (!location) {
-        if (el === document.activeElement || !el.contains(document.activeElement)) {
-          focusable[0]?.focus()
-        }
-      } else if (location === 'first') {
-        focusable[0]?.focus()
-      } else if (location === 'last') {
-        focusable.at(-1)?.focus()
-      } else if (typeof location === 'number') {
-        focusable[location]?.focus()
-      } else {
-        const _el = this.getNextElement(focusable, location)
-        if (_el) _el.focus()
-        else this.focusChild(el, location === 'next' ? 'first': 'last')
+      return {
+        blur: () => {
+          inputRef.value?.some(input => input.blur())
+        },
+        focus: () => {
+          inputRef.value?.[0].focus()
+        },
+        isFocused,
+        focusIndex,
+        inputRef,
+        contentRef,
+        onInput,
+        onKeyDown,
+        onPaste,
+        onBlur,
+        onFocus,
+        fields,
+        model,
       }
     },
-    focusableChildren(el: Element, filterByTabIndex = true) {
-      const targets = ['button', '[href]', 'input:not([type="hidden"])', 'select', 'textarea', '[tabindex]']
-          .map(s => `${s}${filterByTabIndex ? ':not([tabindex="-1"])' : ''}:not([disabled])`)
-          .join(', ')
-      return [...el.querySelectorAll(targets)] as HTMLElement[]
-    },
-    getNextElement(elements: HTMLElement[], location?: 'next' | 'prev', condition?: (el: HTMLElement) => boolean) {
-      let _el
-      let idx = elements.indexOf(document.activeElement as HTMLElement)
-      const inc = location === 'next' ? 1 : -1
-      do {
-        idx += inc
-        _el = elements[idx]
-      } while ((!_el || _el.offsetParent == null || !(condition?.(_el) ?? true)) && idx < elements.length && idx >= 0)
-      return _el
-    },
-  },
-  watch: {
-    model: {
-      handler(val) {
-        if (val.length === this.length) this.$emit('finish', val.join(''))
-      },
-      deep: true
-    },
-    focusIndex(val) {
-      if (val < 0) return
-
-      nextTick(() => {
-        this.inputRef[val]?.select()
-      })
-    }
-  },
-})
+  })
 </script>
 
 <template>
-<div :class="['base-otp-input', {'base-otp-input--divided': divider}]">
+<div :class="[
+  'base-otp-input',
+  {
+    'base-otp-input--divided': divider
+  }]"
+>
   <div
     ref="contentRef"
     class="base-otp-input__content"
@@ -218,6 +237,9 @@ export default defineComponent({
 
       <base-field
         :focused="(isFocused && focusAll) || focusIndex === i"
+        :theme
+        :color
+        :variant
       >
         <input
           :ref="val => inputRef[i] = val as HTMLInputElement"
@@ -231,7 +253,7 @@ export default defineComponent({
           maxlength="1"
           :placeholder="placeholder"
           :type="type === 'number' ? 'text' : type"
-          :value="model.value[i]"
+          :value="model[i]"
           @input="onInput"
           @focus="e => onFocus(e, i)"
           @blur="onBlur"
@@ -244,7 +266,7 @@ export default defineComponent({
     <input
       class="base-otp-input-input"
       type="hidden"
-      :value="model.value.join('')"
+      :value="model.join('')"
     >
 
   </div>
