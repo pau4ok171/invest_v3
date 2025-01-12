@@ -6,8 +6,8 @@ import CompanyDetailStatement from "@/components/company_detail/content_list/Com
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import CompanyDetailShareholderReturnsDialogContent
   from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsDialogContent.vue";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "CompanyDetailShareholderReturns",

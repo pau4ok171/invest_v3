@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {mapGetters, mapMutations} from "vuex";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotesModalMenuHeader",

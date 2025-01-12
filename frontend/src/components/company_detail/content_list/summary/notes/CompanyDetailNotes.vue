@@ -13,7 +13,7 @@ import CompanyDetailNotesNoteItem from "@/components/company_detail/content_list
 import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
 import CompanyDetailNotesLateralMenu
   from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesLateralMenu.vue";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailNotes",

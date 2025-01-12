@@ -9,7 +9,7 @@ import CompanyDetailRiskReward from "@/components/company_detail/content_list/su
 import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
 import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
 import {mapGetters} from "vuex";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailStockOverview",

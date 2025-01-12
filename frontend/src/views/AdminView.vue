@@ -10,7 +10,7 @@ import store from "@/store";
 import {RouteNamesEnum} from "@/router/routes.types";
 import {useAdminStore} from "@/store/admin";
 import {AdminComponentName} from "@/types/admin.types";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 const vuexStore = store
 

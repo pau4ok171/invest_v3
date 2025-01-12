@@ -6,8 +6,8 @@ import CopyIcon from "@/components/icons/CopyIcon.vue";
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import {toast} from "vue3-toastify";
 import utils from "@/mixins/utils";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "CompanyDetailSidebarMain",

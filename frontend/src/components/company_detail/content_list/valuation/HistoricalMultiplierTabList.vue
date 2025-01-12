@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
 
 export default defineComponent({
   name: "HistoricalMultiplierTabList",

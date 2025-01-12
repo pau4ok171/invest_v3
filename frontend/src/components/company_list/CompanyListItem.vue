@@ -4,7 +4,7 @@ import {mapActions, mapGetters} from "vuex";
 import {defineComponent} from "vue";
 import type {PropType} from "vue";
 import type {ListCompany} from "@/types/invest";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: 'CompanyListItem',

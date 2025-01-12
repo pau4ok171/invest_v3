@@ -23,7 +23,7 @@ import highchartsMore from 'highcharts/highcharts-more'
 import loadSolidGauge from 'highcharts/modules/solid-gauge'
 import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
 import Ripple from "@/directives/ripple";
-import { createVisagiste } from "@/plugins/visagiste";
+import { createVisagiste } from "@/apps/visagiste/visagiste";
 
 axios.defaults.baseURL = 'http://localhost:8000'
 

@@ -5,8 +5,8 @@ import {mapState} from "vuex";
 import {DateTime} from "luxon";
 import {toast} from "vue3-toastify";
 import {useAdminStore} from "@/store/admin";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: "AdminModelHeader",

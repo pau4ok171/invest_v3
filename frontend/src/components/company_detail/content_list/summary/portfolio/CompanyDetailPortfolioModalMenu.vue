@@ -7,7 +7,7 @@ import NewPortfolioInput from "@/components/UI/inputs/NewPortfolioInput.vue";
 import axios from "axios";
 import {toast} from "vue3-toastify";
 import type {Portfolio} from "@/types/portfolios";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
   name: "CompanyDetailPortfolioModalMenu",

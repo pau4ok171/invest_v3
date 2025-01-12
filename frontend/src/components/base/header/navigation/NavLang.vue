@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseList from "@/components/UI/base/components/BaseList/BaseList.vue";
+import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseList from "@/apps/visagiste/components/BaseList/BaseList.vue";
 </script>
 
 <template>

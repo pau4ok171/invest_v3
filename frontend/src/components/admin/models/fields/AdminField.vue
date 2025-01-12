@@ -10,7 +10,8 @@ import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue"
 import AdminYearField from "@/components/admin/models/fields/AdminYearField.vue";
 import {FieldStatusEnum} from "@/types/admin.types";
 import type {AdminModelValue, IFormattedSector} from "@/types/admin.types";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+
 
 export default defineComponent({
   name: "AdminField",

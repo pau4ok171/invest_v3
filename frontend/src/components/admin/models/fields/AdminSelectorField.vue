@@ -5,7 +5,8 @@ import CheckedIcon from "@/components/icons/CheckedIcon.vue";
 import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
 import AdminSelectorDropDownMenu from "@/components/admin/models/fields/AdminSelectorDropDownMenu.vue";
 import type {IFormattedSector, IFormattedSelector} from "@/types/admin.types";
-import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
+import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
+
 
 export default defineComponent({
   name: "AdminSelectorField",

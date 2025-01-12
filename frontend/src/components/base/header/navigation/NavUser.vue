@@ -3,9 +3,9 @@ import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown
 import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
 import {mapGetters} from "vuex";
 import {defineComponent} from "vue";
-import BaseButton from "@/components/UI/base/components/BaseButton/BaseButton.vue";
-import BaseMenu from "@/components/UI/base/components/BaseMenu/BaseMenu.vue";
-import BaseDialog from "@/components/UI/base/components/BaseDialog/BaseDialog.vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
+import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
 
 export default defineComponent({
   name: 'NavUser',
