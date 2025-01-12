@@ -197,6 +197,6 @@ export default defineComponent({
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use "BaseField";
 </style>

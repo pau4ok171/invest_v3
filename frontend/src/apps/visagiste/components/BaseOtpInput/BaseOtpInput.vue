@@ -273,7 +273,7 @@ export default defineComponent({
 </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .base-otp-input {
   position: relative;
   display: flex;
