@@ -263,7 +263,7 @@ export function createTheme (options?: ThemeOptions): ThemeInstance & { install:
     createCssClass(lines, ':root', generateCssVariables(current.value))
 
     for (const [themeName, theme] of Object.entries(computedThemes.value)) {
-      createCssClass(lines, `base-theme--${themeName}`, [
+      createCssClass(lines, `.base-theme--${themeName}`, [
         `color-scheme: ${theme.dark ? 'dark': 'normal'}`,
         ...generateCssVariables(theme),
       ])
