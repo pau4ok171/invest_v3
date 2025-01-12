@@ -1,6 +1,6 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import BaseOtpInput from "@/apps/visagiste/components/BaseOtpInput/BaseOtpInput.vue";
+import BaseOtpInput from '@/apps/visagiste/components/BaseOtpInput/BaseOtpInput.vue'
 
 export default defineComponent({
   name: "AdminDashboard",
@@ -9,7 +9,9 @@ export default defineComponent({
       modelValue: '',
     }
   },
-  components: {BaseOtpInput},
+  components: {
+    BaseOtpInput
+  },
 })
 </script>
 
@@ -23,6 +25,7 @@ export default defineComponent({
   theme="dark"
   color="#000"
   variant="filled"
+  placeholder="•"
 />
 </template>
 
