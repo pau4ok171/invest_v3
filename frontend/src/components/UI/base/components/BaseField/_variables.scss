@@ -1,0 +1,45 @@
+
+// INPUT
+$input-font-size: 1.6rem !default;
+$input-line-height: 1.5 !default;
+
+// FIELD
+$field-border-radius: 4px !default;
+$field-clearable-margin: 4px !default;
+$field-disabled-color: rgba(var(--base-theme-on-surface), var(--base-medium-emphasis-opacity)) !default;
+$field-input-column-gap: 2px !default;
+$field-font-size: 1.6rem !default;
+$field-letter-spacing: .009375em !default;
+$field-max-width: 100% !default;
+$field-transition-timing: .15s 'cubic-bezier(0.4, 0, 0.2, 1)' !default;
+$field-subtle-transition-timing: 250ms 'cubic-bezier(0.4, 0, 0.2, 1)' !default;
+
+// CONTROL
+$field-control-affixed-inner-padding: 6px !default;
+$field-control-affixed-padding: 12px !default;
+$field-control-padding-end: 16px !default;
+$field-control-padding-start: 16px !default;
+$field-control-padding-top: 8px !default;
+$field-control-padding-bottom: 4px !default;
+$field-control-solo-background: rgb(var(--base-theme-surface)) !default;
+$field-control-solo-color: rgba(var(--base-theme-on-surface), var(--base-high-emphasis-opacity)) !default;
+$field-control-solo-inverted-color: rgba(var(--base-theme-on-surface), var(--base-high-emphasis-opacity)) !default;
+$field-control-solo-inverted-focused-color: rgb(var(--base-theme-on-surface-variant)) !default;
+$field-input-padding-bottom: var(--base-field-padding-bottom, $field-control-padding-bottom) !default;
+$field-input-padding-top: calc(var(--base-field-padding-top, $field-control-padding-top) + var(--base-input-padding-top, 0)) !default;
+
+// INPUT
+$field-input-min-height: #{max(
+  var(--base-input-control-height, #input-control-height),
+  calc($input-font-size * $input-line-height + var(--base-field-input-padding-top) + var(--base-input-padding-bottom))
+)} !default;
+$field-input-opacity: var(--base-high-emphasis-opacity) !default;
+
+// LABEL
+
+// OUTLINE
+$field-border-width: 1px !default;
+$field-outline-opacity: .38 !default;
+$field-focused-border-width: 2px !default;
+
+// OVERLAY
