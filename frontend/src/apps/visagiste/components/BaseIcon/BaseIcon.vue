@@ -39,7 +39,10 @@ import TileModeIcon from "@/components/icons/TileModeIcon.vue";
 import TrashIcon from "@/components/icons/TrashIcon.vue";
 import UploadIcon from "@/components/icons/UploadIcon.vue";
 import UserIcon from "@/components/icons/UserIcon.vue";
-import {IBaseIcon} from "@/apps/visagiste/components/BaseIcon/baseIcon";
+import type {IBaseIcon} from "@/apps/visagiste/components/BaseIcon/baseIcon";
+import DarkThemeIcon from "@/components/icons/DarkThemeIcon.vue";
+import LightThemeIcon from "@/components/icons/LightThemeIcon.vue";
+import LangIcon from "@/components/icons/LangIcon.vue";
 
 export default defineComponent({
   name: "BaseIcon",
@@ -52,6 +55,7 @@ export default defineComponent({
     CheckmarkCircleIcon,
     CopyIcon,
     CrossIcon,
+    DarkThemeIcon,
     DeleteIcon,
     DotsIcon,
     EditIcon,
@@ -63,6 +67,8 @@ export default defineComponent({
     HeaderIcon,
     InfoIcon,
     InputCrossIcon,
+    LangIcon,
+    LightThemeIcon,
     ListIcon,
     MegaphoneIcon,
     ModalMenuCloseIcon,
