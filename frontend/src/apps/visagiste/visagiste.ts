@@ -1,4 +1,3 @@
-
 // Composables
 // TODO: CreateDate
 import { createDefaults, DefaultsSymbol } from "@/apps/visagiste/composables/defaults";
@@ -134,8 +133,6 @@ function inject (this: ComponentPublicInstance, key: InjectionKey<any> | string)
   const vm = this.$
 
   const provides = vm.parent?.provides ?? vm.vnode.appContext?.provides
-
-  console.log("provides", vm.parent?.provides)
 
   if (provides && (key as any) in provides) {
     return provides[(key as string)]
