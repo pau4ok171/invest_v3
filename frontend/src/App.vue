@@ -4,13 +4,11 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import axios from "axios";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
-import Loader from "@/components/UI/Loader.vue";
 import BaseApp from "@/apps/visagiste/components/BaseApp/BaseApp.vue";
 
 export default defineComponent({
   components: {
     BaseApp,
-    Loader,
     AppLayout,
     RouterView,
   },
