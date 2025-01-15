@@ -23,14 +23,13 @@ import highchartsMore from 'highcharts/highcharts-more'
 import loadSolidGauge from 'highcharts/modules/solid-gauge'
 import {defaultChartOpts} from "@/components/charts/DefaultChartOpts";
 import Ripple from "@/directives/ripple";
-import { createVisagiste } from "@/apps/visagiste/visagiste";
+import visagiste from "@/plugins/visagiste";
 
 axios.defaults.baseURL = 'http://localhost:8000'
 
 const app = createApp(App)
 const pinia = createPinia()
 const hc = Highcharts as any
-const visagiste = createVisagiste()
 
 app.directive('intersection', Vintersection)
 app.directive('debounce', Vdebounce)
