@@ -1,14 +1,12 @@
 <script lang="ts">
-import BasicHeader from '@/components/base/header/BasicHeader.vue'
-import Loader from "@/components/UI/Loader.vue";
+import TheHeader from '@/components/base/header/TheHeader.vue'
 import {defineComponent} from "vue";
 import {mapState} from "vuex";
 
 export default defineComponent({
   name: 'AppLayoutDefault',
   components: {
-    Loader,
-    BasicHeader,
+    TheHeader,
   },
   computed: {
     ...mapState({
@@ -19,7 +17,7 @@ export default defineComponent({
 </script>
 
 <template>
-<BasicHeader/>
+<TheHeader/>
 
 <div class="content">
   <div class="content__inner" :class="{'content__inner--moved': lateralMenuIsOpen}">
