@@ -1,0 +1,19 @@
+@use "../../styles/tools";
+@use "./variables" as *;
+
+@include tools.layer('components') {
+  .base-application {
+    display: flex;
+    background: $application-background;
+    color: $application-color;
+  }
+  .base-application__wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    backface-visibility: hidden;
+    max-width: 100%;
+    min-height: 100vh;
+  }
+}
