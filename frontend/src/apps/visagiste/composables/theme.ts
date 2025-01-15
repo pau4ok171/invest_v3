@@ -12,7 +12,7 @@ import {
 } from "@/apps/visagiste/utils";
 
 // Types
-import type { App, DeepReadonly, InjectionKey, Ref } from 'vue'
+import type { App, DeepReadonly, InjectionKey, Ref, PropType } from 'vue'
 import type { HeadClient } from '@unhead'
 import type { VueHeadClient } from '@vueuse'
 
@@ -107,6 +107,22 @@ export interface ThemeInstance {
 }
 
 export const ThemeSymbol: InjectionKey<ThemeInstance> = Symbol.for('visagiste:theme')
+
+const allowedThemes = [
+  'light',
+  'dark',
+  'finargo-dark',
+  'finargo-light',
+  'admin',
+] as const
+
+export type ThemeName = typeof allowedThemes[number]
+export const themeProps = {
+  theme: {
+    type: String as PropType<ThemeName>,
+    validator: (v: any) => allowedThemes.includes(v)
+  },
+}
 
 function generateDefaults () {
   return {
@@ -392,6 +408,8 @@ export function useTheme () {
   const theme = inject(ThemeSymbol, null)
 
   if (!theme) throw new Error('Could not find Visage theme injection')
+
+  return theme
 }
 
 function createCssClass (lines: string[], selector: string, content: string[]) {
