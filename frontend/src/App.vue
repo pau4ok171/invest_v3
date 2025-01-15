@@ -5,9 +5,11 @@ import axios from "axios";
 import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
 import {defineComponent} from "vue";
 import Loader from "@/components/UI/Loader.vue";
+import BaseApp from "@/apps/visagiste/components/BaseApp/BaseApp.vue";
 
 export default defineComponent({
   components: {
+    BaseApp,
     Loader,
     AppLayout,
     RouterView,
@@ -37,15 +39,10 @@ export default defineComponent({
 </script>
 
 <template>
-<div>
+<base-app>
   <AppLayout>
     <RouterView/>
   </AppLayout>
-
-<!--  <Loader v-if="isLoading"/>-->
-</div>
+</base-app>
 </template>
 
-<style>
-  @import 'assets/css/main.css';
-</style>
