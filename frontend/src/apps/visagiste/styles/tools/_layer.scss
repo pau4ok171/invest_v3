@@ -1,0 +1,7 @@
+@use '../settings';
+
+@mixin layer ($name) {
+  @layer visagiste.#{$name} {
+    @content
+  }
+}
