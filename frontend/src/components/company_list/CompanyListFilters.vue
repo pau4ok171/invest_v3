@@ -95,14 +95,13 @@ export default defineComponent({
 </section>
 </template>
 
-<style scoped>
+<style>
 .company-list__filters {
   display: grid;
   grid-template-columns: auto auto;
   grid-template-rows: 40px;
   justify-content: space-between;
   align-items: center;
-  color: #92969c;
   margin-top: 16px;
 }
 .company-list__basic-filters {

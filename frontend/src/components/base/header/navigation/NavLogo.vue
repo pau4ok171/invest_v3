@@ -9,10 +9,11 @@
 </div>
 </template>
 
-<style>
+<style lang="scss">
 .navigation__logo {
   font-size: 30px;
   font-weight: 900;
   user-select: none;
+  color: rgb(var(--base-theme-on-background));
 }
 </style>

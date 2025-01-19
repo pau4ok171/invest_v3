@@ -23,7 +23,7 @@ export default defineComponent({
 </section>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-list__info {
   padding: 10px 0;
   display: grid;
@@ -40,13 +40,13 @@ export default defineComponent({
   line-height: 1.5;
 }
 .company-list__updated span {
-  color: rgba(255, 255, 255, .7);
+  color: rgb(var(--base-theme-on-surface-variant));
   text-transform: uppercase;
 }
 .company-list__description {
   margin-top: 16px;
   font-size: 1.4rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .5);
+  color: rgb(var(--base-theme-on-surface-variant));
 }
 </style>

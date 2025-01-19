@@ -39,7 +39,7 @@ export default defineComponent({
 </section>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-list__options {
   display: grid;
   grid-template-columns: 250px auto 250px;
@@ -51,7 +51,7 @@ export default defineComponent({
   font-size: 1.2rem;
   font-weight: normal;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .3);
+  color: rgb(var(--base-theme-on-surface-variant));
 }
 .company-list__view-modes {
   display: grid;

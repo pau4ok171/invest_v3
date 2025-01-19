@@ -1,8 +1,8 @@
 <script lang="ts">
+import {defineComponent} from "vue";
 import CompanyListInfo from "@/components/company_list/CompanyListInfo.vue";
 import CompanyListFilters from "@/components/company_list/CompanyListFilters.vue";
 import CompanyListOptions from "@/components/company_list/CompanyListOptions.vue";
-import {defineComponent} from "vue";
 
 export default defineComponent({
   name: "CompanyListHeader",
@@ -15,7 +15,7 @@ export default defineComponent({
 </script>
 
 <template>
-<header class="company-list__header">
+<section class="company-list__header">
 
   <CompanyListInfo/>
 
@@ -23,13 +23,13 @@ export default defineComponent({
 
   <CompanyListOptions/>
 
-</header>
+</section>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-list__header {
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgba(var(--base-theme-on-background), var(--base-border-opacity));
   display: grid;
 }
 </style>
