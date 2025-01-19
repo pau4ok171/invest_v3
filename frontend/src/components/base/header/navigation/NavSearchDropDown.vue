@@ -70,13 +70,9 @@ export default defineComponent({
   background: linear-gradient(180deg, #00c6fb, #005bea);
 }
 .nav_search__dropdown {
-  position: fixed;
+  position: absolute;
   left: 0;
-  top: 0;
-  margin: 0;
-  transform: translate(1020px, 55px);
-  transition: opacity .3s linear 0s, transform .3s ease-out 0s;
-  opacity: 1;
+  bottom: 0;
 }
 .nav-search__dropdown-inner {
   width: 400px;

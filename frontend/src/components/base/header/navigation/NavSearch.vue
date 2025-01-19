@@ -90,7 +90,6 @@ export default defineComponent({
   display: flex;
   justify-content: center;
   align-items: center;
-  margin:0 24px;
   width: 271px;
 }
 .nav-search__inner {

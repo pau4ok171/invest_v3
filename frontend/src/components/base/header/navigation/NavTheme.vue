@@ -14,26 +14,10 @@ const changeThemeMode = () => theme.global.name.value = isDarkTheme.value ? 'fin
 </script>
 
 <template>
-<div class="nav-theme">
-  <base-button
-    :icon="isDarkTheme ? 'DarkThemeIcon' : 'LightThemeIcon'"
-    variant="text"
-    rounded="x-small"
-    @click="changeThemeMode"
+<base-button
+  :icon="isDarkTheme ? 'DarkThemeIcon' : 'LightThemeIcon'"
+  variant="text"
+  rounded="x-small"
+  @click="changeThemeMode"
 />
-</div>
 </template>
-
-<style scoped>
-.nav-theme {
-  display: flex;
-  color: #92969c;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 64px;
-  padding-left: 8px;
-  user-select: none;
-  cursor: pointer;
-}
-</style>

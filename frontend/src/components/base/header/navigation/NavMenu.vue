@@ -1,8 +1,12 @@
 <script lang="ts">
 import {RoutesHeaderEnum} from "@/router/routes.types";
 import {defineComponent} from "vue";
+import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
 
 export default defineComponent({
+  components: {
+    BaseButton
+  },
   computed: {
     RoutesHeaderEnum() {
       return RoutesHeaderEnum
@@ -13,29 +17,20 @@ export default defineComponent({
 
 <template>
 <div class="navigation__nav-menu" >
-  <RouterLink
-      v-for="routeName in RoutesHeaderEnum"
-      :key="routeName"
-      class="nav-menu__item"
-      :to="{ name: routeName }"
-  >
-    {{ routeName }}
+  <RouterLink  v-for="routeName in RoutesHeaderEnum" :key="routeName" :to="{name: routeName}">
+    <base-button
+      :text="routeName"
+      variant="text"
+      style="text-transform: capitalize; padding-inline: 8px"
+    />
   </RouterLink>
 </div>
 </template>
 
-<style scoped>
+<style>
 .navigation__nav-menu {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.nav-menu__item {
-  font-size: 1.4rem;
-  padding: 0 8px;
-  display: inline-block;
-  text-transform: capitalize;
-  height: 64px;
-  line-height: 64px;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-<div class="default-logo navigation__logo">
+<div class="navigation__logo">
   <RouterLink
     :key="`home`"
     :to="{ name: `home` }"
@@ -9,11 +9,8 @@
 </div>
 </template>
 
-<style scoped>
+<style>
 .navigation__logo {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
   font-size: 30px;
   font-weight: 900;
   user-select: none;

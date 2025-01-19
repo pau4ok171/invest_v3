@@ -25,56 +25,47 @@ export default defineComponent({
 </script>
 
 <template>
-<div class="navigation__account-access">
-  <div class="account-access__inner">
-    <template v-if="isAuthenticated">
-      <base-menu>
-        <template #activator>
-          <base-button
-            icon="UserIcon"
-            variant="text"
-            rounded="x-small"
-          />
-        </template>
-        <template #list>
-          <NavUserDropDown/>
-        </template>
-      </base-menu>
-    </template>
-    <template v-else>
-      <base-dialog
-        max-width="700"
-        footer-type="withoutFooter"
-      >
-        <template #activator>
-          <base-button
-            text="login"
-            rounded="large"
-            theme="blue"
-          />
-        </template>
-        <template #dialog>
-          <AuthModalMenu/>
-        </template>
-      </base-dialog>
-    </template>
-  </div>
+<div class="nav-user__wrapper">
+  <template v-if="isAuthenticated">
+    <base-menu>
+      <template #activator>
+        <base-button
+          icon="UserIcon"
+          variant="text"
+          rounded="x-small"
+        />
+      </template>
+      <template #list>
+        <NavUserDropDown/>
+      </template>
+    </base-menu>
+  </template>
+
+  <template v-else>
+    <base-dialog
+      max-width="700"
+      footer-type="withoutFooter"
+    >
+      <template #activator>
+        <base-button
+          text="login"
+          rounded="large"
+          theme="blue"
+        />
+      </template>
+      <template #dialog>
+        <AuthModalMenu/>
+      </template>
+    </base-dialog>
+  </template>
 </div>
 </template>
 
-<style scoped>
-.navigation__account-access {
-  position: relative;
-}
-.account-access__inner {
+<style>
+.nav-user__wrapper {
   display: flex;
-  color: #92969c;
   justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 64px;
-  padding-left: 8px;
-  user-select: none;
-  cursor: pointer;
+  min-width: 90px;
 }
+
 </style>
