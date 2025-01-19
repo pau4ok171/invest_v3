@@ -11,7 +11,7 @@ export default defineComponent({
   methods: {
     clickHandler(event: Event) {
       const target = event.target as HTMLDivElement
-      if (target.parentNode.parentNode !== this.$el) {
+      if (target.parentNode?.parentNode !== this.$el) {
         this.isActive = false
         document.removeEventListener('click', this.clickHandler)
       }
