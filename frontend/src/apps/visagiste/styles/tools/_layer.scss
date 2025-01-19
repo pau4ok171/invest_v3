@@ -1,7 +1,11 @@
 @use '../settings';
 
 @mixin layer ($name) {
-  @layer visagiste.#{$name} {
-    @content
+  @if (settings.$layers) {
+    @layer visagiste.#{$name} {
+      @content;
+    }
+  } @else {
+    @content;
   }
 }
