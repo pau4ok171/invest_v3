@@ -1,6 +1,3 @@
-// Styles
-import '@/apps/visagiste/styles/main.scss';
-
 // Composables
 import {createVisagiste} from "@/apps/visagiste/visagiste";
 

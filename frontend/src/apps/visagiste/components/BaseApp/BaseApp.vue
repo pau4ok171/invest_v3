@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import './../../styles/main.scss'
 import './BaseApp.scss';
 // Utilities
 import { themeProps, provideTheme } from '../../composables/theme';
