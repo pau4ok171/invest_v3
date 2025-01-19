@@ -1,0 +1,114 @@
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  // Blocks
+  .base-toolbar {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+    flex: $toolbar-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 100%;
+    transition: $toolbar-transition;
+    transition-property: height, width, transform, max-width, left, right, top, bottom, box-shadow;
+
+    @include tools.border($toolbar-border...);
+    @include tools.elevation($toolbar-elevation);
+    @include tools.rounded($toolbar-border-radius);
+    @include tools.theme($toolbar-theme...);
+
+    &--absolute {
+      position: absolute;
+    }
+    &--collapse {
+      max-width: $toolbar-collapsed-max-width;
+      overflow: hidden;
+      border-end-end-radius: $toolbar-collapsed-border-radius;
+
+      .base-toolbar-title {
+        display: none;
+      }
+    }
+    &--flat {
+      @include tools.elevation($toolbar-flat-elevation);
+    }
+    &--floating {
+      display: inline-flex;
+    }
+    &--rounded {
+      @include tools.rounded($toolbar-rounded-border-radius)
+    }
+  }
+  .base-toolbar__content,
+  .base-toolbar__extension {
+    width: 100%;
+    position: relative;
+    align-items: center;
+    display: flex;
+    flex: 0 0 auto;
+    transition: inherit;
+  }
+  .base-toolbar__content {
+    > .base-button:first-child {
+      margin-inline-start: $toolbar-prepend-button-margin-start;
+    }
+    > .base-button:last-child {
+      margin-inline-end: $toolbar-append-button-margin-end;
+    }
+    > .base-toolbar-title {
+      margin-inline-start: $toolbar-title-margin;
+    }
+    .base-toolbar--density-prominent & {
+      align-items: flex-start;
+    }
+  }
+  .base-toolbar__image {
+    display: flex;
+    opacity: var(--base-toolbar-image-opacity, 1);
+    transition-property: opacity;
+    @include tools.absolute()
+  }
+  .base-toolbar__prepend,
+  .base-toolbar__append {
+    display: flex;
+    align-items: center;
+    align-self: stretch;
+  }
+  .base-toolbar__prepend {
+    margin-inline: $toolbar-prepend-button-margin-start auto;
+  }
+  .base-toolbar__append {
+    margin-inline: auto $toolbar-append-button-margin-end;
+  }
+  .base-toolbar-title {
+    flex: 1 1;
+    font-size: $toolbar-title-font-size;
+    min-width: 0;
+
+    @include tools.typography($toolbar-title-typography...);
+
+    .base-toolbar--density-prominent & {
+      align-self: flex-end;
+      padding-bottom: 6px;
+
+      @include tools.typography($toolbar-prominent-title-typography...);
+    }
+  }
+  .base-toolbar-title__placeholder {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .base-toolbar-items {
+    display: flex;
+    height: inherit;
+    align-self: stretch;
+
+    > .base-button {
+      border-radius: 0;
+    }
+  }
+}
