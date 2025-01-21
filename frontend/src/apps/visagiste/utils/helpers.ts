@@ -210,3 +210,12 @@ export function clamp (value: number, min = 0, max = 1) {
 export function createRange (length: number, start = 0): number[] {
   return Array.from({ length }, (v, k) => start + k)
 }
+
+type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N
+export function wrapInArray<T> (
+  v: T | null | undefined
+): T extends readonly any[]
+  ? IfAny<T, T[], T>
+  : NonNullable<T>[] {
+  return v == null ? [] : Array.isArray(v) ? v as any : [v]
+}
