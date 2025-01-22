@@ -1,6 +1,9 @@
 // Composables
 import {createVisagiste} from "@/apps/visagiste/visagiste";
 
+// Locals
+import { ru, es, fr, de } from "@/apps/visagiste/locale";
+
 const finargoDarkTheme = {
   dark: true,
   colors: {
@@ -86,5 +89,9 @@ export default createVisagiste({
     'finargo-dark': finargoDarkTheme,
     'finargo-light': finargoLightTheme,
     }
+  },
+  locale: {
+    locale: 'ru',
+    messages: { ru, es, de, fr }
   }
 })

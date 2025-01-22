@@ -4,12 +4,12 @@ import { createDefaults, DefaultsSymbol } from "@/apps/visagiste/composables/def
 // TODO: CreateDisplay
 // TODO: CreateGoTo
 // TODO: CreateIcons
-// TODO: CreateLocale
+import { createLocale, LocaleSymbol } from "@/apps/visagiste/composables/locale";
 import  { createTheme, ThemeSymbol } from "@/apps/visagiste/composables/theme";
 
 // Utilities
 import {defineComponent, nextTick, reactive} from "vue";
-import {getUid, IN_BROWSER, mergeDeep} from "@/apps/visagiste/utils"; // TODO: Create defineComponent
+import {getUid, IN_BROWSER, mergeDeep} from "@/apps/visagiste/utils";
 
 // Types
 import type { App, ComponentPublicInstance, InjectionKey } from "vue";
@@ -18,7 +18,7 @@ import type { DefaultsOptions } from "@/apps/visagiste/composables/defaults";
 // TODO: Create DisplayOptions
 // TODO: Create GoToOptions
 // TODO: Create IconOptions
-// TODO: Create LocaleOptions
+import type { LocaleOptions, RtlOptions } from "@/apps/visagiste/composables/locale";
 import type { ThemeOptions } from "@/apps/visagiste/composables/theme";
 export * from "@/apps/visagiste/composables"
 
@@ -30,10 +30,10 @@ export interface VisagisteOptions {
   directives?: Record<string, any>
   defaults?: DefaultsOptions
   // display?: DisplayOptions
-  // goTo?: GoTOOptions
+  // goTo?: GoToOptions
   theme?: ThemeOptions
   // icons?: IconOptions
-  // locale?: LocaleOptions
+  locale?: LocaleOptions & RtlOptions
   // ssr?: SSROptions
 }
 
@@ -52,7 +52,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
   // const display = createDisplay(options.display)
   const theme = createTheme(options.theme)
   // const icons = createIcons(options.icons)
-  // const locale = createLocale(options.locale)
+  const locale = createLocale(options.locale)
   // const date = createDate(options.date)
   // const goTo = createGoTo(options.goTo)
 
@@ -78,11 +78,12 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     // app.provide(DisplaySymbol, display)
     app.provide(ThemeSymbol, theme)
     // app.provide(IconSymbol, icons)
-    // app.provide(LocaleSymbol, locale)
+    app.provide(LocaleSymbol, locale)
     // app.provide(DateOptionsSymbol, date.options)
     // app.provide(DateAdapterSymbol, date.instance)
     // app.provide(GoToSymbol, goTo)
 
+    // In case of SSR
     // if (IN_BROWSER && options.ssr) {
     //   if (app.$nuxt) {
     //     app.$nuxt.hook('app:suspense:resolve', () => {
@@ -109,7 +110,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
             // display: inject.call(this, DisplaySymbol),
             theme: inject.call(this, ThemeSymbol),
             // icons: inject.call(this, IconSymbol),
-            // locale: inject.call(this, LocaleSymbol),
+            locale: inject.call(this, LocaleSymbol),
             // date: inject.call(this, DateAdapterSymbol),
           })
         }
@@ -123,7 +124,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     // display,
     theme,
     // icons,
-    // locale,
+    locale,
     // date,
     // goTo,
   }

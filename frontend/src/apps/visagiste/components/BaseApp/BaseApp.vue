@@ -1,7 +1,10 @@
 <script setup lang="ts">
+// Styles
 import './../../styles/main.scss'
 import './BaseApp.scss';
-// Utilities
+
+// Composables
+import { useRtl } from "@/apps/visagiste/composables";
 import { themeProps, provideTheme } from '../../composables/theme';
 
 // Types
@@ -18,7 +21,8 @@ const { themeClasses } = provideTheme(props)
 <div
   :class="[
     'base-application',
-     themeClasses
+     themeClasses,
+     rtlClasses,
   ]"
 >
   <div class="base-application__wrap">
