@@ -4,5 +4,9 @@
 import { warn } from "vue";
 
 export function consoleWarn (message: string): void {
-  warn(`Base: ${message}`)
+  warn(`Visagiste: ${message}`)
+}
+
+export function consoleError (message: string): void {
+  warn(`Visagiste error: ${message}`)
 }
