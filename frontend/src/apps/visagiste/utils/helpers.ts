@@ -54,6 +54,40 @@ export function getObjectValueByPath (obj: any, path?: string | null, fallback?:
   return getNestedValue(obj, path.split('.'), fallback)
 }
 
+export type SelectItemKey<T = Record<string, any>> =
+  | boolean | null | undefined // Ignored
+  | string // Lookup by key, can use dot notation for nested objects
+  | readonly (string | number)[] // Nested lookup by key, each array item is a key in the next level
+  | ((item: T, fallback?: any) => any)
+
+export function getPropertyFromItem (
+  item: any,
+  property: SelectItemKey,
+  fallback?: any
+): any {
+  if (property === true) return item === undefined ? fallback : item
+
+  if (property == null || typeof property === 'boolean') return fallback
+
+  if (item !== Object(item)) {
+    if (typeof property !== 'function') return fallback
+
+    const value = property(item, fallback)
+
+    return typeof value === 'undefined' ? fallback : value
+  }
+
+  if (typeof property === 'string') return getObjectValueByPath(item, property, fallback)
+
+  if (Array.isArray(property)) return getNestedValue(item, property, fallback)
+
+  if (typeof property !== 'function') return fallback
+
+  const value = property(item, fallback)
+
+  return typeof value === 'undefined' ? fallback : value
+}
+
 export type EventProp<T extends any[] = any[], F = (...args: T) => void> = F
 export const EventProp = <T extends any[] = any[]>() => [Function, Array] as PropType<EventProp<T>>
 
@@ -103,6 +137,10 @@ export function focusChild(el: Element, location?: 'next' | 'prev' | 'first' | '
     if (_el) _el.focus()
     else focusChild(el, location === 'next' ? 'first': 'last')
   }
+}
+
+export function isEmpty (val: any): boolean {
+  return val === null || val === undefined || (typeof val === 'string' && val.trim() === '')
 }
 
 // Only allow a single return type
