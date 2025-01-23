@@ -1,7 +1,6 @@
 // Utilities
 import {capitalize, inject, provide, ref, watchEffect} from "vue";
 import {consoleError} from "@/apps/visagiste/utils";
-import {BaseDataTableSelectionSymbol} from "./select";
 
 // Types
 import type {DeepReadonly, InjectionKey, PropType, Ref} from "vue";
@@ -13,7 +12,7 @@ export const dataTableHeadersProps = {
   headers: Array as PropType<DeepReadonly<DataTableHeader[]>>,
 }
 
-export const baseDataTableHeadersSymbol: InjectionKey<{
+export const BaseDataTableHeadersSymbol: InjectionKey<{
   headers: Ref<InternalDataTableHeader[][]>
   columns: Ref<InternalDataTableHeader[]>
 }> = Symbol.for('visagiste:data-table-headers')
@@ -283,12 +282,12 @@ export function createHeaders (
 
   const data = { headers, columns, sortFunctions, sortRawFunctions, filterFunctions }
 
-  provide(BaseDataTableSelectionSymbol, data)
+  provide(BaseDataTableHeadersSymbol, data)
 
   return data
 }
 export function useHeaders () {
-  const data = inject(BaseDataTableSelectionSymbol)
+  const data = inject(BaseDataTableHeadersSymbol)
 
   if (!data) throw new Error('Missing headers!')
 
