@@ -1,11 +1,11 @@
 // Composables
 // TODO: CreateDate
-import { createDefaults, DefaultsSymbol } from "@/apps/visagiste/composables/defaults";
-// TODO: CreateDisplay
+import { createDefaults, DefaultsSymbol } from "./composables/defaults";
+import { createDisplay, DisplaySymbol } from "./composables/display";
 // TODO: CreateGoTo
 // TODO: CreateIcons
-import { createLocale, LocaleSymbol } from "@/apps/visagiste/composables/locale";
-import  { createTheme, ThemeSymbol } from "@/apps/visagiste/composables/theme";
+import { createLocale, LocaleSymbol } from "./composables/locale";
+import  { createTheme, ThemeSymbol } from "./composables/theme";
 
 // Utilities
 import {defineComponent, nextTick, reactive} from "vue";
@@ -14,8 +14,8 @@ import {getUid, IN_BROWSER, mergeDeep} from "@/apps/visagiste/utils";
 // Types
 import type { App, ComponentPublicInstance, InjectionKey } from "vue";
 // TODO: Create DateOptions
-import type { DefaultsOptions } from "@/apps/visagiste/composables/defaults";
-// TODO: Create DisplayOptions
+import type { DefaultsOptions } from "./composables/defaults";
+import type { DisplayOptions, SSROptions } from "./composables/display";
 // TODO: Create GoToOptions
 // TODO: Create IconOptions
 import type { LocaleOptions, RtlOptions } from "@/apps/visagiste/composables/locale";
@@ -29,12 +29,12 @@ export interface VisagisteOptions {
   // date?: DateOptions
   directives?: Record<string, any>
   defaults?: DefaultsOptions
-  // display?: DisplayOptions
+  display?: DisplayOptions
   // goTo?: GoToOptions
   theme?: ThemeOptions
   // icons?: IconOptions
   locale?: LocaleOptions & RtlOptions
-  // ssr?: SSROptions
+  ssr?: SSROptions
 }
 
 export interface Blueprint extends Omit<VisagisteOptions, 'blueprint'> {}
@@ -49,7 +49,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
   } = options
 
   const defaults = createDefaults(options.defaults)
-  // const display = createDisplay(options.display)
+  const display = createDisplay(options.display, options.ssr)
   const theme = createTheme(options.theme)
   // const icons = createIcons(options.icons)
   const locale = createLocale(options.locale)
@@ -75,7 +75,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     theme.install(app)
 
     app.provide(DefaultsSymbol, defaults)
-    // app.provide(DisplaySymbol, display)
+    app.provide(DisplaySymbol, display)
     app.provide(ThemeSymbol, theme)
     // app.provide(IconSymbol, icons)
     app.provide(LocaleSymbol, locale)
@@ -84,21 +84,21 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     // app.provide(GoToSymbol, goTo)
 
     // In case of SSR
-    // if (IN_BROWSER && options.ssr) {
-    //   if (app.$nuxt) {
-    //     app.$nuxt.hook('app:suspense:resolve', () => {
-    //       display.update()
-    //     })
-    //   } else {
-    //     const { mount } = app
-    //     app.mount = (...args) => {
-    //       const vm = mount(...args)
-    //       nextTick(() => display.update())
-    //       app.mount = mount
-    //       return vm
-    //     }
-    //   }
-    // }
+    if (IN_BROWSER && options.ssr) {
+      if (app.$nuxt) {
+        app.$nuxt.hook('app:suspense:resolve', () => {
+          display.update()
+        })
+      } else {
+        const { mount } = app
+        app.mount = (...args) => {
+          const vm = mount(...args)
+          nextTick(() => display.update())
+          app.mount = mount
+          return vm
+        }
+      }
+    }
 
     getUid.reset()
 
@@ -107,7 +107,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
         $visagiste () {
           return reactive({
             defaults: inject.call(this, DefaultsSymbol),
-            // display: inject.call(this, DisplaySymbol),
+            display: inject.call(this, DisplaySymbol),
             theme: inject.call(this, ThemeSymbol),
             // icons: inject.call(this, IconSymbol),
             locale: inject.call(this, LocaleSymbol),
@@ -121,7 +121,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
   return {
     install,
     defaults,
-    // display,
+    display,
     theme,
     // icons,
     locale,
