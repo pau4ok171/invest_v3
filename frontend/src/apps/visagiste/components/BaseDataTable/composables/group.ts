@@ -2,7 +2,7 @@
 import {useProxiedModel} from "@/apps/visagiste/composables/proxiedModel";
 
 // Utilities
-import {computed, provide, inject, ref} from "vue";
+import {computed, provide, inject, ref, PropType} from "vue";
 import {getObjectValueByPath} from "@/apps/visagiste/utils";
 
 // Types
@@ -22,6 +22,13 @@ export interface Group<T = any> {
   key: string
   value: any
   items: readonly (T | Group<T>)[]
+}
+
+export const dataTableGroupProps = {
+  groupBy: {
+    type: Array as PropType<readonly SortItem[]>,
+    default: () => ({}),
+  },
 }
 
 const BaseDataTableGroupSymbol: InjectionKey<{
