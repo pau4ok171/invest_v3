@@ -5,6 +5,7 @@ export * from './getCurrentInstance'
 export * from './globals'
 export * from './helpers'
 export * from './injectSelf'
+export * from './propsFactory'
 
 
 
