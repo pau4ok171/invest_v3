@@ -7,14 +7,12 @@ import './BaseApp.scss';
 import { useRtl } from "@/apps/visagiste/composables";
 import { themeProps, provideTheme } from '../../composables/theme';
 
-// Types
-
-// Composables
 const props = defineProps({
   ...themeProps
 })
 
 const { themeClasses } = provideTheme(props)
+const { rtlClasses } = useRtl()
 </script>
 
 <template>
