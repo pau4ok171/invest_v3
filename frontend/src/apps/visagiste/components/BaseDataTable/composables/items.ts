@@ -15,7 +15,7 @@ export interface DataTableItemProps {
 }
 
 // Composables
-export const dataTableItemProps = {
+export const dataTableItemsProps = {
   items: {
     type: Array as PropType<DataTableItemProps['items']>,
     default: () => ([]),
