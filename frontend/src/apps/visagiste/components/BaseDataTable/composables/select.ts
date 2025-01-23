@@ -188,4 +188,6 @@ export function useSelection () {
   const data = inject(BaseDataTableSelectionSymbol)
 
   if (!data) throw new Error('Missing selection!')
+
+  return data
 }

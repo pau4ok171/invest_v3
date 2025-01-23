@@ -25,7 +25,7 @@ export type DataTableHeader<T = Record<string, any>> = {
 
   sortable?: boolean
   sort?: DataTableCompareFunction
-  sortRow?: DataTableCompareFunction
+  sortRaw?: DataTableCompareFunction
   filter?: FilterFunction
 
   mobile?: boolean
