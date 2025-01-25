@@ -5,10 +5,10 @@ import './BaseApp.scss';
 
 // Composables
 import { useRtl } from "@/apps/visagiste/composables";
-import { themeProps, provideTheme } from '../../composables/theme';
+import { useThemeProps, provideTheme } from '../../composables/theme';
 
 const props = defineProps({
-  ...themeProps
+  ...useThemeProps()
 })
 
 const { themeClasses } = provideTheme(props)
