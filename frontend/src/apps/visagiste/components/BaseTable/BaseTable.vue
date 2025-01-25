@@ -3,7 +3,7 @@
 import './BaseTable.scss';
 
 // Composables
-import { themeProps, provideTheme } from "@/apps/visagiste/composables/theme";
+import { useThemeProps, provideTheme } from "@/apps/visagiste/composables/theme";
 import { densityProps, useDensity } from "@/apps/visagiste/composables/density";
 
 // Utilities
@@ -17,7 +17,7 @@ export default defineComponent({
     fixedFooter: Boolean,
     height: [Number, String],
     hover: Boolean,
-    ...themeProps,
+    ...useThemeProps(),
     ...densityProps,
   },
   methods: {
