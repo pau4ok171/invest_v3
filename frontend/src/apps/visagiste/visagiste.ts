@@ -3,13 +3,13 @@
 import { createDefaults, DefaultsSymbol } from "./composables/defaults";
 import { createDisplay, DisplaySymbol } from "./composables/display";
 // TODO: CreateGoTo
-// TODO: CreateIcons
+import { createIcons, IconSymbol } from "./composables/icons";
 import { createLocale, LocaleSymbol } from "./composables/locale";
 import  { createTheme, ThemeSymbol } from "./composables/theme";
 
 // Utilities
 import {defineComponent, nextTick, reactive} from "vue";
-import {getUid, IN_BROWSER, mergeDeep} from "@/apps/visagiste/utils";
+import {getUid, IN_BROWSER, mergeDeep} from "./utils";
 
 // Types
 import type { App, ComponentPublicInstance, InjectionKey } from "vue";
@@ -17,10 +17,10 @@ import type { App, ComponentPublicInstance, InjectionKey } from "vue";
 import type { DefaultsOptions } from "./composables/defaults";
 import type { DisplayOptions, SSROptions } from "./composables/display";
 // TODO: Create GoToOptions
-// TODO: Create IconOptions
-import type { LocaleOptions, RtlOptions } from "@/apps/visagiste/composables/locale";
-import type { ThemeOptions } from "@/apps/visagiste/composables/theme";
-export * from "@/apps/visagiste/composables"
+import type { IconOptions } from "./composables/icons";
+import type { LocaleOptions, RtlOptions } from "./composables/locale";
+import type { ThemeOptions } from "./composables/theme";
+export * from "./composables"
 
 export interface VisagisteOptions {
   aliases?: Record<string, any>
@@ -32,7 +32,7 @@ export interface VisagisteOptions {
   display?: DisplayOptions
   // goTo?: GoToOptions
   theme?: ThemeOptions
-  // icons?: IconOptions
+  icons?: IconOptions
   locale?: LocaleOptions & RtlOptions
   ssr?: SSROptions
 }
@@ -51,7 +51,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
   const defaults = createDefaults(options.defaults)
   const display = createDisplay(options.display, options.ssr)
   const theme = createTheme(options.theme)
-  // const icons = createIcons(options.icons)
+  const icons = createIcons(options.icons)
   const locale = createLocale(options.locale)
   // const date = createDate(options.date)
   // const goTo = createGoTo(options.goTo)
@@ -77,7 +77,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     app.provide(DefaultsSymbol, defaults)
     app.provide(DisplaySymbol, display)
     app.provide(ThemeSymbol, theme)
-    // app.provide(IconSymbol, icons)
+    app.provide(IconSymbol, icons)
     app.provide(LocaleSymbol, locale)
     // app.provide(DateOptionsSymbol, date.options)
     // app.provide(DateAdapterSymbol, date.instance)
@@ -109,7 +109,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
             defaults: inject.call(this, DefaultsSymbol),
             display: inject.call(this, DisplaySymbol),
             theme: inject.call(this, ThemeSymbol),
-            // icons: inject.call(this, IconSymbol),
+            icons: inject.call(this, IconSymbol),
             locale: inject.call(this, LocaleSymbol),
             // date: inject.call(this, DateAdapterSymbol),
           })
@@ -123,7 +123,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     defaults,
     display,
     theme,
-    // icons,
+    icons,
     locale,
     // date,
     // goTo,
