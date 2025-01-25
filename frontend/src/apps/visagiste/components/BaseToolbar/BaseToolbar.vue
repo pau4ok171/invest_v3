@@ -9,8 +9,8 @@ import { BaseExpandTransition } from "@/apps/visagiste/components/transitions";
 import { borderProps, useBorder } from '@/apps/visagiste/composables/border'
 import { useBackgroundColor } from "@/apps/visagiste/composables/color";
 import { elevationProps, useElevation } from '@/apps/visagiste/composables/elevation'
-import { roundedProps, useRounded } from '@/apps/visagiste/composables/rounded'
-import { themeProps, provideTheme } from "@/apps/visagiste/composables/theme";
+import { useRoundedProps, useRounded } from '@/apps/visagiste/composables/rounded'
+import { useThemeProps, provideTheme } from "@/apps/visagiste/composables/theme";
 
 // Utilities
 import {computed, shallowRef, toRef, defineComponent} from "vue";
@@ -53,8 +53,8 @@ export default defineComponent({
     title: String,
     ...borderProps,
     ...elevationProps,
-    ...roundedProps,
-    ...themeProps,
+    ...useRoundedProps(),
+    ...useThemeProps(),
   },
   setup(props, { slots }) {
     const { backgroundColorClasses, backgroundColorStyles } = useBackgroundColor(toRef(props, 'color'))
