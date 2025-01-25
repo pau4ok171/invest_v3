@@ -1,7 +1,6 @@
 import type {ComputedGetter, PropType, ToRefs} from "vue";
 import {computed, reactive, toRefs, watchEffect} from "vue";
 
-
 export function getNestedValue (obj: any, path: (string | number)[], fallback?: any): any {
   const last = path.length - 1
   if (last < 0) return obj === undefined ? fallback : obj
@@ -256,4 +255,12 @@ export function wrapInArray<T> (
   ? IfAny<T, T[], T>
   : NonNullable<T>[] {
   return v == null ? [] : Array.isArray(v) ? v as any : [v]
+}
+
+const onRE = /^on[^a-z]/
+export const isOn = (key: string) => onRE.test(key)
+
+/** Array.includes but value can be any type */
+export function includes (arr: readonly any[], val: any) {
+  return arr.includes(val)
 }
