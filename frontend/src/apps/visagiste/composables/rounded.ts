@@ -1,6 +1,6 @@
 // Utilities
 import {computed, isRef} from "vue";
-import {getCurrentInstanceName} from "@/apps/visagiste/utils";
+import {getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 
 // Types
 import type {Ref} from "vue";
@@ -24,6 +24,14 @@ export const roundedProps = {
   },
   tile: Boolean,
 }
+
+export const useRoundedProps = propsFactory({
+  rounded: {
+    type: [Boolean, Number, String],
+    default: undefined,
+  },
+  tile: Boolean,
+}, 'rounded')
 
 export function useRounded (
   props: RoundedProps | Ref<RoundedValue>,
