@@ -8,6 +8,7 @@ import {
   lighten,
   mergeDeep,
   parseColor,
+  propsFactory,
   RGBtoHex
 } from "@/apps/visagiste/utils";
 
@@ -117,12 +118,13 @@ const allowedThemes = [
 ] as const
 
 export type ThemeName = typeof allowedThemes[number]
-export const themeProps = {
+
+export const useThemeProps = propsFactory({
   theme: {
     type: String as PropType<ThemeName>,
     validator: (v: any) => allowedThemes.includes(v)
   },
-}
+}, 'theme')
 
 function generateDefaults () {
   return {
