@@ -3,7 +3,7 @@
 import './BaseDivider.scss';
 
 // Composables
-import { themeProps, provideTheme } from "@/apps/visagiste/composables/theme";
+import {provideTheme, useThemeProps} from "@/apps/visagiste/composables/theme";
 
 // Utilities
 import {computed, defineComponent, toRef} from "vue";
@@ -24,7 +24,7 @@ export default defineComponent({
     opacity: [Number, String],
     thickness: [Number, String],
     vertical: [Boolean],
-    ...themeProps,
+    ...useThemeProps(),
   },
   setup(props) {
     const { themeClasses } = provideTheme(props)
