@@ -1,7 +1,9 @@
-import { createJavascriptTransition } from "@/apps/visagiste/components/transitions/createTransition";
+import { createJavascriptTransition, createCssTransition } from "./createTransition";
 
 import ExpandTransitionGenerator from './expand-transition'
 
+// Generic transitions
+export const BaseSlideYTransition = createCssTransition('slide-y-transition')
 
 // Javascript transitions
 export const BaseExpandTransition = createJavascriptTransition('expand-transition', ExpandTransitionGenerator())
@@ -9,3 +11,4 @@ export const BaseExpandXTransition = createJavascriptTransition('expand-x-transi
 
 export type BaseExpandTransition = InstanceType<typeof BaseExpandTransition>
 export type BaseExpandXTransition = InstanceType<typeof BaseExpandXTransition>
+export type BaseSlideYTransition = InstanceType<typeof BaseSlideYTransition>
