@@ -1,5 +1,6 @@
-import type {ComputedGetter, PropType, ToRefs} from "vue";
-import {computed, reactive, toRefs, watchEffect} from "vue";
+import type {ComputedGetter, PropType, ToRefs, VNode} from "vue";
+import {computed, Fragment, reactive, toRefs, watchEffect} from "vue";
+import {IN_BROWSER} from "@/apps/visagiste/utils/globals";
 
 export function getNestedValue (obj: any, path: (string | number)[], fallback?: any): any {
   const last = path.length - 1
@@ -59,6 +60,22 @@ export type SelectItemKey<T = Record<string, any>> =
   | readonly (string | number)[] // Nested lookup by key, each array item is a key in the next level
   | ((item: T, fallback?: any) => any)
 
+export function pick<
+  T extends object,
+  U extends Extract<keyof T, string>
+> (obj: T, paths: U[]): MaybePick<T, U> {
+  const found: any = {}
+
+  const keys = new Set(Object.keys(obj))
+  for (const path of paths) {
+    if (keys.has(path)) {
+      found[path] = obj[path]
+    }
+  }
+
+  return found
+}
+
 export function getPropertyFromItem (
   item: any,
   property: SelectItemKey,
@@ -89,6 +106,16 @@ export function getPropertyFromItem (
 
 export type EventProp<T extends any[] = any[], F = (...args: T) => void> = F
 export const EventProp = <T extends any[] = any[]>() => [Function, Array] as PropType<EventProp<T>>
+
+export function callEvent<T extends any[]> (handler: EventProp<T> | EventProp<T>[] | undefined, ...args: T) {
+  if (Array.isArray(handler)) {
+    for (const h of handler) {
+      h(...args)
+    }
+  } else if (typeof handler === 'function') {
+    handler(...args)
+  }
+}
 
 export function toKebabCase (str = '') {
   if (toKebabCase.cache.has(str)) return toKebabCase.cache.get(str)!
@@ -248,6 +275,31 @@ export function createRange (length: number, start = 0): number[] {
   return Array.from({ length }, (v, k) => start + k)
 }
 
+/**
+ * Filter attributes that should be applied to
+ * the root element of an input component. Remaining
+ * attributes should be passed to the <input> element inside.
+ * */
+export function filterInputAttrs (attrs: Record<string, unknown>) {
+  const [events, props] = pickWithRest(attrs, [onRE])
+  const inputEvents = omit(events, bubblingEvents)
+  const [rootAttrs, inputAttrs] = pickWithRest(props, ['class', 'style', 'id', '/^data-/'])
+  Object.assign(rootAttrs, events)
+  Object.assign(inputAttrs, inputEvents)
+  return [rootAttrs, inputAttrs]
+}
+
+export function flattenFragments (nodes: VNode[]): VNode[] {
+  return nodes.map(node => {
+    if (node.type === Fragment) {
+      return flattenFragments(node.children as VNode[])
+    } else {
+      return node
+    }
+  }).flat()
+}
+
+
 type IfAny<T, Y, N> = 0 extends (1 & T) ? Y : N
 export function wrapInArray<T> (
   v: T | null | undefined
@@ -257,10 +309,149 @@ export function wrapInArray<T> (
   return v == null ? [] : Array.isArray(v) ? v as any : [v]
 }
 
+type MaybePick<
+  T extends object,
+  U extends Extract<keyof T, string>
+> = Record<string, unknown> extends T ? Partial<Pick<T, U>> : Pick<T, U>
+
+// Array of keys
+export function pickWithRest<
+  T extends object,
+  U extends Extract<keyof T, string>,
+  E extends Extract<keyof T, string>
+> (obj: T, paths: U[], exclude?: E[]): [yes: MaybePick<T, Exclude<U, E>>, no: Omit<T, Exclude<U, E>>]
+// Array of keys or RegExp to test keys against
+export function pickWithRest<
+  T extends object,
+  U extends Extract<keyof T, string>,
+  E extends Extract<keyof T, string>
+> (obj: T, paths: (U | RegExp)[], exclude?: E[]): [yes: Partial<T>, no: Partial<T>]
+export function pickWithRest<
+  T extends object,
+  U extends Extract<keyof T, string>,
+  E extends Extract<keyof T, string>
+> (obj: T, paths: (U | RegExp)[], exclude?: E[]): [yes: Partial<T>, no: Partial<T>] {
+  const found = Object.create(null)
+  const rest = Object.create(null)
+
+  for (const key in obj) {
+    if (
+      paths.some(path => path instanceof RegExp
+        ? path.test(key)
+        : path === key
+      ) && !exclude?.some(path => path === key)
+    ) {
+      found[key] = obj[key]
+    } else {
+      rest[key] = obj[key]
+    }
+  }
+
+  return [found, rest]
+}
+
+export function omit<
+  T extends object,
+  U extends Extract<keyof T, string>
+> (obj: T, exclude: U[]): Omit<T, U> {
+  const clone = { ...obj }
+
+  exclude.forEach(prop => delete clone[prop])
+
+  return clone
+}
+
+export function only<
+  T extends object,
+  U extends Extract<keyof T, string>
+> (obj: T, include: U[]): Pick<T, U> {
+  const clone = {} as T
+
+  include.forEach(prop => clone[prop] = obj[prop])
+
+  return clone
+}
+
 const onRE = /^on[^a-z]/
 export const isOn = (key: string) => onRE.test(key)
+
+const bubblingEvents = [
+  'onAfterscriptexecute',
+  'onAnimationcancel',
+  'onAnimationend',
+  'onAnimationiteration',
+  'onAnimationstart',
+  'onAuxclick',
+  'onBeforeinput',
+  'onBeforescriptexecute',
+  'onChange',
+  'onClick',
+  'onCompositionend',
+  'onCompositionstart',
+  'onCompositionupdate',
+  'onContextmenu',
+  'onCopy',
+  'onCut',
+  'onDblclick',
+  'onFocusin',
+  'onFocusout',
+  'onFullscreenchange',
+  'onFullscreenerror',
+  'onGesturechange',
+  'onGestureend',
+  'onGesturestart',
+  'onGotpointercapture',
+  'onInput',
+  'onKeydown',
+  'onKeypress',
+  'onKeyup',
+  'onLostpointercapture',
+  'onMousedown',
+  'onMousemove',
+  'onMouseout',
+  'onMouseover',
+  'onMouseup',
+  'onMousewheel',
+  'onPaste',
+  'onPointercancel',
+  'onPointerdown',
+  'onPointerenter',
+  'onPointerleave',
+  'onPointermove',
+  'onPointerout',
+  'onPointerover',
+  'onPointerup',
+  'onReset',
+  'onSelect',
+  'onSubmit',
+  'onTouchcancel',
+  'onTouchend',
+  'onTouchmove',
+  'onTouchstart',
+  'onTransitioncancel',
+  'onTransitionend',
+  'onTransitionrun',
+  'onTransitionstart',
+  'onWheel',
+]
 
 /** Array.includes but value can be any type */
 export function includes (arr: readonly any[], val: any) {
   return arr.includes(val)
+}
+
+/** Returns null if the selector is not supported, or we can't check */
+export function matchesSelector (el: Element | undefined, selector: string): boolean | null {
+  const supportsSelector = IN_BROWSER
+    && typeof CSS !== 'undefined'
+    && typeof CSS.supports !== 'undefined' &&
+    CSS.supports(`selector(${selector})`)
+
+  if (!supportsSelector) return null
+
+  try {
+    return !!el && el.matches(selector)
+  } catch (err) {
+    return null
+  }
 }
