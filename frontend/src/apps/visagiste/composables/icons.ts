@@ -2,8 +2,8 @@
 import { aliases, mdi } from '@/apps/visagiste/iconsets/mdi'
 
 // Utilities
-import {computed, defineComponent, inject, unref} from "vue";
-import {consoleWarn, mergeDeep} from "@/apps/visagiste/utils";
+import {computed, h, inject, unref} from "vue";
+import {defineComponent, consoleWarn, mergeDeep, propsFactory} from "@/apps/visagiste/utils";
 
 // Types
 import type {ComponentPublicInstance, FunctionalComponent, InjectionKey, PropType, Ref} from "vue";
@@ -84,7 +84,7 @@ type IconInstance = {
 
 export const IconSymbol: InjectionKey<InternalIconOptions> = Symbol.for('visagiste:icons')
 
-export const iconProps = {
+export const useIconProps = propsFactory({
    icon: {
       type: IconValue,
     },
@@ -92,18 +92,18 @@ export const iconProps = {
       type: String,
       required: true
     },
-}
+}, 'icon')
 
 export const BaseComponentIcon = defineComponent({
   name: 'BaseComponentIcon',
-  props: iconProps,
+  props: useIconProps(),
   setup(props, { slots }) {
     return () => {
       const Icon = props.icon as JSXComponent
-      return (
-        <props.tag>
-          { props.icon ? <Icon/> : slots.default?.() }
-        </props.tag>
+      return h(
+        props.tag,
+        null,
+        props.icon ? h(Icon) : slots.default?.()
       )
     }
   }
@@ -113,28 +113,27 @@ export type BaseComponentIcon = InstanceType<typeof BaseComponentIcon>
 export const BaseSvgIcon = defineComponent({
   name: 'BaseSvgIcon',
   inheritAttrs: false,
-  props: iconProps,
+  props: useIconProps(),
   setup(props, { attrs }) {
     return () => {
-      return (
-        <props.tag { ...attrs } style={ null }>
-          <svg
-            class="base-icon__svg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            role="img"
-            aria-hidden="true"
-          >
-            { Array.isArray(props.icon)
-              ? props.icon.map(path => (
-                Array.isArray(path)
-                  ? <path d={ path[0] as string } fill-opacity={ path[1] }></path>
-                  : <path d={ path as string }></path>
-              ))
-              : <path d={ props.icon as string }></path>
+      const icon = Array.isArray(props.icon)
+        ? props.icon.map(path => {
+            if (Array.isArray(path)) {
+              return h('path', {d: path[0], fillOpacity: path[1]});
+            } else {
+              return h('path', {d: path});
             }
-          </svg>
-        </props.tag>
+          })
+         : h('path', { d: props.icon });
+
+      return h(props.tag, { ...attrs, style: null} ,
+        h('svg', {
+          class: "base-icon__svg",
+          xmlns: "http://www.w3.org/2000/svg",
+          viewBox: "0 0 24 24",
+          role: "img",
+          'aria-hidden': "true",
+        }, icon)
       )
     }
   }
@@ -143,10 +142,10 @@ export type BaseSvgIcon = InstanceType<typeof BaseSvgIcon>
 
 export const BaseLigatureIcon = defineComponent({
   name: 'BaseLigatureIcon',
-  props: iconProps,
+  props: useIconProps(),
   setup(props) {
     return () => {
-      return <props.tag>{ props.icon }</props.tag>
+      return h(props.tag, {}, props.icon)
     }
   },
 })
@@ -154,10 +153,10 @@ export type BaseLigatureIcon = InstanceType<typeof BaseLigatureIcon>
 
 export const BaseClassIcon = defineComponent({
   name: 'BaseClassIcon',
-  props: iconProps,
-  setup(props) {
+  props: useIconProps(),
+  setup(props, context) {
     return () => {
-      return <props.tag class={ props.icon }></props.tag>
+      return h(props.tag, { class: props.icon })
     }
   },
 })
