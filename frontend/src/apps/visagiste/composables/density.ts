@@ -2,7 +2,7 @@
 
 // Types
 import type { PropType } from "vue";
-import {getCurrentInstanceName} from "@/apps/visagiste/utils";
+import {getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 import {computed} from "vue";
 
 const allowedDensities = [null, 'default', 'comfortable', 'compact'] as const
@@ -14,13 +14,13 @@ export interface DensityProps {
 }
 
 // Composables
-export const densityProps = {
+export const useDensityProps = propsFactory({
   density: {
     type: String as PropType<Density>,
     default: 'default',
     validator: (v: any) => allowedDensities.includes(v),
   }
-}
+}, 'density')
 
 export function useDensity (
   props: DensityProps,
