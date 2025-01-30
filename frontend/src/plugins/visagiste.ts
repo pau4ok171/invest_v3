@@ -4,6 +4,9 @@ import {createVisagiste} from "@/apps/visagiste/visagiste";
 // Locals
 import { ru, es, fr, de } from "@/apps/visagiste/locale";
 
+// Icons
+import { aliases, mdi } from "@/apps/visagiste/iconsets/mdi-svg";
+
 const finargoDarkTheme = {
   dark: true,
   colors: {
@@ -93,5 +96,12 @@ export default createVisagiste({
   locale: {
     locale: 'ru',
     messages: { ru, es, de, fr }
-  }
+  },
+  icons: {
+    defaultSet: 'mdi',
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
 })
