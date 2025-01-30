@@ -1,0 +1,50 @@
+@use 'sass:map';
+@use "../../styles/settings";
+@use "../../styles/tools";
+@use "./variables" as *;
+
+@include tools.layer('components') {
+  .base-icon {
+    --base-icon-size-multiplier: 1;
+    align-items: center;
+    display: inline-flex;
+    font-feature-settings: 'liga';
+    height: $icon-size;
+    justify-content: center;
+    letter-spacing: $icon-letter-spacing;
+    line-height: $icon-line-height;
+    position: relative;
+    text-indent: $icon-text-indent;
+    text-align: center;
+    user-select: none;
+    vertical-align: $icon-vertical-align;
+    width: $icon-size;
+    min-width: $icon-size;
+
+    &--clickable {
+      cursor: pointer;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: $icon-disabled-opacity;
+    }
+
+    @each $name in settings.$sizes {
+      &--size-#{$name} {
+        font-size: calc(var(--base-icon-size-multiplier) * #{map.get($icon-sizes, $name)});
+      }
+    }
+  }
+  .base-icon__svg {
+    fill: currentColor;
+    width: 100%;
+    height: 100%;
+  }
+  .base-icon--start {
+    margin-inline-end: $icon-margin-start;
+  }
+  .base-icon__end {
+    margin-inline-end: $icon-margin-end;
+  }
+}
