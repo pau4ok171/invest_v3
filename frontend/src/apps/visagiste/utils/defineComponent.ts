@@ -1,27 +1,164 @@
-import type {VNode, VNodeChild} from "vue";
+// Composables
+import { injectDefaults, internalUseDefaults } from '@/apps/visagiste/composables/defaults'
+
+// Utilities
+import {
+  defineComponent as _defineComponent, // eslint-disable-line no-restricted-imports
+} from 'vue'
+import { consoleWarn } from './console'
+import { pick } from './helpers'
+import { propsFactory } from './propsFactory'
+
+// Types
+import type {
+  AllowedComponentProps,
+  Component,
+  ComponentCustomProps,
+  ComponentInjectOptions,
+  ComponentObjectPropsOptions,
+  ComponentOptions,
+  ComponentOptionsMixin,
+  ComponentOptionsWithObjectProps,
+  ComponentOptionsWithoutProps,
+  ComponentPropsOptions,
+  ComponentPublicInstance,
+  ComputedOptions,
+  DefineComponent,
+  EmitsOptions,
+  ExtractDefaultPropTypes,
+  ExtractPropTypes,
+  FunctionalComponent,
+  MethodOptions,
+  ObjectEmitsOptions,
+  SlotsType,
+  VNode,
+  VNodeChild,
+  VNodeProps,
+} from 'vue'
+
+// No props
+export function defineComponent<
+  Props = {},
+  RawBindings = {},
+  D = {},
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
+  Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
+  E extends EmitsOptions = {},
+  EE extends string = string,
+  I extends {} = {},
+  II extends string = string,
+  S extends SlotsType = {},
+>(
+  options: ComponentOptionsWithoutProps<
+    Props,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    EE,
+    I,
+    II,
+    S
+  >
+): DefineComponent<Props, RawBindings, D, C, M, Mixin, Extends, E, EE>
+
+// Object Props
+export function defineComponent<
+  PropsOptions extends Readonly<ComponentPropsOptions>,
+  RawBindings,
+  D,
+  C extends ComputedOptions = {},
+  M extends MethodOptions = {},
+  Mixin extends ComponentOptionsMixin = ComponentOptionsMixin,
+  Extends extends ComponentOptionsMixin = ComponentOptionsMixin,
+  E extends EmitsOptions = {},
+  EE extends string = string,
+  I extends {} = {},
+  II extends string = string,
+  S extends SlotsType = {},
+>(
+  options: ComponentOptionsWithObjectProps<
+    PropsOptions,
+    RawBindings,
+    D,
+    C,
+    M,
+    Mixin,
+    Extends,
+    E,
+    EE,
+    I,
+    II,
+    S
+  >
+): DefineComponent<PropsOptions, RawBindings, D, C, M, Mixin, Extends, E, EE> & FilterPropsOptions<PropsOptions>
+
+// Implementation
+export function defineComponent (options: ComponentOptions) {
+  options._setup = options._setup ?? options.setup
+
+  if (!options.name) {
+    consoleWarn('The component is missing an explicit name, unable to generate default prop value')
+
+    return options
+  }
+
+  if (options._setup) {
+    options.props = propsFactory(options.props ?? {}, options.name)()
+    const propKeys = Object.keys(options.props).filter(key => key !== 'class' && key !== 'style')
+    options.filterProps = function filterProps (props: Record<string, any>) {
+      return pick(props, propKeys)
+    }
+
+    options.props._as = String
+    options.setup = function setup (props: Record<string, any>, ctx) {
+      const defaults = injectDefaults()
+
+      // Skip props proxy if defaults are not provided
+      if (!defaults.value) return options._setup(props, ctx)
+
+      const { props: _props, provideSubDefaults } = internalUseDefaults(props, props._as ?? options.name, defaults)
+
+      const setupBindings = options._setup(_props, ctx)
+
+      provideSubDefaults()
+
+      return setupBindings
+    }
+  }
+
+  return options
+}
+
+type ToListeners<T extends string | number | symbol> = { [K in T]: K extends `on${infer U}` ? Uncapitalize<U> : K }[T]
 
 export type SlotsToProps<
-	U extends RawSlots,
-	T = MakeInternalSlots<U>
+  U extends RawSlots,
+  T = MakeInternalSlots<U>
 > = {
-	$children?: (
-		| VNodeChild
-		| (T extends { default: infer V } ? V : {})
-		| { [K in keyof T]?: T[K] }
-	)
-	'v-slots'?: { [ K in keyof T]?: T[K] | false }
+  $children?: (
+    | VNodeChild
+    | (T extends { default: infer V } ? V : {})
+    | { [K in keyof T]?: T[K] }
+  )
+  'v-slots'?: { [K in keyof T]?: T[K] | false }
 } & {
-	[K in keyof T as `v-slot:${K & string}`]?: T[K] | false
+  [K in keyof T as `v-slot:${K & string}`]?: T[K] | false
 }
 
 type RawSlots = Record<string, unknown>
 type Slot<T> = [T] extends [never] ? () => VNodeChild : (arg: T) => VNodeChild
 type VueSlot<T> = [T] extends [never] ? () => VNode[] : (arg: T) => VNode[]
 type MakeInternalSlots<T extends RawSlots> = {
-	[K in keyof T]: Slot<T[K]>
+  [K in keyof T]: Slot<T[K]>
 }
 type MakeSlots<T extends RawSlots> = {
-	[K in keyof T]: VueSlot<T[K]>
+  [K in keyof T]: VueSlot<T[K]>
 }
 
 export type GenericProps<Props, Slots extends Record<string, unknown>> = {
