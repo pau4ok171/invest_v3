@@ -150,8 +150,8 @@ export default defineComponent({
     watch(() => props.src, () => {
       init(state.value !== 'idle')
     })
-    watch(aspectRatio, (val, oldValue) => {
-      if (!val && oldValue && image.value) {
+    watch(aspectRatio, (val, oldVal) => {
+      if (!val && oldVal && image.value) {
         pollForSize(image.value)
       }
     })
@@ -185,7 +185,7 @@ export default defineComponent({
           if (vm.isUnmounted) return
 
           if (image.value?.complete) {
-            if (!image.value?.naturalWidth) {
+            if (!image.value.naturalWidth) {
               onError()
             }
 
