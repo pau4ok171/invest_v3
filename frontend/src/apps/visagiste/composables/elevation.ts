@@ -1,4 +1,5 @@
 // Utilities
+import {propsFactory} from "@/apps/visagiste/utils";
 
 // Types
 import type {Ref} from "vue";
@@ -13,7 +14,7 @@ export interface ElevationProps {
 }
 
 // Composables
-export const elevationProps = {
+export const useElevationProps = propsFactory({
   elevation: {
     type: [Number, String],
     validator (v: any) {
@@ -23,7 +24,7 @@ export const elevationProps = {
       )
     }
   }
-}
+}, 'elevation')
 
 export function useElevation (
   props: ElevationProps | Ref<number | string | undefined>
