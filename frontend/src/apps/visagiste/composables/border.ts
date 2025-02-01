@@ -1,6 +1,6 @@
 // Utilities
 import {computed, isRef} from "vue";
-import {getCurrentInstanceName} from "@/apps/visagiste/utils";
+import {getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 
 // Types
 export interface BorderProps {
@@ -8,9 +8,9 @@ export interface BorderProps {
 }
 
 // Composables
-export const borderProps = {
+export const useBorderProps = propsFactory({
   border: [Boolean, Number, String]
-}
+}, 'border')
 
 export function useBorder (
   props: BorderProps,
