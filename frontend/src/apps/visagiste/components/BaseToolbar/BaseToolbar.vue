@@ -6,9 +6,9 @@ import BaseToolbarTitle from "./BaseToolbarTitle.vue";
 import { BaseExpandTransition } from "@/apps/visagiste/components/transitions";
 
 // Composables
-import { borderProps, useBorder } from '@/apps/visagiste/composables/border'
+import { useBorderProps, useBorder } from '@/apps/visagiste/composables/border'
 import { useBackgroundColor } from "@/apps/visagiste/composables/color";
-import { elevationProps, useElevation } from '@/apps/visagiste/composables/elevation'
+import { useElevationProps, useElevation } from '@/apps/visagiste/composables/elevation'
 import { useRoundedProps, useRounded } from '@/apps/visagiste/composables/rounded'
 import { useThemeProps, provideTheme } from "@/apps/visagiste/composables/theme";
 
@@ -51,8 +51,8 @@ export default defineComponent({
     },
     image: String,
     title: String,
-    ...borderProps,
-    ...elevationProps,
+    ...useBorderProps(),
+    ...useElevationProps(),
     ...useRoundedProps(),
     ...useThemeProps(),
   },
