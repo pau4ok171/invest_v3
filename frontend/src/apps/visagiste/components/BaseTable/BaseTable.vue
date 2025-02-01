@@ -4,7 +4,7 @@ import './BaseTable.scss';
 
 // Composables
 import { useThemeProps, provideTheme } from "@/apps/visagiste/composables/theme";
-import { densityProps, useDensity } from "@/apps/visagiste/composables/density";
+import { useDensityProps, useDensity } from "@/apps/visagiste/composables/density";
 
 // Utilities
 import { defineComponent } from "vue";
@@ -18,7 +18,7 @@ export default defineComponent({
     height: [Number, String],
     hover: Boolean,
     ...useThemeProps(),
-    ...densityProps,
+    ...useDensityProps(),
   },
   methods: {
     convertToUnit
