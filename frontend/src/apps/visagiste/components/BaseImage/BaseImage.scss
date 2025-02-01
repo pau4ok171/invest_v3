@@ -1,0 +1,48 @@
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-image {
+    --base-theme-overlay-multiplier: 3;
+    z-index: 0;
+
+    &.base-image--absolute {
+      height: 100%;
+      left: 0;
+      overflow: hidden;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 1;
+    }
+    &--booting .base-responsive__sizer {
+      transition: none;
+    }
+    &--rounded {
+      @include tools.rounded($img-rounded-border-radius);
+    }
+  }
+  .base-image__image,
+  .base-image__picture,
+  .base-image__gradient,
+  .base-image__placeholder,
+  .base-image__error {
+    z-index: 1;
+
+    @include tools.absolute();
+  }
+  .base-image__image {
+    &--preload {
+      filter: $img-preload-filter;
+    }
+    &--contain {
+      object-fit: contain;
+    }
+    &--cover {
+      object-fit: cover;
+    }
+  }
+  .base-image__gradient {
+    background-repeat: no-repeat;
+  }
+}

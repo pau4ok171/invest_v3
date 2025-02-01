@@ -129,18 +129,26 @@ export default defineComponent({
     const naturalWidth = shallowRef<number>()
     const naturalHeight = shallowRef<number>()
 
+    function normalizeAspect (aspect: string | number): number {
+      if (!isNaN(Number(aspect))) return Number(aspect)
+
+      const [w, h] = typeof aspect === 'string' ? aspect.split('/') : [1, 1]
+
+      return Number(w) / Number(h)
+    }
+
     const normalisedSrc = computed<srcObject>(() => {
       return props.src && typeof props.src === 'object'
         ? {
             src: props.src.src,
             srcset: props.srcset || props.src.srcset,
             lazySrc: props.lazySrc || props.src.lazySrc,
-            aspect: Number(props.aspectRatio || props.src.aspect || 0),
+            aspect: normalizeAspect(props.aspectRatio || props.src.aspect || 0),
           } : {
             src: props.src,
             srcset: props.srcset,
             lazySrc: props.lazySrc,
-            aspect: Number(props.aspectRatio || 0),
+            aspect: normalizeAspect(props.aspectRatio || 0),
           }
     })
     const aspectRatio = computed(() => {
@@ -255,8 +263,6 @@ export default defineComponent({
     }))
 
     const imageIs = () => {
-      console.log(normalisedSrc.value)
-      console.log(state.value)
       if (!normalisedSrc.value.src || state.value === 'idle') return null
 
       const img = h('img', {
@@ -279,13 +285,13 @@ export default defineComponent({
       return h(MaybeTransition, {
         transition: props.transition,
         appear: true,
-      },
-      withDirectives(
-        sources
-          ? h('picture', { class: 'base-image__picture' }, [sources, img])
-          : img,
-        [[vShow, state.value === 'loaded']]
-      ))
+      }, {default: () => [
+        withDirectives(
+          sources
+            ? h('picture', { class: 'base-image__picture' }, [sources, img])
+            : img,
+          [[vShow, state.value === 'loaded']]
+        )]})
     }
 
     const preloadImageIs = () => h(MaybeTransition, {
@@ -346,10 +352,8 @@ export default defineComponent({
       const stop = watch(aspectRatio, val => {
         if (val) {
           // Doesn't work with nextTick, idk why
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              isBooted.value = true
-            })
+          nextTick(() => {
+            isBooted.value = true
           })
           stop()
         }
@@ -398,19 +402,19 @@ export default defineComponent({
   :aspectRatio="aspectRatio"
   :aria-label="$props.alt"
   :role="$props.alt ? 'img' : undefined"
-  v-intersect="[{
+  v-intersect.once="{
     handler: init,
     options: $props.options,
-  }, null, ['once']]"
+  }"
 >
+  <template #additional>
+    <component :is="imageIs"/>
+    <component :is="preloadImageIs"/>
+    <component :is="gradientIs"/>
+    <component :is="placeholderIs"/>
+    <component :is="errorIs"/>
+  </template>
 
-  <component :is="imageIs"/>
-  <component :is="preloadImageIs"/>
-  <component :is="gradientIs"/>
-  <component :is="placeholderIs"/>
-  <component :is="errorIs"/>
-
-  <slot/>
-
+  <slot name="default"/>
 </BaseResponsive>
 </template>
