@@ -354,7 +354,7 @@ $sizes: (
 ) !default;
 
 $size-scale: $spacer * 2 !default;
-$size-scale: (
+$size-scales: (
   'x-small': -2,
   'small': -1,
   'default': 0,
