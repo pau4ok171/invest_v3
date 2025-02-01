@@ -1,5 +1,5 @@
-import type {ComputedGetter, PropType, ToRefs, VNode} from "vue";
-import {computed, Fragment, reactive, toRefs, watchEffect} from "vue";
+import type {ComponentInternalInstance, ComputedGetter, InjectionKey, PropType, ToRefs, VNode, VNodeChild} from "vue";
+import {capitalize, computed, Fragment, reactive, toRefs, watchEffect} from "vue";
 import {IN_BROWSER} from "@/apps/visagiste/utils/globals";
 
 export function getNestedValue (obj: any, path: (string | number)[], fallback?: any): any {
@@ -128,6 +128,29 @@ export function toKebabCase (str = '') {
   }
   toKebabCase.cache = new Map<string, string>()
 
+export function findChildrenWithProvide (
+  key: InjectionKey<any> | symbol,
+  vnode?: VNodeChild,
+): ComponentInternalInstance[] {
+  if (!vnode || typeof vnode !== 'object') return []
+
+  if (Array.isArray(vnode)) {
+    return vnode.map(child => findChildrenWithProvide(key, child)).flat(1)
+  } else if (vnode.suspense) {
+    return findChildrenWithProvide(key, vnode.ssContent!)
+  } else if (Array.isArray(vnode.children)) {
+    vnode.children.map(child => findChildrenWithProvide(key, child)).flat(1)
+  } else if (vnode.component) {
+    if (Object.getOwnPropertySymbols(vnode.component.provides).includes(key as symbol)) {
+      return [vnode.component]
+    } else if (vnode.component.subTree) {
+      return findChildrenWithProvide(key, vnode.component.subTree).flat(1)
+    }
+  }
+
+  return []
+}
+
 export function focusableChildren(el: Element, filterByTabIndex = true) {
   const targets = ['button', '[href]', 'input:not([type="hidden"])', 'select', 'textarea', '[tabindex]']
     .map(s => `${s}${filterByTabIndex ? ':not([tabindex="-1"])' : ''}:not([disabled])`)
@@ -187,6 +210,11 @@ export function destructComputed<T extends object> (getter: ComputedGetter<T>) {
     }
   }, { flush: 'sync' })
   return toRefs(refs)
+}
+
+export function hasEvent (props: Record<string, any>, name: string) {
+  name = 'on' + capitalize(name)
+  return !!(props[name] || props[`${name}Once`] || props[`${name}Capture`] || props[`${name}OnceCapture`] || props[`${name}CaptureOnce`])
 }
 
 export function chunk (str: string, size = 1) {
