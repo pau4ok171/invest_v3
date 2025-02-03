@@ -2,7 +2,7 @@
 // TODO: CreateDate
 import { createDefaults, DefaultsSymbol } from "./composables/defaults";
 import { createDisplay, DisplaySymbol } from "./composables/display";
-// TODO: CreateGoTo
+import { createGoTo, GoToSymbol } from "./composables/goto";
 import { createIcons, IconSymbol } from "./composables/icons";
 import { createLocale, LocaleSymbol } from "./composables/locale";
 import  { createTheme, ThemeSymbol } from "./composables/theme";
@@ -16,7 +16,7 @@ import type { App, ComponentPublicInstance, InjectionKey } from "vue";
 // TODO: Create DateOptions
 import type { DefaultsOptions } from "./composables/defaults";
 import type { DisplayOptions, SSROptions } from "./composables/display";
-// TODO: Create GoToOptions
+import type { GoToOptions } from "./composables/goto";
 import type { IconOptions } from "./composables/icons";
 import type { LocaleOptions, RtlOptions } from "./composables/locale";
 import type { ThemeOptions } from "./composables/theme";
@@ -30,7 +30,7 @@ export interface VisagisteOptions {
   directives?: Record<string, any>
   defaults?: DefaultsOptions
   display?: DisplayOptions
-  // goTo?: GoToOptions
+  goTo?: GoToOptions
   theme?: ThemeOptions
   icons?: IconOptions
   locale?: LocaleOptions & RtlOptions
@@ -54,7 +54,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
   const icons = createIcons(options.icons)
   const locale = createLocale(options.locale)
   // const date = createDate(options.date)
-  // const goTo = createGoTo(options.goTo)
+  const goTo = createGoTo(options.goTo, locale)
 
   const install = (app: App) => {
     for (const key in directives) {
@@ -81,7 +81,7 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     app.provide(LocaleSymbol, locale)
     // app.provide(DateOptionsSymbol, date.options)
     // app.provide(DateAdapterSymbol, date.instance)
-    // app.provide(GoToSymbol, goTo)
+    app.provide(GoToSymbol, goTo)
 
     // In case of SSR
     if (IN_BROWSER && options.ssr) {
@@ -126,10 +126,11 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     icons,
     locale,
     // date,
-    // goTo,
+    goTo,
   }
 }
 
+// Vue's inject() can only be used in setup
 function inject (this: ComponentPublicInstance, key: InjectionKey<any> | string) {
   const vm = this.$
 
