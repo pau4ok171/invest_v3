@@ -1,0 +1,94 @@
+@use '../../styles/tools';
+@use './variables' as *;
+@use './mixins' as *;
+
+@include tools.layer('components') {
+  .base-chip {
+    align-items: center;
+    display: inline-flex;
+    font-weight: $chip-font-weight;
+    max-width: $chip-max-width;
+    min-width: 0;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    white-space: $chip-white-space;
+    vertical-align: middle;
+
+    .base-icon {
+      --base-icon-size-multiplier: #{$chip-icon-size-multiplier};
+    }
+    @at-root {
+      @include chip-sizes();
+      @include chip-density('height', $chip-density);
+    }
+
+    @include tools.border($chip-border...);
+    @include tools.states('.base-chip__overlay');
+    @include tools.rounded($chip-border-radius);
+    @include tools.variant($chip-variants...);
+
+    &--border {
+      border-width: $chip-border-thin-width;
+    }
+    &--link {
+      cursor: pointer;
+    }
+    &--link,
+    &--filter {
+      user-select: none;
+    }
+    &--label {
+      @include tools.rounded($chip-label-border-radius);
+    }
+  }
+  // Elements
+  .base-chip__content {
+    align-items: center;
+    display: inline-flex;
+
+    .base-autocomplete__selection &,
+    .base-combobox__selection &,
+    .base-select__selection & {
+      overflow: hidden;
+    }
+  }
+  .base-chip__filter,
+  .base-chip__prepend,
+  .base-chip__append,
+  .base-chip__close {
+    align-items: center;
+    display: inline-flex;
+  }
+  .base-chip__close {
+    cursor: pointer;
+    flex: 0 1 auto;
+    font-size: $chip-close-size;
+    max-height: $chip-close-size;
+    max-width: $chip-close-size;
+    user-select: none;
+
+    .base-icon {
+      font-size: inherit;
+    }
+  }
+  .base-chip__filter {
+    transition: $chip-filter-transition;
+  }
+  .base-chip__overlay {
+    background-color: currentColor;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+    @include tools.absolute();
+  }
+  .base-chip--disabled {
+    opacity: $chip-disabled-opacity;
+    pointer-events: none;
+    user-select: none;
+  }
+  .base-chip--label {
+    border-radius: $chip-label-border-radius;
+  }
+}
