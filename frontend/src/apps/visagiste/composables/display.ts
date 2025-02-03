@@ -1,6 +1,6 @@
 // Utilities
 import {computed, inject, reactive, shallowRef, toRefs, watchEffect} from "vue";
-import {getCurrentInstanceName, IN_BROWSER, mergeDeep, SUPPORTS_TOUCH} from "@/apps/visagiste/utils";
+import {getCurrentInstanceName, IN_BROWSER, mergeDeep, propsFactory, SUPPORTS_TOUCH} from "@/apps/visagiste/utils";
 
 // Types
 import type {InjectionKey, PropType, Ref} from "vue";
@@ -212,13 +212,13 @@ export function createDisplay (options?: DisplayOptions, ssr?: SSROptions): Disp
   return { ...toRefs(state), update, ssr: !!ssr }
 }
 
-export const displayProps = {
+export const useDisplayProps = propsFactory({
   mobile: {
     type: Boolean as PropType<boolean | null>,
     default: false,
   },
   mobileBreakpoint: [Number, String] as PropType<number | DisplayBreakpoint>,
-}
+}, 'display')
 
 export function useDisplay (
   props: DisplayProps = {},
