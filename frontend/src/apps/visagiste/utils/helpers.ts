@@ -1,5 +1,14 @@
-import type {ComponentInternalInstance, ComputedGetter, InjectionKey, PropType, ToRefs, VNode, VNodeChild} from "vue";
-import {capitalize, computed, Fragment, reactive, toRefs, watchEffect} from "vue";
+import type {
+  ComponentInternalInstance,
+  ComponentPublicInstance,
+  ComputedGetter,
+  InjectionKey,
+  PropType,
+  ToRefs,
+  VNode,
+  VNodeChild
+} from "vue";
+import {capitalize, computed, Fragment, reactive, shallowRef, toRefs, watchEffect} from "vue";
 import {IN_BROWSER} from "@/apps/visagiste/utils/globals";
 
 export function getNestedValue (obj: any, path: (string | number)[], fallback?: any): any {
@@ -288,12 +297,71 @@ export function convertToUnit (str: string | number | null | undefined, unit = '
   }
 }
 
+export function isObject (obj: any): obj is Record<string, any> {
+  return obj !== null && typeof obj === 'object' && !Array.isArray(obj)
+}
+
 export function isPlainObject (obj: any): obj is Record<string, any> {
   let proto
   return obj !== null && typeof obj === 'object' && (
       (proto = Object.getPrototypeOf(obj)) === Object.prototype || proto === null
   )
 }
+
+export function refElement (obj?: ComponentPublicInstance<any> | HTMLElement): HTMLElement | undefined {
+  if (obj && '$el' in obj) {
+    const el = obj.$el as HTMLElement
+    if (el?.nodeType === Node.TEXT_NODE) {
+      // Multi-root component, use the first element
+      return el.nextElementSibling as HTMLElement
+    }
+    return el
+  }
+  return obj as HTMLElement
+}
+
+// KeyboardEvent.keyCode aliases
+export const keyCodes = Object.freeze({
+  enter: 13,
+  tab: 9,
+  delete: 46,
+  esc: 27,
+  space: 32,
+  up: 38,
+  down: 40,
+  left: 37,
+  right: 39,
+  end: 35,
+  home: 36,
+  del: 46,
+  backspace: 8,
+  insert: 45,
+  pageup: 33,
+  pagedown: 34,
+  shift: 16,
+})
+
+export const keyValues: Record<string, string> = Object.freeze({
+  enter: 'Enter',
+  tab: 'Tab',
+  delete: 'Delete',
+  esc: 'Escape',
+  space: 'Space',
+  up: 'ArrowUp',
+  down: 'ArrowDown',
+  left: 'ArrowLeft',
+  right: 'ArrowRight',
+  end: 'End',
+  home: 'Home',
+  del: 'Delete',
+  backspace: 'Backspace',
+  insert: 'Insert',
+  pageup: 'PageUp',
+  pagedown: 'PageDown',
+  shift: 'Shift',
+})
+
+
 
 export function clamp (value: number, min = 0, max = 1) {
   return Math.max(min, Math.min(max, value))
@@ -482,4 +550,27 @@ export function matchesSelector (el: Element | undefined, selector: string): boo
   } catch (err) {
     return null
   }
+}
+
+export type TemplateRef = {
+  (target: Element | ComponentPublicInstance | null): void
+  value: HTMLElement | ComponentPublicInstance | null | undefined
+  readonly el: HTMLElement | undefined
+}
+export function templateRef () {
+  const el = shallowRef<HTMLElement | ComponentPublicInstance | null>()
+  const fn = (target: HTMLElement | ComponentPublicInstance | null) => {
+    el.value = target
+  }
+  Object.defineProperty(fn, 'value', {
+    enumerable: true,
+    get: () => el.value,
+    set: (val: any) => el.value = val,
+  })
+  Object.defineProperty(fn, 'el', {
+    enumerable: true,
+    get: () => refElement(el.value),
+  })
+
+  return fn as TemplateRef
 }
