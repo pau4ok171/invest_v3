@@ -1,13 +1,10 @@
 // Utilities
 import {
   computed,
-  ComputedRef,
   nextTick,
   onScopeDispose,
-  PropType,
   reactive,
   resolveDynamicComponent,
-  SetupContext,
   toRef
 } from "vue";
 import {
@@ -20,7 +17,7 @@ import {
 } from "@/apps/visagiste/utils";
 
 // Types
-import type {Ref} from "vue";
+import type {ComputedRef, Ref, PropType, SetupContext} from "vue";
 import type {
   RouterLink as _RouterLink,
   useLink as _useLink,
