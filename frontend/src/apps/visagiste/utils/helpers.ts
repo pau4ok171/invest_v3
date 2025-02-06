@@ -6,9 +6,10 @@ import type {
   PropType,
   ToRefs,
   VNode,
+  VNodeArrayChildren,
   VNodeChild
 } from "vue";
-import {capitalize, computed, Fragment, reactive, shallowRef, toRefs, watchEffect} from "vue";
+import {capitalize, Comment, computed, Fragment, isVNode, reactive, shallowRef, toRefs, watchEffect} from "vue";
 import {IN_BROWSER} from "@/apps/visagiste/utils/globals";
 
 export function getNestedValue (obj: any, path: (string | number)[], fallback?: any): any {
@@ -552,6 +553,17 @@ export function matchesSelector (el: Element | undefined, selector: string): boo
   }
 }
 
+export function ensureValidVNode (vnodes: VNodeArrayChildren): VNodeArrayChildren | null {
+  return vnodes.some(child => {
+    if (!isVNode(child)) return true
+    if (child.type === Comment) return false
+    return child.type !== Fragment ||
+      ensureValidVNode(child.children as VNodeArrayChildren)
+  })
+    ? vnodes
+    : null
+}
+
 export type TemplateRef = {
   (target: Element | ComponentPublicInstance | null): void
   value: HTMLElement | ComponentPublicInstance | null | undefined
@@ -573,4 +585,15 @@ export function templateRef () {
   })
 
   return fn as TemplateRef
+}
+
+export function checkPrintable (e: KeyboardEvent) {
+  const isPrintableChar = e.key.length === 1
+  const noModifier = !e.ctrlKey && !e.metaKey && !e.altKey
+  return isPrintableChar && noModifier
+}
+
+export type Primitive = string | number | boolean | symbol | bigint
+export function isPrimitive (value: unknown): value is Primitive {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean' || typeof value === 'bigint'
 }
