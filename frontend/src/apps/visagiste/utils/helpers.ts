@@ -564,6 +564,18 @@ export function ensureValidVNode (vnodes: VNodeArrayChildren): VNodeArrayChildre
     : null
 }
 
+export function defer (timeout: number, cb: () => void) {
+  if (!IN_BROWSER || timeout === 0) {
+    cb()
+
+    return () => {}
+  }
+
+  const timeoutId = window.setTimeout(cb, timeout)
+
+  return () => window.clearTimeout(timeoutId)
+}
+
 export type TemplateRef = {
   (target: Element | ComponentPublicInstance | null): void
   value: HTMLElement | ComponentPublicInstance | null | undefined
