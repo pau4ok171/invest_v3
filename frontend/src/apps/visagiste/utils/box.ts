@@ -26,7 +26,7 @@ export function getOverflow (a: Box, b: Box) {
   return {
     x: {
       before: Math.max(0, b.left - a.left),
-      after: Math.max(a.right - b.right),
+      after: Math.max(0, a.right - b.right),
     },
     y: {
       before: Math.max(0, b.top - a.top),

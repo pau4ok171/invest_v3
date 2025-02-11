@@ -33,7 +33,7 @@ export function useStack (
   const _zIndex = shallowRef(+zIndex.value)
   useToggleScope(isActive, () => {
     const lastZIndex = globalStack.at(-1)?.[1]
-    _zIndex.value = lastZIndex ? lastZIndex + 10 : +zIndex
+    _zIndex.value = lastZIndex ? lastZIndex + 10 : +zIndex.value
 
     if (createStackEntry) {
       globalStack.push([vm.uid, _zIndex.value])

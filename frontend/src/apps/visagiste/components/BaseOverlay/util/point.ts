@@ -1,6 +1,6 @@
 // Types
-import type {ParsedAnchor} from "@/apps/visagiste/utils";
-import type {Box} from "@/apps/visagiste/utils";
+import type { ParsedAnchor } from "@/apps/visagiste/utils";
+import type { Box } from "@/apps/visagiste/utils";
 
 type Point = { x: number, y: number }
 declare class As<T extends string> {
@@ -39,37 +39,29 @@ export function anchorToPoint (anchor: ParsedAnchor, box: Box): ViewportPoint {
   if (anchor.side === 'top' || anchor.side === 'bottom') {
     const { side, align } = anchor
 
-    const x: number = align === 'left'
-      ? 0
-      : align === 'center'
-        ? box.width / 2
-        : align === 'right'
-          ? box.width
-          : align
-
-    const y: number = side === 'top'
-      ? 0
-      : side === 'bottom'
-        ? box.height
-        : side
+    const x: number =
+      align === 'left' ? 0
+      : align === 'center' ? box.width / 2
+      : align === 'right' ? box.width
+      : align
+    const y: number =
+      side === 'top' ? 0
+      : side === 'bottom' ? box.height
+      : side
 
     return elementToViewport({ x, y } as ElementPoint, box)
   } else if (anchor.side === 'left' || anchor.side === 'right') {
     const { side, align } = anchor
 
-    const x: number = side === 'left'
-      ? 0
-      : side === 'right'
-        ? box.width
-        : side
-
-    const y: number = align === 'top'
-      ? 0
-      : align === 'center'
-        ? box.height / 2
-        : align === 'bottom'
-          ? box.height
-          : align
+    const x: number =
+      side === 'left' ? 0
+      : side === 'right' ? box.width
+      : side
+    const y: number =
+      align === 'top' ? 0
+      : align === 'center' ? box.height / 2
+      : align === 'bottom' ? box.height
+      : align
 
     return elementToViewport({ x, y } as ElementPoint, box)
   }

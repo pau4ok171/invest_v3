@@ -28,8 +28,7 @@ import {
 import type {PropType, Ref} from "vue";
 import type {Anchor} from "@/apps/visagiste/utils";
 
-
-export interface LocationStrategiesData {
+export interface LocationStrategyData {
   contentEl: Ref<HTMLElement | undefined>
   target: Ref<HTMLElement | [x: number, y: number] | undefined>
   isActive: Ref<boolean>
@@ -37,7 +36,7 @@ export interface LocationStrategiesData {
 }
 
 type LocationStrategyFn = (
-  data: LocationStrategiesData,
+  data: LocationStrategyData,
   props: StrategyProps,
   contentStyles: Ref<Record<string, string>>
 ) => undefined | { updateLocation: (e?: Event) => void }
@@ -72,12 +71,12 @@ export const useLocationStrategyProps = propsFactory({
     type: String as PropType<StrategyProps['origin']>,
     default: 'auto',
   },
-  offset: [Number, String, Array] as PropType<StrategyProps['offset']>
+  offset: [Number, String, Array] as PropType<StrategyProps['offset']>,
 }, 'BaseOverlay-location-strategies')
 
 export function useLocationStrategies (
   props: StrategyProps,
-  data: LocationStrategiesData
+  data: LocationStrategyData
 ) {
   const contentStyles = ref({})
   const updateLocation = ref<(e: Event) => void>()
@@ -149,23 +148,22 @@ function getIntrinsicSize (el: HTMLElement, isRtl: boolean) {
   return contentBox
 }
 
-function connectedLocationStrategy (data: LocationStrategiesData, props: StrategyProps, contentStyles: Ref<Record<string, string>>) {
+function connectedLocationStrategy (data: LocationStrategyData, props: StrategyProps, contentStyles: Ref<Record<string, string>>) {
   const activatorFixed = Array.isArray(data.target.value) || isFixedPosition(data.target.value)
   if (activatorFixed) {
     Object.assign(contentStyles.value, {
       position: 'fixed',
       top: 0,
-      [data.isRtl.value ? 'right': 'left']: 0,
+      [data.isRtl.value ? 'right' : 'left']: 0,
     })
   }
 
   const { preferredAnchor, preferredOrigin } = destructComputed(() => {
     const parsedAnchor = parseAnchor(props.location, data.isRtl.value)
-    const parsedOrigin = props.origin === 'overlap'
-      ? parsedAnchor
-      : props.origin === 'auto'
-        ? flipSide(parsedAnchor)
-        : parseAnchor(props.origin, data.isRtl.value)
+    const parsedOrigin =
+      props.origin === 'overlap' ? parsedAnchor
+      : props.origin === 'auto' ? flipSide(parsedAnchor)
+      : parseAnchor(props.origin, data.isRtl.value)
 
     // Some combinations of props may produce an invalid origin
     if (parsedAnchor.side === parsedOrigin.side && parsedAnchor.align === flipAlign(parsedOrigin).align) {
@@ -387,7 +385,7 @@ function connectedLocationStrategy (data: LocationStrategiesData, props: Strateg
     const axis = getAxis(placement.anchor)
 
     Object.assign(contentStyles.value, {
-      '--v-overlay-anchor-origin': `${placement.anchor.side} ${placement.anchor.align}`,
+      '--base-overlay-anchor-origin': `${placement.anchor.side} ${placement.anchor.align}`,
       transformOrigin: `${placement.origin.side} ${placement.origin.align}`,
       // transform: `translate(${pixelRound(x)}px, ${pixelRound(y)}px)`,
       top: convertToUnit(pixelRound(y)),
@@ -438,9 +436,9 @@ function connectedLocationStrategy (data: LocationStrategiesData, props: Strateg
 }
 
 function pixelRound (val: number) {
-  return Math.round(val * devicePixelRatio) * devicePixelRatio
+  return Math.round(val * devicePixelRatio) / devicePixelRatio
 }
 
 function pixelCeil (val: number) {
-  return Math.ceil(val * devicePixelRatio) * devicePixelRatio
+  return Math.ceil(val * devicePixelRatio) / devicePixelRatio
 }

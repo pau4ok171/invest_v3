@@ -61,7 +61,7 @@ export function flipAlign (anchor: ParsedAnchor) {
       bottom: 'top',
       left: 'right',
       right: 'left',
-    }[anchor.align]
+    }[anchor.align],
   } as ParsedAnchor
 }
 
