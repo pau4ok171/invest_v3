@@ -1,372 +1,391 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import type {PropType} from 'vue'
-// @ts-ignore
-import {AtomSpinner} from "epic-spinners";
+// Styles
+import "./BaseButton.scss";
+
+// Components
+import { BaseButtonToggleSymbol } from "../BaseButtonToggle/BaseButtonToggle.vue";
 import BaseIcon from "@/apps/visagiste/components/BaseIcon/BaseIcon.vue";
-import type {IBaseIcon, IconValue} from "@/apps/visagiste/components/BaseIcon/baseIcon";
-import type {Density, Elevation, Rounded, Size, Variant} from "@/apps/visagiste/components/BaseButton/baseButton";
-import type {Theme} from "@/apps/visagiste/components/BaseTheme/baseTheme";
+import BaseDefaultsProvider from "@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue";
+import BaseProgressCircular from "@/apps/visagiste/components/BaseProgressCircular/BaseProgressCircular.vue";
+
+// Composables
+import { IconValue } from "@/apps/visagiste/composables/icons";
+import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
+import { useComponentProps } from "@/apps/visagiste/composables/component";
+import {
+  useDensity,
+  useDensityProps,
+} from "@/apps/visagiste/composables/density";
+import {
+  useDimension,
+  useDimensionProps,
+} from "@/apps/visagiste/composables/dimensions";
+import {
+  useElevation,
+  useElevationProps,
+} from "@/apps/visagiste/composables/elevation";
+import {
+  useGroupItem,
+  useGroupProps,
+} from "@/apps/visagiste/composables/group";
+import { useLoader, useLoaderProps } from "@/apps/visagiste/composables/loader";
+import {
+  useLocation,
+  useLocationProps,
+} from "@/apps/visagiste/composables/location";
+import {
+  useRounded,
+  useRoundedProps,
+} from "@/apps/visagiste/composables/rounded";
+import { useLink, useRouterProps } from "@/apps/visagiste/composables/router";
+import { useSize, useSizeProps } from "@/apps/visagiste/composables/size";
+import { useTagProps } from "@/apps/visagiste/composables/tag";
+import {
+  provideTheme,
+  useThemeProps,
+} from "@/apps/visagiste/composables/theme";
+import {
+  genOverlays,
+  useVariant,
+  useVariantProps,
+} from "@/apps/visagiste/composables/variant";
+import {
+  usePosition,
+  usePositionProps,
+} from "@/apps/visagiste/composables/position";
+import { useSelectLink } from "@/apps/visagiste/composables/selectLink";
+
+// Directives
+import { Ripple } from "@/apps/visagiste/directives/ripple";
+
+// Utilities
+import { computed } from "vue";
+import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+
+// Types
+import type { PropType } from "vue";
+import type { RippleDirectiveBinding } from "@/apps/visagiste/directives/ripple";
+
+export type BaseButtonSlots = {
+  default: never;
+  prepend: never;
+  append: never;
+  loader: never;
+};
+
+export const useBaseButtonProps = propsFactory(
+  {
+    active: {
+      type: Boolean,
+      default: undefined,
+    },
+    activeColor: String,
+    baseColor: String,
+    symbol: {
+      type: null,
+      default: BaseButtonToggleSymbol,
+    },
+    flat: Boolean,
+    icon: [Boolean, String, Function, Object] as PropType<boolean | IconValue>,
+    prependIcon: IconValue,
+    appendIcon: IconValue,
+
+    block: Boolean,
+    readonly: Boolean,
+    slim: Boolean,
+    stacked: Boolean,
+
+    ripple: {
+      type: [Boolean, Object] as PropType<RippleDirectiveBinding["value"]>,
+      default: true,
+    },
+
+    text: String,
+
+    ...useBorderProps(),
+    ...useComponentProps(),
+    ...useDensityProps(),
+    ...useDimensionProps(),
+    ...useElevationProps(),
+    ...useGroupProps(),
+    ...useLoaderProps(),
+    ...useLocationProps(),
+    ...usePositionProps(),
+    ...useRoundedProps(),
+    ...useRouterProps(),
+    ...useSizeProps(),
+    ...useTagProps({ tag: "button" }),
+    ...useThemeProps(),
+    ...useVariantProps({ variant: "elevated" } as const),
+  },
+  "BaseButton",
+);
 
 export default defineComponent({
   name: "BaseButton",
-  components: {
-    BaseIcon,
-    AtomSpinner,
+  components: { BaseProgressCircular, BaseDefaultsProvider, BaseIcon },
+  methods: { genOverlays },
+  props: useBaseButtonProps(),
+  emits: {
+    "group: selected": (val: { value: boolean }) => true,
   },
-  props: {
-    variant: {
-      type: String as PropType<Variant>,
-      default: 'elevated',
-    },
-    text: {
-      type: String,
-      default: 'Button'
-    },
-    icon: {
-      type: [String, Object] as PropType<IconValue | IBaseIcon>,
-    },
-    appendIcon: {
-      type: [String, Object] as PropType<IconValue | IBaseIcon>,
-    },
-    prependIcon: {
-      type: [String, Object] as PropType<IconValue | IBaseIcon>,
-    },
-    stacked: Boolean,
-    density: {
-      type: String as PropType<Density>,
-      default: 'default',
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    size: {
-      type: String as PropType<Size>,
-      default: 'default',
-    },
-    block: {
-      type: Boolean,
-      default: false,
-    },
-    rounded: {
-      type: String as PropType<Rounded>,
-      default: 'default',
-    },
-    elevation: {
-      type: String as PropType<Elevation>,
-      default: '2',
-    },
-    ripple: {
-      type: Boolean,
-      default: true,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    theme: {
-      type: String as PropType<Theme>,
-      default: 'light',
-    },
-    color: {
-      type: String,
-    },
-    lower: {
-      type: Boolean,
-      default: false,
-    },
-    active: {
-      type: Boolean,
-      default: false,
-    },
+  directives: {
+    Ripple,
   },
-  computed: {
-    classObject() {
-      const classObj = []
-      classObj.push(`base-theme--${this.theme}`)
+  setup(props, { attrs, slots }) {
+    const { themeClasses } = provideTheme(props);
+    const { borderClasses } = useBorder(props);
+    const { densityClasses } = useDensity(props);
+    const { dimensionStyles } = useDimension(props);
+    const { elevationClasses } = useElevation(props);
+    const { loaderClasses } = useLoader(props);
+    const { locationStyles } = useLocation(props);
+    const { positionClasses } = usePosition(props);
+    const { roundedClasses } = useRounded(props);
+    const { sizeClasses, sizeStyles } = useSize(props);
+    const group = useGroupItem(props, props.symbol, false);
+    const link = useLink(props, attrs);
 
-      classObj.push('base-button')
+    const isActive = computed(() => {
+      if (props.active !== undefined) {
+        return props.active;
+      }
 
-      classObj.push(`base-button--variant-${this.variant}`)
-      classObj.push(`base-button--density-${this.density}`)
-      classObj.push(`base-button--size-${this.size}`)
-      classObj.push(`base-button--rounded-${this.rounded}`)
-      if (!!this.icon) {
-        classObj.push('base-button--icon')
+      if (link.isLink.value) {
+        return link.isActive?.value;
       }
-      if (!this.icon && this.stacked) {
-        classObj.push('base-button--stacked')
-      }
-      if (this.disabled) {
-        classObj.push('base-button--disabled')
-      }
-      if (this.variant === 'elevated') {
-        classObj.push(`base-button--elevation-${this.elevation}`)
-      }
-      if (this.block) {
-        classObj.push('base-button--block')
-      }
-      if (this.loading) {
-        classObj.push('base-button--loading')
-      }
-      if (this.color) {
-        classObj.push('base-button--color')
-      }
-      if (this.lower) {
-        classObj.push('base-button--lower')
-      }
-      if (this.active) {
-        classObj.push('base-button--active')
-      }
-      return classObj
+
+      return group?.isSelected.value;
+    });
+
+    const color = computed(() =>
+      isActive.value ? (props.activeColor ?? props.color) : props.color,
+    );
+    const variantProps = computed(() => {
+      const showColor =
+        (group?.isSelected.value &&
+          (!link.isLink.value || link.isActive?.value)) ||
+        !group ||
+        link.isActive?.value;
+      return {
+        color: showColor ? (color.value ?? props.baseColor) : props.baseColor,
+        variant: props.variant,
+      };
+    });
+    const { colorClasses, colorStyles, variantClasses } =
+      useVariant(variantProps);
+
+    const isDisabled = computed(() => group?.disabled.value || props.disabled);
+    const isElevated = computed(() => {
+      return (
+        props.variant === "elevated" &&
+        !(props.disabled || props.flat || props.border)
+      );
+    });
+    const valueAttr = computed(() => {
+      if (props.value === undefined || typeof props.value === "symbol")
+        return undefined;
+
+      return Object(props.value) === props.value
+        ? JSON.stringify(props.value, null, 0)
+        : props.value;
+    });
+
+    function onClick(e: MouseEvent) {
+      if (
+        isDisabled.value ||
+        (link.isLink.value &&
+          (e.metaKey ||
+            e.ctrlKey ||
+            e.shiftKey ||
+            e.button !== 0 ||
+            attrs.target === "_blank"))
+      )
+        return;
+
+      link.navigate?.(e);
+      group?.toggle();
     }
+
+    useSelectLink(link, group?.select);
+
+    const Tag = computed(() => (link.isLink.value ? "a" : props.tag));
+    const hasPrepend = computed(() => !!(props.prependIcon || slots.prepend));
+    const hasAppend = computed(() => !!(props.appendIcon || slots.append));
+    const hasIcon = computed(() => !!(props.icon && props.icon !== true));
+
+    const rippleConfig = computed(() => {
+      if (props.icon)
+        return {
+          center: true,
+          enabled: !isDisabled && props.ripple,
+        };
+      return {
+        enabled: !isDisabled && props.ripple,
+      };
+    });
+
+    return {
+      themeClasses,
+      borderClasses,
+      densityClasses,
+      dimensionStyles,
+      elevationClasses,
+      loaderClasses,
+      locationStyles,
+      positionClasses,
+      roundedClasses,
+      sizeClasses,
+      sizeStyles,
+      colorClasses,
+      colorStyles,
+      variantClasses,
+      Tag,
+      hasPrepend,
+      hasAppend,
+      hasIcon,
+      isActive,
+      isDisabled,
+      isElevated,
+      group,
+      link,
+      valueAttr,
+      rippleConfig,
+      onClick,
+    };
   },
-})
+});
 </script>
 
 <template>
-<button v-ripple="ripple" :class="classObject" :disabled="loading || disabled">
-  <span class="base-button__overlay"></span>
-  <span class="base-button__underlay"></span>
-  <template v-if="icon">
-    <span class="base-button__icon" v-if="icon"><BaseIcon :icon="icon"/></span>
-  </template>
+  <component
+    :is="Tag"
+    :type="Tag === 'a' ? undefined : 'button'"
+    :class="[
+      'base-button',
+      group?.selectedClass,
+      {
+        'base-button--active': isActive,
+        'base-button--block': $props.block,
+        'base-button--disabled': isDisabled,
+        'base-button--elevated': isElevated,
+        'base-button--flat': $props.flat,
+        'base-button--icon': $props.icon,
+        'base-button--loading': $props.loading,
+        'base-button--readonly': $props.readonly,
+        'base-button--slim': $props.slim,
+        'base-button--stacked': $props.stacked,
+      },
+      themeClasses,
+      borderClasses,
+      colorClasses,
+      densityClasses,
+      elevationClasses,
+      loaderClasses,
+      positionClasses,
+      roundedClasses,
+      sizeClasses,
+      variantClasses,
+      $props.class,
+    ]"
+    :style="[
+      colorStyles,
+      dimensionStyles,
+      locationStyles,
+      sizeStyles,
+      $props.style,
+    ]"
+    :aria-busy="$props.loading ? true : undefined"
+    :disabled="isDisabled || undefined"
+    :tabindex="$props.loading || $props.readonly ? -1 : undefined"
+    @click="onClick"
+    :value="valueAttr"
+    v-bind="{ ...link.linkProps }"
+    v-ripple="rippleConfig"
+  >
+    <!-- TODO: TOGGLE center if isIcon in v-ripple -->
+    <component :is="genOverlays(true, 'base-button')" />
 
-  <template v-else>
-    <span class="base-button__prepend" v-if="prependIcon"><BaseIcon :icon="prependIcon"/></span>
-    <span class="base-button__text">{{ text }}</span>
-    <span class="base-button__append" v-if="appendIcon"><BaseIcon :icon="appendIcon"/></span>
-  </template>
-  <span v-if="loading" class="base-button__loader"><atom-spinner color="inherit" :animation-duration="1250"/></span>
-</button>
+    <template v-if="!$props.icon && hasPrepend">
+      <span key="prepend" class="base-button__prepend">
+        <BaseIcon
+          v-if="!$slots.prepend"
+          key="prepend-icon"
+          :icon="$props.prependIcon"
+        />
+
+        <BaseDefaultsProvider
+          v-else
+          key="prepend-defaults"
+          :disabled="!$props.prependIcon"
+          :defaults="{
+            BaseIcon: {
+              icon: $props.prependIcon,
+            },
+          }"
+        >
+          <slot name="prepend" />
+        </BaseDefaultsProvider>
+      </span>
+    </template>
+
+    <span class="base-button__content" data-no-activator="">
+      <BaseIcon
+        v-if="!$slots.default && hasIcon"
+        key="content-icon"
+        :icon="$props.icon"
+      />
+      <BaseDefaultsProvider
+        v-else
+        key="content-defaults"
+        :disabled="!hasIcon"
+        :defaults="{
+          BaseIcon: {
+            icon: $props.icon,
+          },
+        }"
+      >
+        <slot>
+          {{ $props.text }}
+        </slot>
+      </BaseDefaultsProvider>
+    </span>
+
+    <template v-if="!$props.icon && hasAppend">
+      <span key="append" class="base-button__append">
+        <BaseIcon
+          v-if="!$slots.append"
+          key="append-icon"
+          :icon="$props.appendIcon"
+        />
+
+        <BaseDefaultsProvider
+          v-else
+          key="append-defaults"
+          :disabled="!$props.appendIcon"
+          :defaults="{
+            BaseIcon: {
+              icon: $props.appendIcon,
+            },
+          }"
+        >
+          <slot name="append" />
+        </BaseDefaultsProvider>
+      </span>
+    </template>
+
+    <template v-if="!!$props.loading">
+      <span key="loader" class="base-button__loader">
+        <slot name="loader">
+          <BaseProgressCircular
+            :color="
+              typeof $props.loading === 'boolean' ? undefined : $props.loading
+            "
+            indeterminate
+            width="2"
+          />
+        </slot>
+      </span>
+    </template>
+  </component>
 </template>
-
-<style lang="scss" scoped>
-@use '../BaseTheme/themes';
-@use 'size';
-@use 'density';
-@use 'variant';
-@use 'rounded';
-@use 'elevation';
-/* BASE BUTTON */
-.base-button {
-  /* Position */
-  position: relative;
-  display: inline-grid;
-  align-items: center;
-  justify-content: center;
-  vertical-align: middle;
-  flex-shrink: 0;
-  grid-template-areas: "prepend text append";
-  grid-template-columns: max-content auto max-content;
-  margin: 0;
-  /* Geometry */
-  max-width: 100%;
-  /* Styling */
-  outline: none;
-  font-weight: 500;
-  text-indent: .0892857143em;
-  text-transform: uppercase;
-  text-decoration: none;
-  letter-spacing: .0892857143em;
-  transition: background-color .2s ease 0s;
-  transition-property: box-shadow, transform, opacity, background;
-  transition-duration: .28s;
-  transition-timing-function: cubic-bezier(.4,0,.2,1);
-  border-color: rgba(var(--base-border-color), var(--base-border-opacity));
-  border-style: solid;
-  border-width: 0;
-  /* Options */
-  user-select: none;
-  cursor: pointer;
-  overflow: visible;
-  &.base-button--icon {
-    border-radius: 50%;
-    min-width: 0;
-    padding: 0;
-    height: calc(var(--base-button-height) + 12px);
-    width: calc(var(--base-button-height) + 12px);
-    & .base-icon--size {
-      &-x-large{
-      --base-icon-size-multiplier: 1.5;
-      }
-      &-large {
-        --base-icon-size-multiplier: 1.2;
-      }
-      &-default {
-        --base-icon-size-multiplier: 1;
-      }
-      &-small {
-        --base-icon-size-multiplier: 0.8;
-      }
-      &-x-small {
-        --base-icon-size-multiplier: 0.5;
-      }
-    }
-  }
-  &.base-button--icon.base-button--density-comfortable {
-    height: calc(var(--base-button-height) + 0px);
-    width: calc(var(--base-button-height) + 0px);
-  }
-  &.base-button--icon.base-button--density-compact {
-    height: calc(var(--base-button-height) + -8px);
-    width: calc(var(--base-button-height) + -8px);
-  }
-  &:hover > .base-button__overlay {
-    opacity: 0.04;
-  }
-  &:focus-visible > .base-button__overlay {
-    opacity: var(--base-focus-opacity);
-  }
-  &.base-button--disabled {
-    pointer-events: none;
-    opacity: .26;
-    &.base-button--variant-elevated,
-    &.base-button--variant-flat {
-      box-shadow: none;
-      opacity: 1;
-      color: rgba(var(--base-theme-on-surface), .26);
-      background: rgb(var(--base-theme-surface));
-      & .base-button__overlay {
-        opacity: 0.4615384615;
-      }
-    }
-  }
-  &.base-button--block {
-    display: flex;
-    flex: 1 0 auto;
-    min-width: 100%;
-  }
-  &.base-button--color {
-    color: v-bind(color);
-  }
-  &.base-button--lower {
-    letter-spacing: normal;
-    text-transform: none;
-    font-weight: normal;
-    text-indent: inherit;
-  }
-  &.base-button--active > .base-button__overlay {
-    opacity: calc(var(--base-activated-opacity) * var(--base-theme-overlay-multiplier));
-  }
-}
-@supports selector(:focus-visible) {
-  .base-button:focus-visible::after {
-    opacity: .25;
-  }
-}
-@supports selector(:focus-visible) {
-  .base-button::after {
-    position: absolute;
-    content: "";
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    box-sizing: inherit;
-  }
-}
-@supports selector(:focus-visible) {
-  .base-button::after {
-    pointer-events: none;
-    border: 2px solid currentColor;
-    border-radius: inherit;
-    opacity: 0;
-    transition: opacity .2s ease-in-out;
-  }
-}
-.base-button--stacked {
-  white-space: normal;
-  grid-template-areas: "prepend" "text" "append";
-  grid-template-columns: auto;
-  grid-template-rows: max-content max-content max-content;
-  justify-items: center;
-  align-content: center;
-  & .base-button__text {
-    flex-direction: column;
-    line-height: 1.25;
-  }
-  &.base-button--block {
-    display: inline-grid;
-  }
-}
-.base-button--stacked .base-button__append {
-  margin-top: 4px;
-}
-.base-button--stacked .base-button__prepend,
-.base-button--stacked .base-button__append {
-  margin-inline: 0;
-}
-.base-button--stacked .base-icon {
-  --base-button-size-multiplier: 1.1428571429;
-}
-.base-button__overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background-color: currentColor;
-  border-radius: inherit;
-  opacity: 0;
-  transition: opacity .2s ease-in-out;
-}
-.base-button__underlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-.base-button__prepend, .base-button__text, .base-button__append {
-  align-items: center;
-  display: flex;
-  transition: transform, opacity .2s cubic-bezier(.4, 0, .2, 1);
-  pointer-events: none;
-}
-.base-button__icon {
-  pointer-events: none;
-}
-.base-button__prepend {
-  grid-area: prepend;
-  margin-inline: calc(var(--base-button-height) / -9) calc(var(--base-button-height) / 4.5);
-}
-.base-button__text {
-  grid-area: text;
-  justify-content: center;
-  white-space: nowrap;
-}
-.base-button__append {
-  grid-area: append;
-  margin-inline: calc(var(--base-button-height) / 4.5) calc(var(--base-button-height) / -9);
-}
-.base-button.base-button--loading {
-  & {
-    pointer-events: none;
-  }
-  & > .base-button__text,
-  & > .base-button__icon,
-  & > .base-button__prepend,
-  & > .base-button__append {
-    opacity: 0;
-  }
-}
-.base-button__loader {
-  display: flex;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  left: 0;
-  top: 0;
-  & > .atom-spinner {
-    width: 1.5em!important;
-    height: 1.5em!important;
-  }
-}
-</style>
