@@ -14,14 +14,16 @@ import {
   onScopeDispose,
   ref,
   watch,
-  watchEffect
+  watchEffect,
 } from "vue";
 import {
+  bindProps,
   getCurrentInstance,
   IN_BROWSER,
   matchesSelector,
   propsFactory,
   templateRef,
+  unbindProps,
 } from "@/apps/visagiste/utils";
 
 // Types
@@ -30,7 +32,7 @@ import type {
   ComponentPublicInstance,
   EffectScope,
   PropType,
-  Ref
+  Ref,
 } from "vue";
 import type {DelayProps} from "@/apps/visagiste/composables/delay";
 
@@ -112,7 +114,7 @@ export function useActivator (
       isActive.value = !isActive.value
     },
     onMouseenter: (e: MouseEvent) => {
-      if (e.sourceCapabilities?.firesToucheEvents) return
+      if (e.sourceCapabilities?.firesTouchEvents) return
 
       isHovered = true
       activatorEl.value = (e.currentTarget || e.target) as HTMLElement
