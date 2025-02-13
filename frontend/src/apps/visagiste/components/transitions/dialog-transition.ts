@@ -89,14 +89,26 @@ export default defineComponent({
 
     return () => {
       return props.target
-        ? h(Transition, {
+        ? h(
+          Transition,
+          {
             name: 'dialog-transition',
             ...functions,
             css: false,
-          }, {
-          default: () => [slots]
-        })
-        : h(Transition, { name: 'dialog-transition' }, {default: () => [slots]})
+          },
+          {
+            default: () => slots.default?.()
+          }
+        )
+        : h(
+          Transition,
+          {
+            name: 'dialog-transition',
+          },
+          {
+            default: () => slots.default?.()
+          }
+        )
     }
   },
 })
