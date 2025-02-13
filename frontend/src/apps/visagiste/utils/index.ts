@@ -1,5 +1,6 @@
 export * from './anchor'
 export * from './animation'
+export * from './bindProps'
 export * from './box'
 export * from './colorUtils'
 export * from './console'
