@@ -537,6 +537,10 @@ export function includes (arr: readonly any[], val: any) {
   return arr.includes(val)
 }
 
+export function eventName (propName: string) {
+  return propName[2].toLowerCase() + propName.slice(3)
+}
+
 /** Returns null if the selector is not supported, or we can't check */
 export function matchesSelector (el: Element | undefined, selector: string): boolean | null {
   const supportsSelector = IN_BROWSER
@@ -574,6 +578,19 @@ export function defer (timeout: number, cb: () => void) {
   const timeoutId = window.setTimeout(cb, timeout)
 
   return () => window.clearTimeout(timeoutId)
+}
+
+export function isClickInsideElement (event: MouseEvent, targetDiv: HTMLElement) {
+  const mouseX = event.clientX
+  const mouseY = event.clientY
+
+  const divRect = targetDiv.getBoundingClientRect()
+  const divLeft = divRect.left
+  const divTop = divRect.top
+  const divRight = divRect.right
+  const divBottom = divRect.bottom
+
+  return mouseX >= divLeft && mouseX <= divRight && mouseY >= divTop && mouseY <= divBottom
 }
 
 export type TemplateRef = {
