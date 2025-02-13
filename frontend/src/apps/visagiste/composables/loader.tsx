@@ -1,12 +1,12 @@
 // Components
-import { BaseProgressLinear } from '@/apps/visagiste/components/BaseProgressLinear';
+import BaseProgressLinear from '@/apps/visagiste/components/BaseProgressLinear/BaseProgressLinear.vue';
 
 // Utilities
-import {computed, ExtractPropTypes, SetupContext} from "vue";
+import {computed} from "vue";
 import {getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 
-
 // Types
+import type {ExtractPropTypes, SetupContext} from "vue";
 import type {SlotsToProps} from "@/apps/visagiste/utils";
 
 export interface LoaderSlotProps {
