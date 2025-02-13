@@ -1,6 +1,6 @@
 <script lang="ts">
 // Utilities
-import {defineComponent, Transition, TransitionGroup, mergeProps} from "vue";
+import {defineComponent, Transition, TransitionGroup, mergeProps, h} from "vue";
 import {propsFactory} from "@/apps/visagiste/utils";
 
 // Types
@@ -14,16 +14,15 @@ export const useTransitionProps = propsFactory({
 	},
 }, 'transition')
 
-interface MaybeTransitionProps extends TransitionProps {
-	transition?: string | boolean | TransitionProps & { component?: any }
-	disabled?: boolean
-	group?: boolean
-}
-
-export default defineComponent<MaybeTransitionProps>({
+export default defineComponent({
   name: 'MaybeTransition',
-  props: useTransitionProps(),
-  setup (props) {
+  props: {
+    disabled: Boolean,
+    group: Boolean,
+
+    ...useTransitionProps(),
+  },
+  setup (props, { slots }) {
     const { transition, disabled, group, ...rest } = props
 
     const {
@@ -41,19 +40,13 @@ export default defineComponent<MaybeTransitionProps>({
       rest as any,
     )
 
-    return {
+    return () => h(
       component,
-      transitionProps
-    }
+      {...transitionProps},
+      {
+        default: () => slots.default?.()
+      }
+    )
   }
 })
 </script>
-
-<template>
-<component
-  :is="component"
-  v-bind="transitionProps"
->
-  <slot/>
-</component>
-</template>
