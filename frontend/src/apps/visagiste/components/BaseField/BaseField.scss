@@ -1,186 +1,246 @@
-@use "./variables" as *;
-@use "sass:selector";
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:selector';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './variables' as *;
 
-// REGION INPUT
-.base-field {
-  position: relative;
-  display: grid;
-  grid-template-areas: "prepend-inner field clear append-inner";
-  grid-template-columns: min-content minmax(0, 1fr) min-content min-content;
-  font-size: $field-font-size;
-  letter-spacing: $field-letter-spacing;
-  max-width: $field-max-width;
-  border-radius: $field-border-radius;
-  contain: layout;
-  flex: 1 0;
-  grid-area: control;
-  --base-theme-overlay-multiplier: 1;
-  --base-field-padding-start: #{$field-control-padding-start};
-  --base-field-padding-end: #{$field-control-padding-end};
-  --base-field-padding-top: #{$field-control-padding-top};
-  --base-field-padding-bottom: #{$field-control-padding-bottom};
-  --base-field-input-padding-top: #{$field-input-padding-top};
-  --base-field-input-padding-bottom: #{$field-input-padding-bottom};
+@include tools.layer('components') {
+  /* REGION INPUT */
+  .base-field {
+    display: grid;
+    grid-template-areas: "prepend-inner field clear append-inner";
+    grid-template-columns: min-content minmax(0, 1fr) min-content min-content;
+    font-size: $field-font-size;
+    letter-spacing: $field-letter-spacing;
+    max-width: $field-max-width;
+    border-radius: $field-border-radius;
+    contain: layout;
+    flex: 1 0;
+    grid-area: control;
+    position: relative;
 
-  &--disabled {
-    opacity: var(--base-disabled-opacity);
-    pointer-events: none;
-  }
-}
-// REGION MODIFIERS
-.base-field {
-  &--prepended {
-    padding-inline-start: $field-control-affixed-padding;
-  }
-  &--appended {
-    padding-inline-end: $field-control-affixed-padding;
-  }
-  &--variant-solo,
-  &--variant-solo-filled {
-    background: $field-control-solo-background;
-    border-color: transparent;
-    color: $field-control-solo-color;
-    box-shadow: 0 3px 1px -2px var(--base-shadow-key-umbra-opacity, rgba(0, 0, 0, .2)), 0 2px 2px 0px var(--base-shadow-key-penumbra-opacity, rgba(0, 0, 0, .14)), 0 1px 5px 0 var(--base-shadow-key-ambient-opacity, rgba(0, 0, 0, .12));
-  }
-  &--variant-solo-inverted {
-    background: $field-control-solo-background;
-    border-color: transparent;
-    color: $field-control-solo-inverted-color;
-    box-shadow: 0 3px 1px -2px var(--base-shadow-key-umbra-opacity, rgba(0, 0, 0, .2)), 0 2px 2px 0px var(--base-shadow-key-penumbra-opacity, rgba(0, 0, 0, .14)), 0 1px 5px 0px var(--base-shadow-key-ambient-opacity, rgba(0, 0, 0, .12));
+    --base-theme-overlay-multiplier: 1;
+    --base-field-padding-start: #{$field-control-padding-start};
+    --base-field-padding-end: #{$field-control-padding-end};
+    --base-field-padding-top: #{$field-control-padding-top};
+    --base-field-padding-bottom: #{$field-control-padding-bottom};
+    --base-field-input-padding-top: #{$field-input-padding-top};
+    --base-field-input-padding-bottom: #{$field-input-padding-bottom};
 
-    &.base-field--focused {
-      color: $field-control-solo-inverted-focused-color;
+    &--disabled {
+      opacity: var(--base-disabled-opacity);
+      pointer-events: none;
+    }
+    .base-chip {
+      --base-chip-height: #{$field-chip-height};
     }
   }
-  &--variant-filled {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  &--outlined,
-  &--single-line,
-  &--no-label {
-    --base-field-padding-top: 0;
-  }
-  &--variant-plain,
-  &--variant-underlined {
-    border-radius: 0;
-    padding: 0;
-
-    &.base-field {
-      --base-field-padding-start: 0;
-      --base-field-padding-end: 0;
-    }
-  }
-  &--flat {
-    box-shadow: none;
-  }
-  &.base-field{
+   /* REGION MODIFIERS */
+  .base-field {
     &--prepended {
-      --base-field-padding-start: $field-control-affixed-inner-padding;
+      padding-inline-start: $field-control-affixed-padding;
     }
     &--appended {
-      --base-field-padding-start: $field-control-affixed-inner-padding;
+      padding-inline-end: $field-control-affixed-padding;
+    }
+    &--variant-solo,
+    &--variant-solo-filled {
+      background: $field-control-solo-background;
+      border-color: transparent;
+      color: $field-control-solo-color;
+      @include tools.elevation($field-control-solo-elevation);
+    }
+    &--variant-solo-inverted {
+      background: $field-control-solo-background;
+      border-color: transparent;
+      color: $field-control-solo-inverted-color;
+      @include tools.elevation($field-control-solo-elevation);
+
+      &.base-field--focused {
+        color: $field-control-solo-inverted-focused-color;
+      }
+    }
+    &--variant-filled {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &--variant-solo,
+    &--variant-solo-inverted,
+    &--variant-solo-filled,
+    &--varialt-filled {
+      $root: &;
+
+      @at-root {
+        @include tools.density('base-input', $input-density) using ($modifier) {
+          @at-root #{selector.nest(&, $root)} {
+            --base-input-control-height: #{$field-control-height + $modifier};
+            --base-field-padding-bottom: #{math.max(0px, $field-control-padding-bottom + $modifier * .5)};
+          }
+        }
+      }
+    }
+
+    &--variant-outlined,
+    &--single-line,
+    &--no-label {
+      --base-field-padding-top: 0;
+      $root: &;
+
+      @at-root {
+        @include tools.density('base-input', $input-density) using ($modifier) {
+          @at-root #{selector.nest(&, $root)} {
+            --base-field-padding-bottom: #{16px + $modifier * .5};
+          }
+        }
+      }
+    }
+    &--variant-plain,
+    &--variant-underlined {
+      $root: &;
+      border-radius: 0;
+      padding: 0;
+
+      &.base-field {
+        --base-field-padding-start: 0;
+        --base-field-padding-end: 0;
+      }
+      @at-root {
+        @include tools.density('base-input', $input-density) using ($modifier) {
+          @at-root #{selector.nest(&, $root)} {
+            --base-input-control-height: #{$field-control-underlined-height + $modifier};
+            --base-field-padding-top: #{math.max(0px, 4px + $modifier * .25)};
+            --base-field-padding-bottom: #{math.max(0px, $field-control-padding-bottom + $modifier * .5)};
+          }
+        }
+      }
+    }
+    &--flat {
+      box-shadow: none;
+    }
+    &--rounded {
+      @include tools.rounded($field-rounded-border-radius);
+    }
+    // These are separate so they can override the default variant styles
+    &.base-field{
+      &--prepended {
+        --base-field-padding-start: #{$field-control-affixed-inner-padding};
+      }
+      &--appended {
+        --base-field-padding-end: #{$field-control-affixed-inner-padding};
+      }
     }
   }
-}
 
-// REGION ELEMENTS
-.base-field__input {
-  position: relative;
-  width: 100%;
-  align-items: center;
-  color: inherit;
-  column-gap: $field-input-column-gap;
-  display: flex;
-  flex-wrap: wrap;
-  letter-spacing: $field-letter-spacing;
-  opacity: $field-input-opacity;
-  min-height: $field-input-min-height;
-  min-width: 0;
-  padding-inline: var(--base-field-padding-start) var(--base-field-padding-end);
-  padding-top: var(--base-field-input-padding-top);
-  padding-bottom: var(--base-field-input-padding-bottom);
-
-  input {
-    letter-spacing: inherit;
-
-    &::placeholder {
-      color: currentColor;
-      opacity: var(--base-disabled-opacity);
-    }
-  }
-
-  &:focus,
-  &:active {
-    outline: none;
-  }
-  // Remove Firefox red outline
-  &:invalid {
-    box-shadow: none;
-  }
-}
-.base-field__field {
-  position: relative;
-  display: flex;
-  flex: 1 0;
-  grid-area: field;
-  align-items: flex-start;
-}
-
-// REGION AFFIXES
-.base-field__prepend-inner {
-  grid-area: prepend-inner;
-  padding-inline-end: var(--base-field-padding-after);
-}
-.base-field__clearable {
-  grid-area: clearable;
-}
-.base-field__append-inner {
-  grid-area: append-inner;
-  padding-inline-start: var(--base-field-padding-after);
-}
-.base-field__append-inner,
-.base-field__clearable,
-.base-field__prepend-inner {
-  display: flex;
-  align-items: flex-start;
-  padding-top: var(--base-input-padding-top, $field-control-padding-top);
-
-  .base-field--center-affix & {
+  /* REGION ELEMENTS */
+  .base-field__input {
+    position: relative;
+    width: 100%;
     align-items: center;
-    padding-top: 0;
+    color: inherit;
+    column-gap: $field-input-column-gap;
+    display: flex;
+    flex-wrap: wrap;
+    letter-spacing: $field-letter-spacing;
+    opacity: $field-input-opacity;
+    min-height: $field-input-min-height;
+    min-width: 0;
+    padding-inline: var(--base-field-padding-start) var(--base-field-padding-end);
+    padding-top: var(--base-field-input-padding-top);
+    padding-bottom: var(--base-field-input-padding-bottom);
+
+    $root: &;
+
+    @at-root {
+      @include tools.density('base-input', $input-density) using ($modifier) {
+        @at-root #{selector.nest(&, $root)} {
+          row-gap: #{$field-input-row-gap + $modifier * .25};
+        }
+      }
+    }
+
+    input {
+      letter-spacing: inherit;
+    }
+
+    @at-root {
+      & input::placeholder,
+      input#{&}::placeholder,
+      textarea#{&}::placeholder {
+        color: currentColor;
+        opacity: var(--base-disabled-opacity);
+      }
+    }
+
+    &:focus,
+    &:active {
+      outline: none;
+    }
+    // Remove Firefox red outline
+    &:invalid {
+      box-shadow: none;
+    }
   }
-}
-.base-field.base-field--variant-underlined,
-.base-field.base-field--variant-plain {
+  .base-field__field {
+    position: relative;
+    display: flex;
+    flex: 1 0;
+    grid-area: field;
+    align-items: flex-start;
+  }
+
+  /* REGION AFFIXES */
+  .base-field__prepend-inner {
+    grid-area: prepend-inner;
+    padding-inline-end: var(--base-field-padding-after);
+  }
+  .base-field__clearable {
+    grid-area: clear;
+  }
+  .base-field__append-inner {
+    grid-area: append-inner;
+    padding-inline-start: var(--base-field-padding-after);
+  }
   .base-field__append-inner,
   .base-field__clearable,
   .base-field__prepend-inner {
+    display: flex;
     align-items: flex-start;
-    padding-top: $field-input-padding-top;
-    padding-bottom: $field-input-padding-bottom;
+    padding-top: var(--base-input-padding-top, $field-control-padding-top);
+
+    .base-field--center-affix & {
+      align-items: center;
+      padding-top: 0;
+    }
+  }
+  .base-field.base-field--variant-underlined,
+  .base-field.base-field--variant-plain {
+    .base-field__append-inner,
+    .base-field__clearable,
+    .base-field__prepend-inner {
+      align-items: flex-start;
+      padding-top: $field-input-padding-top;
+      padding-bottom: $field-input-padding-bottom;
+    }
   }
   .base-field__append-inner,
   .base-field__prepend-inner {
-    .base-field--focus & {
+    .base-field--focused & {
       opacity: 1;
     }
   }
+  .base-field__prepend-inner,
   .base-field__append-inner,
-  .base-field__clearable,
-  .base-field__prepend-inner {
+  .base-field__clearable {
     > .base-icon {
       opacity: var(--base-medium-emphasis-opacity);
     }
-
     .base-field--disabled &,
     .base-field--error & {
       > .base-icon {
         opacity: 1;
       }
     }
-
     .base-field--error:not(.base-field--disabled) & {
       > .base-icon {
         color: rgb(var(--base-theme-error));
@@ -199,7 +259,6 @@
     .base-field--persistent-clear & {
       opacity: 1;
     }
-
     @media (hover: hover) {
       .base-field:hover & {
         opacity: 1;
@@ -209,216 +268,331 @@
       opacity: 1;
     }
   }
-}
+  /* REGION LABEL */
+  .base-label.base-field-label {
+    contain: layout paint;
+    display: block;
+    margin-inline-start: var(--base-field-padding-start);
+    margin-inline-end: var(--base-field-padding-end);
+    max-width: calc(100% - var(--base-field-padding-start) - var(--base-field-padding-end));
+    pointer-events: none;
+    position: absolute;
+    top: var(--base-input-padding-top);
+    transform-origin: left center;
+    transition: $field-transition-timing;
+    transition-property: opacity, transform;
+    z-index: 1;
 
-// REGION LABEL
-
-// REGION OUTLINE
-.base-field__outline {
-  position: absolute;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  contain: layout;
-  align-items: stretch;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  --base-field-border-width: #{$field-border-width};
-  --base-field-border-opacity: #{$field-outline-opacity};
-
-  @media (hover: hover) {
-    .base-field:hover & {
-      --base-field-border-opacity: var(--base-high-emphasis-opacity);
+    .base-field--variant-underlined &,
+    .base-field--variant-plain & {
+      top: calc(var(--base-field-input-padding-top) + var(--base-field-padding-top));
     }
-  }
-  .base-field-error:not(.base-field--disabled) & {
-    color: rgb(var(--base-theme-error));
-  }
-  .base-field--focused &,
-  .base-field--error & {
-    --base-field-border-opacity: 1;
-  }
-
-  .base-field-outlined.base-field--focused & {
-    --base-field-border-width: #{$field-focused-border-width};
-  }
-  .base-field--variant-filled &,
-  .base-field--variant-underlined & {
-    &::before {
-      border-color: currentColor;
-      border-style: solid;
-      border-width: 0 0 $field-focused-border-width;
-      opacity: var(--base-field-border-opacity);
-      transition: opacity $field-subtle-transition-timing;
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    .base-field--center-affix & {
+      top: 50%;
+      transform: translateY(-50%);
     }
-  }
-  .base-field--variant-filled &,
-  .base-field--variant-underlined & {
-    &::after {
-      border-color: currentColor;
-      border-style: solid;
-      border-width: 0 0 $field-focused-border-width;
-      transform: scaleX(0);
-      transition: opacity $field-transition-timing;
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    .base-field--active & {
+      visibility: hidden;
+    }
+    .base-field--focused &,
+    .base-field--error {
+      opacity: 1;
+    }
+    .base-field--error:not(.base-field--disabled) & {
+      color: rgb(var(--base-field-label-scale));
+    }
+    &--floating {
+      --base-field-label-scale: #{$field-label-floating-scale}em;
+      font-size: var(--base-field-label-scale);
+      visibility: hidden;
 
-      @at-root #{selector.append('.base-field--focused', &)} {
-        transform: scaleX(1);
+      .base-field--variant-outlined & {
+        min-width: 100%;
       }
-    }
-  }
-  .base-field--variant-outlined & {
-    border-radius: inherit;
+      .base-field--center-affix & {
+        transform: none;
+      }
+      .base-field.base-field--active & {
+        visibility: unset;
+      }
+      .base-field--variant-solo &,
+      .base-field--variant-solo-inverted &,
+      .base-field--variant-filled &,
+      .base-field--variant-solo-filled & {
+        $root: &;
 
-    &__start,
-    &__notch:before,
-    &__notch:after,
-    &__end {
-      border: 0 solid currentColor;
-      opacity: var(--base-field-border-opacity);
-      transition: opacity $field-subtle-transition-timing;
-    }
-
-    &__start {
-      flex: 0 0 $field-control-affixed-padding;
-      border-top-width: var(--base-field-border-width);
-      border-bottom-width: var(--base-field-border-width);
-      border-inline-start-width: var(--base-field-border-width);
-      border-start-start-radius: inherit;
-      border-start-end-radius: 0;
-      border-end-end-radius: 0;
-      border-end-start-radius: inherit;
-
-      @at-root {
-        #{selector.append('.v-field--rounded', &)},
-        #{selector.append('[class^="rounded-"]', &)},
-        #{selector.append('[class*=" rounded-"]', &)} {
-          flex-basis: calc(var(--base-input-control-height) / 2 + 2px);
+        @at-root {
+          @include tools.density('base-input', $input-density) using ($modifier) {
+            @at-root #{selector.nest(&, $root)} {
+              top: 7px + $modifier * .25;
+            }
+          }
         }
       }
-
-      @at-root #{selector.append('.v-field--reverse', &)} {
-        border-start-start-radius: 0;
-        border-start-end-radius: inherit;
-        border-end-end-radius: inherit;
-        border-end-start-radius: 0;
-        border-inline-end-width: var(--base-field-border-width);
-        border-inline-start-width: 0;
+      .base-field--variant-plain &,
+      .base-field--variant-underlined & {
+        transform: translateY(-16px);
+        margin: 0;
+        top: var(--base-input-padding-top);
+      }
+      .base-field--variant-outlined & {
+        transform: translateY(-50%);
+        transform-origin: center;
+        position: static;
+        margin: 0 4px;
       }
     }
+  }
 
-    &__notch {
-      flex: none;
-      position: relative;
-      max-width: calc(100% - $field-control-affixed-padding);
+  /* REGION OUTLINE */
+  .base-field__outline {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    contain: layout;
+    align-items: stretch;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    --base-field-border-width: #{$field-border-width};
+    --base-field-border-opacity: #{$field-outline-opacity};
 
-      &::before,
-      &::after {
+    @media (hover: hover) {
+      .base-field:hover & {
+        --base-field-border-opacity: var(--base-high-emphasis-opacity);
+      }
+    }
+    .base-field-error:not(.base-field--disabled) & {
+      color: rgb(var(--base-theme-error));
+    }
+    .base-field--focused &,
+    .base-field--error & {
+      --base-field-border-opacity: 1;
+    }
+
+    .base-field-outlined.base-field--focused & {
+      --base-field-border-width: #{$field-focused-border-width};
+    }
+    .base-field--variant-filled &,
+    .base-field--variant-underlined & {
+      &::before {
+        border-color: currentColor;
+        border-style: solid;
+        border-width: 0 0 $field-focused-border-width;
         opacity: var(--base-field-border-opacity);
         transition: opacity $field-subtle-transition-timing;
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        @include tools.absolute(true);
       }
-
-      &::before {
-        border-width: var(--basev-field-border-width) 0 0;
-      }
-
+    }
+    .base-field--variant-filled &,
+    .base-field--variant-underlined & {
       &::after {
-        bottom: 0;
-        border-width: 0 0 var(--base-field-border-width);
-      }
+        border-color: currentColor;
+        border-style: solid;
+        border-width: 0 0 $field-focused-border-width;
+        transform: scaleX(0);
+        transition: opacity $field-transition-timing;
+        @include tools.absolute(true);
 
-      @at-root #{selector.append('.base-field--active', &)} {
-        &::before {
-          opacity: 0;
+        @at-root #{selector.append('.base-field--focused', &)} {
+          transform: scaleX(1);
         }
       }
     }
+    .base-field--variant-outlined & {
+      border-radius: inherit;
 
-    &__end {
-      flex: 1;
-      border-top-width: var(--base-field-border-width);
-      border-bottom-width: var(--base-field-border-width);
-      border-inline-end-width: var(--base-field-border-width);
-      border-start-start-radius: 0;
-      border-start-end-radius: inherit;
-      border-end-end-radius: inherit;
-      border-end-start-radius: 0;
-
-      @at-root #{selector.append('.base-field--reverse', &)} {
+      &__start,
+      &__notch:before,
+      &__notch:after,
+      &__end {
+        border: 0 solid currentColor;
+        opacity: var(--base-field-border-opacity);
+        transition: opacity $field-subtle-transition-timing;
+      }
+      &__start {
+        flex: 0 0 $field-control-affixed-padding;
+        border-top-width: var(--base-field-border-width);
+        border-bottom-width: var(--base-field-border-width);
+        border-inline-start-width: var(--base-field-border-width);
         border-start-start-radius: inherit;
         border-start-end-radius: 0;
         border-end-end-radius: 0;
         border-end-start-radius: inherit;
-        border-inline-end-width: 0;
-        border-inline-start-width: var(--base-field-border-width);
+
+        @at-root {
+          #{selector.append('.base-field--rounded', &)},
+          #{selector.append('[class^="rounded-"]', &)},
+          #{selector.append('[class*=" rounded-"]', &)} {
+            flex-basis: calc(var(--base-input-control-height) / 2 + 2px);
+          }
+        }
+        @at-root #{selector.append('.base-field--reverse', &)} {
+          border-start-start-radius: 0;
+          border-start-end-radius: inherit;
+          border-end-end-radius: inherit;
+          border-end-start-radius: 0;
+          border-inline-end-width: var(--base-field-border-width);
+          border-inline-start-width: 0;
+        }
+      }
+      &__notch {
+        flex: none;
+        position: relative;
+        max-width: calc(100% - $field-control-affixed-padding * 2);
+
+        @at-root {
+          #{selector.append('.base-field--rounded', &)},
+          #{selector.append('[class^="rounded-"]', &)},
+          #{selector.append('[class*=" rounded-"]', &)} {
+            max-width: calc(100% - var(--base-input-control-height))
+          }
+        }
+
+        &::before,
+        &::after {
+          opacity: var(--base-field-border-opacity);
+          transition: opacity $field-subtle-transition-timing;
+
+          @include tools.absolute(true);
+        }
+        &::before {
+          border-width: var(--basev-field-border-width) 0 0;
+        }
+        &::after {
+          bottom: 0;
+          border-width: 0 0 var(--base-field-border-width);
+        }
+        @at-root #{selector.append('.base-field--active', &)} {
+          &::before {
+            opacity: 0;
+          }
+        }
+      }
+      &__end {
+        flex: 1;
+        border-top-width: var(--base-field-border-width);
+        border-bottom-width: var(--base-field-border-width);
+        border-inline-end-width: var(--base-field-border-width);
+        border-start-start-radius: 0;
+        border-start-end-radius: inherit;
+        border-end-end-radius: inherit;
+        border-end-start-radius: 0;
+
+        @at-root #{selector.append('.base-field--reverse', &)} {
+          border-start-start-radius: inherit;
+          border-start-end-radius: 0;
+          border-end-end-radius: 0;
+          border-end-start-radius: inherit;
+          border-inline-end-width: 0;
+          border-inline-start-width: var(--base-field-border-width);
+        }
       }
     }
   }
-}
 
-// REGION LOADER
-.base-field__loader {
-  position: absolute;
-  width: 100%;
-  top: calc(100% - 2px);
-  left: 0;
-  right: 0;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: inherit;
-  border-bottom-left-radius: inherit;
-  overflow: hidden;
+  /* REGION LOADER */
+  .base-field__loader {
+    position: absolute;
+    width: 100%;
+    top: calc(100% - 2px);
+    left: 0;
+    right: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+    overflow: hidden;
 
-  .base-field--variant-outlined & {
-    top: calc(100% - 3px);
-    width: calc(100% - #{$field-border-width} * 2);
-    left: $field-border-width;
-  }
-}
-
-// OVERLAY
-
-// REGION MODIFIERS
-.base-field--reverse {
-  .base-field__field,
-  .base-field__input,
-  .base-field__outline {
-    flex-direction: row-reverse
-  }
-
-  .base-field__input, input {
-    text-align: end;
-  }
-}
-.base-field--variant-filled,
-.base-field--variant-underlined {
-  .base-input--disabled & {
-    .base-field__outline::before {
-      border-image: repeating-linear-gradient(to right, $field-disabled-color 0px, $field-disabled-color 2px, transparent 2px, transparent 4px) 1 repeat;
+    .base-field--variant-outlined & {
+      top: calc(100% - 3px);
+      width: calc(100% - #{$field-border-width} * 2);
+      left: $field-border-width;
     }
   }
-}
-.base-field--loading {
-  .base-field__outline::after,
-  .base-field__outline::before {
-    opacity: 0;
+
+  /* OVERLAY */
+  .base-field__overlay {
+    border-radius: inherit;
+    pointer-events: none;
+
+    @include tools.absolute();
+  }
+  .base-field--variant-filled {
+    .base-field__overlay {
+      background-color: currentColor;
+      opacity: $field-overlay-filled-opacity;
+      transition: opacity $field-subtle-transition-timing;
+    }
+    &.base-field--has-background .base-field__overlay {
+      opacity: 0;
+    }
+    @media (hover: hover) {
+      &:hover .base-field__overlay {
+        opacity: calc((#{$field-overlay-filled-opacity} + #{map.get(settings.$states, 'hover')}) * var(--base-theme-overlay-multiplier));
+      }
+    }
+    &.base-field--focused .base-field__overlay {
+      opacity: calc((#{$field-overlay-filled-opacity} + #{map.get(settings.$states, 'focus')}) * var(--base-theme-overlay-multiplier));
+    }
+  }
+  .base-field--variant-solo-filled {
+    .base-field__overlay {
+      background-color: currentColor;
+      opacity: $field-overlay-filled-opacity;
+      transition: opacity $field-subtle-transition-timing;
+    }
+    @media (hover: hover) {
+      &:hover .base-field__overlay {
+        opacity: calc((#{$field-overlay-filled-opacity} + #{map.get(settings.$states, 'hover')}) * var(--base-theme-overlay-multiplier));
+      }
+    }
+    &.base-field--focused .base-field__overlay {
+      opacity: calc((#{$field-overlay-filled-opacity} + #{map.get(settings.$states, 'focus')}) * var(--base-theme-overlay-multiplier));
+    }
+  }
+  .base-field--variant-solo-inverted {
+    .base-field__overlay {
+      transition: opacity $field-subtle-transition-timing;
+    }
+    &.base-field--has-background .base-field__overlay {
+      opacity: 0;
+    }
+    @media (hover: hover) {
+      &:hover .base-field__overlay {
+        opacity: calc((#{.04} + #{map.get(settings.$states, 'hover')}) * var(--base-theme-overlay-multiplier));
+      }
+    }
+    &.base-field--focused .base-field__overlay {
+      background-color: $field-overlay-focused-background-color;
+      opacity: 1;
+    }
+  }
+
+  /* REGION MODIFIERS */
+  .base-field--reverse {
+    .base-field__field,
+    .base-field__input,
+    .base-field__outline {
+      flex-direction: row-reverse
+    }
+    .base-field__input, input {
+      text-align: end;
+    }
+  }
+  .base-field--variant-filled,
+  .base-field--variant-underlined {
+    .base-input--disabled & {
+      .base-field__outline::before {
+        border-image: repeating-linear-gradient(to right, $field-disabled-color 0px, $field-disabled-color 2px, transparent 2px, transparent 4px) 1 repeat;
+      }
+    }
+  }
+  .base-field--loading {
+    .base-field__outline::after,
+    .base-field__outline::before {
+      opacity: 0;
+    }
   }
 }
