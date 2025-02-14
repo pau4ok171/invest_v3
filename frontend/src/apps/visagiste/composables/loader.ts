@@ -2,7 +2,7 @@
 import BaseProgressLinear from '@/apps/visagiste/components/BaseProgressLinear/BaseProgressLinear.vue';
 
 // Utilities
-import {computed} from "vue";
+import {computed, h} from "vue";
 import {getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 
 // Types
@@ -45,20 +45,24 @@ export function LoaderSlot (
 	}>>,
 	{ slots }: SetupContext,
 ) {
-	return (
-		<div class={ `${props.name}__loader` }>
-			{ slots.default?.({
+	return h(
+		'div',
+		{
+			class: `${props.name}__loader`
+		},
+		{
+			default: () => slots.default?.({
 				color: props.color,
 				isActive: props.active,
-			} as LoaderSlotProps) || (
-				<BaseProgressLinear
-					absolute={ props.absolute }
-					active={ props.active }
-					color={ props.color }
-					height="2"
-					indeterminate
-				/>
-			)}
-		</div>
+			} as LoaderSlotProps) || h(
+				BaseProgressLinear,
+				{
+					absolute: props.absolute,
+					active: props.active,
+					color: props.color,
+					height: "2",
+					indeterminate: true,
+			})
+		}
 	)
 }
