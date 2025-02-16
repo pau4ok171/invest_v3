@@ -27,6 +27,10 @@ import { provideTheme } from "@/apps/visagiste/composables/theme";
 import { createLayout } from "@/apps/visagiste/composables/layout";
 import { useRtl } from "@/apps/visagiste/composables/locale";
 
+defineOptions({
+  name: 'BaseApplication'
+})
+
 const props = defineProps(useBaseAppProps());
 
 const theme = provideTheme(props);

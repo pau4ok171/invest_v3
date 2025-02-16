@@ -22,6 +22,10 @@ import { provideDefaults } from "@/apps/visagiste/composables/defaults";
 // Utilities
 import { toRef } from "vue";
 
+defineOptions({
+  name: 'BaseToolbarItems'
+})
+
 const props = defineProps(useBaseToolbarItemsProps());
 
 provideDefaults({

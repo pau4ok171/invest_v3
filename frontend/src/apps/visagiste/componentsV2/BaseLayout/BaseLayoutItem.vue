@@ -34,6 +34,10 @@ import "./BaseLayoutItem.scss";
 import { useLayoutItem } from "@/apps/visagiste/composables/layout";
 import { computed, toRef } from "vue";
 
+defineOptions({
+  name: 'BaseLayoutItem'
+})
+
 const props = defineProps(useBaseLayoutItemProps());
 
 const { layoutItemStyles } = useLayoutItem({

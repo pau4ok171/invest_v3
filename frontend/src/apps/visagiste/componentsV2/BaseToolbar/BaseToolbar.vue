@@ -90,6 +90,10 @@ export type BaseToolbarSlots = {
   extension: (props?: any) => void;
 };
 
+defineOptions({
+  name: 'BaseToolbar'
+})
+
 const props = defineProps(useBaseToolbarProps());
 const slots = defineSlots<BaseToolbarSlots>();
 

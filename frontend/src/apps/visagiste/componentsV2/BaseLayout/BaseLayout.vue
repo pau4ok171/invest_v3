@@ -23,6 +23,10 @@ import "./BaseLayout.scss";
 import { createLayout } from "@/apps/visagiste/composables/layout";
 import { useDimension } from "@/apps/visagiste/composables/dimensions";
 
+defineOptions({
+  name: 'BaseLayout'
+})
+
 const props = defineProps(useBaseLayoutProps());
 
 const { layoutClasses, layoutStyles, getLayoutItem, items, layoutRef } =
