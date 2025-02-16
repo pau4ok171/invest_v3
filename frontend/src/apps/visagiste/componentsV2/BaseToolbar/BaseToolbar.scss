@@ -2,7 +2,7 @@
 @use './variables' as *;
 
 @include tools.layer('components') {
-  // Blocks
+  // Block
   .base-toolbar {
     position: relative;
     display: flex;
@@ -52,6 +52,8 @@
     transition: inherit;
   }
   .base-toolbar__content {
+    overflow: hidden;
+
     > .base-button:first-child {
       margin-inline-start: $toolbar-prepend-button-margin-start;
     }
@@ -69,7 +71,7 @@
     display: flex;
     opacity: var(--base-toolbar-image-opacity, 1);
     transition-property: opacity;
-    @include tools.absolute()
+    @include tools.absolute();
   }
   .base-toolbar__prepend,
   .base-toolbar__append {
