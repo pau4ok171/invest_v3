@@ -1,5 +1,5 @@
 @use "../../styles/tools";
-@use "./variables" as *;
+@use "variables" as *;
 
 @include tools.layer('components') {
   .base-application {
