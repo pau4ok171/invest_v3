@@ -126,6 +126,8 @@ export const BaseSvgIcon = defineComponent({
           })
          : h('path', { d: props.icon });
 
+      console.log(icon)
+
       return h(props.tag, { ...attrs, style: null} ,
         h('svg', {
           class: "base-icon__svg",

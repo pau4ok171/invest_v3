@@ -1,5 +1,0 @@
-<template>
-<svg viewBox="0 0 24 24">
-  <path d="M15.4987 11.0192V12.5288H8.45666V11.0192H15.4987ZM8.72475 6V18H7V6H8.72475ZM17 6V18H15.2842V6H17Z"></path>
-</svg>
-</template>

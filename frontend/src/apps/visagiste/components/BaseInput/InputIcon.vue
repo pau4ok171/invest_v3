@@ -1,6 +1,6 @@
 <script lang="ts">
 // Components
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue';
+import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
 
 // Composables
 import { useLocale } from '@/apps/visagiste/composables/locale';

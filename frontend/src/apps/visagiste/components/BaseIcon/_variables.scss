@@ -2,7 +2,7 @@
 @use '../../styles/settings';
 @use '../../styles/tools';
 
-// VIcon
+// BaseIcon
 $icon-disabled-opacity: 0.38 !default;
 $icon-left-margin-left: map.get(settings.$grid-gutters, 'md') !default;
 $icon-letter-spacing: normal !default;
