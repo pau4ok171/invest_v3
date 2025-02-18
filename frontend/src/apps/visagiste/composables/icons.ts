@@ -146,9 +146,7 @@ export const BaseLigatureIcon = defineComponent({
   name: 'BaseLigatureIcon',
   props: useIconProps(),
   setup(props) {
-    return () => {
-      return h(props.tag, {}, props.icon)
-    }
+    return () => h(props.tag, null, props.icon)
   },
 })
 export type BaseLigatureIcon = InstanceType<typeof BaseLigatureIcon>
