@@ -19,7 +19,7 @@ import {useHydration} from "@/apps/visagiste/composables/hydration";
 import {useScopeId} from "@/apps/visagiste/composables/scopeId";
 import {useBackButton, useRouter} from "@/apps/visagiste/composables/router";
 import {useToggleScope} from "@/apps/visagiste/composables/toggleScope";
-import MaybeTransition, { useTransitionProps } from "@/apps/visagiste/composables_v2/transition.vue";
+import MaybeTransition, { useTransitionProps } from "@/apps/visagiste/composablesV2/transition.vue";
 
 // Directives
 import { ClickOutside } from "@/apps/visagiste/directives";
@@ -27,7 +27,8 @@ import { ClickOutside } from "@/apps/visagiste/directives";
 // Utilities
 import {computed, h, mergeProps, onBeforeUnmount, ref, toRef, Transition, watch} from "vue";
 import {
-  animate, convertToUnit,
+  animate,
+  convertToUnit,
   defineComponent,
   getCurrentInstance,
   getScrollParent,
@@ -38,8 +39,8 @@ import {
 
 // Types
 import type { Ref, PropType } from 'vue';
-import type { TemplateRef } from "@/apps/visagiste/utils";
 import type {BackgroundColorData} from "@/apps/visagiste/composables/color";
+import type { TemplateRef } from "@/apps/visagiste/utils";
 
 interface ScrimProps {
   [key: string]: unknown
@@ -103,8 +104,13 @@ export const useBaseOverlayProps = propsFactory({
 
 export default defineComponent({
   name: "BaseOverlay",
-  components: {MaybeTransition},
-  methods: {convertToUnit, mergeProps},
+  components: {
+    MaybeTransition,
+  },
+  methods: {
+    convertToUnit,
+    mergeProps
+  },
   directives: {
     ClickOutside,
   },
@@ -293,13 +299,22 @@ export default defineComponent({
       onAfterLeave,
       onClickOutside,
     }
-
   }
 })
 </script>
 
 <template>
-<slot name="activator" v-bind="{ isActive, targetRef, props: mergeProps({ ref: activatorRef }, activatorEvents, $props.activatorProps) }"/>
+<slot
+  name="activator"
+  v-bind="{
+    isActive,
+    targetRef,
+    props: mergeProps({
+    ref: activatorRef
+    }, activatorEvents, $props.activatorProps,
+    )
+  }"
+/>
 
 <template v-if="isMounted && hasContent">
   <Teleport
@@ -326,14 +341,14 @@ export default defineComponent({
         },
         $props.style,
       ]"
-      :ref="root"
+      ref="root"
       v-bind="{...scopeId, ...$attrs}"
     >
       <component
         :is="Scrim"
         :color="scrimColor"
         :modelValue="isActive && !!$props.scrim"
-        :ref="scrimEl"
+        ref="scrimEl"
         v-bind="{...scrimEvents}"
       />
       <MaybeTransition
@@ -345,7 +360,7 @@ export default defineComponent({
         :onAfterLeave="onAfterLeave"
       >
         <div
-          :ref="contentEl"
+          ref="contentEl"
           v-show="isActive"
           v-click-outside="{ handler: onClickOutside, closeConditional, include: () => [activatorEl] }"
           :class="[
