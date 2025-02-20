@@ -1,5 +1,5 @@
 // Components
-import BaseProgressLinear from '@/apps/visagiste/components/BaseProgressLinear/BaseProgressLinear.vue';
+import { BaseProgressLinear } from "@/apps/visagiste/components/BaseProgressLinear";
 
 // Utilities
 import {computed, h} from "vue";
