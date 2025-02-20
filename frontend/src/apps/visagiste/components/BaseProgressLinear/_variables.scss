@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '../../styles/settings';
+@use '@/apps/visagiste/styles/settings';
 
 // BaseProgressLinear
 $progress-linear-background: currentColor !default;
