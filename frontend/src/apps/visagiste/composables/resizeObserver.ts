@@ -39,7 +39,9 @@ export function useResizeObserver (callback?: ResizeObserverCallback, box: 'cont
       }
 
       if (newValue) observer.observe(newValue)
-    }, { flush: 'post' })
+    }, {
+      flush: 'post',
+    })
   }
 
   return {
