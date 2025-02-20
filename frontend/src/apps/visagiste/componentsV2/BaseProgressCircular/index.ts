@@ -1,1 +1,0 @@
-export { default as BaseProgressCircular } from './BaseProgressCircular.vue'

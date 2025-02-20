@@ -1,6 +1,6 @@
 @use 'sass:list';
-@use '../../styles/settings';
-@use '../../styles/tools';
+@use '@/apps/visagiste/styles/settings';
+@use '@/apps/visagiste/styles/tools';
 @use './variables' as *;
 
 @include tools.layer('components') {
