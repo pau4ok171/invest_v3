@@ -8,7 +8,7 @@ $input-control-height: 56px !default;
 $input-flex: 1 1 auto !default;
 $input-font-size: tools.map-deep-get(settings.$typography, 'body-1', 'size') !default;
 $input-font-weight: tools.map-deep-get(settings.$typography, 'body-1', 'weight') !default;
-$icon-line-height: 1.5 !default;
+$input-line-height: 1.5 !default;
 
 // CHIPS
 $input-chips-margin-top: null !default;
