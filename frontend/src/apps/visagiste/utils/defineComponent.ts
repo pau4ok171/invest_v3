@@ -5,9 +5,9 @@ import { injectDefaults, internalUseDefaults } from '@/apps/visagiste/composable
 import {
   defineComponent as _defineComponent, // eslint-disable-line no-restricted-imports
 } from 'vue'
-import { consoleWarn } from './console'
-import { pick } from './helpers'
-import { propsFactory } from './propsFactory'
+import { consoleWarn } from '@/apps/visagiste/utils/console'
+import { pick } from '@/apps/visagiste/utils/helpers'
+import { propsFactory } from '@/apps/visagiste/utils/propsFactory'
 
 // Types
 import type {
