@@ -83,6 +83,7 @@
 
     > .base-badge,
     > .base-icon,
+    > .base-flag,
     > .base-tooltip {
       ~ .base-list-item__spacer {
         width: $list-item-action-margin-start;
@@ -97,6 +98,7 @@
     .base-list-item--slim & {
       > .base-badge,
       > .base-icon,
+      > .base-flag,
       > .base-tooltip {
         ~ .base-list-item__spacer {
           width: $list-item-slim-spacer-width;
@@ -128,6 +130,7 @@
     }
     > .base-badge,
     > .base-icon,
+    > .base-flag,
     > .base-tooltip {
       ~ .base-list-item__spacer {
         width: $list-item-icon-margin-end;
@@ -324,7 +327,7 @@
     transition: opacity 0.2s ease-in-out;
 
     .base-list-item--active.base-list-item--variant-elevated & {
-      --v-theme-overlay-multiplier: 0;
+      --base-theme-overlay-multiplier: 0;
     }
   }
   $base-padding: list.nth($list-item-padding, 2);
@@ -349,7 +352,7 @@
     &--prepend {
       --parent-padding: calc(var(--indent-padding) + var(--prepend-width));
     }
-    &--fluid.v-list-group--prepend {
+    &--fluid.base-list-group--prepend {
       --parent-padding: var(--indent-padding);
     }
   }

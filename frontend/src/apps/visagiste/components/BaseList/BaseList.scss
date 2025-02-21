@@ -64,14 +64,14 @@
 
         #{$root} {
           min-height: $list-subheader-min-height + ($modifier * $list-subheader-min-height-multiplier);
-          padding-inline-start: calc(#{$base-padding} + var(--inline-padding)) !important;
+          padding-inline-start: calc(#{$base-padding} + var(--indent-padding)) !important;
         }
       }
     }
     &--inset {
-      --inline-padding: #{$list-subheader-inset-padding-start};
+      --indent-padding: #{$list-subheader-inset-padding-start};
     }
-    .base-list--nav {
+    .base-list--nav & {
       font-size: $list-nav-subheader-font-size;
     }
     &--sticky {

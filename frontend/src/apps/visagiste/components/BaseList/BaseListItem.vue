@@ -1,105 +1,131 @@
 <script lang="ts">
 // Styles
-import './BaseListItem.scss'
+import "./BaseListItem.scss";
 
 // Components
-import BaseListItemSubtitle from './BaseListItemSubtitle.vue'
-import BaseListItemTitle from './BaseListItemTitle.vue'
+import BaseListItemSubtitle from "./BaseListItemSubtitle.vue";
+import BaseListItemTitle from "./BaseListItemTitle.vue";
 import BaseAvatar from "@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue";
 import BaseDefaultsProvider from "@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue";
-import BaseIcon from "@/apps/visagiste/components/BaseIcon/BaseIcon.vue";
+import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
 
 // Composables
-import { useList } from './list';
-import {useBorder, useBorderProps} from "@/apps/visagiste/composables/border";
-import {useComponentProps} from "@/apps/visagiste/composables/component";
-import {useDensity, useDensityProps} from "@/apps/visagiste/composables/density";
-import {useDimension, useDimensionProps} from "@/apps/visagiste/composables/dimensions";
-import {useElevation, useElevationProps} from "@/apps/visagiste/composables/elevation";
-import {IconValue} from "@/apps/visagiste/composables/icons";
-import {useNestedItem} from "@/apps/visagiste/composables/nested/nested";
-import {useRounded, useRoundedProps} from "@/apps/visagiste/composables/rounded";
-import {useLink, useRouterProps} from "@/apps/visagiste/composables/router";
-import {useTagProps} from "@/apps/visagiste/composables/tag";
-import {provideTheme, useThemeProps} from "@/apps/visagiste/composables/theme";
-import {genOverlays, useVariant, useVariantProps} from "@/apps/visagiste/composables/variant";
+import { useList } from "./list";
+import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
+import { useComponentProps } from "@/apps/visagiste/composables/component";
+import {
+  useDensity,
+  useDensityProps,
+} from "@/apps/visagiste/composables/density";
+import {
+  useDimension,
+  useDimensionProps,
+} from "@/apps/visagiste/composables/dimensions";
+import {
+  useElevation,
+  useElevationProps,
+} from "@/apps/visagiste/composables/elevation";
+import { IconValue } from "@/apps/visagiste/composables/icons";
+import { useNestedItem } from "@/apps/visagiste/composables/nested/nested";
+import {
+  useRounded,
+  useRoundedProps,
+} from "@/apps/visagiste/composables/rounded";
+import { useLink, useRouterProps } from "@/apps/visagiste/composables/router";
+import { useTagProps } from "@/apps/visagiste/composables/tag";
+import {
+  provideTheme,
+  useThemeProps,
+} from "@/apps/visagiste/composables/theme";
+import {
+  genOverlays,
+  useVariant,
+  useVariantProps,
+} from "@/apps/visagiste/composables/variant";
 
 // Directives
 import { Ripple } from "@/apps/visagiste/directives";
 
 // Utilities
-import {computed, onBeforeMount, watch} from "vue";
-import {defineComponent, EventProp, propsFactory} from '@/apps/visagiste/utils'
+import { computed, onBeforeMount, watch } from "vue";
+import {
+  defineComponent,
+  EventProp,
+  propsFactory,
+} from "@/apps/visagiste/utils";
 
 // Types
-import type {PropType} from "vue";
-import type {RippleDirectiveBinding} from "@/directives/ripple";
+import type { PropType } from "vue";
+import type { RippleDirectiveBinding } from "@/directives/ripple";
 
 export type ListItemSlot = {
-  isActive: boolean
-  isOpen: boolean
-  isSelected: boolean
-  isIndeterminate: boolean
-  select: (value: boolean) => void
-}
+  isActive: boolean;
+  isOpen: boolean;
+  isSelected: boolean;
+  isIndeterminate: boolean;
+  select: (value: boolean) => void;
+};
 
 export type ListItemTitleSlot = {
-  title?: string | number
-}
+  title?: string | number;
+};
 
 export type ListItemSubtitleSlot = {
-  subtitle?: string | number
-}
+  subtitle?: string | number;
+};
 
 export type BaseListItemSlots = {
-  prepend: ListItemSlot
-  append: ListItemSlot
-  default: ListItemSlot
-  title: ListItemTitleSlot
-  subtitle: ListItemSubtitleSlot
-}
+  prepend: ListItemSlot;
+  append: ListItemSlot;
+  default: ListItemSlot;
+  title: ListItemTitleSlot;
+  subtitle: ListItemSubtitleSlot;
+};
 
-export const useBaseListItemProps = propsFactory({
-  active: {
-    type: Boolean,
-    default: undefined,
-  },
-  activeClass: String,
-  appendAvatar: String,
-  appendIcon: IconValue,
-  baseColor: String,
-  disabled: Boolean,
-  lines: [Boolean, String] as PropType<'one' | 'two' | 'three' | false>,
-  link: {
-    type: Boolean,
-    default: undefined,
-  },
-  nav: Boolean,
-  prependAvatar: String,
-  prependIcon: IconValue,
-  ripple: {
-    type: [Boolean, Object] as PropType<RippleDirectiveBinding['value']>,
-    default: true,
-  },
-  slim: Boolean,
-  subtitle: [String, Number],
-  title: [String, Number],
-  value: null,
+export const useBaseListItemProps = propsFactory(
+  {
+    active: {
+      type: Boolean,
+      default: undefined,
+    },
+    activeClass: String,
+    appendAvatar: String,
+    appendIcon: IconValue,
+    baseColor: String,
+    disabled: Boolean,
+    lines: [Boolean, String] as PropType<"one" | "two" | "three" | false>,
+    link: {
+      type: Boolean,
+      default: undefined,
+    },
+    nav: Boolean,
+    prependAvatar: String,
+    prependIcon: IconValue,
+    ripple: {
+      type: [Boolean, Object] as PropType<RippleDirectiveBinding["value"]>,
+      default: true,
+    },
+    slim: Boolean,
+    subtitle: [String, Number],
+    title: [String, Number],
+    value: null,
 
-  onClick: EventProp<[MouseEvent | KeyboardEvent]>(),
-  onClickOnce: EventProp<[MouseEvent]>(),
+    onClick: EventProp<[MouseEvent | KeyboardEvent]>(),
+    onClickOnce: EventProp<[MouseEvent]>(),
 
-  ...useBorderProps(),
-  ...useComponentProps(),
-  ...useDensityProps(),
-  ...useDimensionProps(),
-  ...useElevationProps(),
-  ...useRoundedProps(),
-  ...useRouterProps(),
-  ...useTagProps(),
-  ...useThemeProps(),
-  ...useVariantProps({ variant: 'text' } as const),
-}, 'BaseListItem')
+    ...useBorderProps(),
+    ...useComponentProps(),
+    ...useDensityProps(),
+    ...useDimensionProps(),
+    ...useElevationProps(),
+    ...useRoundedProps(),
+    ...useRouterProps(),
+    ...useTagProps(),
+    ...useThemeProps(),
+    ...useVariantProps({ variant: "text" } as const),
+  },
+  "BaseListItem",
+);
 
 export default defineComponent({
   name: "BaseListItem",
@@ -111,7 +137,7 @@ export default defineComponent({
     BaseListItemSubtitle,
   },
   methods: {
-    genOverlays
+    genOverlays,
   },
   directives: {
     Ripple,
@@ -120,9 +146,11 @@ export default defineComponent({
   emits: {
     click: (e: MouseEvent | KeyboardEvent) => true,
   },
-  setup (props, { attrs, slots, emit }) {
-    const link = useLink(props, attrs)
-    const id = computed(() => props.value === undefined ? link.href.value : props.value)
+  setup(props, { attrs, slots, emit }) {
+    const link = useLink(props, attrs);
+    const id = computed(() =>
+      props.value === undefined ? link.href.value : props.value
+    );
     const {
       activate,
       isActivated,
@@ -135,22 +163,32 @@ export default defineComponent({
       parent,
       openOnSelect,
       id: uid,
-    } = useNestedItem(id, false)
-    const list = useList()
-    const isActive = computed(() =>
-      props.active !== false &&
-      (props.active || link.isActive?.value || (root.activatable.value ? isActivated.value : isSelected.value))
-    )
-    const isLink = computed(() => props.link !== false && link.isLink.value)
-    const isSelectable = computed(() => (!!list && (root.selectable.value || root.activatable.value || props.value != null)))
-    const isClickable = computed(() =>
-      !props.disabled &&
-      props.link !== false &&
-      (props.link || link.isClickable.value || isSelected.value)
-    )
+    } = useNestedItem(id, false);
+    const list = useList();
+    const isActive = computed(
+      () =>
+        props.active !== false &&
+        (props.active ||
+          link.isActive?.value ||
+          (root.activatable.value ? isActivated.value : isSelected.value)),
+    );
+    const isLink = computed(() => props.link !== false && link.isLink.value);
+    const isSelectable = computed(
+      () =>
+        !!list &&
+        (root.selectable.value ||
+          root.activatable.value ||
+          props.value != null),
+    );
+    const isClickable = computed(
+      () =>
+        !props.disabled &&
+        props.link !== false &&
+        (props.link || link.isClickable.value || isSelectable.value),
+    );
 
-    const roundedProps = computed(() => props.rounded || props.nav)
-    const color = computed(() => props.color)
+    const roundedProps = computed(() => props.rounded || props.nav);
+    const color = computed(() => props.color);
     const variantProps = computed(() => ({
       color: isActive.value ? color.value ?? props.baseColor : props.baseColor,
       variant: props.variant,
@@ -158,28 +196,33 @@ export default defineComponent({
 
     // useNestedItem doesn't call register until beforeMount,
     // so this can't be an immediate watcher as we don't know parent yet
-    watch(() => link.isActive?.value, val => {
-      if (!val) return
-      handleActiveLink()
-    })
+    watch(
+      () => link.isActive?.value,
+      (val) => {
+        if (!val) return;
+        handleActiveLink();
+      },
+    );
     onBeforeMount(() => {
-      if (link.isActive?.value) handleActiveLink()
-    })
-    function handleActiveLink () {
+      if (link.isActive?.value) handleActiveLink();
+    });
+    function handleActiveLink() {
       if (parent.value != null) {
-        root.open(parent.value, true)
+        root.open(parent.value, true);
       }
-      openOnSelect(true)
+      openOnSelect(true);
     }
 
-    const { themeClasses } = provideTheme(props)
-    const { borderClasses } = useBorder(props)
+    const { themeClasses } = provideTheme(props);
+    const { borderClasses } = useBorder(props);
     const { colorClasses, colorStyles, variantClasses } = useVariant(variantProps)
-    const { densityClasses } = useDensity(props)
-    const { dimensionStyles } = useDimension(props)
-    const { elevationClasses } = useElevation(props)
-    const { roundedClasses } = useRounded(roundedProps)
-    const lineClasses = computed(() => props.lines ? `base-list-item--${props.lines}` : undefined)
+    const { densityClasses } = useDensity(props);
+    const { dimensionStyles } = useDimension(props);
+    const { elevationClasses } = useElevation(props);
+    const { roundedClasses } = useRounded(roundedProps);
+    const lineClasses = computed(() =>
+      props.lines ? `base-list-item--${props.lines}-line` : undefined,
+    );
 
     const slotProps = computed(() => ({
       isActive: isActive.value,
@@ -187,44 +230,54 @@ export default defineComponent({
       isOpen: isOpen.value,
       isSelected: isSelected.value,
       isIndeterminate: isIndeterminate.value,
-    } satisfies ListItemSlot))
+    } satisfies ListItemSlot));
 
-    function onClick (e: MouseEvent) {
-      emit('click', e)
+    function onClick(e: MouseEvent) {
+      emit("click", e);
 
-      if (!isClickable.value) return
+      if (!isClickable.value) return;
 
-      link.navigate?.(e)
+      link.navigate?.(e);
 
-      if (isGroupActivator) return
+      if (isGroupActivator) return;
 
       if (root.activatable.value) {
-        activate(!isActivated.value, e)
+        activate(!isActivated.value, e);
       } else if (root.selectable.value) {
-        select(!isSelected.value, e)
+        select(!isSelected.value, e);
       } else if (props.value != null) {
-        select(!isSelected.value, e)
+        select(!isSelected.value, e);
       }
     }
 
-    function onKeyDown (e: KeyboardEvent) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        e.target!.dispatchEvent(new MouseEvent('click', e))
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.target!.dispatchEvent(new MouseEvent("click", e));
       }
     }
 
-    const Tag = computed(() => isLink.value ? 'a' : props.tag)
-    const hasTitle = computed(() => (slots.title || props.title != null))
-    const hasSubtitle = computed(() => (slots.subtitle || props.subtitle != null))
-    const hasAppendMedia = computed(() => !!(props.appendAvatar || props.appendIcon))
-    const hasAppend = computed(() => !!(hasAppendMedia || slots.append))
-    const hasPrependMedia = computed(() => !!(props.prependAvatar || props.prependIcon))
-    const hasPrepend = computed(() => !!(hasPrependMedia || slots.prepend))
+    const Tag = computed(() => (isLink.value ? "a" : props.tag));
+    const hasTitle = computed(() => !!(slots.title && slots.title?.().length) || props.title != null);
+    const hasSubtitle = computed(
+      () => !!(slots.subtitle && slots.subtitle?.().length) || props.subtitle != null,
+    );
+    const hasAppendMedia = computed(
+      () => !!(props.appendAvatar || props.appendIcon),
+    );
+    const hasAppend = computed(() => !!(hasAppendMedia.value || !!(slots.append && slots.append?.().length)));
+    const hasPrependMedia = computed(
+      () => !!(props.prependAvatar || props.prependIcon),
+    );
+    const hasPrepend = computed(() => !!(hasPrependMedia.value || (slots.prepend && slots.prepend?.().length)));
 
-    watch(() => hasPrepend.value, () => list?.updateHasPrepend(hasPrepend.value))
+    watch(
+      () => hasPrepend.value,
+      () => list?.updateHasPrepend(hasPrepend.value),
+    );
 
     return {
+      uid,
       list,
       root,
       link,
@@ -237,6 +290,7 @@ export default defineComponent({
       hasPrependMedia,
       hasPrepend,
       isActive,
+      isActivated,
       isClickable,
       isSelected,
       isSelectable,
@@ -253,158 +307,147 @@ export default defineComponent({
       dimensionStyles,
       onClick,
       onKeyDown,
-    }
+    };
   },
-})
+});
 </script>
 
 <template>
-<component
-  :is="Tag"
-  :class="[
-    'base-list-item',
-    {
-      'base-item--active': isActive,
-      'base-item--disabled': $props.disabled,
-      'base-item--link': isClickable,
-      'base-item--nav': $props.nav,
-      'base-item--prepend': !hasPrepend && list?.hasPrepend,
-      'base-item--slim': $props.slim,
-      [`${$props.activeClass}`]: $props.activeClass && isActive,
-    },
-    themeClasses,
-    borderClasses,
-    colorClasses,
-    densityClasses,
-    elevationClasses,
-    lineClasses,
-    roundedClasses,
-    variantClasses,
-    $props.class,
-  ]"
-  :style="[
-    colorStyles,
-    dimensionStyles,
-    $props.style,
-  ]"
-  :tabindex="isClickable ? (list ? -2 : 0) : undefined"
-  :aria-selected="
-    isSelectable  ? (
-      root.activatable ? isActive
-      : root.selectable ? isSelected
-      : isActive
-    ) : undefined
-  "
-  @click="onClick"
-  @keydown="isClickable && !isLink && onKeyDown"
-  v-ripple="isClickable && $props.ripple"
-  v-bind="{...link.linkProps}"
->
-  <component :is="genOverlays(isClickable || isActive, 'base-list-item')"/>
-
-  <div
-    v-if="hasPrepend"
-    key="prepend"
-    class="base-list-item__prepend"
+  <component
+    :is="Tag"
+    :class="[
+      'base-list-item',
+      {
+        'base-list-item--active': isActive,
+        'base-list-item--disabled': $props.disabled,
+        'base-list-item--link': isClickable,
+        'base-list-item--nav': $props.nav,
+        'base-list-item--prepend': !hasPrepend && list?.hasPrepend,
+        'base-list-item--slim': $props.slim,
+        [`${$props.activeClass}`]: $props.activeClass && isActive,
+      },
+      themeClasses,
+      borderClasses,
+      colorClasses,
+      densityClasses,
+      elevationClasses,
+      lineClasses,
+      roundedClasses,
+      variantClasses,
+      $props.class,
+    ]"
+    :style="[colorStyles, dimensionStyles, $props.style]"
+    :tabindex="isClickable ? (list ? -2 : 0) : undefined"
+    :aria-selected="
+      isSelectable
+        ? root.activatable
+          ? isActivated
+          : root.selectable
+            ? isSelected
+            : isActive
+        : undefined
+    "
+    @click="onClick"
+    @keydown="isClickable && !isLink && onKeyDown"
+    v-ripple="isClickable && $props.ripple"
+    v-bind="{ ...link.linkProps }"
   >
-    <template v-if="!$slots.prepend">
-      <BaseAvatar
-        v-if="$props.prependAvatar"
-        key="prepend-avatar"
-        :density="$props.density"
-        :image="$props.prependAvatar"
-      />
-      <BaseIcon
-        v-if="$props.prependIcon"
-        key="prepend-icon"
-        :density="$props.density"
-        :icon="$props.prependIcon"
-      />
-    </template>
+    <component :is="genOverlays(isClickable || isActive, 'base-list-item')" />
 
-    <BaseDefaultsProvider
-      v-else
-      key="prepend-defaults"
-      :disabled="!hasPrependMedia"
-      :defaults="{
-        BaseAvatar: {
-          density: $props.density,
-          image: $props.prependAvatar,
-        },
-        BaseIcon: {
-          density: $props.density,
-          icon: $props.prependIcon,
-        },
-        BaseListItemAction: {
-          start: true,
-        },
-      }"
-    >
-      <slot name="prepend" v-bind="slotProps"/>
-    </BaseDefaultsProvider>
+    <div v-if="hasPrepend" key="prepend" class="base-list-item__prepend">
+      <template v-if="!$slots.prepend">
+        <BaseAvatar
+          v-if="$props.prependAvatar"
+          key="prepend-avatar"
+          :density="$props.density"
+          :image="$props.prependAvatar"
+        />
+        <BaseIcon
+          v-if="$props.prependIcon"
+          key="prepend-icon"
+          :density="$props.density"
+          :icon="$props.prependIcon"
+        />
+      </template>
 
-    <div class="base-list-item__spacer"/>
-  </div>
+      <BaseDefaultsProvider
+        v-else
+        key="prepend-defaults"
+        :disabled="!hasPrependMedia"
+        :defaults="{
+          BaseAvatar: {
+            density: $props.density,
+            image: $props.prependAvatar,
+          },
+          BaseIcon: {
+            density: $props.density,
+            icon: $props.prependIcon,
+          },
+          BaseListItemAction: {
+            start: true,
+          },
+        }"
+      >
+        <slot name="prepend" v-bind="slotProps" />
+      </BaseDefaultsProvider>
 
-  <div class="base-list-item__content" data-no-activator="">
-    <BaseListItemTitle v-if="hasTitle" key="title">
-      <slot name="title" v-bind="{ title: $props.title }">
-        {{ $props.title }}
-      </slot>
-    </BaseListItemTitle>
+      <div class="base-list-item__spacer" />
+    </div>
 
-    <BaseListItemSubtitle v-if="hasSubtitle" key="subtitle">
-      <slot name="subtitle" v-bind="{ subtitle: $props.subtitle }">
-        {{ $props.subtitle }}
-      </slot>
-    </BaseListItemSubtitle>
+    <div class="base-list-item__content" data-no-activator="">
+      <BaseListItemTitle v-if="hasTitle" key="title">
+        <slot name="title" v-bind="{ title: $props.title }">
+          {{ $props.title }}
+        </slot>
+      </BaseListItemTitle>
 
-    <slot v-bind="slotProps"/>
-  </div>
+      <BaseListItemSubtitle v-if="hasSubtitle" key="subtitle">
+        <slot name="subtitle" v-bind="{ subtitle: $props.subtitle }">
+          {{ $props.subtitle }}
+        </slot>
+      </BaseListItemSubtitle>
 
-    <div
-    v-if="hasAppend"
-    key="append"
-    class="base-list-item__append"
-  >
-    <template v-if="!$slots.append">
-      <BaseAvatar
-        v-if="$props.appendAvatar"
-        key="append-avatar"
-        :density="$props.density"
-        :image="$props.appendAvatar"
-      />
-      <BaseIcon
-        v-if="$props.appendIcon"
-        key="append-icon"
-        :density="$props.density"
-        :icon="$props.appendIcon"
-      />
-    </template>
+      <slot v-bind="slotProps" />
+    </div>
 
-    <BaseDefaultsProvider
-      v-else
-      key="append-defaults"
-      :disabled="!hasAppendMedia"
-      :defaults="{
-        BaseAvatar: {
-          density: $props.density,
-          image: $props.appendAvatar,
-        },
-        BaseIcon: {
-          density: $props.density,
-          icon: $props.appendIcon,
-        },
-        BaseListItemAction: {
-          start: true,
-        },
-      }"
-    >
-      <slot name="append" v-bind="slotProps"/>
-    </BaseDefaultsProvider>
+    <div v-if="hasAppend" key="append" class="base-list-item__append">
+      <template v-if="!$slots.append">
+        <BaseAvatar
+          v-if="$props.appendAvatar"
+          key="append-avatar"
+          :density="$props.density"
+          :image="$props.appendAvatar"
+        />
+        <BaseIcon
+          v-if="$props.appendIcon"
+          key="append-icon"
+          :density="$props.density"
+          :icon="$props.appendIcon"
+        />
+      </template>
 
-    <div class="base-list-item__spacer"/>
-  </div>
+      <BaseDefaultsProvider
+        v-else
+        key="append-defaults"
+        :disabled="!hasAppendMedia"
+        :defaults="{
+          BaseAvatar: {
+            density: $props.density,
+            image: $props.appendAvatar,
+          },
+          BaseIcon: {
+            density: $props.density,
+            icon: $props.appendIcon,
+          },
+          BaseListItemAction: {
+            start: true,
+          },
+        }"
+      >
+        <slot name="append" v-bind="slotProps" />
+      </BaseDefaultsProvider>
 
-</component>
+      <div class="base-list-item__spacer" />
+    </div>
+  </component>
 </template>

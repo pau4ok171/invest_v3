@@ -6,32 +6,41 @@ import BaseListItemSubheader from "./BaseListItemSubheader.vue";
 import BaseDivider from "../BaseDivider/BaseDivider.vue";
 
 // Utilities
-import {h} from "vue";
 import { createList } from "./list";
-import {defineComponent, propsFactory} from '@/apps/visagiste/utils';
+import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
 
 // Types
-import type {PropType} from "vue";
-import type {InternalListItem} from "./BaseList.vue";
-import type {BaseListItemSlots} from "./BaseListItem.vue";
+import type { PropType } from "vue";
+import type { InternalListItem } from "./BaseList.vue";
+import type { BaseListItemSlots } from "./BaseListItem.vue";
 
 export type BaseListChildrenSlots<T> = {
-  [K in keyof Omit<BaseListItemSlots, 'default'>]: BaseListItemSlots[K] & { item: T }
+  [K in keyof Omit<BaseListItemSlots, "default">]: BaseListItemSlots[K] & {
+    item: T;
+  };
 } & {
-  default: never
-  item: { props: InternalListItem['props'] }
-  divider: { props: InternalListItem['props'] }
-  subheader: { props: InternalListItem['props'] }
-  header: { props: InternalListItem['props'] }
-}
+  default: never;
+  item: { props: InternalListItem["props"] };
+  divider: { props: InternalListItem["props"] };
+  subheader: { props: InternalListItem["props"] };
+  header: { props: InternalListItem["props"] };
+};
 
-export const useBaseListChildrenProps = propsFactory({
-  items: Array as PropType<readonly InternalListItem[]>,
-  returnObject: Boolean,
-}, 'BaseListChildren')
+export const useBaseListChildrenProps = propsFactory(
+  {
+    items: Array as PropType<readonly InternalListItem[]>,
+    returnObject: Boolean,
+  },
+  "BaseListChildren",
+);
 
 export default defineComponent({
   name: "BaseListChildren",
+  computed: {
+    BaseListGroup() {
+      return BaseListGroup;
+    },
+  },
   components: {
     BaseListItem,
     BaseListGroup,
@@ -39,55 +48,105 @@ export default defineComponent({
     BaseDivider,
   },
   props: useBaseListChildrenProps(),
-  setup (props, { slots }) {
-    createList()
-
-    return () => {
-      // TODO: refactor slots
-      if (slots.default?.()[0].children.length) {
-        return slots.default()
-      } else {
-        return props.items?.map(({children, props: itemsProps, type, raw: item}) => {
-          console.log('[BaseListChildren] items ', props.items)
-          if (type === 'divider') {
-            return slots.divider?.({props: itemsProps}) ?? h(BaseDivider, {...itemsProps})
-          }
-
-          if (type === 'subheader') {
-            return slots.subheader?.({props: itemsProps}) ?? h(BaseListItemSubheader, {...itemsProps})
-          }
-
-          const slotsWithItem = {
-            subtitle: slots.subtitle ? (slotProps: any) => slots.subtitle?.({...slotProps, item}) : undefined,
-            prepend: slots.prepend ? (slotProps: any) => slots.prepend?.({...slotProps, item}) : undefined,
-            append: slots.append ? (slotProps: any) => slots.append?.({...slotProps, item}) : undefined,
-            title: slots.title ? (slotProps: any) => slots.title?.({...slotProps, item}) : undefined,
-          }
-
-          const listGroupProps = BaseListGroup.filterProps(itemsProps)
-
-          return children
-            ? h(BaseListGroup, {value: itemsProps?.value, ...listGroupProps}, {
-              activator: ({props: activatorProps}) => {
-                const listItemProps = {
-                  ...itemsProps,
-                  ...activatorProps,
-                  value: props.returnObject ? item : itemsProps.value,
-                }
-
-                return slots.header
-                  ? slots.header({props: listItemProps})
-                  : h(BaseListItem, {...listItemProps}, slotsWithItem)
-              },
-              default: () => h(BaseListChildren, {items: children, returnObject: props.returnObject}, slots)
-            })
-            : slots.item ? slots.item({props: itemsProps}) : h(BaseListItem, {
-              ...itemsProps,
-              value: props.returnObject ? item : itemsProps.value,
-            }, slotsWithItem)
-        })
-      }
-    }
-  }
-})
+  setup() {
+    createList();
+  },
+});
 </script>
+
+<template>
+  <slot name="default">
+    <template
+      v-for="{ children, props: itemProps, type, raw: item } in $props.items"
+    >
+      <template v-if="type === 'divider'">
+        <slot name="divider" v-bind="{ props: itemProps }">
+          <BaseDivider v-bind="{ props: itemProps }" />
+        </slot>
+      </template>
+
+      <template v-else-if="type === 'subheader'">
+        <slot name="subheader" v-bind="{ props: itemProps }">
+          <BaseListItemSubheader v-bind="{ props: itemProps }" />
+        </slot>
+      </template>
+
+      <template v-else-if="children">
+        <BaseListGroup
+          v-bind="{
+            value: itemProps?.value,
+            ...BaseListGroup.filterProps(itemProps),
+          }"
+        >
+          <template #activator="{ props: activatorProps }">
+            <slot
+              name="header"
+              v-bind="{
+                props: {
+                  ...itemProps,
+                  ...activatorProps,
+                  value: $props.returnObject ? item : itemProps.value,
+                },
+              }"
+            >
+              <BaseListItem
+                v-bind="{
+                  ...itemProps,
+                  ...activatorProps,
+                  value: $props.returnObject ? item : itemProps.value,
+                }"
+              >
+                <template #subtitle="slotProps"
+                  ><slot name="subtitle" v-bind="{ ...slotProps, item }"
+                /></template>
+                <template #prepend="slotProps"
+                  ><slot name="prepend" v-bind="{ ...slotProps, item }"
+                /></template>
+                <template #append="slotProps"
+                  ><slot name="append" v-bind="{ ...slotProps, item }"
+                /></template>
+                <template #title="slotProps"
+                  ><slot name="title" v-bind="{ ...slotProps, item }"
+                /></template>
+              </BaseListItem>
+            </slot>
+          </template>
+          <template #default>
+            <BaseListChildren
+              :items="children"
+              :returnObject="$props.returnObject"
+            >
+              <template v-for="(_, name) in $slots" #[name]="data">
+                <slot :name="name" v-bind="data" />
+              </template>
+            </BaseListChildren>
+          </template>
+        </BaseListGroup>
+      </template>
+
+      <template v-else>
+        <slot name="item" v-bind="{ props: itemProps }">
+          <BaseListItem
+            v-bind="{
+              ...itemProps,
+              value: $props.returnObject ? item : itemProps.value,
+            }"
+          >
+            <template #subtitle="slotProps">
+              <slot name="subtitle" v-bind="{ ...slotProps, item }"/>
+            </template>
+            <template #prepend="slotProps">
+              <slot name="prepend" v-bind="{ ...slotProps, item }"/>
+            </template>
+            <template #append="slotProps">
+              <slot name="append" v-bind="{ ...slotProps, item }"/>
+            </template>
+            <template #title="slotProps">
+              <slot name="title" v-bind="{ ...slotProps, item }"/>
+            </template>
+          </BaseListItem>
+        </slot>
+      </template>
+    </template>
+  </slot>
+</template>
