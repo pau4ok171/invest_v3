@@ -28,7 +28,9 @@ import {
   useRounded,
   useRoundedProps,
 } from "@/apps/visagiste/composables/rounded";
+import { useRtl } from "@/apps/visagiste/composables";
 import { IconValue } from "@/apps/visagiste/composables/icons";
+import { useSlotIsEmpty } from "@/apps/visagiste/composables/slotIsEmpty";
 
 // Utilities
 import { computed, ref, watch } from "vue";
@@ -46,7 +48,6 @@ import {
 // Types
 import type { PropType, SlotsType, Ref } from "vue";
 import type { LoaderSlotProps } from "@/apps/visagiste/composables/loader";
-import { useRtl } from "@/apps/visagiste/composables";
 
 const allowedVariants = [
   "underlined",
@@ -75,10 +76,7 @@ export const useBaseFieldProps = propsFactory(
   {
     appendInnerIcon: IconValue,
     bgColor: String,
-    clearable: {
-      type: IconValue,
-      default: "$clear",
-    },
+    clearable: Boolean,
     clearIcon: {
       type: IconValue,
       default: "$clear",
@@ -138,10 +136,13 @@ export default defineComponent({
     BaseExpandXTransition() {
       return BaseExpandXTransition;
     },
+    LoaderSlot() {
+      return LoaderSlot;
+    },
   },
-  components: { BaseDefaultsProvider, BaseFieldLabel },
-  methods: {
-    LoaderSlot,
+  components: {
+    BaseDefaultsProvider,
+    BaseFieldLabel,
   },
   inheritAttrs: false,
   props: {
@@ -164,7 +165,8 @@ export default defineComponent({
     const { rtlClasses } = useRtl();
 
     const isActive = computed(() => props.dirty || props.active);
-    const hasLabel = computed(() => !!(props.label || slots.label));
+    const isLabelEmpty = useSlotIsEmpty("label");
+    const hasLabel = computed(() => !!props.label || !isLabelEmpty.value);
     const hasFloatingLabel = computed(
       () => !props.singleLine && hasLabel.value,
     );
@@ -173,8 +175,8 @@ export default defineComponent({
     const id = computed(() => props.id || `input-${uid}`);
     const messagesId = computed(() => `${id.value}-messages`);
 
-    const labelRef = ref<typeof BaseFieldLabel>();
-    const floatingLabelRef = ref<typeof BaseFieldLabel>();
+    const labelRef = ref<BaseFieldLabel>();
+    const floatingLabelRef = ref<BaseFieldLabel>();
     const controlRef = ref<HTMLElement>();
     const isPlainOrUnderlined = computed(() =>
       ["plain", "underlined"].includes(props.variant),
@@ -261,17 +263,21 @@ export default defineComponent({
     }
 
     const isOutlined = computed(() => props.variant === "outlined");
+    const isPrependInnerEmpty = useSlotIsEmpty("prepend-inner");
+    const isClearEmpty = useSlotIsEmpty("clear");
+    const isAppendInnerEmpty = useSlotIsEmpty("append-inner");
     const hasPrepend = computed(
-      () => !!(slots["prepend-inner"] || props.prependInnerIcon),
+      () => !isPrependInnerEmpty.value || !!props.prependInnerIcon,
     );
     const hasClear = computed(
-      () => !!(props.clearable || slots.clear) && !props.disabled,
+      () => (!!props.clearable || !isClearEmpty.value) && !props.disabled,
     );
     const hasAppend = computed(
-      () => !!(slots["append-inner"] || props.appendInnerIcon || hasClear),
+      () =>
+        !isAppendInnerEmpty.value || !!props.appendInnerIcon || hasClear.value,
     );
     const label = computed(() => {
-      if (slots.label) {
+      if (!isLabelEmpty.value) {
         return () =>
           slots.label({
             ...slotProps.value,
@@ -393,13 +399,18 @@ export default defineComponent({
           :for="id"
           :style="textColorStyles"
         >
-          {{ label() }}
+          <component :is="label" />
         </BaseFieldLabel>
       </template>
 
       <template v-if="hasLabel">
         <BaseFieldLabel key="label" ref="labelRef" :for="id">
-          {{ label() }}
+          <slot
+            name="label"
+            v-bind="{ ...slotProps, label: $props.label, props: { for: id } }"
+          >
+            {{ $props.label }}
+          </slot>
         </BaseFieldLabel>
       </template>
 
@@ -415,49 +426,49 @@ export default defineComponent({
           blur,
         }"
       />
+    </div>
 
-      <template v-if="hasClear">
-        <component :is="BaseExpandXTransition" key="clear">
-          <div
-            class="base-field__clearable"
-            v-show="$props.dirty"
-            @mousedown="
-              (e: MouseEvent) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }
-            "
+    <template v-if="hasClear">
+      <component :is="BaseExpandXTransition" key="clear">
+        <div
+          class="base-field__clearable"
+          v-show="$props.dirty"
+          @mousedown="
+            (e: MouseEvent) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          "
+        >
+          <BaseDefaultsProvider
+            :defaults="{
+              BaseIcon: {
+                icon: $props.clearIcon,
+              },
+            }"
           >
-            <BaseDefaultsProvider
-              :defaults="{
-                BaseIcon: {
-                  icon: $props.clearIcon,
+            <slot
+              name="clear"
+              v-bind="{
+                ...slotProps,
+                props: {
+                  onFocus: focus,
+                  onBlur: blur,
+                  onClick: $props['onClick:clear'],
                 },
               }"
             >
-              <slot
+              <component
+                :is="InputIcon"
                 name="clear"
-                v-bind="{
-                  ...slotProps,
-                  props: {
-                    onFocus: focus,
-                    onBlur: blur,
-                    onClick: $props['onClick:clear'],
-                  },
-                }"
-              >
-                <component
-                  :is="InputIcon"
-                  name="clear"
-                  @focus="focus"
-                  @blur="blur"
-                />
-              </slot>
-            </BaseDefaultsProvider>
-          </div>
-        </component>
-      </template>
-    </div>
+                @focus="focus"
+                @blur="blur"
+              />
+            </slot>
+          </BaseDefaultsProvider>
+        </div>
+      </component>
+    </template>
 
     <template v-if="hasAppend">
       <div key="append" class="base-field__append-inner">
@@ -478,14 +489,22 @@ export default defineComponent({
     >
       <template v-if="isOutlined">
         <div class="base-field__outline__start"></div>
+
         <template v-if="hasFloatingLabel">
           <div class="base-field__outline__notch">
             <BaseFieldLabel ref="floatingLabelRef" floating :for="id">
-              {{ label() }}
+              <component :is="label" />
             </BaseFieldLabel>
           </div>
         </template>
+
         <div class="base-field__outline__end"></div>
+      </template>
+
+      <template v-if="isPlainOrUnderlined && hasFloatingLabel">
+        <BaseFieldLabel ref="floatingLabelRef" floating :for="id">
+          <component :is="label" />
+        </BaseFieldLabel>
       </template>
     </div>
   </div>
