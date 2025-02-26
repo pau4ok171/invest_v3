@@ -50,7 +50,7 @@ export function useInputIcon<T extends {}, K extends names = Listeners<T>> (prop
       ? t(`$visagiste.input.${localeKey}`, props.label ?? '')
       : undefined
 
-    return () => h(BaseIcon, {
+    return h(BaseIcon, {
       icon: props[`${name}Icon`],
       'aria-label': label,
       onClick: listener,
