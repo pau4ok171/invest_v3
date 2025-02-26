@@ -1,71 +1,68 @@
 <script lang="ts">
 // Styles
-import "./BaseCard.scss";
+import './BaseCard.scss'
 
 // Components
-import { default as BaseCardActions } from "./BaseCardActions.vue";
-import { default as BaseCardItem } from "./BaseCardItem.vue";
-import { default as BaseCardText } from "./BaseCardText.vue";
-import { BaseDefaultsProvider } from "@/apps/visagiste/components/BaseDefaultsProvider";
-import { BaseImage } from "@/apps/visagiste/components/BaseImage";
+import { default as BaseCardActions } from './BaseCardActions.vue'
+import { default as BaseCardItem } from './BaseCardItem.vue'
+import { default as BaseCardText } from './BaseCardText.vue'
+import { BaseDefaultsProvider } from '@/apps/visagiste/components/BaseDefaultsProvider'
+import { BaseImage } from '@/apps/visagiste/components/BaseImage'
 
 // Composables
-import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { useBorder, useBorderProps } from '@/apps/visagiste/composables/border'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 import {
   useDensity,
   useDensityProps,
-} from "@/apps/visagiste/composables/density";
+} from '@/apps/visagiste/composables/density'
 import {
   useDimension,
   useDimensionProps,
-} from "@/apps/visagiste/composables/dimensions";
+} from '@/apps/visagiste/composables/dimensions'
 import {
   useElevation,
   useElevationProps,
-} from "@/apps/visagiste/composables/elevation";
+} from '@/apps/visagiste/composables/elevation'
 import {
-  LoaderSlot,
+  default as LoaderSlot,
   useLoader,
   useLoaderProps,
-} from "@/apps/visagiste/composables/loader";
+} from '@/apps/visagiste/composablesV2/loader.vue'
 import {
   useLocation,
   useLocationProps,
-} from "@/apps/visagiste/composables/location";
+} from '@/apps/visagiste/composables/location'
 import {
   usePosition,
   usePositionProps,
-} from "@/apps/visagiste/composables/position";
+} from '@/apps/visagiste/composables/position'
 import {
   useRounded,
   useRoundedProps,
-} from "@/apps/visagiste/composables/rounded";
-import { useLink, useRouterProps } from "@/apps/visagiste/composables/router";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
-import {
-  provideTheme,
-  useThemeProps,
-} from "@/apps/visagiste/composables/theme";
+} from '@/apps/visagiste/composables/rounded'
+import { useLink, useRouterProps } from '@/apps/visagiste/composables/router'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
 import {
   genOverlays,
   useVariant,
   useVariantProps,
-} from "@/apps/visagiste/composables/variant";
-import { IconValue } from "@/apps/visagiste/composables/icons";
+} from '@/apps/visagiste/composables/variant'
+import { IconValue } from '@/apps/visagiste/composables/icons'
 
 // Directives
-import { Ripple } from "@/apps/visagiste/directives/ripple";
+import { Ripple } from '@/apps/visagiste/directives/ripple'
 
 // Utilities
-import { computed } from "vue";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { computed } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType, SlotsType } from "vue";
-import type { RippleDirectiveBinding } from "@/apps/visagiste/directives/ripple";
-import type { BaseCardItemSlots } from "@/apps/visagiste/components/BaseCard/BaseCardItem.vue";
-import type { LoaderSlotProps } from "@/apps/visagiste/composables/loader";
+import type { PropType, SlotsType } from 'vue'
+import type { RippleDirectiveBinding } from '@/apps/visagiste/directives/ripple'
+import type { BaseCardItemSlots } from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
+import type { LoaderSlotProps } from '@/apps/visagiste/composablesV2/loader.vue'
 
 export const useBaseCardProps = propsFactory(
   {
@@ -82,7 +79,7 @@ export const useBaseCardProps = propsFactory(
     prependAvatar: String,
     prependIcon: IconValue,
     ripple: {
-      type: [Boolean, Object] as PropType<RippleDirectiveBinding["value"]>,
+      type: [Boolean, Object] as PropType<RippleDirectiveBinding['value']>,
       default: true,
     },
     subtitle: [String, Number],
@@ -101,23 +98,24 @@ export const useBaseCardProps = propsFactory(
     ...useRouterProps(),
     ...useTagProps(),
     ...useThemeProps(),
-    ...useVariantProps({ variant: "elevated" } as const),
+    ...useVariantProps({ variant: 'elevated' } as const),
   },
-  "BaseCard",
-);
+  'BaseCard'
+)
 
 export type BaseCardSlots = BaseCardItemSlots & {
-  default: never;
-  actions: never;
-  text: never;
-  loader: LoaderSlotProps;
-  image: never;
-  item: never;
-};
+  default: never
+  actions: never
+  text: never
+  loader: LoaderSlotProps
+  image: never
+  item: never
+}
 
 export default defineComponent({
-  name: "BaseCard",
+  name: 'BaseCard',
   components: {
+    LoaderSlot,
     BaseCardText,
     BaseCardItem,
     BaseDefaultsProvider,
@@ -134,41 +132,41 @@ export default defineComponent({
   props: useBaseCardProps(),
   slots: Object as SlotsType<BaseCardSlots>,
   setup(props, { attrs, slots }) {
-    const { themeClasses } = provideTheme(props);
-    const { borderClasses } = useBorder(props);
-    const { colorClasses, colorStyles, variantClasses } = useVariant(props);
-    const { densityClasses } = useDensity(props);
-    const { dimensionStyles } = useDimension(props);
-    const { elevationClasses } = useElevation(props);
-    const { loaderClasses } = useLoader(props);
-    const { locationStyles } = useLocation(props);
-    const { positionClasses } = usePosition(props);
-    const { roundedClasses } = useRounded(props);
-    const link = useLink(props, attrs);
+    const { themeClasses } = provideTheme(props)
+    const { borderClasses } = useBorder(props)
+    const { colorClasses, colorStyles, variantClasses } = useVariant(props)
+    const { densityClasses } = useDensity(props)
+    const { dimensionStyles } = useDimension(props)
+    const { elevationClasses } = useElevation(props)
+    const { loaderClasses } = useLoader(props)
+    const { locationStyles } = useLocation(props)
+    const { positionClasses } = usePosition(props)
+    const { roundedClasses } = useRounded(props)
+    const link = useLink(props, attrs)
 
-    const isLink = computed(() => props.link !== false && link.isLink.value);
+    const isLink = computed(() => props.link !== false && link.isLink.value)
     const isClickable = computed(
       () =>
         !props.disabled &&
         props.link !== false &&
-        (props.link || link.isClickable.value),
-    );
+        (props.link || link.isClickable.value)
+    )
 
-    const Tag = computed(() => (isLink.value ? "a" : props.tag));
-    const hasTitle = computed(() => slots.title || props.title != null);
-    const hasSubtitle = computed(
-      () => slots.subtitle || props.subtitle != null,
-    );
-    const hasHeader = computed(() => hasTitle.value || hasSubtitle.value);
+    const Tag = computed(() => (isLink.value ? 'a' : props.tag))
+    const hasTitle = computed(() => slots.title || props.title != null)
+    const hasSubtitle = computed(() => slots.subtitle || props.subtitle != null)
+    const hasHeader = computed(() => hasTitle.value || hasSubtitle.value)
     const hasAppend = computed(
-      () => !!(slots.append || props.appendAvatar || props.appendIcon),
-    );
+      () => !!(slots.append || props.appendAvatar || props.appendIcon)
+    )
     const hasPrepend = computed(
-      () => !!(slots.prepend || props.prependAvatar || props.prependIcon),
-    );
-    const hasImage = computed(() => !!(slots.image || props.image));
-    const hasCardItem = computed(() => hasHeader.value || hasPrepend.value || hasAppend.value);
-    const hasText = computed(() => slots.text || props.text != null);
+      () => !!(slots.prepend || props.prependAvatar || props.prependIcon)
+    )
+    const hasImage = computed(() => !!(slots.image || props.image))
+    const hasCardItem = computed(
+      () => hasHeader.value || hasPrepend.value || hasAppend.value
+    )
+    const hasText = computed(() => slots.text || props.text != null)
 
     return {
       themeClasses,
@@ -195,9 +193,9 @@ export default defineComponent({
       hasImage,
       hasCardItem,
       hasText,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
@@ -251,14 +249,13 @@ export default defineComponent({
       </div>
     </template>
 
-    <component
-      :is="LoaderSlot"
+    <LoaderSlot
       name="base-card"
       :active="!!$props.loading"
       :color="typeof $props.loading === 'boolean' ? undefined : $props.loading"
     >
       <slot name="loader" />
-    </component>
+    </LoaderSlot>
 
     <template v-if="hasCardItem">
       <BaseCardItem

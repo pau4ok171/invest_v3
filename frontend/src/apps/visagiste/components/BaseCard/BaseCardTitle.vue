@@ -1,27 +1,27 @@
 <script lang="ts">
 // Composables
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 
 // Utilities
-import { h } from "vue";
-import { defineComponent } from "@/apps/visagiste/utils";
+import { h } from 'vue'
+import { defineComponent } from '@/apps/visagiste/utils'
 
 export default defineComponent({
-  name: "BaseCardTitle",
+  name: 'BaseCardTitle',
   props: {
     ...useComponentProps(),
   },
   setup(props, { slots }) {
     return () => {
       return h(
-        "div",
+        'div',
         {
-          class: ["base-card-title", props.class],
+          class: ['base-card-title', props.class],
           style: props.style,
         },
-        () => slots.default?.(),
-      );
-    };
+        slots.default?.()
+      )
+    }
   },
-});
+})
 </script>

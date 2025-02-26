@@ -1,28 +1,28 @@
 <script lang="ts">
 // Components
-import { default as BaseCardSubtitle } from "./BaseCardSubtitle.vue";
-import { default as BaseCardTitle } from "./BaseCardTitle.vue";
-import { BaseAvatar } from "@/apps/visagiste/components/BaseAvatar";
-import { BaseDefaultsProvider } from "@/apps/visagiste/components/BaseDefaultsProvider";
-import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
+import { default as BaseCardSubtitle } from './BaseCardSubtitle.vue'
+import { default as BaseCardTitle } from './BaseCardTitle.vue'
+import { BaseAvatar } from '@/apps/visagiste/components/BaseAvatar'
+import { BaseDefaultsProvider } from '@/apps/visagiste/components/BaseDefaultsProvider'
+import { BaseIcon } from '@/apps/visagiste/components/BaseIcon'
 
 // Composables
-import { useComponentProps } from "@/apps/visagiste/composables/component";
-import { useDensityProps } from "@/apps/visagiste/composables/density";
-import { IconValue } from "@/apps/visagiste/composables/icons";
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import { useDensityProps } from '@/apps/visagiste/composables/density'
+import { IconValue } from '@/apps/visagiste/composables/icons'
 
 // Utilities
-import type { SlotsType } from "vue";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
-import { computed } from "vue";
+import type { SlotsType } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
+import { computed } from 'vue'
 
 export type BaseCardItemSlots = {
-  default: never;
-  prepend: never;
-  append: never;
-  title: never;
-  subtitle: never;
-};
+  default: never
+  prepend: never
+  append: never
+  title: never
+  subtitle: never
+}
 
 export const useCardItemProps = propsFactory(
   {
@@ -36,11 +36,11 @@ export const useCardItemProps = propsFactory(
     ...useComponentProps(),
     ...useDensityProps(),
   },
-  "BaseCardItem",
-);
+  'BaseCardItem'
+)
 
 export default defineComponent({
-  name: "BaseCardItem",
+  name: 'BaseCardItem',
   components: {
     BaseCardSubtitle,
     BaseCardTitle,
@@ -52,17 +52,15 @@ export default defineComponent({
   slots: Object as SlotsType<BaseCardItemSlots>,
   setup(props, { slots }) {
     const hasPrependMedia = computed(
-      () => !!(props.prependAvatar || props.prependIcon),
-    );
-    const hasPrepend = computed(() => hasPrependMedia.value || slots.prepend);
+      () => !!(props.prependAvatar || props.prependIcon)
+    )
+    const hasPrepend = computed(() => hasPrependMedia.value || slots.prepend)
     const hasAppendMedia = computed(
-      () => !!(props.appendAvatar || props.appendIcon),
-    );
-    const hasAppend = computed(() => hasAppendMedia.value || slots.append);
-    const hasTitle = computed(() => props.title != null || slots.title);
-    const hasSubtitle = computed(
-      () => props.subtitle != null || slots.subtitle,
-    );
+      () => !!(props.appendAvatar || props.appendIcon)
+    )
+    const hasAppend = computed(() => hasAppendMedia.value || slots.append)
+    const hasTitle = computed(() => props.title != null || slots.title)
+    const hasSubtitle = computed(() => props.subtitle != null || slots.subtitle)
 
     return {
       hasPrependMedia,
@@ -71,9 +69,9 @@ export default defineComponent({
       hasAppend,
       hasTitle,
       hasSubtitle,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
