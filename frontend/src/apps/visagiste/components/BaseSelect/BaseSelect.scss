@@ -69,7 +69,7 @@
       margin-inline-start: 4px;
       transition: $select-transition;
 
-      .base-select--active-menu {
+      .base-select--active-menu & {
         opacity: var(--base-high-emphasis-opacity);
         transform: rotate(180deg);
       }

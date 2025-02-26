@@ -1,37 +1,37 @@
 <script lang="ts">
 // Styles
-import "./BaseSelect.scss";
+import './BaseSelect.scss'
 
 // Components
-import { BaseDialogTransition } from "@/apps/visagiste/components/transitions";
-import { BaseAvatar } from "@/apps/visagiste/components/BaseAvatar";
-import { BaseCheckboxButton } from "@/apps/visagiste/components/BaseCheckbox";
-import { BaseChip } from "@/apps/visagiste/components/BaseChip";
-import { BaseDefaultsProvider } from "@/apps/visagiste/components/BaseDefaultsProvider";
-import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
-import { BaseList, BaseListItem } from "@/apps/visagiste/components/BaseList";
-import { BaseMenu } from "@/apps/visagiste/components/BaseMenu";
+import { BaseDialogTransition } from '@/apps/visagiste/components/transitions'
+import { BaseAvatar } from '@/apps/visagiste/components/BaseAvatar'
+import { BaseCheckboxButton } from '@/apps/visagiste/components/BaseCheckbox'
+import { BaseChip } from '@/apps/visagiste/components/BaseChip'
+import { BaseDefaultsProvider } from '@/apps/visagiste/components/BaseDefaultsProvider'
+import { BaseIcon } from '@/apps/visagiste/components/BaseIcon'
+import { BaseList, BaseListItem } from '@/apps/visagiste/components/BaseList'
+import { BaseMenu } from '@/apps/visagiste/components/BaseMenu'
 import {
   BaseTextField,
   useBaseTextFieldProps,
-} from "@/apps/visagiste/components/BaseTextField";
-import { BaseVirtualScroll } from "@/apps/visagiste/components/BaseVirtualScroll";
+} from '@/apps/visagiste/components/BaseTextField'
+import { BaseVirtualScroll } from '@/apps/visagiste/components/BaseVirtualScroll'
 
 // Composables
-import { useScrolling } from "./useScrolling";
-import { useForm } from "@/apps/visagiste/composables/form";
-import { IconValue } from "@/apps/visagiste/composables/icons";
+import { useScrolling } from './useScrolling'
+import { useForm } from '@/apps/visagiste/composables/form'
+import { IconValue } from '@/apps/visagiste/composables/icons'
 import {
   useItems,
   useItemsProps,
-} from "@/apps/visagiste/composables/list-items";
-import { useLocale } from "@/apps/visagiste/composables/locale";
-import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
-import { useTransitionProps } from "@/apps/visagiste/composables/transition";
-import { useSlotIsEmpty } from "@/apps/visagiste/composables/slotIsEmpty";
+} from '@/apps/visagiste/composables/list-items'
+import { useLocale } from '@/apps/visagiste/composables/locale'
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
+import { useTransitionProps } from '@/apps/visagiste/composables/transition'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 // Utilities
-import { computed, mergeProps, nextTick, ref, shallowRef, watch } from "vue";
+import { computed, mergeProps, nextTick, ref, shallowRef, watch } from 'vue'
 import {
   checkPrintable,
   deepEqual,
@@ -41,19 +41,19 @@ import {
   omit,
   propsFactory,
   wrapInArray,
-} from "@/apps/visagiste/utils";
+} from '@/apps/visagiste/utils'
 
 // Types
-import type { Component, PropType } from "vue";
-import type { ListItem } from "@/apps/visagiste/composables/list-items";
+import type { Component, PropType } from 'vue'
+import type { ListItem } from '@/apps/visagiste/composables/list-items'
 
-type Primitive = string | number | boolean | symbol;
+type Primitive = string | number | boolean | symbol
 
 type Val<T, ReturnObject extends boolean> = [T] extends [Primitive]
   ? T
   : ReturnObject extends true
     ? T
-    : any;
+    : any
 
 type Value<
   T,
@@ -61,7 +61,7 @@ type Value<
   Multiple extends boolean,
 > = Multiple extends true
   ? readonly Val<T, ReturnObject>[]
-  : Val<T, ReturnObject> | null;
+  : Val<T, ReturnObject> | null
 
 export const useSelectProps = propsFactory(
   {
@@ -69,38 +69,38 @@ export const useSelectProps = propsFactory(
     closableChips: Boolean,
     closeText: {
       type: String,
-      default: "$visagiste.close",
+      default: '$visagiste.close',
     },
     openText: {
       type: String,
-      default: "$visagiste.open",
+      default: '$visagiste.open',
     },
     eager: Boolean,
     hideNoData: Boolean,
     hideSelected: Boolean,
     listProps: {
-      type: Object as PropType<BaseList["$props"]>,
+      type: Object as PropType<InstanceType<typeof BaseList>['$props']>,
     },
     menu: Boolean,
     menuIcon: {
       type: IconValue,
-      default: "$dropdown",
+      default: '$dropdown',
     },
     menuProps: {
-      type: Object as PropType<BaseMenu["$props"]>,
+      type: Object as PropType<InstanceType<typeof BaseMenu>['$props']>,
     },
     multiple: Boolean,
     noDataText: {
       type: String,
-      default: "$visagiste.noDataText",
+      default: '$visagiste.noDataText',
     },
     openOnClear: Boolean,
     itemColor: String,
 
     ...useItemsProps({ itemChildren: false }),
   },
-  "Select",
-);
+  'Select'
+)
 
 export const useBaseSelectProps = propsFactory(
   {
@@ -108,19 +108,19 @@ export const useBaseSelectProps = propsFactory(
     ...omit(
       useBaseTextFieldProps({
         modelValue: null,
-        role: "combobox",
+        role: 'combobox',
       }),
-      ["validationValue", "dirty", "appendInnerIcon"],
+      ['validationValue', 'dirty', 'appendInnerIcon']
     ),
     ...useTransitionProps({
       transition: { component: BaseDialogTransition as Component },
     }),
   },
-  "BaseSelect",
-);
+  'BaseSelect'
+)
 
 export default defineComponent({
-  name: "BaseSelect",
+  name: 'BaseSelect',
   methods: { mergeProps },
   components: {
     BaseChip,
@@ -136,209 +136,208 @@ export default defineComponent({
   },
   props: useBaseSelectProps(),
   emits: {
-    "update:focused": (focused: boolean) => true,
-    "update:modelValue": (value: any) => true,
-    "update:menu": (ue: boolean) => true,
+    'update:focused': (focused: boolean) => true,
+    'update:modelValue': (value: any) => true,
+    'update:menu': (ue: boolean) => true,
   },
   setup(props) {
-    const { t } = useLocale();
-    const baseTextFieldRef = ref(0);
-    const baseMenuRef = ref<BaseMenu>();
-    const baseVirtualScrollRef = ref<BaseVirtualScroll>();
-    const _menu = useProxiedModel(props, "menu");
+    const { t } = useLocale()
+    const baseTextFieldRef = ref()
+    const baseMenuRef = ref<InstanceType<typeof BaseMenu>>()
+    const baseVirtualScrollRef = ref<InstanceType<typeof BaseVirtualScroll>>()
+    const _menu = useProxiedModel(props, 'menu')
     const menu = computed({
       get: () => _menu.value,
       set: (v) => {
-        if (_menu.value && !v && baseMenuRef.value?.openChildren.size) return;
-        _menu.value = v;
+        if (_menu.value && !v && baseMenuRef.value?.openChildren.size) return
+        _menu.value = v
       },
-    });
-    const { items, transformIn, transformOut } = useItems(props);
+    })
+    const { items, transformIn, transformOut } = useItems(props)
     const model = useProxiedModel(
       props,
-      "modelValue",
+      'modelValue',
       [],
       (v) => transformIn(v === null ? [null] : wrapInArray(v)),
       (v) => {
-        const transformed = transformOut(v);
-        return props.multiple ? transformed : (transformed[0] ?? null);
-      },
-    );
+        const transformed = transformOut(v)
+        return props.multiple ? transformed : (transformed[0] ?? null)
+      }
+    )
     const counterValue = computed(() => {
-      return typeof props.counterValue === "function"
+      return typeof props.counterValue === 'function'
         ? props.counterValue(model.value)
-        : typeof props.counterValue === "number"
+        : typeof props.counterValue === 'number'
           ? props.counterValue
-          : model.value.length;
-    });
-    const form = useForm(props);
+          : model.value.length
+    })
+    const form = useForm(props)
     const selectedValues = computed(() =>
-      model.value.map((selection) => selection.value),
-    );
-    const isFocused = shallowRef(false);
+      model.value.map((selection) => selection.value)
+    )
+    const isFocused = shallowRef(false)
     const label = computed(() =>
-      menu.value ? props.closeText : props.openText,
-    );
+      menu.value ? props.closeText : props.openText
+    )
 
-    let keyboardLookupPrefix = "";
-    let keyboardLookupLastTime: number;
+    let keyboardLookupPrefix = ''
+    let keyboardLookupLastTime: number
 
     const displayItems = computed(() => {
       if (props.hideSelected) {
         return items.value.filter(
           (item) =>
             !model.value.some((s) =>
-              (props.valueComparator || deepEqual)(s, item),
-            ),
-        );
+              (props.valueComparator || deepEqual)(s, item)
+            )
+        )
       }
-      return items.value;
-    });
+      return items.value
+    })
 
     const menuDisabled = computed(
       () =>
         (props.hideNoData && !displayItems.value.length) ||
         form.isReadonly.value ||
-        form.isDisabled.value,
-    );
+        form.isDisabled.value
+    )
 
     const computedMenuProps = computed(() => {
       return {
         ...props.menuProps,
         activatorProps: {
           ...(props.menuProps?.activatorProps || {}),
-          "aria-haspopup": "listbox", // Set aria-haspopup to 'listbox'
+          'aria-haspopup': 'listbox', // Set aria-haspopup to 'listbox'
         },
-      };
-    });
+      }
+    })
 
-    const listRef = ref<BaseList>();
-    const listEvents = useScrolling(listRef, baseTextFieldRef);
+    const listRef = ref<InstanceType<typeof BaseList>>()
+    const listEvents = useScrolling(listRef, baseTextFieldRef)
     function onClear(e: MouseEvent) {
       if (props.openOnClear) {
-        menu.value = true;
+        menu.value = true
       }
     }
     function onMousedownControl() {
-      if (menuDisabled.value) return;
+      if (menuDisabled.value) return
 
-      menu.value = !menu.value;
+      menu.value = !menu.value
     }
     function onListKeydown(e: KeyboardEvent) {
       if (checkPrintable(e)) {
-        onKeydown(e);
+        onKeydown(e)
       }
     }
     function onKeydown(e: KeyboardEvent) {
-      if (!e.key || form.isReadonly.value) return;
+      if (!e.key || form.isReadonly.value) return
 
       if (
-        ["Enter", " ", "ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)
+        ['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)
       ) {
-        e.preventDefault();
+        e.preventDefault()
       }
 
-      if (["Enter", "ArrowDown", " "].includes(e.key)) {
-        menu.value = true;
+      if (['Enter', 'ArrowDown', ' '].includes(e.key)) {
+        menu.value = true
       }
 
-      if (["Escape", "Tab"].includes(e.key)) {
-        menu.value = false;
+      if (['Escape', 'Tab'].includes(e.key)) {
+        menu.value = false
       }
 
-      if (e.key === "Home") {
-        listRef.value?.focus("first");
-      } else if (e.key === "End") {
-        listRef.value?.focus("last");
+      if (e.key === 'Home') {
+        listRef.value?.focus('first')
+      } else if (e.key === 'End') {
+        listRef.value?.focus('last')
       }
 
       // html select hotkeys
-      const KEYBOARD_LOOKUP_THRESHOLD = 1000; // milliseconds
+      const KEYBOARD_LOOKUP_THRESHOLD = 1000 // milliseconds
 
-      if (!checkPrintable(e)) return;
+      if (!checkPrintable(e)) return
 
-      const now = performance.now();
+      const now = performance.now()
       if (now - keyboardLookupLastTime > KEYBOARD_LOOKUP_THRESHOLD) {
-        keyboardLookupPrefix = "";
+        keyboardLookupPrefix = ''
       }
-      keyboardLookupPrefix += e.key.toLowerCase();
-      keyboardLookupLastTime = now;
+      keyboardLookupPrefix += e.key.toLowerCase()
+      keyboardLookupLastTime = now
 
       const item = items.value.find((item) =>
-        item.title.toLowerCase().startsWith(keyboardLookupPrefix),
-      );
+        item.title.toLowerCase().startsWith(keyboardLookupPrefix)
+      )
       if (item !== undefined) {
-        model.value = [item];
-        const index = displayItems.value.indexOf(item);
+        model.value = [item]
+        const index = displayItems.value.indexOf(item)
         IN_BROWSER &&
           window.requestAnimationFrame(() => {
-            index >= 0 && baseVirtualScrollRef.value?.scrollToIndex(index);
-          });
+            index >= 0 && baseVirtualScrollRef.value?.scrollToIndex(index)
+          })
       }
     }
 
-    /** @param item
-     @param set - null means toggle */
+    /** @param set - null means toggle */
     function select(item: ListItem, set: boolean | null = true) {
-      if (item.props.disabled) return;
+      if (item.props.disabled) return
 
       if (props.multiple) {
         const index = model.value.findIndex((selection) =>
-          (props.valueComparator || deepEqual)(selection.value, item.value),
-        );
-        const add = set == null ? !~index : set;
+          (props.valueComparator || deepEqual)(selection.value, item.value)
+        )
+        const add = set == null ? !~index : set
 
         if (~index) {
-          const value = add ? [...model.value, item] : [...model.value];
-          value.splice(index, 1);
-          model.value = value;
+          const value = add ? [...model.value, item] : [...model.value]
+          value.splice(index, 1)
+          model.value = value
         } else if (add) {
-          model.value = [...model.value, item];
+          model.value = [...model.value, item]
         }
       } else {
-        const add = set !== false;
-        model.value = add ? [item] : [];
+        const add = set !== false
+        model.value = add ? [item] : []
 
         nextTick(() => {
-          menu.value = false;
-        });
+          menu.value = false
+        })
       }
     }
 
     function onBlur(e: FocusEvent) {
       if (!listRef.value?.$el.contains(e.relatedTarget as HTMLElement)) {
-        menu.value = false;
+        menu.value = false
       }
     }
 
     function onAfterEnter() {
       if (props.eager) {
-        baseVirtualScrollRef.value?.calculateVisibleItems();
+        baseVirtualScrollRef.value?.calculateVisibleItems()
       }
     }
 
     function onAfterLeave() {
       if (isFocused.value) {
-        baseTextFieldRef.value?.focus();
+        baseTextFieldRef.value?.focus()
       }
     }
 
     function onFocusin(e: FocusEvent) {
-      isFocused.value = true;
+      isFocused.value = true
     }
 
     function onModelUpdate(v: any) {
-      if (v == null) model.value = [];
+      if (v == null) model.value = []
       else if (
-        matchesSelector(baseTextFieldRef.value, ":autofill") ||
-        matchesSelector(baseTextFieldRef.value, ":-webkit-autofill")
+        matchesSelector(baseTextFieldRef.value, ':autofill') ||
+        matchesSelector(baseTextFieldRef.value, ':-webkit-autofill')
       ) {
-        const item = items.value.find((item) => item.title === v);
+        const item = items.value.find((item) => item.title === v)
         if (item) {
-          select(item);
+          select(item)
         }
       } else if (baseTextFieldRef.value) {
-        baseTextFieldRef.value.value = "";
+        baseTextFieldRef.value.value = ''
       }
     }
 
@@ -346,58 +345,59 @@ export default defineComponent({
       if (!props.hideSelected && menu.value && model.value.length) {
         const index = displayItems.value.findIndex((item) =>
           model.value.some((s) =>
-            (props.valueComparator || deepEqual)(s.value, item.value),
-          ),
-        );
+            (props.valueComparator || deepEqual)(s.value, item.value)
+          )
+        )
         IN_BROWSER &&
           window.requestAnimationFrame(() => {
-            index >= 0 && baseVirtualScrollRef.value?.scrollToIndex(index);
-          });
+            index >= 0 && baseVirtualScrollRef.value?.scrollToIndex(index)
+          })
       }
-    });
+    })
 
     watch(
       () => props.items,
       (newVal, oldVal) => {
-        if (menu.value) return;
+        if (menu.value) return
 
         if (isFocused.value && !oldVal.length && newVal.length) {
-          menu.value = true;
+          menu.value = true
         }
-      },
-    );
+      }
+    )
 
-    const chipIsEmpty = useSlotIsEmpty("chip");
-    const prependItemIsEmpty = useSlotIsEmpty("prepend-item");
-    const appendItemIsEmpty = useSlotIsEmpty("append-item");
-    const noDataIsEmpty = useSlotIsEmpty("no-data");
-    const selectionIsEmpty = useSlotIsEmpty("selection");
+    const chipIsEmpty = useSlotIsEmpty('chip')
+    const prependItemIsEmpty = useSlotIsEmpty('prepend-item')
+    const appendItemIsEmpty = useSlotIsEmpty('append-item')
+    const noDataIsEmpty = useSlotIsEmpty('no-data')
+    const selectionIsEmpty = useSlotIsEmpty('selection')
 
-    const hasChips = computed(() => !!props.chips || !chipIsEmpty.value);
+    const hasChips = computed(() => !!props.chips || !chipIsEmpty.value)
     const hasList = computed(
       () =>
-        !(props.hideNoData || displayItems.value.length) ||
+        !props.hideNoData ||
+        displayItems.value.length ||
         !prependItemIsEmpty.value ||
         !appendItemIsEmpty.value ||
-        !noDataIsEmpty.value,
-    );
-    const isDirty = computed(() => model.value.length > 0);
-    const textFieldProps = computed(() => BaseTextField.filterProps(props));
+        !noDataIsEmpty.value
+    )
+    const isDirty = computed(() => model.value.length > 0)
+    const textFieldProps = computed(() => BaseTextField.filterProps(props))
     const placeholder = computed(() =>
       isDirty.value ||
       (!isFocused.value && !props.label && !props.persistentPlaceholder)
         ? undefined
-        : props.placeholder,
-    );
+        : props.placeholder
+    )
 
     function onChipClose(e: Event, item: ListItem) {
-      e.stopPropagation();
-      e.preventDefault();
+      e.stopPropagation()
+      e.preventDefault()
 
-      select(item, false);
+      select(item, false)
     }
 
-    function onChipKeydown (e: KeyboardEvent, item: ListItem) {
+    function onChipKeydown(e: KeyboardEvent, item: ListItem) {
       if (e.key !== 'Enter' && e.key !== ' ') return
 
       e.preventDefault()
@@ -406,16 +406,16 @@ export default defineComponent({
       onChipClose(e, item)
     }
 
-     function onChipMousedown (e: MouseEvent) {
-        e.preventDefault()
-        e.stopPropagation()
-      }
+    function onChipMousedown(e: MouseEvent) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
 
     return {
+      baseVirtualScrollRef,
       baseTextFieldRef,
       baseMenuRef,
       listRef,
-      baseVirtualScrollRef,
       textFieldProps,
       listEvents,
       displayItems,
@@ -443,11 +443,12 @@ export default defineComponent({
       t,
       select,
       label,
+      menu,
       menuDisabled,
       computedMenuProps,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
@@ -604,7 +605,11 @@ export default defineComponent({
         </template>
       </BaseMenu>
 
-      <div v-for="(item, index) in model" :key="item.value" class="base-select__selection">
+      <div
+        v-for="(item, index) in model"
+        :key="item.value"
+        class="base-select__selection"
+      >
         <template v-if="hasChips">
           <template v-if="$slots.chip">
             <BaseDefaultsProvider
@@ -635,7 +640,6 @@ export default defineComponent({
               size="small"
               :text="item.title"
               :disabled="item.props.disabled"
-
               @click:close="(e: Event) => onChipClose(e, item)"
               @keydown="(e: KeyboardEvent) => onChipKeydown(e, item)"
               @mousedown="onChipMousedown"
