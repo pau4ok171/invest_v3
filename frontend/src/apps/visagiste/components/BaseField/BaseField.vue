@@ -135,6 +135,7 @@ export default defineComponent({
     },
   },
   components: {
+    LoaderSlot,
     BaseDefaultsProvider,
     BaseFieldLabel,
   },
@@ -333,7 +334,7 @@ export default defineComponent({
         'base-field--prepended': hasPrepend,
         'base-field--reverse': $props.reverse,
         'base-field--single-line': $props.singleLine,
-        'base-field--no-label': !label(),
+        'base-field--no-label': !label,
         [`base-field--variant-${$props.variant}`]: true,
       },
       themeClasses,
@@ -350,8 +351,7 @@ export default defineComponent({
   >
     <div class="base-field__overlay" />
 
-    <component
-      :is="LoaderSlot"
+    <LoaderSlot
       name="base-field"
       :active="!!$props.loading"
       :color="
@@ -363,7 +363,7 @@ export default defineComponent({
       "
     >
       <slot name="loader" />
-    </component>
+    </LoaderSlot>
 
     <template v-if="hasPrepend">
       <div key="prepend" class="base-field__prepend-inner">
