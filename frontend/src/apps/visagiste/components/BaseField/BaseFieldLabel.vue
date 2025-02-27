@@ -36,7 +36,7 @@ export default defineComponent({
           style: props.style,
           "aria-hidden": props.floating || undefined,
         },
-        slots.default?.(),
+        () => slots.default?.(),
       );
   },
 });
