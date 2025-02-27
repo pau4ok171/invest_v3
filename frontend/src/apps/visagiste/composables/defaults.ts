@@ -12,11 +12,11 @@ import {
   getCurrentInstance,
   mergeDeep,
   toKebabCase,
+  injectSelf,
 } from '@/apps/visagiste/utils'
 
 // Types
 import type { InjectionKey, Ref, MaybeRef, ComputedRef, VNode } from 'vue'
-import { injectSelf } from '@/apps/visagiste/utils'
 
 export type DefaultsInstance =
   | undefined
