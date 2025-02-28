@@ -1,0 +1,1 @@
+export { default as BasePagination, useBasePaginationProps } from './BasePagination.vue'
