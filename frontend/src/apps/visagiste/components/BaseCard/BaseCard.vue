@@ -124,7 +124,6 @@ export default defineComponent({
   },
   methods: {
     genOverlays,
-    LoaderSlot,
   },
   directives: {
     Ripple,
