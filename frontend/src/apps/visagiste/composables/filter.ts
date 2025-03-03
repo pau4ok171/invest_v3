@@ -1,10 +1,10 @@
 // Utilities
-import {computed, shallowRef, unref, watchEffect} from "vue";
-import {getPropertyFromItem, wrapInArray} from "@/apps/visagiste/utils";
+import { computed, shallowRef, unref, watchEffect } from 'vue'
+import {getPropertyFromItem, propsFactory, wrapInArray} from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType, Ref } from "vue";
-import type { MaybeRef } from "vue";
+import type { PropType, Ref } from 'vue'
+import type { MaybeRef } from 'vue'
 
 /**
  * - match without highlight
@@ -12,8 +12,16 @@ import type { MaybeRef } from "vue";
  * - single match (start, end)
  * - multiple matches (start, end), probably shouldn't overlap
  */
-export type FilterMatch = boolean | number | [number, number] | [number, number][]
-export type FilterFunction = (value: string, query: string, item?: InternalItem) => FilterMatch
+export type FilterMatch =
+  | boolean
+  | number
+  | [number, number]
+  | [number, number][]
+export type FilterFunction = (
+  value: string,
+  query: string,
+  item?: InternalItem
+) => FilterMatch
 export type FilterKeyFunctions = Record<string, FilterFunction>
 export type FilterKeys = string | string[]
 export type FilterMode = 'some' | 'every' | 'union' | 'intersection'
@@ -35,10 +43,13 @@ export interface InternalItem<T = any> {
 export const defaultFilter: FilterFunction = (value, query, item) => {
   if (value == null || query == null) return -1
 
-  return value.toString().toLocaleLowerCase().indexOf(query.toString().toLocaleLowerCase())
+  return value
+    .toString()
+    .toLocaleLowerCase()
+    .indexOf(query.toString().toLocaleLowerCase())
 }
 
-export const filterProps = {
+export const useFilterProps = propsFactory({
   customFilter: Function as PropType<FilterFunction>,
   customKeyFilter: Object as PropType<FilterKeyFunctions>,
   filterKeys: [Array, String] as PropType<FilterKeys>,
@@ -47,20 +58,22 @@ export const filterProps = {
     default: 'intersection',
   },
   noFilter: Boolean,
-}
+}, 'filter')
 
-export function filterItems (
-  items: readonly (readonly [item: InternalItem, transformed: {}])[] | readonly InternalItem[],
+export function filterItems(
+  items:
+    | readonly (readonly [item: InternalItem, transformed: {}])[]
+    | readonly InternalItem[],
   query: string,
   options?: {
-    customKeyFilter?: FilterKeyFunctions,
-    default?: FilterFunction,
-    filterKeys?: FilterKeys,
-    filterMode?: FilterMode,
+    customKeyFilter?: FilterKeyFunctions
+    default?: FilterFunction
+    filterKeys?: FilterKeys
+    filterMode?: FilterMode
     noFilter?: boolean
-  },
+  }
 ) {
-  const array: { index: number, matches: Record<string, FilterMatch> }[] = []
+  const array: { index: number; matches: Record<string, FilterMatch> }[] = []
   // always ensure we fall back to a functioning filter
   const filter = options?.default ?? defaultFilter
   const keys = options?.filterKeys ? wrapInArray(options.filterKeys) : false
@@ -68,9 +81,11 @@ export function filterItems (
 
   if (!items?.length) return array
 
-  loop:
-  for (let i = 0; i < items.length; i++) {
-    const [item, transformed = item] = wrapInArray(items[i]) as readonly [InternalItem, {}]
+  loop: for (let i = 0; i < items.length; i++) {
+    const [item, transformed = item] = wrapInArray(items[i]) as readonly [
+      InternalItem,
+      {},
+    ]
     const customMatches: Record<string, FilterMatch> = {}
     const defaultMatches: Record<string, FilterMatch> = {}
     let match: FilterMatch = -1
@@ -110,15 +125,14 @@ export function filterItems (
         options?.filterMode === 'union' &&
         customFiltersLength !== customFiltersLength &&
         !defaultMatchesLength
-      ) continue
+      )
+        continue
 
       if (
         options?.filterMode === 'intersection' &&
-        (
-          customMatchesLength !== customFiltersLength ||
-          !defaultMatchesLength
-        )
-      ) continue
+        (customMatchesLength !== customFiltersLength || !defaultMatchesLength)
+      )
+        continue
     }
 
     array.push({ index: i, matches: { ...defaultMatches, ...customMatches } })
@@ -127,7 +141,7 @@ export function filterItems (
   return array
 }
 
-export function useFilter <T extends InternalItem> (
+export function useFilter<T extends InternalItem>(
   props: FilterProps,
   items: MaybeRef<T[]>,
   query: Ref<string | undefined> | (() => string | undefined),
@@ -137,39 +151,36 @@ export function useFilter <T extends InternalItem> (
   }
 ) {
   const filteredItems: Ref<T[]> = shallowRef([])
-  const filteredMatches: Ref<Map<unknown, Record<string, FilterMatch>>> = shallowRef(new Map())
-  const transformedItems = computed(() => (
+  const filteredMatches: Ref<Map<unknown, Record<string, FilterMatch>>> =
+    shallowRef(new Map())
+  const transformedItems = computed(() =>
     options?.transform
-      ? unref(items).map(item => ([item, options.transform!(item)] as const))
+      ? unref(items).map((item) => [item, options.transform!(item)] as const)
       : unref(items)
-  ))
+  )
 
   watchEffect(() => {
     const _query = typeof query === 'function' ? query() : unref(query)
-    const strQuery = (
-      typeof _query !== 'string' &&
-      typeof _query !== 'number'
-    ) ? '' : String(_query)
+    const strQuery =
+      typeof _query !== 'string' && typeof _query !== 'number'
+        ? ''
+        : String(_query)
 
-    const results = filterItems(
-      transformedItems.value,
-      strQuery,
-      {
-        customKeyFilter: {
-          ...props.customKeyFilter,
-          ...unref(options?.customKeyFilter),
-        },
-        default: props.customFilter,
-        filterKeys: props.filterKeys,
-        filterMode: props.filterMode,
-        noFilter: props.noFilter,
+    const results = filterItems(transformedItems.value, strQuery, {
+      customKeyFilter: {
+        ...props.customKeyFilter,
+        ...unref(options?.customKeyFilter),
       },
-    )
+      default: props.customFilter,
+      filterKeys: props.filterKeys,
+      filterMode: props.filterMode,
+      noFilter: props.noFilter,
+    })
 
     const originalItems = unref(items)
 
-    const _filteredItems: typeof filteredItems['value'] = []
-    const _filteredMatches: typeof filteredMatches['value'] = new Map()
+    const _filteredItems: (typeof filteredItems)['value'] = []
+    const _filteredMatches: (typeof filteredMatches)['value'] = new Map()
     results.forEach(({ index, matches }) => {
       const item = originalItems[index]
       _filteredItems.push(item)
@@ -179,7 +190,7 @@ export function useFilter <T extends InternalItem> (
     filteredMatches.value = _filteredMatches
   })
 
-  function getMatches (item: T) {
+  function getMatches(item: T) {
     return filteredMatches.value.get(item.value)
   }
 
