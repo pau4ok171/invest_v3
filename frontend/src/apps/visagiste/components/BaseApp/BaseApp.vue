@@ -1,18 +1,18 @@
 <script lang="ts">
 // Styles
-import "../../styles/main.scss";
-import "./BaseApp.scss";
+import '../../styles/main.scss'
+import './BaseApp.scss'
 
 // Composables
-import { provideTheme } from "@/apps/visagiste/composables/theme";
-import { createLayout } from "@/apps/visagiste/composables/layout";
-import { useRtl } from "@/apps/visagiste/composables/locale";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
-import { useLayoutProps } from "@/apps/visagiste/composables/layout";
-import { useThemeProps } from "@/apps/visagiste/composables/theme";
+import { provideTheme } from '@/apps/visagiste/composables/theme'
+import { createLayout } from '@/apps/visagiste/composables/layout'
+import { useRtl } from '@/apps/visagiste/composables/locale'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import { useLayoutProps } from '@/apps/visagiste/composables/layout'
+import { useThemeProps } from '@/apps/visagiste/composables/theme'
 
 // Utilities
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 export const useBaseAppProps = propsFactory(
   {
@@ -20,17 +20,17 @@ export const useBaseAppProps = propsFactory(
     ...useLayoutProps({ fullHeight: true }),
     ...useThemeProps(),
   },
-  "BaseApp",
-);
+  'BaseApp'
+)
 
 export default defineComponent({
-  name: "BaseApplication",
+  name: 'BaseApplication',
   props: useBaseAppProps(),
   setup(props) {
-    const theme = provideTheme(props);
+    const theme = provideTheme(props)
     const { layoutClasses, getLayoutItem, items, layoutRef } =
-      createLayout(props);
-    const { rtlClasses } = useRtl();
+      createLayout(props)
+    const { rtlClasses } = useRtl()
 
     return {
       theme,
@@ -39,9 +39,9 @@ export default defineComponent({
       getLayoutItem,
       items,
       layoutRef,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
