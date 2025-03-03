@@ -1,18 +1,20 @@
 // Composables
-import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
-import { useLocale } from "@/apps/visagiste/composables";
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
+import { useLocale } from '@/apps/visagiste/composables'
 
 // Utilities
-import {computed, inject, provide, toRef} from "vue";
-import {getObjectValueByPath, isEmpty} from "@/apps/visagiste/utils";
+import { computed, inject, provide, toRef } from 'vue'
+import {getObjectValueByPath, isEmpty, propsFactory} from '@/apps/visagiste/utils'
 
 // Types
-import type {InjectionKey, PropType, Ref} from "vue";
-import type {DataTableCompareFunction, InternalDataTableHeader} from "@/apps/visagiste/components/BaseDataTable/types";
-import type { InternalItem } from '@/apps/visagiste/composables/filter';
+import type { InjectionKey, PropType, Ref } from 'vue'
+import type {
+  DataTableCompareFunction,
+  InternalDataTableHeader,
+} from '@/apps/visagiste/components/BaseDataTable/types'
+import type { InternalItem } from '@/apps/visagiste/composables/filter'
 
-
-export const dataTableSortProps = {
+export const useDataTableSortProps = propsFactory({
   sortBy: {
     type: Array as PropType<readonly SortItem[]>,
     default: () => ([]),
@@ -20,7 +22,7 @@ export const dataTableSortProps = {
   customKeySort: Object as PropType<Record<string, DataTableCompareFunction>>,
   multiSort: Boolean,
   mustSort: Boolean,
-}
+}, 'DataTable-sort')
 
 const BaseDataTableSortSymbol: InjectionKey<{
   sortBy: Ref<readonly SortItem[]>
@@ -28,7 +30,7 @@ const BaseDataTableSortSymbol: InjectionKey<{
   isSorted: (column: InternalDataTableHeader) => boolean
 }> = Symbol.for('visagiste:data-table-sort')
 
-export type SortItem = { key: string, order?: boolean | 'asc' | 'desc' }
+export type SortItem = { key: string; order?: boolean | 'asc' | 'desc' }
 
 type SortProps = {
   sortBy: readonly SortItem[]
@@ -37,7 +39,7 @@ type SortProps = {
   mustSort: boolean
 }
 
-export function createSort (props: SortProps) {
+export function createSort(props: SortProps) {
   const sortBy = useProxiedModel(props, 'sortBy')
   const mustSort = toRef(props, 'mustSort')
   const multiSort = toRef(props, 'multiSort')
@@ -45,7 +47,7 @@ export function createSort (props: SortProps) {
   return { sortBy, mustSort, multiSort }
 }
 
-export function provideSort (options: {
+export function provideSort(options: {
   sortBy: Ref<readonly SortItem[]>
   mustSort: Ref<boolean>
   multiSort: Ref<boolean>
@@ -56,17 +58,18 @@ export function provideSort (options: {
   const toggleSort = (column: InternalDataTableHeader) => {
     if (column.key == null) return
 
-    let newSortBy = sortBy.value.map(x => ({ ...x })) ?? []
-    const item = newSortBy.find(x => x.key === column.key)
+    let newSortBy = sortBy.value.map((x) => ({ ...x })) ?? []
+    const item = newSortBy.find((x) => x.key === column.key)
 
     if (!item) {
-      if (multiSort.value) newSortBy = [...newSortBy, { key: column.key, order: 'asc' }]
+      if (multiSort.value)
+        newSortBy = [...newSortBy, { key: column.key, order: 'asc' }]
       else newSortBy = [{ key: column.key, order: 'asc' }]
     } else if (item.order === 'desc') {
       if (multiSort.value) {
         item.order = 'asc'
       } else {
-        newSortBy = newSortBy.filter(x => x.key !== column.key)
+        newSortBy = newSortBy.filter((x) => x.key !== column.key)
       }
     } else {
       item.order = 'desc'
@@ -76,8 +79,8 @@ export function provideSort (options: {
     if (page) page.value = 1
   }
 
-  function isSorted (column: InternalDataTableHeader) {
-    return !!sortBy.value.find(item => item.key === column.key)
+  function isSorted(column: InternalDataTableHeader) {
+    return !!sortBy.value.find((item) => item.key === column.key)
   }
 
   const data = { sortBy, toggleSort, isSorted }
@@ -87,7 +90,7 @@ export function provideSort (options: {
   return data
 }
 
-export function useSort () {
+export function useSort() {
   const data = inject(BaseDataTableSortSymbol)
 
   if (!data) throw new Error('Missing sort!')
@@ -96,7 +99,7 @@ export function useSort () {
 }
 
 // TODO: abstract into project composable
-export function useSortedItems<T extends InternalItem> (
+export function useSortedItems<T extends InternalItem>(
   props: {
     customKeySort: Record<any, DataTableCompareFunction> | undefined
   },
@@ -106,7 +109,7 @@ export function useSortedItems<T extends InternalItem> (
     transform?: (item: T) => {}
     sortFunctions?: Ref<Record<string, DataTableCompareFunction> | undefined>
     sortRawFunctions?: Ref<Record<string, DataTableCompareFunction> | undefined>
-  },
+  }
 ) {
   const locale = useLocale()
   const sortedItems = computed(() => {
@@ -125,7 +128,7 @@ export function useSortedItems<T extends InternalItem> (
   return { sortedItems }
 }
 
-export function sortItems<T extends InternalItem> (
+export function sortItems<T extends InternalItem>(
   items: T[],
   sortByItems: readonly SortItem[],
   locale: string,
@@ -133,66 +136,81 @@ export function sortItems<T extends InternalItem> (
     transform?: (item: T) => Record<string, any>
     sortFunctions?: Record<string, DataTableCompareFunction>
     sortRawFunctions?: Record<string, DataTableCompareFunction>
-  },
+  }
 ): T[] {
-  const stringCollator = new Intl.Collator(locale, { sensitivity: 'accent', usage: 'sort' })
+  const stringCollator = new Intl.Collator(locale, {
+    sensitivity: 'accent',
+    usage: 'sort',
+  })
 
-  const transformedItems = items.map(item => (
-    [item, options?.transform ? options.transform(item) : item as never] as const
-  ))
+  const transformedItems = items.map(
+    (item) =>
+      [
+        item,
+        options?.transform ? options.transform(item) : (item as never),
+      ] as const
+  )
 
-  return transformedItems.sort((a, b) => {
-    for (let i = 0; i < sortByItems.length; i++) {
-      let hasCustomResult = false
-      const sortKey = sortByItems[i].key
-      const sortOrder = sortByItems[i].order ?? 'asc'
+  return transformedItems
+    .sort((a, b) => {
+      for (let i = 0; i < sortByItems.length; i++) {
+        let hasCustomResult = false
+        const sortKey = sortByItems[i].key
+        const sortOrder = sortByItems[i].order ?? 'asc'
 
-      if (sortOrder === false) continue
+        if (sortOrder === false) continue
 
-      let sortA = getObjectValueByPath(a[1], sortKey)
-      let sortB = getObjectValueByPath(b[1], sortKey)
-      let sortARaw = a[0].raw
-      let sortBRaw = b[0].raw
+        let sortA = getObjectValueByPath(a[1], sortKey)
+        let sortB = getObjectValueByPath(b[1], sortKey)
+        let sortARaw = a[0].raw
+        let sortBRaw = b[0].raw
 
-      if (sortOrder === 'desc') {
-        [sortA, sortB] = [sortB, sortA]
-        ;[sortARaw, sortBRaw] = [sortBRaw, sortARaw]
+        if (sortOrder === 'desc') {
+          ;[sortA, sortB] = [sortB, sortA]
+          ;[sortARaw, sortBRaw] = [sortBRaw, sortARaw]
+        }
+
+        if (options?.sortRawFunctions?.[sortKey]) {
+          const customResult = options?.sortRawFunctions[sortKey](
+            sortARaw,
+            sortBRaw
+          )
+
+          if (customResult == null) continue
+          hasCustomResult = true
+          if (customResult) return customResult
+        }
+
+        if (options?.sortFunctions?.[sortKey]) {
+          const customResult = options?.sortFunctions[sortKey](sortA, sortB)
+
+          if (customResult == null) continue
+          hasCustomResult = true
+          if (customResult) return customResult
+        }
+
+        if (hasCustomResult) continue
+
+        // Dates should be compared numerically
+        if (sortA instanceof Date && sortB instanceof Date) {
+          return sortA.getTime() - sortB.getTime()
+        }
+
+        ;[sortA, sortB] = [sortA, sortB].map((s) =>
+          s != null ? s.toString().toLocaleLowerCase() : s
+        )
+
+        if (sortA !== sortB) {
+          if (isEmpty(sortA) && isEmpty(sortB)) return 0
+          if (isEmpty(sortA)) return -1
+          if (isEmpty(sortB)) return 1
+          if (!isNaN(sortA) && !isNaN(sortB))
+            return Number(sortA) - Number(sortB)
+          return stringCollator.compare(sortA, sortB)
+        }
       }
 
-      if (options?.sortRawFunctions?.[sortKey]) {
-        const customResult = options?.sortRawFunctions[sortKey](sortARaw, sortBRaw)
-
-        if (customResult == null) continue
-        hasCustomResult = true
-        if (customResult) return customResult
-      }
-
-      if (options?.sortFunctions?.[sortKey]) {
-        const customResult = options?.sortFunctions[sortKey](sortA, sortB)
-
-        if (customResult == null) continue
-        hasCustomResult = true
-        if (customResult) return customResult
-      }
-
-      if (hasCustomResult) continue
-
-      // Dates should be compared numerically
-      if (sortA instanceof Date && sortB instanceof Date) {
-        return sortA.getTime() - sortB.getTime()
-      }
-
-      [sortA, sortB] = [sortA, sortB].map(s => s != null ? s.toString().toLocaleLowerCase() : s)
-
-      if (sortA !== sortB) {
-        if (isEmpty(sortA) && isEmpty(sortB)) return 0
-        if (isEmpty(sortA)) return -1
-        if (isEmpty(sortB)) return 1
-        if (!isNaN(sortA) && !isNaN(sortB)) return Number(sortA) - Number(sortB)
-        return stringCollator.compare(sortA, sortB)
-      }
-    }
-
-    return 0
-  }).map(([item]) => item)
+      return 0
+    })
+    .map(([item]) => item)
 }

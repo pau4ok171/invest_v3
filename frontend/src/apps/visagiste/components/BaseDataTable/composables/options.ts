@@ -1,9 +1,13 @@
-import type { Ref } from "vue";
-import type { SortItem } from "./sort";
-import {deepEqual, getCurrentInstance} from "@/apps/visagiste/utils";
-import {computed, watch} from "vue";
+// Utilities
+import { computed, watch } from 'vue'
+import { deepEqual, getCurrentInstance } from '@/apps/visagiste/utils'
 
-export function useOptions ({
+// Types
+import type { Ref } from 'vue'
+import type { SortItem } from './sort'
+
+
+export function useOptions({
   page,
   itemsPerPage,
   sortBy,
@@ -27,15 +31,19 @@ export function useOptions ({
   }))
 
   let oldOptions: typeof options.value | null = null
-  watch(options, () => {
-    if (deepEqual(oldOptions, options.value)) return
+  watch(
+    options,
+    () => {
+      if (deepEqual(oldOptions, options.value)) return
 
-    // Reset page when searching
-    if (oldOptions && oldOptions.search !== options.value.search) {
-      page.value = 1
-    }
+      // Reset page when searching
+      if (oldOptions && oldOptions.search !== options.value.search) {
+        page.value = 1
+      }
 
-    vm.emit('update:options', options.value)
-    oldOptions = options.value
-  }, { deep: true, immediate: true })
+      vm.emit('update:options', options.value)
+      oldOptions = options.value
+    },
+    { deep: true, immediate: true }
+  )
 }

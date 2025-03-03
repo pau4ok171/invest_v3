@@ -1,15 +1,14 @@
 // Composables
-
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 
 // Utilities
-import {deepEqual, wrapInArray} from "@/apps/visagiste/utils";
+import { computed, inject, provide } from 'vue'
+import {deepEqual, propsFactory, wrapInArray} from '@/apps/visagiste/utils'
 
 // Types
-import type {InjectionKey, PropType, Ref} from "vue";
-import type {EventProp} from "@/apps/visagiste/utils";
-import {useProxiedModel} from "@/apps/visagiste/composables/proxiedModel";
-import {computed, inject, provide} from "vue";
-import type {DataTableItemProps} from "./items";
+import type { InjectionKey, PropType, Ref } from 'vue'
+import type { EventProp } from '@/apps/visagiste/utils'
+import type { DataTableItemProps } from './items'
 
 export interface SelectableItem {
   value: any
@@ -62,7 +61,8 @@ const pageSelectStrategy: DataTableSelectStrategy = {
 
     return selected
   },
-  selectAll: ({ value, currentPage, selected }) => pageSelectStrategy.select({ items: currentPage, value, selected })
+  selectAll: ({ value, currentPage, selected }) =>
+    pageSelectStrategy.select({ items: currentPage, value, selected }),
 }
 
 const allSelectStrategy: DataTableSelectStrategy = {
@@ -76,14 +76,15 @@ const allSelectStrategy: DataTableSelectStrategy = {
 
     return selected
   },
-  selectAll: ({ value, allItems, selected }) => allSelectStrategy.select({ items: allItems, value, selected })
+  selectAll: ({ value, allItems, selected }) =>
+    allSelectStrategy.select({ items: allItems, value, selected }),
 }
 
-export const dataTableSelectProps = {
+export const useDataTableSelectProps = propsFactory({
   showSelect: Boolean,
   selectStrategy: {
     type: [String, Object] as PropType<'single' | 'page' | 'all'>,
-    default: 'page'
+    default: 'page',
   },
   modelValue: {
     type: Array as PropType<readonly any[]>,
@@ -91,49 +92,70 @@ export const dataTableSelectProps = {
   },
   valueComparator: {
     type: Function as PropType<typeof deepEqual>,
-    default: deepEqual
-  }
-}
+    default: deepEqual,
+  },
+}, 'DataTable-select')
 
-export const BaseDataTableSelectionSymbol: InjectionKey<ReturnType<
-  typeof provideSelection
->> = Symbol.for('visagiste: data-table-selection')
+export const BaseDataTableSelectionSymbol: InjectionKey<
+  ReturnType<typeof provideSelection>
+> = Symbol.for('visagiste: data-table-selection')
 
-export function provideSelection (
+export function provideSelection(
   props: SelectionProps,
-  { allItems, currentPage }: { allItems: Ref<SelectableItem[]>, currentPage: Ref<SelectableItem[]> }
+  {
+    allItems,
+    currentPage,
+  }: { allItems: Ref<SelectableItem[]>; currentPage: Ref<SelectableItem[]> }
 ) {
-  const selected = useProxiedModel(props, 'modelValue', props.modelValue, v => {
-    return new Set(wrapInArray(v).map((v: any) => {
-      return allItems.value.find(item => props.valueComparator(v, item.value))?.value ?? v
-    }))
-  }, v => {
-    return [...v.values()]
-  })
+  const selected = useProxiedModel(
+    props,
+    'modelValue',
+    props.modelValue,
+    (v) => {
+      return new Set(
+        wrapInArray(v).map((v: any) => {
+          return (
+            allItems.value.find((item) => props.valueComparator(v, item.value))
+              ?.value ?? v
+          )
+        })
+      )
+    },
+    (v) => {
+      return [...v.values()]
+    }
+  )
 
-  const allSelectable = computed(() => allItems.value.filter(item => item.selectable))
-  const currentPageSelectable = computed(() => currentPage.value.filter(item => item.selectable))
+  const allSelectable = computed(() =>
+    allItems.value.filter((item) => item.selectable)
+  )
+  const currentPageSelectable = computed(() =>
+    currentPage.value.filter((item) => item.selectable)
+  )
 
   const selectStrategy = computed(() => {
     if (typeof props.selectStrategy === 'object') return props.selectStrategy
 
     switch (props.selectStrategy) {
-      case "single": return singleSelectStrategy
-      case "all": return allSelectStrategy
-      case "page":
-      default: return pageSelectStrategy
+      case 'single':
+        return singleSelectStrategy
+      case 'all':
+        return allSelectStrategy
+      case 'page':
+      default:
+        return pageSelectStrategy
     }
   })
 
-  function isSelected (items: SelectableItem | SelectableItem[]) {
-    return wrapInArray(items).every(item => selected.value.has(item.value))
+  function isSelected(items: SelectableItem | SelectableItem[]) {
+    return wrapInArray(items).every((item) => selected.value.has(item.value))
   }
 
-  function isSomeSelected (items: SelectableItem |SelectableItem[]) {
-    return wrapInArray(items).some(item => selected.value.has(item.value))
+  function isSomeSelected(items: SelectableItem | SelectableItem[]) {
+    return wrapInArray(items).some((item) => selected.value.has(item.value))
   }
 
-  function select (items: SelectableItem[], value: boolean) {
+  function select(items: SelectableItem[], value: boolean) {
     const newSelected = selectStrategy.value.select({
       items,
       value,
@@ -143,16 +165,16 @@ export function provideSelection (
     selected.value = newSelected
   }
 
-  function toggleSelect (item: SelectableItem) {
+  function toggleSelect(item: SelectableItem) {
     select([item], !isSelected([item]))
   }
 
-  function selectAll (value: boolean) {
+  function selectAll(value: boolean) {
     const newSelected = selectStrategy.value.selectAll({
       value,
       allItems: allSelectable.value,
       currentPage: currentPageSelectable.value,
-      selected: new Set(selected.value)
+      selected: new Set(selected.value),
     })
 
     selected.value = newSelected
@@ -184,7 +206,7 @@ export function provideSelection (
   return data
 }
 
-export function useSelection () {
+export function useSelection() {
   const data = inject(BaseDataTableSelectionSymbol)
 
   if (!data) throw new Error('Missing selection!')

@@ -1,21 +1,25 @@
 // Composables
-import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 
 // Utilities
-import { inject, provide, toRef } from "vue";
+import { inject, provide, toRef } from 'vue'
+import { propsFactory } from '@/apps/visagiste/utils'
 
 // Types
-import type { InjectionKey, PropType, Ref } from "vue";
-import type { DataTableItem } from "../types";
+import type { InjectionKey, PropType, Ref } from 'vue'
+import type { DataTableItem } from '../types'
 
-export const dataTableExpandProps = {
-  expandOnClick: Boolean,
-  showExpand: Boolean,
-  expanded: {
-    type: Array as PropType<readonly string[]>,
-    default: () => ([]),
+export const useDataTableExpandProps = propsFactory(
+  {
+    expandOnClick: Boolean,
+    showExpand: Boolean,
+    expanded: {
+      type: Array as PropType<readonly string[]>,
+      default: () => [],
+    },
   },
-}
+  'DataTable-expand'
+)
 
 export const BaseDataTableExpandedKey: InjectionKey<{
   expand: (item: DataTableItem, value: boolean) => void
@@ -31,15 +35,21 @@ type ExpandProps = {
   'onUpdate:expanded': ((value: any[]) => void) | undefined
 }
 
-export function provideExpanded (props: ExpandProps) {
+export function provideExpanded(props: ExpandProps) {
   const expandOnClick = toRef(props, 'expandOnClick')
-  const expanded = useProxiedModel(props, 'expanded', props.expanded, v => {
-    return new Set(v)
-  }, v => {
-    return [...v.values()]
-  })
+  const expanded = useProxiedModel(
+    props,
+    'expanded',
+    props.expanded,
+    (v) => {
+      return new Set(v)
+    },
+    (v) => {
+      return [...v.values()]
+    }
+  )
 
-  function expand (item: DataTableItem, value: boolean) {
+  function expand(item: DataTableItem, value: boolean) {
     const newExpanded = new Set(expanded.value)
 
     if (!value) {
@@ -51,11 +61,11 @@ export function provideExpanded (props: ExpandProps) {
     expanded.value = newExpanded
   }
 
-  function isExpanded (item: DataTableItem) {
+  function isExpanded(item: DataTableItem) {
     return expanded.value.has(item.value)
   }
 
-  function toggleExpand (item: DataTableItem) {
+  function toggleExpand(item: DataTableItem) {
     expand(item, !isExpanded(item))
   }
 
@@ -66,7 +76,7 @@ export function provideExpanded (props: ExpandProps) {
   return data
 }
 
-export function useExpanded () {
+export function useExpanded() {
   const data = inject(BaseDataTableExpandedKey)
 
   if (!data) throw Error('Missing expand!')

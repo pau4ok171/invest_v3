@@ -1,16 +1,20 @@
 // Utilities
-import {capitalize, inject, provide, ref, watchEffect} from "vue";
-import {consoleError} from "@/apps/visagiste/utils";
+import { capitalize, inject, provide, ref, watchEffect } from 'vue'
+import {consoleError, propsFactory} from '@/apps/visagiste/utils'
 
 // Types
-import type {DeepReadonly, InjectionKey, PropType, Ref} from "vue";
-import type {FilterKeyFunctions} from "@/apps/visagiste/composables/filter";
-import type { DataTableCompareFunction, DataTableHeader, InternalDataTableHeader } from "../types";
-import type {SortItem} from "./sort";
+import type { DeepReadonly, InjectionKey, PropType, Ref } from 'vue'
+import type { FilterKeyFunctions } from '@/apps/visagiste/composables/filter'
+import type {
+  DataTableCompareFunction,
+  DataTableHeader,
+  InternalDataTableHeader,
+} from '../types'
+import type { SortItem } from './sort'
 
-export const dataTableHeadersProps = {
+export const useDataTableHeaderProps = propsFactory({
   headers: Array as PropType<DeepReadonly<DataTableHeader[]>>,
-}
+}, 'DataTable-header')
 
 export const BaseDataTableHeadersSymbol: InjectionKey<{
   headers: Ref<InternalDataTableHeader[][]>
@@ -25,8 +29,11 @@ type HeaderProps = {
 const defaultHeader = { title: '', sortable: false }
 const defaultActionHeader = { ...defaultHeader, width: 48 }
 
-function priorityQueue <T> (arr: T[] = []) {
-  const queue: { element: T, priority: number }[] = arr.map(element => ({ element, priority: 0 }))
+function priorityQueue<T>(arr: T[] = []) {
+  const queue: { element: T; priority: number }[] = arr.map((element) => ({
+    element,
+    priority: 0,
+  }))
 
   return {
     enqueue: (element: T, priority: number) => {
@@ -61,7 +68,10 @@ function priorityQueue <T> (arr: T[] = []) {
   }
 }
 
-function extractLeaves (item: InternalDataTableHeader, columns: InternalDataTableHeader[] = []) {
+function extractLeaves(
+  item: InternalDataTableHeader,
+  columns: InternalDataTableHeader[] = []
+) {
   if (!item.children) {
     columns.push(item)
   } else {
@@ -73,7 +83,10 @@ function extractLeaves (item: InternalDataTableHeader, columns: InternalDataTabl
   return columns
 }
 
-function extractKeys (headers: DeepReadonly<DataTableHeader[]>, keys = new Set<string>()) {
+function extractKeys(
+  headers: DeepReadonly<DataTableHeader[]>,
+  keys = new Set<string>()
+) {
   for (const item of headers) {
     if (item.key) keys.add(item.key)
 
@@ -85,22 +98,26 @@ function extractKeys (headers: DeepReadonly<DataTableHeader[]>, keys = new Set<s
   return keys
 }
 
-function getDefaultItem (item: DeepReadonly<DataTableHeader>) {
+function getDefaultItem(item: DeepReadonly<DataTableHeader>) {
   if (!item.key) return undefined
   if (item.key === 'data-table-group') return defaultHeader
-  if (['data-table-expand', 'data-table-select'].includes(item.key)) return defaultActionHeader
+  if (['data-table-expand', 'data-table-select'].includes(item.key))
+    return defaultActionHeader
   return undefined
 }
 
-function getDepth (item: InternalDataTableHeader, depth = 0): number {
+function getDepth(item: InternalDataTableHeader, depth = 0): number {
   if (!item.children) return depth
 
-  return Math.max(depth, ...item.children.map(child => getDepth(child, depth + 1)))
+  return Math.max(
+    depth,
+    ...item.children.map((child) => getDepth(child, depth + 1))
+  )
 }
 
-function parseFixedColumns (items: InternalDataTableHeader[]) {
+function parseFixedColumns(items: InternalDataTableHeader[]) {
   let seenFixed = false
-  function setFixed (item: InternalDataTableHeader, parentFixed = false) {
+  function setFixed(item: InternalDataTableHeader, parentFixed = false) {
     if (!item) return
 
     if (parentFixed) {
@@ -116,13 +133,15 @@ function parseFixedColumns (items: InternalDataTableHeader[]) {
         if (!seenFixed) {
           item.lastFixed = true
         } else if (isNaN(+item.width!)) {
-          consoleError(`Multiple fixed columns should have a static width (key: ${item.key})`)
+          consoleError(
+            `Multiple fixed columns should have a static width (key: ${item.key})`
+          )
         }
         seenFixed = true
       }
     } else {
       if (item.children) {
-        for (let i = item.children.length - 1; i>= 0; i--) {
+        for (let i = item.children.length - 1; i >= 0; i--) {
           setFixed(item.children[i])
         }
       } else {
@@ -135,7 +154,7 @@ function parseFixedColumns (items: InternalDataTableHeader[]) {
     setFixed(items[i])
   }
 
-  function setFixedOffset (item: InternalDataTableHeader, fixedOffset = 0) {
+  function setFixedOffset(item: InternalDataTableHeader, fixedOffset = 0) {
     if (!item) return fixedOffset
 
     if (item.children) {
@@ -145,7 +164,7 @@ function parseFixedColumns (items: InternalDataTableHeader[]) {
       }
     } else if (item.fixed) {
       item.fixedOffset = fixedOffset
-     fixedOffset += parseFloat(item.width || '0') || 0
+      fixedOffset += parseFloat(item.width || '0') || 0
     }
 
     return fixedOffset
@@ -157,7 +176,7 @@ function parseFixedColumns (items: InternalDataTableHeader[]) {
   }
 }
 
-function parse (items: InternalDataTableHeader[], maxDepth: number) {
+function parse(items: InternalDataTableHeader[], maxDepth: number) {
   const headers: InternalDataTableHeader[][] = []
   let currentDepth = 0
   const queue = priorityQueue(items)
@@ -179,35 +198,41 @@ function parse (items: InternalDataTableHeader[], maxDepth: number) {
       if (item.children) {
         for (const child of item.children) {
           // This internally sorts items that are on the same priority "row"
-          const sort = priority % 1 + (fraction / Math.pow(10, currentDepth + 2))
+          const sort =
+            (priority % 1) + fraction / Math.pow(10, currentDepth + 2)
           queue.enqueue(child, currentDepth + diff + sort)
         }
       }
 
-      fraction +=1
+      fraction += 1
       rowSize -= 1
     }
     currentDepth += 1
     headers.push(row)
   }
 
-  const columns = items.map(item => extractLeaves(item)).flat()
+  const columns = items.map((item) => extractLeaves(item)).flat()
 
   return { columns, headers }
 }
 
-function convertToInternalHeaders (items: DeepReadonly<DataTableHeader[]>) {
+function convertToInternalHeaders(items: DeepReadonly<DataTableHeader[]>) {
   const internalHeaders: InternalDataTableHeader[] = []
   for (const item of items) {
     const defaultItem = { ...getDefaultItem(item), ...item }
-    const key = defaultItem.key ?? (typeof defaultItem.value === 'string' ? defaultItem.value : null)
+    const key =
+      defaultItem.key ??
+      (typeof defaultItem.value === 'string' ? defaultItem.value : null)
     const value = defaultItem.value ?? key ?? null
     const internalItem: InternalDataTableHeader = {
       ...defaultItem,
       key,
       value,
-      sortable: defaultItem.sortable ?? (defaultItem.key != null || !!defaultItem.sort),
-      children: defaultItem.children ? convertToInternalHeaders(defaultItem.children) : undefined,
+      sortable:
+        defaultItem.sortable ?? (defaultItem.key != null || !!defaultItem.sort),
+      children: defaultItem.children
+        ? convertToInternalHeaders(defaultItem.children)
+        : undefined,
     }
 
     internalHeaders.push(internalItem)
@@ -216,10 +241,10 @@ function convertToInternalHeaders (items: DeepReadonly<DataTableHeader[]>) {
   return internalHeaders
 }
 
-export function createHeaders (
+export function createHeaders(
   props: HeaderProps,
   options?: {
-    groupBy?: Ref<readonly  SortItem[]>
+    groupBy?: Ref<readonly SortItem[]>
     showSelect?: Ref<boolean>
     showExpand?: Ref<boolean>
   }
@@ -231,8 +256,12 @@ export function createHeaders (
   const filterFunctions = ref<FilterKeyFunctions>({})
 
   watchEffect(() => {
-    const _headers = props.headers ||
-      Object.keys(props.items[0] ?? {}).map(key => ({ key, title: capitalize(key) })) as never
+    const _headers =
+      props.headers ||
+      (Object.keys(props.items[0] ?? {}).map((key) => ({
+        key,
+        title: capitalize(key),
+      })) as never)
 
     const items = _headers.slice()
     const keys = extractKeys(items)
@@ -253,7 +282,8 @@ export function createHeaders (
 
     parseFixedColumns(internalHeaders)
 
-    const maxDepth = Math.max(...internalHeaders.map(item => getDepth(item))) + 1
+    const maxDepth =
+      Math.max(...internalHeaders.map((item) => getDepth(item))) + 1
     const parsed = parse(internalHeaders, maxDepth)
 
     headers.value = parsed.headers
@@ -280,13 +310,19 @@ export function createHeaders (
     }
   })
 
-  const data = { headers, columns, sortFunctions, sortRawFunctions, filterFunctions }
+  const data = {
+    headers,
+    columns,
+    sortFunctions,
+    sortRawFunctions,
+    filterFunctions,
+  }
 
   provide(BaseDataTableHeadersSymbol, data)
 
   return data
 }
-export function useHeaders () {
+export function useHeaders() {
   const data = inject(BaseDataTableHeadersSymbol)
 
   if (!data) throw new Error('Missing headers!')
