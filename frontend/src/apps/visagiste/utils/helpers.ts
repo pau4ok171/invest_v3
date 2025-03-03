@@ -2,9 +2,8 @@ import type {
   ComponentInternalInstance,
   ComponentPublicInstance,
   ComputedGetter,
-  InjectionKey,
+  InjectionKey, MaybeRef,
   PropType,
-  Slot,
   ToRefs,
   VNode,
   VNodeArrayChildren,
@@ -18,11 +17,10 @@ import {
   isVNode,
   reactive,
   shallowRef,
-  toRefs,
+  toRefs, unref,
   watchEffect,
 } from "vue";
 import { IN_BROWSER } from "@/apps/visagiste/utils/globals";
-import { no } from "vuetify/locale";
 
 export function getNestedValue(
   obj: any,
@@ -460,6 +458,19 @@ export const keyValues: Record<string, string> = Object.freeze({
   pagedown: "PageDown",
   shift: "Shift",
 });
+
+export function debounce (fn: Function, delay: MaybeRef<number>) {
+  let timeoutId = 0 as any
+  const wrap = (...args: any[]) => {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => fn(...args), unref(delay))
+  }
+  wrap.clear = () => {
+    clearTimeout(timeoutId)
+  }
+  wrap.immediate = fn
+  return wrap
+}
 
 export function clamp(value: number, min = 0, max = 1) {
   return Math.max(min, Math.min(max, value));
