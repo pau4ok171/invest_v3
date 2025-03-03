@@ -1,0 +1,1 @@
+export { default as BaseOtpInput, useBaseOtpInputProps } from './BaseOtpInput.vue'
