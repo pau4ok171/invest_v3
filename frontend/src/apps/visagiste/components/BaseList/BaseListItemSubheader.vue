@@ -1,12 +1,12 @@
 <script lang="ts">
 // Composables
-import { useTextColor } from "@/apps/visagiste/composables/color";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
+import { useTextColor } from '@/apps/visagiste/composables/color'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
 
 // Utilities
-import { h, toRef } from "vue";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { h, toRef } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 export const useBaseListSubheaderProps = propsFactory(
   {
@@ -18,27 +18,27 @@ export const useBaseListSubheaderProps = propsFactory(
     ...useComponentProps(),
     ...useTagProps(),
   },
-  "BaseListSubheader",
-);
+  'BaseListSubheader'
+)
 
 export default defineComponent({
-  name: "BaseListItemSubheader",
+  name: 'BaseListItemSubheader',
   props: useBaseListSubheaderProps(),
   setup(props, { slots }) {
     const { textColorClasses, textColorStyles } = useTextColor(
-      toRef(props, "color"),
-    );
+      toRef(props, 'color')
+    )
     return () => {
-      const hasText = !!(slots.default || props.title);
+      const hasText = !!(slots.default || props.title)
 
       return h(
         props.tag,
         {
           class: [
-            "base-list-subheader",
+            'base-list-subheader',
             {
-              "base-list-subheader--inset": props.inset,
-              "base-list-subheader--sticky": props.sticky,
+              'base-list-subheader--inset': props.inset,
+              'base-list-subheader--sticky': props.sticky,
             },
             textColorClasses.value,
             props.class,
@@ -49,15 +49,15 @@ export default defineComponent({
           default: () => [
             hasText
               ? h(
-                  "div",
-                  { class: "base-list-subheader__text" },
-                  slots.default?.() ?? props.title,
+                  'div',
+                  { class: 'base-list-subheader__text' },
+                  slots.default?.() ?? props.title
                 )
               : null,
           ],
-        },
-      );
-    };
+        }
+      )
+    }
   },
-});
+})
 </script>

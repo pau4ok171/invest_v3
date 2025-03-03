@@ -1,11 +1,11 @@
 <script lang="ts">
 // Composables
-import { useTagProps } from "@/apps/visagiste/composables/tag";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 
 // Utilities
-import { h } from "vue";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { h } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 export const useBaseListItemSubtitle = propsFactory(
   {
@@ -14,27 +14,27 @@ export const useBaseListItemSubtitle = propsFactory(
     ...useComponentProps(),
     ...useTagProps(),
   },
-  "BaseListItemSubtitle",
-);
+  'BaseListItemSubtitle'
+)
 
 export default defineComponent({
-  name: "BaseListItemSubtitle",
+  name: 'BaseListItemSubtitle',
   props: useBaseListItemSubtitle(),
   setup(props, { slots }) {
     return () =>
       h(
         props.tag,
         {
-          class: ["base-list-item-subtitle", props.class],
+          class: ['base-list-item-subtitle', props.class],
           style: [
-            { "--base-list-item-subtitle-opacity": props.opacity },
+            { '--base-list-item-subtitle-opacity': props.opacity },
             props.style,
           ],
         },
-        slots.default?.(),
-      );
+        slots.default?.()
+      )
   },
-});
+})
 </script>
 
 <template></template>

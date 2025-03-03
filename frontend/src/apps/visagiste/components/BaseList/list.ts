@@ -1,16 +1,16 @@
 // Utilities
-import { computed, inject, provide, shallowRef } from "vue";
+import { computed, inject, provide, shallowRef } from 'vue'
 
 // Types
-import type { InjectionKey, Ref } from "vue";
+import type { InjectionKey, Ref } from 'vue'
 
 // Depth
 export const DepthKey: InjectionKey<Ref<number>> = Symbol.for('visagiste:depth')
 
-export function useDepth (hasPrepend?: Ref<boolean>) {
+export function useDepth(hasPrepend?: Ref<boolean>) {
   const parent = inject(DepthKey, shallowRef(-1))
 
-  const depth = computed(() => parent.value + 1 + (hasPrepend?.value ? 1: 0))
+  const depth = computed(() => parent.value + 1 + (hasPrepend?.value ? 1 : 0))
 
   provide(DepthKey, depth)
 
@@ -23,8 +23,11 @@ export const ListKey: InjectionKey<{
   updateHasPrepend: (value: boolean) => void
 }> = Symbol.for('visagiste:list')
 
-export function createList () {
-  const parent = inject(ListKey, { hasPrepend: shallowRef(false), updateHasPrepend: () => null })
+export function createList() {
+  const parent = inject(ListKey, {
+    hasPrepend: shallowRef(false),
+    updateHasPrepend: () => null,
+  })
 
   const data = {
     hasPrepend: shallowRef(false),
@@ -38,6 +41,6 @@ export function createList () {
   return parent
 }
 
-export function useList () {
+export function useList() {
   return inject(ListKey, null)
 }

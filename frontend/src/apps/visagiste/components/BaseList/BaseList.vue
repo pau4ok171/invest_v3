@@ -1,45 +1,42 @@
 <script lang="ts">
 // Styles
-import "./BaseList.scss";
+import './BaseList.scss'
 
 // Components
-import BaseListChildren from "./BaseListChildren.vue";
+import BaseListChildren from './BaseListChildren.vue'
 
 // Composables
-import { createList } from "./list";
-import { IconValue } from "@/apps/visagiste/composables/icons";
-import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { createList } from './list'
+import { IconValue } from '@/apps/visagiste/composables/icons'
+import { useBorder, useBorderProps } from '@/apps/visagiste/composables/border'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 import {
   useDensity,
   useDensityProps,
-} from "@/apps/visagiste/composables/density";
+} from '@/apps/visagiste/composables/density'
 import {
   useDimension,
   useDimensionProps,
-} from "@/apps/visagiste/composables/dimensions";
+} from '@/apps/visagiste/composables/dimensions'
 import {
   useElevation,
   useElevationProps,
-} from "@/apps/visagiste/composables/elevation";
-import { useItemsProps } from "@/apps/visagiste/composables/list-items";
+} from '@/apps/visagiste/composables/elevation'
+import { useItemsProps } from '@/apps/visagiste/composables/list-items'
 import {
   useRounded,
   useRoundedProps,
-} from "@/apps/visagiste/composables/rounded";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
-import {
-  provideTheme,
-  useThemeProps,
-} from "@/apps/visagiste/composables/theme";
-import { useVariantProps } from "@/apps/visagiste/composables/variant";
+} from '@/apps/visagiste/composables/rounded'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
+import { useVariantProps } from '@/apps/visagiste/composables/variant'
 import {
   useNested,
   useNestedProps,
-} from "@/apps/visagiste/composables/nested/nested";
+} from '@/apps/visagiste/composables/nested/nested'
 
 // Utilities
-import { computed, ref, shallowRef, toRef } from "vue";
+import { computed, ref, shallowRef, toRef } from 'vue'
 import {
   defineComponent,
   EventProp,
@@ -48,41 +45,41 @@ import {
   isPrimitive,
   omit,
   propsFactory,
-} from "@/apps/visagiste/utils";
+} from '@/apps/visagiste/utils'
 
 // Types
 import type {
   ItemProps,
   ListItem,
-} from "@/apps/visagiste/composables/list-items";
-import type { PropType } from "vue";
-import { useBackgroundColor } from "@/apps/visagiste/composables/color";
-import { provideDefaults } from "@/apps/visagiste/composables/defaults";
+} from '@/apps/visagiste/composables/list-items'
+import type { PropType } from 'vue'
+import { useBackgroundColor } from '@/apps/visagiste/composables/color'
+import { provideDefaults } from '@/apps/visagiste/composables/defaults'
 
 export interface InternalListItem<T = any> extends ListItem<T> {
-  type?: "item" | "subheader" | "divider";
+  type?: 'item' | 'subheader' | 'divider'
 }
 
 function transformItem(
   props: ItemProps & { itemType?: string },
-  item: any,
+  item: any
 ): InternalListItem {
-  const type = getPropertyFromItem(item, props.itemType, "item");
+  const type = getPropertyFromItem(item, props.itemType, 'item')
   const title = isPrimitive(item)
     ? item
-    : getPropertyFromItem(item, props.itemTitle);
-  const value = getPropertyFromItem(item, props.itemValue, undefined);
-  const children = getPropertyFromItem(item, props.itemChildren);
+    : getPropertyFromItem(item, props.itemTitle)
+  const value = getPropertyFromItem(item, props.itemValue, undefined)
+  const children = getPropertyFromItem(item, props.itemChildren)
   const itemProps =
     props.itemProps === true
-      ? omit(item, ["children"])
-      : getPropertyFromItem(item, props.itemProps);
+      ? omit(item, ['children'])
+      : getPropertyFromItem(item, props.itemProps)
 
   const _props = {
     title,
     value,
     ...itemProps,
-  };
+  }
 
   return {
     type,
@@ -90,28 +87,28 @@ function transformItem(
     value: _props.value,
     props: _props,
     children:
-      type === "item" && children ? transformItems(props, children) : undefined,
+      type === 'item' && children ? transformItems(props, children) : undefined,
     raw: item,
-  };
+  }
 }
 
 function transformItems(
   props: ItemProps & { itemType?: string },
-  items: (string | object)[],
+  items: (string | object)[]
 ) {
-  const array: InternalListItem[] = [];
+  const array: InternalListItem[] = []
 
   for (const item of items) {
-    array.push(transformItem(props, item));
+    array.push(transformItem(props, item))
   }
 
-  return array;
+  return array
 }
 
 export function useListItems(props: ItemProps & { itemType?: string }) {
-  const items = computed(() => transformItems(props, props.items));
+  const items = computed(() => transformItems(props, props.items))
 
-  return { items };
+  return { items }
 }
 
 export const useBaseListProps = propsFactory(
@@ -125,20 +122,20 @@ export const useBaseListProps = propsFactory(
     expandIcon: IconValue,
     collapseIcon: IconValue,
     lines: {
-      type: [Boolean, String] as PropType<"one" | "two" | "three" | false>,
-      default: "one",
+      type: [Boolean, String] as PropType<'one' | 'two' | 'three' | false>,
+      default: 'one',
     },
     slim: Boolean,
     nav: Boolean,
 
-    "onClick:open":
+    'onClick:open':
       EventProp<[{ id: unknown; value: boolean; path: unknown }]>(),
-    "onClick:select":
+    'onClick:select':
       EventProp<[{ id: unknown; value: boolean; path: unknown }]>(),
-    "onClick:opened": EventProp<[]>(),
+    'onClick:opened': EventProp<[]>(),
     ...useNestedProps({
-      selectStrategy: "single-leaf" as const,
-      openStrategy: "list" as const,
+      selectStrategy: 'single-leaf' as const,
+      openStrategy: 'list' as const,
     }),
     ...useBorderProps(),
     ...useComponentProps(),
@@ -147,87 +144,87 @@ export const useBaseListProps = propsFactory(
     ...useElevationProps(),
     itemType: {
       type: String,
-      default: "type",
+      default: 'type',
     },
     ...useItemsProps(),
     ...useRoundedProps(),
     ...useTagProps(),
     ...useThemeProps(),
-    ...useVariantProps({ variant: "text" } as const),
+    ...useVariantProps({ variant: 'text' } as const),
   },
-  "BaseList",
-);
+  'BaseList'
+)
 
-type ItemType<T> = T extends readonly (infer U)[] ? U : never;
+type ItemType<T> = T extends readonly (infer U)[] ? U : never
 
 export default defineComponent({
-  name: "BaseList",
+  name: 'BaseList',
   components: { BaseListChildren },
   props: useBaseListProps(),
   emits: {
-    "update:selected": (value: unknown) => true,
-    "update:activated": (value: unknown) => true,
-    "update:opened": (value: unknown) => true,
-    "click:open": (value: { id: unknown; value: boolean; path: unknown[] }) =>
+    'update:selected': (value: unknown) => true,
+    'update:activated': (value: unknown) => true,
+    'update:opened': (value: unknown) => true,
+    'click:open': (value: { id: unknown; value: boolean; path: unknown[] }) =>
       true,
-    "click:activate": (value: {
-      id: unknown;
-      value: boolean;
-      path: unknown[];
+    'click:activate': (value: {
+      id: unknown
+      value: boolean
+      path: unknown[]
     }) => true,
-    "click:select": (value: { id: unknown; value: boolean; path: unknown[] }) =>
+    'click:select': (value: { id: unknown; value: boolean; path: unknown[] }) =>
       true,
   },
   setup(props) {
-    const { items } = useListItems(props);
-    const { themeClasses } = provideTheme(props);
+    const { items } = useListItems(props)
+    const { themeClasses } = provideTheme(props)
     const { backgroundColorClasses, backgroundColorStyles } =
-      useBackgroundColor(toRef(props, "bgColor"));
-    const { borderClasses } = useBorder(props);
-    const { densityClasses } = useDensity(props);
-    const { dimensionStyles } = useDimension(props);
-    const { elevationClasses } = useElevation(props);
-    const { roundedClasses } = useRounded(props);
-    const { children, open, parents, select, getPath } = useNested(props);
+      useBackgroundColor(toRef(props, 'bgColor'))
+    const { borderClasses } = useBorder(props)
+    const { densityClasses } = useDensity(props)
+    const { dimensionStyles } = useDimension(props)
+    const { elevationClasses } = useElevation(props)
+    const { roundedClasses } = useRounded(props)
+    const { children, open, parents, select, getPath } = useNested(props)
     const lineClasses = computed(() =>
-      props.lines ? `base-list--${props.lines}-line` : undefined,
-    );
-    const activeColor = toRef(props, "activeColor");
-    const baseColor = toRef(props, "color");
-    const color = toRef(props, "color");
+      props.lines ? `base-list--${props.lines}-line` : undefined
+    )
+    const activeColor = toRef(props, 'activeColor')
+    const baseColor = toRef(props, 'color')
+    const color = toRef(props, 'color')
 
-    createList();
+    createList()
 
     provideDefaults({
       BaseListGroup: {
         activeColor,
         baseColor,
         color,
-        expandIcon: toRef(props, "expandIcon"),
-        collapseIcon: toRef(props, "collapseIcon"),
+        expandIcon: toRef(props, 'expandIcon'),
+        collapseIcon: toRef(props, 'collapseIcon'),
       },
       BaseListItem: {
-        activeClass: toRef(props, "activeClass"),
+        activeClass: toRef(props, 'activeClass'),
         activeColor,
         baseColor,
         color,
-        density: toRef(props, "density"),
-        disabled: toRef(props, "disabled"),
-        lines: toRef(props, "lines"),
-        nav: toRef(props, "nav"),
-        slim: toRef(props, "slim"),
-        variant: toRef(props, "variant"),
+        density: toRef(props, 'density'),
+        disabled: toRef(props, 'disabled'),
+        lines: toRef(props, 'lines'),
+        nav: toRef(props, 'nav'),
+        slim: toRef(props, 'slim'),
+        variant: toRef(props, 'variant'),
       },
-    });
+    })
 
-    const isFocused = shallowRef(false);
-    const contentRef = ref<HTMLElement>();
+    const isFocused = shallowRef(false)
+    const contentRef = ref<HTMLElement>()
     function onFocusin(e: FocusEvent) {
-      isFocused.value = true;
+      isFocused.value = true
     }
 
     function onFocusout(e: FocusEvent) {
-      isFocused.value = false;
+      isFocused.value = false
     }
 
     function onFocus(e: FocusEvent) {
@@ -237,37 +234,37 @@ export default defineComponent({
           e.relatedTarget && contentRef.value?.contains(e.relatedTarget as Node)
         )
       )
-        focus();
+        focus()
     }
 
     function onKeydown(e: KeyboardEvent) {
-      const target = e.target as HTMLElement;
+      const target = e.target as HTMLElement
 
-      if (!contentRef.value || ["INPUT", "TEXTAREA"].includes(target.tagName))
-        return;
+      if (!contentRef.value || ['INPUT', 'TEXTAREA'].includes(target.tagName))
+        return
 
-      if (e.key === "ArrowDown") {
-        focus("next");
-      } else if (e.key === "ArrowUp") {
-        focus("prev");
-      } else if (e.key === "Home") {
-        focus("first");
-      } else if (e.key === "End") {
-        focus("last");
+      if (e.key === 'ArrowDown') {
+        focus('next')
+      } else if (e.key === 'ArrowUp') {
+        focus('prev')
+      } else if (e.key === 'Home') {
+        focus('first')
+      } else if (e.key === 'End') {
+        focus('last')
       } else {
-        return;
+        return
       }
 
-      e.preventDefault();
+      e.preventDefault()
     }
 
     function onMousedown(e: MouseEvent) {
-      isFocused.value = true;
+      isFocused.value = true
     }
 
-    function focus(location?: "next" | "prev" | "first" | "last") {
+    function focus(location?: 'next' | 'prev' | 'first' | 'last') {
       if (contentRef.value) {
-        return focusChild(contentRef.value, location);
+        return focusChild(contentRef.value, location)
       }
     }
 
@@ -295,9 +292,9 @@ export default defineComponent({
       children,
       parents,
       getPath,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>

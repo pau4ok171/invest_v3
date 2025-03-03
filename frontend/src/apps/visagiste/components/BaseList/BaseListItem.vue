@@ -1,86 +1,84 @@
 <script lang="ts">
 // Styles
-import "./BaseListItem.scss";
+import './BaseListItem.scss'
 
 // Components
-import BaseListItemSubtitle from "./BaseListItemSubtitle.vue";
-import BaseListItemTitle from "./BaseListItemTitle.vue";
-import BaseAvatar from "@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue";
-import BaseDefaultsProvider from "@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue";
-import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
+import BaseListItemSubtitle from './BaseListItemSubtitle.vue'
+import BaseListItemTitle from './BaseListItemTitle.vue'
+import BaseAvatar from '@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue'
+import BaseDefaultsProvider from '@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue'
+import { BaseIcon } from '@/apps/visagiste/components/BaseIcon'
 
 // Composables
-import { useList } from "./list";
-import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { useList } from './list'
+import { useBorder, useBorderProps } from '@/apps/visagiste/composables/border'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 import {
   useDensity,
   useDensityProps,
-} from "@/apps/visagiste/composables/density";
+} from '@/apps/visagiste/composables/density'
 import {
   useDimension,
   useDimensionProps,
-} from "@/apps/visagiste/composables/dimensions";
+} from '@/apps/visagiste/composables/dimensions'
 import {
   useElevation,
   useElevationProps,
-} from "@/apps/visagiste/composables/elevation";
-import { IconValue } from "@/apps/visagiste/composables/icons";
-import { useNestedItem } from "@/apps/visagiste/composables/nested/nested";
+} from '@/apps/visagiste/composables/elevation'
+import { IconValue } from '@/apps/visagiste/composables/icons'
+import { useNestedItem } from '@/apps/visagiste/composables/nested/nested'
 import {
   useRounded,
   useRoundedProps,
-} from "@/apps/visagiste/composables/rounded";
-import { useLink, useRouterProps } from "@/apps/visagiste/composables/router";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
-import {
-  provideTheme,
-  useThemeProps,
-} from "@/apps/visagiste/composables/theme";
+} from '@/apps/visagiste/composables/rounded'
+import { useLink, useRouterProps } from '@/apps/visagiste/composables/router'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
 import {
   genOverlays,
   useVariant,
   useVariantProps,
-} from "@/apps/visagiste/composables/variant";
+} from '@/apps/visagiste/composables/variant'
 
 // Directives
-import { Ripple } from "@/apps/visagiste/directives";
+import { Ripple } from '@/apps/visagiste/directives'
 
 // Utilities
-import { computed, onBeforeMount, watch } from "vue";
+import { computed, onBeforeMount, watch } from 'vue'
 import {
   defineComponent,
   EventProp,
   propsFactory,
-} from "@/apps/visagiste/utils";
+} from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType } from "vue";
-import type { RippleDirectiveBinding } from "@/directives/ripple";
+import type { PropType } from 'vue'
+import type { RippleDirectiveBinding } from '@/directives/ripple'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 export type ListItemSlot = {
-  isActive: boolean;
-  isOpen: boolean;
-  isSelected: boolean;
-  isIndeterminate: boolean;
-  select: (value: boolean) => void;
-};
+  isActive: boolean
+  isOpen: boolean
+  isSelected: boolean
+  isIndeterminate: boolean
+  select: (value: boolean) => void
+}
 
 export type ListItemTitleSlot = {
-  title?: string | number;
-};
+  title?: string | number
+}
 
 export type ListItemSubtitleSlot = {
-  subtitle?: string | number;
-};
+  subtitle?: string | number
+}
 
 export type BaseListItemSlots = {
-  prepend: ListItemSlot;
-  append: ListItemSlot;
-  default: ListItemSlot;
-  title: ListItemTitleSlot;
-  subtitle: ListItemSubtitleSlot;
-};
+  prepend: ListItemSlot
+  append: ListItemSlot
+  default: ListItemSlot
+  title: ListItemTitleSlot
+  subtitle: ListItemSubtitleSlot
+}
 
 export const useBaseListItemProps = propsFactory(
   {
@@ -93,7 +91,7 @@ export const useBaseListItemProps = propsFactory(
     appendIcon: IconValue,
     baseColor: String,
     disabled: Boolean,
-    lines: [Boolean, String] as PropType<"one" | "two" | "three" | false>,
+    lines: [Boolean, String] as PropType<'one' | 'two' | 'three' | false>,
     link: {
       type: Boolean,
       default: undefined,
@@ -102,7 +100,7 @@ export const useBaseListItemProps = propsFactory(
     prependAvatar: String,
     prependIcon: IconValue,
     ripple: {
-      type: [Boolean, Object] as PropType<RippleDirectiveBinding["value"]>,
+      type: [Boolean, Object] as PropType<RippleDirectiveBinding['value']>,
       default: true,
     },
     slim: Boolean,
@@ -122,13 +120,13 @@ export const useBaseListItemProps = propsFactory(
     ...useRouterProps(),
     ...useTagProps(),
     ...useThemeProps(),
-    ...useVariantProps({ variant: "text" } as const),
+    ...useVariantProps({ variant: 'text' } as const),
   },
-  "BaseListItem",
-);
+  'BaseListItem'
+)
 
 export default defineComponent({
-  name: "BaseListItem",
+  name: 'BaseListItem',
   components: {
     BaseDefaultsProvider,
     BaseIcon,
@@ -146,11 +144,11 @@ export default defineComponent({
   emits: {
     click: (e: MouseEvent | KeyboardEvent) => true,
   },
-  setup(props, { attrs, slots, emit }) {
-    const link = useLink(props, attrs);
+  setup(props, { attrs, emit }) {
+    const link = useLink(props, attrs)
     const id = computed(() =>
       props.value === undefined ? link.href.value : props.value
-    );
+    )
     const {
       activate,
       isActivated,
@@ -163,34 +161,34 @@ export default defineComponent({
       parent,
       openOnSelect,
       id: uid,
-    } = useNestedItem(id, false);
-    const list = useList();
+    } = useNestedItem(id, false)
+    const list = useList()
     const isActive = computed(
       () =>
         props.active !== false &&
         (props.active ||
           link.isActive?.value ||
-          (root.activatable.value ? isActivated.value : isSelected.value)),
-    );
-    const isLink = computed(() => props.link !== false && link.isLink.value);
+          (root.activatable.value ? isActivated.value : isSelected.value))
+    )
+    const isLink = computed(() => props.link !== false && link.isLink.value)
     const isSelectable = computed(
       () =>
         !!list &&
-        (root.selectable.value ||
-          root.activatable.value ||
-          props.value != null),
-    );
+        (root.selectable.value || root.activatable.value || props.value != null)
+    )
     const isClickable = computed(
       () =>
         !props.disabled &&
         props.link !== false &&
-        (props.link || link.isClickable.value || isSelectable.value),
-    );
+        (props.link || link.isClickable.value || isSelectable.value)
+    )
 
-    const roundedProps = computed(() => props.rounded || props.nav);
-    const color = computed(() => props.color);
+    const roundedProps = computed(() => props.rounded || props.nav)
+    const color = computed(() => props.color)
     const variantProps = computed(() => ({
-      color: isActive.value ? color.value ?? props.baseColor : props.baseColor,
+      color: isActive.value
+        ? (color.value ?? props.baseColor)
+        : props.baseColor,
       variant: props.variant,
     }))
 
@@ -199,82 +197,95 @@ export default defineComponent({
     watch(
       () => link.isActive?.value,
       (val) => {
-        if (!val) return;
-        handleActiveLink();
-      },
-    );
+        if (!val) return
+        handleActiveLink()
+      }
+    )
     onBeforeMount(() => {
-      if (link.isActive?.value) handleActiveLink();
-    });
+      if (link.isActive?.value) handleActiveLink()
+    })
     function handleActiveLink() {
       if (parent.value != null) {
-        root.open(parent.value, true);
+        root.open(parent.value, true)
       }
-      openOnSelect(true);
+      openOnSelect(true)
     }
 
-    const { themeClasses } = provideTheme(props);
-    const { borderClasses } = useBorder(props);
-    const { colorClasses, colorStyles, variantClasses } = useVariant(variantProps)
-    const { densityClasses } = useDensity(props);
-    const { dimensionStyles } = useDimension(props);
-    const { elevationClasses } = useElevation(props);
-    const { roundedClasses } = useRounded(roundedProps);
+    const { themeClasses } = provideTheme(props)
+    const { borderClasses } = useBorder(props)
+    const { colorClasses, colorStyles, variantClasses } =
+      useVariant(variantProps)
+    const { densityClasses } = useDensity(props)
+    const { dimensionStyles } = useDimension(props)
+    const { elevationClasses } = useElevation(props)
+    const { roundedClasses } = useRounded(roundedProps)
     const lineClasses = computed(() =>
-      props.lines ? `base-list-item--${props.lines}-line` : undefined,
-    );
+      props.lines ? `base-list-item--${props.lines}-line` : undefined
+    )
 
-    const slotProps = computed(() => ({
-      isActive: isActive.value,
-      select,
-      isOpen: isOpen.value,
-      isSelected: isSelected.value,
-      isIndeterminate: isIndeterminate.value,
-    } satisfies ListItemSlot));
+    const slotProps = computed(
+      () =>
+        ({
+          isActive: isActive.value,
+          select,
+          isOpen: isOpen.value,
+          isSelected: isSelected.value,
+          isIndeterminate: isIndeterminate.value,
+        }) satisfies ListItemSlot
+    )
 
     function onClick(e: MouseEvent) {
-      emit("click", e);
+      emit('click', e)
 
-      if (!isClickable.value) return;
+      if (!isClickable.value) return
 
-      link.navigate?.(e);
+      link.navigate?.(e)
 
-      if (isGroupActivator) return;
+      if (isGroupActivator) return
 
       if (root.activatable.value) {
-        activate(!isActivated.value, e);
+        activate(!isActivated.value, e)
       } else if (root.selectable.value) {
-        select(!isSelected.value, e);
+        select(!isSelected.value, e)
       } else if (props.value != null) {
-        select(!isSelected.value, e);
+        select(!isSelected.value, e)
       }
     }
 
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        e.target!.dispatchEvent(new MouseEvent("click", e));
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        e.target!.dispatchEvent(new MouseEvent('click', e))
       }
     }
 
-    const Tag = computed(() => (isLink.value ? "a" : props.tag));
-    const hasTitle = computed(() => !!(slots.title && slots.title?.().length) || props.title != null);
+    const prependIsEmpty = useSlotIsEmpty('prepend')
+    const appendIsEmpty = useSlotIsEmpty('append')
+    const titleIsEmpty = useSlotIsEmpty('title')
+    const subtitleIsEmpty = useSlotIsEmpty('subtitle')
+
+    const Tag = computed(() => (isLink.value ? 'a' : props.tag))
+    const hasTitle = computed(() => !titleIsEmpty.value || props.title != null)
     const hasSubtitle = computed(
-      () => !!(slots.subtitle && slots.subtitle?.().length) || props.subtitle != null,
-    );
+      () => !subtitleIsEmpty.value || props.subtitle != null
+    )
     const hasAppendMedia = computed(
-      () => !!(props.appendAvatar || props.appendIcon),
-    );
-    const hasAppend = computed(() => !!(hasAppendMedia.value || !!(slots.append && slots.append?.().length)));
+      () => !!(props.appendAvatar || props.appendIcon)
+    )
+    const hasAppend = computed(
+      () => hasAppendMedia.value || !appendIsEmpty.value
+    )
     const hasPrependMedia = computed(
-      () => !!(props.prependAvatar || props.prependIcon),
-    );
-    const hasPrepend = computed(() => !!(hasPrependMedia.value || (slots.prepend && slots.prepend?.().length)));
+      () => !!(props.prependAvatar || props.prependIcon)
+    )
+    const hasPrepend = computed(
+      () => hasPrependMedia.value || !prependIsEmpty.value
+    )
 
     watch(
       () => hasPrepend.value,
-      () => list?.updateHasPrepend(hasPrepend.value),
-    );
+      () => list?.updateHasPrepend(hasPrepend.value)
+    )
 
     return {
       uid,
@@ -307,9 +318,9 @@ export default defineComponent({
       dimensionStyles,
       onClick,
       onKeyDown,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>

@@ -7,7 +7,7 @@ import { h } from 'vue'
 import { defineComponent } from '@/apps/visagiste/utils'
 
 export default defineComponent({
-  name: 'BaseListItemTitle',
+  name: 'BaseListImage',
   props: {
     ...useComponentProps(),
   },
@@ -16,7 +16,7 @@ export default defineComponent({
       return h(
         'div',
         {
-          class: ['base-list-item-title', props.class],
+          class: ['base-list-image', props.class],
           style: props.style,
         },
         slots.default?.()

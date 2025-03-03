@@ -1,44 +1,44 @@
 <script lang="ts">
 // Components
-import BaseListGroup from "./BaseListGroup.vue";
-import BaseListItem from "./BaseListItem.vue";
-import BaseListItemSubheader from "./BaseListItemSubheader.vue";
-import BaseDivider from "../BaseDivider/BaseDivider.vue";
+import BaseListGroup from './BaseListGroup.vue'
+import BaseListItem from './BaseListItem.vue'
+import BaseListItemSubheader from './BaseListItemSubheader.vue'
+import BaseDivider from '../BaseDivider/BaseDivider.vue'
 
 // Utilities
-import { createList } from "./list";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { createList } from './list'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType } from "vue";
-import type { InternalListItem } from "./BaseList.vue";
-import type { BaseListItemSlots } from "./BaseListItem.vue";
+import type { PropType } from 'vue'
+import type { InternalListItem } from './BaseList.vue'
+import type { BaseListItemSlots } from './BaseListItem.vue'
 
 export type BaseListChildrenSlots<T> = {
-  [K in keyof Omit<BaseListItemSlots, "default">]: BaseListItemSlots[K] & {
-    item: T;
-  };
+  [K in keyof Omit<BaseListItemSlots, 'default'>]: BaseListItemSlots[K] & {
+    item: T
+  }
 } & {
-  default: never;
-  item: { props: InternalListItem["props"] };
-  divider: { props: InternalListItem["props"] };
-  subheader: { props: InternalListItem["props"] };
-  header: { props: InternalListItem["props"] };
-};
+  default: never
+  item: { props: InternalListItem['props'] }
+  divider: { props: InternalListItem['props'] }
+  subheader: { props: InternalListItem['props'] }
+  header: { props: InternalListItem['props'] }
+}
 
 export const useBaseListChildrenProps = propsFactory(
   {
     items: Array as PropType<readonly InternalListItem[]>,
     returnObject: Boolean,
   },
-  "BaseListChildren",
-);
+  'BaseListChildren'
+)
 
 export default defineComponent({
-  name: "BaseListChildren",
+  name: 'BaseListChildren',
   computed: {
     BaseListGroup() {
-      return BaseListGroup;
+      return BaseListGroup
     },
   },
   components: {
@@ -49,9 +49,9 @@ export default defineComponent({
   },
   props: useBaseListChildrenProps(),
   setup() {
-    createList();
+    createList()
   },
-});
+})
 </script>
 
 <template>
@@ -133,16 +133,16 @@ export default defineComponent({
             }"
           >
             <template #subtitle="slotProps">
-              <slot name="subtitle" v-bind="{ ...slotProps, item }"/>
+              <slot name="subtitle" v-bind="{ ...slotProps, item }" />
             </template>
             <template #prepend="slotProps">
-              <slot name="prepend" v-bind="{ ...slotProps, item }"/>
+              <slot name="prepend" v-bind="{ ...slotProps, item }" />
             </template>
             <template #append="slotProps">
-              <slot name="append" v-bind="{ ...slotProps, item }"/>
+              <slot name="append" v-bind="{ ...slotProps, item }" />
             </template>
             <template #title="slotProps">
-              <slot name="title" v-bind="{ ...slotProps, item }"/>
+              <slot name="title" v-bind="{ ...slotProps, item }" />
             </template>
           </BaseListItem>
         </slot>
