@@ -1,0 +1,1 @@
+export { default as BaseDefaultsProvider, useBaseDefaultsProviderProps } from './BaseDefaultsProvider.vue'

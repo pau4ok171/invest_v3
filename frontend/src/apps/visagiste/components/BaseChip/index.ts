@@ -1,0 +1,1 @@
+export { default as BaseChip, useBaseChipProps } from './BaseChip.vue'
