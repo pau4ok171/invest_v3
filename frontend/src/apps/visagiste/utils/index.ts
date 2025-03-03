@@ -14,6 +14,7 @@ export * from './isFixedPosition'
 export * from './helpers'
 export * from './injectSelf'
 export * from './propsFactory'
+export * from './events'
 
 
 
