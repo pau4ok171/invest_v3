@@ -293,7 +293,7 @@ export default defineComponent({
           }"
           :colspan="column.colspan"
           :rowspan="column.rowspan"
-          @click="column.sortable ? () => toggleSort(column) : undefined"
+          :onClick="column.sortable ? () => toggleSort(column) : undefined"
           :fixed="column.fixed"
           :nowrap="column.nowrap"
           :last-fixed="column.lastFixed"
