@@ -1,20 +1,20 @@
 <script lang="ts">
 // Styles
-import "./BaseVirtualScroll.scss";
+import './BaseVirtualScroll.scss'
 
 // Components
-import BaseVirtualScrollItem from "./BaseVirtualScrollItem.vue";
+import BaseVirtualScrollItem from './BaseVirtualScrollItem.vue'
 
 // Composables
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 import {
   useDimension,
   useDimensionProps,
-} from "@/apps/visagiste/composables/dimensions";
+} from '@/apps/visagiste/composables/dimensions'
 import {
   useVirtual,
   useVirtualProps,
-} from "@/apps/visagiste/composables/virtual";
+} from '@/apps/visagiste/composables/virtual'
 
 // Utilities
 import {
@@ -23,10 +23,10 @@ import {
   getCurrentInstance,
   getScrollParent,
   propsFactory,
-} from "@/apps/visagiste/utils";
-import type { PropType } from "vue";
-import { onMounted, onScopeDispose, toRef } from "vue";
-import { useToggleScope } from "@/apps/visagiste/composables/toggleScope";
+} from '@/apps/visagiste/utils'
+import type { PropType } from 'vue'
+import { onMounted, onScopeDispose, toRef } from 'vue'
+import { useToggleScope } from '@/apps/visagiste/composables/toggleScope'
 
 export const useBaseVirtualScrollProps = propsFactory(
   {
@@ -40,17 +40,17 @@ export const useBaseVirtualScrollProps = propsFactory(
     ...useComponentProps(),
     ...useDimensionProps(),
   },
-  "BaseVirtualScroll",
-);
+  'BaseVirtualScroll'
+)
 
 export default defineComponent({
-  name: "BaseVirtualScroll",
+  name: 'BaseVirtualScroll',
   methods: { convertToUnit },
   components: { BaseVirtualScrollItem },
   props: useBaseVirtualScrollProps(),
   setup(props) {
-    const vm = getCurrentInstance("BaseVirtualScroll");
-    const { dimensionStyles } = useDimension(props);
+    const vm = getCurrentInstance('BaseVirtualScroll')
+    const { dimensionStyles } = useDimension(props)
     const {
       calculateVisibleItems,
       containerRef,
@@ -62,30 +62,27 @@ export default defineComponent({
       paddingTop,
       paddingBottom,
       computedItems,
-    } = useVirtual(props, toRef(props, "items"));
+    } = useVirtual(props, toRef(props, 'items'))
 
     useToggleScope(
       () => props.renderless,
       () => {
         function handleListeners(add = false) {
-          const method = add ? "addEventListener" : "removeEventListener";
+          const method = add ? 'addEventListener' : 'removeEventListener'
 
           if (containerRef.value === document.documentElement) {
-            document[method]("scroll", handleScroll, { passive: true });
-            document[method]("scrollend", handleScrollend);
+            document[method]('scroll', handleScroll, { passive: true })
+            document[method]('scrollend', handleScrollend)
           }
         }
 
         onMounted(() => {
-          containerRef.value = getScrollParent(
-            vm.vnode.el as HTMLElement,
-            true,
-          );
-          handleListeners(true);
-        });
-        onScopeDispose(handleListeners);
-      },
-    );
+          containerRef.value = getScrollParent(vm.vnode.el as HTMLElement, true)
+          handleListeners(true)
+        })
+        onScopeDispose(handleListeners)
+      }
+    )
 
     return {
       containerRef,
@@ -97,9 +94,11 @@ export default defineComponent({
       dimensionStyles,
       handleScroll,
       handleScrollend,
-    };
+      scrollToIndex,
+      calculateVisibleItems,
+    }
   },
-});
+})
 </script>
 
 <template>
