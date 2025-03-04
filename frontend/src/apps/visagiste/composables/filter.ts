@@ -1,6 +1,10 @@
 // Utilities
 import { computed, shallowRef, unref, watchEffect } from 'vue'
-import {getPropertyFromItem, propsFactory, wrapInArray} from '@/apps/visagiste/utils'
+import {
+  getPropertyFromItem,
+  propsFactory,
+  wrapInArray,
+} from '@/apps/visagiste/utils'
 
 // Types
 import type { PropType, Ref } from 'vue'
@@ -31,7 +35,7 @@ export interface FilterProps {
   customKeyFilter?: FilterKeyFunctions
   filterKeys?: FilterKeys
   filterMode?: FilterMode
-  noFilter: boolean
+  noFilter?: boolean
 }
 
 export interface InternalItem<T = any> {
@@ -49,16 +53,19 @@ export const defaultFilter: FilterFunction = (value, query, item) => {
     .indexOf(query.toString().toLocaleLowerCase())
 }
 
-export const useFilterProps = propsFactory({
-  customFilter: Function as PropType<FilterFunction>,
-  customKeyFilter: Object as PropType<FilterKeyFunctions>,
-  filterKeys: [Array, String] as PropType<FilterKeys>,
-  filterMode: {
-    type: String as PropType<FilterMode>,
-    default: 'intersection',
+export const useFilterProps = propsFactory(
+  {
+    customFilter: Function as PropType<FilterFunction>,
+    customKeyFilter: Object as PropType<FilterKeyFunctions>,
+    filterKeys: [Array, String] as PropType<FilterKeys>,
+    filterMode: {
+      type: String as PropType<FilterMode>,
+      default: 'intersection',
+    },
+    noFilter: Boolean,
   },
-  noFilter: Boolean,
-}, 'filter')
+  'filter'
+)
 
 export function filterItems(
   items:
@@ -105,7 +112,7 @@ export function filterItems(
           if (match !== -1 && match !== false) {
             if (keyFilter) customMatches[key] = match
             else defaultMatches[key] = match
-          } else if (options?.filterMode !== 'every') {
+          } else if (options?.filterMode === 'every') {
             continue loop
           }
         }
@@ -123,7 +130,7 @@ export function filterItems(
 
       if (
         options?.filterMode === 'union' &&
-        customFiltersLength !== customFiltersLength &&
+        customMatchesLength !== customFiltersLength &&
         !defaultMatchesLength
       )
         continue
