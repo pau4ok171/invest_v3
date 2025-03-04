@@ -235,22 +235,9 @@ export default defineComponent({
               :items="flatItems"
               v-bind="{ ...$attrs, ...dataTableRowsProps }"
             >
-              <template #data-table-select
-                ><slot name="data-table-select"
-              /></template>
-              <template #data-table-group
-                ><slot name="data-table-group"
-              /></template>
-              <template #group-header><slot name="group-header" /></template>
-              <template #expanded-row><slot name="expanded-row" /></template>
-              <template #no-data><slot name="no-data" /></template>
-              <template #item><slot name="item" /></template>
-              <template #item.data-table-expand
-                ><slot name="item.data-table-expand"
-              /></template>
-              <template #item.data-table-select
-                ><slot name="item.data-table-select"
-              /></template>
+              <template v-for="(_, name) in ($slots as {})" #[name]="slotData">
+                <slot :name="name" v-bind="slotData || {}"/>
+              </template>
             </BaseDataTableRows>
           </slot>
 

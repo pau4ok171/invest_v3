@@ -1,6 +1,6 @@
 // Utilities
 import { computed } from 'vue'
-import {getPropertyFromItem, propsFactory} from '@/apps/visagiste/utils'
+import { getPropertyFromItem, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
 import type { PropType, Ref } from 'vue'
@@ -20,23 +20,26 @@ export interface DataTableItemProps {
 }
 
 // Composables
-export const useDataTableItemsProps = propsFactory({
-  items: {
-    type: Array as PropType<DataTableItemProps['items']>,
-    default: () => [],
+export const useDataTableItemsProps = propsFactory(
+  {
+    items: {
+      type: Array as PropType<DataTableItemProps['items']>,
+      default: () => ([]),
+    },
+    itemValue: {
+      type: [String, Array, Function] as PropType<SelectItemKey>,
+      default: 'id',
+    },
+    itemSelectable: {
+      type: [String, Array, Function] as PropType<SelectItemKey>,
+      default: null,
+    },
+    rowProps: [Object, Function] as PropType<RowProps<any>>,
+    cellProps: [Object, Function] as PropType<CellProps<any>>,
+    returnObject: Boolean,
   },
-  itemValue: {
-    type: [String, Array, Function] as PropType<SelectItemKey>,
-    default: 'id',
-  },
-  itemSelectable: {
-    type: [String, Array, Function] as PropType<SelectItemKey>,
-    default: null,
-  },
-  rowProps: [Object, Function] as PropType<RowProps<any>>,
-  cellProps: [Object, Function] as PropType<CellProps<any>>,
-  returnObject: Boolean,
-}, 'DataTable-items')
+  'DataTable-items'
+)
 
 export function transformItem(
   props: Omit<DataTableItemProps, 'items'>,

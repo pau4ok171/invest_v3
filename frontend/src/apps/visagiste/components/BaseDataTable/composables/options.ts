@@ -6,7 +6,6 @@ import { deepEqual, getCurrentInstance } from '@/apps/visagiste/utils'
 import type { Ref } from 'vue'
 import type { SortItem } from './sort'
 
-
 export function useOptions({
   page,
   itemsPerPage,

@@ -177,7 +177,7 @@ export default defineComponent({
       },
     })
 
-    const slotProps = computed<BaseDataTableVirtualSlotProps<any>>(() => ({
+    const slotProps = computed(() => ({
       sortBy: sortBy.value,
       toggleSort,
       someSelected: someSelected.value,
@@ -269,52 +269,45 @@ export default defineComponent({
             <slot name="body.prepend" v-bind="slotProps" />
 
             <BaseDataTableRows
-              :items="displayItems"
               v-bind="{ ...$attrs, ...dataTableRowsProps }"
+              :items="displayItems"
             >
-              <template #data-table-select
-                ><slot name="data-table-select"
-              /></template>
-              <template #data-table-group
-                ><slot name="data-table-group"
-              /></template>
-              <template #group-header><slot name="group-header" /></template>
-              <template #expanded-row><slot name="expanded-row" /></template>
-              <template #no-data><slot name="no-data" /></template>
-              <template #item.data-table-expand
-                ><slot name="item.data-table-expand"
-              /></template>
-              <template #item.data-table-select
-                ><slot name="item.data-table-select"
-              /></template>
-
               <template #item="itemSlotProps">
                 <BaseVirtualScrollItem
                   :key="itemSlotProps.internalItem.index"
                   renderless
                   @update:height="
                     (height) =>
-                      handleItemResize(itemSlotProps.internalItem.index, height)
+                      handleItemResize(
+                        itemSlotProps.internalItem.index,
+                        height
+                      )
                   "
                 >
-                  <template #default="itemRef">
+                  <template #default="{ itemRef }">
                     <slot name="item" v-bind="{ ...itemSlotProps, itemRef }">
                       <BaseDataTableRow
+                        v-bind="itemSlotProps.props"
                         ref="itemRef"
                         :key="itemSlotProps.internalItem.index"
                         :index="itemSlotProps.internalItem.index"
                       >
-                        <template #item.data-table-select
-                          ><slot name="item.data-table-select"
-                        /></template>
-                        <template #item.data-table-expand
-                          ><slot name="item.data-table-expand"
-                        /></template>
+                        <template
+                          v-for="(_, name) in $slots"
+                          #[name]="vSlotProps"
+                        >
+                          <slot :name="name" v-bind="vSlotProps || {}" />
+                        </template>
                       </BaseDataTableRow>
                     </slot>
                   </template>
                 </BaseVirtualScrollItem>
               </template>
+
+              <template v-for="(_, name) in ($slots as {})" #[name]="slotData">
+                <slot :name="name" v-bind="slotData || {}"/>
+              </template>
+
             </BaseDataTableRows>
 
             <slot name="body.append" v-bind="slotProps" />

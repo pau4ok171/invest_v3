@@ -325,10 +325,9 @@ export default defineComponent({
               v-bind="{ ...$attrs, ...dataTableRowsProps }"
               :items="paginatedItems"
             >
-              <template #item><slot name="item" /></template>
-              <template #no-data><slot name="no-data" /></template>
-              <template #expanded-row><slot name="expanded-row" /></template>
-              <template #group-header><slot name="group-header" /></template>
+              <template v-for="(_, name) in ($slots as {})" #[name]="slotData">
+                <slot :name="name" v-bind="slotData || {}"/>
+              </template>
             </BaseDataTableRows>
           </slot>
 

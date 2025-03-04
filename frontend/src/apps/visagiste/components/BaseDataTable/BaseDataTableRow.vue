@@ -21,7 +21,7 @@ import {
 } from '@/apps/visagiste/utils'
 
 // Types
-import type { CellProps, DataTableItem, ItemKeySlot } from './types'
+import type {CellProps, DataTableItem, InternalDataTableHeader, ItemKeySlot} from './types'
 import type { BaseDataTableHeaderCellColumnSlotProps } from './BaseDataTableHeaders.vue'
 import type { PropType } from 'vue'
 
@@ -62,6 +62,54 @@ export default defineComponent({
     const { toggleSort, sortBy, isSorted } = useSort()
     const { columns } = useHeaders()
 
+    const slotProps = (column: InternalDataTableHeader) => ({
+        index: props.index!,
+        item: props.item!.raw,
+        internalItem: props.item!,
+        value: getObjectValueByPath(props.item!.columns, column.key),
+        column,
+        isSelected,
+        toggleSelect,
+        isExpanded,
+        toggleExpand,
+    } satisfies ItemKeySlot<any>)
+
+    const columnSlotProps = (column: InternalDataTableHeader): BaseDataTableHeaderCellColumnSlotProps => ({
+      column,
+      selectAll,
+      isSorted,
+      toggleSort,
+      sortBy: sortBy.value,
+      someSelected: someSelected.value,
+      allSelected: allSelected.value,
+      getSortIcon: () => '',
+    })
+
+    const cellProps = (column: InternalDataTableHeader) => {
+      if (typeof props.cellProps === 'function') {
+        return props.cellProps({
+          index: slotProps(column).index,
+          item: slotProps(column).item,
+          internalItem: slotProps(column).internalItem,
+          value: slotProps(column).value,
+          column,
+        })
+      }
+      return props.cellProps
+    }
+
+    const columnCellProps = (column: InternalDataTableHeader) => {
+      if (typeof column.cellProps === 'function') {
+        return column.cellProps({
+          index: slotProps(column).index,
+          item: slotProps(column).item,
+          internalItem: slotProps(column).internalItem,
+          value: slotProps(column).value,
+        })
+      }
+      return column.cellProps
+    }
+
     return {
       columns,
       mobile,
@@ -76,6 +124,10 @@ export default defineComponent({
       toggleSort,
       sortBy,
       isSorted,
+      slotProps,
+      columnSlotProps,
+      cellProps,
+      columnCellProps,
     }
   },
 })
@@ -100,7 +152,7 @@ export default defineComponent({
   >
     <template v-if="$props.item">
       <BaseDataTableColumn
-        v-for="(column, i) in columns"
+        v-for="column in columns"
         :align="column.align"
         :class="{
           'base-data-table__td--expanded-row':
@@ -117,57 +169,19 @@ export default defineComponent({
         "
         :nowrap="column.nowrap"
         :width="!mobile ? column.width : undefined"
-        v-bind="{
-          ...(typeof $props.cellProps === 'function'
-            ? $props.cellProps({
-                index: $props.index,
-                item: $props.item.raw,
-                internalItem: $props.item,
-                value: getObjectValueByPath($props.item.columns, column.key),
-                column,
-              })
-            : $props.cellProps),
-          ...(typeof column.cellProps === 'function'
-            ? column.cellProps({
-                index: $props.index,
-                item: $props.item.raw,
-                internalItem: $props.item,
-                value: getObjectValueByPath($props.item.columns, column.key),
-              })
-            : column.cellProps),
-        }"
+        v-bind="{...cellProps(column), ...columnCellProps(column)}"
       >
         <template v-if="$slots[`item.${column.key}`] && !mobile">
           <slot
             :name="`item.${column.key}`"
-            v-bind="{
-              index: $props.index!,
-              item: $props.item.raw,
-              internalItem: $props.item,
-              value: getObjectValueByPath($props.item.columns, column.key),
-              column,
-              isSelected,
-              toggleSelect,
-              isExpanded,
-              toggleExpand,
-            }"
+            v-bind="slotProps(column)"
           />
         </template>
 
         <template v-else-if="column.key === 'data-table-select'">
           <slot
             name="item.data-table-select"
-            v-bind="{
-              index: $props.index!,
-              item: $props.item.raw,
-              internalItem: $props.item,
-              value: getObjectValueByPath($props.item.columns, column.key),
-              column,
-              isSelected,
-              toggleSelect,
-              isExpanded,
-              toggleExpand,
-            }"
+            v-bind="slotProps(column)"
           >
             <BaseCheckboxButton
               :disabled="!$props.item.selectable"
@@ -180,17 +194,7 @@ export default defineComponent({
         <template v-else-if="column.key === 'data-table-expand'">
           <slot
             name="item.data-table-expand"
-            v-bind="{
-              index: $props.index!,
-              item: $props.item.raw,
-              internalItem: $props.item,
-              value: getObjectValueByPath($props.item.columns, column.key),
-              column,
-              isSelected,
-              toggleSelect,
-              isExpanded,
-              toggleExpand,
-            }"
+            v-bind="slotProps(column)"
           >
             <BaseButton
               :icon="isExpanded($props.item) ? '$collapse' : '$expand'"
@@ -201,24 +205,15 @@ export default defineComponent({
           </slot>
         </template>
 
-        <template v-else-if="!mobile">{{
-          toDisplayString(getObjectValueByPath($props.item.columns, column.key))
-        }}</template>
+        <template v-else-if="!mobile">
+          {{toDisplayString(slotProps(column).value)}}
+        </template>
 
         <template v-else>
           <div class="base-data-table__td-title">
             <slot
               :name="`header.${column.key}`"
-              v-bind="{
-                column,
-                selectAll,
-                isSorted,
-                toggleSort,
-                sortBy,
-                someSelected,
-                allSelected,
-                getSortIcon: () => '',
-              }"
+              v-bind="columnSlotProps(column)"
             >
               {{ column.title }}
             </slot>
@@ -226,23 +221,9 @@ export default defineComponent({
           <div class="base-data-table__td-value">
             <slot
               :name="`item.${column.key}`"
-              v-bind="{
-                index: $props.index!,
-                item: $props.item.raw,
-                internalItem: $props.item,
-                value: getObjectValueByPath($props.item.columns, column.key),
-                column,
-                isSelected,
-                toggleSelect,
-                isExpanded,
-                toggleExpand,
-              }"
+              v-bind="slotProps(column)"
             >
-              {{
-                toDisplayString(
-                  getObjectValueByPath($props.item.columns, column.key)
-                )
-              }}
+              {{toDisplayString(slotProps(column).value)}}
             </slot>
           </div>
         </template>

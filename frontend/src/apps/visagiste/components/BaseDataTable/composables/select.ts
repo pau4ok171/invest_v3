@@ -3,7 +3,7 @@ import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 
 // Utilities
 import { computed, inject, provide } from 'vue'
-import {deepEqual, propsFactory, wrapInArray} from '@/apps/visagiste/utils'
+import { deepEqual, propsFactory, wrapInArray } from '@/apps/visagiste/utils'
 
 // Types
 import type { InjectionKey, PropType, Ref } from 'vue'
@@ -38,7 +38,7 @@ type SelectionProps = Pick<DataTableItemProps, 'itemValue'> & {
   modelValue: readonly any[]
   selectStrategy: 'single' | 'page' | 'all'
   valueComparator: typeof deepEqual
-  'onUpdate:modelValue': EventProp<any[]> | undefined
+  'onUpdate:modelValue': EventProp<[any[]]> | undefined
 }
 
 const singleSelectStrategy: DataTableSelectStrategy = {
@@ -52,7 +52,7 @@ const singleSelectStrategy: DataTableSelectStrategy = {
 
 const pageSelectStrategy: DataTableSelectStrategy = {
   showSelectAll: true,
-  allSelected: ({ allItems }) => allItems,
+  allSelected: ({ currentPage }) => currentPage,
   select: ({ items, value, selected }) => {
     for (const item of items) {
       if (value) selected.add(item.value)
@@ -80,21 +80,24 @@ const allSelectStrategy: DataTableSelectStrategy = {
     allSelectStrategy.select({ items: allItems, value, selected }),
 }
 
-export const useDataTableSelectProps = propsFactory({
-  showSelect: Boolean,
-  selectStrategy: {
-    type: [String, Object] as PropType<'single' | 'page' | 'all'>,
-    default: 'page',
+export const useDataTableSelectProps = propsFactory(
+  {
+    showSelect: Boolean,
+    selectStrategy: {
+      type: [String, Object] as PropType<'single' | 'page' | 'all'>,
+      default: 'page',
+    },
+    modelValue: {
+      type: Array as PropType<readonly any[]>,
+      default: () => [],
+    },
+    valueComparator: {
+      type: Function as PropType<typeof deepEqual>,
+      default: deepEqual,
+    },
   },
-  modelValue: {
-    type: Array as PropType<readonly any[]>,
-    default: () => ([]),
-  },
-  valueComparator: {
-    type: Function as PropType<typeof deepEqual>,
-    default: deepEqual,
-  },
-}, 'DataTable-select')
+  'DataTable-select'
+)
 
 export const BaseDataTableSelectionSymbol: InjectionKey<
   ReturnType<typeof provideSelection>
@@ -113,7 +116,7 @@ export function provideSelection(
     props.modelValue,
     (v) => {
       return new Set(
-        wrapInArray(v).map((v: any) => {
+        wrapInArray(v).map((v) => {
           return (
             allItems.value.find((item) => props.valueComparator(v, item.value))
               ?.value ?? v

@@ -3,7 +3,7 @@ import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 
 // Utilities
 import { computed, provide, inject, ref } from 'vue'
-import {getObjectValueByPath, propsFactory} from '@/apps/visagiste/utils'
+import { getObjectValueByPath, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
 import type { InjectionKey, Ref, PropType } from 'vue'
@@ -24,12 +24,15 @@ export interface Group<T = any> {
   items: readonly (T | Group<T>)[]
 }
 
-export const useDataTableGroupProps = propsFactory({
-  groupBy: {
-    type: Array as PropType<readonly SortItem[]>,
-    default: () => ([]),
+export const useDataTableGroupProps = propsFactory(
+  {
+    groupBy: {
+      type: Array as PropType<readonly SortItem[]>,
+      default: () => [],
+    },
   },
-}, 'DataTable-group')
+  'DataTable-group'
+)
 
 const BaseDataTableGroupSymbol: InjectionKey<{
   opened: Ref<Set<string>>
@@ -44,7 +47,7 @@ const BaseDataTableGroupSymbol: InjectionKey<{
 
 type GroupProps = {
   groupBy: readonly SortItem[]
-  'onUpdate:groupBy': ((value: SortItem[]) => void ) | undefined
+  'onUpdate:groupBy': ((value: SortItem[]) => void) | undefined
 }
 
 export function createGroupBy(props: GroupProps) {
@@ -62,10 +65,12 @@ export function provideGroupBy(options: {
   const opened = ref(new Set<string>())
 
   const sortByWithGroups = computed(() => {
-    return groupBy.value.map<SortItem>((value) => ({
-        ...value,
-        order: value.order ?? false,
-      })).concat(disableSort?.value ? [] : sortBy.value)
+    return groupBy.value
+      .map<SortItem>((val) => ({
+        ...val,
+        order: val.order ?? false,
+      }))
+      .concat(disableSort?.value ? [] : sortBy.value)
   })
 
   function isGroupOpen(group: Group) {
@@ -105,6 +110,12 @@ export function provideGroupBy(options: {
       depth: 0,
     })
   }
+
+  // onBeforeMount(() => {
+  //   for (const key of groupedItems.value.keys()) {
+  //     opened.value.add(key)
+  //   }
+  // })
 
   const data = {
     sortByWithGroups,

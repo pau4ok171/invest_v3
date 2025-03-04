@@ -58,9 +58,9 @@ export type GroupHeaderSlot = {
   item: Group
   columns: InternalDataTableHeader[]
   isExpanded: ReturnType<typeof provideExpanded>['isExpanded']
-  toggleExpanded: ReturnType<typeof provideExpanded>['toggleExpand']
+  toggleExpand: ReturnType<typeof provideExpanded>['toggleExpand']
   isSelected: ReturnType<typeof provideSelection>['isSelected']
-  toggleSelected: ReturnType<typeof provideSelection>['toggleSelect']
+  toggleSelect: ReturnType<typeof provideSelection>['toggleSelect']
   toggleGroup: ReturnType<typeof provideGroupBy>['toggleGroup']
   isGroupOpen: ReturnType<typeof provideGroupBy>['isGroupOpen']
 }
@@ -70,9 +70,9 @@ type ItemSlotBase<T> = {
   item: T
   internalItem: DataTableItem<T>
   isExpanded: ReturnType<typeof provideExpanded>['isExpanded']
-  toggleExpanded: ReturnType<typeof provideExpanded>['toggleExpand']
+  toggleExpand: ReturnType<typeof provideExpanded>['toggleExpand']
   isSelected: ReturnType<typeof provideSelection>['isSelected']
-  toggleSelected: ReturnType<typeof provideSelection>['toggleSelect']
+  toggleSelect: ReturnType<typeof provideSelection>['toggleSelect']
 }
 
 export type ItemSlot<T> = ItemSlotBase<T> & {

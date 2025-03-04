@@ -1,6 +1,6 @@
 // Utilities
 import { capitalize, inject, provide, ref, watchEffect } from 'vue'
-import {consoleError, propsFactory} from '@/apps/visagiste/utils'
+import { consoleError, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
 import type { DeepReadonly, InjectionKey, PropType, Ref } from 'vue'
@@ -12,9 +12,12 @@ import type {
 } from '../types'
 import type { SortItem } from './sort'
 
-export const useDataTableHeaderProps = propsFactory({
-  headers: Array as PropType<DeepReadonly<DataTableHeader[]>>,
-}, 'DataTable-header')
+export const useDataTableHeaderProps = propsFactory(
+  {
+    headers: Array as PropType<DeepReadonly<DataTableHeader[]>>,
+  },
+  'DataTable-header'
+)
 
 export const BaseDataTableHeadersSymbol: InjectionKey<{
   headers: Ref<InternalDataTableHeader[][]>
@@ -322,6 +325,7 @@ export function createHeaders(
 
   return data
 }
+
 export function useHeaders() {
   const data = inject(BaseDataTableHeadersSymbol)
 
