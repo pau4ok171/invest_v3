@@ -149,7 +149,7 @@ export default defineComponent({
     const { t } = useLocale()
     const baseTextFieldRef = ref()
     const isFocused = shallowRef(false)
-    const isPristine = shallowRef(false)
+    const isPristine = shallowRef(true)
     const listHasFocus = shallowRef(false)
     const baseMenuRef = ref<InstanceType<typeof BaseMenu>>()
     const baseVirtualScrollRef = ref<InstanceType<typeof BaseVirtualScroll>>()
@@ -263,7 +263,7 @@ export default defineComponent({
     function onKeydown(e: KeyboardEvent) {
       if (form.isReadonly.value) return
 
-      const selectionStart = baseTextFieldRef.value.selectionStart
+      const selectionStart = baseTextFieldRef.value.inputRef.selectionStart
       const length = model.value.length
 
       if (['Enter', 'ArrowDown', 'ArrowUp'].includes(e.key)) {
@@ -327,7 +327,7 @@ export default defineComponent({
           selectionIndex.value = prev
         } else {
           selectionIndex.value = -1
-          baseTextFieldRef.value.setSelectionRange(
+          baseTextFieldRef.value.inputRef.setSelectionRange(
             search.value?.length,
             search.value?.length
           )
@@ -341,7 +341,7 @@ export default defineComponent({
           selectionIndex.value = next
         } else {
           selectionIndex.value = -1
-          baseTextFieldRef.value.setSelectionRange(0, 0)
+          baseTextFieldRef.value.inputRef.setSelectionRange(0, 0)
         }
       } else if (~selectionIndex.value && checkPrintable(e)) {
         selectionIndex.value = -1
