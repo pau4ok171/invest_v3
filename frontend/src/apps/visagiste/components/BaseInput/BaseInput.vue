@@ -194,6 +194,11 @@ export default defineComponent({
       hasMessages,
       hasDetails,
       slotProps,
+      reset,
+      resetValidation,
+      validate,
+      isValid,
+      errorMessages,
     };
   },
 });
