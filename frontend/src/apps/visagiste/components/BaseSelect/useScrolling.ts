@@ -1,15 +1,20 @@
+// Components
+import BaseList from '@/apps/visagiste/components/BaseList/BaseList.vue'
+import BaseTextField from '@/apps/visagiste/components/BaseTextField/BaseTextField.vue'
+
 // Utilities
 import { shallowRef, watch } from 'vue'
 
 // Types
 import type { Ref } from 'vue'
-import BaseList from "@/apps/visagiste/components/BaseList/BaseList.vue";
-import BaseTextField from "@/apps/visagiste/components/BaseTextField/BaseTextField.vue";
 
-export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFieldRef: Ref<typeof BaseTextField | undefined>) {
+export function useScrolling(
+  listRef: Ref<InstanceType<typeof BaseList> | undefined>,
+  textFieldRef: Ref<InstanceType<typeof BaseTextField> | undefined>
+) {
   const isScrolling = shallowRef(false)
   let scrollTimeout: number
-  function onListScroll (e: Event) {
+  function onListScroll(e: Event) {
     cancelAnimationFrame(scrollTimeout)
     isScrolling.value = true
     scrollTimeout = requestAnimationFrame(() => {
@@ -18,11 +23,11 @@ export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFie
       })
     })
   }
-  async function finishScrolling () {
-    await new Promise(resolve => requestAnimationFrame(resolve))
-    await new Promise(resolve => requestAnimationFrame(resolve))
-    await new Promise(resolve => requestAnimationFrame(resolve))
-    await new Promise<void>(resolve => {
+  async function finishScrolling() {
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    await new Promise((resolve) => requestAnimationFrame(resolve))
+    await new Promise<void>((resolve) => {
       if (isScrolling.value) {
         const stop = watch(isScrolling, () => {
           stop()
@@ -31,7 +36,7 @@ export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFie
       } else resolve()
     })
   }
-  async function onListKeydown (e: KeyboardEvent) {
+  async function onListKeydown(e: KeyboardEvent) {
     if (e.key === 'Tab') {
       textFieldRef.value?.focus()
     }
@@ -42,20 +47,22 @@ export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFie
 
     if (e.key === 'Home' || e.key === 'End') {
       el.scrollTo({
-        top: e.key === 'Home' ? 0: el.scrollHeight,
+        top: e.key === 'Home' ? 0 : el.scrollHeight,
         behavior: 'smooth',
       })
     }
 
     await finishScrolling()
 
-    const children = el.querySelectorAll(':scope > :not(.base-virtual-scroll__spacer)')
+    const children = el.querySelectorAll(
+      ':scope > :not(.base-virtual-scroll__spacer)'
+    )
 
     if (e.key === 'PageDown' || e.key === 'Home') {
       const top = el.getBoundingClientRect().top
       for (const child of children) {
         if (child.getBoundingClientRect().top >= top) {
-          (child as HTMLElement).focus()
+          ;(child as HTMLElement).focus()
           break
         }
       }
@@ -63,7 +70,7 @@ export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFie
       const bottom = el.getBoundingClientRect().bottom
       for (const child of [...children].reverse()) {
         if (child.getBoundingClientRect().bottom <= bottom) {
-          (child as HTMLElement).focus()
+          ;(child as HTMLElement).focus()
           break
         }
       }
@@ -73,5 +80,5 @@ export function useScrolling (listRef: Ref<typeof BaseList | undefined>, textFie
   return {
     onScrollPassive: onListScroll,
     onKeydown: onListKeydown,
-  } as Record<string, Function>
+  } as Record<string, Function> // typescript doesn't know about vue's event merging
 }
