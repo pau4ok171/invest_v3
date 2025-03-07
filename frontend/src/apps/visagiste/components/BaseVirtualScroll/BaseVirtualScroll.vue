@@ -73,6 +73,9 @@ export default defineComponent({
           if (containerRef.value === document.documentElement) {
             document[method]('scroll', handleScroll, { passive: true })
             document[method]('scrollend', handleScrollend)
+          } else {
+            containerRef.value?.[method]('scroll', handleScroll, { passive: true })
+            containerRef.value?.[method]('scrollend', handleScrollend)
           }
         }
 
@@ -121,7 +124,6 @@ export default defineComponent({
     </BaseVirtualScrollItem>
 
     <div
-      ref="markerRef"
       class="base-virtual-scroll__spacer"
       :style="{ paddingTop: convertToUnit(paddingBottom) }"
     />
