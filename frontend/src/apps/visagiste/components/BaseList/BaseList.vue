@@ -299,8 +299,8 @@ export default defineComponent({
 
 <template>
   <component
-    :is="$props.tag"
-    :ref="contentRef"
+    :is="$props.tag as string"
+    ref="contentRef"
     :class="[
       'base-list',
       {
@@ -321,11 +321,11 @@ export default defineComponent({
     :tabindex="$props.disabled || isFocused ? -1 : 0"
     role="listbox"
     :aria-activedescendant="undefined"
-    @focusin="onFocusin"
-    @focusout="onFocusout"
-    @focus="onFocus"
-    @keydown="onKeydown"
-    @mousedown="onMousedown"
+    :onFocusin="onFocusin"
+    :onFocusout="onFocusout"
+    :onFocus="onFocus"
+    :onKeydown="onKeydown"
+    :onMousedown="onMousedown"
   >
     <BaseListChildren :items :returnObject="$props.returnObject">
       <template #default>

@@ -358,8 +358,8 @@ export default defineComponent({
             : isActive
         : undefined
     "
-    @click="onClick"
-    @keydown="isClickable && !isLink && onKeyDown"
+    :onClick="onClick"
+    :onKeydown="isClickable && !isLink && onKeyDown"
     v-ripple="isClickable && $props.ripple"
     v-bind="{ ...link.linkProps }"
   >
