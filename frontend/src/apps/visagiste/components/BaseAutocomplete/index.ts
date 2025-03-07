@@ -1,0 +1,1 @@
+export { default as BaseAutocomplete, useBaseAutocompleteProps } from './BaseAutocomplete.vue'
