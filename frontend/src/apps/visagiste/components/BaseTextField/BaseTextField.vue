@@ -1,49 +1,49 @@
 <script lang="ts">
 // Styles
-import "./BaseTextField.scss";
+import './BaseTextField.scss'
 
 // Components
 import {
   BaseField,
   useBaseFieldProps,
-} from "@/apps/visagiste/components/BaseField";
+} from '@/apps/visagiste/components/BaseField'
 import BaseInput, {
   useBaseInputProps,
-} from "@/apps/visagiste/components/BaseInput/BaseInput.vue";
-import BaseCounter from "@/apps/visagiste/components/BaseCounter/BaseCounter.vue";
+} from '@/apps/visagiste/components/BaseInput/BaseInput.vue'
+import BaseCounter from '@/apps/visagiste/components/BaseCounter/BaseCounter.vue'
 
 // Composables
-import type { BaseCounterSlot } from "@/apps/visagiste/components/BaseCounter/BaseCounter.vue";
-import type { BaseInputSlots } from "@/apps/visagiste/components/BaseInput/BaseInput.vue";
-import type { BaseFieldSlots } from "@/apps/visagiste/components/BaseField/BaseField.vue";
-import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
-import { useFocus } from "@/apps/visagiste/composables/focus";
+import type { BaseCounterSlot } from '@/apps/visagiste/components/BaseCounter/BaseCounter.vue'
+import type { BaseInputSlots } from '@/apps/visagiste/components/BaseInput/BaseInput.vue'
+import type { BaseFieldSlots } from '@/apps/visagiste/components/BaseField/BaseField.vue'
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
+import { useFocus } from '@/apps/visagiste/composables/focus'
 
 // Directives
-import Intersect from "@/apps/visagiste/directives/intersect";
+import Intersect from '@/apps/visagiste/directives/intersect'
 
 // Utilities
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick, ref } from 'vue'
 import {
   callEvent,
   defineComponent,
   filterInputAttrs,
   propsFactory,
-} from "@/apps/visagiste/utils";
+} from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType, SlotsType } from "vue";
-import { useSlotIsEmpty } from "@/apps/visagiste/composables/slotIsEmpty";
+import type { PropType, SlotsType } from 'vue'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 const activeTypes = [
-  "color",
-  "file",
-  "time",
-  "date",
-  "datetime-local",
-  "week",
-  "month",
-];
+  'color',
+  'file',
+  'time',
+  'date',
+  'datetime-local',
+  'week',
+  'month',
+]
 
 export const useBaseTextFieldProps = propsFactory(
   {
@@ -60,26 +60,26 @@ export const useBaseTextFieldProps = propsFactory(
     role: String,
     type: {
       type: String,
-      default: "text",
+      default: 'text',
     },
     modelModifiers: Object as PropType<Record<string, boolean>>,
 
     ...useBaseInputProps(),
     ...useBaseFieldProps(),
   },
-  "BaseTextField",
-);
+  'BaseTextField'
+)
 
 export type BaseTextFieldSlots = Omit<
   BaseInputSlots & BaseFieldSlots,
-  "default"
+  'default'
 > & {
-  default: never;
-  counter: BaseCounterSlot;
-};
+  default: never
+  counter: BaseCounterSlot
+}
 
 export default defineComponent({
-  name: "BaseTextField",
+  name: 'BaseTextField',
   components: { BaseCounter, BaseField, BaseInput },
   directives: {
     Intersect,
@@ -88,119 +88,118 @@ export default defineComponent({
   props: useBaseTextFieldProps(),
   slots: Object as SlotsType<BaseTextFieldSlots>,
   emits: {
-    "click:control": (e: MouseEvent) => true,
-    "mousedown:control": (e: MouseEvent) => true,
-    "update:focused": (focused: boolean) => true,
-    "update:modelValue": (val: string) => true,
+    'click:control': (e: MouseEvent) => true,
+    'mousedown:control': (e: MouseEvent) => true,
+    'update:focused': (focused: boolean) => true,
+    'update:modelValue': (val: string) => true,
   },
   setup(props, { attrs, emit }) {
-    const model = useProxiedModel(props, "modelValue");
-    const { isFocused, focus, blur } = useFocus(props);
+    const model = useProxiedModel(props, 'modelValue')
+    const { isFocused, focus, blur } = useFocus(props)
     const counterValue = computed(() => {
-      return typeof props.counterValue === "function"
+      return typeof props.counterValue === 'function'
         ? props.counterValue(model.value)
-        : typeof props.counterValue === "number"
+        : typeof props.counterValue === 'number'
           ? props.counterValue
-          : (model.value ?? "").toString().length;
-    });
+          : (model.value ?? '').toString().length
+    })
     const max = computed(() => {
-      if (attrs.maxlength) return attrs.maxlength as unknown as undefined;
+      if (attrs.maxlength) return attrs.maxlength as unknown as undefined
 
       if (
         !props.counter ||
-        (typeof props.counter !== "number" && typeof props.counter !== "string")
+        (typeof props.counter !== 'number' && typeof props.counter !== 'string')
       )
-        return undefined;
+        return undefined
 
-      return props.counter;
-    });
+      return props.counter
+    })
 
     const isPlainOrUnderlined = computed(() =>
-      ["plain", "underlined"].includes(props.variant),
-    );
+      ['plain', 'underlined'].includes(props.variant)
+    )
 
     function onIntersect(
       isIntersecting: boolean,
-      entries: IntersectionObserverEntry[],
+      entries: IntersectionObserverEntry[]
     ) {
-      if (!props.autofocus || !isIntersecting) return;
-
-      (entries[0].target as HTMLInputElement)?.focus?.();
+      if (!props.autofocus || !isIntersecting) return
+      ;(entries[0].target as HTMLInputElement)?.focus?.()
     }
 
-    const baseInputRef = ref<typeof BaseInput>();
-    const baseFieldRef = ref<typeof BaseField>();
-    const inputRef = ref<HTMLInputElement>();
+    const baseInputRef = ref<InstanceType<typeof BaseInput>>()
+    const baseFieldRef = ref<InstanceType<typeof BaseField>>()
+    const inputRef = ref<HTMLInputElement>()
     const isActive = computed(
       () =>
         activeTypes.includes(props.type) ||
         props.persistentPlaceholder ||
         isFocused.value ||
-        props.active,
-    );
+        props.active
+    )
 
     function onFocus() {
       if (inputRef.value !== document.activeElement) {
-        inputRef.value?.focus();
+        inputRef.value?.focus()
       }
 
-      if (!isFocused.value) focus();
+      if (!isFocused.value) focus()
     }
     function onControlMousedown(e: MouseEvent) {
-      emit("mousedown:control", e);
+      emit('mousedown:control', e)
 
-      if (e.target === inputRef.value) return;
+      if (e.target === inputRef.value) return
 
-      onFocus();
-      e.preventDefault();
+      onFocus()
+      e.preventDefault()
     }
     function onControlClick(e: MouseEvent) {
-      onFocus();
+      onFocus()
 
-      emit("click:control", e);
+      emit('click:control', e)
     }
     function onClear(e: MouseEvent) {
-      e.stopPropagation();
+      e.stopPropagation()
 
-      onFocus();
+      onFocus()
 
       nextTick(() => {
-        model.value = null;
+        model.value = null
 
-        callEvent(props["onClick:clear"], e);
-      });
+        callEvent(props['onClick:clear'], e)
+      })
     }
     function onInput(e: Event) {
-      const el = e.target as HTMLInputElement;
-      model.value = el.value;
+      const el = e.target as HTMLInputElement
+      model.value = el.value
       if (
         props.modelModifiers?.trim &&
-        ["text", "search", "password", "tel", "url"].includes(props.type)
+        ['text', 'search', 'password', 'tel', 'url'].includes(props.type)
       ) {
-        const caretPosition = [el.selectionStart, el.selectionEnd];
+        const caretPosition = [el.selectionStart, el.selectionEnd]
         nextTick(() => {
-          el.selectionStart = caretPosition[0];
-          el.selectionEnd = caretPosition[1];
-        });
+          el.selectionStart = caretPosition[0]
+          el.selectionEnd = caretPosition[1]
+        })
       }
     }
-    const isCounterEmpty = useSlotIsEmpty("counter");
-    const isDetailsEmpty = useSlotIsEmpty("details");
+    const isCounterEmpty = useSlotIsEmpty('counter')
+    const isDetailsEmpty = useSlotIsEmpty('details')
     const hasCounter = computed(
       () =>
         !isCounterEmpty.value ||
-        (props.counter !== false && props.counter != null),
-    );
-    const hasDetails = computed(() => hasCounter || !isDetailsEmpty.value);
+        (props.counter !== false && props.counter != null)
+    )
+    const hasDetails = computed(() => hasCounter || !isDetailsEmpty.value)
     const { rootAttrs, inputAttrs } = computed(() => {
-      const [root, input] = filterInputAttrs(attrs);
-      return { rootAttrs: root, inputAttrs: input };
-    }).value;
+      const [root, input] = filterInputAttrs(attrs)
+      return { rootAttrs: root, inputAttrs: input }
+    }).value
     const inputProps = computed(() => {
-      const { modelValue: _, ...rest } = BaseInput.filterProps(props);
-      return rest;
-    });
-    const fieldProps = computed(() => BaseField.filterProps(props));
+      const { modelValue: _, ...rest } = BaseInput.filterProps(props)
+      return rest
+    })
+    const fieldProps = computed(() => BaseField.filterProps(props))
 
     return {
       baseInputRef,
@@ -225,9 +224,10 @@ export default defineComponent({
       onInput,
       onFocus,
       blur,
-    };
+      focus,
+    }
   },
-});
+})
 </script>
 
 <template>
@@ -272,11 +272,11 @@ export default defineComponent({
         :focused="isFocused"
         :error="isValid.value === false"
         :role="$props.role"
-        @mousedown="onControlMousedown"
-        @click="onControlClick"
-        @click:clear="onClear"
-        @click:prependInner="$props['onClick:prependInner']"
-        @click:appendInner="$props['onClick:appendInner']"
+        :onMousedown="onControlMousedown"
+        :onClick="onControlClick"
+        :onClick:clear="onClear"
+        :onClick:prependInner="$props['onClick:prependInner']"
+        :onClick:appendInner="$props['onClick:appendInner']"
       >
         <template #append-inner="slotProps"
           ><slot name="append-inner" v-bind="slotProps"
@@ -310,6 +310,8 @@ export default defineComponent({
               <input
                 ref="inputRef"
                 :value="model"
+                @input="onInput"
+                v-intersect.once="{ handler: onIntersect }"
                 :autofocus="$props.autofocus"
                 :readonly="isReadonly.value"
                 :disabled="isDisabled.value"
@@ -317,19 +319,19 @@ export default defineComponent({
                 :placeholder="$props.placeholder"
                 :size="1"
                 :type="$props.type"
-                v-bind="{ ...slotProps, ...inputAttrs }"
-                @input="onInput"
                 @focus="onFocus"
                 @blur="blur"
-                v-intersect.once="onIntersect"
+                v-bind="{ ...slotProps, ...inputAttrs }"
               />
             </div>
           </template>
           <template v-else>
             <input
               ref="inputRef"
-              :value="model"
               :class="fieldClass"
+              :value="model"
+              @input="onInput"
+              v-intersect.once="{ handler: onIntersect }"
               :autofocus="$props.autofocus"
               :readonly="isReadonly.value"
               :disabled="isDisabled.value"
@@ -337,11 +339,9 @@ export default defineComponent({
               :placeholder="$props.placeholder"
               :size="1"
               :type="$props.type"
-              v-bind="{ ...slotProps, ...inputAttrs }"
-              @input="onInput"
               @focus="onFocus"
               @blur="blur"
-              v-intersect.once="onIntersect"
+              v-bind="{ ...slotProps, ...inputAttrs }"
             />
           </template>
 
