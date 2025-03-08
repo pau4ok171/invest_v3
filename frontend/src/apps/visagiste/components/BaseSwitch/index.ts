@@ -1,0 +1,1 @@
+export { default as BaseSwitch, useBaseSwitchProps } from './BaseSwitch.vue'

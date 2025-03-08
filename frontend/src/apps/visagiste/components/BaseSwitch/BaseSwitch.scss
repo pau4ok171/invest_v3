@@ -1,0 +1,226 @@
+@use 'sass:selector';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-switch {
+    .base-label {
+      padding-inline-start: $switch-label-margin-inline-start;
+    }
+  }
+  .base-switch__loader {
+    display: flex;
+
+    .base-progress-circular {
+      color: $switch-loader-color;
+    }
+  }
+  .base-switch__track,
+  .base-switch__thumb {
+    transition: none;
+
+    .base-selection-control--error:not(.base-selection-control--disabled) & {
+      background-color: $switch-error-background-color;
+      color: $switch-error-color;
+    }
+  }
+  .base-switch__track-true {
+    margin-inline-end: auto;
+
+    .base-selection-control:not(.base-selection-control--dirty) & {
+      opacity: 0;
+    }
+  }
+  .base-switch__track-false {
+    margin-inline-start: auto;
+
+    .base-selection-control--dirty & {
+      opacity: 0;
+    }
+  }
+  .base-switch__track {
+    display: inline-flex;
+    align-items: center;
+    font-size: .5rem;
+    padding: 0 5px;
+    background-color: $switch-track-background;
+    border-radius: $switch-track-radius;
+    height: $switch-track-height;
+    opacity: $switch-track-opacity;
+    min-width: $switch-track-width;
+    cursor: pointer;
+    transition: $switch-track-transition;
+
+    .base-switch--inset & {
+      border-radius: $switch-inset-track-border-radius;
+      font-size: .75rem;
+      height: $switch-inset-track-height;
+      min-width: $switch-inset-track-width;
+    }
+  }
+  .base-switch__thumb {
+    align-items: center;
+    background-color: $switch-thumb-background;
+    color: $switch-thumb-color;
+    border-radius: $switch-thumb-radius;
+    display: flex;
+    font-size: .75rem;
+    height: $switch-thumb-height;
+    justify-content: center;
+    width: $switch-thumb-width;
+    pointer-events: none;
+    transition: $switch-thumb-transition;
+    position: relative;
+    overflow: hidden;
+
+    .base-switch:not(.base-switch--inset) & {
+      @include tools.elevation($switch-thumb-elevation);
+    }
+    .base-switch.base-switch--flat:not(.base-switch--inset) & {
+      background: $switch-thumb-flat-background;
+      color: $switch-thumb-flat-color;
+
+      @include tools.elevation(0);
+    }
+    .base-switch--inset & {
+      height: $switch-inset-thumb-height;
+      width: $switch-inset-thumb-width;
+      transform: scale(calc($switch-inset-thumb-off-height / $switch-inset-thumb-height));
+
+      &--filled {
+        transform: none;
+      }
+    }
+    .base-switch--inset .base-selection-control--dirty & {
+      transform: none;
+      transition: .15s .05s transform settings.$decelerated-easing;
+    }
+  }
+  .base-switch {
+    $switch-thumb-transform: $switch-track-width * .5 - $switch-thumb-width * .5 + $switch-thumb-offset;
+
+    &.base-input {
+      flex: $switch-flex;
+    }
+    .base-selection-control {
+      min-height: var(--base-input-control-height);
+    }
+    .base-selection-control__input {
+      border-radius: 50%;
+      transition: $switch-control-input-transition;
+      position: absolute;
+      @include tools.ltr() {
+        transform: translateX(-$switch-thumb-transform);
+      }
+      @include tools.rtl() {
+        transform: translateX($switch-thumb-transform);
+      }
+      .base-icon {
+        position: absolute;
+      }
+    }
+    .base-selection-control--dirty {
+      .base-selection-control__input {
+        @include tools.ltr() {
+          transform: translateX($switch-thumb-transform);
+        }
+        @include tools.rtl() {
+          transform: translateX(-$switch-thumb-transform);
+        }
+      }
+    }
+    &.base-switch--indeterminate {
+      .base-selection-control__input {
+        transform: scale(.8);
+      }
+      .base-switch__thumb {
+        transform: scale(.75);
+        box-shadow: none;
+      }
+    }
+    &.base-switch--inset {
+      .base-selection-control__wrapper {
+        width: auto;
+      }
+    }
+    &.base-input--vertical {
+      .base-label {
+        min-width: max-content;
+      }
+      .base-selection-control__wrapper {
+        transform: $switch-thumb-vertical-transform;
+      }
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .base-switch {
+    .base-switch__loader {
+      .base-progress-circular {
+        color: currentColor;
+      }
+    }
+    .base-switch__thumb {
+      background-color: buttontext;
+    }
+    .base-switch__track,
+    .base-switch__thumb {
+      border: 1px solid;
+      color: buttontext;
+    }
+    &:not(.base-switch--loading):not(.base-input--disabled) {
+      .base-selection-control--dirty {
+        .base-switch__thumb {
+          background-color: highlight;
+        }
+      }
+    }
+    &:not(.base-input--disabled) {
+      .base-selection-control--dirty {
+        .base-switch__track {
+          background-color: highlight;
+        }
+        .base-switch__track,
+        .base-switch__thumb {
+          color: highlight;
+        }
+      }
+    }
+    &.base-switch--inset {
+      .base-switch__track {
+        border-width: 2px;
+      }
+      &:not(.base-switch--loading):not(.base-input--disabled) {
+        .base-selection-control--dirty {
+          .base-switch__thumb {
+            background-color: highlighttext;
+            color: highlighttext;
+          }
+        }
+      }
+    }
+    &.base-input--disabled {
+      .base-switch__thumb {
+        background-color: graytext;
+      }
+
+      .base-switch__track,
+      .base-switch__thumb {
+        color: graytext;
+      }
+    }
+    &.base-switch--loading {
+      .base-switch__thumb {
+        background-color: canvas;
+      }
+      &.base-switch--inset,
+      &.base-switch--indeterminate {
+        .base-switch__thumb {
+          border-width: 0;
+        }
+      }
+    }
+  }
+}
