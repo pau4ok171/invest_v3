@@ -27,7 +27,7 @@
     }
     &--error:not(.base-selection-control--disabled) {
       .base-label {
-        color: rgb(var(--base-theme-error))
+        color: rgb(var(--base-theme-error));
       }
     }
     &--inline {
@@ -42,7 +42,7 @@
     }
     @at-root {
       @include tools.density('base-selection-control', $selection-control-density) using ($modifier) {
-        --base-selection-control-size: #{$selection-control-size + $modifier}
+        --base-selection-control-size: #{$selection-control-size + $modifier};
       }
     }
   }
@@ -79,7 +79,7 @@
       background-color: currentColor;
       opacity: 0;
       pointer-events: none;
-      @include tools.absolute(true)
+      @include tools.absolute(true);
     }
     &:hover::before {
       opacity: calc(#{map.get(settings.$states, 'hover')} * var(--base-theme-overlay-multiplier));

@@ -279,6 +279,7 @@ export default defineComponent({
       onFocus,
       onBlur,
       onClickLabel,
+      input,
     }
   },
 })
@@ -352,7 +353,7 @@ export default defineComponent({
       :for="id"
       @click="onClickLabel"
     >
-      <slot name="label">
+      <slot name="label" :label="$props.label" :props="{ for: id }">
         {{ $props.label }}
       </slot>
     </BaseLabel>
