@@ -1,10 +1,12 @@
 // Types
-import type {InjectionKey} from "vue";
+import type { InjectionKey } from 'vue'
 
 interface MenuProvide {
-  register (): void
-  unregister (): void
-  closeParents (e?: MouseEvent): void
+  register(): void
+  unregister(): void
+  closeParents(e?: MouseEvent): void
 }
 
-export const BaseMenuSymbol: InjectionKey<MenuProvide> = Symbol.for('visagiste:base-menu')
+export const BaseMenuSymbol: InjectionKey<MenuProvide> = Symbol.for(
+  'visagiste:base-menu'
+)
