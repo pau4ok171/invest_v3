@@ -9,7 +9,7 @@ import {getCurrentInstance} from "@/apps/visagiste/utils";
 const isSlotEmpty = (slot: Slot | undefined, slotProps = {}): boolean => {
   if (!slot) return true;
 
-  return slot(slotProps).some((vnode: VNode) => {
+  return slot(slotProps).every((vnode: VNode) => {
     if (vnode.type === Comment) return true;
 
     if (Array.isArray(vnode.children) && !vnode.children.length) return true;
