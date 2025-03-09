@@ -1,17 +1,16 @@
 <script lang="ts">
 // Styles
-import './BaseMenu.scss';
+import './BaseMenu.scss'
 
 // Components
-import { useBaseOverlayProps } from '../BaseOverlay/BaseOverlay.vue'
+import { BaseOverlay, useBaseOverlayProps } from '../BaseOverlay'
 import BaseDialogTransition from '../transitions/dialog-transition'
-import BaseOverlay from "@/apps/visagiste/components/BaseOverlay/BaseOverlay.vue";
-import BaseDefaultsProvider from "@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue";
+import BaseDefaultsProvider from '@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue'
 
 // Composables
-import {useProxiedModel} from "@/apps/visagiste/composables/proxiedModel";
-import {useScopeId} from "@/apps/visagiste/composables/scopeId";
-import {useRtl} from "@/apps/visagiste/composables";
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
+import { useScopeId } from '@/apps/visagiste/composables/scopeId'
+import { useRtl } from '@/apps/visagiste/composables'
 
 // Utilities
 import {
@@ -25,9 +24,9 @@ import {
   provide,
   ref,
   shallowRef,
-  watch
-} from "vue";
-import {BaseMenuSymbol} from "@/apps/visagiste/components/BaseMenu/shared";
+  watch,
+} from 'vue'
+import { BaseMenuSymbol } from '@/apps/visagiste/components/BaseMenu/shared'
 import {
   defineComponent,
   focusableChildren,
@@ -37,38 +36,49 @@ import {
   IN_BROWSER,
   isClickInsideElement,
   omit,
-  propsFactory
-} from '@/apps/visagiste/utils';
+  propsFactory,
+} from '@/apps/visagiste/utils'
 
 // Types
-import type {Component} from "vue";
+import type { SlotsType, Component } from 'vue'
+import type { OverlaySlots } from '@/apps/visagiste/components/BaseOverlay/BaseOverlay.vue'
 
+export const useBaseMenuProps = propsFactory(
+  {
+    // TODO
+    // disableKeys: Boolean,
+    id: String,
+    submenu: Boolean,
 
-export const useBaseMenuProps = propsFactory({
-  // TODO
-  // disableKeys: Boolean,
-  id: String,
-  submenu: Boolean,
-
-  ...omit(useBaseOverlayProps({
-    closeDelay: 250,
-    closeOnContentClick: true,
-    locationStrategy: 'connected' as const,
-    location: undefined,
-    openDelay: 300,
-    scrim: false,
-    scrollStrategy: 'reposition' as const,
-    transition: { component: BaseDialogTransition as Component },
-  }), ['absolute']),
-}, 'BaseMenu')
+    ...omit(
+      useBaseOverlayProps({
+        closeDelay: 250,
+        closeOnContentClick: true,
+        locationStrategy: 'connected' as const,
+        location: undefined,
+        openDelay: 300,
+        scrim: false,
+        scrollStrategy: 'reposition' as const,
+        transition: { component: BaseDialogTransition as Component },
+      }),
+      ['absolute']
+    ),
+  },
+  'BaseMenu'
+)
 
 export default defineComponent({
-  name: "BaseMenu",
+  name: 'BaseMenu',
+  components: {
+    BaseDefaultsProvider,
+    BaseOverlay,
+  },
   props: useBaseMenuProps(),
   emits: {
     'update:modelValue': (value: boolean) => true,
   },
-  setup (props, { slots }) {
+  slots: Object as SlotsType<OverlaySlots>,
+  setup(props, { slots, expose }) {
     const isActive = useProxiedModel(props, 'modelValue')
     const { scopeId } = useScopeId()
     const { isRtl } = useRtl()
@@ -76,7 +86,7 @@ export default defineComponent({
     const uid = getUid()
     const id = computed(() => props.id || `base-menu-${uid}`)
 
-    const overlay = ref<BaseOverlay>()
+    const overlay = ref<InstanceType<typeof BaseOverlay>>()
 
     const parent = inject(BaseMenuSymbol, null)
     const openChildren = shallowRef(new Set<number>())
@@ -89,9 +99,12 @@ export default defineComponent({
       },
       closeParents(e?: MouseEvent) {
         setTimeout(() => {
-          if (!openChildren.value.size &&
-          !props.persistent &&
-          (e == null || (overlay.value?.contentEl && !isClickInsideElement(e, overlay.value.contentEl)))
+          if (
+            !openChildren.value.size &&
+            !props.persistent &&
+            (e == null ||
+              (overlay.value?.contentEl &&
+                !isClickInsideElement(e, overlay.value.contentEl)))
           ) {
             isActive.value = false
             parent?.closeParents()
@@ -104,9 +117,9 @@ export default defineComponent({
       parent?.unregister()
       document.removeEventListener('focusin', onFocusIn)
     })
-    onDeactivated(() => isActive.value = false)
+    onDeactivated(() => (isActive.value = false))
 
-    async function onFocusIn (e: FocusEvent) {
+    async function onFocusIn(e: FocusEvent) {
       const before = e.relatedTarget as HTMLElement | null
       const after = e.target as HTMLElement | null
 
@@ -128,33 +141,42 @@ export default defineComponent({
       }
     }
 
-    watch(isActive, val => {
-      if (val) {
-        parent?.register()
-        if (IN_BROWSER) {
-          document.addEventListener('focusin', onFocusIn, { once: true })
+    watch(
+      isActive,
+      (val) => {
+        if (val) {
+          parent?.register()
+          if (IN_BROWSER) {
+            document.addEventListener('focusin', onFocusIn, { once: true })
+          }
+        } else {
+          parent?.unregister()
+          if (IN_BROWSER) {
+            document.removeEventListener('focusin', onFocusIn)
+          }
         }
-      } else {
-        parent?.unregister()
-        if (IN_BROWSER) {
-          document.removeEventListener('focusin', onFocusIn)
-        }
-      }
-    }, { immediate: true })
+      },
+      { immediate: true }
+    )
 
-    function onClickOutside (e: MouseEvent) {
+    function onClickOutside(e: MouseEvent) {
       parent?.closeParents(e)
     }
 
-    function onKeydown (e: KeyboardEvent) {
+    function onKeydown(e: KeyboardEvent) {
       if (props.disabled) return
 
-      if (e.key === 'Tab' || (e.key === 'Enter' && !props.closeOnContentClick)) {
+      if (
+        e.key === 'Tab' ||
+        (e.key === 'Enter' && !props.closeOnContentClick)
+      ) {
         if (
           e.key === 'Enter' &&
-          ((e.target instanceof HTMLTextAreaElement) ||
-          (e.target instanceof HTMLInputElement && !!e.target.closest('form')))
-        ) return
+          (e.target instanceof HTMLTextAreaElement ||
+            (e.target instanceof HTMLInputElement &&
+              !!e.target.closest('form')))
+        )
+          return
         if (e.key === 'Enter') e.preventDefault()
 
         const nextElement = getNextElement(
@@ -166,13 +188,16 @@ export default defineComponent({
           isActive.value = false
           overlay.value?.activatorEl?.focus()
         }
-      } else if (props.submenu && e.key === (isRtl.value ? 'ArrowRight' : 'ArrowLeft')) {
+      } else if (
+        props.submenu &&
+        e.key === (isRtl.value ? 'ArrowRight' : 'ArrowLeft')
+      ) {
         isActive.value = false
         overlay.value?.activatorEl?.focus()
       }
     }
 
-    function onActivatorKeydown (e: KeyboardEvent) {
+    function onActivatorKeydown(e: KeyboardEvent) {
       if (props.disabled) return
 
       const el = overlay.value?.contentEl
@@ -205,12 +230,18 @@ export default defineComponent({
     }
 
     const activatorProps = computed(() =>
-      mergeProps({
-        'aria-haspopup': 'menu',
-        'aria-expanded': String(isActive.value),
-        'aria-controls': id.value,
-      }, props.activatorProps)
+      mergeProps(
+        {
+          'aria-haspopup': 'menu',
+          'aria-expanded': String(isActive.value),
+          'aria-controls': id.value,
+          onKeydown: onActivatorKeydown,
+        },
+        props.activatorProps
+      )
     )
+
+    expose({ openChildren })
 
     return () => {
       const overlayProps = BaseOverlay.filterProps(props)
@@ -224,7 +255,7 @@ export default defineComponent({
           style: props.style,
           ...overlayProps,
           modelValue: isActive.value,
-          'onUpdate:modelValue': (value: boolean) => isActive.value = value,
+          'onUpdate:modelValue': (value: boolean) => (isActive.value = value),
           absolute: true,
           activatorProps: activatorProps.value,
           location: props.location ?? (props.submenu ? 'end' : 'bottom'),
@@ -233,20 +264,21 @@ export default defineComponent({
           ...scopeId,
         },
         {
-          activator: slots.activator,
-          default: (...args: any[]) => h(
-            BaseDefaultsProvider,
-            {
-              root: 'BaseMenu'
-            },
-            {
-              default: () => slots.default?.(...args)
-            }
-          )
+          activator: (...args) => slots.activator?.(...args),
+          default: (...args: any[]) => {
+            const defaultSlotContent = slots.default?.(...args)
+
+            return defaultSlotContent
+              ? h(
+                  BaseDefaultsProvider,
+                  { root: 'BaseMenu' },
+                  () => defaultSlotContent
+                )
+              : null
+          },
         }
       )
     }
   },
 })
 </script>
-
