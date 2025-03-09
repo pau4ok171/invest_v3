@@ -1,0 +1,86 @@
+@use '../../styles/tools';
+@use '../../styles/settings';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-file-upload {
+    padding: $file-upload-padding;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    &.base-card {
+      display: flex;
+      border-radius: 4px;
+      border-style: dashed;
+      border-width: 2px;
+    }
+    &.base-file-upload--density-compact {
+      padding: 32px 0;
+      flex-direction: row;
+      gap: 1rem;
+    }
+    .base-overlay__scrim {
+      pointer-events: none;
+    }
+    &--disabled {
+      pointer-events: none;
+      opacity: var(--base-disabled-opacity);
+    }
+    &--dragging {
+      > * {
+        pointer-events: none;
+      }
+    }
+    &--clickable {
+      cursor: pointer;
+    }
+    input[type='file'] {
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      z-index: -1;
+    }
+  }
+  .base-file-upload-title {
+    font-size: $file-upload-title-font-size;
+    font-weight: 600;
+    text-align: center;
+  }
+  .base-file-upload-icon {
+    opacity: var(--base-medium-emphasis-opacity);
+    font-size: $file-upload-icon-font-size;
+    margin-bottom: $file-upload-icon-margin-bottom;
+
+    .base-file-upload--density-comfortable & {
+      font-size: $file-upload-icon-font-size - .5rem;
+      margin-bottom: $file-upload-icon-margin-bottom - .5rem;
+    }
+    .base-file-upload--density-compact & {
+      font-size: $file-upload-icon-font-size - 1rem;
+      margin-bottom: $file-upload-icon-margin-bottom - 1rem;
+    }
+  }
+  .base-file-upload-divider {
+    align-items: center;
+    display: flex;
+    margin: $file-upload-divider-margin;
+    justify-content: center;
+    width: 100%;
+
+    .base-divider__wrapper {
+      max-width: 100%;
+    }
+  }
+  .base-file-upload-items {
+    margin: $file-upload-items-margin;
+  }
+  .base-file-upload-item {
+    &:not(:first-child) {
+      margin-top: 8px;
+    }
+  }
+}
