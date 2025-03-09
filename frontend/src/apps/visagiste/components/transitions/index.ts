@@ -4,6 +4,7 @@ import ExpandTransitionGenerator from './expand-transition'
 
 // Generic transitions
 export const BaseSlideYTransition = createCssTransition('slide-y-transition')
+export const BaseScaleTransition = createCssTransition('scale-transition')
 export const BaseFadeTransition = createCssTransition('fade-transition')
 
 // Javascript transitions
