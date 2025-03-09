@@ -1,6 +1,6 @@
 <script lang="ts">
 // Styles
-import './_variables.scss'
+import './BaseLabel.scss'
 
 // Composables
 import { useComponentProps } from '@/apps/visagiste/composables/component'
@@ -40,7 +40,7 @@ export default defineComponent({
       $props.class,
     ]"
     :style="$props.style"
-    @click="onClick"
+    @click="$props.onClick"
   >
     {{ $props.text }}
 
