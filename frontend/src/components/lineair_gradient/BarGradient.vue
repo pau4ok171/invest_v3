@@ -1,11 +1,3 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-
-export default defineComponent({
-  name: "BarGradient"
-})
-</script>
-
 <template>
   <svg height="0" width="0">
     <linearGradient id="BarGradient">
@@ -14,7 +6,3 @@ export default defineComponent({
     </linearGradient>
   </svg>
 </template>
-
-<style scoped>
-
-</style>
