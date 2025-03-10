@@ -144,7 +144,7 @@ export const BaseSvgIcon = defineComponent({
 
       return h(
         props.tag,
-        { ...attrs, style: null },
+        { style: null, ...attrs },
         h(
           'svg',
           {
