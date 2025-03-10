@@ -3,19 +3,21 @@
 
 @include tools.layer('components') {
   .base-menu {
-    display: flex;
-    flex-direction: column;
-    @include tools.rounded($menu-content-border-radius);
+    > .base-overlay__content {
+      display: flex;
+      flex-direction: column;
+      @include tools.rounded($menu-content-border-radius);
 
-    > .base-card,
-    > .base-sheet,
-    > .base-list {
-      background: rgb(var(--base-theme-surface));
-      border-radius: inherit;
-      overflow: auto;
-      height: 100%;
+      > .base-card,
+      > .base-sheet,
+      > .base-list {
+        background: rgb(var(--base-theme-surface));
+        border-radius: inherit;
+        overflow: auto;
+        height: 100%;
 
-      @include tools.elevation($menu-elevation);
+        @include tools.elevation($menu-elevation);
+      }
     }
   }
 }
