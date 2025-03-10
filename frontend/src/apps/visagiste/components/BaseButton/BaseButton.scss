@@ -59,7 +59,7 @@
 
       // ensure that default
       // base-icon is 24px
-      &.base-button-size-default {
+      &.base-button--size-default {
         --base-button-size: #{$button-icon-font-size};
       }
       @at-root & {

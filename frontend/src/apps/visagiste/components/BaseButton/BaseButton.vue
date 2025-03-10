@@ -1,77 +1,74 @@
 <script lang="ts">
 // Styles
-import "./BaseButton.scss";
+import './BaseButton.scss'
 
 // Components
-import { BaseButtonToggleSymbol } from "../BaseButtonToggle/BaseButtonToggle.vue";
-import BaseIcon from "@/apps/visagiste/components/BaseIcon/BaseIcon.vue";
-import BaseDefaultsProvider from "@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue";
-import BaseProgressCircular from "@/apps/visagiste/components/BaseProgressCircular/BaseProgressCircular.vue";
+import { BaseButtonToggleSymbol } from '../BaseButtonToggle/BaseButtonToggle.vue'
+import { BaseIcon } from '@/apps/visagiste/components/BaseIcon'
+import BaseDefaultsProvider from '@/apps/visagiste/components/BaseDefaultsProvider/BaseDefaultsProvider.vue'
+import { BaseProgressCircular } from '@/apps/visagiste/components/BaseProgressCircular'
 
 // Composables
-import { IconValue } from "@/apps/visagiste/composables/icons";
-import { useBorder, useBorderProps } from "@/apps/visagiste/composables/border";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
+import { IconValue } from '@/apps/visagiste/composables/icons'
+import { useBorder, useBorderProps } from '@/apps/visagiste/composables/border'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
 import {
   useDensity,
   useDensityProps,
-} from "@/apps/visagiste/composables/density";
+} from '@/apps/visagiste/composables/density'
 import {
   useDimension,
   useDimensionProps,
-} from "@/apps/visagiste/composables/dimensions";
+} from '@/apps/visagiste/composables/dimensions'
 import {
   useElevation,
   useElevationProps,
-} from "@/apps/visagiste/composables/elevation";
+} from '@/apps/visagiste/composables/elevation'
+import { useGroupItem, useGroupProps } from '@/apps/visagiste/composables/group'
 import {
-  useGroupItem,
-  useGroupProps,
-} from "@/apps/visagiste/composables/group";
-import { useLoader, useLoaderProps } from "@/apps/visagiste/composables/loader";
+  useLoader,
+  useLoaderProps,
+} from '@/apps/visagiste/composablesV2/loader.vue'
 import {
   useLocation,
   useLocationProps,
-} from "@/apps/visagiste/composables/location";
+} from '@/apps/visagiste/composables/location'
 import {
   useRounded,
   useRoundedProps,
-} from "@/apps/visagiste/composables/rounded";
-import { useLink, useRouterProps } from "@/apps/visagiste/composables/router";
-import { useSize, useSizeProps } from "@/apps/visagiste/composables/size";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
-import {
-  provideTheme,
-  useThemeProps,
-} from "@/apps/visagiste/composables/theme";
+} from '@/apps/visagiste/composables/rounded'
+import { useLink, useRouterProps } from '@/apps/visagiste/composables/router'
+import { useSize, useSizeProps } from '@/apps/visagiste/composables/size'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
 import {
   genOverlays,
   useVariant,
   useVariantProps,
-} from "@/apps/visagiste/composables/variant";
+} from '@/apps/visagiste/composables/variant'
 import {
   usePosition,
   usePositionProps,
-} from "@/apps/visagiste/composables/position";
-import { useSelectLink } from "@/apps/visagiste/composables/selectLink";
+} from '@/apps/visagiste/composables/position'
+import { useSelectLink } from '@/apps/visagiste/composables/selectLink'
 
 // Directives
-import { Ripple } from "@/apps/visagiste/directives/ripple";
+import { Ripple } from '@/apps/visagiste/directives/ripple'
 
 // Utilities
-import { computed } from "vue";
-import { defineComponent, propsFactory } from "@/apps/visagiste/utils";
+import { computed } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 // Types
-import type { PropType } from "vue";
-import type { RippleDirectiveBinding } from "@/apps/visagiste/directives/ripple";
+import type { PropType } from 'vue'
+import type { RippleDirectiveBinding } from '@/apps/visagiste/directives/ripple'
 
 export type BaseButtonSlots = {
-  default: never;
-  prepend: never;
-  append: never;
-  loader: never;
-};
+  default: never
+  prepend: never
+  append: never
+  loader: never
+}
 
 export const useBaseButtonProps = propsFactory(
   {
@@ -96,7 +93,7 @@ export const useBaseButtonProps = propsFactory(
     stacked: Boolean,
 
     ripple: {
-      type: [Boolean, Object] as PropType<RippleDirectiveBinding["value"]>,
+      type: [Boolean, Object] as PropType<RippleDirectiveBinding['value']>,
       default: true,
     },
 
@@ -114,82 +111,82 @@ export const useBaseButtonProps = propsFactory(
     ...useRoundedProps(),
     ...useRouterProps(),
     ...useSizeProps(),
-    ...useTagProps({ tag: "button" }),
+    ...useTagProps({ tag: 'button' }),
     ...useThemeProps(),
-    ...useVariantProps({ variant: "elevated" } as const),
+    ...useVariantProps({ variant: 'elevated' } as const),
   },
-  "BaseButton",
-);
+  'BaseButton'
+)
 
 export default defineComponent({
-  name: "BaseButton",
+  name: 'BaseButton',
   components: { BaseProgressCircular, BaseDefaultsProvider, BaseIcon },
   methods: { genOverlays },
   props: useBaseButtonProps(),
   emits: {
-    "group: selected": (val: { value: boolean }) => true,
+    'group: selected': (val: { value: boolean }) => true,
   },
   directives: {
     Ripple,
   },
   setup(props, { attrs, slots }) {
-    const { themeClasses } = provideTheme(props);
-    const { borderClasses } = useBorder(props);
-    const { densityClasses } = useDensity(props);
-    const { dimensionStyles } = useDimension(props);
-    const { elevationClasses } = useElevation(props);
-    const { loaderClasses } = useLoader(props);
-    const { locationStyles } = useLocation(props);
-    const { positionClasses } = usePosition(props);
-    const { roundedClasses } = useRounded(props);
-    const { sizeClasses, sizeStyles } = useSize(props);
-    const group = useGroupItem(props, props.symbol, false);
-    const link = useLink(props, attrs);
+    const { themeClasses } = provideTheme(props)
+    const { borderClasses } = useBorder(props)
+    const { densityClasses } = useDensity(props)
+    const { dimensionStyles } = useDimension(props)
+    const { elevationClasses } = useElevation(props)
+    const { loaderClasses } = useLoader(props)
+    const { locationStyles } = useLocation(props)
+    const { positionClasses } = usePosition(props)
+    const { roundedClasses } = useRounded(props)
+    const { sizeClasses, sizeStyles } = useSize(props)
+    const group = useGroupItem(props, props.symbol, false)
+    const link = useLink(props, attrs)
 
     const isActive = computed(() => {
       if (props.active !== undefined) {
-        return props.active;
+        return props.active
       }
 
       if (link.isLink.value) {
-        return link.isActive?.value;
+        return link.isActive?.value
       }
 
-      return group?.isSelected.value;
-    });
+      return group?.isSelected.value
+    })
 
     const color = computed(() =>
-      isActive.value ? (props.activeColor ?? props.color) : props.color,
-    );
+      isActive.value ? (props.activeColor ?? props.color) : props.color
+    )
     const variantProps = computed(() => {
       const showColor =
         (group?.isSelected.value &&
           (!link.isLink.value || link.isActive?.value)) ||
         !group ||
-        link.isActive?.value;
+        link.isActive?.value
       return {
         color: showColor ? (color.value ?? props.baseColor) : props.baseColor,
         variant: props.variant,
-      };
-    });
+      }
+    })
     const { colorClasses, colorStyles, variantClasses } =
-      useVariant(variantProps);
+      useVariant(variantProps)
 
-    const isDisabled = computed(() => group?.disabled.value || props.disabled);
+    const isDisabled = computed(() => group?.disabled.value || props.disabled)
     const isElevated = computed(() => {
       return (
-        props.variant === "elevated" &&
+        props.variant === 'elevated' &&
         !(props.disabled || props.flat || props.border)
-      );
-    });
+      )
+    })
     const valueAttr = computed(() => {
-      if (props.value === undefined || typeof props.value === "symbol")
-        return undefined;
+      if (props.value === undefined || typeof props.value === 'symbol')
+        return undefined
 
       return Object(props.value) === props.value
         ? JSON.stringify(props.value, null, 0)
-        : props.value;
-    });
+        : props.value
+    })
 
     function onClick(e: MouseEvent) {
       if (
@@ -199,31 +196,31 @@ export default defineComponent({
             e.ctrlKey ||
             e.shiftKey ||
             e.button !== 0 ||
-            attrs.target === "_blank"))
+            attrs.target === '_blank'))
       )
-        return;
+        return
 
-      link.navigate?.(e);
-      group?.toggle();
+      link.navigate?.(e)
+      group?.toggle()
     }
 
-    useSelectLink(link, group?.select);
+    useSelectLink(link, group?.select)
 
-    const Tag = computed(() => (link.isLink.value ? "a" : props.tag));
-    const hasPrepend = computed(() => !!(props.prependIcon || slots.prepend));
-    const hasAppend = computed(() => !!(props.appendIcon || slots.append));
-    const hasIcon = computed(() => !!(props.icon && props.icon !== true));
+    const Tag = computed(() => (link.isLink.value ? 'a' : props.tag))
+    const hasPrepend = computed(() => !!(props.prependIcon || slots.prepend))
+    const hasAppend = computed(() => !!(props.appendIcon || slots.append))
+    const hasIcon = computed(() => !!(props.icon && props.icon !== true))
 
     const rippleConfig = computed(() => {
       if (props.icon)
         return {
           center: true,
           enabled: !isDisabled && props.ripple,
-        };
+        }
       return {
         enabled: !isDisabled && props.ripple,
-      };
-    });
+      }
+    })
 
     return {
       themeClasses,
@@ -252,9 +249,9 @@ export default defineComponent({
       valueAttr,
       rippleConfig,
       onClick,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
