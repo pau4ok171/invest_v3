@@ -1,10 +1,10 @@
 <script lang="ts">
-import { RouterView } from 'vue-router';
-import AppLayout from '@/layouts/AppLayout.vue';
+import { RouterView } from "vue-router";
+import AppLayout from "@/layouts/AppLayout.vue";
 import axios from "axios";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
-import {defineComponent} from "vue";
-import BaseApp from "@/apps/visagiste/components/BaseApp/BaseApp.vue";
+import { mapActions, mapGetters, mapMutations } from "vuex";
+import { defineComponent } from "vue";
+import { BaseApp } from "@/apps/visagiste/components/BaseApp";
 
 export default defineComponent({
   components: {
@@ -13,34 +13,32 @@ export default defineComponent({
     RouterView,
   },
   async mounted() {
-    this.initializeAuth()
-    axios.defaults.headers.common["Authorization"] = this.token ? `Token ${this.token}` : ''
-    await this.fetchUserInfo()
+    this.initializeAuth();
+    axios.defaults.headers.common["Authorization"] = this.token
+      ? `Token ${this.token}`
+      : "";
+    await this.fetchUserInfo();
   },
   methods: {
     ...mapMutations({
-      initializeAuth: "authModule/initializeAuth"
+      initializeAuth: "authModule/initializeAuth",
     }),
     ...mapActions({
-      fetchUserInfo: 'authModule/fetchUserInfo',
+      fetchUserInfo: "authModule/fetchUserInfo",
     }),
   },
   computed: {
     ...mapGetters({
-      token: 'authModule/getToken',
-    }),
-    ...mapState({
-      isLoading: 'isLoading',
+      token: "authModule/getToken",
     }),
   },
-})
+});
 </script>
 
 <template>
-<base-app>
-  <AppLayout>
-    <RouterView/>
-  </AppLayout>
-</base-app>
+  <base-app>
+    <AppLayout>
+      <RouterView />
+    </AppLayout>
+  </base-app>
 </template>
-
