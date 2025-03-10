@@ -6,6 +6,7 @@ import { ru, es, fr, de } from "@/apps/visagiste/locale";
 
 // Icons
 import { aliases, mdi } from "@/apps/visagiste/iconsets/mdi-svg";
+import { aliases as iAliases, i } from '@/iconsets/iIcons/i-svg';
 
 const finargoDarkTheme = {
   dark: true,
@@ -83,8 +84,6 @@ const finargoLightTheme = {
   },
 }
 
-// TODO: CREATE AdminTheme
-
 export default createVisagiste({
   theme: {
     defaultTheme: 'finargo-dark',
@@ -99,9 +98,13 @@ export default createVisagiste({
   },
   icons: {
     defaultSet: 'mdi',
-    aliases,
+    aliases: {
+      ...aliases,
+      ...iAliases,
+    },
     sets: {
       mdi,
+      i
     },
   },
 })
