@@ -86,13 +86,13 @@
     > .base-flag,
     > .base-tooltip {
       ~ .base-list-item__spacer {
-        width: $list-item-action-margin-start;
+        width: $list-item-icon-margin-start;
       }
     }
     > .base-avatar,
     > .base-badge:is(:has(.base-avatar)) {
       ~ .base-list-item__spacer {
-        width: $list-item-action-margin-start;
+        width: $list-item-avatar-margin-start;
       }
     }
     .base-list-item--slim & {
@@ -150,7 +150,7 @@
       > .base-icon,
       > .base-tooltip {
         ~ .base-list-item__spacer {
-          width: $list-item-action-spacer-width;
+          width: $list-item-slim-spacer-width;
         }
       }
       > .base-avatar,
@@ -163,7 +163,7 @@
         width: $list-item-slim-action-spacer-width;
       }
     }
-    .base-list-item--tree-line & {
+    .base-list-item--three-line & {
       align-self: start;
     }
   }
@@ -186,7 +186,7 @@
     }
     &--end {
       margin-inline-start: $list-item-action-margin-start;
-      margin-inline-end: $list-item-action-margin-end;
+      margin-inline-end: -$list-item-action-margin-end;
     }
   }
   .base-list-item-media {
