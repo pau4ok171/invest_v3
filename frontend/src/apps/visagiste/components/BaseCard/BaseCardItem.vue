@@ -15,6 +15,7 @@ import { IconValue } from '@/apps/visagiste/composables/icons'
 import type { SlotsType } from 'vue'
 import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 import { computed } from 'vue'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 export type BaseCardItemSlots = {
   default: never
@@ -50,17 +51,28 @@ export default defineComponent({
   },
   props: useCardItemProps(),
   slots: Object as SlotsType<BaseCardItemSlots>,
-  setup(props, { slots }) {
+  setup(props) {
+    const prependIsEmpty = useSlotIsEmpty('prepend')
+    const appendIsEmpty = useSlotIsEmpty('append')
+    const titleIsEmpty = useSlotIsEmpty('title')
+    const subtitleIsEmpty = useSlotIsEmpty('subtitle')
+
     const hasPrependMedia = computed(
       () => !!(props.prependAvatar || props.prependIcon)
     )
-    const hasPrepend = computed(() => hasPrependMedia.value || slots.prepend)
+    const hasPrepend = computed(
+      () => hasPrependMedia.value || !prependIsEmpty.value
+    )
     const hasAppendMedia = computed(
       () => !!(props.appendAvatar || props.appendIcon)
     )
-    const hasAppend = computed(() => hasAppendMedia.value || slots.append)
-    const hasTitle = computed(() => props.title != null || slots.title)
-    const hasSubtitle = computed(() => props.subtitle != null || slots.subtitle)
+    const hasAppend = computed(
+      () => hasAppendMedia.value || !appendIsEmpty.value
+    )
+    const hasTitle = computed(() => props.title != null || !titleIsEmpty.value)
+    const hasSubtitle = computed(
+      () => props.subtitle != null || !subtitleIsEmpty.value
+    )
 
     return {
       hasPrependMedia,
