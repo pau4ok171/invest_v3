@@ -55,7 +55,10 @@ export default defineComponent({
       }
     },
     async getSearchResults (v: string) {
-      if (!v.length) return
+      if (!v.length) {
+        this.searchResponse = []
+        return
+      }
 
       await axios
         .get('/api/v1/invest/search_query/', {
@@ -63,7 +66,6 @@ export default defineComponent({
         })
         .then((response) => {
           this.searchResponse = this.highlightSearchResponse(response.data, v)
-          console.log(this.searchResponse)
         })
         .catch((err) => {
           console.log(err);
