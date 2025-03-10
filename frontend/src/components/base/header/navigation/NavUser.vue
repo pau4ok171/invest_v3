@@ -1,28 +1,24 @@
 <script lang="ts">
 // Components
-import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
+import AuthModalMenu from '@/components/base/auth/AuthModalMenu.vue'
 
 // Base Components
-import { BaseButton } from "@/apps/visagiste/components/BaseButton";
-import { BaseMenu } from "@/apps/visagiste/components/BaseMenu";
-import { BaseDialog } from "@/apps/visagiste/components/BaseDialog";
-import { BaseCard } from "@/apps/visagiste/components/BaseCard/";
-import { BaseList } from "@/apps/visagiste/components/BaseList";
-import { BaseListItem } from "@/apps/visagiste/components/BaseList";
-import { BaseDivider } from "@/apps/visagiste/components/BaseDivider";
-import { BaseToolbar } from "@/apps/visagiste/components/BaseToolbar";
-import { BaseToolbarTitle } from "@/apps/visagiste/components/BaseToolbar";
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import { BaseMenu } from '@/apps/visagiste/components/BaseMenu'
+import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
+import { BaseCard } from '@/apps/visagiste/components/BaseCard/'
+import { BaseList } from '@/apps/visagiste/components/BaseList'
+import { BaseListItem } from '@/apps/visagiste/components/BaseList'
+import { BaseDivider } from '@/apps/visagiste/components/BaseDivider'
 
 // Utilities
-import { defineComponent } from "vue";
-import axios from "axios";
-import { mapGetters, mapMutations, mapState } from "vuex";
+import { defineComponent } from 'vue'
+import axios from 'axios'
+import { mapGetters, mapMutations, mapState } from 'vuex'
 
 export default defineComponent({
-  name: "NavUser",
+  name: 'NavUser',
   components: {
-    BaseToolbarTitle,
-    BaseToolbar,
     BaseDivider,
     BaseListItem,
     BaseList,
@@ -35,38 +31,38 @@ export default defineComponent({
   data() {
     return {
       items: [
-        { title: "Profile", to: "/profile", id: "profile" },
-        { title: "Plan & Pricing", to: "/pricing", id: "pricing" },
-        { title: "Notifications", to: "/notifications", id: "notifications" },
-        { title: "HelpCenter", to: "/helpcenter", id: "help" },
+        { title: 'Profile', to: '/profile', id: 'profile' },
+        { title: 'Plan & Pricing', to: '/pricing', id: 'pricing' },
+        { title: 'Notifications', to: '/notifications', id: 'notifications' },
+        { title: 'HelpCenter', to: '/helpcenter', id: 'help' },
       ],
       dialog: false,
-    };
+    }
   },
   computed: {
     ...mapState({
       userInfo: (state: any) => state.authModule.userInfo,
     }),
     ...mapGetters({
-      isAuthenticated: "authModule/getIsAuthenticated",
+      isAuthenticated: 'authModule/getIsAuthenticated',
     }),
   },
   methods: {
     ...mapMutations({
-      removeToken: "authModule/removeToken",
+      removeToken: 'authModule/removeToken',
     }),
     logout() {
-      axios.defaults.headers.common["Authorization"] = "";
+      axios.defaults.headers.common['Authorization'] = ''
 
-      localStorage.removeItem("token");
-      localStorage.removeItem("username");
-      localStorage.removeItem("userid");
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('userid')
 
-      this.removeToken();
-      document.location.reload();
+      this.removeToken()
+      document.location.reload()
     },
   },
-});
+})
 </script>
 
 <template>
@@ -107,19 +103,18 @@ export default defineComponent({
     <template v-else>
       <base-dialog v-model="dialog" max-width="700">
         <template #activator="{ props: activatorProps }">
-          <base-button
-            text="login"
-            rounded="large"
-            color="blue"
-            v-bind="activatorProps"
-          />
+          <base-button text="login" color="blue" v-bind="activatorProps" />
         </template>
         <template #default>
-          <base-card>
-            <base-toolbar>
-              <base-toolbar-title>Finargo</base-toolbar-title>
-              <base-button icon="$close" variant="text" @click="dialog = false" />
-            </base-toolbar>
+          <base-card title="Finargo">
+            <template #append>
+              <base-button
+                icon="$close"
+                density="compact"
+                variant="text"
+                @click="dialog = false"
+              />
+            </template>
             <AuthModalMenu />
           </base-card>
         </template>
