@@ -1,98 +1,104 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
-import {mapActions, mapGetters} from "vuex";
-import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
-import BaseList from "@/apps/visagiste/components/BaseList/BaseList.vue";
-import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
+import { defineComponent } from 'vue'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import { mapActions, mapGetters } from 'vuex'
+import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
+import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
+import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
+import BaseToolbar from '@/apps/visagiste/components/BaseToolbar/BaseToolbar.vue'
+import BaseTextField from '@/apps/visagiste/components/BaseTextField/BaseTextField.vue'
+import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
 
 export default defineComponent({
-  name: "CompanyListFilters",
+  name: 'CompanyListFilters',
   components: {
+    BaseSelect,
+    BaseToolbar,
+    BaseCardText,
+    BaseCard,
     BaseDialog,
-    BaseList,
-    BaseMenu,
-    BaseButton
+    BaseButton,
+  },
+  data() {
+    return {
+      dialog: false,
+      country: { slug: 'global', title: 'Global' },
+      sector: { slug: 'any', title: 'Any' },
+    }
   },
   computed: {
     ...mapGetters({
-      active_filters: "companyList/getActiveFilters",
-      filters: "companyList/getFilters",
+      active_filters: 'companyList/getActiveFilters',
+      filters: 'companyList/getFilters',
     }),
   },
   methods: {
     ...mapActions({
-      changeFilter: "companyList/changeFilter"
+      changeFilter: 'companyList/changeFilter',
     }),
-    setActiveFilter(activeItem: any, filterName: string) {
-      const activeFilter = {slug: activeItem.id, title: activeItem.title}
-      this.changeFilter({filter_name: filterName, object:  activeFilter})
-    }
+  },
+  watch: {
+    country(newVal) {
+      this.changeFilter({ filter_name: 'country', object: newVal })
+      this.country = this.active_filters.country
+      this.sector = this.active_filters.sector
+    },
+    sector(newVal) {
+      this.changeFilter({ filter_name: 'sector', object: newVal })
+      this.country = this.active_filters.country
+      this.sector = this.active_filters.sector
+    },
   },
 })
 </script>
 
 <template>
-<section class="company-list__filters">
-
-  <div class="company-list__basic-filters">
-
-    <base-menu>
-      <template #activator>
-        <base-button
-          :text="active_filters.country.title"
-          append-icon="ArrowDownIcon"
-          variant="outlined"
-        />
-      </template>
-      <template #list>
-        <base-list
-          :active-item="{id: active_filters.country.slug, title: active_filters.country.title}"
-          :items="filters.country.map((i: any) => ({id: i.slug, title: i.title}))"
-          :has-search=true
-          @setActiveItem="(activeItem: any) => setActiveFilter(activeItem, 'country')"
-        />
-      </template>
-    </base-menu>
-
-    <base-menu>
-      <template #activator>
-        <base-button
-          :text="active_filters.sector.title"
-          append-icon="ArrowDownIcon"
-          variant="outlined"
-        />
-      </template>
-      <template #list>
-        <base-list
-          :active-item="{id: active_filters.sector.slug, title: active_filters.sector.title}"
-          :items="filters.sector.map((i: any) => ({id: i.slug, title: i.title}))"
-          :has-search=true
-          @setActiveItem="(activeItem: any) => setActiveFilter(activeItem, 'sector')"
-        />
-      </template>
-    </base-menu>
-
-  </div>
-
-  <base-dialog
-    max-width="500"
-    title="Advanced filters"
-  >
-    <template #activator>
-      <base-button
-        text="advanced filters"
-        append-icon="FilterIcon"
-        variant="text"
-        rounded="large"
+  <section class="company-list__filters">
+    <div class="company-list__basic-filters">
+      <base-select
+        v-model="country"
+        :items="filters.country"
+        variant="outlined"
+        density="compact"
+        single-line
+        item-title="title"
+        item-value="slug"
+        return-object
+        hide-details
       />
-    </template>
-    <template #dialog>
-      <div class="company-list__advanced-filter-text">TO BE ADDED</div>
-    </template>
-  </base-dialog>
 
-</section>
+      <base-select
+        v-model="sector"
+        :items="filters.sector"
+        variant="outlined"
+        density="compact"
+        single-line
+        item-value="slug"
+        return-object
+        hide-details
+      />
+    </div>
+
+    <base-dialog v-model="dialog" max-width="500">
+      <template #activator="{ props: activatorProps }">
+        <base-button
+          v-bind="activatorProps"
+          text="advanced filters"
+          append-icon="$iFilter"
+          variant="text"
+        />
+      </template>
+
+      <template #default>
+        <base-card>
+          <base-toolbar title="Advanced filters">
+            <base-button variant="text" icon="$close" @click="dialog = false" />
+          </base-toolbar>
+          <base-card-text>TO BE ADDED</base-card-text>
+        </base-card>
+      </template>
+    </base-dialog>
+  </section>
 </template>
 
 <style>
@@ -108,10 +114,5 @@ export default defineComponent({
   display: grid;
   column-gap: 8px;
   grid-template-columns: auto auto;
-}
-.company-list__advanced-filter-text {
-  font-size: 1.6rem;
-  letter-spacing: 0.03125rem;
-  line-height: inherit;
 }
 </style>
