@@ -20,7 +20,7 @@ import { useComponentProps } from '@/apps/visagiste/composables/component'
 import { useDensity } from '@/apps/visagiste/composables/density'
 
 // Directives
-import Ripple from '@/directives/ripple'
+import Ripple from '@/apps/visagiste/directives/ripple'
 
 // Utilities
 import { computed, h, inject, nextTick, ref, shallowRef } from 'vue'

@@ -16,7 +16,7 @@ import { deepEqual, getUid, propsFactory, defineComponent } from "@/apps/visagis
 
 // Types
 import type { InjectionKey, PropType, Ref } from 'vue'
-import type { RippleDirectiveBinding } from "@/directives/ripple";
+import type { RippleDirectiveBinding } from "@/apps/visagiste/directives/ripple";
 
 export interface BaseSelectionControlGroupContext {
   modelValue: Ref<any>
