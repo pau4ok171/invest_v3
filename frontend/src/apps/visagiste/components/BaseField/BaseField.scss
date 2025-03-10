@@ -363,7 +363,7 @@
         --base-field-border-opacity: var(--base-high-emphasis-opacity);
       }
     }
-    .base-field-error:not(.base-field--disabled) & {
+    .base-field--error:not(.base-field--disabled) & {
       color: rgb(var(--base-theme-error));
     }
     .base-field--focused &,
