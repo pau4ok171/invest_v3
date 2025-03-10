@@ -53,7 +53,7 @@ import {
 
 // Types
 import type { PropType } from 'vue'
-import type { RippleDirectiveBinding } from '@/directives/ripple'
+import type { RippleDirectiveBinding } from '@/apps/visagiste/directives/ripple'
 import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 export type ListItemSlot = {
