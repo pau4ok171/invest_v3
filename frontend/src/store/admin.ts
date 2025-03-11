@@ -1,4 +1,4 @@
-import {defineStore} from "pinia";
+import { defineStore } from 'pinia'
 import type {
   ICompanyDataToRequest,
   IFetchedDetailCompany,
@@ -8,11 +8,14 @@ import type {
   IFormattedMarket,
   IFormattedSector,
   IFormattedUser,
-  PreviousFormattedDetailCompany
-} from "@/types/admin.types";
-import {AdminComponentName, isKeyOfFormattedDetailCompany} from "@/types/admin.types";
-import axios, {AxiosError} from "axios";
-import {toast} from "vue3-toastify";
+  PreviousFormattedDetailCompany,
+} from '@/types/admin.types'
+import {
+  AdminComponentName,
+  isKeyOfFormattedDetailCompany,
+} from '@/types/admin.types'
+import axios, { AxiosError } from 'axios'
+import { toast } from 'vue3-toastify'
 
 export const useAdminStore = defineStore({
   id: 'admin',
@@ -29,10 +32,11 @@ export const useAdminStore = defineStore({
     modelWasModified: false,
   }),
   getters: {
-    getModelWasModified: ((state) => Object.values(state.previousCompanyFormData).some(v => v.wasModified)),
+    getModelWasModified: (state) =>
+      Object.values(state.previousCompanyFormData).some((v) => v.wasModified),
   },
   actions: {
-    async initAdminStore() {
+    async init() {
       this.companyFormData = getEmptyCompanyFormData()
       this.previousCompanyFormData = getPreviousCompanyFormData()
     },
@@ -46,8 +50,8 @@ export const useAdminStore = defineStore({
       const companyUID = this.companyUID
       const company: IFetchedDetailCompany = await axios
         .get(`api/v1/admin/companies/${companyUID}/`)
-        .then(response => response.data)
-        .catch(error => console.log(error))
+        .then((response) => response.data)
+        .catch((error) => console.log(error))
 
       this.companyFormData = await getFormattedCompanyData(company)
     },
@@ -57,7 +61,10 @@ export const useAdminStore = defineStore({
       this.modelIsSaving = true
       // PrepareData
       const companyData: IFormattedDetailCompany = this.companyFormData
-      const preparedCompanyData = await getCompanyDataToRequest(companyData, this.previousCompanyFormData)
+      const preparedCompanyData = await getCompanyDataToRequest(
+        companyData,
+        this.previousCompanyFormData
+      )
       // CreateDataObject
       const formData = getFormDataFromRequestData(preparedCompanyData)
       // If NewModel => POST Request
@@ -65,7 +72,7 @@ export const useAdminStore = defineStore({
         if (this.isNewModel) {
           company = await axios
             .post('api/v1/admin/companies/', formData)
-            .then(response => {
+            .then((response) => {
               this.companyUID = response.data.uid
               toast.success('Company is successfully created')
               return response.data
@@ -77,7 +84,7 @@ export const useAdminStore = defineStore({
           const companyUID = this.companyUID
           company = await axios
             .patch(`api/v1/admin/companies/${companyUID}/`, formData)
-            .then(response => {
+            .then((response) => {
               this.companyUID = response.data.uid
               toast.success('Company is successfully saved')
               return response.data
@@ -90,7 +97,7 @@ export const useAdminStore = defineStore({
         this.companyFormData = companyFormData
         this.previousCompanyFormData = getPreviousCompanyFormData()
         this.isNewModel = false
-        window.scrollTo({top: 0, behavior: 'smooth'})
+        window.scrollTo({ top: 0, behavior: 'smooth' })
       } finally {
         // Reset ModelIsSaving
         this.modelIsSaving = false
@@ -100,16 +107,15 @@ export const useAdminStore = defineStore({
       // Send DELETE Request
       try {
         await axios
-            .delete(`api/v1/admin/companies/${this.companyUID}/`)
-            .then(async () => {
-              // Open Models Component
-              this.activeComponent = AdminComponentName.MODELS
-              // Notify Client
-              toast.success('Company is successfully deleted')
-            })
-            .catch(e => console.log(e))
-      }
-      catch (e) {
+          .delete(`api/v1/admin/companies/${this.companyUID}/`)
+          .then(async () => {
+            // Open Models Component
+            this.activeComponent = AdminComponentName.MODELS
+            // Notify Client
+            toast.success('Company is successfully deleted')
+          })
+          .catch((e) => console.log(e))
+      } catch (e) {
         console.log(e)
       }
     },
@@ -129,7 +135,9 @@ export const useAdminStore = defineStore({
       }
     },
     async activateEditMode() {
-      this.previousCompanyFormData = getPreviousCompanyFormData(this.companyFormData)
+      this.previousCompanyFormData = getPreviousCompanyFormData(
+        this.companyFormData
+      )
       this.editModeActivated = true
     },
     async deactivateEditMode() {
@@ -141,28 +149,40 @@ export const useAdminStore = defineStore({
       }
     },
     async resetField(key: '__all__' | string) {
-      let companyFormData: IFormattedDetailCompany = {...this.companyFormData}
-      const previousCompanyFormData: PreviousFormattedDetailCompany = {...this.previousCompanyFormData}
+      let companyFormData: IFormattedDetailCompany = { ...this.companyFormData }
+      const previousCompanyFormData: PreviousFormattedDetailCompany = {
+        ...this.previousCompanyFormData,
+      }
 
       if (key === '__all__') {
         companyFormData = Object.keys(companyFormData).reduce((obj, k) => {
-          return {...obj, [k]: previousCompanyFormData[k as keyof PreviousFormattedDetailCompany].value}
+          return {
+            ...obj,
+            [k]: previousCompanyFormData[
+              k as keyof PreviousFormattedDetailCompany
+            ].value,
+          }
         }, {} as IFormattedDetailCompany)
         this.companyFormData = companyFormData
         return
       }
 
       if (isKeyOfFormattedDetailCompany(companyFormData, key)) {
-        companyFormData = {...companyFormData, [key]: previousCompanyFormData[key].value}
+        companyFormData = {
+          ...companyFormData,
+          [key]: previousCompanyFormData[key].value,
+        }
       }
 
       if (key === 'country' || key === 'market') {
-        companyFormData['country'] = this.previousCompanyFormData['country'].value
+        companyFormData['country'] =
+          this.previousCompanyFormData['country'].value
         companyFormData['market'] = this.previousCompanyFormData['market'].value
       }
       if (key === 'sector' || key === 'industry') {
         companyFormData['sector'] = this.previousCompanyFormData['sector'].value
-        companyFormData['industry'] = this.previousCompanyFormData['industry'].value
+        companyFormData['industry'] =
+          this.previousCompanyFormData['industry'].value
       }
       if (key === 'ticker') {
         companyFormData['slug'] = this.previousCompanyFormData['slug'].value
@@ -183,14 +203,14 @@ const getEmptyCompanyFormData = (): IFormattedDetailCompany => {
     description: '',
     shortDescription: '',
     city: '',
-    country: {name: '', slug: '', key: 0} as IFormattedCountry,
-    market: {name: '', slug: '', key: 0} as IFormattedMarket,
-    sector: {name: '', slug: '', key: 0} as IFormattedSector,
-    industry: {name: '', slug: '', key: 0} as IFormattedIndustry,
+    country: { name: '', slug: '', key: 0 } as IFormattedCountry,
+    market: { name: '', slug: '', key: 0 } as IFormattedMarket,
+    sector: { name: '', slug: '', key: 0 } as IFormattedSector,
+    industry: { name: '', slug: '', key: 0 } as IFormattedIndustry,
     created: '',
     updated: '',
-    createdBy: {firstName: '', lastName: ''} as IFormattedUser,
-    updatedBy: {firstName: '', lastName: ''} as IFormattedUser,
+    createdBy: { firstName: '', lastName: '' } as IFormattedUser,
+    updatedBy: { firstName: '', lastName: '' } as IFormattedUser,
     isVisible: false,
     logo: {} as File,
     isFund: false,
@@ -199,59 +219,71 @@ const getEmptyCompanyFormData = (): IFormattedDetailCompany => {
   }
 }
 
-const getPreviousCompanyFormData = (company: IFormattedDetailCompany|undefined = undefined): PreviousFormattedDetailCompany => {
-  return Object.entries(company || getEmptyCompanyFormData()).reduce((obj, [k, v]) => {
-    return {...obj, [k]: {value: v, wasModified: false}}
-  }, {} as PreviousFormattedDetailCompany)
+const getPreviousCompanyFormData = (
+  company: IFormattedDetailCompany | undefined = undefined
+): PreviousFormattedDetailCompany => {
+  return Object.entries(company || getEmptyCompanyFormData()).reduce(
+    (obj, [k, v]) => {
+      return { ...obj, [k]: { value: v, wasModified: false } }
+    },
+    {} as PreviousFormattedDetailCompany
+  )
 }
 
-const getFormDataFromRequestData = (object: ICompanyDataToRequest) => Object.keys(object).reduce((formData, key) => {
-  const obj = object[key as keyof ICompanyDataToRequest]
-  if (key === 'logo') {
-    if (obj != undefined && obj instanceof File) {
-      // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
-      formData.append(key, obj, 'logo.png')
-    } else {
+const getFormDataFromRequestData = (object: ICompanyDataToRequest) =>
+  Object.keys(object).reduce((formData, key) => {
+    const obj = object[key as keyof ICompanyDataToRequest]
+    if (key === 'logo') {
+      if (obj != undefined && obj instanceof File) {
+        // https://stackoverflow.com/questions/63230458/django-rest-framework-doesnt-accept-blob-picture-file-file-extension-is-not
+        formData.append(key, obj, 'logo.png')
+      } else {
+        formData.append(key, '__delete__')
+      }
+      return formData
+    }
+    if (key === 'year_founded' && typeof obj == 'string' && !obj.length) {
       formData.append(key, '__delete__')
+      return formData
+    }
+    if (typeof obj == 'string') {
+      formData.append(key, obj)
+      return formData
+    }
+    if (typeof obj == 'boolean') {
+      formData.append(key, obj.toString())
+      return formData
     }
     return formData
-  }
-  if (key === 'year_founded' && typeof obj == 'string' && !obj.length) {
-    formData.append(key, '__delete__')
-    return formData
-  }
-  if (typeof obj == 'string') {
-    formData.append(key, obj)
-    return formData
-  }
-  if (typeof obj == 'boolean') {
-    formData.append(key, obj.toString())
-    return formData
-  }
-  return formData
-}, new FormData())
+  }, new FormData())
 
-const getFormattedCompanyData = async (company: IFetchedDetailCompany): Promise<IFormattedDetailCompany> => {
-  let file = await fetch(company.logo).then(r => r.blob()).then(blobFile => new File([blobFile], "CompanyLogo", {type: "image/png"}))
+const getFormattedCompanyData = async (
+  company: IFetchedDetailCompany
+): Promise<IFormattedDetailCompany> => {
+  let file = await fetch(company.logo)
+    .then((r) => r.blob())
+    .then(
+      (blobFile) => new File([blobFile], 'CompanyLogo', { type: 'image/png' })
+    )
   return {
-    ticker: company.ticker  || '',
-    slug: company.slug  || '',
-    uid: company.uid  || '',
-    companyName: company.title  || '',
-    shortCompanyName: company.short_title  || '',
-    shortCompanyNameGenitive: company.short_title_genitive  || '',
-    description: company.description  || '',
-    shortDescription: company.short_description  || '',
-    city: company.city  || '',
+    ticker: company.ticker || '',
+    slug: company.slug || '',
+    uid: company.uid || '',
+    companyName: company.title || '',
+    shortCompanyName: company.short_title || '',
+    shortCompanyNameGenitive: company.short_title_genitive || '',
+    description: company.description || '',
+    shortDescription: company.short_description || '',
+    city: company.city || '',
     country: {
-      name: company.country.name  || '',
-      slug: company.country.name_iso  || '',
-      key: company.country.id  || '',
+      name: company.country.name || '',
+      slug: company.country.name_iso || '',
+      key: company.country.id || '',
       currency: {
-        name: company.country.currency.name  || '',
-        symbol: company.country.currency.symbol  || '',
+        name: company.country.currency.name || '',
+        symbol: company.country.currency.symbol || '',
       },
-      flagURL: company.country.flag_url
+      flagURL: company.country.flag_url,
     },
     market: {
       name: company.market.title || '',
@@ -261,24 +293,24 @@ const getFormattedCompanyData = async (company: IFetchedDetailCompany): Promise<
     sector: {
       name: company.sector.title || '',
       slug: company.sector.slug || '',
-      key: company.sector.id  || '',
+      key: company.sector.id || '',
     },
     industry: {
-      name: company.industry.title  || '',
-      slug: company.industry.slug  || '',
-      key: company.industry.sector  || '',
+      name: company.industry.title || '',
+      slug: company.industry.slug || '',
+      key: company.industry.sector || '',
     },
-    created: company.created  || '',
-    updated: company.updated  || '',
+    created: company.created || '',
+    updated: company.updated || '',
     createdBy: {
-      firstName: company.created_by.first_name  || '',
-      lastName: company.created_by.last_name  || '',
+      firstName: company.created_by.first_name || '',
+      lastName: company.created_by.last_name || '',
     },
     updatedBy: {
-      firstName: company.updated_by.first_name  || '',
-      lastName: company.updated_by.last_name  || '',
+      firstName: company.updated_by.first_name || '',
+      lastName: company.updated_by.last_name || '',
     },
-    isVisible: company.is_visible  || false,
+    isVisible: company.is_visible || false,
     logo: file,
     isFund: company.is_fund || false,
     website: company.website || '',
@@ -286,28 +318,72 @@ const getFormattedCompanyData = async (company: IFetchedDetailCompany): Promise<
   } as IFormattedDetailCompany
 }
 
-const getCompanyDataToRequest = async (companyData: IFormattedDetailCompany, previousCompanyData: PreviousFormattedDetailCompany): Promise<ICompanyDataToRequest> => {
+const getCompanyDataToRequest = async (
+  companyData: IFormattedDetailCompany,
+  previousCompanyData: PreviousFormattedDetailCompany
+): Promise<ICompanyDataToRequest> => {
   const companyDataToRequest = {
-    ticker: previousCompanyData['ticker'].wasModified?companyData.ticker.trim().toUpperCase():null,
-    slug: previousCompanyData['slug'].wasModified?companyData.slug.trim():null,
-    uid: previousCompanyData['uid'].wasModified?companyData.uid.trim():null,
-    title: previousCompanyData['companyName'].wasModified?companyData.companyName.trim():null,
-    short_title: previousCompanyData['shortCompanyName'].wasModified?companyData.shortCompanyName.trim():null,
-    short_title_genitive: previousCompanyData['shortCompanyNameGenitive'].wasModified?companyData.shortCompanyNameGenitive.trim():null,
-    description: previousCompanyData['description'].wasModified?companyData.description.trim():null,
-    short_description: previousCompanyData['shortDescription'].wasModified?companyData.shortDescription.trim():null,
-    city: previousCompanyData['city'].wasModified?companyData.city.trim():null,
-    country_name_iso: previousCompanyData['country'].wasModified?companyData.country.slug:null,
-    market_slug: previousCompanyData['market'].wasModified?companyData.market.slug:null,
-    sector_slug: previousCompanyData['sector'].wasModified?companyData.sector.slug:null,
-    industry_slug: previousCompanyData['industry'].wasModified?companyData.industry.slug:null,
-    is_visible: previousCompanyData['isVisible'].wasModified?companyData.isVisible:null,
-    logo: previousCompanyData['logo'].wasModified?companyData.logo:null,
-    is_fund: previousCompanyData['isFund'].wasModified?companyData.isFund:null,
-    website: previousCompanyData['website'].wasModified?companyData.website.trim():null,
-    year_founded: previousCompanyData['founded'].wasModified?companyData.founded.trim():null,
+    ticker: previousCompanyData['ticker'].wasModified
+      ? companyData.ticker.trim().toUpperCase()
+      : null,
+    slug: previousCompanyData['slug'].wasModified
+      ? companyData.slug.trim()
+      : null,
+    uid: previousCompanyData['uid'].wasModified ? companyData.uid.trim() : null,
+    title: previousCompanyData['companyName'].wasModified
+      ? companyData.companyName.trim()
+      : null,
+    short_title: previousCompanyData['shortCompanyName'].wasModified
+      ? companyData.shortCompanyName.trim()
+      : null,
+    short_title_genitive: previousCompanyData['shortCompanyNameGenitive']
+      .wasModified
+      ? companyData.shortCompanyNameGenitive.trim()
+      : null,
+    description: previousCompanyData['description'].wasModified
+      ? companyData.description.trim()
+      : null,
+    short_description: previousCompanyData['shortDescription'].wasModified
+      ? companyData.shortDescription.trim()
+      : null,
+    city: previousCompanyData['city'].wasModified
+      ? companyData.city.trim()
+      : null,
+    country_name_iso: previousCompanyData['country'].wasModified
+      ? companyData.country.slug
+      : null,
+    market_slug: previousCompanyData['market'].wasModified
+      ? companyData.market.slug
+      : null,
+    sector_slug: previousCompanyData['sector'].wasModified
+      ? companyData.sector.slug
+      : null,
+    industry_slug: previousCompanyData['industry'].wasModified
+      ? companyData.industry.slug
+      : null,
+    is_visible: previousCompanyData['isVisible'].wasModified
+      ? companyData.isVisible
+      : null,
+    logo: previousCompanyData['logo'].wasModified ? companyData.logo : null,
+    is_fund: previousCompanyData['isFund'].wasModified
+      ? companyData.isFund
+      : null,
+    website: previousCompanyData['website'].wasModified
+      ? companyData.website.trim()
+      : null,
+    year_founded: previousCompanyData['founded'].wasModified
+      ? companyData.founded.trim()
+      : null,
   }
   return Object.keys(companyDataToRequest)
-      .filter(k => companyDataToRequest[k as keyof ICompanyDataToRequest] !== null)
-      .reduce((a, k) => ({...a, [k]: companyDataToRequest[k as keyof ICompanyDataToRequest]}), {})
+    .filter(
+      (k) => companyDataToRequest[k as keyof ICompanyDataToRequest] !== null
+    )
+    .reduce(
+      (a, k) => ({
+        ...a,
+        [k]: companyDataToRequest[k as keyof ICompanyDataToRequest],
+      }),
+      {}
+    )
 }
