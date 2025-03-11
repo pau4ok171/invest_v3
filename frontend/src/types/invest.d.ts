@@ -45,6 +45,13 @@ export interface ListCompany {
     title: string,
     uid: string,
     updated: string,
+    return_7d: number,
+    return_30d: number,
+    return_90d: number,
+    return_1y: number,
+    return_3y: number,
+    return_5y: number,
+    average_weekly_mouvement: number,
 }
 
 export interface SearchCompany {
