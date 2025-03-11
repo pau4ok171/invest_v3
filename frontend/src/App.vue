@@ -1,38 +1,25 @@
-<script lang="ts">
-import { RouterView } from "vue-router";
-import AppLayout from "@/layouts/AppLayout.vue";
-import axios from "axios";
-import { mapActions, mapGetters, mapMutations } from "vuex";
-import { defineComponent } from "vue";
-import { BaseApp } from "@/apps/visagiste/components/BaseApp";
+<script setup lang="ts">
+// Components
+import { BaseApp } from '@/apps/visagiste/components/BaseApp'
 
-export default defineComponent({
-  components: {
-    BaseApp,
-    AppLayout,
-    RouterView,
-  },
-  async mounted() {
-    this.initializeAuth();
-    axios.defaults.headers.common["Authorization"] = this.token
-      ? `Token ${this.token}`
-      : "";
-    await this.fetchUserInfo();
-  },
-  methods: {
-    ...mapMutations({
-      initializeAuth: "authModule/initializeAuth",
-    }),
-    ...mapActions({
-      fetchUserInfo: "authModule/fetchUserInfo",
-    }),
-  },
-  computed: {
-    ...mapGetters({
-      token: "authModule/getToken",
-    }),
-  },
-});
+// Composables
+import { useAuthStore } from '@/store/auth'
+
+// Utilities
+import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
+import axios from 'axios'
+import AppLayout from '@/layouts/AppLayout.vue'
+
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.init()
+  axios.defaults.headers.common['Authorization'] = authStore.token
+    ? `Token ${authStore.token}`
+    : ''
+  authStore.fetchUserInfo()
+})
 </script>
 
 <template>
