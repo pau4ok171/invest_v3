@@ -1,20 +1,24 @@
 <script lang="ts">
-import type {PropType} from "vue";
-import {defineComponent} from 'vue'
-import type {ErrorObject} from "@vuelidate/core";
-import AdminImageField from "@/components/admin/models/fields/AdminImageField.vue";
-import AdminSelectorField from "@/components/admin/models/fields/AdminSelectorField.vue";
-import AdminCheckBoxField from "@/components/admin/models/fields/AdminCheckBoxField.vue";
-import AdminTextField from "@/components/admin/models/fields/AdminTextField.vue";
-import AdminCharField from "@/components/admin/models/fields/AdminCharField.vue";
-import AdminYearField from "@/components/admin/models/fields/AdminYearField.vue";
-import {FieldStatusEnum} from "@/types/admin.types";
-import type {AdminModelValue, IFormattedSector} from "@/types/admin.types";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+// Components
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import AdminTextField from '@/components/admin/models/fields/AdminTextField.vue'
+import AdminCharField from '@/components/admin/models/fields/AdminCharField.vue'
+import AdminYearField from '@/components/admin/models/fields/AdminYearField.vue'
+import AdminImageField from '@/components/admin/models/fields/AdminImageField.vue'
+import AdminCheckBoxField from '@/components/admin/models/fields/AdminCheckBoxField.vue'
+import AdminSelectorField from '@/components/admin/models/fields/AdminSelectorField.vue'
 
+// Utilities
+import { defineComponent } from 'vue'
+
+// Types
+import type { PropType } from 'vue'
+import type { ErrorObject } from '@vuelidate/core'
+import { FieldStatusEnum } from '@/types/admin.types'
+import type { AdminModelValue, IFormattedSector } from '@/types/admin.types'
 
 export default defineComponent({
-  name: "AdminField",
+  name: 'AdminField',
   components: {
     BaseButton,
     AdminImageField,
@@ -34,7 +38,7 @@ export default defineComponent({
       default: 'Label',
     },
     helpText: {
-      type: String
+      type: String,
     },
     isRequired: {
       type: Boolean,
@@ -46,7 +50,7 @@ export default defineComponent({
     },
     isDirty: {
       type: Boolean,
-      required: true
+      required: true,
     },
     modelValue: {
       type: [String, Boolean, Object],
@@ -81,59 +85,54 @@ export default defineComponent({
         return FieldStatusEnum.VALID
       }
       return FieldStatusEnum.VIRGIN
-    }
+    },
   },
   methods: {
     updateModelValue(value: AdminModelValue) {
       this.$emit('update:modelValue', value)
-    }
+    },
   },
 })
 </script>
 
 <template>
-<div class="admin-field__fieldset">
-  <div class="admin-field__field-wrapper">
-    <div class="admin-field__reset-button-wrapper">
-      <base-button
-        icon="ResetIcon"
-        size="x-small"
-        density="compact"
-        theme="dark-blue"
-        v-show="wasModified"
-        @click="$emit('resetField')"
-        v-tippy="{content: 'Click to reset field changes'}"
+  <div class="admin-field__fieldset">
+    <div class="admin-field__field-wrapper">
+      <div class="admin-field__reset-button-wrapper">
+        <base-button
+          icon="$iReset"
+          size="x-small"
+          density="comfortable"
+          color="info"
+          v-show="wasModified"
+          @click="$emit('resetField')"
+          v-tippy="{ content: 'Click to reset field changes' }"
+        />
+      </div>
+
+      <component
+        :is="field"
+        :label
+        :isRequired
+        :isDisabled
+        :modelValue
+        :options
+        :hasSearch
+        :fieldStatus="getFieldStatus"
+        @update:model-value="updateModelValue"
+        @commitValidator="$emit('commitValidator')"
+        @touch="$emit('touch')"
       />
     </div>
 
-    <component
-      :is="field"
-      :label
-      :isRequired
-      :isDisabled
-      :modelValue
-      :options
-      :hasSearch
-      :fieldStatus="getFieldStatus"
-      @update:model-value="updateModelValue"
-      @commitValidator="$emit('commitValidator')"
-      @touch="$emit('touch')"
-    />
-  </div>
+    <div v-if="helpText" class="admin-field__help-text">{{ helpText }}</div>
 
-  <div v-if="helpText" class="admin-field__help-text">{{ helpText }}</div>
-
-  <div v-if="errors?.length" class="admin-field__errors">
-    <div
-        v-for="error in errors"
-        :key="error.$uid"
-        class="admin-field__error"
-    >
-      {{ error.$message }}
+    <div v-if="errors?.length" class="admin-field__errors">
+      <div v-for="error in errors" :key="error.$uid" class="admin-field__error">
+        {{ error.$message }}
+      </div>
     </div>
   </div>
-
-</div>
 </template>
 <style>
 :root {
@@ -160,7 +159,7 @@ export default defineComponent({
 }
 .admin-field__help-text {
   color: #92969c;
-  font-size: 1.2rem;
+  font-size: .75rem;
   padding-left: 20px;
   margin-top: 4px;
 }
@@ -169,7 +168,7 @@ export default defineComponent({
   margin: 10px 0 0 20px;
   border: 1px solid #c92432;
   border-radius: 8px;
-  font-size: 1.2rem;
+  font-size: .75rem;
 }
 .admin-field__error {
   display: flex;
