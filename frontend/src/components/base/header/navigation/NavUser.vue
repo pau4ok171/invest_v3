@@ -1,4 +1,4 @@
-<script lang="ts">
+<script setup lang="ts">
 // Components
 import AuthModalMenu from '@/components/base/auth/AuthModalMenu.vue'
 
@@ -11,63 +11,38 @@ import { BaseList } from '@/apps/visagiste/components/BaseList'
 import { BaseListItem } from '@/apps/visagiste/components/BaseList'
 import { BaseDivider } from '@/apps/visagiste/components/BaseDivider'
 
+// Composables
+import { useAuthStore } from '@/store/auth'
+
 // Utilities
-import { defineComponent } from 'vue'
+import { ref, shallowRef } from 'vue'
 import axios from 'axios'
-import { mapGetters, mapMutations, mapState } from 'vuex'
 
-export default defineComponent({
-  name: 'NavUser',
-  components: {
-    BaseDivider,
-    BaseListItem,
-    BaseList,
-    BaseCard,
-    BaseDialog,
-    BaseMenu,
-    BaseButton,
-    AuthModalMenu,
-  },
-  data() {
-    return {
-      items: [
-        { title: 'Profile', to: '/profile', id: 'profile' },
-        { title: 'Plan & Pricing', to: '/pricing', id: 'pricing' },
-        { title: 'Notifications', to: '/notifications', id: 'notifications' },
-        { title: 'HelpCenter', to: '/helpcenter', id: 'help' },
-      ],
-      dialog: false,
-    }
-  },
-  computed: {
-    ...mapState({
-      userInfo: (state: any) => state.authModule.userInfo,
-    }),
-    ...mapGetters({
-      isAuthenticated: 'authModule/getIsAuthenticated',
-    }),
-  },
-  methods: {
-    ...mapMutations({
-      removeToken: 'authModule/removeToken',
-    }),
-    logout() {
-      axios.defaults.headers.common['Authorization'] = ''
+const authStore = useAuthStore()
 
-      localStorage.removeItem('token')
-      localStorage.removeItem('username')
-      localStorage.removeItem('userid')
+const items = ref([
+  { title: 'Profile', to: '/profile', id: 'profile' },
+  { title: 'Plan & Pricing', to: '/pricing', id: 'pricing' },
+  { title: 'Notifications', to: '/notifications', id: 'notifications' },
+  { title: 'HelpCenter', to: '/helpcenter', id: 'help' },
+])
+const dialog = shallowRef(false)
 
-      this.removeToken()
-      document.location.reload()
-    },
-  },
-})
+function onLogout() {
+  axios.defaults.headers.common['Authorization'] = ''
+
+  localStorage.removeItem('token')
+  localStorage.removeItem('username')
+  localStorage.removeItem('userid')
+
+  authStore.token = ''
+  authStore.userInfo = {}
+}
 </script>
 
 <template>
   <div class="nav-user__wrapper">
-    <template v-if="isAuthenticated">
+    <template v-if="authStore.isAuthenticated">
       <base-menu>
         <template #activator="{ props }">
           <base-button
@@ -82,7 +57,7 @@ export default defineComponent({
           <base-card>
             <base-list>
               <base-list-item
-                v-if="userInfo.is_staff"
+                v-if="authStore.userInfo.is_staff"
                 :to="{ name: 'admin' }"
                 title="Admin Panel"
               />
@@ -93,7 +68,7 @@ export default defineComponent({
                 :to="item.to"
               />
               <base-divider />
-              <base-list-item @click="logout" title="Logout" />
+              <base-list-item @click="onLogout" title="Logout" />
             </base-list>
           </base-card>
         </template>
