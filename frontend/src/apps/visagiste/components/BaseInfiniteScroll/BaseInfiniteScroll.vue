@@ -48,7 +48,7 @@ export const useBaseInfiniteScrollProps = propsFactory(
     direction: {
       type: String as PropType<'vertical' | 'horizontal'>,
       default: 'vertical',
-      validator: (value: any) => ['intersect', 'manual'].includes(value),
+      validator: (value: any) => ['vertical', 'horizontal'].includes(value),
     },
     side: {
       type: String as PropType<InfiniteScrollSide>,
@@ -102,8 +102,7 @@ export const BaseInfiniteScrollIntersect = defineComponent({
           class: 'base-infinite-scroll-intersect',
           style: { '--base-infinite-margin-size': props.rootMargin },
           ref: intersectionRef,
-        },
-        '&nbsp;'
+        }
       )
   },
 })
