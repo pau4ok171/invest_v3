@@ -1,42 +1,26 @@
-<script lang="ts">
-import CompanyListHeader from "@/components/company_list/CompanyListHeader.vue";
-import CompanyListContent from "@/components/company_list/CompanyListContent.vue";
-import {mapActions, mapGetters, mapMutations} from "vuex";
-import {defineComponent} from "vue";
+<script setup lang="ts">
+// Components
+import CompanyListHeader from '@/components/company_list/CompanyListHeader.vue'
+import CompanyListContent from '@/components/company_list/CompanyListContent.vue'
 
-export default defineComponent({
-  name: 'CompanyList',
-  components: {
-    CompanyListHeader,
-    CompanyListContent,
-  },
-  async mounted() {
-    document.title = 'Stocks'
-    await this.fetchFilters()
-    await this.fetchCompanies()
-    this.setPageIsReady(true)
-  },
-  methods: {
-    ...mapActions({
-      fetchCompanies: "companyList/fetchCompanies",
-      fetchFilters: "companyList/fetchFilters",
-    }),
-    ...mapMutations({
-      setPageIsReady: "companyList/setPageIsReady",
-    })
-  },
-  computed: {
-    ...mapGetters({
-      pageIsReady: "companyList/getPageIsReady",
-    }),
-  },
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+
+// Utilities
+import { onMounted } from 'vue'
+
+const companyListStore = useCompanyListStore()
+
+onMounted(async () => {
+  document.title = 'Stocks'
+  await companyListStore.fetchFilters()
 })
 </script>
 
 <template>
-<section>
-  <CompanyListHeader v-if="pageIsReady"/>
+  <section>
+    <CompanyListHeader />
 
-  <CompanyListContent v-if="pageIsReady"/>
-</section>
+    <CompanyListContent />
+  </section>
 </template>

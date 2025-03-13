@@ -1,17 +1,8 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+// Components
 import CompanyListInfo from '@/components/company_list/CompanyListInfo.vue'
 import CompanyListFilters from '@/components/company_list/CompanyListFilters.vue'
 import CompanyListOptions from '@/components/company_list/CompanyListOptions.vue'
-
-export default defineComponent({
-  name: 'CompanyListHeader',
-  components: {
-    CompanyListOptions,
-    CompanyListFilters,
-    CompanyListInfo,
-  },
-})
 </script>
 
 <template>

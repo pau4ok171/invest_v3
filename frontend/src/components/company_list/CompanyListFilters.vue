@@ -1,55 +1,34 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+// Components
 import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import { mapActions, mapGetters } from 'vuex'
 import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
 import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
+import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
 import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
 import BaseToolbar from '@/apps/visagiste/components/BaseToolbar/BaseToolbar.vue'
-import BaseTextField from '@/apps/visagiste/components/BaseTextField/BaseTextField.vue'
-import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
 
-export default defineComponent({
-  name: 'CompanyListFilters',
-  components: {
-    BaseSelect,
-    BaseToolbar,
-    BaseCardText,
-    BaseCard,
-    BaseDialog,
-    BaseButton,
-  },
-  data() {
-    return {
-      dialog: false,
-      country: { slug: 'global', title: 'Global' },
-      sector: { slug: 'any', title: 'Any' },
-    }
-  },
-  computed: {
-    ...mapGetters({
-      active_filters: 'companyList/getActiveFilters',
-      filters: 'companyList/getFilters',
-    }),
-  },
-  methods: {
-    ...mapActions({
-      changeFilter: 'companyList/changeFilter',
-    }),
-  },
-  watch: {
-    country(newVal) {
-      this.changeFilter({ filter_name: 'country', object: newVal })
-      this.country = this.active_filters.country
-      this.sector = this.active_filters.sector
-    },
-    sector(newVal) {
-      this.changeFilter({ filter_name: 'sector', object: newVal })
-      this.country = this.active_filters.country
-      this.sector = this.active_filters.sector
-    },
-  },
-})
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+
+// Utilities
+import { ref, shallowRef, watch } from 'vue'
+
+const companyListStore = useCompanyListStore()
+
+const dialog = shallowRef(false)
+const country = ref({ slug: 'global', title: 'Global' })
+const sector = ref({ slug: 'any', title: 'Any' })
+
+watch(country, async (newVal) => {
+  await companyListStore.changeFilter({ filterName: 'country', item: newVal })
+  country.value = companyListStore.activeFilters.country
+  sector.value = companyListStore.activeFilters.sector
+}, { deep: true })
+watch(sector, async (newVal) => {
+  await companyListStore.changeFilter({ filterName: 'sector', item: newVal })
+  country.value = companyListStore.activeFilters.country
+  sector.value = companyListStore.activeFilters.sector
+}, { deep: true })
 </script>
 
 <template>
@@ -57,8 +36,9 @@ export default defineComponent({
     <div class="company-list__basic-filters">
       <base-select
         v-model="country"
-        :items="filters.country"
-        variant="outlined"
+        :items="companyListStore.filters.country"
+        :loading="companyListStore.fetching"
+        variant="solo-filled"
         density="compact"
         single-line
         item-title="title"
@@ -69,8 +49,9 @@ export default defineComponent({
 
       <base-select
         v-model="sector"
-        :items="filters.sector"
-        variant="outlined"
+        :items="companyListStore.filters.sector"
+        :loading="companyListStore.fetching"
+        variant="solo-filled"
         density="compact"
         single-line
         item-value="slug"

@@ -1,32 +1,39 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
+<script setup lang="ts">
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
 
-export default defineComponent({
-  name: 'CompanyListInfo',
-  computed: {
-    ...mapGetters({
-      active_filters: 'companyList/getActiveFilters',
-      list_updated: 'companyList/getListUpdated',
-    }),
-  },
-})
+const companyListStore = useCompanyListStore()
 </script>
 
 <template>
   <section class="company-list__info">
     <div class="company-list__title">
-      Largest {{ active_filters.country.title }} Stocks
+      Largest {{ companyListStore.activeFilters.country.title }} Stocks
     </div>
     <div class="company-list__updated">
-      <span>Updated</span>
-      {{ new Date(list_updated).toLocaleDateString('ru-RU') }}
+      <span>Updated </span>
+      <base-skeleton-loader
+        class="d-inline-block mt-n3 ml-n3"
+        v-if="companyListStore.fetching"
+        width="120"
+        type="text"
+      />
+      <template v-else>
+        {{
+          companyListStore.lastUpdate
+            ? new Date(companyListStore.lastUpdate).toLocaleDateString('ru-RU')
+            : 'n/a'
+        }}
+      </template>
     </div>
     <div class="company-list__description">
-      Discover {{ active_filters.country.title }} companies<template
-        v-if="active_filters.country.markets"
+      Discover
+      {{ companyListStore.activeFilters.country.title }} companies<template
+        v-if="companyListStore.activeFilters.country.markets"
       >
-        that are on the {{ active_filters.country.markets[0].title }}</template
+        that are on the
+        {{ companyListStore.activeFilters.country.markets[0]?.title }}</template
       >.
     </div>
   </section>

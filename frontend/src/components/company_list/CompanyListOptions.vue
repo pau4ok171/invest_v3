@@ -1,26 +1,18 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
+<script setup lang="ts">
+// Components
 import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
-export default defineComponent({
-  name: 'CompanyListOptions',
-  components: {
-    BaseButton,
-  },
-  computed: {
-    ...mapGetters({
-      totalCompaniesLength: 'companyList/getTotalCompaniesLength',
-    }),
-  },
-})
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+
+const companyListStore = useCompanyListStore()
 </script>
 
 <template>
   <section class="company-list__options">
     <div></div>
     <div class="company-list__company-count">
-      <p>{{ totalCompaniesLength }} companies</p>
+      <p>{{ companyListStore.totalCompanyLength }} companies</p>
     </div>
     <div class="company-list__view-modes">
       <base-button icon="$iTableMode" variant="text" disabled />

@@ -1,7 +1,5 @@
-import {createStore} from "vuex";
-import {companyDetailModule} from "@/store/modules/companyDetailModule";
-import {companyListModule} from "@/store/modules/companyListModule";
-import {authModule} from "@/store/modules/authModule";
+import { createStore } from 'vuex'
+import { companyDetailModule } from '@/store/modules/companyDetailModule'
 
 const store = createStore({
   state: () => ({
@@ -17,8 +15,6 @@ const store = createStore({
     },
   },
   modules: {
-    authModule: authModule,
-    companyList: companyListModule,
     companyDetail: companyDetailModule,
   },
 })
