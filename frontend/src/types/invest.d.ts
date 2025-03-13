@@ -1,71 +1,69 @@
 export interface DetailCompany {
-    analyst_ideas: Array<AnalystIdea>,
-    reports: Array<Report>,
-    country: Country,
-    formatting: Formatting,
-    market: Market,
-    sector_market: SectorMarket,
-    price_data: PriceData,
-    sector: Sector,
-    id: number,
-    year_founded: number,
-    is_watchlisted: boolean,
-    absolute_url: string,
-    logo_url: string,
-    title: string,
-    ticker: string,
-    uid: string,
-    slug: string,
-    description: string,
-    short_description: string,
-    website: string,
-    company_news: Array<News>,
-    next_dividend: Dividend,
-    last_reported_earnings: string,
-    next_earnings: string,
-    return_7d: number,
-    return_30d: number,
-    return_90d: number,
-    return_1y: number,
-    return_3y: number,
-    return_5y: number,
-    average_weekly_mouvement: number,
+  absolute_url: string
+  analyst_ideas: Array<AnalystIdea>
+  average_weekly_mouvement: number
+  company_news: Array<News>
+  country: Country
+  description: string
+  formatting: Formatting
+  id: number
+  is_watchlisted: boolean
+  last_reported_earnings: string
+  logo_url: string
+  market: Market
+  next_dividend: Dividend
+  next_earnings: string
+  price_data: PriceData
+  reports: Array<Report>
+  return_1y: number
+  return_30d: number
+  return_3y: number
+  return_5y: number
+  return_7d: number
+  return_90d: number
+  sector: Sector
+  sector_market: SectorMarket
+  short_description: string
+  slug: string
+  ticker: string
+  title: string
+  uid: string
+  website: string
+  year_founded: number
 }
 
 export interface ListCompany {
-    absolute_url: string,
-    country: Country,
-    formatting: Formatting,
-    is_watchlisted: boolean,
-    logo_url: string,
-    market: Market,
-    price_data: PriceData,
-    sector: Sector,
-    ticker: string,
-    title: string,
-    uid: string,
-    updated: string,
-    return_7d: number,
-    return_30d: number,
-    return_90d: number,
-    return_1y: number,
-    return_3y: number,
-    return_5y: number,
-    average_weekly_mouvement: number,
+  absolute_url: string
+  average_weekly_mouvement: number
+  country: Country
+  formatting: Formatting
+  is_watchlisted: boolean
+  logo_url: string
+  market: Market
+  price_data: PriceData
+  return_1y: number
+  return_30d: number
+  return_3y: number
+  return_5y: number
+  return_7d: number
+  return_90d: number
+  sector: Sector
+  ticker: string
+  title: string
+  uid: string
+  updated: string
 }
 
 export interface SearchCompany {
-    uid: string,
-    title: string,
-    ticker: string,
-    logo_url: string,
-    country: Country,
-    sector: Sector,
-    market: Market,
-    absolute_url: string,
+  absolute_url: string
+  country: Country
+  logo_url: string
+  market: Market
+  sector: Sector
+  ticker: string
+  title: string
+  uid: string
 }
-
-export interface SearchCompanyItems extends Array<SearchCompany>{}
 
 export interface AnalystIdea {
     analyst: Analyst,
@@ -93,30 +91,30 @@ export interface Currency {
 }
 
 export interface Report {
-    total_employees_figure: number,
-    updated: string,
-    scale: string,
-    scale_unit: number,
-    income_net: number,
-    sales: number,
-    cost_of_sales: number,
-    equity: number,
-    debt: number,
-    gross_margin: number,
-    operation_expenses: number,
-    operation_income: number,
-    other_income_net: number,
-    taxes: number,
-    share_outstanding: number,
-    assets: number,
+  assets: number
+  cost_of_sales: number
+  debt: number
+  equity: number
+  gross_margin: number
+  income_net: number
+  operation_expenses: number
+  operation_income: number
+  other_income_net: number
+  sales: number
+  scale: string
+  scale_unit: number
+  share_outstanding: number
+  taxes: number
+  total_employees_figure: number
+  updated: string
 }
 
 export interface Country {
-    currency: Currency,
-    id: number,
-    markets: Array<Market>
-    slug: string,
-    title: string,
+  currency: Currency
+  id: number
+  markets: Array<Market>
+  slug: string
+  title: string
 }
 
 export interface Market {
@@ -171,16 +169,16 @@ export interface Competitor {
 }
 
 export interface Snowflake {
-    value: number,
-    future: number,
-    past: number,
-    health: number,
-    dividends: number,
+  dividends: number
+  future: number
+  health: number
+  past: number
+  value: number
 }
 
 export interface Candle {
-    close: number,
-    time: number,
+  close: number
+  time: number
 }
 
 export interface News {
@@ -191,23 +189,23 @@ export interface News {
     content: string,
 }
 
-export interface  Dividend {
-    scale: string,
-    scale_unit: number,
-    dividend_yield: number,
-    dividend_amount: number,
-    declared_date: string,
-    ex_dividend_date: string,
-    pay_date: string,
-    currency: Currency,
+export interface Dividend {
+  currency: Currency
+  declared_date: string
+  dividend_amount: number
+  dividend_yield: number
+  ex_dividend_date: string
+  pay_date: string
+  scale: string
+  scale_unit: number
 }
 
 export interface SectorMarket {
-    return_7d: number,
-    return_30d: number,
-    return_90d: number,
-    return_1y: number,
-    return_3y: number,
-    return_5y: number,
-    average_weekly_mouvement: number,
+  average_weekly_mouvement: number
+  return_1y: number
+  return_30d: number
+  return_3y: number
+  return_5y: number
+  return_7d: number
+  return_90d: number
 }
