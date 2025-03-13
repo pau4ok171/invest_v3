@@ -198,11 +198,12 @@ export default defineComponent({
       },
       $props.class,
     ]"
-    :stype="$props.style"
+    :style="$props.style"
     :fixedHeader="$props.fixedHeader"
     v-bind="tableProps"
   >
     <template #top><slot name="top" v-bind="slotProps" /></template>
+
     <template #default>
       <slot name="default" v-bind="slotProps">
         <slot name="colgroup" v-bind="slotProps" />
@@ -214,10 +215,10 @@ export default defineComponent({
           role="rowgroup"
         >
           <BaseDataTableHeaders v-bind="dataTableHeadersProps">
-            <template #headers><slot name="headers" /></template>
-            <template #data-table-select
-              ><slot name="data-table-select"
-            /></template>
+            <template #headers="vSlotProps"><slot name="headers" v-bind="vSlotProps" /></template>
+            <template #data-table-select>
+              <slot name="data-table-select"/>
+            </template>
           </BaseDataTableHeaders>
         </thead>
 
@@ -232,8 +233,8 @@ export default defineComponent({
 
           <slot name="body" v-bind="slotProps">
             <BaseDataTableRows
-              :items="flatItems"
               v-bind="{ ...$attrs, ...dataTableRowsProps }"
+              :items="flatItems"
             >
               <template v-for="(_, name) in ($slots as {})" #[name]="slotData">
                 <slot :name="name" v-bind="slotData || {}"/>
@@ -249,6 +250,7 @@ export default defineComponent({
         <slot name="tfoot" v-bind="slotProps" />
       </slot>
     </template>
+
     <template #bottom>
       <slot name="bottom" v-bind="slotProps">
         <template v-if="!$props.hideDefaultFooter">
