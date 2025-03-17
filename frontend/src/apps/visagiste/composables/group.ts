@@ -1,8 +1,19 @@
 // Composables
-import {useProxiedModel} from "@/apps/visagiste/composables/proxiedModel";
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 
 // Utilities
-import {computed, inject, onBeforeUnmount, onMounted, onUpdated, provide, reactive, toRef, unref, watch} from "vue";
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  provide,
+  reactive,
+  toRef,
+  unref,
+  watch,
+} from 'vue'
 import {
   consoleWarn,
   deepEqual,
@@ -10,8 +21,8 @@ import {
   getCurrentInstance,
   getUid,
   propsFactory,
-  wrapInArray
-} from "@/apps/visagiste/utils";
+  wrapInArray,
+} from '@/apps/visagiste/utils'
 
 // Types
 import type {
@@ -21,9 +32,9 @@ import type {
   InjectionKey,
   PropType,
   Ref,
-  UnwrapRef
-} from "vue";
-import type {EventProp} from "@/apps/visagiste/utils";
+  UnwrapRef,
+} from 'vue'
+import type { EventProp } from '@/apps/visagiste/utils'
 
 export interface GroupItem {
   id: number
@@ -51,11 +62,13 @@ export interface GroupProvide {
   prev: () => void
   next: () => void
   selectedClass: Ref<string | undefined>
-  items: ComputedRef<{
-    id: number
-    value: unknown
-    disabled: boolean | undefined
-  }[]>
+  items: ComputedRef<
+    {
+      id: number
+      value: unknown
+      disabled: boolean | undefined
+    }[]
+  >
   disabled: Ref<boolean | undefined>
   getItemIndex: (value: unknown) => number
 }
@@ -73,49 +86,56 @@ export interface GroupItemProvide {
   group: GroupProvide
 }
 
-export const useGroupProps = propsFactory({
-  modelValue: {
-    type: null,
-    default: undefined,
+export const useGroupProps = propsFactory(
+  {
+    modelValue: {
+      type: null,
+      default: undefined,
+    },
+    multiple: Boolean,
+    mandatory: [Boolean, String] as PropType<boolean | 'force'>,
+    max: Number,
+    selectedClass: String,
+    disabled: Boolean,
   },
-  multiple: Boolean,
-  mandatory: [Boolean, String] as PropType<boolean | 'force'>,
-  max: Number,
-  selectedClass: String,
-  disabled: Boolean,
-}, 'group')
+  'group'
+)
 
-export const useGroupItemProps = propsFactory({
-  value: null,
-  disabled: Boolean,
-  selectedClass: String,
-}, 'group-item')
+export const useGroupItemProps = propsFactory(
+  {
+    value: null,
+    disabled: Boolean,
+    selectedClass: String,
+  },
+  'group-item'
+)
 
-export interface GroupItemProps extends ExtractPropTypes<ReturnType<typeof useGroupItemProps>> {
+export interface GroupItemProps
+  extends ExtractPropTypes<ReturnType<typeof useGroupItemProps>> {
   'onGroup:selected': EventProp<[{ value: boolean }]> | undefined
 }
 
 // Composables
-export function useGroupItem (
+export function useGroupItem(
   props: GroupItemProps,
   injectKey: InjectionKey<GroupProvide>,
-  required?: true,
+  required?: true
 ): GroupItemProvide
-export function useGroupItem (
+export function useGroupItem(
   props: GroupItemProps,
   injectKey: InjectionKey<GroupProvide>,
-  required: false,
+  required: false
 ): GroupItemProvide | null
-export function useGroupItem (
+export function useGroupItem(
   props: GroupItemProps,
   injectKey: InjectionKey<GroupProvide>,
-  required = true,
+  required = true
 ): GroupItemProvide | null {
   const vm = getCurrentInstance('useGroupItem')
 
   if (!vm) {
     throw new Error(
-      '[Visagiste] UseGroupItem composable must be used inside a component setup function'
+      '[Visagiste] useGroupItem composable must be used inside a component setup function'
     )
   }
 
@@ -128,17 +148,22 @@ export function useGroupItem (
   if (!group) {
     if (!required) return group
 
-    throw new Error(`[Visagiste] Could not find useGroup injection with symbol ${injectKey.description}`)
+    throw new Error(
+      `[Visagiste] Could not find useGroup injection with symbol ${injectKey.description}`
+    )
   }
 
   const value = toRef(props, 'value')
   const disabled = computed(() => !!(group.disabled.value || props.disabled))
 
-  group.register({
-    id,
-    value,
-    disabled,
-  }, vm)
+  group.register(
+    {
+      id,
+      value,
+      disabled,
+    },
+    vm
+  )
 
   onBeforeUnmount(() => {
     group.unregister(id)
@@ -154,11 +179,17 @@ export function useGroupItem (
     return group.items.value[group.items.value.length - 1].id === id
   })
 
-  const selectedClass = computed(() => isSelected.value && [group.selectedClass.value, props.selectedClass])
+  const selectedClass = computed(
+    () => isSelected.value && [group.selectedClass.value, props.selectedClass]
+  )
 
-  watch(isSelected, value => {
-    vm.emit('group:selected', { value })
-  }, { flush: 'sync' })
+  watch(
+    isSelected,
+    (value) => {
+      vm.emit('group:selected', { value })
+    },
+    { flush: 'sync' }
+  )
 
   return {
     id,
@@ -174,7 +205,7 @@ export function useGroupItem (
   }
 }
 
-export function useGroup (
+export function useGroup(
   props: GroupProps,
   injectKey: InjectionKey<GroupProvide>
 ) {
@@ -184,21 +215,21 @@ export function useGroup (
     props,
     'modelValue',
     [],
-    v => {
+    (v) => {
       if (v == null) return []
 
       return getIds(items, wrapInArray(v))
     },
-    v => {
+    (v) => {
       const arr = getValues(items, v)
 
-      return props.multiple ? arr: arr[0]
+      return props.multiple ? arr : arr[0]
     }
   )
 
   const groupVm = getCurrentInstance('useGroup')
 
-  function register (item: GroupItem, vm: ComponentInternalInstance) {
+  function register(item: GroupItem, vm: ComponentInternalInstance) {
     // Is there a better way to fix this typing?
     const unwrapped = item as unknown as UnwrapRef<GroupItem>
 
@@ -218,7 +249,7 @@ export function useGroup (
     }
   }
 
-  function unregister (id: number) {
+  function unregister(id: number) {
     if (isUnmounted) return
 
     // TODO: re-evaluate this line's importance in the future
@@ -227,13 +258,13 @@ export function useGroup (
 
     forceMandatoryValue()
 
-    const index = items.findIndex(item => item.id === id)
+    const index = items.findIndex((item) => item.id === id)
     items.splice(index, 1)
   }
 
   // If mandatory and nothing is selected, then select first non-disabled item
-  function forceMandatoryValue () {
-    const item = items.find(item => !item.disabled)
+  function forceMandatoryValue() {
+    const item = items.find((item) => !item.disabled)
     if (item && props.mandatory === 'force' && !selected.value.length) {
       selected.value = [item.id]
     }
@@ -249,31 +280,27 @@ export function useGroup (
 
   onUpdated(() => {
     // #19655 update the items that use the index as the value.
-    for (let i = 0; i  < items.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       if (items[i].useIndexAsValue) {
         items[i].value = i
       }
     }
   })
 
-  function select (id: number, value?: boolean) {
-    const item = items.find(item => item.id === id)
+  function select(id: number, value?: boolean) {
+    const item = items.find((item) => item.id === id)
     if (value && item?.disabled) return
 
     if (props.multiple) {
       const internalValue = selected.value.slice()
-      const index = internalValue.findIndex(v => v === id)
+      const index = internalValue.findIndex((v) => v === id)
       const isSelected = ~index
       value = value ?? !isSelected
 
       // We can't remove value if group is
       // mandatory, value already exists,
       // and it is the only value
-      if (
-        isSelected &&
-        props.mandatory &&
-        internalValue.length <= 1
-      ) return
+      if (isSelected && props.mandatory && internalValue.length <= 1) return
 
       // We can't add value if it would
       // cause max limit to be exceeded
@@ -281,7 +308,8 @@ export function useGroup (
         !isSelected &&
         props.max != null &&
         internalValue.length + 1 > props.max
-      ) return
+      )
+        return
 
       if (index < 0 && value) internalValue.push(id)
       else if (index >= 0 && !value) internalValue.splice(index, 1)
@@ -295,16 +323,17 @@ export function useGroup (
     }
   }
 
-  function step (offset: number) {
+  function step(offset: number) {
     // getting an offset from selected value obviously won't work with multiple values
-    if (props.multiple) consoleWarn('This method is not supported when using "multiple" prop')
+    if (props.multiple)
+      consoleWarn('This method is not supported when using "multiple" prop')
 
     if (!selected.value.length) {
-      const item = items.find(item => !item.disabled)
+      const item = items.find((item) => !item.disabled)
       item && (selected.value = [item.id])
     } else {
       const currentId = selected.value[0]
-      const currentIndex = items.findIndex(i => i.id === currentId)
+      const currentIndex = items.findIndex((i) => i.id === currentId)
 
       let newIndex = (currentIndex + offset) % items.length
       let newItem = items[newIndex]
@@ -339,19 +368,19 @@ export function useGroup (
   return state
 }
 
-function getItemIndex (items: UnwrapRef<GroupItem[]>, value: unknown) {
+function getItemIndex(items: UnwrapRef<GroupItem[]>, value: unknown) {
   const ids = getIds(items, [value])
 
   if (!ids.length) return -1
 
-  return items.findIndex(item => item.id === ids[0])
+  return items.findIndex((item) => item.id === ids[0])
 }
 
-function getIds (items: UnwrapRef<GroupItem[]>, modelValue: any[]) {
+function getIds(items: UnwrapRef<GroupItem[]>, modelValue: any[]) {
   const ids: number[] = []
 
-  modelValue.forEach(value => {
-    const item = items.find(item => deepEqual(value, item.value))
+  modelValue.forEach((value) => {
+    const item = items.find((item) => deepEqual(value, item.value))
     const itemByIndex = items[value]
 
     if (item?.value != null) {
@@ -364,11 +393,11 @@ function getIds (items: UnwrapRef<GroupItem[]>, modelValue: any[]) {
   return ids
 }
 
-function getValues (items: UnwrapRef<GroupItem[]>, ids: any[]) {
+function getValues(items: UnwrapRef<GroupItem[]>, ids: any[]) {
   const values: unknown[] = []
 
-  ids.forEach(id => {
-    const itemIndex = items.findIndex(item => item.id === id)
+  ids.forEach((id) => {
+    const itemIndex = items.findIndex((item) => item.id === id)
     if (~itemIndex) {
       const item = items[itemIndex]
       values.push(item.value != null ? item.value : itemIndex)
