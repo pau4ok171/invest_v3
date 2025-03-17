@@ -1,8 +1,8 @@
 export interface Note {
-    id: Number,
-    company: Number,
-    body: String,
-    text: string,
-    created: String,
-    updated: string,
+    id: number | null,
+    company: number,
+    body: string | null,
+    text: string | null,
+    created: string | null,
+    updated: string | null,
 }

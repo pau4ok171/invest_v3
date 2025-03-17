@@ -1,35 +1,35 @@
 export interface DetailCompany {
-  absolute_url: string
+  absolute_url: string | undefined
   analyst_ideas: Array<AnalystIdea>
-  average_weekly_mouvement: number
+  average_weekly_mouvement: number | undefined
   company_news: Array<News>
   country: Country
-  description: string
+  description: string | undefined
   formatting: Formatting
-  id: number
-  is_watchlisted: boolean
-  last_reported_earnings: string
-  logo_url: string
+  id: number | undefined
+  is_watchlisted: boolean | undefined
+  last_reported_earnings: string | undefined
+  logo_url: string | undefined
   market: Market
   next_dividend: Dividend
-  next_earnings: string
+  next_earnings: string | undefined
   price_data: PriceData
   reports: Array<Report>
-  return_1y: number
-  return_30d: number
-  return_3y: number
-  return_5y: number
-  return_7d: number
-  return_90d: number
+  return_1y: number | undefined
+  return_30d: number | undefined
+  return_3y: number | undefined
+  return_5y: number | undefined
+  return_7d: number | undefined
+  return_90d: number | undefined
   sector: Sector
   sector_market: SectorMarket
-  short_description: string
-  slug: string
-  ticker: string
-  title: string
-  uid: string
-  website: string
-  year_founded: number
+  short_description: string | undefined
+  slug: string | undefined
+  ticker: string | undefined
+  title: string | undefined
+  uid: string | undefined
+  website: string | undefined
+  year_founded: number | undefined
 }
 
 export interface ListCompany {
@@ -67,27 +67,27 @@ export interface SearchCompany {
 
 export interface AnalystIdea {
     analyst: Analyst,
-    company: number,
+    company: number | undefined,
     currency: Currency,
-    date_target: string,
-    description: string,
-    id: number,
-    idea_created: string,
-    price_target: number,
+    date_target: string | undefined,
+    description: string | undefined,
+    id: number | undefined,
+    idea_created: string | undefined,
+    price_target: number | undefined,
 }
 
 export interface Analyst {
-    description: string,
-    id: number,
-    name: string,
-    score: number,
+    description: string | undefined,
+    id: number | undefined,
+    name: string | undefined,
+    score: number | undefined,
 }
 
 export interface Currency {
-    id: number,
-    name: string,
-    name_iso: string,
-    symbol: string,
+    id: number | undefined,
+    name: string | undefined,
+    name_iso: string | undefined,
+    symbol: string | undefined,
 }
 
 export interface Report {
@@ -111,46 +111,46 @@ export interface Report {
 
 export interface Country {
   currency: Currency
-  id: number
+  id: number | undefined
   markets: Array<Market>
-  slug: string
-  title: string
+  slug: string | undefined
+  title: string | undefined
 }
 
 export interface Market {
-    country: number,
-    id: number,
-    slug: string,
-    title: string,
-    return_7d: number,
-    return_30d: number,
-    return_90d: number,
-    return_1y: number,
-    return_3y: number,
-    return_5y: number,
-    average_weekly_mouvement: number,
-    volatility_10p: number,
-    volatility_90p: number,
+    country: number | undefined
+    id: number | undefined
+    slug: string | undefined
+    title: string | undefined
+    return_7d: number | undefined
+    return_30d: number | undefined
+    return_90d: number | undefined
+    return_1y: number | undefined
+    return_3y: number | undefined
+    return_5y: number | undefined
+    average_weekly_mouvement: number | undefined
+    volatility_10p: number | undefined
+    volatility_90p: number | undefined
 }
 
 export interface Formatting {
-    primaryCurrencyISO: string
-    primaryCurrencySymbol: string
-    reportCurrencyISO: string
-    reportCurrencySymbol: string
-    tradingCurrencyISO: string
-    tradingCurrencySymbol: string
+    primaryCurrencyISO: string | undefined
+    primaryCurrencySymbol: string | undefined
+    reportCurrencyISO: string | undefined
+    reportCurrencySymbol: string | undefined
+    tradingCurrencyISO: string | undefined
+    tradingCurrencySymbol: string | undefined
 }
 
 export interface PriceData {
-    capitalisation: number,
-    last_price: number,
+    capitalisation: number | undefined
+    last_price: number | undefined
 }
 
 export interface Sector {
-    main_header: string,
-    slug: string,
-    title: string,
+    main_header: string | undefined,
+    slug: string | undefined,
+    title: string | undefined,
 }
 
 export interface Competitor {
@@ -191,21 +191,21 @@ export interface News {
 
 export interface Dividend {
   currency: Currency
-  declared_date: string
-  dividend_amount: number
-  dividend_yield: number
-  ex_dividend_date: string
-  pay_date: string
-  scale: string
-  scale_unit: number
+  declared_date: string | undefined
+  dividend_amount: number | undefined
+  dividend_yield: number | undefined
+  ex_dividend_date: string | undefined
+  pay_date: string | undefined
+  scale: string | undefined
+  scale_unit: number | undefined
 }
 
 export interface SectorMarket {
-  average_weekly_mouvement: number
-  return_1y: number
-  return_30d: number
-  return_3y: number
-  return_5y: number
-  return_7d: number
-  return_90d: number
+  average_weekly_mouvement: number | undefined
+  return_1y: number | undefined
+  return_30d: number | undefined
+  return_3y: number | undefined
+  return_5y: number | undefined
+  return_7d: number | undefined
+  return_90d: number | undefined
 }
