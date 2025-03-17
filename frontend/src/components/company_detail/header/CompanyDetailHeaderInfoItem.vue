@@ -1,36 +1,53 @@
-<script lang="ts">
- import {defineComponent} from "vue";
-
- export default defineComponent({
-   name: 'CompanyDetailHeaderInfoItem',
- })
+<script setup lang="ts">
+const props = defineProps({
+  nowrap: Boolean,
+  onRow: Boolean,
+  small: Boolean,
+})
 </script>
 
 <template>
-<div class="detail-header__info-item">
-  <div class="detail-header__info-item-title">
-    <slot name="title"/>
+  <div
+    :class="[
+      'detail-header__info-item',
+      {
+        'detail-header__info-item--nowrap': props.nowrap,
+      },
+    ]"
+  >
+    <div v-if="$slots.title" class="detail-header__info-item-title">
+      <slot name="title" />
+    </div>
+    <div
+      v-if="$slots.value"
+      :class="[
+        'detail-header__info-item-value',
+        {
+          'detail-header__info-item-value--on-row': props.onRow,
+          'detail-header__info-item-value--small': props.small,
+        },
+      ]"
+    >
+      <slot name="value" />
+    </div>
+
+    <slot />
   </div>
-  <div class="detail-header__info-item-value">
-    <slot name="value"/>
-  </div>
-</div>
 </template>
 
-<style>
+<style lang="scss" scoped>
 .detail-header__info-item {
   display: flex;
   flex-flow: wrap;
-  justify-content: flex-start;
+  justify-content: center;
   margin-top: 0;
   width: auto;
   float: none;
-  margin-right: 24px;
   height: 40px;
 }
 .detail-header__info-item--nowrap {
   flex-flow: nowrap;
-  align-items: flex-end;
+  align-items: center;
   justify-content: flex-end;
 }
 .detail-header__info-item-value--on-row {
@@ -43,13 +60,13 @@
   min-height: 0;
   max-width: fit-content;
   flex: 0 0 100%;
-  font-size: 1.2rem;
+  font-size: 0.75rem;
   font-weight: normal;
   color: #fff;
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .7);
+  color: rgba(255, 255, 255, 0.7);
   padding-right: 8px;
 }
 .detail-header__info-item-value {
@@ -57,18 +74,12 @@
   width: 100%;
   min-height: 0;
   max-width: 100%;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   font-weight: 500;
   white-space: nowrap;
 }
 .detail-header__info-item-value--small {
-  font-size: 1.2rem;
-}
-.detail-header__error-color {
-  color: var(--color-error);
-}
-.detail-header__success-color {
-  color: var(--color-success);
+  font-size: 0.75rem;
 }
 </style>
