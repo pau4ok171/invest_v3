@@ -167,7 +167,7 @@ function humanize(val: number, currencyUnit: string) {
   </base-infinite-scroll>
 </template>
 
-<style lang="scss">
+<style scoped lang="scss">
 .company-list-companies-table.base-table {
   > .base-table__wrapper {
     > table {
