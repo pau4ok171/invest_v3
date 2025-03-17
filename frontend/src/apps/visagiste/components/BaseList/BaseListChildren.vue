@@ -2,7 +2,7 @@
 // Components
 import BaseListGroup from './BaseListGroup.vue'
 import BaseListItem from './BaseListItem.vue'
-import BaseListItemSubheader from './BaseListItemSubheader.vue'
+import BaseListItemSubheader from './BaseListSubheader.vue'
 import BaseDivider from '../BaseDivider/BaseDivider.vue'
 
 // Utilities
@@ -13,6 +13,7 @@ import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 import type { PropType } from 'vue'
 import type { InternalListItem } from './BaseList.vue'
 import type { BaseListItemSlots } from './BaseListItem.vue'
+import {BaseListGroup} from "@/apps/visagiste/components/BaseList/index";
 
 export type BaseListChildrenSlots<T> = {
   [K in keyof Omit<BaseListItemSlots, 'default'>]: BaseListItemSlots[K] & {
@@ -39,7 +40,7 @@ export default defineComponent({
   computed: {
     BaseListGroup() {
       return BaseListGroup
-    },
+    }
   },
   components: {
     BaseListItem,
@@ -61,13 +62,13 @@ export default defineComponent({
     >
       <template v-if="type === 'divider'">
         <slot name="divider" v-bind="{ props: itemProps }">
-          <BaseDivider v-bind="{ props: itemProps }" />
+          <BaseDivider v-bind="itemProps" />
         </slot>
       </template>
 
       <template v-else-if="type === 'subheader'">
         <slot name="subheader" v-bind="{ props: itemProps }">
-          <BaseListItemSubheader v-bind="{ props: itemProps }" />
+          <BaseListItemSubheader v-bind="itemProps" />
         </slot>
       </template>
 

@@ -1,11 +1,18 @@
 // Utilities
-import {computed, shallowRef, toRaw, watchEffect} from "vue";
-import {deepEqual, getPropertyFromItem, isPrimitive, omit, propsFactory} from "@/apps/visagiste/utils";
+import { computed, shallowRef, watchEffect } from 'vue'
+import {
+  deepEqual,
+  getPropertyFromItem,
+  isPrimitive,
+  omit,
+  pick,
+  propsFactory,
+} from '@/apps/visagiste/utils'
 
 // Types
-import type {PropType} from "vue";
-import type {InternalItem} from "./filter";
-import type {SelectItemKey, Primitive} from "@/apps/visagiste/utils";
+import type { PropType } from 'vue'
+import type { InternalItem } from './filter'
+import type { SelectItemKey, Primitive } from '@/apps/visagiste/utils'
 
 export interface ListItem<T = any> extends InternalItem<T> {
   title: string
@@ -28,42 +35,49 @@ export interface ItemProps {
 }
 
 // Composables
-export const useItemsProps = propsFactory({
-  items: {
-    type: Array as PropType<ItemProps['items']>,
-    default: () => ([]),
+export const useItemsProps = propsFactory(
+  {
+    items: {
+      type: Array as PropType<ItemProps['items']>,
+      default: () => [],
+    },
+    itemTitle: {
+      type: [String, Array, Function] as PropType<SelectItemKey>,
+      default: 'title',
+    },
+    itemValue: {
+      type: [String, Array, Function] as PropType<SelectItemKey>,
+      default: 'value',
+    },
+    itemChildren: {
+      type: [Boolean, String, Array, Function] as PropType<SelectItemKey>,
+      default: 'children',
+    },
+    itemProps: {
+      type: [Boolean, String, Array, Function] as PropType<SelectItemKey>,
+      default: 'props',
+    },
+    returnObject: Boolean,
+    valueComparator: Function as PropType<typeof deepEqual>,
   },
-  itemTitle: {
-    type: [String, Array, Function] as PropType<SelectItemKey>,
-    default: 'title',
-  },
-  itemValue: {
-    type: [String, Array, Function] as PropType<SelectItemKey>,
-    default: 'value',
-  },
-  itemChildren: {
-    type: [Boolean, String, Array, Function] as PropType<SelectItemKey>,
-    default: 'children',
-  },
-  itemProps: {
-    type: [Boolean, String, Array, Function] as PropType<SelectItemKey>,
-    default: 'props',
-  },
-  returnObject: Boolean,
-  valueComparator: Function as PropType<typeof deepEqual>,
-}, 'list-items')
+  'list-items'
+)
 
-export function transformItem (props: Omit<ItemProps, 'items'>, item: any): ListItem {
+export function transformItem(
+  props: Omit<ItemProps, 'items'>,
+  item: any
+): ListItem {
   const title = getPropertyFromItem(item, props.itemTitle, item)
   const value = getPropertyFromItem(item, props.itemValue, title)
   const children = getPropertyFromItem(item, props.itemChildren)
-  const itemProps = props.itemProps === true
-    ? typeof item === 'object' && item != null && !Array.isArray(item)
-      ? 'children' in item
-        ? omit(item, ['children'])
-        : item
-      : undefined
-    : getPropertyFromItem(item, props.itemProps)
+  const itemProps =
+    props.itemProps === true
+      ? typeof item === 'object' && item != null && !Array.isArray(item)
+        ? 'children' in item
+          ? omit(item, ['children'])
+          : item
+        : undefined
+      : getPropertyFromItem(item, props.itemProps)
 
   const _props = {
     title,
@@ -75,13 +89,25 @@ export function transformItem (props: Omit<ItemProps, 'items'>, item: any): List
     title: String(_props.title ?? ''),
     value: _props.value,
     props: _props,
-    children: Array.isArray(children) ? transformItems(props, children) : undefined,
+    children: Array.isArray(children)
+      ? transformItems(props, children)
+      : undefined,
     raw: item,
   }
 }
 
-export function transformItems (props: Omit<ItemProps, 'items'>, items: ItemProps['items']) {
-  const _props = toRaw(props)
+export function transformItems(
+  props: Omit<ItemProps, 'items'>,
+  items: ItemProps['items']
+) {
+  const _props = pick(props, [
+    'itemTitle',
+    'itemValue',
+    'itemChildren',
+    'itemProps',
+    'returnObject',
+    'valueComparator',
+  ])
 
   const array: ListItem[] = []
   for (const item of items) {
@@ -91,9 +117,11 @@ export function transformItems (props: Omit<ItemProps, 'items'>, items: ItemProp
   return array
 }
 
-export function useItems (props: ItemProps) {
+export function useItems(props: ItemProps) {
   const items = computed(() => transformItems(props, props.items))
-  const hasNullItem = computed(() => items.value.some(item => item.value === null))
+  const hasNullItem = computed(() =>
+    items.value.some((item) => item.value === null)
+  )
 
   const itemsMap = shallowRef<Map<Primitive, ListItem[]>>(new Map())
   const keylessItems = shallowRef<ListItem[]>([])
@@ -118,10 +146,9 @@ export function useItems (props: ItemProps) {
     keylessItems.value = keyless
   })
 
-  function transformIn (value: any[]): ListItem[] {
+  function transformIn(value: any[]): ListItem[] {
     // Cache unrefed values outside the loop,
-    // proxy getters can bee slow when you call them a billion times
-    const _value = toRaw(value)
+    // proxy getters can be slow when you call them a billion times
     const _items = itemsMap.value
     const _allItems = items.value
     const _keylessItems = keylessItems.value
@@ -129,15 +156,22 @@ export function useItems (props: ItemProps) {
     const _returnObject = props.returnObject
     const hasValueComparator = !!props.valueComparator
     const valueComparator = props.valueComparator || deepEqual
-    const _props = toRaw(props)
+    const _props = pick(props, [
+      'itemTitle',
+      'itemValue',
+      'itemChildren',
+      'itemProps',
+      'returnObject',
+      'valueComparator',
+    ])
 
     const returnValue: ListItem[] = []
-    main: for (const v of _value) {
+    main: for (const v of value) {
       // When the model value is null, return an InternalItem
       // based on null only if null is one of the items
       if (!_hasNullItem && v === null) continue
 
-      // String model value means valus is a custom input value from combobox
+      // String model value means value is a custom input value from combobox
       // Don't look up existing items if the model value is a string
       if (_returnObject && typeof v === 'string') {
         returnValue.push(transformItem(_props, v))
@@ -153,13 +187,13 @@ export function useItems (props: ItemProps) {
       // This is O(n^2) so we really don't want to
       // do it for more than a couple hundred items.
       if (hasValueComparator || !fastItems) {
-        for (const item of (hasValueComparator ? _allItems : _keylessItems)) {
+        for (const item of hasValueComparator ? _allItems : _keylessItems) {
           if (valueComparator(v, item.value)) {
             returnValue.push(item)
             continue main
           }
         }
-        // Not an existing item, construct it from the model
+        // Not an existing item, construct it from the model (#4000)
         returnValue.push(transformItem(_props, v))
         continue
       }
@@ -170,7 +204,7 @@ export function useItems (props: ItemProps) {
     return returnValue
   }
 
-  function transformOut (value: ListItem[]): any[] {
+  function transformOut(value: ListItem[]): any[] {
     return props.returnObject
       ? value.map(({ raw }) => raw)
       : value.map(({ value }) => value)

@@ -30,6 +30,6 @@ export {
   useBaseListItemSubtitle,
 } from './BaseListItemSubtitle.vue'
 export {
-  default as BaseListItemSubheader,
+  default as BaseListSubheader,
   useBaseListSubheaderProps,
-} from './BaseListItemSubheader.vue'
+} from './BaseListSubheader.vue'

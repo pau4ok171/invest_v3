@@ -22,7 +22,7 @@ export const useBaseListSubheaderProps = propsFactory(
 )
 
 export default defineComponent({
-  name: 'BaseListItemSubheader',
+  name: 'BaseListSubheader',
   props: useBaseListSubheaderProps(),
   setup(props, { slots }) {
     const { textColorClasses, textColorStyles } = useTextColor(
