@@ -1,11 +1,5 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
 import PageNotFound from "@/components/base/page_not_found/PageNotFound.vue";
-
-export default defineComponent({
-  name: "PageNotFoundView",
-  components: {PageNotFound}
-})
 </script>
 
 <template>
