@@ -24,7 +24,10 @@ import {
   useElevation,
   useElevationProps,
 } from '@/apps/visagiste/composables/elevation'
-import { useGroupItem, useGroupProps } from '@/apps/visagiste/composables/group'
+import {
+  useGroupItem,
+  useGroupItemProps,
+} from '@/apps/visagiste/composables/group'
 import {
   useLoader,
   useLoaderProps,
@@ -104,7 +107,7 @@ export const useBaseButtonProps = propsFactory(
     ...useDensityProps(),
     ...useDimensionProps(),
     ...useElevationProps(),
-    ...useGroupProps(),
+    ...useGroupItemProps(),
     ...useLoaderProps(),
     ...useLocationProps(),
     ...usePositionProps(),
