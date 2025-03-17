@@ -131,6 +131,9 @@ export function createVisagiste(visagiste: VisagisteOptions = {}) {
   }
 }
 
+export const version = '1'
+createVisagiste.version = version
+
 // Vue's inject() can only be used in setup
 function inject(
   this: ComponentPublicInstance,
