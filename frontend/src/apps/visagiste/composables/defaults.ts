@@ -16,7 +16,8 @@ import {
 } from '@/apps/visagiste/utils'
 
 // Types
-import type { InjectionKey, Ref, MaybeRef, ComputedRef, VNode } from 'vue'
+import type { InjectionKey, Ref, ComputedRef, VNode } from 'vue'
+import type { MaybeRef } from '@/apps/visagiste/utils'
 
 export type DefaultsInstance =
   | undefined
@@ -119,7 +120,7 @@ export function internalUseDefaults(
 
   name = name ?? vm.type.name ?? vm.type.__name
   if (!name) {
-    throw new Error('[Vuetify] Could not determine component name')
+    throw new Error('[Visagiste] Could not determine component name')
   }
 
   const componentDefaults = computed(() => defaults.value?.[props._as ?? name])
