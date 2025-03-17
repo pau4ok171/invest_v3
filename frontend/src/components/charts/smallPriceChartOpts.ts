@@ -1,10 +1,9 @@
-let chartOpts;
-export default chartOpts =  {
+export const defChartOpts = {
   chart: {
     backgroundColor: 'transparent',
     height: 40,
     width: 300,
-    spacing: [5, 0, 5, 0]
+    spacing: [5, 0, 5, 0],
   },
   series: [
     {
@@ -15,37 +14,37 @@ export default chartOpts =  {
         enabled: false,
         states: {
           hover: {
-            enabled: false
-          }
-        }
+            enabled: false,
+          },
+        },
       },
     },
   ],
   xAxis: {
     visible: false,
     crosshair: {
-      width: 0
-    }
+      width: 0,
+    },
   },
   yAxis: {
     visible: false,
     crosshair: {
-      width: 0
-    }
+      width: 0,
+    },
   },
   scrollbar: {
-    enabled: false
+    enabled: false,
   },
   navigator: {
-    enabled: false
+    enabled: false,
   },
   title: {
-    text: null
+    text: null,
   },
   rangeSelector: {
     enabled: false,
   },
   tooltip: {
-    enabled: false
-  }
+    enabled: false,
+  },
 }
