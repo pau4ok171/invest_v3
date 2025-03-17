@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios'
+import axios from '@/axios'
 import VueAxios from 'vue-axios'
 
 import Vue3Toastify, { toast, type ToastContainerOptions } from 'vue3-toastify'
@@ -23,8 +23,6 @@ import highchartsMore from 'highcharts/highcharts-more'
 import loadSolidGauge from 'highcharts/modules/solid-gauge'
 import { defaultChartOpts } from '@/components/charts/DefaultChartOpts'
 import visagiste from '@/plugins/visagiste'
-
-axios.defaults.baseURL = 'http://localhost:8000'
 
 const app = createApp(App)
 const pinia = createPinia()
