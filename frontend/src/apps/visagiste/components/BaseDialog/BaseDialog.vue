@@ -63,7 +63,7 @@ export default defineComponent({
     const isActive = useProxiedModel(props, "modelValue");
     const { scopeId } = useScopeId();
 
-    const overlay = ref<BaseOverlay>();
+    const overlay = ref<InstanceType<typeof BaseOverlay>>();
     function onFocusin(e: FocusEvent) {
       const before = e.relatedTarget as HTMLElement | null;
       const after = e.target as HTMLElement | null;
