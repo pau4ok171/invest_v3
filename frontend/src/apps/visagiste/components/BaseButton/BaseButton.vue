@@ -54,6 +54,7 @@ import {
   usePositionProps,
 } from '@/apps/visagiste/composables/position'
 import { useSelectLink } from '@/apps/visagiste/composables/selectLink'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 // Directives
 import { Ripple } from '@/apps/visagiste/directives/ripple'
@@ -132,7 +133,7 @@ export default defineComponent({
   directives: {
     Ripple,
   },
-  setup(props, { attrs, slots }) {
+  setup(props, { attrs }) {
     const { themeClasses } = provideTheme(props)
     const { borderClasses } = useBorder(props)
     const { densityClasses } = useDensity(props)
@@ -209,9 +210,16 @@ export default defineComponent({
 
     useSelectLink(link, group?.select)
 
+    const prependIsEmpty = useSlotIsEmpty('prepend')
+    const appendIsEmpty = useSlotIsEmpty('append')
+
     const Tag = computed(() => (link.isLink.value ? 'a' : props.tag))
-    const hasPrepend = computed(() => !!(props.prependIcon || slots.prepend))
-    const hasAppend = computed(() => !!(props.appendIcon || slots.append))
+    const hasPrepend = computed(
+      () => !!(props.prependIcon || !prependIsEmpty.value)
+    )
+    const hasAppend = computed(
+      () => !!(props.appendIcon || !appendIsEmpty.value)
+    )
     const hasIcon = computed(() => !!(props.icon && props.icon !== true))
 
     const rippleConfig = computed(() => {
