@@ -18,9 +18,9 @@ import { createPinia } from 'pinia'
 
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
-import StockChart from 'highcharts/modules/stock'
-import highchartsMore from 'highcharts/highcharts-more'
-import loadSolidGauge from 'highcharts/modules/solid-gauge'
+import 'highcharts/modules/stock'
+import 'highcharts/highcharts-more'
+import 'highcharts/modules/solid-gauge'
 import { defaultChartOpts } from '@/components/charts/DefaultChartOpts'
 import visagiste from '@/plugins/visagiste'
 
@@ -31,10 +31,6 @@ const hc = Highcharts as any
 app.directive('intersection', Vintersection)
 app.directive('debounce', Vdebounce)
 app.directive('tippy', directive)
-
-highchartsMore(hc)
-loadSolidGauge(hc)
-StockChart(hc)
 
 hc.Templating.helpers.abs = (value: number) => Math.abs(value)
 
