@@ -1,26 +1,26 @@
 // Composables
 // TODO: CreateDate
-import { createDefaults, DefaultsSymbol } from "./composables/defaults";
-import { createDisplay, DisplaySymbol } from "./composables/display";
-import { createGoTo, GoToSymbol } from "./composables/goto";
-import { createIcons, IconSymbol } from "./composables/icons";
-import { createLocale, LocaleSymbol } from "./composables/locale";
-import  { createTheme, ThemeSymbol } from "./composables/theme";
+import { createDefaults, DefaultsSymbol } from './composables/defaults'
+import { createDisplay, DisplaySymbol } from './composables/display'
+import { createGoTo, GoToSymbol } from './composables/goto'
+import { createIcons, IconSymbol } from './composables/icons'
+import { createLocale, LocaleSymbol } from './composables/locale'
+import { createTheme, ThemeSymbol } from './composables/theme'
 
 // Utilities
-import {defineComponent, nextTick, reactive} from "vue";
-import {getUid, IN_BROWSER, mergeDeep} from "./utils";
+import { nextTick, reactive } from 'vue'
+import { defineComponent, getUid, IN_BROWSER, mergeDeep } from './utils'
 
 // Types
-import type { App, ComponentPublicInstance, InjectionKey } from "vue";
+import type { App, ComponentPublicInstance, InjectionKey } from 'vue'
 // TODO: Create DateOptions
-import type { DefaultsOptions } from "./composables/defaults";
-import type { DisplayOptions, SSROptions } from "./composables/display";
-import type { GoToOptions } from "./composables/goto";
-import type { IconOptions } from "./composables/icons";
-import type { LocaleOptions, RtlOptions } from "./composables/locale";
-import type { ThemeOptions } from "./composables/theme";
-export * from "./composables"
+import type { DefaultsOptions } from './composables/defaults'
+import type { DisplayOptions, SSROptions } from './composables/display'
+import type { GoToOptions } from './composables/goto'
+import type { IconOptions } from './composables/icons'
+import type { LocaleOptions, RtlOptions } from './composables/locale'
+import type { ThemeOptions } from './composables/theme'
+export * from './composables'
 
 export interface VisagisteOptions {
   aliases?: Record<string, any>
@@ -39,14 +39,10 @@ export interface VisagisteOptions {
 
 export interface Blueprint extends Omit<VisagisteOptions, 'blueprint'> {}
 
-export function createVisagiste (visagiste: VisagisteOptions = {}) {
+export function createVisagiste(visagiste: VisagisteOptions = {}) {
   const { blueprint, ...rest } = visagiste
   const options: VisagisteOptions = mergeDeep(blueprint, rest)
-  const {
-    aliases = {},
-    components = {},
-    directives = {},
-  } = options
+  const { aliases = {}, components = {}, directives = {} } = options
 
   const defaults = createDefaults(options.defaults)
   const display = createDisplay(options.display, options.ssr)
@@ -65,11 +61,14 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
     }
 
     for (const key in aliases) {
-      app.component(key, defineComponent({
-        ...aliases[key],
-        name: key,
-        aliasName: aliases[key].name,
-      }))
+      app.component(
+        key,
+        defineComponent({
+          ...aliases[key],
+          name: key,
+          aliasName: aliases[key].name,
+        })
+      )
     }
 
     theme.install(app)
@@ -131,12 +130,15 @@ export function createVisagiste (visagiste: VisagisteOptions = {}) {
 }
 
 // Vue's inject() can only be used in setup
-function inject (this: ComponentPublicInstance, key: InjectionKey<any> | string) {
+function inject(
+  this: ComponentPublicInstance,
+  key: InjectionKey<any> | string
+) {
   const vm = this.$
 
   const provides = vm.parent?.provides ?? vm.vnode.appContext?.provides
 
   if (provides && (key as any) in provides) {
-    return provides[(key as string)]
+    return provides[key as string]
   }
 }
