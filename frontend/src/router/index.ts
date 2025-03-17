@@ -1,7 +1,11 @@
+// Composables
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/store/auth'
+import { usePageStore } from '@/store/page'
+
+// Utilities
 import { loadLayoutMiddleware } from '@/router/middleware/loadLayout.middleware'
 import { RouteNamesEnum } from '@/router/routes.types'
-import { useAuthStore } from '@/store/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -47,7 +51,7 @@ const router = createRouter({
       component: () => import('@/views/CompanyListView.vue'),
     },
     {
-      path: '/markets/:company_slug',
+      path: '/markets/:companySlug',
       name: RouteNamesEnum.company_detail,
       component: () => import('@/views/CompanyDetailView.vue'),
     },
@@ -63,13 +67,17 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      alias: '/:pathMatch(.*)*',
       name: RouteNamesEnum.page_not_found,
       component: () => import('@/views/PageNotFoundView.vue'),
     },
   ],
 })
 
-router.beforeEach(loadLayoutMiddleware)
+router.beforeEach(async (route) => {
+  const pageStore = usePageStore()
+
+  pageStore.notFound = false
+  await loadLayoutMiddleware(route)
+})
 
 export default router
