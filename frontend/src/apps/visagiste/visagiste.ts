@@ -101,20 +101,22 @@ export function createVisagiste(visagiste: VisagisteOptions = {}) {
 
     getUid.reset()
 
-    app.mixin({
-      computed: {
-        $visagiste () {
-          return reactive({
-            defaults: inject.call(this, DefaultsSymbol),
-            display: inject.call(this, DisplaySymbol),
-            theme: inject.call(this, ThemeSymbol),
-            icons: inject.call(this, IconSymbol),
-            locale: inject.call(this, LocaleSymbol),
-            // date: inject.call(this, DateAdapterSymbol),
-          })
-        }
-      }
-    })
+    if (typeof __VUE_OPTIONS_API__ !== 'boolean' || __VUE_OPTIONS_API__) {
+      app.mixin({
+        computed: {
+          $visagiste() {
+            return reactive({
+              defaults: inject.call(this, DefaultsSymbol),
+              display: inject.call(this, DisplaySymbol),
+              theme: inject.call(this, ThemeSymbol),
+              icons: inject.call(this, IconSymbol),
+              locale: inject.call(this, LocaleSymbol),
+              // date: inject.call(this, DateAdapterSymbol),
+            })
+          },
+        },
+      })
+    }
   }
 
   return {
