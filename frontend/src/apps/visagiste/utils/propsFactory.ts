@@ -1,6 +1,6 @@
 // Types
-import type {ComponentObjectPropsOptions, Prop, PropType} from "vue";
-import type {IfAny} from "@vueuse/core";
+import type { ComponentObjectPropsOptions, Prop, PropType } from 'vue'
+import type { IfAny } from '@vue/shared'
 
 /**
  * Creates a factory function for props definitions.
@@ -28,15 +28,21 @@ import type {IfAny} from "@vueuse/core";
  * }
  */
 
-export function propsFactory<PropsOptions extends ComponentObjectPropsOptions> (
-  props: PropsOptions, source: string
+export function propsFactory<PropsOptions extends ComponentObjectPropsOptions>(
+  props: PropsOptions,
+  source: string
 ) {
   return <Defaults extends PartialKeys<PropsOptions> = {}>(
     defaults?: Defaults
   ): AppendDefault<PropsOptions, Defaults> => {
     return Object.keys(props).reduce<any>((obj, prop) => {
-      const isObjectDefinition = typeof props[prop] === 'object' && props[prop] != null && !Array.isArray(props[prop])
-      const definition = isObjectDefinition ? props[prop] : { type: props[prop] }
+      const isObjectDefinition =
+        typeof props[prop] === 'object' &&
+        props[prop] != null &&
+        !Array.isArray(props[prop])
+      const definition = isObjectDefinition
+        ? props[prop]
+        : { type: props[prop] }
 
       if (defaults && prop in defaults) {
         obj[prop] = {
@@ -56,26 +62,29 @@ export function propsFactory<PropsOptions extends ComponentObjectPropsOptions> (
   }
 }
 
-type AppendDefault<T extends ComponentObjectPropsOptions, D extends PartialKeys<T>> = {
+type AppendDefault<
+  T extends ComponentObjectPropsOptions,
+  D extends PartialKeys<T>,
+> = {
   [P in keyof T]-?: unknown extends D[P]
     ? T[P]
     : T[P] extends Record<string, unknown>
       ? Omit<T[P], 'type' | 'default'> & {
-        type: PropType<MergeTypeDefault<T[P], D[P]>>
-        default: MergeDefault<T[P], D[P]>
-    }
-    : {
-      type: PropType<MergeTypeDefault<T[P], D[P]>>
-      default: MergeDefault<T[P], D[P]>
-      }
+          type: PropType<MergeTypeDefault<T[P], D[P]>>
+          default: MergeDefault<T[P], D[P]>
+        }
+      : {
+          type: PropType<MergeTypeDefault<T[P], D[P]>>
+          default: MergeDefault<T[P], D[P]>
+        }
 }
 
 type MergeTypeDefault<T, D, P = InferPropType<T>> = unknown extends D
   ? P
-  : (P | D)
+  : P | D
 type MergeDefault<T, D, P = InferPropType<T>> = unknown extends D
   ? P
-  : (NonNullable<P> | D)
+  : NonNullable<P> | D
 
 /**
  * Like `Partial<T>` but doesn't care what the value is
@@ -86,10 +95,10 @@ type PartialKeys<T> = { [P in keyof T]?: unknown }
 type InferPropType<T> = [T] extends [null]
   ? any // null & true would fail to infer
   : [T] extends [{ type: null | true }]
-    // As TS issue https://github.com/Microsoft/TypeScript/issues/14829
-    // somehow `ObjectConstructor` when inferred from { (): T } becomes `any`
-    // `BooleanConstructor` when inferred from PropConstructor(with PropMethod) becomes `Boolean`
-    ? any
+    ? // As TS issue https://github.com/Microsoft/TypeScript/issues/14829
+      // somehow `ObjectConstructor` when inferred from { (): T } becomes `any`
+      // `BooleanConstructor` when inferred from PropConstructor(with PropMethod) becomes `Boolean`
+      any
     : [T] extends [ObjectConstructor | { type: ObjectConstructor }]
       ? Record<string, any>
       : [T] extends [BooleanConstructor | { type: BooleanConstructor }]
