@@ -42,7 +42,7 @@ import type { Ref, PropType } from 'vue';
 import type {BackgroundColorData} from "@/apps/visagiste/composables/color";
 import type { TemplateRef } from "@/apps/visagiste/utils";
 
-interface ScrimProps {
+export interface ScrimProps {
   [key: string]: unknown
   modelValue: boolean
   color: BackgroundColorData
@@ -287,6 +287,7 @@ export default defineComponent({
       teleportTarget,
       top,
       root,
+      globalTop,
       themeClasses,
       rtlClasses,
       stackStyles,
@@ -311,7 +312,7 @@ export default defineComponent({
     targetRef,
     props: mergeProps({
     ref: activatorRef
-    }, activatorEvents, $props.activatorProps,
+    }, activatorEvents, $props.activatorProps as Record<string, any>,
     )
   }"
 />
