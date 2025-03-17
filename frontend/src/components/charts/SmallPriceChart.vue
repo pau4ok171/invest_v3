@@ -1,52 +1,37 @@
-<script lang="ts">
-import chartOpts from "@/components/charts/smallPriceChartOpts";
-import {defineComponent} from "vue";
-import {mapGetters} from "vuex";
+<script setup lang="ts">
+import { defChartOpts } from '@/components/charts/smallPriceChartOpts'
+import { computed, ref, watch } from 'vue'
+import { useCompanyDetailStore } from '@/store/companyDetail'
 
-export default defineComponent({
-  data() {
-    return {
-      chartOpts: chartOpts
-    }
-  },
-  computed: {
-    ...mapGetters({
-      companyPriceData: 'companyDetail/companyPriceData',
-    }),
-  },
-  watch: {
-    companyPriceData() {
-      this.chartOpts.series[0].data = this.companyPriceData
-    },
-  },
-  mounted() {
-    this.chartOpts.series[0].data = this.companyPriceData
-  },
-})
+const companyDetailStore = useCompanyDetailStore()
+const priceData = computed(() => companyDetailStore.chartPriceData)
+
+const chartOpts = ref(defChartOpts)
+
+watch(
+  () => priceData.value,
+  () => {
+    chartOpts.value.series[0].data = priceData.value as []
+  }
+)
 </script>
 
 <template>
-<div>
-  <div class="price-history-chart">
-    <charts
-      :constructorType="'stockChart'"
-      :options="chartOpts"
-    />
-  </div>
-</div>
+  <charts
+    class="price-history-chart"
+    constructorType="stockChart"
+    :options="chartOpts"
+  />
 </template>
 
-<style>
+<style scoped>
 .price-history-chart {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 300px;
   max-width: 100%;
   height: 40px;
   line-height: 1.5;
-}
-.price-history-chart svg {
-  width: 100%;
-  height: 100%;
-  fill: none;
 }
 </style>
