@@ -296,7 +296,7 @@ export function createTheme (options?: ThemeOptions): ThemeInstance & { install:
         createCssClass(fgLines, `.${key}`, [`color: rgb(var(--base-theme-${key})) !important`])
       } else {
         createCssClass(bgLines, `.bg-${key}`, [
-          `base-theme-overlay-multiplier: var(--base-theme-${key}-overlay-multiplier)`,
+          `--base-theme-overlay-multiplier: var(--base-theme-${key}-overlay-multiplier)`,
           `background-color: rgb(var(--base-theme-${key})) !important`,
           `color: rgb(var(--base-theme-on-${key})) !important`,
         ])
