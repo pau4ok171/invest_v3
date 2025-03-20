@@ -23,8 +23,8 @@ import { useVariantProps } from '@/apps/visagiste/composables/variant'
 import { provideDefaults } from '@/apps/visagiste/composables/defaults'
 
 // Utilities
-import { defineComponent, h, toRef } from 'vue'
-import { propsFactory } from '@/apps/visagiste/utils'
+import { h, toRef } from 'vue'
+import { defineComponent, propsFactory } from '@/apps/visagiste/utils'
 
 export const useBaseButtonGroupProps = propsFactory(
   {
