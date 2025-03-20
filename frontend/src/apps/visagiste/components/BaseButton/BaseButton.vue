@@ -128,7 +128,7 @@ export default defineComponent({
   methods: { genOverlays },
   props: useBaseButtonProps(),
   emits: {
-    'group: selected': (val: { value: boolean }) => true,
+    'group:selected': (val: { value: boolean }) => true,
   },
   directives: {
     Ripple,
