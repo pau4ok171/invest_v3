@@ -1,37 +1,36 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import { defineComponent } from 'vue'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton/'
 
 export default defineComponent({
-  name: "BaseLateralMenu",
+  name: 'BaseLateralMenu',
   components: {
     BaseButton,
-  }
+  },
 })
 </script>
 
 <template>
-<div class="base-lateral-menu">
-  <div class="base-lateral-menu__inner">
-    <header class="base-lateral-menu__header">
-      <h3 class="base-lateral-menu__title">
-        <slot name="title"/>
-      </h3>
-      <base-button
-        icon="ModalMenuCloseIcon"
-        variant="text"
-        color="#92969c"
-        rounded="x-small"
-        density="comfortable"
-        theme="grey"
-        @click="$emit('closeMenu')"
-      />
-    </header>
-    <main class="base-lateral-menu__main">
-      <slot name="content"/>
-    </main>
+  <div class="base-lateral-menu">
+    <div class="base-lateral-menu__inner">
+      <header class="base-lateral-menu__header">
+        <h3 class="base-lateral-menu__title">
+          <slot name="title" />
+        </h3>
+        <base-button
+          icon="$close"
+          variant="text"
+          color="#92969c"
+          rounded="x-small"
+          density="comfortable"
+          @click="$emit('closeMenu')"
+        />
+      </header>
+      <main class="base-lateral-menu__main">
+        <slot name="content" />
+      </main>
+    </div>
   </div>
-</div>
 </template>
 
 <style>
