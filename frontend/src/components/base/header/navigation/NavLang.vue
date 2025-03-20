@@ -7,7 +7,7 @@ import { useLocale } from '@/apps/visagiste/composables'
 import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
 import BaseListItem from '@/apps/visagiste/components/BaseList/BaseListItem.vue'
 import { BaseFlag } from '@/apps/visagiste/components/BaseFlag'
-import BaseListItemSubheader from '@/apps/visagiste/components/BaseList/BaseListItemSubheader.vue'
+import BaseListItemSubheader from '@/apps/visagiste/components/BaseList/BaseListSubheader.vue'
 
 const langs = [
   { id: 'en', title: 'English', iso: 'gb' },

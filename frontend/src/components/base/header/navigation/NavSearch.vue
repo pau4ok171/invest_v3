@@ -1,23 +1,23 @@
 <script lang="ts">
-import axios from "axios";
-import { defineComponent } from "vue";
-import type { SearchCompany } from "@/types/invest";
-import { BaseIcon } from "@/apps/visagiste/components/BaseIcon";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
-import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
-import BaseCard from "@/apps/visagiste/components/BaseCard/BaseCard.vue";
-import BaseTextField from "@/apps/visagiste/components/BaseTextField/BaseTextField.vue";
-import BaseCardText from "@/apps/visagiste/components/BaseCard/BaseCardText.vue";
-import BaseListItemSubheader from "@/apps/visagiste/components/BaseList/BaseListItemSubheader.vue";
-import BaseList from "@/apps/visagiste/components/BaseList/BaseList.vue";
-import BaseListItem from "@/apps/visagiste/components/BaseList/BaseListItem.vue";
-import BaseListItemTitle from "@/apps/visagiste/components/BaseList/BaseListItemTitle.vue";
-import BaseListItemSubtitle from "@/apps/visagiste/components/BaseList/BaseListItemSubtitle.vue";
-import BaseFlag from "@/apps/visagiste/components/BaseFlag/BaseFlag.vue";
-import BaseChip from "@/apps/visagiste/components/BaseChip/BaseChip.vue";
+import axios from 'axios'
+import { defineComponent } from 'vue'
+import type { SearchCompany } from '@/types/invest'
+import { BaseIcon } from '@/apps/visagiste/components/BaseIcon'
+import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
+import BaseDialog from '@/apps/visagiste/components/BaseDialog/BaseDialog.vue'
+import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
+import BaseTextField from '@/apps/visagiste/components/BaseTextField/BaseTextField.vue'
+import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
+import BaseListItemSubheader from '@/apps/visagiste/components/BaseList/BaseListSubheader.vue'
+import BaseList from '@/apps/visagiste/components/BaseList/BaseList.vue'
+import BaseListItem from '@/apps/visagiste/components/BaseList/BaseListItem.vue'
+import BaseListItemTitle from '@/apps/visagiste/components/BaseList/BaseListItemTitle.vue'
+import BaseListItemSubtitle from '@/apps/visagiste/components/BaseList/BaseListItemSubtitle.vue'
+import BaseFlag from '@/apps/visagiste/components/BaseFlag/BaseFlag.vue'
+import BaseChip from '@/apps/visagiste/components/BaseChip/BaseChip.vue'
 
 export default defineComponent({
-  name: "NavSearch",
+  name: 'NavSearch',
   components: {
     BaseChip,
     BaseFlag,
@@ -37,8 +37,8 @@ export default defineComponent({
     return {
       searchResponse: [] as SearchCompany[],
       model: false,
-      timeoutId: -1
-    };
+      timeoutId: -1,
+    }
   },
   methods: {
     onUpdate(v: string) {
@@ -47,14 +47,20 @@ export default defineComponent({
       this.timeoutId = setTimeout(() => this.getSearchResults(v), 600)
     },
     onKeydown(e: KeyboardEvent) {
-      if (e.key === 'k' && e.ctrlKey && !e.altKey && !e.shiftKey &&!e.metaKey) {
+      if (
+        e.key === 'k' &&
+        e.ctrlKey &&
+        !e.altKey &&
+        !e.shiftKey &&
+        !e.metaKey
+      ) {
         e.stopPropagation()
         e.preventDefault()
 
         this.model = !this.model
       }
     },
-    async getSearchResults (v: string) {
+    async getSearchResults(v: string) {
       if (!v.length) {
         this.searchResponse = []
         return
@@ -62,28 +68,28 @@ export default defineComponent({
 
       await axios
         .get('/api/v1/invest/search_query/', {
-          params: { query: v }
+          params: { query: v },
         })
         .then((response) => {
           this.searchResponse = this.highlightSearchResponse(response.data, v)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
         })
     },
     highlightSearchResponse(searchResponse: SearchCompany[], query: string) {
-      const regex = new RegExp(query, "gi");
+      const regex = new RegExp(query, 'gi')
       return searchResponse.map((c) => {
         c.title = c.title.replace(
           regex,
-          `<span class="mask__highlight">$&</span>`,
-        );
+          `<span class="mask__highlight">$&</span>`
+        )
         c.ticker = c.ticker.replace(
           regex,
-          `<span class="mask__highlight">$&</span>`,
-        );
-        return c;
-      });
+          `<span class="mask__highlight">$&</span>`
+        )
+        return c
+      })
     },
   },
   watch: {
@@ -91,15 +97,15 @@ export default defineComponent({
       if (val === false) {
         this.searchResponse = []
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     document.addEventListener('keydown', this.onKeydown)
   },
-  unmounted () {
+  unmounted() {
     document.removeEventListener('keydown', this.onKeydown)
-  }
-});
+  },
+})
 </script>
 
 <template>
@@ -113,7 +119,9 @@ export default defineComponent({
       >
         <span class="me-n1">
           <span>Search</span>
-          <span class="py-1 px-2 ms-2 border rounded text-disabled text-caption">Ctrl+K</span>
+          <span class="py-1 px-2 ms-2 border rounded text-disabled text-caption"
+            >Ctrl+K</span
+          >
         </span>
       </base-button>
     </template>
@@ -166,14 +174,19 @@ export default defineComponent({
             @click="model = false"
           >
             <template #prepend>
-              <base-flag :code="item.country.slug"/>
+              <base-flag :code="item.country.slug" />
             </template>
             <template #default>
-              <base-list-item-title v-html="item.title"/>
-              <base-list-item-subtitle v-html="item.ticker"/>
+              <base-list-item-title v-html="item.title" />
+              <base-list-item-subtitle v-html="item.ticker" />
             </template>
             <template #append>
-              <base-chip :text="item.sector.title" label color="info" size="small" />
+              <base-chip
+                :text="item.sector.title"
+                label
+                color="info"
+                size="small"
+              />
             </template>
           </base-list-item>
         </base-list>
