@@ -38,7 +38,8 @@ function createNote() {
     company: company.value.id || -1,
   }
   companyDetailStore.noteSavedContent = ''
-  // TODO: Add noteDialogOpening
+
+  companyDetailStore.notesEditorIsActive = true
 }
 
 function humanizeFinancial(val: number = 0, currencySymbol: string = '') {

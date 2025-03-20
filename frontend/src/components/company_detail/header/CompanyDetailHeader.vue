@@ -56,13 +56,15 @@ function createNote() {
     company: company.value.id || -1,
   }
   companyDetailStore.noteSavedContent = ''
-  // TODO: Add NoteDialogActivating
+
+  companyDetailStore.notesEditorIsActive = true
 }
 </script>
 
 <template>
   <base-card
     class="px-4 mb-4"
+    style="z-index: 1"
     :loading="companyDetailStore.fetchingCompany && 'info'"
   >
     <template #image>

@@ -2,6 +2,7 @@
 // Components
 import CompanyDetailHeader from '@/components/company_detail/header/CompanyDetailHeader.vue'
 import CompanyDetailContent from '@/components/company_detail/CompanyDetailContent.vue'
+import NotesEditor from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -43,4 +44,5 @@ onMounted(async () => {
 <template>
   <CompanyDetailHeader />
   <CompanyDetailContent />
+  <NotesEditor />
 </template>
