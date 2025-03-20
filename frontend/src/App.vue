@@ -1,9 +1,11 @@
 <script setup lang="ts">
 // Components
 import { BaseApp } from '@/apps/visagiste/components/BaseApp'
+import PageNotFoundView from "@/views/PageNotFoundView.vue";
 
 // Composables
 import { useAuthStore } from '@/store/auth'
+import { usePageStore } from '@/store/page'
 
 // Utilities
 import { onMounted } from 'vue'
@@ -12,6 +14,7 @@ import axios from 'axios'
 import AppLayout from '@/layouts/AppLayout.vue'
 
 const authStore = useAuthStore()
+const pageStore = usePageStore()
 
 onMounted(() => {
   authStore.init()
@@ -25,7 +28,8 @@ onMounted(() => {
 <template>
   <base-app>
     <AppLayout>
-      <RouterView />
+      <RouterView v-if="!pageStore.notFound" />
+      <PageNotFoundView v-else/>
     </AppLayout>
   </base-app>
 </template>
