@@ -1,6 +1,7 @@
 // Utilities
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { toast } from 'vue3-toastify'
 
 // Types
 import type {
@@ -14,7 +15,6 @@ import type {
 import type { Portfolio } from '@/types/portfolios'
 import type { Note } from '@/types/notes'
 import type { Statement } from '@/types/statements'
-import { toast } from 'vue3-toastify'
 
 interface PriceDataResponse extends Array<Candle> {}
 
@@ -136,6 +136,7 @@ export const useCompanyDetailStore = defineStore({
     competitors: [] as Competitor[],
     note: {} as Note,
     noteSavedContent: '',
+    notesEditorIsActive: false,
     fetchingPriceData: false,
     fetchingCompany: false,
     watchlistLoading: false,
@@ -159,16 +160,18 @@ export const useCompanyDetailStore = defineStore({
 
       this.portfolios = portfolios
     },
+    addNote(note: Note) {
+      this.notes.push(note)
+    },
     updateNotes(note: Note) {
-      let notes: Note[] = []
+      let _notes: Note[] = []
       this.notes.forEach((n: Note) => {
         if (n.id === note.id) {
-          notes.push(note)
+          _notes.push(note)
         } else {
-          notes.push(n)
+          _notes.push(n)
         }
-
-        this.notes = notes
+        this.notes = _notes
       })
     },
     async fetchPriceData(companySlug: string) {
