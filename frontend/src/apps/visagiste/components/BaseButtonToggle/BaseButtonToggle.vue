@@ -46,24 +46,31 @@ export const useBaseButtonToggleProps = propsFactory(
 export default defineComponent({
   name: 'BaseButtonToggle',
   props: useBaseButtonToggleProps(),
-  setup(props, { slots }) {
+  setup(props, { slots, expose }) {
     const { isSelected, next, prev, select, selected } = useGroup(
       props,
       BaseButtonToggleSymbol
     )
+
+    expose({
+      next,
+      prev,
+      select,
+    })
+
     return () => {
-      const buttonToggleProps = BaseButtonGroup.filterProps(props)
+      const buttonGroupProps = BaseButtonGroup.filterProps(props)
 
       return h(
         BaseButtonGroup,
         {
           class: ['base-button-toggle', props.class],
+          ...buttonGroupProps,
           style: props.style,
-          ...buttonToggleProps,
         },
         {
           default: () =>
-            slots.default?.(isSelected, next, prev, select, selected),
+            slots.default?.({ isSelected, next, prev, select, selected }),
         }
       )
     }
