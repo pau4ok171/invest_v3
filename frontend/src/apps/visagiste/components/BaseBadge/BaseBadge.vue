@@ -27,8 +27,8 @@ import { useLocale } from '@/apps/visagiste/composables/locale'
 import MaybeTransition from '@/apps/visagiste/composablesV2/transition.vue'
 
 // Utilities
-import { defineComponent, toRef, computed } from 'vue'
-import { pickWithRest, propsFactory } from '@/apps/visagiste/utils'
+import { toRef, computed } from 'vue'
+import { defineComponent, pickWithRest, propsFactory } from '@/apps/visagiste/utils'
 
 export const useBaseBadgeProps = propsFactory(
   {
