@@ -2,7 +2,7 @@
 // Components
 import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
-import CompanyDetailRiskReward from '@/components/company_detail/content_list/summary/CompanyDetailRiskReward.vue'
+import CompanyDetailRiskReward from '@/components/company_detail/content_list/summary/overview/CompanyDetailRiskReward.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
