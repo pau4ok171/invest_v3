@@ -133,9 +133,9 @@ export default defineComponent({
       <BaseCardSubtitle v-if="hasSubtitle" key="subtitle">
         <slot name="subtitle">{{ $props.subtitle }}</slot>
       </BaseCardSubtitle>
-    </div>
 
-    <slot name="default" />
+      <slot name="default" />
+    </div>
 
     <template v-if="hasAppend">
       <div key="append" class="base-card-item__append">

@@ -105,6 +105,11 @@
       padding-inline-start: $card-append-padding-inline-start;
     }
   }
+  .base-card-item__content {
+    align-self: center;
+    grid-area: content;
+    overflow: hidden;
+  }
   .base-card-title {
     display: block;
     flex: $card-title-flex;
