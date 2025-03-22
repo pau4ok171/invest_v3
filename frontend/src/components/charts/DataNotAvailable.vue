@@ -1,21 +1,16 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-
-export default defineComponent({
-  name: "DataNotAvailable",
-  props: {
-    chartName: {
-      type: String,
-      required: true,
-    }
+<script setup lang="ts">
+const props = defineProps({
+  chartName: {
+    type: String,
+    required: true,
   },
 })
 </script>
 
 <template>
-<div class="chart-data-not-available">
-  <p>Insufficient data to display {{ chartName }}</p>
-</div>
+  <div class="chart-data-not-available">
+    <p>Insufficient data to display {{ props.chartName }}</p>
+  </div>
 </template>
 
 <style scoped>
@@ -30,6 +25,6 @@ export default defineComponent({
   border-radius: 8px;
 }
 .chart-data-not-available p {
-  font-size: 1.4rem;
+  font-size: 0.875rem;
 }
 </style>
