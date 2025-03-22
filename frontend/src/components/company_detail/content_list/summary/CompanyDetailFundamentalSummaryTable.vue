@@ -1,66 +1,55 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-import QuestionText from "@/components/UI/text/QuestionText.vue";
-import QuestionLink from "@/components/UI/text/QuestionLink.vue";
-import {mapGetters} from "vuex";
+<script setup lang="ts">
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
 
-export default defineComponent({
-  name: "CompanyDetailFundamentalSummaryTable",
-  components: {QuestionLink, QuestionText, ArrowDownIcon},
-  computed: {
-    ...mapGetters({
-      company: 'companyDetail/getCompany',
-    }),
-    get_pe() {
-      if (!this.company.market) return null
-      const marketCap = this.company.price_data.capitalisation
-      const report = this.company.reports[0]
-      if (!report || !marketCap) return 'n/a'
+// Utilities
+import { computed } from 'vue'
 
-      const earnings = report.income_net
-      const scale_unit = report.scale_unit
-      return `${(marketCap/(earnings * scale_unit)).toFixed(1)}x`
-    },
-    get_pb() {
-      if (!this.company.market) return null
-      const marketCap = this.company.price_data.capitalisation
-      const report = this.company.reports[0]
-      if (!report || !marketCap) return 'n/a'
+const store = useCompanyDetailStore()
+const company = computed(() => store.company)
 
-      const bookValue = report.assets
-      const scale_unit = report.scale_unit
-      return `${(marketCap/(bookValue * scale_unit)).toFixed(1)}x`
-    },
-  }
+const pe = computed(() => {
+  const marketCap = company.value.price_data.capitalisation
+  const report = company.value.reports[0]
+  if (!report || !marketCap) return 'n/a'
+
+  const earnings = report.income_net
+  const scale_unit = report.scale_unit
+  return `${(marketCap / (earnings * scale_unit)).toFixed(1)}x`
+})
+const pb = computed(() => {
+  const marketCap = company.value.price_data.capitalisation
+  const report = company.value.reports[0]
+  if (!report || !marketCap) return 'n/a'
+
+  const bookValue = report.assets
+  const scale_unit = report.scale_unit
+  return `${(marketCap / (bookValue * scale_unit)).toFixed(1)}x`
 })
 </script>
 
 <template>
-<div class="detail-fundamental-summary-table">
-
-  <div class="detail-fundamental-summary-table__in-row-item-box">
-    <div class="detail-fundamental-summary-table__in-row-item">
-      <h3 class="detail-fundamental-summary-table__title">{{ get_pe }}</h3>
-      <span class="detail-fundamental-summary-table__text">P/E Ratio</span>
-    </div>
-    <div class="detail-fundamental-summary-table__in-row-item detail-fundamental-summary-table__flex-end">
-      <div>
-        <h3 class="detail-fundamental-summary-table__subtitle">{{ get_pb }}</h3>
-        <span class="detail-fundamental-summary-table__subtext">P/B Ratio</span>
+  <div class="detail-fundamental-summary-table">
+    <div class="detail-fundamental-summary-table__in-row-item-box">
+      <div class="detail-fundamental-summary-table__in-row-item">
+        <h3 class="detail-fundamental-summary-table__title">{{ pe }}</h3>
+        <span class="detail-fundamental-summary-table__text">P/E Ratio</span>
+      </div>
+      <div
+        class="detail-fundamental-summary-table__in-row-item detail-fundamental-summary-table__flex-end"
+      >
+        <div>
+          <h3 class="detail-fundamental-summary-table__subtitle">{{ pb }}</h3>
+          <span class="detail-fundamental-summary-table__subtext"
+            >P/B Ratio</span
+          >
+        </div>
       </div>
     </div>
   </div>
-
-  <div>
-    <QuestionText>Is SBER overvalued?</QuestionText>
-    <QuestionLink>See Fair Value and valuation analysis</QuestionLink>
-  </div>
-
-</div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-fundamental-summary-table {
   margin-top: 50px;
 }
@@ -80,47 +69,27 @@ export default defineComponent({
   align-items: flex-end;
 }
 .detail-fundamental-summary-table__title {
-  font-size: 3.6rem;
+  font-size: 2.25rem;
   line-height: 1.25;
   font-weight: 500;
   margin-bottom: 2px;
 }
 .detail-fundamental-summary-table__subtitle {
-  font-size: 2rem;
+  font-size: 1.25rem;
   line-height: 1.25;
   font-weight: 500;
   margin-bottom: 2px;
 }
 .detail-fundamental-summary-table__text {
-  font-size: 1.6rem;
+  font-size: 1rem;
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, .7);
+  color: rgba(255, 255, 255, 0.7);
 }
 .detail-fundamental-summary-table__subtext {
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, .7);
-}
-.detail-fundamental-summary-table__question {
-  font-size: 1.6rem;
-  line-height: 1.5;
-  font-weight: 500;
-  color: rgba(255, 255, 255, .5);
-  margin-top: 35px;
-}
-.detail-fundamental-summary-table__link {
-  display: flex;
-  font-size: 1.6rem;
-  line-height: 1.5;
-  font-weight: 500;
-  color: var(--blue);
-  text-decoration: underline;
-}
-.detail-fundamental-summary-table__link svg {
-  transform: rotate(-90deg);
-  margin-left: -6px;
-  fill: var(--blue);
+  color: rgba(255, 255, 255, 0.7);
 }
 </style>

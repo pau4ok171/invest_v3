@@ -13,16 +13,17 @@ const props = defineProps({
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .chart-data-not-available {
   display: flex;
   justify-content: center;
   flex-direction: column;
   gap: 16px;
   align-items: center;
+  padding: 16px;
   height: 100%;
-  background-color: var(--bg-color);
-  border-radius: 8px;
+  background-color: rgb(var(--base-theme-surface-bright));
+  border-radius: 4px;
 }
 .chart-data-not-available p {
   font-size: 0.875rem;

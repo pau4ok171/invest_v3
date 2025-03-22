@@ -1,71 +1,74 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {chartOpts} from "@/components/charts/earningsRevenueChart";
-import {mapGetters} from "vuex";
-import type {Report} from "@/types/invest";
-import DataNotAvailable from "@/components/charts/DataNotAvailable.vue";
+<script setup lang="ts">
+// Components
+import DataNotAvailable from '@/components/charts/DataNotAvailable.vue'
 
-export default defineComponent({
-  name: "EarningsRevenueChart",
-  components: {DataNotAvailable},
-  data() {
-    return {
-      chartOpts: chartOpts,
-      dataIsAvailable: true,
-    }
-  },
-  mounted() {
-    if (!this.company.reports) {
-      this.dataIsAvailable = false
-      return null
-    }
-    const report: Report = this.company.reports[0]
-    if (!report) {
-      this.dataIsAvailable = false
-      return null
-    }
-    const others_expenses = Number((report.gross_margin-report.income_net).toFixed(1))
-    const series: any = this.chartOpts.series[0]
-    series.data = [{
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
+
+// Utilities
+import { computed, onMounted, ref, shallowRef } from 'vue'
+import { chartOpts } from '@/components/charts/earningsRevenueChart'
+
+// Types
+import type { Report } from '@/types/invest'
+
+const store = useCompanyDetailStore()
+const company = computed(() => store.company)
+
+const chartOptions = ref(chartOpts)
+const available = shallowRef(true)
+
+onMounted(() => {
+  if (!company.value.reports) {
+    available.value = false
+    return
+  }
+
+  const report: Report = company.value.reports[0]
+  if (!report) {
+    available.value = false
+    return null
+  }
+  const others_expenses = Number(
+    (report.gross_margin - report.income_net).toFixed(1)
+  )
+  const series: any = chartOptions.value.series[0]
+  series.data = [
+    {
       name: 'Revenue',
-      color: "#2394DF",
-      y: report.sales
-    }, {
+      color: '#2394DF',
+      y: report.sales,
+    },
+    {
       name: 'Cost of Revenue',
-      color: "rgba(230,65,65,.5)",
-      y: -report.cost_of_sales
-    }, {
+      color: 'rgba(230,65,65,.5)',
+      y: -report.cost_of_sales,
+    },
+    {
       name: 'Gross Profit',
-      color: "#2DC97E",
+      color: '#2DC97E',
       isIntermediateSum: true,
-    }, {
+    },
+    {
       name: 'Other Expenses',
-      color: "rgba(230,65,65,.5)",
-      y: -others_expenses
-    }, {
+      color: 'rgba(230,65,65,.5)',
+      y: -others_expenses,
+    },
+    {
       name: 'Earnings',
-      color: "#71E7D6",
+      color: '#71E7D6',
       isSum: true,
-    }] as Array<Object>
-    this.chartOpts.series[0].dataLabels.format = `{(abs y):,.f}${report.scale}`
-  },
-  computed: {
-    ...mapGetters({
-      company: 'companyDetail/getCompany',
-    })
-  },
+    },
+  ] as Array<Object>
+  chartOptions.value.series[0].dataLabels.format = `{(abs y):,.f}${report.scale}`
 })
 </script>
 
 <template>
-<div class="earnings-revenue-chart">
-  <DataNotAvailable v-if="!dataIsAvailable" chart-name="Earnings Revenue Chart"/>
-  <charts
-    v-else
-    :constructorType="'chart'"
-    :options="chartOpts"
-  />
-</div>
+  <div class="earnings-revenue-chart">
+    <DataNotAvailable v-if="!available" chart-name="Earnings Revenue Chart" />
+    <charts v-else constructorType="chart" :options="chartOptions" />
+  </div>
 </template>
 
 <style>
