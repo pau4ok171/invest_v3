@@ -58,7 +58,7 @@ function afterCreate(chart: any) {
 }
 
 function setChartDataUpdateInterval() {
-  const companySlug = route.params.company_slug as string
+  const companySlug = route.params.companySlug as string
   intervalId.value = setInterval(
     async () => await companyDetailStore.fetchPriceData(companySlug),
     1000 * 60 * 5
