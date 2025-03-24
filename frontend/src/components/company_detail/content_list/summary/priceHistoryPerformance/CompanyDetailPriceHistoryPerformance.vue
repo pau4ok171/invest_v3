@@ -9,19 +9,18 @@ import BaseCol from '@/apps/visagiste/components/BaseGrid/BaseCol.vue'
 import CompanyDetailNewsItem from '@/components/company_detail/content_list/summary/news/CompanyDetailNewsItem.vue'
 import BaseCardActions from '@/apps/visagiste/components/BaseCard/BaseCardActions.vue'
 import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
+import CompanyDetailShareholderReturnsTable
+  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsTable.vue";
+import CompanyDetailStatement from "@/components/company_detail/base/CompanyDetailStatement.vue";
+import PriceVolatilityChart from "@/components/charts/PriceVolatilityChart.vue";
+import CompanyDetailShareholderReturnsDialog
+  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsDialog.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
 // Utilities
 import { computed } from 'vue'
-import CompanyDetailShareholderReturnsTable
-  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsTable.vue";
-import CompanyDetailStatement from "@/components/company_detail/content_list/CompanyDetailStatement.vue";
-import PriceVolatilityChart from "@/components/charts/PriceVolatilityChart.vue";
-import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
-import CompanyDetailShareholderReturnsDialog
-  from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsDialog.vue";
 
 const companyDetailStore = useCompanyDetailStore()
 const company = computed(() => companyDetailStore.company)

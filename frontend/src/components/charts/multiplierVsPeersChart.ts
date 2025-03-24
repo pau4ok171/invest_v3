@@ -165,7 +165,7 @@ export const chartOpts = {
       },
       labels: {
         style: {
-          fontSize: '1.2rem',
+          fontSize: '.75rem',
           color: '#fff',
         },
         formatter: function (this: any) {return this.isFirst ? this.chart.yAxis[0].options.firstEl : this.value}},
@@ -178,7 +178,7 @@ export const chartOpts = {
       tickWidth: 0,
       labels: {
         style: {
-          fontSize: '1.2rem',
+          fontSize: '.75rem',
           color: '#fff',
         },
         formatter: function (this: any) {

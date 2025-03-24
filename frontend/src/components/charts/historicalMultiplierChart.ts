@@ -23,7 +23,7 @@ export const chartOpts = {
     plotBackgroundColor: 'url(#ActualBackgroundGradient)',
     style: {
       fontFamily: 'inherit',
-      fontSize: '1.6rem',
+      fontSize: '1rem',
       fontWeight: 'normal'
     },
     zooming: {
