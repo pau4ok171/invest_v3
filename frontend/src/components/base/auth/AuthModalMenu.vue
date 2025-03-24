@@ -3,7 +3,6 @@ import SocialAuthForm from '@/components/base/auth/SocialAuthForm.vue'
 import AuthForm from '@/components/base/auth/AuthForm.vue'
 import axios, { AxiosError } from 'axios'
 import Loader from '@/components/UI/Loader.vue'
-import { mapMutations } from 'vuex'
 import { defineComponent } from 'vue'
 import { useAuthStore } from '@/store/auth'
 
@@ -38,9 +37,6 @@ export default defineComponent({
     this.cleanModalMenu()
   },
   methods: {
-    ...mapMutations({
-      setIsLoading: 'setIsLoading',
-    }),
     cleanModalMenu() {
       this.formData = this.EMPTY_FORM_DATA
       this.errors = []
@@ -57,7 +53,7 @@ export default defineComponent({
       const formData = new FormData()
       this.errors = []
       if (this.registerIsChosen) {
-        this.setIsLoading(true)
+        // this.setIsLoading(true)
 
         // TODO: Проверить на ошибки|На уникальность логина
 
@@ -71,7 +67,7 @@ export default defineComponent({
           .then(() => {})
           .catch(this.catchError)
 
-        this.setIsLoading(false)
+        // this.setIsLoading(false)
       } else {
         Object.entries({
           username: this.formData.current_username,
@@ -83,7 +79,7 @@ export default defineComponent({
       }
     },
     async loginUser(formData: FormData) {
-      this.setIsLoading(true)
+      // this.setIsLoading(true)
       await axios
         .post('/api/v1/token/login/', formData)
         .then((response) => {
@@ -100,7 +96,7 @@ export default defineComponent({
           document.location.reload()
         })
         .catch(this.catchError)
-      this.setIsLoading(false)
+      // this.setIsLoading(false)
     },
     catchError(error: AxiosError) {
       if (error.response) {

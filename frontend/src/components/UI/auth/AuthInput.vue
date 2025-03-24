@@ -29,7 +29,6 @@
 <style scoped>
 .form__input {
   padding: 14px 48px 14px 12px;
-  font-size: 1.4rem;
   width: 100%;
   border-radius: 4px;
   height: 40px;
