@@ -8,11 +8,12 @@ import {
   lighten,
   mergeDeep,
   parseColor,
+  propsFactory,
   RGBtoHex
 } from "@/apps/visagiste/utils";
 
 // Types
-import type { App, DeepReadonly, InjectionKey, Ref } from 'vue'
+import type { App, DeepReadonly, InjectionKey, Ref, PropType } from 'vue'
 import type { HeadClient } from '@unhead'
 import type { VueHeadClient } from '@vueuse'
 
@@ -107,6 +108,23 @@ export interface ThemeInstance {
 }
 
 export const ThemeSymbol: InjectionKey<ThemeInstance> = Symbol.for('visagiste:theme')
+
+const allowedThemes = [
+  'light',
+  'dark',
+  'finargo-dark',
+  'finargo-light',
+  'admin',
+] as const
+
+export type ThemeName = typeof allowedThemes[number]
+
+export const useThemeProps = propsFactory({
+  theme: {
+    type: String as PropType<ThemeName>,
+    validator: (v: any) => allowedThemes.includes(v)
+  },
+}, 'theme')
 
 function generateDefaults () {
   return {
@@ -278,7 +296,7 @@ export function createTheme (options?: ThemeOptions): ThemeInstance & { install:
         createCssClass(fgLines, `.${key}`, [`color: rgb(var(--base-theme-${key})) !important`])
       } else {
         createCssClass(bgLines, `.bg-${key}`, [
-          `base-theme-overlay-multiplier: var(--base-theme-${key}-overlay-multiplier)`,
+          `--base-theme-overlay-multiplier: var(--base-theme-${key}-overlay-multiplier)`,
           `background-color: rgb(var(--base-theme-${key})) !important`,
           `color: rgb(var(--base-theme-on-${key})) !important`,
         ])
@@ -392,6 +410,8 @@ export function useTheme () {
   const theme = inject(ThemeSymbol, null)
 
   if (!theme) throw new Error('Could not find Visage theme injection')
+
+  return theme
 }
 
 function createCssClass (lines: string[], selector: string, content: string[]) {

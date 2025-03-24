@@ -1,191 +1,339 @@
 <script lang="ts">
-import {defineComponent} from 'vue';
-import type {PropType} from 'vue';
-import BaseInput from "@/components/UI/base/BaseInput.vue";
-import BaseIcon from "@/apps/visagiste/components/BaseIcon/BaseIcon.vue";
+// Styles
+import './BaseList.scss'
 
-interface ListItem {
-  id: number | string,
-  title: string,
-  highlightedTitle?: string,
+// Components
+import BaseListChildren from './BaseListChildren.vue'
+
+// Composables
+import { createList } from './list'
+import { IconValue } from '@/apps/visagiste/composables/icons'
+import { useBorder, useBorderProps } from '@/apps/visagiste/composables/border'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import {
+  useDensity,
+  useDensityProps,
+} from '@/apps/visagiste/composables/density'
+import {
+  useDimension,
+  useDimensionProps,
+} from '@/apps/visagiste/composables/dimensions'
+import {
+  useElevation,
+  useElevationProps,
+} from '@/apps/visagiste/composables/elevation'
+import { useItemsProps } from '@/apps/visagiste/composables/list-items'
+import {
+  useRounded,
+  useRoundedProps,
+} from '@/apps/visagiste/composables/rounded'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
+import { useVariantProps } from '@/apps/visagiste/composables/variant'
+import {
+  useNested,
+  useNestedProps,
+} from '@/apps/visagiste/composables/nested/nested'
+
+// Utilities
+import { computed, ref, shallowRef, toRef } from 'vue'
+import {
+  defineComponent,
+  EventProp,
+  focusChild,
+  getPropertyFromItem,
+  isPrimitive,
+  omit,
+  propsFactory,
+} from '@/apps/visagiste/utils'
+
+// Types
+import type {
+  ItemProps,
+  ListItem,
+} from '@/apps/visagiste/composables/list-items'
+import type { PropType } from 'vue'
+import { useBackgroundColor } from '@/apps/visagiste/composables/color'
+import { provideDefaults } from '@/apps/visagiste/composables/defaults'
+
+export interface InternalListItem<T = any> extends ListItem<T> {
+  type?: 'item' | 'subheader' | 'divider'
 }
 
-export default defineComponent({
-  name: "BaseList",
-  components: {
-    BaseIcon,
-    BaseInput
-  },
-  data() {
-    return {
-      searchQuery: '',
-    }
-  },
-  props: {
-    activeItem: {
-      type: Object as PropType<ListItem>,
-      required: true,
-    },
-    items: {
-      type: Object as PropType<ListItem[]>,
-      required: true
-    },
-    hasSearch: {
-      type: Boolean,
-      default: false
-    },
-  },
-  computed: {
-    filteredItems() {
-      const filtered = this.items.filter(i => i.title.toLowerCase().includes(this.searchQuery.toLowerCase().trim()))
+function transformItem(
+  props: ItemProps & { itemType?: string },
+  item: any
+): InternalListItem {
+  const type = getPropertyFromItem(item, props.itemType, 'item')
+  const title = isPrimitive(item)
+    ? item
+    : getPropertyFromItem(item, props.itemTitle)
+  const value = getPropertyFromItem(item, props.itemValue, undefined)
+  const children = getPropertyFromItem(item, props.itemChildren)
+  const itemProps =
+    props.itemProps === true
+      ? omit(item, ['children'])
+      : getPropertyFromItem(item, props.itemProps)
 
-      if (this.searchQuery) {
-        const regex = new RegExp(this.searchQuery.trim(), 'gi')
-        return filtered.map(f => {
-          const highlightedTitle = f.title.replace(regex, match => `<span class="base-list__highlight">${match}</span>`)
-          return {...f, highlightedTitle}
-        })
-      }
-      return filtered
+  const _props = {
+    title,
+    value,
+    ...itemProps,
+  }
+
+  return {
+    type,
+    title: _props.title,
+    value: _props.value,
+    props: _props,
+    children:
+      type === 'item' && children ? transformItems(props, children) : undefined,
+    raw: item,
+  }
+}
+
+function transformItems(
+  props: ItemProps & { itemType?: string },
+  items: (string | object)[]
+) {
+  const array: InternalListItem[] = []
+
+  for (const item of items) {
+    array.push(transformItem(props, item))
+  }
+
+  return array
+}
+
+export function useListItems(props: ItemProps & { itemType?: string }) {
+  const items = computed(() => transformItems(props, props.items))
+
+  return { items }
+}
+
+export const useBaseListProps = propsFactory(
+  {
+    baseColor: String,
+    /* @deprecated */
+    activeColor: String,
+    activeClass: String,
+    bgColor: String,
+    disabled: Boolean,
+    expandIcon: IconValue,
+    collapseIcon: IconValue,
+    lines: {
+      type: [Boolean, String] as PropType<'one' | 'two' | 'three' | false>,
+      default: 'one',
     },
+    slim: Boolean,
+    nav: Boolean,
+
+    'onClick:open':
+      EventProp<[{ id: unknown; value: boolean; path: unknown }]>(),
+    'onClick:select':
+      EventProp<[{ id: unknown; value: boolean; path: unknown }]>(),
+    'onClick:opened': EventProp<[]>(),
+    ...useNestedProps({
+      selectStrategy: 'single-leaf' as const,
+      openStrategy: 'list' as const,
+    }),
+    ...useBorderProps(),
+    ...useComponentProps(),
+    ...useDensityProps(),
+    ...useDimensionProps(),
+    ...useElevationProps(),
+    itemType: {
+      type: String,
+      default: 'type',
+    },
+    ...useItemsProps(),
+    ...useRoundedProps(),
+    ...useTagProps(),
+    ...useThemeProps(),
+    ...useVariantProps({ variant: 'text' } as const),
+  },
+  'BaseList'
+)
+
+type ItemType<T> = T extends readonly (infer U)[] ? U : never
+
+export default defineComponent({
+  name: 'BaseList',
+  components: { BaseListChildren },
+  props: useBaseListProps(),
+  emits: {
+    'update:selected': (value: unknown) => true,
+    'update:activated': (value: unknown) => true,
+    'update:opened': (value: unknown) => true,
+    'click:open': (value: { id: unknown; value: boolean; path: unknown[] }) =>
+      true,
+    'click:activate': (value: {
+      id: unknown
+      value: boolean
+      path: unknown[]
+    }) => true,
+    'click:select': (value: { id: unknown; value: boolean; path: unknown[] }) =>
+      true,
+  },
+  setup(props) {
+    const { items } = useListItems(props)
+    const { themeClasses } = provideTheme(props)
+    const { backgroundColorClasses, backgroundColorStyles } =
+      useBackgroundColor(toRef(props, 'bgColor'))
+    const { borderClasses } = useBorder(props)
+    const { densityClasses } = useDensity(props)
+    const { dimensionStyles } = useDimension(props)
+    const { elevationClasses } = useElevation(props)
+    const { roundedClasses } = useRounded(props)
+    const { children, open, parents, select, getPath } = useNested(props)
+    const lineClasses = computed(() =>
+      props.lines ? `base-list--${props.lines}-line` : undefined
+    )
+    const activeColor = toRef(props, 'activeColor')
+    const baseColor = toRef(props, 'color')
+    const color = toRef(props, 'color')
+
+    createList()
+
+    provideDefaults({
+      BaseListGroup: {
+        activeColor,
+        baseColor,
+        color,
+        expandIcon: toRef(props, 'expandIcon'),
+        collapseIcon: toRef(props, 'collapseIcon'),
+      },
+      BaseListItem: {
+        activeClass: toRef(props, 'activeClass'),
+        activeColor,
+        baseColor,
+        color,
+        density: toRef(props, 'density'),
+        disabled: toRef(props, 'disabled'),
+        lines: toRef(props, 'lines'),
+        nav: toRef(props, 'nav'),
+        slim: toRef(props, 'slim'),
+        variant: toRef(props, 'variant'),
+      },
+    })
+
+    const isFocused = shallowRef(false)
+    const contentRef = ref<HTMLElement>()
+    function onFocusin(e: FocusEvent) {
+      isFocused.value = true
+    }
+
+    function onFocusout(e: FocusEvent) {
+      isFocused.value = false
+    }
+
+    function onFocus(e: FocusEvent) {
+      if (
+        !isFocused.value &&
+        !(
+          e.relatedTarget && contentRef.value?.contains(e.relatedTarget as Node)
+        )
+      )
+        focus()
+    }
+
+    function onKeydown(e: KeyboardEvent) {
+      const target = e.target as HTMLElement
+
+      if (!contentRef.value || ['INPUT', 'TEXTAREA'].includes(target.tagName))
+        return
+
+      if (e.key === 'ArrowDown') {
+        focus('next')
+      } else if (e.key === 'ArrowUp') {
+        focus('prev')
+      } else if (e.key === 'Home') {
+        focus('first')
+      } else if (e.key === 'End') {
+        focus('last')
+      } else {
+        return
+      }
+
+      e.preventDefault()
+    }
+
+    function onMousedown(e: MouseEvent) {
+      isFocused.value = true
+    }
+
+    function focus(location?: 'next' | 'prev' | 'first' | 'last') {
+      if (contentRef.value) {
+        return focusChild(contentRef.value, location)
+      }
+    }
+
+    return {
+      items,
+      contentRef,
+      themeClasses,
+      backgroundColorClasses,
+      borderClasses,
+      densityClasses,
+      elevationClasses,
+      lineClasses,
+      roundedClasses,
+      backgroundColorStyles,
+      dimensionStyles,
+      isFocused,
+      onFocusin,
+      onFocusout,
+      onFocus,
+      onKeydown,
+      onMousedown,
+      open,
+      select,
+      focus,
+      children,
+      parents,
+      getPath,
+    }
   },
 })
 </script>
 
 <template>
-<div class="base-list">
-  <div class="base-list__inner">
-
-    <template v-if="hasSearch">
-      <div @click.stop class="base-list__search">
-        <BaseInput
-          type="search"
-          class="base-list__input"
-          autocomplite="false"
-          placeholder="Type to Filter..."
-          :value="searchQuery"
-          @input="searchQuery=$event.target.value"
-        />
-      </div>
-    </template>
-
-    <ul v-if="filteredItems.length" class="base-list__items">
-      <li
-        class="base-list__item"
-        :key=item.id
-        v-for="item in filteredItems"
-      >
-        <button
-          class="base-list__button"
-          @click="$emit('setActiveItem', item)"
-          :disabled="item.id === activeItem.id"
-          :value="item.id"
-        >
-          <base-icon
-            icon="CheckedIcon"
-            :disabled="item.id !== activeItem.id"
-          />
-
-          <span v-html="item.highlightedTitle || item.title"></span>
-
-        </button>
-      </li>
-    </ul>
-    <div v-else class="base-list__no-items">NOTHING HERE...</div>
-  </div>
-</div>
+  <component
+    :is="$props.tag as string"
+    ref="contentRef"
+    :class="[
+      'base-list',
+      {
+        'base-list--disabled': $props.disabled,
+        'base-list--nav': $props.nav,
+        'base-list--slim': $props.slim,
+      },
+      themeClasses,
+      backgroundColorClasses,
+      borderClasses,
+      densityClasses,
+      elevationClasses,
+      lineClasses,
+      roundedClasses,
+      $props.class,
+    ]"
+    :style="[backgroundColorStyles, dimensionStyles, $props.style]"
+    :tabindex="$props.disabled || isFocused ? -1 : 0"
+    role="listbox"
+    :aria-activedescendant="undefined"
+    :onFocusin="onFocusin"
+    :onFocusout="onFocusout"
+    :onFocus="onFocus"
+    :onKeydown="onKeydown"
+    :onMousedown="onMousedown"
+  >
+    <BaseListChildren :items :returnObject="$props.returnObject">
+      <template #default>
+        <slot name="default" />
+      </template>
+      <template #activator>
+        <slot name="activator" />
+      </template>
+    </BaseListChildren>
+  </component>
 </template>
-
-<style scoped>
-.base-list {
-  position: absolute;
-  top: 40px;
-  width: 280px;
-  z-index: 5;
-  border-radius: 8px;
-}
-.base-list__inner {
-  background-color: #212529;
-  width: 100%;
-  height: 100%;
-  border-radius: inherit;
-}
-.base-list__search {
-  padding: .8rem;
-  width: 100%;
-  position: relative;
-  background-color: inherit;
-  border-radius: inherit;
-}
-.base-list__input {
-  width: 100%;
-  height: 40px;
-  font-size: 1.6rem;
-  padding: .6rem 1.2rem;
-  background-color: #212529;
-  border: 1px solid #495057;
-  border-radius: 8px;
-  outline: none;
-  font-weight: 400;
-  line-height: 1.5;
-  appearance: none;
-  color: #fff;
-  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-}
-.base-list__input:focus {
-  color: #fff;
-  border-color: #86b7fe;
-  box-shadow: 0 0 0  .4rem rgba(13, 110, 253, .25);
-}
-.base-list__items {
-  font-size: 1.4rem;
-  font-weight: 400;
-  border-radius: 8px;
-  overflow-y: auto;
-  max-height: 250px;
-  margin-right: 8px;
-}
-.base-list__no-items {
-  font-size: 1.2rem;
-  font-weight: 400;
-  text-align: center;
-  padding: 8px 0 8px 0;
-}
-.base-list__item {
-  list-style: none;
-}
-.base-list__button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  text-align: left;
-  padding: .8rem 1.6rem;
-  color: inherit;
-}
-.base-list__button:not([disabled]):hover {
-  background-color: var(--blue);
-}
-.base-list__button:is([disabled]) {
-  opacity: .2;
-}
-.base-list__button > i[disabled=true] {
-  opacity: 0;
-}
-.base-list__items::-webkit-scrollbar {
-  width: 10px;
-}
-.base-list__items::-webkit-scrollbar-track {
-  -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, .2);
-  background-color: #f9f9fd;
-  border-radius: 10px;
-}
-.base-list__items::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: linear-gradient(180deg, #00c6fb, #005bea);
-}
-:global(.base-list__highlight) {
-  background-color: yellow;
-  color: black;
-}
-</style>

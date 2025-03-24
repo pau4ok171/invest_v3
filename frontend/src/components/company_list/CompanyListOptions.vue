@@ -1,45 +1,28 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {mapGetters} from "vuex";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+<script setup lang="ts">
+// Components
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
-export default defineComponent({
-  name: "CompanyListOptions",
-  components: {
-    BaseButton,
-  },
-  computed: {
-    ...mapGetters({
-      totalCompaniesLength: "companyList/getTotalCompaniesLength",
-    })
-  },
-})
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+
+const companyListStore = useCompanyListStore()
 </script>
 
 <template>
-<section class="company-list__options">
-  <div></div>
-  <div class="company-list__company-count">
-    <p>{{ totalCompaniesLength }} companies</p>
-  </div>
-  <div class="company-list__view-modes">
+  <section class="company-list__options">
+    <div></div>
+    <div class="company-list__company-count">
+      <p>{{ companyListStore.totalCompanyLength }} companies</p>
+    </div>
+    <div class="company-list__view-modes">
+      <base-button icon="$iTableMode" variant="text" disabled />
 
-    <base-button
-      :icon="{value: 'TableModeIcon', size: 'large'}"
-      variant="text"
-      disabled
-    />
-
-    <base-button
-      :icon="{value: 'TileModeIcon', size: 'large'}"
-      variant="text"
-    />
-
-  </div>
-</section>
+      <base-button icon="$iTileMode" variant="text" />
+    </div>
+  </section>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-list__options {
   display: grid;
   grid-template-columns: 250px auto 250px;
@@ -48,10 +31,10 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: 0.75rem;
   font-weight: normal;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .3);
+  color: rgb(var(--base-theme-on-surface-variant));
 }
 .company-list__view-modes {
   display: grid;

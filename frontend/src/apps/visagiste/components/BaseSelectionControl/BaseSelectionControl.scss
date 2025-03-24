@@ -1,0 +1,106 @@
+@use 'sass:map';
+@use 'sass:list';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './variables' as *;
+
+
+@include tools.layer('components') {
+  .base-selection-control {
+    align-items: center;
+    contain: layout;
+    display: flex;
+    flex: 1 0;
+    grid-area: control;
+    position: relative;
+    user-select: none;
+
+    .base-label {
+      white-space: normal;
+      word-break: break-word;
+      height: 100%;
+      opacity: 1;
+    }
+    &--disabled {
+      opacity: var(--base-disabled-opacity);
+      pointer-events: none;
+    }
+    &--error:not(.base-selection-control--disabled) {
+      .base-label {
+        color: rgb(var(--base-theme-error));
+      }
+    }
+    &--inline {
+      display: inline-flex;
+      flex: 0 0 auto;
+      min-width: 0;
+      max-width: 100%;
+
+      .base-label {
+        width: auto;
+      }
+    }
+    @at-root {
+      @include tools.density('base-selection-control', $selection-control-density) using ($modifier) {
+        --base-selection-control-size: #{$selection-control-size + $modifier};
+      }
+    }
+  }
+  .base-selection-control__wrapper {
+    width: var(--base-selection-control-size);
+    height: var(--base-selection-control-size);
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    flex: none;
+  }
+  .base-selection-control__input {
+    width: var(--base-selection-control-size);
+    height: var(--base-selection-control-size);
+    align-items: center;
+    display: flex;
+    flex: none;
+    justify-content: center;
+    position: relative;
+    border-radius: 50%;
+
+    input {
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
+    &::before {
+      border-radius: 100%;
+      background-color: currentColor;
+      opacity: 0;
+      pointer-events: none;
+      @include tools.absolute(true);
+    }
+    &:hover::before {
+      opacity: calc(#{map.get(settings.$states, 'hover')} * var(--base-theme-overlay-multiplier));
+    }
+    > .base-icon {
+      opacity: var(--base-medium-emphasis-opacity);
+    }
+    .base-selection-control--disabled &,
+    .base-selection-control--dirty &,
+    .base-selection-control--error & {
+      > .base-icon {
+        opacity: 1;
+      }
+    }
+    .base-selection-control--error:not(.base-selection-control--disabled) & {
+      > .base-icon {
+        color: rgb(var(--base-theme-error));
+      }
+    }
+    .base-selection-control--focus-visible &::before {
+      opacity: calc(#{map.get(settings.$states, 'focus')} * var(--base-theme-overlay-multiplier));
+    }
+  }
+}

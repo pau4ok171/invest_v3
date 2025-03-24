@@ -1,158 +1,113 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import CompanyDetailSection from "@/components/company_detail/content_list/CompanyDetailSection.vue";
-import CompanyDetailContentGroup from "@/components/company_detail/content_list/CompanyDetailContentGroup.vue";
-import BookIcon from "@/components/icons/BookIcon.vue";
-import DetailSectionTitle from "@/components/UI/text/DetailSectionTitle.vue";
-import DetailSectionText from "@/components/UI/text/DetailSectionText.vue";
-import CompanyDetailNotesModalMenu from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesModalMenu.vue";
-import {mapGetters, mapMutations} from "vuex";
-import CompanyDetailNotesToolDropDownMenu
-  from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesToolDropDownMenu.vue";
-import CompanyDetailNotesNoteItem from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesNoteItem.vue";
-import BaseLateralMenuContainer from "@/components/UI/lateral_menu/BaseLateralMenuContainer.vue";
-import CompanyDetailNotesLateralMenu
-  from "@/components/company_detail/content_list/summary/notes/CompanyDetailNotesLateralMenu.vue";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+<script setup lang="ts">
+// Components
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import BaseBadge from '@/apps/visagiste/components/BaseBadge/BaseBadge.vue'
+import BookIcon from '@/components/icons/BookIcon.vue'
+import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
+import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
+import BaseContainer from '@/apps/visagiste/components/BaseGrid/BaseContainer.vue'
+import BaseCol from '@/apps/visagiste/components/BaseGrid/BaseCol.vue'
+import BaseEmptyState from '@/apps/visagiste/components/BaseEmptyState/BaseEmptyState.vue'
+import CompanyDetailNotesDialog from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
+import BaseRow from '@/apps/visagiste/components/BaseGrid/BaseRow.vue'
+import BaseCardText from "@/apps/visagiste/components/BaseCard/BaseCardText.vue";
+import BaseCardItem from "@/apps/visagiste/components/BaseCard/BaseCardItem.vue";
 
-export default defineComponent({
-  name: "CompanyDetailNotes",
-  components: {
-    BaseButton,
-    CompanyDetailNotesLateralMenu,
-    BaseLateralMenuContainer,
-    CompanyDetailNotesNoteItem,
-    CompanyDetailNotesToolDropDownMenu,
-    CompanyDetailNotesModalMenu,
-    DetailSectionText,
-    DetailSectionTitle,
-    BookIcon,
-    CompanyDetailContentGroup,
-    CompanyDetailSection
-  },
-  computed: {
-    ...mapGetters({
-      notesModalMenuIsOpen: "companyDetail/getNotesModalMenuIsActive",
-      notes: 'companyDetail/getNotes',
-      note: "companyDetail/getNote",
-      isAuthenticated: 'authModule/getIsAuthenticated',
-    }),
-    getNoteListClass() {
-      return `detail-notes__note-list-${this.notes.slice(0, 3).length}-el`
-    }
-  },
-  methods: {
-    ...mapMutations({
-      setNotesModalMenuIsOpen: "companyDetail/setNotesModalMenuIsOpen",
-      setNote: "companyDetail/setNote",
-    }),
-  }
-})
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useAuthStore } from '@/store/auth'
+
+// Utilities
+import { computed } from 'vue'
+
+// Types
+import type { Note } from '@/types/notes'
+
+
+const authStore = useAuthStore()
+const companyDetailStore = useCompanyDetailStore()
+const notes = computed<Note[]>(() => companyDetailStore.notes)
+const note = computed<Note>(() => companyDetailStore.note)
+
+function editNote(note: Note) {
+  companyDetailStore.note = note
+  companyDetailStore.notesEditorIsActive = true
+}
 </script>
 
 <template>
-<CompanyDetailSection>
-  <CompanyDetailContentGroup>
+  <base-card color="surface-light" class="mb-4 pa-4">
+    <base-card-title class="pt-4">
+      <base-badge color="surface-bright" :content="notes.length" floating
+        >My Notes</base-badge
+      >
+    </base-card-title>
 
-    <header class="detail-notes">
-      <DetailSectionTitle>My Notes</DetailSectionTitle>
-      <mark class="detail-notes__mark">{{ notes.length }}</mark>
-    </header>
+    <base-empty-state
+      v-if="!notes.length"
+      title="Capture your thoughts, links and company narrative"
+    >
+      <template #media><book-icon /></template>
 
-    <template v-if="notes.length">
-      <div :class="['detail-notes__note-list', getNoteListClass]">
-        <CompanyDetailNotesNoteItem
-          v-for="note in notes.slice(0, 3)"
-          :note
-          :key="note.id"
-        />
-      </div>
+      <template #actions>
+        <base-button
+          prepend-icon="$iEdit"
+          color="info"
+          rounded="large"
+          :disabled="!authStore.isAuthenticated"
+          @click="() => companyDetailStore.notesEditorIsActive = true"
+        >
+          <CompanyDetailNotesDialog />
+          Add Note
+        </base-button>
+      </template>
+    </base-empty-state>
 
-      <BaseLateralMenuContainer>
-        <template #button>
-          <base-button
-            text="See More"
-            theme="dark-blue"
-            block
-            rounded="large"
-          />
-        </template>
-        <template #menu="menuProps">
-          <CompanyDetailNotesLateralMenu @closeMenu="menuProps.close()"/>
-        </template>
-      </BaseLateralMenuContainer>
-    </template>
-
-    <div v-else class="detail-notes__empty">
-      <BookIcon class="detail-notes__empty-image"/>
-      <DetailSectionText>Capture your thoughts, links and company narrative</DetailSectionText>
-
-      <base-button
-        prepend-icon="PenIcon"
-        text="Add Note"
-        theme="dark-blue"
-        rounded="large"
-        lower
-        :disabled="!isAuthenticated"
-        @click="setNotesModalMenuIsOpen(true)"
-      />
-
-    </div>
-
-  </CompanyDetailContentGroup>
-</CompanyDetailSection>
-
-<CompanyDetailNotesModalMenu v-if="notesModalMenuIsOpen && isAuthenticated"/>
+    <base-container v-else>
+      <base-row class="mb-2">
+        <base-col v-for="note in notes.slice(0, 3)" :key="`note-${note.id}`">
+          <base-card
+            color="surface-bright"
+            @click="() => editNote(note)"
+          >
+            <base-card-text class="company-detail-notes__note-text">{{ note.text }}</base-card-text>
+            <base-card-item>
+              <template #prepend>
+                <span class="mr-1">{{
+                  note.created === note.updated ? 'Created' : 'Updated'
+                }}</span>
+                <time v-if="note.updated" :datetime="note.updated">{{
+                  new Date(note.updated).toLocaleDateString('ru-RU')
+                }}</time>
+              </template>
+              <template #append>
+                <base-button
+                  icon="$iDelete"
+                  variant="text"
+                  color="error"
+                  density="comfortable"
+                  size="small"
+                  rounded="lg"
+                  @click.stop="companyDetailStore.deleteNote(note)"
+                />
+              </template>
+            </base-card-item>
+          </base-card>
+        </base-col>
+      </base-row>
+      <!-- TODO: Create Dialog for notes on CompanyDetailNotes -->
+      <base-button color="blue" text="See More" block />
+    </base-container>
+  </base-card>
 </template>
 
 <style scoped>
-.detail-notes {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: auto auto 1fr;
-  justify-content: start;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.detail-notes__mark {
-  font-size: 1.4rem;
-  border-radius: 8px;
-  background-color: #262e3a;
-  margin: 0 4px 8px;
-  padding: 2px 8px;
-  color: inherit;
-  white-space: nowrap;
-}
-.detail-notes__empty {
-  display: grid;
-  gap: 8px;
-  grid-template-columns: repeat(1, 1fr);
-  grid-template-rows: auto auto auto;
-  justify-items: center;
-  align-content: center;
-  max-height: 164px;
-  margin-bottom: 8px;
-}
-.detail-notes__empty-image {
-  width: 64px;
-  height: 66px;
-  fill: none;
-  transform: translateY(4px);
-}
-.detail-notes__note-list {
-  display: grid;
-  gap: 8px;
-  grid-template-rows: auto;
-  max-height: 164px;
-  margin-bottom: 8px;
-}
-.detail-notes__note-list-1-el {
-  grid-template-columns: repeat(1, 1fr);
-}
-.detail-notes__note-list-2-el {
-  grid-template-columns: repeat(2, 1fr);
-}
-.detail-notes__note-list-3-el {
-  grid-template-columns: repeat(3, 1fr);
+.company-detail-notes__note-text {
+  height: 75px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
 </style>

@@ -1,29 +1,45 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {mapGetters} from "vuex";
+<script setup lang="ts">
+// Composables
+import { useCompanyListStore } from '@/store/companyList'
+import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
 
-export default defineComponent({
-  name: "CompanyListInfo",
-  computed: {
-    ...mapGetters({
-      active_filters: "companyList/getActiveFilters",
-      list_updated: "companyList/getListUpdated",
-    }),
-  },
-})
+const companyListStore = useCompanyListStore()
 </script>
 
 <template>
-<section class="company-list__info">
-  <div class="company-list__title">Largest {{ active_filters.country.title }} Stocks</div>
-  <div class="company-list__updated"><span>Updated</span> {{ new Date(list_updated).toLocaleDateString('ru-RU') }}</div>
-  <div class="company-list__description">
-    Discover {{ active_filters.country.title }} companies<template v-if="active_filters.country.markets"> that are on the {{ active_filters.country.markets[0].title }}</template>.
-  </div>
-</section>
+  <section class="company-list__info">
+    <div class="company-list__title">
+      Largest {{ companyListStore.activeFilters.country.title }} Stocks
+    </div>
+    <div class="company-list__updated">
+      <span>Updated </span>
+      <base-skeleton-loader
+        class="d-inline-block mt-n3 ml-n3"
+        v-if="companyListStore.fetching"
+        width="120"
+        type="text"
+      />
+      <template v-else>
+        {{
+          companyListStore.lastUpdate
+            ? new Date(companyListStore.lastUpdate).toLocaleDateString('ru-RU')
+            : 'n/a'
+        }}
+      </template>
+    </div>
+    <div class="company-list__description">
+      Discover
+      {{ companyListStore.activeFilters.country.title }} companies<template
+        v-if="companyListStore.activeFilters.country.markets"
+      >
+        that are on the
+        {{ companyListStore.activeFilters.country.markets[0]?.title }}</template
+      >.
+    </div>
+  </section>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-list__info {
   padding: 10px 0;
   display: grid;
@@ -31,22 +47,22 @@ export default defineComponent({
 }
 .company-list__title {
   margin-bottom: 8px;
-  font-size: 2.8rem;
+  font-size: 1.75rem;
   line-height: 1.25;
   font-weight: 500;
 }
 .company-list__updated {
-  font-size: 1.2rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 .company-list__updated span {
-  color: rgba(255, 255, 255, .7);
+  color: rgb(var(--base-theme-on-surface-variant));
   text-transform: uppercase;
 }
 .company-list__description {
   margin-top: 16px;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .5);
+  color: rgb(var(--base-theme-on-surface-variant));
 }
 </style>

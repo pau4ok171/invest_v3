@@ -15,7 +15,7 @@ export const chartOpts = {
     marginTop: 40,
     style: {
       fontFamily: 'inherit',
-      fontSize: '1.6rem',
+      fontSize: '1rem',
       fontWeight: 'normal'
     },
     zooming: {
@@ -68,7 +68,7 @@ export const chartOpts = {
         style: {
           color: '#fff',
           opacity: 1,
-          fontSize: '1.2rem',
+          fontSize: '.75rem',
         }
       }
     },
@@ -83,7 +83,7 @@ export const chartOpts = {
     pointFormat: '<tspan class="price-history-chart-point-box__date">{point.key}</tspan><br><tspan class="price-history-chart-point-box__price">₽{point.y}</tspan>',
     footerFormat: '',
     style: {
-      fontSize: '1.4rem',
+      fontSize: '.875rem',
     },
   }
 }

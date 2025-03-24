@@ -1,0 +1,132 @@
+@use 'sass:math';
+@use 'sass:selector';
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-input {
+    display: grid;
+    flex: $input-flex;
+    font-size: $input-font-size;
+    font-weight: $input-font-weight;
+    line-height: $input-line-height;
+
+    &--disabled {
+      pointer-events: none;
+    }
+
+    @at-root {
+      @include tools.density('base-input', $input-density) using ($modifier) {
+        --base-input-control-height: #{$input-control-height + $modifier};
+        --base-input-padding-top: #{16px + $modifier * .5};
+      }
+    }
+  }
+  .base-input--vertical {
+    grid-template-areas: "append" "control" "prepend";
+    grid-template-rows: max-content auto max-content;
+    grid-template-columns: min-content;
+
+    .base-input__prepend {
+      margin-inline-end: $input-affix-margin-inside;
+    }
+    .base-input__append {
+      margin-inline-start: $input-affix-margin-inside;
+    }
+  }
+  .base-input--horizontal {
+    grid-template-areas: "prepend control append" "a messages b";
+    grid-template-columns: max-content minmax(0, 1fr) max-content;
+    grid-template-rows: 1fr auto;
+
+    .base-input__prepend {
+      margin-inline-end: $input-affix-margin-inside;
+    }
+    .base-input__append {
+      margin-inline-start: $input-affix-margin-inside;
+    }
+  }
+  .base-input__details {
+    align-items: flex-end;
+    display: flex;
+    font-size: $input-details-font-size;
+    grid-area: messages;
+    letter-spacing: $input-details-letter-spacing;
+    line-height: $input-details-line-height;
+    min-height: $input-details-min-height;
+    padding-top: $input-details-padding-above;
+    overflow: hidden;
+    justify-content: space-between;
+  }
+  .base-input__details,
+  .base-input__prepend,
+  .base-input__append {
+    > .base-icon {
+      opacity: var(--base-medium-emphasis-opacity);
+    }
+    .base-input--disabled &,
+    .base-input--error & {
+      > .base-icon,
+      .base-messages {
+        opacity: 1;
+      }
+    }
+    .base-input--disabled & {
+      opacity: var(--base-disabled-opacity);
+    }
+    .base-input--error:not(.base-input--disabled) & {
+      > .base-icon,
+      .base-messages {
+        color: rgb(var(--base-theme-error));
+      }
+    }
+  }
+  .base-input__prepend,
+  .base-input__append {
+    display: flex;
+    align-items: flex-start;
+    padding-top: var(--base-input-padding-top);
+
+    .base-input--center-affix & {
+      align-items: center;
+      padding-top: 0;
+    }
+  }
+  .base-input__prepend {
+    grid-area: prepend;
+  }
+  .base-input__append {
+    grid-area: append;
+  }
+  .base-input__control {
+    display: flex;
+    grid-area: control;
+  }
+  .base-input {
+    &--hide-spin-buttons {
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+    }
+    &--plain-underlined {
+      .base-input__prepend,
+      .base-input__append {
+        $this: &;
+        align-items: flex-start;
+
+        @at-root {
+          @include tools.density('base-input', $input-density) using ($modifier) {
+            @at-root #{selector.append(&, $this)} {
+              padding-top: calc(var(--base-input-padding-top) + #{math.max(0, 4px + $modifier * .25)});
+            }
+          }
+        }
+      }
+    }
+  }
+}

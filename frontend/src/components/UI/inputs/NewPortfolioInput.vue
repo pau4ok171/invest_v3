@@ -49,7 +49,7 @@ export default defineComponent({
     padding: 0 14px;
     appearance: none;
     outline: none;
-    font-size: 1.4rem;
+    font-size: .75rem;
     font-weight: 500;
     border-radius: 4px;
     background-color: rgba(35, 148, 223, .05);

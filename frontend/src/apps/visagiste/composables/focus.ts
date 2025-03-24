@@ -3,13 +3,19 @@ import {useProxiedModel} from "@/apps/visagiste/composables/proxiedModel";
 
 // Utilities
 import {computed} from "vue";
-import {getCurrentInstanceName} from "@/apps/visagiste/utils";
+import {EventProp, getCurrentInstanceName, propsFactory} from "@/apps/visagiste/utils";
 
 // Types
 export interface FocusProps {
   focused: boolean,
   'onUpdate:focused': ((focused: boolean) => any) | undefined
 }
+
+// Composables
+export const useFocusProps = propsFactory({
+  focused: Boolean,
+  'onUpdate:focused': EventProp<[boolean]>(),
+}, 'focus')
 
 export function useFocus(
   props: FocusProps,

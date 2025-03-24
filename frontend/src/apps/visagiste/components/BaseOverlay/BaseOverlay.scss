@@ -1,0 +1,61 @@
+@use 'sass:selector';
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  // Block
+  .base-overlay-container {
+    contain: layout;
+    left: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    display: contents;
+  }
+  .base-overlay-scroll-blocked {
+    padding-inline-end: var(--base-scrollbar-offset);
+
+    &:not(html) {
+      overflow-y: hidden !important;
+    }
+    @at-root #{selector.append(html, &)} {
+      position: fixed;
+      top: var(--base-body-scroll-y);
+      left: var(--base-body-scroll-x);
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .base-overlay {
+    border-radius: inherit;
+    display: flex;
+    inset: 0;
+    pointer-events: none;
+    position: fixed;
+  }
+  // Elements
+  .base-overlay__content {
+    outline: none;
+    position: absolute;
+    pointer-events: auto;
+    contain: layout;
+  }
+  .base-overlay__scrim {
+    pointer-events: auto;
+    background: $overlay-scrim-background;
+    border-radius: inherit;
+    inset: 0;
+    opacity: $overlay-opacity;
+    position: fixed;
+  }
+  // Modifier
+  .base-overlay--absolute {
+    position: absolute;
+  }
+  .base-overlay--contained .base-overlay__scrim {
+    position: absolute;
+  }
+  .base-overlay-scroll-blocked {
+    padding-inline-end: var(--base-scrollbar-offset);
+  }
+}

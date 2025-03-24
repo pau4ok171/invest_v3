@@ -1,135 +1,199 @@
 <script lang="ts">
-import type {PropType} from 'vue';
-import {defineComponent} from 'vue';
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
-import type {Theme} from "@/apps/visagiste/components/BaseTheme/baseTheme";
-import type {FooterType, HeaderType} from "@/apps/visagiste/components/BaseDialog/baseDialog";
-import BaseOverlay from "@/apps/visagiste/components/BaseOverlay/BaseOverlay.vue";
+// Styles
+import "./BaseDialog.scss";
+
+// Components
+import { BaseDialogTransition } from "@/apps/visagiste/components/transitions";
+import { BaseDefaultsProvider } from "@/apps/visagiste/components/BaseDefaultsProvider";
+import { BaseOverlay } from "@/apps/visagiste/components/BaseOverlay";
+import { useBaseOverlayProps } from "@/apps/visagiste/components/BaseOverlay";
+
+// Composables
+import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
+import { useScopeId } from "@/apps/visagiste/composables/scopeId";
+
+// Utilities
+import {
+  computed,
+  mergeProps,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  watch,
+} from "vue";
+import {
+  defineComponent,
+  focusableChildren,
+  IN_BROWSER,
+  propsFactory,
+} from "@/apps/visagiste/utils";
+
+// Types
+import type { Component } from "vue";
+
+export const useBaseDialogProps = propsFactory(
+  {
+    fullscreen: Boolean,
+    retainFocus: {
+      type: Boolean,
+      default: true,
+    },
+    scrollable: Boolean,
+
+    ...useBaseOverlayProps({
+      origin: "center center" as const,
+      scrollStrategy: "block" as const,
+      transition: { component: BaseDialogTransition as Component },
+      zIndex: 2400,
+    }),
+  },
+  "BaseDialog",
+);
 
 export default defineComponent({
   name: "BaseDialog",
-  components: {
-    BaseOverlay,
-    BaseButton,
+  components: { BaseDefaultsProvider, BaseOverlay },
+  props: useBaseDialogProps(),
+  emits: {
+    "update:modelValue": (value: boolean) => true,
+    afterEnter: () => true,
+    afterLeave: () => true,
   },
-  data() {
-    return {
-      isActive: false,
-    }
-  },
-  props: {
-    title: {
-      type: String,
-      default: '',
-    },
-    maxWidth: {
-      type: String,
-      default: '',
-    },
-    theme: {
-      type: String as PropType<Theme>,
-      default: 'light',
-    },
-    elevated: {
-      type: Boolean,
-      default: true
-    },
-    scrollable: {
-      type: Boolean,
-      default: false,
-    },
-    persistent: {
-      type: Boolean,
-      default: false,
-    },
-    headerType: {
-      type: String as PropType<HeaderType>,
-      default: 'default',
-    },
-    footerType: {
-      type: String as PropType<FooterType>,
-      default: 'withClose'
-    },
-  },
-  computed: {
-    dialogClassObject() {
-      const classObj = []
-      classObj.push(`base-dialog`)
-      classObj.push(`base-theme--${this.theme}`)
+  setup(props, { emit }) {
+    const isActive = useProxiedModel(props, "modelValue");
+    const { scopeId } = useScopeId();
 
-      if (this.elevated) {
-        classObj.push(`base-dialog--elevated`)
+    const overlay = ref<InstanceType<typeof BaseOverlay>>();
+    function onFocusin(e: FocusEvent) {
+      const before = e.relatedTarget as HTMLElement | null;
+      const after = e.target as HTMLElement | null;
+
+      if (
+        before !== after &&
+        overlay.value?.contentEl &&
+        // We're the topmost dialog
+        overlay.value?.globalTop &&
+        // It isn't the document or the dialog body
+        ![document, overlay.value.contentEl].includes(after!) &&
+        // It isn't inside the dialog body
+        !overlay.value.contentEl.contains(after)
+      ) {
+        const focusable = focusableChildren(overlay.value.contentEl);
+
+        if (!focusable.length) return;
+
+        const firstElement = focusable[0];
+        const lastElement = focusable[focusable.length - 1];
+
+        if (before === firstElement) {
+          lastElement.focus();
+        } else {
+          firstElement.focus();
+        }
       }
-      return classObj
-    },
-    dialogStyleObject() {
-      const styleObj: Record<string, string> = {}
-      if (this.maxWidth) {
-        styleObj['--base-dialog-max-width'] = this.maxWidth.endsWith('px') ? this.maxWidth : `${this.maxWidth}px`
+    }
+
+    onBeforeUnmount(() => {
+      document.removeEventListener("focusin", onFocusin);
+    });
+
+    if (IN_BROWSER) {
+      watch(
+        () => isActive.value && props.retainFocus,
+        (val) => {
+          val
+            ? document.addEventListener("focusin", onFocusin)
+            : document.removeEventListener("focusin", onFocusin);
+        },
+        { immediate: true },
+      );
+    }
+
+    function onAfterEnter() {
+      emit("afterEnter");
+      if (
+        overlay.value?.contentEl &&
+        !overlay.value.contentEl.contains(document.activeElement)
+      ) {
+        overlay.value.contentEl.focus({ preventScroll: true });
       }
-      return styleObj
-    },
+    }
+
+    function onAfterLeave() {
+      emit("afterLeave");
+    }
+
+    watch(isActive, async (val) => {
+      if (!val) {
+        await nextTick();
+        overlay.value!.activatorEl?.focus({ preventScroll: true });
+      }
+    });
+
+    const overlayProps = computed(() => BaseOverlay.filterProps(props));
+    const activatorProps = computed(() =>
+      mergeProps(
+        {
+          "aria-haspopup": "dialog",
+        },
+        props.activatorProps,
+      ),
+    );
+    const contentProps = computed(() =>
+      mergeProps(
+        {
+          tabindex: -1,
+        },
+        props.contentProps,
+      ),
+    );
+
+    return {
+      overlay,
+      overlayProps,
+      activatorProps,
+      contentProps,
+      scopeId,
+      isActive,
+      onAfterEnter,
+      onAfterLeave,
+    };
   },
-  methods: {
-    processButtonClick(buttonName: string, close: boolean = true) {
-      this.$emit(`click:${buttonName}`)
-      if (close) {
-        this.isActive = false
-      }
-    },
-  },
-})
+});
 </script>
 
 <template>
-<div>
-  <div @click="isActive=!isActive">
-    <slot name="activator"/>
-  </div>
-
-  <base-overlay
-    v-model:is-active="isActive"
-    :scrollable="scrollable"
-    :persistent="persistent"
-    :theme="theme"
+  <BaseOverlay
+    ref="overlay"
+    :class="[
+      'base-dialog',
+      {
+        'base-dialog--fullscreen': $props.fullscreen,
+        'base-dialog--scrollable': $props.scrollable,
+      },
+      $props.class,
+    ]"
+    :style="$props.style"
+    v-bind="{ ...overlayProps, ...scopeId }"
+    v-model="isActive"
+    aria-modal="true"
+    :activator-props="activatorProps"
+    :content-props="contentProps"
+    :height="!$props.fullscreen ? $props.height : undefined"
+    :width="!$props.fullscreen ? $props.width : undefined"
+    :max-height="!$props.fullscreen ? $props.maxHeight : undefined"
+    :max-width="!$props.fullscreen ? $props.maxWidth : undefined"
+    role="dialog"
+    :onAfterEnter="onAfterEnter"
+    :onAfterLeave="onAfterLeave"
   >
-    <template #content>
-      <div :style="dialogStyleObject" :class="dialogClassObject">
-        <header v-if="headerType !== 'withoutHeader'" class="base-dialog__header">
-          <h1 class="base-dialog__title">{{ title }}</h1>
-          <base-button
-            v-if="headerType !== 'withoutCloseButton'"
-            icon="ModalMenuCloseIcon"
-            variant="text"
-            color="#92969c"
-            rounded="x-small"
-            density="comfortable"
-            theme="grey"
-            @click="isActive=false"
-          />
-        </header>
-        <main class="base-dialog__main">
-          <slot name="dialog"/>
-        </main>
-        <footer v-if="footerType !== 'withoutFooter'" class="base-dialog__footer">
-          <base-button v-if="footerType === 'withOk'" @click.stop="processButtonClick('ok')" text="Ok" variant="text"/>
-          <base-button v-if="footerType === 'withClose'" @click.stop="processButtonClick('close')" text="Close" variant="text"/>
-          <template v-if="footerType === 'withYesNo'">
-            <base-button @click.stop="processButtonClick('yes')" theme="success" text="Yes" variant="flat"/>
-            <base-button @click.stop="processButtonClick('no')" theme="error" text="No" variant="flat"/>
-          </template>
-          <template v-if="footerType === 'withYesNoCancel'">
-            <base-button @click.stop="processButtonClick('yes')" text="Yes" variant="text"/>
-            <base-button @click.stop="processButtonClick('no')" text="No" variant="text"/>
-            <base-button @click.stop="processButtonClick('cancel')" text="Cancel" variant="text"/>
-          </template>
-        </footer>
-      </div>
+    <template #activator="{ ...args }">
+      <slot name="activator" v-bind="{ ...args }"/>
     </template>
-  </base-overlay>
-</div>
+    <template #default="{ ...args }">
+      <BaseDefaultsProvider root="BaseDialog">
+        <slot name="default" v-bind="{ ...args }" />
+      </BaseDefaultsProvider>
+    </template>
+  </BaseOverlay>
 </template>
-
-<style lang="scss" scoped>
-@use 'styles';
-</style>

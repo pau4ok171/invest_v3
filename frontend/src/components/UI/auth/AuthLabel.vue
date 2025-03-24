@@ -16,7 +16,6 @@ export default defineComponent({
 .form__label {
   display: block;
   color: rgb(38, 46, 58);
-  font-size: 1.4rem;
   position: absolute;
   top: 0;
   left: 0;

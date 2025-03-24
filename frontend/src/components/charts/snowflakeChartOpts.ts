@@ -1,21 +1,4 @@
-let chartOpts;
-
-const snowflakeChartColor5 = '#6bc51a'
-const snowflakeChartBorderColor5 = '#79ee04'
-
-const snowflakeChartColor4 = '#b2c319'
-const snowflakeChartBorderColor4 = '#def30b'
-
-const snowflakeChartColor3 = '#c7a028'
-const snowflakeChartBorderColor3 = '#ffc413'
-
-const snowflakeChartColor2 = '#c75633'
-const snowflakeChartBorderColor2 = '#ff5a23'
-
-const snowflakeChartColor1 = '#c74a35'
-const snowflakeChartBorderColor1 = '#fb4a27'
-
-export default chartOpts =  {
+export const chartOpts =  {
   chart: {
     polar: true,
     height: 280,
@@ -76,14 +59,13 @@ export default chartOpts =  {
       pointStart: 0,
       pointInterval: 72,
     },
-
   },
   series: [{
     type: 'areaspline',
     clip: false,
     enableMouseTracking: false,
-    fillColor: snowflakeChartColor5, // Цвет заливки
-    lineColor: snowflakeChartBorderColor5, // Цвет границы
+    fillColor: '#6bc51a', // Цвет заливки
+    lineColor: '#79ee04', // Цвет границы
     lineWidth: 2, // Толщина границы
     opacity:.75, // Прозрачность фона
     xAxis: 0,

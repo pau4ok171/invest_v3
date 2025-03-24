@@ -1,47 +1,40 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {mapGetters} from "vuex";
+<script setup lang="ts">
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
 
-export default defineComponent({
-  name: "CompanyDetailSidebarHeader",
-    computed: {
-      ...mapGetters({
-        company: 'companyDetail/getCompany',
-      })
-  },
-})
+// Utilities
+import { computed } from 'vue'
+
+const companyDetailStore = useCompanyDetailStore()
+const company = computed(() => companyDetailStore.company)
 </script>
 
 <template>
-<header class="detail-sidebar__header">
-<div class="detail-sidebar__snowflake">
-<div class="detail-sidebar__logo">
-  <img :src="company.logo_url" :alt="company.slug">
-</div>
-</div>
-</header>
+  <div class="detail-sidebar__header">
+    <div class="detail-sidebar__logo">
+      <img :src="company.logo_url" :alt="company.slug" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
 .detail-sidebar__header {
+  display: flex;
+  justify-content: flex-start;
   padding-bottom: 8px;
-  visibility: hidden;
   opacity: 0;
 }
-.detail-sidebar__snowflake {
-  margin: -18px -8px;
-  max-width: 160px;
-  padding-bottom: 16px;
-}
 .detail-sidebar__logo {
-  margin: 4px 12px 0 8px;
-  float: left;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 160px;
+  height: 160px;
   background-color: #fff;
   border-radius: 8px;
 }
 .detail-sidebar__logo img {
-  width: 160px;
-  height: 160px;
-  padding: 11%;
+  width: 100px;
+  height: 100px;
 }
 </style>

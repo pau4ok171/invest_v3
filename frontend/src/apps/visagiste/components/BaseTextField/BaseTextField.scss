@@ -1,0 +1,84 @@
+@use 'sass:selector';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  /* BLOCK */
+  .base-text-field {
+    input {
+      color: inherit;
+      opacity: 0;
+      flex: $text-field-input-flex;
+      transition: $text-field-input-transition;
+      min-width: 0;
+
+      &:focus,
+      &:active {
+        outline: none;
+      }
+      // Remove Firefox red outline
+      &:invalid {
+        box-shadow: none;
+      }
+    }
+    .base-field {
+      cursor: text;
+    }
+    .base-field__input {
+      @at-root #{selector.append('.base-text-field--prefixed', &)} {
+        --base-field-padding-start: #{$text-field-input-padding-start};
+      }
+      @at-root #{selector.append('.base-text-field--suffixed', &)} {
+        --base-field-padding-end: #{$text-field-input-padding-end};
+      }
+    }
+    .base-input__details {
+      padding-inline: $text-field-details-padding-inline;
+
+      @at-root #{selector.append('.base-input--plain-underlined', &)} {
+        padding-inline: 0;
+      }
+    }
+    .base-field--no-label,
+    .base-field--active {
+      input {
+        opacity: 1;
+      }
+    }
+    .base-field--single-line {
+      input {
+        transition: none;
+      }
+    }
+  }
+  /* ELEMENTS */
+  .base-text-field {
+    &__prefix,
+    &__suffix {
+      align-items: center;
+      color: $text-field-affix-color;
+      cursor: default;
+      display: flex;
+      opacity: 0;
+      transition: inherit;
+      white-space: nowrap;
+      min-height: $field-input-min-height;
+      padding-top: calc(var(--base-field-padding-top, 4px) + var(--base-input-padding-top, 0));
+      padding-bottom: var(--base-field-padding-bottom, 6px);
+
+      .base-field--active & {
+        opacity: 1;
+      }
+      .base-field--disabled & {
+        color: $text-field-disabled-affix-color;
+      }
+    }
+    &__prefix {
+      padding-inline-start: var(--base-field-padding-start);
+    }
+    &__suffix {
+      padding-inline-end: var(--base-field-padding-end);
+    }
+  }
+}

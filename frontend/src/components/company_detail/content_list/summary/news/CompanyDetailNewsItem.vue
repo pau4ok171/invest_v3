@@ -1,104 +1,68 @@
-<script lang="ts">
-import {defineComponent} from 'vue';
-import type { PropType } from "vue";
-import MegaphoneIcon from "@/components/icons/MegaphoneIcon.vue";
-import type {News} from "@/types/invest";
-import {DateTime} from "luxon";
+<script setup lang="ts">
+// Components
+import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
+import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
+import BaseDialog from '@/apps/visagiste/components/BaseDialog/BaseDialog.vue'
+import BaseAvatar from '@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue'
+import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
+import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
+import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
 
-export default defineComponent({
-  name: "CompanyDetailNewsItem",
-  components: {MegaphoneIcon},
-  props: {
-    news_item: {
-      type: Object as PropType<News>,
-      required: true,
-    },
-  },
-  computed: {
-    formatted_date() {
-      return DateTime.fromISO(this.news_item.date).toFormat('LLL dd')
-    }
+// Utilities
+import { computed, shallowRef } from 'vue'
+import { DateTime } from 'ts-luxon'
+
+// Types
+import type { PropType } from 'vue'
+import type { News } from '@/types/invest'
+
+const props = defineProps({
+  item: {
+    type: Object as PropType<News>,
+    required: true,
   },
 })
+
+const dialog = shallowRef(false)
+
+const publishedAt = computed(() =>
+  DateTime.fromISO(props.item.date).toFormat('LLL dd')
+)
 </script>
 
 <template>
-<button class="detail-recent-news__item">
-  <article class="detail-recent-news__article">
-    <div class="detail-recent-news__icon">
-      <MegaphoneIcon/>
-    </div>
-    <div class="detail-recent-news__message">
-      <h4 class="detail-recent-news__title">{{ news_item.title }}</h4>
-      <span class="detail-recent-news__text">{{ formatted_date }}</span>
-    </div>
-  </article>
-</button>
-</template>
+  <base-dialog max-width="700" v-model="dialog">
+    <template #activator="{ props: activatorProps }">
+      <base-card variant="text" v-bind="activatorProps">
+        <base-card-item>
+          <template #prepend>
+            <base-avatar variant="tonal">
+              <base-icon icon="$iMegaphone" />
+            </base-avatar>
+          </template>
 
-<style>
-.detail-recent-news__item {
-  position: relative;
-  border-radius: 8px;
-  transition: all .3s ease 0s;
-  padding: 0 12px;
-  color: rgb(38, 46, 58);
-  vertical-align: middle;
-  height: auto;
-  line-height: normal;
-  background-color: inherit;
-  text-align: left;
-}
-.detail-recent-news__item:hover {
-  background-color: #262e3a;
-}
-.detail-recent-news__article {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: min-content auto;
-  align-items: start;
-  cursor: pointer;
-  background: transparent;
-  padding: 8px;
-}
-.detail-recent-news__icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 40px;
-  width: 40px;
-  position: relative;
-}
-.detail-recent-news__icon::before {
-  content: "";
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  background-color: #8c929b;
-  opacity: .1;
-  z-index: 0;
-}
-.detail-recent-news__icon > svg {
-  opacity: .5;
-}
-.detail-recent-news__message {
-  display: grid;
-  row-gap: 4px;
-  font-size: 1.2rem;
-  font-weight: normal;
-  color: #fff;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.5;
-}
-.detail-recent-news__title {
-  font-size: 1.4rem;
-  font-weight: normal;
-}
-.detail-recent-news__text {
-  color: rgba(255, 255, 255, .5);
-}
-</style>
+          <base-card-text class="py-0">{{ item.title }}</base-card-text>
+          <base-card-text class="py-0 opacity-50" style="font-size: 0.75rem">
+            {{ publishedAt }}
+          </base-card-text>
+        </base-card-item>
+      </base-card>
+    </template>
+
+    <base-card>
+      <template #append>
+        <base-button
+          icon="$close"
+          density="compact"
+          variant="text"
+          @click="dialog = false"
+        />
+      </template>
+      <base-card-title>{{ props.item.title }}</base-card-title>
+      <base-divider />
+      <base-card-text>{{ props.item.content }}</base-card-text>
+    </base-card>
+  </base-dialog>
+</template>

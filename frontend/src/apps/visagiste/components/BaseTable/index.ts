@@ -1,0 +1,1 @@
+export { default as BaseTable, useBaseTableProps } from './BaseTable.vue'

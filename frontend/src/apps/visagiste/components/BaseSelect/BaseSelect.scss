@@ -1,0 +1,78 @@
+@use 'sass:selector';
+@use 'sass:math';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-select {
+    .base-field {
+      .base-text-field__prefix,
+      .base-text-field__suffix,
+      .base-field__input,
+      &.base-field {
+        cursor: pointer;
+      }
+    }
+    .base-field {
+      .base-field__input {
+        > input {
+          align-self: flex-start;
+          opacity: 1;
+          flex: 0 0;
+          position: absolute;
+          width: 100%;
+          transition: none;
+          pointer-events: none;
+          caret-color: transparent;
+        }
+      }
+    }
+    .base-field--dirty {
+      .base-select__selection {
+        margin-inline-end: 2px;
+      }
+    }
+    .base-select__selection-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &__content {
+      overflow: hidden;
+
+      @include tools.elevation($select-content-elevation);
+      @include tools.rounded($select-content-border-radius);
+    }
+    &__selection {
+      display: inline-flex;
+      align-items: center;
+      letter-spacing: inherit;
+      line-height: inherit;
+      max-width: 100%;
+    }
+    .base-select__selection {
+      &:first-child {
+        margin-inline-start: 0;
+      }
+    }
+    &--selected {
+      .base-field {
+        .base-field__input {
+          > input {
+            opacity: 0;
+          }
+        }
+      }
+    }
+    &__menu-icon {
+      margin-inline-start: 4px;
+      transition: $select-transition;
+
+      .base-select--active-menu & {
+        opacity: var(--base-high-emphasis-opacity);
+        transform: rotate(180deg);
+      }
+    }
+  }
+}

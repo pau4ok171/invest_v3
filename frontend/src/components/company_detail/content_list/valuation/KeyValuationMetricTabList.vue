@@ -1,66 +1,64 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import type {PropType} from 'vue'
-import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
-import {mapGetters} from "vuex";
-import type {Tab} from "@/components/company_detail/content_list/valuation/KeyValuationMetric.vue";
+<script setup lang="ts">
+// Components
+import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
 
-export default defineComponent({
-  name: "KeyValuationMetricTabList",
-  components: {
-    SolidStarIcon
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
+
+// Utilities
+import { computed } from 'vue'
+
+// Types
+import type { PropType } from 'vue'
+import type { FairValueTab } from '@/components/company_detail/content_list/valuation/CompanyDetailValuation.vue'
+
+const props = defineProps({
+  tabs: {
+    type: Object as PropType<Record<string, FairValueTab>>,
+    required: true,
   },
-  props: {
-    tabs: {
-      type: Object as PropType<{[p: string]: Tab}>,
-      required: true,
-    },
-  },
-  computed: {
-    ...mapGetters({
-      company: 'companyDetail/getCompany',
-    }),
-    get_key_metric() {
-      return Object.values(this.tabs).find(t => t.active)?.metric
-    }
+  selected: {
+    type: Object as PropType<FairValueTab>,
+    required: true,
   },
 })
+
+const store = useCompanyDetailStore()
+const company = computed(() => store.company)
 </script>
 
 <template>
-<div class="detail-key-valuation-metric__tab-list">
-  <div role="tablist" class="detail-key-valuation-metric__tab-button-list">
-
-    <button
-      role="tab"
-      class="detail-key-valuation-metric__tab-button"
-      v-for="tab in tabs"
-      :key="tab.id"
-      :disabled="tab.active"
-      @click="$emit('changeTab', tab)"
-    >
-      {{ tab.name }}
-    </button>
-
-  </div>
-  <div class="detail-key-valuation-metric__tab-desc">
-
-    <div class="detail-key-valuation-metric__tab-icon">
-      <SolidStarIcon/>
+  <div class="detail-key-valuation-metric__tab-list">
+    <div role="tablist" class="detail-key-valuation-metric__tab-button-list">
+      <button
+        role="tab"
+        class="detail-key-valuation-metric__tab-button"
+        v-for="tab in tabs"
+        :key="tab.id"
+        :disabled="tab.id === selected.id"
+        @click="$emit('update:selected', tab)"
+      >
+        {{ tab.name }}
+      </button>
     </div>
+    <div class="detail-key-valuation-metric__tab-desc">
+      <div class="detail-key-valuation-metric__tab-icon">
+        <base-icon icon="$iSolidStar" color="info" />
+      </div>
 
-    <div class="detail-key-valuation-metric__text">
-      <p class="detail-key-valuation-metric__text-desc">
-        <mark class="detail-key-valuation-metric__text-mark">Key metric: </mark>
-        <span>{{ get_key_metric }}</span>
-      </p>
+      <div class="detail-key-valuation-metric__text">
+        <p class="detail-key-valuation-metric__text-desc">
+          <mark class="detail-key-valuation-metric__text-mark"
+            >Key metric:
+          </mark>
+          <span>{{ selected.metric }}</span>
+        </p>
+      </div>
     </div>
-
   </div>
-</div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-key-valuation-metric__tab-list {
   display: grid;
   align-content: start;
@@ -77,15 +75,15 @@ export default defineComponent({
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
   padding: 4px;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, .3);
+  color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
 .detail-key-valuation-metric__tab-button:disabled {
   color: rgb(255, 255, 255);
-  background-color: rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, 0.3);
   cursor: auto;
 }
 .detail-key-valuation-metric__tab-button:hover:not(:disabled) {
@@ -106,18 +104,15 @@ export default defineComponent({
   display: grid;
   justify-content: center;
 }
-.detail-key-valuation-metric__tab-icon svg {
-  fill: var(--blue);
-}
 .detail-key-valuation-metric__text {
   display: grid;
 }
 .detail-key-valuation-metric__text-desc {
   line-height: 1.5;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
 }
 .detail-key-valuation-metric__text-mark {
   background-color: transparent;
-  color: var(--blue);
+  color: var(--base-theme-info);
 }
 </style>

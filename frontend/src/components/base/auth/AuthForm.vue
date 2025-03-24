@@ -1,27 +1,27 @@
 <script lang="ts">
-import AuthButton from "@/components/UI/auth/AuthButton.vue";
-import AuthLabel from "@/components/UI/auth/AuthLabel.vue";
-import AuthInput from "@/components/UI/auth/AuthInput.vue";
-import AuthField from "@/components/UI/auth/AuthField.vue";
-import LoginForm from "@/components/base/auth/LoginForm.vue";
-import RegisterForm from "@/components/base/auth/RegisterForm.vue";
-import {defineComponent} from "vue";
-import type {PropType} from "vue";
-import type {loginAuthData, registerAuthData} from "@/types/auth";
+import AuthButton from '@/components/UI/auth/AuthButton.vue'
+import AuthLabel from '@/components/UI/auth/AuthLabel.vue'
+import AuthInput from '@/components/UI/auth/AuthInput.vue'
+import AuthField from '@/components/UI/auth/AuthField.vue'
+import LoginForm from '@/components/base/auth/LoginForm.vue'
+import RegisterForm from '@/components/base/auth/RegisterForm.vue'
+import { defineComponent } from 'vue'
+import type { PropType } from 'vue'
+import type { loginAuthData, registerAuthData } from '@/types/auth'
 
 export default defineComponent({
   name: 'AuthForm',
   props: {
     registerIsChosen: {
       type: Boolean,
-      required: true
+      required: true,
     },
     errors: {
       type: Array<String>,
       required: true,
     },
     formData: {
-      type: Object as PropType<loginAuthData|registerAuthData>,
+      type: Object as PropType<loginAuthData | registerAuthData>,
       required: true,
     },
     formIsValid: Boolean,
@@ -32,7 +32,7 @@ export default defineComponent({
     AuthField,
     AuthInput,
     AuthLabel,
-    AuthButton
+    AuthButton,
   },
   methods: {
     setFormIsValid(formIsValid: Boolean) {
@@ -43,35 +43,33 @@ export default defineComponent({
 </script>
 
 <template>
-<form @submit.prevent="$emit('submitForm')" class="form">
-
-  <LoginForm
+  <form @submit.prevent="$emit('submitForm')" class="form">
+    <LoginForm
       v-if="!registerIsChosen"
       :formData
       :formIsValid
       @setFormIsValid="setFormIsValid"
-  />
-  <RegisterForm
+    />
+    <RegisterForm
       v-else
       :formData
       :formIsValid
       @setFormIsValid="setFormIsValid"
-  />
+    />
 
-  <div class="form__errors" v-if="errors.length">
-    <p v-for="error in errors">{{ error }}</p>
-  </div>
+    <div class="form__errors" v-if="errors.length">
+      <p v-for="error in errors">{{ error }}</p>
+    </div>
 
-  <div class="form__forgot-password" v-if="!registerIsChosen">
+    <div class="form__forgot-password" v-if="!registerIsChosen">
       <a href="#">Забыли пароль?</a>
-  </div>
+    </div>
 
-  <AuthButton :disabled="!formIsValid">
-    <template v-if="!registerIsChosen">Войти</template>
-    <template v-else>Регистрация</template>
-  </AuthButton>
-
-</form>
+    <AuthButton :disabled="!formIsValid">
+      <template v-if="!registerIsChosen">Войти</template>
+      <template v-else>Регистрация</template>
+    </AuthButton>
+  </form>
 </template>
 
 <style scoped>
@@ -80,7 +78,6 @@ export default defineComponent({
   min-height: 238px;
 }
 .form__forgot-password {
-  font-size: 1.2rem;
   line-height: 1.5;
   margin-top: 8px;
   text-align: right;
@@ -88,7 +85,6 @@ export default defineComponent({
   color: rgb(35, 148, 223);
 }
 .form__errors {
-  font-size: 1.2rem;
   padding: 12px;
   margin-bottom: 16px;
   background-color: var(--color-error);

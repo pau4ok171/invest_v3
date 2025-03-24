@@ -1,0 +1,270 @@
+@use 'sass:math';
+@use 'sass:map';
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './mixins' as *;
+@use './variables' as *;
+
+@include tools.layer('components') {
+  .base-button {
+    align-items: center;
+    border-radius: $button-border-radius;
+    display: inline-grid;
+    grid-template-areas: "prepend content append";
+    grid-template-columns: max-content auto max-content;
+    font-weight: $button-font-weight;
+    justify-content: center;
+    letter-spacing: $button-text-letter-spacing;
+    line-height: $button-line-height;
+    max-width: $button-max-width;
+    outline: none;
+    position: relative;
+    text-decoration: none;
+    text-indent: $button-text-letter-spacing;
+    text-transform: $button-text-transform;
+    transition-property: $button-transition-property;
+    transition-duration: 0.28s;
+    transition-timing-function: settings.$standard-easing;
+    user-select: none;
+    vertical-align: $button-vertical-align;
+    flex-shrink: 0;
+
+    @at-root {
+      @include button-sizes();
+      @include button-density('height', $button-density);
+    }
+
+    @include tools.border($button-border...);
+    @include tools.position($button-positions);
+    @include tools.states('.base-button__overlay');
+    @include tools.variant($button-variants...);
+
+    @supports (selector(:focus-visible)) {
+      &::after {
+        pointer-events: none;
+        border: 2px solid currentColor;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity .2s ease-in-out;
+        @include tools.absolute(true);
+      }
+      &:focus-visible::after {
+        opacity: calc(.25 * var(--base-theme-overlay-multiplier));
+      }
+    }
+    &--icon {
+      border-radius: $button-icon-border-radius;
+      min-width: 0;
+      padding: 0;
+
+      // ensure that default
+      // base-icon is 24px
+      &.base-button--size-default {
+        --base-button-size: #{$button-icon-font-size};
+      }
+      @at-root & {
+        @include button-density(('width', 'height'), $button-icon-density);
+      }
+    }
+    &--elevated {
+      &:hover,
+      &:focus {
+        @include tools.elevation(map.get($button-elevation, 'hover'));
+      }
+      &:active {
+        @include tools.elevation(map.get($button-elevation, 'active'));
+      }
+    }
+    &--flat {
+      box-shadow: none;
+    }
+    &--block {
+      display: flex;
+      flex: 1 0 auto;
+      min-width: 100%;
+    }
+    &--disabled {
+      pointer-events: none;
+
+      @if ($button-colored-disabled) {
+        opacity: $button-disabled-opacity;
+
+        &:hover {
+          opacity: $button-disabled-opacity;
+        }
+      } @else {
+        opacity: 1;
+
+        &.base-button {
+          // specificity has to be higher to override theme !important
+          color: rgba(var(--base-theme-on-surface), $button-disabled-opacity) !important;
+        }
+      }
+      &.base-button--variant-elevated,
+      &.base-button--variant-flat {
+        box-shadow: none;
+
+        @if ($button-colored-disabled) {
+          opacity: 1;
+          color: rgba(var(--base-theme-on-surface), $button-disabled-opacity);
+          background: rgb(var(--base-theme-surface));
+        } @else {
+          background: rgb(var(--base-theme-surface)) !important;
+        }
+        .base-button__overlay {
+          // __overlay uses currentColor, so we need to divide
+          // by the text opacity to get the correct value
+          opacity: math.div($button-disabled-overlay, $button-disabled-opacity);
+        }
+      }
+    }
+    &--loading {
+      pointer-events: none;
+
+      .base-button__content,
+      .base-button__prepend,
+      .base-button__append {
+        opacity: 0;
+      }
+    }
+    &--stacked {
+      grid-template-areas: "prepend" "content" "append";
+      grid-template-columns: auto;
+      grid-template-rows: max-content max-content max-content;
+      justify-items: center;
+      align-content: center;
+
+      .base-button__content {
+        flex-direction: column;
+        line-height: $button-stacked-line-height;
+      }
+      .base-button__prepend,
+      .base-button__append,
+      .base-button__content > .base-icon--start,
+      .base-button__content > .base-icon--end {
+        margin-inline: 0;
+      }
+      .base-button__prepend,
+      .base-button__content > .base-icon--start {
+        margin-bottom: $button-stacked-icon-margin;
+      }
+      .base-button__append,
+      .base-button__content > .base-icon--end {
+        margin-top: $button-stacked-icon-margin;
+      }
+      @at-root {
+        @include button-sizes($button-stacked-sizes, true);
+        @include button-density('height', $button-stacked-density);
+      }
+    }
+    &--slim {
+      padding: $button-slim-padding;
+    }
+    &--readonly {
+      pointer-events: none;
+    }
+    &--rounded {
+      @include tools.rounded($button-rounded-border-radius);
+
+      &.base-button--icon {
+        @include tools.rounded($button-border-radius);
+      }
+    }
+    .base-icon {
+      --base-icon-size-multiplier: #{calc(18/21)};
+    }
+    &--icon {
+      .base-icon {
+        --base-icon-size-multiplier: 1;
+      }
+    }
+    &--stacked {
+      .base-icon {
+        --base-icon-size-multiplier: #{calc(24/21)};
+      }
+      &.base-button--block {
+        min-width: 100%;
+      }
+    }
+  }
+  .base-button__loader {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    > .base-progress-circular {
+      width: $button-loader-size;
+      height: $button-loader-size;
+    }
+  }
+  .base-button__content,
+  .base-button__prepend,
+  .base-button__append {
+    align-items: center;
+    display: flex;
+    transition: $button-content-transition;
+  }
+  .base-button__prepend {
+    grid-area: prepend;
+    margin-inline: $button-margin-start $button-margin-end;
+
+    .base-button--slim & {
+      margin-inline-start: 0;
+    }
+  }
+  .base-button__append {
+    grid-area: append;
+    margin-inline: $button-margin-end $button-margin-start;
+
+    .base-button--slim & {
+      margin-inline-end: 0;
+    }
+  }
+  .base-button__content {
+    grid-area: content;
+    justify-content: center;
+    white-space: $button-white-space;
+
+    > .base-icon--start {
+      margin-inline: $button-margin-start $button-margin-end;
+    }
+    > .base-icon--end {
+      margin-inline: $button-margin-end $button-margin-start;
+    }
+    .base-button--stacked & {
+      white-space: normal;
+    }
+  }
+  .base-button__overlay {
+    background-color: currentColor;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity .2s ease-in-out;
+  }
+  .base-button__overlay,
+  .base-button__underlay {
+    pointer-events: none;
+    @include tools.absolute();
+  }
+  // BasePagination
+  .base-pagination {
+    .base-button {
+      @include tools.rounded($button-pagination-border-radius);
+
+      &--rounded {
+        @include tools.rounded($button-pagination-rounded-border-radius);
+      }
+      &__overlay {
+        transition: none;
+      }
+    }
+    .base-pagination__item--is-active .base-button__overlay {
+      opacity: $button-pagination-active-overlay-opacity;
+    }
+  }
+}

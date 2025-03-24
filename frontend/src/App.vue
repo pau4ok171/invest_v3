@@ -1,51 +1,35 @@
-<script lang="ts">
-import { RouterView } from 'vue-router';
-import AppLayout from '@/layouts/AppLayout.vue';
-import axios from "axios";
-import {mapActions, mapGetters, mapMutations, mapState} from "vuex";
-import {defineComponent} from "vue";
-import Loader from "@/components/UI/Loader.vue";
+<script setup lang="ts">
+// Components
+import { BaseApp } from '@/apps/visagiste/components/BaseApp'
+import PageNotFoundView from "@/views/PageNotFoundView.vue";
 
-export default defineComponent({
-  components: {
-    Loader,
-    AppLayout,
-    RouterView,
-  },
-  async mounted() {
-    this.initializeAuth()
-    axios.defaults.headers.common["Authorization"] = this.token ? `Token ${this.token}` : ''
-    await this.fetchUserInfo()
-  },
-  methods: {
-    ...mapMutations({
-      initializeAuth: "authModule/initializeAuth"
-    }),
-    ...mapActions({
-      fetchUserInfo: 'authModule/fetchUserInfo',
-    }),
-  },
-  computed: {
-    ...mapGetters({
-      token: 'authModule/getToken',
-    }),
-    ...mapState({
-      isLoading: 'isLoading',
-    }),
-  },
+// Composables
+import { useAuthStore } from '@/store/auth'
+import { usePageStore } from '@/store/page'
+
+// Utilities
+import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
+import axios from 'axios'
+import AppLayout from '@/layouts/AppLayout.vue'
+
+const authStore = useAuthStore()
+const pageStore = usePageStore()
+
+onMounted(() => {
+  authStore.init()
+  axios.defaults.headers.common['Authorization'] = authStore.token
+    ? `Token ${authStore.token}`
+    : ''
+  authStore.fetchUserInfo()
 })
 </script>
 
 <template>
-<div>
-  <AppLayout>
-    <RouterView/>
-  </AppLayout>
-
-<!--  <Loader v-if="isLoading"/>-->
-</div>
+  <base-app>
+    <AppLayout>
+      <RouterView v-if="!pageStore.notFound" />
+      <PageNotFoundView v-else/>
+    </AppLayout>
+  </base-app>
 </template>
-
-<style>
-  @import 'assets/css/main.css';
-</style>

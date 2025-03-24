@@ -20,7 +20,6 @@
   border-radius: 6px;
   user-select: none;
   margin-top: 2.4rem;
-  font-size: 1.4rem;
   color: #fff;
   padding: 0;
   background-color: rgb(35, 148, 223);

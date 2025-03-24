@@ -1,0 +1,52 @@
+@use '../../styles/settings';
+@use '../../styles/tools';
+@use './mixins' as *;
+
+@include tools.layer('components') {
+  .base-container {
+    @include make-container();
+    @include make-container-max-widths();
+
+    &--fluid {
+      max-width: 100%;
+    }
+    &.fill-height {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .base-row {
+    @include make-row();
+
+    & + .base-row {
+      margin-top: settings.$grid-gutter * .5;
+
+      &--dense {
+        margin-top: settings.$form-grid-gutter * .5;
+      }
+    }
+    &--dense {
+      margin: -(settings.$form-grid-gutter) * .5;
+
+      > .base-col,
+      > [class*="base-col-"] {
+        padding: settings.$form-grid-gutter;
+      }
+    }
+    // Remove the negative margin from default .v-row, then the horizontal padding
+    // from all immediate children columns (to prevent runaway style inheritance).
+    &.base-row--no-gutters {
+      margin: 0;
+
+      > .base-col,
+      > [class*="base-col-"] {
+        padding: 0;
+      }
+    }
+  }
+  .base-spacer {
+    flex-grow: 1;
+  }
+  @include make-grid-columns();
+}

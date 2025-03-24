@@ -1,0 +1,98 @@
+@use 'sass:list';
+@use '@/apps/visagiste/styles/settings';
+@use '@/apps/visagiste/styles/tools';
+@use './variables' as *;
+
+@include tools.layer('components') {
+  // Elements
+  .base-progress-circular {
+    align-items: center;
+    display: inline-flex;
+    justify-content: center;
+    position: relative;
+    vertical-align: middle;
+
+    > svg {
+      width: 100%;
+      height: 100%;
+      margin: auto;
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+  }
+  .base-progress-circular__content {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+  }
+  .base-progress-circular__underlay {
+    color: $progress-circular-underlay-color;
+    stroke: currentColor;
+    z-index: 1;
+  }
+  .base-progress-circular__overlay {
+    stroke: currentColor;
+    transition: $progress-circular-overlay-transition;
+    z-index: 2;
+  }
+  // Modifiers
+  .base-progress-circular {
+    @each $name, $multiplier in $progress-circular-sizes {
+      $size: $progress-circular-size + (settings.$size-scale * $multiplier);
+
+      &--size-#{$name} {
+        height: $size;
+        width: $size;
+      }
+    }
+  }
+  .base-progress-circular--indeterminate {
+    > svg {
+      animation: $progress-circular-rotate-animation;
+      transform-origin: center center;
+      transition: $progress-circular-intermediate-svg-transition;
+    }
+    .base-progress-circular__overlay {
+      animation: $progress-circular-rotate-dash, $progress-circular-rotate-animation;
+      stroke-dasharray: 25, 200;
+      stroke-dashoffset: 0;
+      stroke-linecap: round;
+      transform-origin: center center;
+      transform: $progress-circular-overlay-transform;
+    }
+  }
+  .base-progress-circular--disabled-shrink {
+    > svg {
+      animation-duration: list.nth($progress-circular-rotate-animation, 2) * .5;
+    }
+    .base-progress-circular__overlay {
+      animation: none;
+    }
+  }
+  .base-progress-circular--indeterminate:not(.base-progress-circular--visible) {
+    > svg,
+  .base-progress-circular__overlay {
+      animation-play-state: paused !important;
+    }
+  }
+  @keyframes progress-circular-dash {
+    0% {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+    }
+    50% {
+      stroke-dasharray: 100, 200;
+      stroke-dashoffset: -15px;
+    }
+    100% {
+      stroke-dasharray: 100, 200;
+      stroke-dashoffset: -124px;
+    }
+  }
+  @keyframes progress-circular-rotate {
+    100% {
+      transform: rotate(270deg);
+    }
+  }
+}

@@ -1,151 +1,106 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import type {PropType} from 'vue'
-import ArrowDownIcon from "@/components/icons/ArrowDownIcon.vue";
-import BackArrowIcon from "@/components/icons/BackArrowIcon.vue";
-import BoldIcon from "@/components/icons/BoldIcon.vue";
-import type {IconValue} from "@/apps/visagiste/components/BaseIcon/baseIcon";
-import CheckIcon from "@/components/icons/CheckIcon.vue";
-import CheckedIcon from "@/components/icons/CheckedIcon.vue";
-import CheckmarkCircleIcon from "@/components/icons/CheckmarkCircleIcon.vue";
-import FilterIcon from "@/components/icons/FilterIcon.vue";
-import CopyIcon from "@/components/icons/CopyIcon.vue";
-import CrossIcon from "@/components/icons/CrossIcon.vue";
-import DeleteIcon from "@/components/icons/DeleteIcon.vue";
-import DotsIcon from "@/components/icons/DotsIcon.vue";
-import EditIcon from "@/components/icons/EditIcon.vue";
-import EmailIcon from "@/components/icons/EmailIcon.vue";
-import ExpandIcon from "@/components/icons/ExpandIcon.vue";
-import HeaderIcon from "@/components/icons/HeaderIcon.vue";
-import GoogleIcon from "@/components/icons/GoogleIcon.vue";
-import ExtraLinkIcon from "@/components/icons/ExtraLinkIcon.vue";
-import InfoIcon from "@/components/icons/InfoIcon.vue";
-import OutlineStarIcon from "@/components/icons/OutlineStarIcon.vue";
-import NotificationIcon from "@/components/icons/NotificationIcon.vue";
-import ModalMenuCloseIcon from "@/components/icons/ModalMenuCloseIcon.vue";
-import MegaphoneIcon from "@/components/icons/MegaphoneIcon.vue";
-import InputCrossIcon from "@/components/icons/InputCrossIcon.vue";
-import ListIcon from "@/components/icons/ListIcon.vue";
-import SolidStarIcon from "@/components/icons/SolidStarIcon.vue";
-import PenIcon from "@/components/icons/PenIcon.vue";
-import PlusIcon from "@/components/icons/PlusIcon.vue";
-import ReduceIcon from "@/components/icons/ReduceIcon.vue";
-import ResetIcon from "@/components/icons/ResetIcon.vue";
-import SearchIcon from "@/components/icons/SearchIcon.vue";
-import SortDownIcon from "@/components/icons/SortDownIcon.vue";
-import SortUpIcon from "@/components/icons/SortUpIcon.vue";
-import TableModeIcon from "@/components/icons/TableModeIcon.vue";
-import TileModeIcon from "@/components/icons/TileModeIcon.vue";
-import TrashIcon from "@/components/icons/TrashIcon.vue";
-import UploadIcon from "@/components/icons/UploadIcon.vue";
-import UserIcon from "@/components/icons/UserIcon.vue";
-import {IBaseIcon} from "@/apps/visagiste/components/BaseIcon/baseIcon";
+// Styles
+import './BaseIcon.scss'
+
+// Composables
+import { useTextColor } from '@/apps/visagiste/composables/color'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import { IconValue, useIcon } from '@/apps/visagiste/composables/icons'
+import { useSize, useSizeProps } from '@/apps/visagiste/composables/size'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
+
+// Utilities
+import { h, computed, ref, Text, toRef } from 'vue'
+import {
+  convertToUnit,
+  defineComponent,
+  flattenFragments,
+  propsFactory,
+} from '@/apps/visagiste/utils'
+
+export const useBaseIconProps = propsFactory(
+  {
+    color: String,
+    disabled: Boolean,
+    start: Boolean,
+    end: Boolean,
+    icon: IconValue,
+
+    ...useComponentProps(),
+    ...useSizeProps(),
+    ...useTagProps({ tag: 'i' }),
+    ...useThemeProps(),
+  },
+  'BaseIcon'
+)
 
 export default defineComponent({
-  name: "BaseIcon",
-  components: {
-    ArrowDownIcon,
-    BackArrowIcon,
-    BoldIcon,
-    CheckedIcon,
-    CheckIcon,
-    CheckmarkCircleIcon,
-    CopyIcon,
-    CrossIcon,
-    DeleteIcon,
-    DotsIcon,
-    EditIcon,
-    EmailIcon,
-    ExpandIcon,
-    ExtraLinkIcon,
-    FilterIcon,
-    GoogleIcon,
-    HeaderIcon,
-    InfoIcon,
-    InputCrossIcon,
-    ListIcon,
-    MegaphoneIcon,
-    ModalMenuCloseIcon,
-    NotificationIcon,
-    OutlineStarIcon,
-    PenIcon,
-    PlusIcon,
-    ReduceIcon,
-    ResetIcon,
-    SearchIcon,
-    SolidStarIcon,
-    SortDownIcon,
-    SortUpIcon,
-    TableModeIcon,
-    TileModeIcon,
-    TrashIcon,
-    UploadIcon,
-    UserIcon,
+  name: 'BaseIcon',
+  methods: {
+    convertToUnit,
   },
-  props: {
-    icon: {
-      type: [String as PropType<IconValue>, Object as PropType<IBaseIcon>],
-      required: true,
+  props: useBaseIconProps(),
+  setup(props, { attrs, slots }) {
+    const slotIcon = ref<string>()
+
+    const { themeClasses } = provideTheme(props)
+    const { iconData } = useIcon(computed(() => slotIcon.value || props.icon))
+    const { sizeClasses } = useSize(props)
+    const { textColorClasses, textColorStyles } = useTextColor(
+      toRef(props, 'color')
+    )
+
+    return () => {
+      const slotValue = slots.default?.()
+      if (slotValue) {
+        slotIcon.value = flattenFragments(slotValue).filter(
+          (node) =>
+            node.type === Text &&
+            node.children &&
+            typeof node.children === 'string'
+        )[0]?.children as string
+      }
+      const hasClick = !!(attrs.onClick || attrs.onClickOnce)
+
+      return h(
+        iconData.value.component,
+        {
+          tag: props.tag,
+          icon: iconData.value.icon,
+          class: [
+            'base-icon',
+            'notranslate',
+            themeClasses.value,
+            sizeClasses.value,
+            textColorClasses.value,
+            {
+              'base-icon--clickable': hasClick,
+              'base-icon--disabled': props.disabled,
+              'base-icon--start': props.start,
+              'base-icon--end': props.end,
+            },
+            props.class,
+          ],
+          style: [
+            !sizeClasses.value
+              ? {
+                  fontSize: convertToUnit(props.size),
+                  height: convertToUnit(props.size),
+                  width: convertToUnit(props.size),
+                }
+              : undefined,
+            textColorStyles.value,
+            props.style,
+          ],
+          role: hasClick ? 'button' : undefined,
+          'aria-hidden': !hasClick,
+          tabindex: hasClick ? (props.disabled ? -1 : 0) : undefined,
+        },
+        slotValue
+      )
     }
-  },
-  computed: {
-    classObject() {
-      const classObj = []
-      const size = typeof this.icon == 'string' ? 'default' : this.icon.size
-      classObj.push('base-icon')
-      classObj.push(`base-icon--size-${size}`)
-      return classObj
-    },
-    iconName() {
-      return typeof this.icon == 'string' ? this.icon : this.icon.value
-    },
   },
 })
 </script>
 
-<template>
-<i :class="classObject"><component class="base-icon__svg" :is="iconName"/></i>
-</template>
-
-<style lang="scss" scoped>
-.base-icon {
-  font-size: calc(var(--base-icon-size-multiplier) * 1.5em);
-  align-items: center;
-  display: inline-flex;
-  font-feature-settings: "liga";
-  height: 1em;
-  justify-content: center;
-  letter-spacing: normal;
-  line-height: 1;
-  position: relative;
-  text-indent: 0;
-  text-align: center;
-  -webkit-user-select: none;
-  user-select: none;
-  vertical-align: middle;
-  width: 1em;
-  min-width: 1em;
-}
-.base-icon--size {
-  &-x-large{
-  --base-icon-size-multiplier: 1.5;
-  }
-  &-large {
-    --base-icon-size-multiplier: 1.2;
-  }
-  &-default {
-    --base-icon-size-multiplier: 1;
-  }
-  &-small {
-    --base-icon-size-multiplier: 0.8;
-  }
-  &-x-small {
-    --base-icon-size-multiplier: 0.5;
-  }
-}
-.base-icon__svg {
-  fill: currentColor;
-  width: 100%;
-  height: 100%;
-}
-</style>

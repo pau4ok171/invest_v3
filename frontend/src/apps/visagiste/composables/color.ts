@@ -1,9 +1,15 @@
 // Utilities
-import { computed, isRef } from "vue";
-import {destructComputed, getForeground, isCssColor, isParsableColor, parseColor} from "@/apps/visagiste/utils";
+import { computed, isRef } from 'vue'
+import {
+  destructComputed,
+  getForeground,
+  isCssColor,
+  isParsableColor,
+  parseColor,
+} from '@/apps/visagiste/utils'
 
 // Types
-import type { CSSProperties, Ref } from "vue";
+import type { CSSProperties, Ref } from 'vue'
 
 type ColorValue = string | false | null | undefined
 
@@ -17,8 +23,10 @@ export interface BackgroundColorData {
   backgroundColorStyles: Ref<CSSProperties>
 }
 
-// Composable
-export function useColor (colors: Ref<{ background?: ColorValue, text?: ColorValue }>) {
+// Composables
+export function useColor(
+  colors: Ref<{ background?: ColorValue; text?: ColorValue }>
+) {
   return destructComputed(() => {
     const classes: string[] = []
     const styles: CSSProperties = {}
@@ -51,37 +59,39 @@ export function useColor (colors: Ref<{ background?: ColorValue, text?: ColorVal
     }
 
     return { colorClasses: classes, colorStyles: styles }
-
   })
-
 }
 
-export function useTextColor (color: Ref<ColorValue>): TextColorData
-export function useTextColor <T extends Record<K, ColorValue>, K extends string> (props: T, name: K): TextColorData
-export function useTextColor <T extends Record<K, ColorValue>, K extends string> (
+export function useTextColor(color: Ref<ColorValue>): TextColorData
+export function useTextColor<T extends Record<K, ColorValue>, K extends string>(
+  props: T,
+  name: K
+): TextColorData
+export function useTextColor<T extends Record<K, ColorValue>, K extends string>(
   props: T | Ref<ColorValue>,
-  name?: K,
+  name?: K
 ): TextColorData {
   const colors = computed(() => ({
-    text: isRef(props) ? props.value : (name ? props[name] : null),
+    text: isRef(props) ? props.value : name ? props[name] : null,
   }))
 
-  const {
-      colorClasses: textColorClasses,
-      colorStyles: textColorStyles,
-  } = useColor(colors)
+  const { colorClasses: textColorClasses, colorStyles: textColorStyles } =
+    useColor(colors)
 
   return { textColorClasses, textColorStyles }
 }
 
-export function useBackgroundColor (color: Ref<ColorValue>): BackgroundColorData
-export function useBackgroundColor <T extends Record<K, ColorValue>, K extends string> (props: T, name: K): BackgroundColorData
-export function useBackgroundColor <T extends Record<K, ColorValue>, K extends string> (
-  props: T | Ref<ColorValue>,
-  name?: K,
-): BackgroundColorData {
+export function useBackgroundColor(color: Ref<ColorValue>): BackgroundColorData
+export function useBackgroundColor<
+  T extends Record<K, ColorValue>,
+  K extends string,
+>(props: T, name: K): BackgroundColorData
+export function useBackgroundColor<
+  T extends Record<K, ColorValue>,
+  K extends string,
+>(props: T | Ref<ColorValue>, name?: K): BackgroundColorData {
   const colors = computed(() => ({
-    background: isRef(props) ? props.value : (name ? props[name] : null),
+    background: isRef(props) ? props.value : name ? props[name] : null,
   }))
 
   const {

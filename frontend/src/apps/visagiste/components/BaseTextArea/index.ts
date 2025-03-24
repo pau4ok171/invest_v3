@@ -1,0 +1,1 @@
+export { default as BaseTextarea, useBaseTextareaProps } from './BaseTextarea.vue'

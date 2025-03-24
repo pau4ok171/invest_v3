@@ -1,168 +1,257 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import AdminModelIndicator from "@/components/admin/models/AdminModelIndicator.vue";
-import {mapState} from "vuex";
-import {DateTime} from "luxon";
-import {toast} from "vue3-toastify";
-import {useAdminStore} from "@/store/admin";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
-import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
+<script setup lang="ts">
+// Components
+import AdminModelIndicator from '@/components/admin/models/AdminModelIndicator.vue'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
+import { BaseCardTitle } from '@/apps/visagiste/components/BaseCard'
+import { BaseCardText } from '@/apps/visagiste/components/BaseCard'
+import { BaseCardActions } from '@/apps/visagiste/components/BaseCard'
+import { BaseCard } from '@/apps/visagiste/components/BaseCard'
 
-export default defineComponent({
-  name: "AdminModelHeader",
-  components: {
-    BaseDialog,
-    BaseButton,
-    AdminModelIndicator,
-  },
-  setup:() => ({store: useAdminStore()}),
-  methods: {
-    getURLFromFile(image: File): string {
-      try {
-        return URL.createObjectURL(image)
-      } catch {
-        return ''
-      }
-    },
-    getFormattedDate(isoDateTime: string) {
-      return DateTime.fromISO(isoDateTime).toFormat('dd LLL yyyy TT')
-    },
-    copyValue(event: MouseEvent) {
-      const target = event.target as HTMLHtmlElement
-      navigator.clipboard.writeText(target.innerText).then(() => toast.success('Value Copied')).catch(err => console.log(err))
-    },
-  },
-  computed: {
-    ...mapState({
-      userInfo: (state: any) => state.authModule.userInfo,
-    }),
-    getModerFullName() {
-      if (this.store.companyFormData.updatedBy.lastName.length) {
-        return `${this.store.companyFormData.updatedBy.lastName} ${this.store.companyFormData.updatedBy.firstName}`
-      }
-      if (this.store.companyFormData.createdBy.lastName.length) {
-        return `${this.store.companyFormData.createdBy.lastName} ${this.store.companyFormData.createdBy.firstName}`
-      }
-      return `${this.userInfo.last_name} ${this.userInfo.first_name}`
-    },
-    getNameOfModification() {
-      if (!this.store.companyUID.length) {
-        return 'Creating by:'
-      }
-      if (this.store.companyFormData.updatedBy.lastName.length) {
-        return 'Modified by:'
-      }
-      return 'Created by:'
+// Composables
+import { useAdminStore } from '@/store/admin'
+import { useAuthStore } from '@/store/auth'
 
-    },
-  },
+// Utilities
+import { computed, shallowRef } from 'vue'
+import { DateTime } from 'luxon'
+import { toast } from 'vue3-toastify'
+
+const adminStore = useAdminStore()
+const authStore = useAuthStore()
+
+const dialog = shallowRef(false)
+
+function getURLFromFile(image: File): string {
+  try {
+    return URL.createObjectURL(image)
+  } catch {
+    return ''
+  }
+}
+
+function getFormattedDate(isoDateTime: string) {
+  return DateTime.fromISO(isoDateTime).toFormat('dd LLL yyyy TT')
+}
+
+function copyValue(e: MouseEvent) {
+  const target = e.target as HTMLHtmlElement
+  navigator.clipboard
+    .writeText(target.innerText)
+    .then(() => toast.success('Value Copied'))
+    .catch((err) => console.log(err))
+}
+
+const moderFullName = computed(() => {
+  if (adminStore.companyFormData.updatedBy.lastName.length) {
+    return `${adminStore.companyFormData.updatedBy.lastName} ${adminStore.companyFormData.updatedBy.firstName}`
+  }
+  if (adminStore.companyFormData.createdBy.lastName.length) {
+    return `${adminStore.companyFormData.createdBy.lastName} ${adminStore.companyFormData.createdBy.firstName}`
+  }
+  return `${authStore.userInfo.last_name} ${authStore.userInfo.first_name}`
+})
+
+const nameOfModification = computed(() => {
+  if (!adminStore.companyUID.length) {
+    return 'Creating by:'
+  }
+  if (adminStore.companyFormData.updatedBy.lastName.length) {
+    return 'Modified by:'
+  }
+  return 'Created by:'
 })
 </script>
 
 <template>
-<div class="admin-model__admin-model-header">
-  <div>
-    <div class="admin-model-header__breadcrumbs">
-      {{ store.companyFormData.sector.slug?store.companyFormData.sector.name:'Sector'  }}
-      /
-      {{ store.companyFormData.industry.slug?store.companyFormData.industry.name:'Industry' }}
-    </div>
-    <div class="admin-model-header__block-company-name">
-      <div class="admin-header__logo-wrapper">
-        <img class="admin-header__logo" :src="getURLFromFile(store.companyFormData.logo)" alt="LOGO" v-if="store.companyFormData.logo?.size">
-        <span class="admin-header__logo-text" v-else>Logo</span>
+  <div class="admin-model__admin-model-header">
+    <div>
+      <div class="admin-model-header__breadcrumbs">
+        {{
+          adminStore.companyFormData.sector.slug
+            ? adminStore.companyFormData.sector.name
+            : 'Sector'
+        }}
+        /
+        {{
+          adminStore.companyFormData.industry.slug
+            ? adminStore.companyFormData.industry.name
+            : 'Industry'
+        }}
       </div>
-      <div>
-        <div class="admin-model-header__company-name">{{ store.companyFormData.companyName?store.companyFormData.companyName:'Company Name' }}</div>
-        <div class="admin-model-header__ticker">
-          <span>{{ store.companyFormData.market.slug?store.companyFormData.market.slug.toUpperCase():'Market' }}</span>
-          <span>:</span>
-          <span>{{ store.companyFormData.ticker?store.companyFormData.ticker:'Ticker' }}</span>
+      <div class="admin-model-header__block-company-name">
+        <div class="admin-header__logo-wrapper">
+          <img
+            class="admin-header__logo"
+            :src="getURLFromFile(adminStore.companyFormData.logo)"
+            alt="LOGO"
+            v-if="adminStore.companyFormData.logo?.size"
+          />
+          <span class="admin-header__logo-text" v-else>Logo</span>
+        </div>
+        <div>
+          <div class="admin-model-header__company-name">
+            {{
+              adminStore.companyFormData.companyName
+                ? adminStore.companyFormData.companyName
+                : 'Company Name'
+            }}
+          </div>
+          <div class="admin-model-header__ticker">
+            <span>{{
+              adminStore.companyFormData.market.slug
+                ? adminStore.companyFormData.market.slug.toUpperCase()
+                : 'Market'
+            }}</span>
+            <span>:</span>
+            <span>{{
+              adminStore.companyFormData.ticker
+                ? adminStore.companyFormData.ticker
+                : 'Ticker'
+            }}</span>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div
-        v-tippy="{content: 'Click to copy UID', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
+      <div
+        v-tippy="{
+          content: 'Click to copy UID',
+          theme: 'tooltip-theme-paper',
+          appendTo: 'parent',
+          arrow: false,
+        }"
         class="admin-model-header__item admin-model-header__item--tooltip"
         @click="copyValue"
-    >
-      {{ store.companyFormData.uid?store.companyFormData.uid:'0000-0000-0000-0000' }}
-    </div>
-    <div class="admin-model-header__item">
-      <img class="admin-model-header__country-flag-icon" :src="store.companyFormData.country.flagURL" alt="Country" v-if="store.companyFormData.country.flagURL">
-      {{ store.companyFormData.country.slug?store.companyFormData.country.name:'Country' }}
-    </div>
-    <div class="admin-model-header__item">{{ store.companyFormData.country.currency?.name?`${store.companyFormData.country.currency.name} (${store.companyFormData.country.currency.symbol})`:'Currency Symbol' }}</div>
-  </div>
-  <div class="admin-model-header__last-column">
-    <div class="admin-model-header__indicator">
-      <AdminModelIndicator :is-active="store.companyFormData.isVisible"/>
-    </div>
-
-    <div class="admin-model-header__last-column-info">
-      <div class="admin-model-header__item">Created: {{ store.companyFormData.created?getFormattedDate(store.companyFormData.created):'00.00.0000 00:00:00' }}</div>
-      <div class="admin-model-header__item">Updated: {{ store.companyFormData.updated?getFormattedDate(store.companyFormData.updated):'00.00.0000 00:00:00' }}</div>
+      >
+        {{
+          adminStore.companyFormData.uid
+            ? adminStore.companyFormData.uid
+            : '0000-0000-0000-0000'
+        }}
+      </div>
       <div class="admin-model-header__item">
-        <div class="admin-model-header__item-modified-by">
-          <div class="admin-model-header__item-modified-by-title" v-text="getNameOfModification"></div>
-          <div class="admin-model-header__item-modified-by-value" v-text="getModerFullName"></div>
-        </div>
+        <img
+          class="admin-model-header__country-flag-icon"
+          :src="adminStore.companyFormData.country.flagURL"
+          alt="Country"
+          v-if="adminStore.companyFormData.country.flagURL"
+        />
+        {{
+          adminStore.companyFormData.country.slug
+            ? adminStore.companyFormData.country.name
+            : 'Country'
+        }}
+      </div>
+      <div class="admin-model-header__item">
+        {{
+          adminStore.companyFormData.country.currency?.name
+            ? `${adminStore.companyFormData.country.currency.name} (${adminStore.companyFormData.country.currency.symbol})`
+            : 'Currency Symbol'
+        }}
       </div>
     </div>
+    <div class="admin-model-header__last-column">
+      <div class="admin-model-header__indicator">
+        <AdminModelIndicator
+          :is-active="adminStore.companyFormData.isVisible"
+        />
+      </div>
 
-    <div class="admin-model-header__action-list">
-      <template v-if="!store.editModeActivated">
+      <div class="admin-model-header__last-column-info">
         <div class="admin-model-header__item">
-          <base-button
-            theme="dark-blue"
-            prepend-icon="EditIcon"
-            text="edit"
-            rounded="large"
-            @click="store.activateEditMode()"
-          />
+          Created:
+          {{
+            adminStore.companyFormData.created
+              ? getFormattedDate(adminStore.companyFormData.created)
+              : '00.00.0000 00:00:00'
+          }}
         </div>
+        <div class="admin-model-header__item">
+          Updated:
+          {{
+            adminStore.companyFormData.updated
+              ? getFormattedDate(adminStore.companyFormData.updated)
+              : '00.00.0000 00:00:00'
+          }}
+        </div>
+        <div class="admin-model-header__item">
+          <div class="admin-model-header__item-modified-by">
+            <div
+              class="admin-model-header__item-modified-by-title"
+              v-text="nameOfModification"
+            ></div>
+            <div
+              class="admin-model-header__item-modified-by-value"
+              v-text="moderFullName"
+            ></div>
+          </div>
+        </div>
+      </div>
 
-        <base-dialog
-          title="Confirm the action"
-          max-width="500"
-          footer-type="withYesNo"
-          @click:yes="store.deleteModel()"
-        >
-          <template #activator>
+      <div class="admin-model-header__action-list">
+        <template v-if="!adminStore.editModeActivated">
+          <div class="admin-model-header__item">
             <base-button
-              theme="error"
-              prepend-icon="DeleteIcon"
-              text="delete"
+              color="info"
+              prepend-icon="$iEdit"
+              text="edit"
               rounded="large"
-              :disabled="store.isNewModel"
+              @click="adminStore.activateEditMode()"
             />
-          </template>
-          <template #dialog>
-            <div class="admin-model-modal-menu__content">
-              <div class="admin-model-modal-menu__description">
-                Are you sure to definitely delete the current model?
-              </div>
-            </div>
-          </template>
-        </base-dialog>
+          </div>
 
-      </template>
-      <template v-else>
-        <div class="admin-model-header__item">
-          <base-button
-            prepend-icon="ResetIcon"
-            text="Close Edit Mode Without Saving"
-            theme="dark-blue"
-            rounded="large"
-            size="small"
-            @click="store.deactivateEditMode()"
-          />
-        </div>
-      </template>
+          <base-dialog v-model="dialog" max-width="500">
+            <template #activator="{ props: activatorProps }">
+              <base-button
+                v-bind="activatorProps"
+                color="error"
+                prepend-icon="$iDelete"
+                text="delete"
+                rounded="large"
+                :disabled="adminStore.isNewModel"
+              />
+            </template>
+            <template #default>
+              <base-card>
+                <base-card-title
+                  >Deletion
+                  {{ adminStore.companyFormData.companyName }}</base-card-title
+                >
+                <base-card-text>
+                  Are you sure to definitely delete the current model?
+                </base-card-text>
+                <base-card-actions>
+                  <base-button
+                    text="yes"
+                    color="error"
+                    variant="text"
+                    @click="adminStore.deleteModel()"
+                  />
+                  <base-button
+                    text="no"
+                    variant="text"
+                    @click="dialog = false"
+                  />
+                </base-card-actions>
+              </base-card>
+            </template>
+          </base-dialog>
+        </template>
+        <template v-else>
+          <div class="admin-model-header__item">
+            <base-button
+              prepend-icon="$iReset"
+              text="Close Edit Mode Without Saving"
+              color="info"
+              rounded="large"
+              size="small"
+              @click="adminStore.deactivateEditMode()"
+            />
+          </div>
+        </template>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <style scoped lang="scss">
@@ -178,8 +267,8 @@ export default defineComponent({
   padding: 16px 32px;
 }
 .admin-model-header__breadcrumbs {
-  margin-bottom: 2.4rem;
-  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
 }
 .admin-model-header__block-company-name {
   padding-bottom: 10px;
@@ -193,7 +282,7 @@ export default defineComponent({
   width: 56px;
 }
 .admin-header__logo-text {
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   width: 100%;
   height: 100%;
   display: flex;
@@ -212,18 +301,18 @@ export default defineComponent({
   vertical-align: text-bottom;
 }
 .admin-model-header__company-name {
-  font-size: 2.8rem;
+  font-size: 1.75rem;
   line-height: 1.25;
   font-weight: 500;
   overflow: hidden;
 }
 .admin-model-header__ticker {
-  font-size: 1.6rem;
+  font-size: 1rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, .7);
+  color: rgba(255, 255, 255, 0.7);
 }
 .admin-model-header__item {
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   margin-bottom: 5px;
 
   &--tooltip {
@@ -267,22 +356,9 @@ export default defineComponent({
   border: 2px solid transparent;
   border-radius: 8px;
   padding: 10px;
-  background-image: linear-gradient(#1b222d, #1b222d), linear-gradient(315deg, #ee4297, #9176c6);
+  background-image:
+    linear-gradient(#1b222d, #1b222d), linear-gradient(315deg, #ee4297, #9176c6);
   background-origin: border-box;
   background-clip: padding-box, border-box;
-}
-.admin-model-modal-menu__content {
-  padding: 16px;
-}
-.admin-model-modal-menu__description {
-  font-size: 1.6rem;
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-.admin-model-modal-menu__actions {
-  display: flex;
-  justify-content: end;
-  gap: 4px;
-  margin-right: 20px;
 }
 </style>

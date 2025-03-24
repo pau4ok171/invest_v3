@@ -1,0 +1,1 @@
+export { default as BaseProgressCircular, useBaseProgressCircularProps } from './BaseProgressCircular.vue';

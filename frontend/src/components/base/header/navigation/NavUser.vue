@@ -1,80 +1,107 @@
-<script lang="ts">
-import NavUserDropDown from "@/components/base/header/navigation/NavUserDropDown.vue";
-import AuthModalMenu from "@/components/base/auth/AuthModalMenu.vue";
-import {mapGetters} from "vuex";
-import {defineComponent} from "vue";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
-import BaseMenu from "@/apps/visagiste/components/BaseMenu/BaseMenu.vue";
-import BaseDialog from "@/apps/visagiste/components/BaseDialog/BaseDialog.vue";
+<script setup lang="ts">
+// Components
+import AuthModalMenu from '@/components/base/auth/AuthModalMenu.vue'
 
-export default defineComponent({
-  name: 'NavUser',
-  components: {
-    BaseDialog,
-    BaseMenu,
-    BaseButton,
-    AuthModalMenu,
-    NavUserDropDown,
-  },
-  computed: {
-    ...mapGetters({
-      isAuthenticated: 'authModule/getIsAuthenticated',
-    })
-  },
-})
+// Base Components
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
+import { BaseMenu } from '@/apps/visagiste/components/BaseMenu'
+import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
+import { BaseCard } from '@/apps/visagiste/components/BaseCard/'
+import { BaseList } from '@/apps/visagiste/components/BaseList'
+import { BaseListItem } from '@/apps/visagiste/components/BaseList'
+import { BaseDivider } from '@/apps/visagiste/components/BaseDivider'
+
+// Composables
+import { useAuthStore } from '@/store/auth'
+
+// Utilities
+import { ref, shallowRef } from 'vue'
+import axios from 'axios'
+
+const authStore = useAuthStore()
+
+const items = ref([
+  { title: 'Profile', to: '/profile', id: 'profile' },
+  { title: 'Plan & Pricing', to: '/pricing', id: 'pricing' },
+  { title: 'Notifications', to: '/notifications', id: 'notifications' },
+  { title: 'HelpCenter', to: '/helpcenter', id: 'help' },
+])
+const dialog = shallowRef(false)
+
+function onLogout() {
+  axios.defaults.headers.common['Authorization'] = ''
+
+  localStorage.removeItem('token')
+  localStorage.removeItem('username')
+  localStorage.removeItem('userid')
+
+  authStore.token = ''
+  authStore.userInfo = {}
+}
 </script>
 
 <template>
-<div class="navigation__account-access">
-  <div class="account-access__inner">
-    <template v-if="isAuthenticated">
+  <div class="nav-user__wrapper">
+    <template v-if="authStore.isAuthenticated">
       <base-menu>
-        <template #activator>
+        <template #activator="{ props }">
           <base-button
-            icon="UserIcon"
+            v-bind="props"
+            icon="$iUser"
             variant="text"
-            rounded="x-small"
+            size="large"
+            rounded="lg"
           />
         </template>
-        <template #list>
-          <NavUserDropDown/>
+        <template #default>
+          <base-card>
+            <base-list>
+              <base-list-item
+                v-if="authStore.userInfo.is_staff"
+                :to="{ name: 'admin' }"
+                title="Admin Panel"
+              />
+              <base-list-item
+                v-for="item in items"
+                :key="item.id"
+                :title="item.title"
+                :to="item.to"
+              />
+              <base-divider />
+              <base-list-item @click="onLogout" title="Logout" />
+            </base-list>
+          </base-card>
         </template>
       </base-menu>
     </template>
+
     <template v-else>
-      <base-dialog
-        max-width="700"
-        footer-type="withoutFooter"
-      >
-        <template #activator>
-          <base-button
-            text="login"
-            rounded="large"
-            theme="blue"
-          />
+      <base-dialog v-model="dialog" max-width="700">
+        <template #activator="{ props: activatorProps }">
+          <base-button text="login" color="blue" v-bind="activatorProps" />
         </template>
-        <template #dialog>
-          <AuthModalMenu/>
+        <template #default>
+          <base-card title="Finargo">
+            <template #append>
+              <base-button
+                icon="$close"
+                density="compact"
+                variant="text"
+                @click="dialog = false"
+              />
+            </template>
+            <AuthModalMenu />
+          </base-card>
         </template>
       </base-dialog>
     </template>
   </div>
-</div>
 </template>
 
-<style scoped>
-.navigation__account-access {
-  position: relative;
-}
-.account-access__inner {
+<style>
+.nav-user__wrapper {
   display: flex;
-  color: #92969c;
   justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 64px;
-  padding-left: 8px;
-  user-select: none;
-  cursor: pointer;
+  min-width: 90px;
 }
 </style>

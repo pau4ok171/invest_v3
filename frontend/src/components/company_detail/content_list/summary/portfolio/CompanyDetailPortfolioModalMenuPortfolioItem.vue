@@ -1,74 +1,71 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import type {PropType} from 'vue'
-import {mapGetters} from "vuex";
-import type {Portfolio} from "@/types/portfolios";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+<script setup lang="ts">
+// Components
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
-export default defineComponent({
-  name: "CompanyDetailPortfolioModalMenuPortfolioItem",
-  components: {
-    BaseButton,
-  },
-  props: {
-    portfolio: {
-      type: Object as PropType<Portfolio>,
-      required: true,
-    },
-  },
-  computed: {
-    ...mapGetters({
-      company: 'companyDetail/getCompany',
-      portfolioIsLoading: "companyDetail/getPortfolioIsLoading",
-    }),
-    isCompanyInPortfolio() {
-      return this.portfolio.positions.includes(this.company.id)
-    }
+// Composables
+import { useCompanyDetailStore } from '@/store/companyDetail'
+
+// Types
+import type { PropType } from 'vue'
+import type { Portfolio } from '@/types/portfolios'
+
+const companyDetailStore = useCompanyDetailStore()
+
+const props = defineProps({
+  portfolio: {
+    type: Object as PropType<Portfolio>,
+    required: true,
   },
 })
 </script>
 
 <template>
-<div class="detail-portfolio-modal-menu-item">
-  <div class="detail-portfolio-modal-menu-item__info-block">
-    <div class="detail-portfolio-modal-menu-item__title">{{ portfolio.name }}</div>
-    <div class="detail-portfolio-modal-menu-item__total-shares">
-      {{ portfolio.positions.length }} Holdings
+  <div class="detail-portfolio-modal-menu-item">
+    <div class="detail-portfolio-modal-menu-item__info-block">
+      <div class="detail-portfolio-modal-menu-item__title">
+        {{ portfolio.name }}
+      </div>
+      <div class="detail-portfolio-modal-menu-item__total-shares">
+        {{ portfolio.positions.length }} Holdings
+      </div>
+    </div>
+
+    <div class="detail-portfolio-modal-menu-item__actions">
+      <template
+        v-if="
+          props.portfolio.positions.includes(
+            companyDetailStore.company.id as number
+          )
+        "
+      >
+        <base-button
+          prepend-icon="$iChecked"
+          text="added"
+          color="success"
+          rounded="large"
+          readonly
+        />
+
+        <base-button
+          icon="$iDelete"
+          color="error"
+          rounded="lg"
+          density="comfortable"
+          @click="$emit('updatePortfolio', 'exclude', portfolio)"
+        />
+      </template>
+
+      <template v-else>
+        <base-button
+          prepend-icon="$plus"
+          text="add"
+          color="info"
+          rounded="large"
+          @click="$emit('updatePortfolio', 'include', portfolio)"
+        />
+      </template>
     </div>
   </div>
-
-  <div class="detail-portfolio-modal-menu-item__actions">
-    <template v-if="isCompanyInPortfolio">
-      <base-button
-        prepend-icon="CheckedIcon"
-        text="added"
-        theme="success"
-        rounded="large"
-        disabled
-      />
-
-      <base-button
-        icon="TrashIcon"
-        theme="error"
-        rounded="x-small"
-        density="comfortable"
-        :loading="portfolioIsLoading"
-        @click="$emit('updatePortfolio', 'exclude', portfolio)"
-      />
-    </template>
-
-    <template v-else>
-      <base-button
-        prepend-icon="PlusIcon"
-        text="add"
-        theme="blue"
-        rounded="large"
-        :loading="portfolioIsLoading"
-        @click="$emit('updatePortfolio', 'include', portfolio)"
-      />
-    </template>
-  </div>
-</div>
 </template>
 
 <style scoped>
@@ -84,12 +81,12 @@ export default defineComponent({
   text-align: left;
 }
 .detail-portfolio-modal-menu-item__title {
-  font-size: 1.8rem;
+  font-size: 1.125rem;
   font-weight: 500;
 }
 .detail-portfolio-modal-menu-item__total-shares {
-  font-size: 1.4rem;
-  opacity: .5;
+  font-size: 0.875rem;
+  opacity: 0.5;
 }
 .detail-portfolio-modal-menu-item__actions {
   display: flex;
