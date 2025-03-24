@@ -1,23 +1,11 @@
-<script lang="ts">
-import {mapState} from "vuex";
-import {defineComponent} from "vue";
-
-export default defineComponent({
-  name: 'TheMain',
-  computed: {
-    ...mapState({
-      lateralMenuIsOpen: "lateralMenuIsOpen",
-    }),
-  },
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
-<div class="main">
-  <div class="main__inner" :class="{'main__inner--moved': lateralMenuIsOpen}">
-    <slot/>
+  <div class="main">
+    <div class="main__inner">
+      <slot />
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="scss">
@@ -29,7 +17,7 @@ export default defineComponent({
   max-width: 100%;
   flex: 1 0 auto;
   justify-content: center;
-  transition: .2s cubic-bezier(.4, 0, .2, 1);
+  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .main__inner {
   position: relative;
@@ -37,8 +25,5 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   width: 100%;
-}
-.main__inner--moved {
-  max-width: 1582px;
 }
 </style>
