@@ -1,7 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
 import axios from '@/axios'
 import VueAxios from 'vue-axios'
 
@@ -40,7 +39,6 @@ Highcharts.setOptions({
 
 app
   .use(router)
-  .use(store)
   .use(pinia)
   .use(VueAxios, axios)
   .use(HighchartsVue, { tagName: 'charts' })
