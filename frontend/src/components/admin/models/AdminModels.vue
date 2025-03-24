@@ -1,12 +1,12 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
-import AdminModelsCompanyItem from "@/components/admin/models/AdminModelsCompanyItem.vue";
-import axios from "axios";
-import type {IAdminCompany} from "@/types/admin.types";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+import { defineComponent } from 'vue'
+import AdminModelsCompanyItem from '@/components/admin/models/AdminModelsCompanyItem.vue'
+import axios from 'axios'
+import type { IAdminCompany } from '@/types/admin.types'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
 export default defineComponent({
-  name: "AdminModels",
+  name: 'AdminModels',
   components: {
     BaseButton,
     AdminModelsCompanyItem,
@@ -24,54 +24,50 @@ export default defineComponent({
   methods: {
     fetchCompanies() {
       axios
-          .get('api/v1/admin/companies/')
-          .then(response => this.companies = response.data)
-          .catch(error => console.log(error))
-    }
+        .get('api/v1/admin/companies/')
+        .then((response) => (this.companies = response.data))
+        .catch((error) => console.log(error))
+    },
   },
 })
 </script>
 
 <template>
-<div class="admin-models">
-  <div class="admin-models__header">
-    <h1>Select Company to change</h1>
-    <base-button
-      text="add company"
-      theme="dark-blue"
-      rounded="large"
-      size="small"
-      @click="$emit('openModel', '')"
-    />
+  <div class="admin-models">
+    <div class="admin-models__header">
+      <h1>Select Company to change</h1>
+      <base-button
+        text="add company"
+        color="info"
+        rounded="lg"
+        size="small"
+        @click="$emit('openModel', '')"
+      />
+    </div>
+    <div v-if="isFetched" class="admin-models__content-list">
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Slug</th>
+            <th>Logo</th>
+            <th>Market</th>
+            <th>Sector</th>
+            <th>Visible</th>
+          </tr>
+        </thead>
+        <tbody>
+          <AdminModelsCompanyItem
+            v-for="company in companies"
+            :key="company.id"
+            :company
+            @click="$emit('openModel', company.uid)"
+          />
+        </tbody>
+      </table>
+    </div>
   </div>
-  <div v-if="isFetched" class="admin-models__content-list">
-    <table>
-      <thead>
-        <tr>
-          
-          <th>Id</th>
-          <th>Title</th>
-          <th>Slug</th>
-          <th>Logo</th>
-          <th>Market</th>
-          <th>Sector</th>
-          <th>Visible</th>
-      
-        </tr>
-      </thead>
-      <tbody>
-        <AdminModelsCompanyItem
-          v-for="company in companies"
-          :key="company.id"
-          :company
-          @click="$emit('openModel', company.uid)"
-        />
-      </tbody>
-      
-    </table>
-  </div>
-
-</div>
 </template>
 
 <style>
@@ -97,12 +93,12 @@ export default defineComponent({
   text-align: left;
 }
 .admin-models__content-list table th {
-  font-size: 1.2rem;
+  font-size: 0.75rem;
   line-height: 1.5;
   font-weight: 500;
   color: #fff;
-  opacity: .5;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  opacity: 0.5;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   cursor: pointer;
   background-color: var(--bg-color);
@@ -128,21 +124,21 @@ export default defineComponent({
 .admin-models__content-list table tr {
   height: auto;
 }
-.admin-models__content-list table tbody tr  {
-  font-size: 1.4rem;
+.admin-models__content-list table tbody tr {
+  font-size: 0.875rem;
   font-weight: normal;
   line-height: 1.5;
-  transition: background-color .2s cubic-bezier(.23, 1, .32, 1) 0s;
+  transition: background-color 0.2s cubic-bezier(0.23, 1, 0.32, 1) 0s;
 }
 .admin-models__content-list table tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.05);
 }
 .admin-models__content-list table td {
   background-color: transparent;
-  font-size: 1.4rem;
+  font-size: 0.875rem;
   height: 64px;
   border-top: none;
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   vertical-align: middle;
   padding: 10px 8px;
   overflow: hidden;

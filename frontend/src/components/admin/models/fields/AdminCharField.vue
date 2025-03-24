@@ -65,7 +65,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 
 .admin-char-field {
   position: relative;
-  line-height: 1.4rem;
+  line-height: .875rem;
   &--valid .admin-char-field__input {
     background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-success-start, $gradient-color-success-finish);
   }
@@ -76,7 +76,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 .admin-char-field__input {
   position: relative;
   width: 400px;
-  font-size: 1.4rem;
+  font-size: .875rem;
   color: #fff;
   outline: none;
   padding: 10px 20px;
@@ -107,7 +107,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 .admin-char-field__label {
   color: #fff;
   border-radius: 20px;
-  font-size: 1.4rem;
+  font-size: .875rem;
   text-transform: uppercase;
   position: absolute;
   z-index: 2;

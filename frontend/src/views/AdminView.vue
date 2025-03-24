@@ -1,112 +1,96 @@
-<script lang="ts">
-import {computed, defineComponent} from 'vue'
-import AdminModels from "@/components/admin/models/AdminModels.vue";
-import AdminDashboard from "@/components/admin/dashboard/AdminDashboard.vue";
-import AdminSettings from "@/components/admin/settings/AdminSettings.vue";
-import AdminStaff from "@/components/admin/staff/AdminStaff.vue";
-import AdminModel from "@/components/admin/models/AdminModel.vue";
-import {previousComponentList} from "@/components/admin/models/components";
-import store from "@/store";
-import {RouteNamesEnum} from "@/router/routes.types";
-import {useAdminStore} from "@/store/admin";
-import {AdminComponentName} from "@/types/admin.types";
-import BaseButton from "@/apps/visagiste/components/BaseButton/BaseButton.vue";
+<script setup lang="ts">
+import {computed, onMounted, ref, watch} from 'vue'
+import AdminModels from '@/components/admin/models/AdminModels.vue'
+import AdminDashboard from '@/components/admin/dashboard/AdminDashboard.vue'
+import AdminSettings from '@/components/admin/settings/AdminSettings.vue'
+import AdminStaff from '@/components/admin/staff/AdminStaff.vue'
+import AdminModel from '@/components/admin/models/AdminModel.vue'
+import { previousComponentList } from '@/components/admin/models/components'
+import { useAdminStore } from '@/store/admin'
+import { AdminComponentName } from '@/types/admin.types'
+import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
-const vuexStore = store
+const adminStore = useAdminStore()
 
-export default defineComponent({
-  name: "AdminView",
-  components: {
-    BaseButton,
-    AdminDashboard,
-    AdminModels,
-    AdminStaff,
-    AdminSettings,
-    AdminModel,
-  },
-  setup: () => {
-    const store = useAdminStore()
-    const WatchActiveComponent = computed(() => store.activeComponent)
+const navigationHeaders = ref([
+  AdminComponentName.DASHBOARD,
+  AdminComponentName.MODELS,
+  AdminComponentName.STAFF,
+  AdminComponentName.SETTINGS,
+])
 
-    return {
-      store,
-      WatchActiveComponent
-    }
-  },
-  mounted() {
-    document.title = 'ADMIN PANEL'
-  },
-  beforeRouteEnter(to, from, next) {
-    // TODO: Replace vuex by pinia
-    const userInfo = vuexStore.state.authModule.userInfo
-    if (!Object.hasOwn(userInfo, 'is_staff') || !userInfo.is_staff) {
-      next(RouteNamesEnum.page_not_found)
-    }
-    next()
-  },
-  data() {
-    return {
-      navigationHeaders: [
-        AdminComponentName.DASHBOARD,
-        AdminComponentName.MODELS,
-        AdminComponentName.STAFF,
-        AdminComponentName.SETTINGS,
-      ]
-    }
-  },
-  methods: {
-    async openModel(company_uid: string) {
-      await this.store.initAdminStore()
-      this.store.companyUID = company_uid
-      this.store.activeComponent = AdminComponentName.MODEL
-    },
-    async changeComponent(componentIs: AdminComponentName) {
-      this.store.activeComponent = componentIs
-    },
-  },
-  watch: {
-    WatchActiveComponent() {
-      this.store.previousComponent = previousComponentList[this.store.activeComponent]
-      window.scrollTo(0, 0)
-    }
-  },
+const components = {
+  AdminDashboard,
+  AdminSettings,
+  AdminStaff,
+  AdminModels,
+  AdminModel,
+}
+
+async function openModel(company_uid: string) {
+  await adminStore.init()
+  adminStore.companyUID = company_uid
+  adminStore.activeComponent = AdminComponentName.MODEL
+}
+
+async function changeComponent(componentIs: AdminComponentName) {
+  adminStore.activeComponent = componentIs
+}
+
+onMounted(() => {
+  document.title = 'ADMIN PANEL'
+})
+
+const WatchActiveComponent = computed(() => adminStore.activeComponent)
+watch(WatchActiveComponent, () => {
+  adminStore.previousComponent = previousComponentList[adminStore.activeComponent]
+  window.scrollTo(0, 0)
 })
 </script>
 
 <template>
-<div class="admin-view">
-  <div class="admin-sidebar">
-    <div class="admin-sidebar__navigation">
+  <div class="admin-view">
+    <div class="admin-sidebar">
+      <div class="admin-sidebar__navigation">
+        <ul class="admin-sidebar__menu">
+          <li
+            v-for="header in navigationHeaders"
+            :key="header"
+            :class="[
+              'admin-sidebar__menu-item',
+              {
+                'admin-sidebar__menu-item--active':
+                  adminStore.activeComponent === header,
+              },
+            ]"
+            @click="adminStore.activeComponent = header"
+          >
+            {{ header.slice(5) }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="admin-content">
+      <div class="admin-content__back">
+        <base-button
+          prepend-icon="$prev"
+          text=""
+          color="info"
+          size="small"
+          :disabled="!adminStore.previousComponent"
+          v-tippy="{
+            content: 'Click to turn back',
+            theme: 'tooltip-theme-paper',
+            appendTo: 'parent',
+            arrow: false,
+          }"
+          @click="changeComponent(adminStore.previousComponent)"
+        />
+      </div>
 
-      <ul class="admin-sidebar__menu">
-        <li
-          v-for="header in navigationHeaders"
-          :key="header"
-          :class="['admin-sidebar__menu-item', {'admin-sidebar__menu-item--active': store.activeComponent === header}]"
-          @click="store.activeComponent = header"
-        >
-          {{ header.slice(5) }}
-        </li>
-      </ul>
-
+      <component @openModel="openModel" :is="components[adminStore.activeComponent]" />
     </div>
   </div>
-  <div class="admin-content">
-    <div class="admin-content__back">
-      <base-button
-        :prepend-icon="{value: 'BackArrowIcon', size: 'small'}"
-        theme="dark-blue"
-        text=""
-        density="comfortable"
-        :disabled="!store.previousComponent"
-        v-tippy="{content: 'Click to turn back', theme: 'tooltip-theme-paper', appendTo: 'parent', arrow: false}"
-        @click="changeComponent(store.previousComponent)"
-      />
-    </div>
-
-    <component @openModel="openModel" :is="store.activeComponent"/>
-  </div>
-</div>
 </template>
 
 <style scoped>
@@ -119,7 +103,7 @@ export default defineComponent({
   width: 25%;
 }
 .admin-content {
- flex: 0 0 75%;
+  flex: 0 0 75%;
   width: 75%;
 }
 .admin-sidebar__navigation {
@@ -131,7 +115,7 @@ export default defineComponent({
   width: 267px;
   position: relative;
   border-radius: 4px;
-  color: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, 0.5);
   padding: 4px 0 4px 12px;
   margin-left: 14px;
   line-height: 1.5;
@@ -145,7 +129,7 @@ export default defineComponent({
   background-color: #1b222d;
 }
 .admin-sidebar__menu-item--active::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   width: 4px;

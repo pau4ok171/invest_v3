@@ -177,7 +177,7 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
   }
 }
 .admin-checkbox-label {
-  font-size: 1.4rem;
+  font-size: .875rem;
   margin-bottom: 8px;
 }
 .admin-checkbox-field {
@@ -185,7 +185,7 @@ $checkbox_animation_translate_x: calc($checkbox_width - $checkbox_inner_width - 
   gap: 8px;
 }
 .admin-checkbox-value {
-  font-size: 1.4rem;
+  font-size: .875rem;
 }
 .admin-checkbox-button--disabled {
   & .admin-checkbox-button__outer:before,

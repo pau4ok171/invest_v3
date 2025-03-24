@@ -70,7 +70,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 .admin-text-field {
   position: relative;
   display: inline-block;
-  line-height: 1.4rem;
+  line-height: .75rem;
   &::after {
     content: "";
     border-top: 2px solid #555;
@@ -96,7 +96,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
   max-height: 800px;
   min-width: 600px;
   max-width: 800px;
-  font-size: 1.4rem;
+  font-size: .75rem;
   scroll-padding: 50px 0 50px 0;
   color: #fff;
   outline: none;
@@ -159,7 +159,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 .admin-text-field__label {
   color: #fff;
   border-radius: 20px;
-  font-size: 1.4rem;
+  font-size: .75rem;
   text-transform: uppercase;
   position: absolute;
   z-index: 2;

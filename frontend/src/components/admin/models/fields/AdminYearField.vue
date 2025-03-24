@@ -113,7 +113,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 
 .admin-year-field {
   position: relative;
-  line-height: 1.4rem;
+  line-height: .75rem;
   &--valid .admin-year-field__inputs {
     background-image: linear-gradient($bg-default-color, $bg-default-color), linear-gradient(315deg, $gradient-color-success-start, $gradient-color-success-finish);
   }
@@ -126,7 +126,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
   display: flex;
   justify-content: center;
   width: 200px;
-  font-size: 1.4rem;
+  font-size: .75rem;
   color: #fff;
   outline: none;
   padding: 5px 10px;
@@ -162,7 +162,7 @@ $gradient-color-error-finish: var(--admin-field-error-gradient-color-finish);
 .admin-year-field__label {
   color: #fff;
   border-radius: 20px;
-  font-size: 1.4rem;
+  font-size: .75rem;
   text-transform: uppercase;
   position: absolute;
   z-index: 2;
