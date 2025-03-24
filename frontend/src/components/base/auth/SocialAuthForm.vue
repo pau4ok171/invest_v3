@@ -44,7 +44,6 @@
 }
 .auth-form__socials-desc {
   margin-bottom: 16px;
-  font-size: 1.6rem;
   line-height: 1.5;
   text-align: center;
   font-weight: normal;
