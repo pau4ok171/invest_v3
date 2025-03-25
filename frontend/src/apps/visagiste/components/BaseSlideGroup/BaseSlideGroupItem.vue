@@ -1,11 +1,11 @@
 <script setup lang="ts">
 // Utilities
 import { BaseSlideGroupSymbol } from './BaseSlideGroup.vue'
-import {useGroupItem, useGroupProps} from "@/apps/visagiste/composables/group";
+import { useGroupItem, useGroupProps } from '@/apps/visagiste/composables/group'
 
 // Types
-import type {UnwrapRef} from "vue";
-import type {GroupItemProvide} from "@/apps/visagiste/composables/group";
+import type { UnwrapRef } from 'vue'
+import type { GroupItemProvide } from '@/apps/visagiste/composables/group'
 
 type BaseSlideGroupItemSlots = {
   default: {
@@ -17,11 +17,11 @@ type BaseSlideGroupItemSlots = {
 }
 
 const props = defineProps({
-  ...useGroupProps()
+  ...useGroupProps(),
 })
 
 const emits = defineEmits<{
-  'group:selected': (val: { value: boolean }) => true,
+  'group:selected': (val: { value: boolean }) => true
 }>()
 
 const slots = defineSlots<BaseSlideGroupItemSlots>()
@@ -30,10 +30,12 @@ const slideGroupItem = useGroupItem(props, BaseSlideGroupSymbol)
 </script>
 
 <template>
-  <slot v-bind="{
-    isSelected: slideGroupItem.isSelected,
-    select: slideGroupItem.select,
-    toggle: slideGroupItem.toggle,
-    selectedClass: slideGroupItem.selectedClass,
-  }"/>
+  <slot
+    v-bind="{
+      isSelected: slideGroupItem.isSelected,
+      select: slideGroupItem.select,
+      toggle: slideGroupItem.toggle,
+      selectedClass: slideGroupItem.selectedClass,
+    }"
+  />
 </template>

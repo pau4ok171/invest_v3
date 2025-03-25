@@ -94,11 +94,6 @@ export const useBaseSlideGroupProps = propsFactory(
 
 export default defineComponent({
   name: 'BaseSlideGroup',
-  computed: {
-    sl() {
-      return sl
-    },
-  },
   components: {
     BaseIcon,
     BaseFadeTransition,
@@ -457,7 +452,7 @@ export default defineComponent({
 
 <template>
   <component
-    :is="$props.tag"
+    :is="$props.tag as string"
     :class="[
       'base-slide-group',
       {

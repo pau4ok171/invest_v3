@@ -42,7 +42,7 @@ export default defineComponent({
 
 <template>
   <component
-    :is="$props.tag"
+    :is="$props.tag as string"
     :class="['base-toolbar-title', $props.class]"
     :style="$props.style"
   >

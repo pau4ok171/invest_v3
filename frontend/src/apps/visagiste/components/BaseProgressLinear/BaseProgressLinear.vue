@@ -1,43 +1,40 @@
 <script lang="ts">
 // Style
-import "./BaseProgressLinear.scss";
+import './BaseProgressLinear.scss'
 
 // Composables
-import { useIntersectionObserver } from "@/apps/visagiste/composables/intersectionObserver";
+import { useIntersectionObserver } from '@/apps/visagiste/composables/intersectionObserver'
 import {
   useBackgroundColor,
   useTextColor,
-} from "@/apps/visagiste/composables/color";
-import { useProxiedModel } from "@/apps/visagiste/composables/proxiedModel";
+} from '@/apps/visagiste/composables/color'
+import { useProxiedModel } from '@/apps/visagiste/composables/proxiedModel'
 import {
   useLocation,
   useLocationProps,
-} from "@/apps/visagiste/composables/location";
+} from '@/apps/visagiste/composables/location'
 import {
   useRounded,
   useRoundedProps,
-} from "@/apps/visagiste/composables/rounded";
-import {
-  provideTheme,
-  useThemeProps,
-} from "@/apps/visagiste/composables/theme";
-import { useRtl } from "@/apps/visagiste/composables";
+} from '@/apps/visagiste/composables/rounded'
+import { provideTheme, useThemeProps } from '@/apps/visagiste/composables/theme'
+import { useRtl } from '@/apps/visagiste/composables'
 
 // Utilities
-import { computed, defineComponent } from "vue";
-import type { SlotsType } from "vue";
+import { computed, defineComponent } from 'vue'
+import type { SlotsType } from 'vue'
 import {
   clamp,
   convertToUnit,
   IN_BROWSER,
   propsFactory,
-} from "@/apps/visagiste/utils";
-import { useComponentProps } from "@/apps/visagiste/composables/component";
-import { useTagProps } from "@/apps/visagiste/composables/tag";
+} from '@/apps/visagiste/utils'
+import { useComponentProps } from '@/apps/visagiste/composables/component'
+import { useTagProps } from '@/apps/visagiste/composables/tag'
 
 type BaseProgressLinearSlots = {
-  default: (props?: any) => void;
-};
+  default: (props?: any) => void
+}
 
 export const useBaseProgressLinearProps = propsFactory(
   {
@@ -81,65 +78,65 @@ export const useBaseProgressLinearProps = propsFactory(
     ...useTagProps(),
     ...useThemeProps(),
   },
-  "BaseProgressLinear",
-);
+  'BaseProgressLinear'
+)
 
 export default defineComponent({
-  name: "BaseProgressLinear",
+  name: 'BaseProgressLinear',
   methods: {
     convertToUnit,
   },
   props: useBaseProgressLinearProps(),
   slots: Object as SlotsType<BaseProgressLinearSlots>,
   emits: {
-    "update:modelValue": (value: number) => true,
+    'update:modelValue': (value: number) => true,
   },
-  setup(props, { slots, emit }) {
-    const progress = useProxiedModel(props, "modelValue");
-    const { isRtl, rtlClasses } = useRtl();
-    const { themeClasses } = provideTheme(props);
-    const { locationStyles } = useLocation(props);
-    const { textColorClasses, textColorStyles } = useTextColor(props, "color");
+  setup(props) {
+    const progress = useProxiedModel(props, 'modelValue')
+    const { isRtl, rtlClasses } = useRtl()
+    const { themeClasses } = provideTheme(props)
+    const { locationStyles } = useLocation(props)
+    const { textColorClasses, textColorStyles } = useTextColor(props, 'color')
     const { backgroundColorClasses, backgroundColorStyles } =
-      useBackgroundColor(computed(() => props.bgColor || props.color));
+      useBackgroundColor(computed(() => props.bgColor || props.color))
     const {
       backgroundColorClasses: bufferColorClasses,
       backgroundColorStyles: bufferColorStyles,
     } = useBackgroundColor(
-      computed(() => props.bufferColor || props.bgColor || props.color),
-    );
+      computed(() => props.bufferColor || props.bgColor || props.color)
+    )
     const {
       backgroundColorClasses: barColorClasses,
       backgroundColorStyles: barColorStyles,
-    } = useBackgroundColor(props, "color");
-    const { roundedClasses } = useRounded(props);
-    const { intersectionRef, isIntersecting } = useIntersectionObserver();
+    } = useBackgroundColor(props, 'color')
+    const { roundedClasses } = useRounded(props)
+    const { intersectionRef, isIntersecting } = useIntersectionObserver()
 
-    const max = computed(() => parseFloat(props.max));
-    const height = computed(() => parseFloat(props.height));
+    const max = computed(() => parseFloat(props.max))
+    const height = computed(() => parseFloat(props.height))
     const normalizedBuffer = computed(() =>
-      clamp((parseFloat(props.bufferValue) / max.value) * 100, 0, 100),
-    );
+      clamp((parseFloat(props.bufferValue) / max.value) * 100, 0, 100)
+    )
     const normalizedValue = computed(() =>
-      clamp((parseFloat(progress.value) / max.value) * 100, 0, 100),
-    );
-    const isReversed = computed(() => isRtl.value !== props.reverse);
+      clamp((parseFloat(progress.value) / max.value) * 100, 0, 100)
+    )
+    const isReversed = computed(() => isRtl.value !== props.reverse)
     const transition = computed(() =>
-      props.indeterminate ? "fade-transition" : "slide-x-transition",
-    );
+      props.indeterminate ? 'fade-transition' : 'slide-x-transition'
+    )
     const isForcedColorsModeActive =
-      IN_BROWSER && window.matchMedia?.("(forced-colors: active)").matches;
+      IN_BROWSER && window.matchMedia?.('(forced-colors: active)').matches
 
     function handleClick(e: MouseEvent) {
-      if (!intersectionRef.value) return;
+      if (!intersectionRef.value) return
 
       const { left, right, width } =
-        intersectionRef.value.getBoundingClientRect();
+        intersectionRef.value.getBoundingClientRect()
       const value = isReversed.value
         ? width - e.clientX + (right - width)
-        : e.clientX - left;
+        : e.clientX - left
 
-      progress.value = Math.round((value / width) * max.value);
+      progress.value = Math.round((value / width) * max.value)
     }
 
     return {
@@ -164,9 +161,9 @@ export default defineComponent({
       normalizedBuffer,
       transition,
       normalizedValue,
-    };
+    }
   },
-});
+})
 </script>
 
 <template>
@@ -215,7 +212,7 @@ export default defineComponent({
           top: `calc(50% - ${convertToUnit(height / 4)})`,
           width: convertToUnit(100 - normalizedBuffer, '%'),
           '--base-progress-linear-stream-to': convertToUnit(
-            height * (isReversed ? 1 : -1),
+            height * (isReversed ? 1 : -1)
           ),
         }"
       />
