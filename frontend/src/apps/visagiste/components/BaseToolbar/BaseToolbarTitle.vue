@@ -2,6 +2,7 @@
 // Composables
 import { useComponentProps } from '@/apps/visagiste/composables/component'
 import { useTagProps } from '@/apps/visagiste/composables/tag'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 // Utilities
 import { computed } from 'vue'
@@ -25,9 +26,12 @@ export type BaseToolbarTitleSlots = {
 export default defineComponent({
   name: 'BaseToolbarTitle',
   props: useBaseToolbarTitleProps(),
-  setup(props, { slots }) {
+  setup(props) {
+    const defaultIsEmpty = useSlotIsEmpty('default')
+    const textIsEmpty = useSlotIsEmpty('text')
+
     const hasText = computed(
-      () => !!(slots.default || slots.text || props.text)
+      () => !!(!defaultIsEmpty.value || !textIsEmpty.value || props.text)
     )
     return {
       hasText,

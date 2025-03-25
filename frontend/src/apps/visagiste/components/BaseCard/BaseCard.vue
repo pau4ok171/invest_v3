@@ -50,6 +50,7 @@ import {
   useVariantProps,
 } from '@/apps/visagiste/composables/variant'
 import { IconValue } from '@/apps/visagiste/composables/icons'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 // Directives
 import { Ripple } from '@/apps/visagiste/directives/ripple'
@@ -130,7 +131,7 @@ export default defineComponent({
   },
   props: useBaseCardProps(),
   slots: Object as SlotsType<BaseCardSlots>,
-  setup(props, { attrs, slots }) {
+  setup(props, { attrs }) {
     const { themeClasses } = provideTheme(props)
     const { borderClasses } = useBorder(props)
     const { colorClasses, colorStyles, variantClasses } = useVariant(props)
@@ -152,20 +153,31 @@ export default defineComponent({
     )
 
     const Tag = computed(() => (isLink.value ? 'a' : props.tag))
-    const hasTitle = computed(() => slots.title || props.title != null)
-    const hasSubtitle = computed(() => slots.subtitle || props.subtitle != null)
+
+    const titleIsEmpty = useSlotIsEmpty('title')
+    const subtitleIsEmpty = useSlotIsEmpty('subtitle')
+    const appendIsEmpty = useSlotIsEmpty('append')
+    const prependIsEmpty = useSlotIsEmpty('prepend')
+    const imageIsEmpty = useSlotIsEmpty('image')
+    const textIsEmpty = useSlotIsEmpty('text')
+
+    const hasTitle = computed(() => !titleIsEmpty.value || props.title != null)
+    const hasSubtitle = computed(
+      () => !subtitleIsEmpty.value || props.subtitle != null
+    )
     const hasHeader = computed(() => hasTitle.value || hasSubtitle.value)
     const hasAppend = computed(
-      () => !!(slots.append || props.appendAvatar || props.appendIcon)
+      () => !!(!appendIsEmpty.value || props.appendAvatar || props.appendIcon)
     )
     const hasPrepend = computed(
-      () => !!(slots.prepend || props.prependAvatar || props.prependIcon)
+      () =>
+        !!(!prependIsEmpty.value || props.prependAvatar || props.prependIcon)
     )
-    const hasImage = computed(() => !!(slots.image || props.image))
+    const hasImage = computed(() => !!(!imageIsEmpty.value || props.image))
     const hasCardItem = computed(
       () => hasHeader.value || hasPrepend.value || hasAppend.value
     )
-    const hasText = computed(() => slots.text || props.text != null)
+    const hasText = computed(() => !textIsEmpty.value || props.text != null)
 
     return {
       themeClasses,

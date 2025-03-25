@@ -110,7 +110,8 @@ export default defineComponent({
     const { themeClasses } = provideTheme(props)
     const { rtlClasses } = useRtl()
 
-    const isExtended = shallowRef(!!(props.extended || slots.extension?.()))
+    const extensionIsEmpty = useSlotIsEmpty('extension')
+    const isExtended = shallowRef((props.extended || !extensionIsEmpty.value))
     const contentHeight = computed(() =>
       parseInt(
         Number(props.height) +

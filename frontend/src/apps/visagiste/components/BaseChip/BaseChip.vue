@@ -40,6 +40,7 @@ import { useSize, useSizeProps } from '@/apps/visagiste/composables/size'
 import { useTagProps } from '@/apps/visagiste/composables/tag'
 import { IconValue } from '@/apps/visagiste/composables/icons'
 import { useLocale } from '@/apps/visagiste/composables'
+import { useSlotIsEmpty } from '@/apps/visagiste/composables/slotIsEmpty'
 
 // Directives
 import { Ripple } from '@/apps/visagiste/directives/ripple'
@@ -147,7 +148,7 @@ export default defineComponent({
     'group:selected': (val: { value: boolean }) => true,
     click: (e: MouseEvent | KeyboardEvent) => true,
   },
-  setup(props, { attrs, emit, slots }) {
+  setup(props, { attrs, emit }) {
     const { t } = useLocale()
     const { borderClasses } = useBorder(props)
     const { colorClasses, colorStyles, variantClasses } = useVariant(props)
@@ -195,17 +196,22 @@ export default defineComponent({
       }
     }
 
+    const appendIsEmpty = useSlotIsEmpty('append')
+    const prependIsEmpty = useSlotIsEmpty('prepend')
+    const closeIsEmpty = useSlotIsEmpty('close')
+    const filterIsEmpty = useSlotIsEmpty('filter')
+
     const Tag = computed(() => (link.isLink.value ? 'a' : props.tag))
     const hasAppendMedia = computed(
       () => !!(props.appendIcon || props.appendAvatar)
     )
-    const hasAppend = computed(() => hasAppendMedia.value || slots.append)
-    const hasClose = computed(() => !!(slots.close || props.closable))
-    const hasFilter = computed(() => !!(slots.filter || props.filter) && group)
+    const hasAppend = computed(() => hasAppendMedia.value || !appendIsEmpty.value)
+    const hasClose = computed(() => !!(!closeIsEmpty.value || props.closable))
+    const hasFilter = computed(() => !!(!filterIsEmpty.value || props.filter) && group)
     const hasPrependMedia = computed(
       () => !!(props.prependIcon || props.prependAvatar)
     )
-    const hasPrepend = computed(() => hasPrependMedia.value || slots.prepend)
+    const hasPrepend = computed(() => hasPrependMedia.value || !prependIsEmpty.value)
     const hasColor = computed(() => !group || group.isSelected.value)
 
     return {
