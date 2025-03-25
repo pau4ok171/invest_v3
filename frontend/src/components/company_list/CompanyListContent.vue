@@ -89,7 +89,7 @@ function humanize(val: number, currencyUnit: string) {
     empty-text=""
   >
     <base-data-table-virtual
-      class="company-list-companies-table"
+      class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
       :headers
       :items

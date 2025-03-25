@@ -78,5 +78,6 @@ onMounted(() => {
     v-model:selected="activeSection"
     @update:selected="changeSection"
     density="compact"
+    bg-color="background"
   />
 </template>

@@ -10,7 +10,7 @@ import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue
 </script>
 
 <template>
-  <base-toolbar class="header">
+  <base-toolbar class="header" color="background">
     <template #prepend>
       <NavLogo />
       <div class="px-1"></div>
