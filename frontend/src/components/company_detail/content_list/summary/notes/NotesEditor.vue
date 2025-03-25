@@ -5,7 +5,6 @@ import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
 import BaseToolbar from '@/apps/visagiste/components/BaseToolbar/BaseToolbar.vue'
 import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
 import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
 import { BaseSlideYTransition } from '@/apps/visagiste/components/transitions'
 import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
 import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
@@ -171,7 +170,7 @@ onBeforeUnmount(() => {
             density="comfortable"
             @click="() => expanded = !expanded"
           />
-          <base-card-title>MISC:SBER</base-card-title>
+          <base-card-text>MISC:SBER</base-card-text>
         </template>
         <template #append>
           <base-button
