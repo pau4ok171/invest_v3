@@ -1,15 +1,9 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
 
 export default defineComponent({
   name: 'AdminImageField',
-  components: {
-    BaseIcon,
-    BaseButton,
-  },
   data() {
     return {
       isDrugOver: false,
@@ -96,7 +90,7 @@ export default defineComponent({
           :disabled="isDisabled"
           @change="uploadFile"
         />
-        <base-icon icon="$iUpload" class="admin-image-field__icon" />
+        <v-icon icon="$iUpload" class="admin-image-field__icon" />
       </template>
 
       <template v-else>
@@ -106,7 +100,7 @@ export default defineComponent({
           alt="logo"
         />
         <div class="admin-image-field__remove-button-wrapper">
-          <base-button
+          <v-btn
             icon="$iDelete"
             variant="flat"
             color="error"

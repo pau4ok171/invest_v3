@@ -2,13 +2,9 @@
 import { defineComponent } from 'vue'
 import type { PropType } from 'vue'
 import type { IFormattedSector, IFormattedSelector } from '@/types/admin.types'
-import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
 
 export default defineComponent({
   name: 'AdminSelectorField',
-  components: {
-    BaseSelect,
-  },
   props: {
     hasSearch: {
       type: Boolean,
@@ -51,7 +47,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <base-select
+  <v-select
     baseColor="#ee4297"
     variant="outlined"
     density="compact"

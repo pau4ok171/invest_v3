@@ -1,13 +1,5 @@
 <script setup lang="ts">
 // Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardActions from '@/apps/visagiste/components/BaseCard/BaseCardActions.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
-import BaseCol from '@/apps/visagiste/components/BaseGrid/BaseCol.vue'
-import BaseContainer from '@/apps/visagiste/components/BaseGrid/BaseContainer.vue'
-import BaseRow from '@/apps/visagiste/components/BaseGrid/BaseRow.vue'
 import CompanyDetailRiskReward from '@/components/company_detail/content_list/summary/overview/CompanyDetailRiskReward.vue'
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 
@@ -38,14 +30,14 @@ function onAboutCompanyClick() {
 </script>
 
 <template>
-  <base-card color="surface-light" class="mb-4">
-    <base-container>
-      <base-row>
-        <base-col cols="7">
-          <base-card-title>{{ company.ticker }} Stock Overview</base-card-title>
-          <base-card-text>{{ company.short_description }}</base-card-text>
-          <base-card-actions>
-            <base-button
+  <v-card color="surface-light" class="mb-4">
+    <v-container>
+      <v-row>
+        <v-col cols="7">
+          <v-card-title>{{ company.ticker }} Stock Overview</v-card-title>
+          <v-card-text>{{ company.short_description }}</v-card-text>
+          <v-card-actions>
+            <v-btn
               prepend-icon="$iInfo"
               text="about the company"
               variant="plain"
@@ -53,17 +45,17 @@ function onAboutCompanyClick() {
               size="small"
               @click="onAboutCompanyClick"
             />
-          </base-card-actions>
-        </base-col>
-        <base-col>
+          </v-card-actions>
+        </v-col>
+        <v-col>
           <SnowflakeChart :chartData="snowflake as number[]" />
-        </base-col>
-      </base-row>
-      <base-row>
-        <base-col cols="12">
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
           <CompanyDetailRiskReward />
-        </base-col>
-      </base-row>
-    </base-container>
-  </base-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>

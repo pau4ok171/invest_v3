@@ -1,1 +1,0 @@
-export { default as BaseMenu, useBaseMenuProps } from './BaseMenu.vue';

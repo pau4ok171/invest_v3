@@ -1,1 +1,0 @@
-export { default as BaseCounter, useBaseCounterProps } from './BaseCounter.vue'

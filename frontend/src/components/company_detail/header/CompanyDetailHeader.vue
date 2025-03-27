@@ -1,17 +1,7 @@
 <script setup lang="ts">
 // Components
 import CompanyDetailHeaderInfoPanel from '@/components/company_detail/header/CompanyDetailHeaderInfoPanel.vue'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseBreadcrumbs from '@/apps/visagiste/components/BaseBreadcrumbs/BaseBreadcrumbs.vue'
-import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
-import BaseCardActions from '@/apps/visagiste/components/BaseCard/BaseCardActions.vue'
-import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
-import BaseDialog from '@/apps/visagiste/components/BaseDialog/BaseDialog.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
 import CompanyDetailPortfolioModalMenu from '@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenu.vue'
-import BaseImage from '@/apps/visagiste/components/BaseImage/BaseImage.vue'
-import BaseAvatar from '@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue'
-import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -62,13 +52,13 @@ function createNote() {
 </script>
 
 <template>
-  <base-card
+  <v-card
     class="px-4 mb-4"
     style="z-index: 1"
     :loading="companyDetailStore.fetchingCompany && 'info'"
   >
     <template #image>
-      <base-image
+      <v-img
         class="opacity-70"
         :src="companyDetailStore.company.sector.main_header"
         cover
@@ -77,33 +67,33 @@ function createNote() {
           v-if="company.sector.main_header"
           class="company-header__image-mask"
         ></div>
-      </base-image>
+      </v-img>
     </template>
-    <base-breadcrumbs :items="breadcrumbs" />
-    <base-card-item>
+    <v-breadcrumbs :items="breadcrumbs" />
+    <v-card-item>
       <template #prepend>
-        <base-skeleton-loader v-if="loading" type="avatar" />
-        <base-avatar v-else :image="company.logo_url" size="60" />
+        <v-skeleton-loader v-if="loading" type="avatar" />
+        <v-avatar v-else :image="company.logo_url" size="60" />
       </template>
       <template #title>
-        <base-skeleton-loader v-if="loading" type="text" width="250" />
+        <v-skeleton-loader v-if="loading" type="text" width="250" />
         <template v-else>{{ company.title }}</template>
       </template>
       <template #subtitle>
-        <base-skeleton-loader v-if="loading" type="text" width="250" />
+        <v-skeleton-loader v-if="loading" type="text" width="250" />
         <template v-else>
           {{
             `${company.market.title}:${company.slug?.toUpperCase()} Stock Report`
           }}
         </template>
       </template>
-    </base-card-item>
-    <base-card-actions class="justify-end">
+    </v-card-item>
+    <v-card-actions class="justify-end">
       <template v-if="loading">
-        <base-skeleton-loader width="250" type="button@3" />
+        <v-skeleton-loader width="250" type="button@3" />
       </template>
       <template v-else>
-        <base-button
+        <v-btn
           v-if="!company.is_watchlisted"
           prepend-icon="$ratingEmpty"
           text="add to watchlist"
@@ -116,7 +106,7 @@ function createNote() {
         />
 
         <template v-else>
-          <base-button
+          <v-btn
             icon="$ratingFull"
             color="info"
             variant="flat"
@@ -128,7 +118,7 @@ function createNote() {
             density="comfortable"
           />
 
-          <base-button
+          <v-btn
             prepend-icon="$iEdit"
             text="add note"
             @click="createNote"
@@ -138,41 +128,41 @@ function createNote() {
           />
         </template>
 
-        <base-button
+        <v-btn
           color="grey"
           :disabled="!authStore.isAuthenticated"
           variant="flat"
           size="small"
         >
-          <base-dialog
+          <v-dialog
             activator="parent"
             :title="`Add ${company.ticker} to Portfolio`"
             max-width="700"
             v-model="portfolioDialog"
           >
-            <base-card title="Portfolio">
+            <v-card title="Portfolio">
               <template #append>
-                <base-button
+                <v-btn
                   icon="$close"
                   density="compact"
                   variant="text"
                   @click="portfolioDialog = false"
                 />
               </template>
-              <base-card-text>
+              <v-card-text>
                 <CompanyDetailPortfolioModalMenu />
-              </base-card-text>
-            </base-card>
-          </base-dialog>
+              </v-card-text>
+            </v-card>
+          </v-dialog>
 
           Add to portfolio
-        </base-button>
+        </v-btn>
       </template>
-    </base-card-actions>
-    <base-card-text>
+    </v-card-actions>
+    <v-card-text>
       <company-detail-header-info-panel />
-    </base-card-text>
-  </base-card>
+    </v-card-text>
+  </v-card>
 </template>
 
 <style scoped>

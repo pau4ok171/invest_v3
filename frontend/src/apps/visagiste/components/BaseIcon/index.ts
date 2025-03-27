@@ -1,1 +1,0 @@
-export { default as BaseIcon, useBaseIconProps } from './BaseIcon.vue';

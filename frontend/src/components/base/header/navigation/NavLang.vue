@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { BaseMenu } from '@/apps/visagiste/components/BaseMenu'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import { BaseList } from '@/apps/visagiste/components/BaseList'
+// Components
+import { BaseFlag } from '@/components/UI/BaseFlag'
+
+// Composables
 import { ref, watch } from 'vue'
-import { useLocale } from '@/apps/visagiste/composables'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseListItem from '@/apps/visagiste/components/BaseList/BaseListItem.vue'
-import { BaseFlag } from '@/apps/visagiste/components/BaseFlag'
-import BaseListItemSubheader from '@/apps/visagiste/components/BaseList/BaseListSubheader.vue'
+import { useLocale } from 'vuetify'
 
 const langs = [
   { id: 'en', title: 'English', iso: 'gb' },
@@ -26,18 +23,19 @@ watch(selected, () => {
 </script>
 
 <template>
-  <base-menu>
+  <v-menu>
     <template #activator="{ props }">
-      <base-button v-bind="props" icon="$iLang" variant="text" rounded="lg" />
+      <v-btn v-bind="props" icon="$iLang" variant="text" rounded="lg" />
     </template>
     <template #default>
-      <base-card>
-        <base-list v-model:selected="selected" slim nav density="compact">
-          <base-list-item-subheader
+      <v-card>
+        <v-list v-model:selected="selected" slim nav density="compact">
+          <v-list-subheader
             class="text-high-emphasis text-uppercase font-weight-black"
-            >Translations</base-list-item-subheader
-          >
-          <base-list-item
+            >
+            Translations
+          </v-list-subheader>
+          <v-list-item
             v-for="item in langs"
             :key="item.id"
             :title="item.title"
@@ -48,9 +46,9 @@ watch(selected, () => {
             <template #prepend>
               <base-flag :code="item.iso" />
             </template>
-          </base-list-item>
-        </base-list>
-      </base-card>
+          </v-list-item>
+        </v-list>
+      </v-card>
     </template>
-  </base-menu>
+  </v-menu>
 </template>

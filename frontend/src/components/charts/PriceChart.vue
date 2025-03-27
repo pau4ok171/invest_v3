@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 import FetchingData from '@/components/charts/FetchingData.vue'
 
 // Composables
@@ -86,7 +85,7 @@ watch(
 
     <template v-else>
       <div role="tablist" class="detail-price-chart__tablist">
-        <base-button
+        <v-btn
           v-for="tab in tablist"
           :key="tab.value"
           :text="tab.value"
@@ -147,10 +146,10 @@ watch(
   fill: rgba(255, 255, 255, 0.3) !important;
 }
 .detail-price-chart .highcharts-button-pressed > text {
-  fill: var(--blue) !important;
+  fill: rgb(var(--v-theme-info)) !important;
 }
 .detail-price-chart .highcharts-button-hover > text {
-  fill: var(--blue) !important;
+  fill: rgb(var(--v-theme-info)) !important;
 }
 .detail-price-chart .price-history-chart-point-box__date {
   fill: rgba(255, 255, 255, 0.7);

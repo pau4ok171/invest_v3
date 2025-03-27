@@ -1,12 +1,6 @@
 <script setup lang="ts">
 // Components
 import AdminModelIndicator from '@/components/admin/models/AdminModelIndicator.vue'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
-import { BaseCardTitle } from '@/apps/visagiste/components/BaseCard'
-import { BaseCardText } from '@/apps/visagiste/components/BaseCard'
-import { BaseCardActions } from '@/apps/visagiste/components/BaseCard'
-import { BaseCard } from '@/apps/visagiste/components/BaseCard'
 
 // Composables
 import { useAdminStore } from '@/store/admin'
@@ -191,7 +185,7 @@ const nameOfModification = computed(() => {
       <div class="admin-model-header__action-list">
         <template v-if="!adminStore.editModeActivated">
           <div class="admin-model-header__item">
-            <base-button
+            <v-btn
               color="info"
               prepend-icon="$iEdit"
               text="edit"
@@ -200,9 +194,9 @@ const nameOfModification = computed(() => {
             />
           </div>
 
-          <base-dialog v-model="dialog" max-width="500">
+          <v-dialog v-model="dialog" max-width="500">
             <template #activator="{ props: activatorProps }">
-              <base-button
+              <v-btn
                 v-bind="activatorProps"
                 color="error"
                 prepend-icon="$iDelete"
@@ -212,34 +206,34 @@ const nameOfModification = computed(() => {
               />
             </template>
             <template #default>
-              <base-card>
-                <base-card-title
+              <v-card>
+                <v-card-title
                   >Deletion
-                  {{ adminStore.companyFormData.companyName }}</base-card-title
+                  {{ adminStore.companyFormData.companyName }}</v-card-title
                 >
-                <base-card-text>
+                <v-card-text>
                   Are you sure to definitely delete the current model?
-                </base-card-text>
-                <base-card-actions>
-                  <base-button
+                </v-card-text>
+                <v-card-actions>
+                  <v-btn
                     text="yes"
                     color="error"
                     variant="text"
                     @click="adminStore.deleteModel()"
                   />
-                  <base-button
+                  <v-btn
                     text="no"
                     variant="text"
                     @click="dialog = false"
                   />
-                </base-card-actions>
-              </base-card>
+                </v-card-actions>
+              </v-card>
             </template>
-          </base-dialog>
+          </v-dialog>
         </template>
         <template v-else>
           <div class="admin-model-header__item">
-            <base-button
+            <v-btn
               prepend-icon="$iReset"
               text="Close Edit Mode Without Saving"
               color="info"

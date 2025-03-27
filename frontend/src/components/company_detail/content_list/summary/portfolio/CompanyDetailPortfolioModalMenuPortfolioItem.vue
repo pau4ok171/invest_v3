@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -38,7 +35,7 @@ const props = defineProps({
           )
         "
       >
-        <base-button
+        <v-btn
           prepend-icon="$iChecked"
           text="added"
           color="success"
@@ -46,7 +43,7 @@ const props = defineProps({
           readonly
         />
 
-        <base-button
+        <v-btn
           icon="$iDelete"
           color="error"
           rounded="lg"
@@ -56,7 +53,7 @@ const props = defineProps({
       </template>
 
       <template v-else>
-        <base-button
+        <v-btn
           prepend-icon="$plus"
           text="add"
           color="info"

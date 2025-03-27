@@ -1,1 +1,0 @@
-export { default as BaseSelect, useBaseSelectProps } from './BaseSelect.vue'

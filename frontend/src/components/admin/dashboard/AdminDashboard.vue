@@ -1,10 +1,4 @@
-<script lang="ts">
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  name: 'AdminDashboard',
-})
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <div class="page-not-found">ADMIN DASHBOARD</div>

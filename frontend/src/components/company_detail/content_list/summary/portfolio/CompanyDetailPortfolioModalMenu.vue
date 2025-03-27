@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 import NewPortfolioInput from '@/components/UI/inputs/NewPortfolioInput.vue'
 import CompanyDetailPortfolioModalMenuPortfolioItem from '@/components/company_detail/content_list/summary/portfolio/CompanyDetailPortfolioModalMenuPortfolioItem.vue'
 
@@ -87,7 +86,7 @@ async function updatePortfolio(action: string, portfolio: Portfolio) {
       @createNewPortfolio="createNewPortfolio"
     />
 
-    <base-button
+    <v-btn
       v-else
       text="new portfolio"
       color="#000"

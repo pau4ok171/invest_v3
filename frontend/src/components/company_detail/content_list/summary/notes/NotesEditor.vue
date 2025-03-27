@@ -1,16 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseToolbar from '@/apps/visagiste/components/BaseToolbar/BaseToolbar.vue'
-import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import { BaseSlideYTransition } from '@/apps/visagiste/components/transitions'
-import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
-import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
-import BaseButtonToggle from '@/apps/visagiste/components/BaseButtonToggle/BaseButtonToggle.vue'
-import BaseProgressCircular from '@/apps/visagiste/components/BaseProgressCircular/BaseProgressCircular.vue'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
@@ -147,8 +135,8 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <BaseDialog
-    :transition="BaseSlideYTransition"
+  <v-dialog
+    transition="slide-y-transition"
     v-model="dialog"
     @update:modelValue="
       (v: boolean) => (companyDetailStore.notesEditorIsActive = v)
@@ -160,26 +148,26 @@ onBeforeUnmount(() => {
     :height="expanded ? 662 : 420"
     persistent
   >
-    <base-card color="surface-light" rounded="lg" class="pa-1">
-      <base-toolbar flat>
+    <v-card color="surface-light" rounded="lg" class="pa-1">
+      <v-toolbar flat>
         <template #prepend>
-          <base-button
+          <v-btn
             :icon="expanded ? '$iReduce' : '$iExpand'"
             rounded="lg"
             variant="text"
             density="comfortable"
             @click="() => expanded = !expanded"
           />
-          <base-card-text>MISC:SBER</base-card-text>
+          <v-card-text>MISC:SBER</v-card-text>
         </template>
         <template #append>
-          <base-button
+          <v-btn
             icon="$iBell"
             rounded="lg"
             variant="text"
             density="comfortable"
           />
-          <base-button
+          <v-btn
             icon="$close"
             rounded="lg"
             variant="text"
@@ -187,58 +175,58 @@ onBeforeUnmount(() => {
             @click="companyDetailStore.notesEditorIsActive = false"
           />
         </template>
-      </base-toolbar>
-      <base-card-text class="py-0">
+      </v-toolbar>
+      <v-card-text class="py-0">
         <div class="notes-editor__content">
           <EditorContent :editor />
         </div>
-      </base-card-text>
-      <base-divider />
-      <base-card-item>
+      </v-card-text>
+      <v-divider />
+      <v-card-item>
         <template #prepend>
-          <base-button-toggle multiple>
-            <base-button
+          <v-btn-toggle multiple>
+            <v-btn
               icon="$iHeader"
               variant="text"
               @click="editor?.chain().focus().toggleHeading({ level: 1 }).run()"
               :active="editor?.isActive('heading', { level: 1 })"
             />
-            <base-button
+            <v-btn
               icon="$iBold"
               variant="text"
               @click="editor?.chain().focus().toggleBold().run()"
               :disabled="!editor?.can().chain().focus().toggleBold().run()"
               :active="editor?.isActive('bold')"
             />
-            <base-button
+            <v-btn
               icon="$menu"
               variant="text"
               @click="editor?.chain().focus().toggleBulletList().run()"
               :active="editor?.isActive('bulletList')"
             />
-          </base-button-toggle>
+          </v-btn-toggle>
         </template>
         <template #append>
           <div class="notes-editor__footer-append">
             {{ saveStatus }}
-            <base-progress-circular
+            <v-progress-circular
               :color="limiterColor"
               :model-value="usedVolume"
             />
-            <base-button
+            <v-btn
               text="Close"
               color="info"
               @click="() => (companyDetailStore.notesEditorIsActive = false)"
             />
           </div>
         </template>
-      </base-card-item>
-    </base-card>
-  </BaseDialog>
+      </v-card-item>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style lang="scss">
-.notes-editor.base-overlay {
+.notes-editor.v-overlay {
   justify-content: flex-end;
   align-items: flex-end;
 

@@ -1,12 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -23,9 +15,9 @@ const totalIdeas = computed(
 
 <template>
   <div class="detail-analyst__modal-menu-container">
-    <base-dialog v-model="dialog" title="Analyst Sources" max-width="700">
+    <v-dialog v-model="dialog" title="Analyst Sources" max-width="700">
       <template #activator="{ props: activatorProps }">
-        <base-button
+        <v-btn
           v-bind="activatorProps"
           class="text-capitalize text-decoration-underline"
           variant="text"
@@ -35,21 +27,21 @@ const totalIdeas = computed(
         />
       </template>
       <template #default>
-        <base-card title="Analysts">
+        <v-card title="Analysts">
           <template #append>
-            <base-button
+            <v-btn
               icon="$close"
               density="compact"
               variant="text"
               @click="dialog = false"
             />
           </template>
-          <base-card-title>
+          <v-card-title>
             {{ companyDetailStore.company.title }} is covered by
             {{ totalIdeas }} analysts.
-          </base-card-title>
-          <base-divider />
-          <base-card-text>
+          </v-card-title>
+          <v-divider />
+          <v-card-text>
             <table class="detail-analysts-modal-menu__table">
               <thead>
                 <tr>
@@ -69,10 +61,10 @@ const totalIdeas = computed(
                 </tr>
               </tbody>
             </table>
-          </base-card-text>
-        </base-card>
+          </v-card-text>
+        </v-card>
       </template>
-    </base-dialog>
+    </v-dialog>
   </div>
 </template>
 

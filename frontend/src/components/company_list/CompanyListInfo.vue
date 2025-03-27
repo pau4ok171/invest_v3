@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyListStore } from '@/store/companyList'
-import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
 
 const companyListStore = useCompanyListStore()
 </script>
@@ -13,7 +12,7 @@ const companyListStore = useCompanyListStore()
     </div>
     <div class="company-list__updated">
       <span>Updated </span>
-      <base-skeleton-loader
+      <v-skeleton-loader
         class="d-inline-block mt-n3 ml-n3"
         v-if="companyListStore.fetching"
         width="120"
@@ -56,13 +55,13 @@ const companyListStore = useCompanyListStore()
   line-height: 1.5;
 }
 .company-list__updated span {
-  color: rgb(var(--base-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface-variant));
   text-transform: uppercase;
 }
 .company-list__description {
   margin-top: 16px;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: rgb(var(--base-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface-variant));
 }
 </style>

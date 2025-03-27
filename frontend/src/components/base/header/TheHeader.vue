@@ -1,30 +1,29 @@
 <script setup lang="ts">
-import { BaseToolbar } from '@/apps/visagiste/components/BaseToolbar'
+// Components
 import NavTheme from '@/components/base/header/navigation/NavTheme.vue'
 import NavMenu from '@/components/base/header/navigation/NavMenu.vue'
 import NavSearch from '@/components/base/header/navigation/NavSearch.vue'
 import NavLang from '@/components/base/header/navigation/NavLang.vue'
 import NavUser from '@/components/base/header/navigation/NavUser.vue'
 import NavLogo from '@/components/base/header/navigation/NavLogo.vue'
-import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
 </script>
 
 <template>
-  <base-toolbar class="header" color="background">
+  <v-toolbar class="header px-md-3" color="background" flat>
     <template #prepend>
-      <NavLogo />
+      <nav-logo />
       <div class="px-1"></div>
-      <NavSearch />
+      <nav-search />
     </template>
     <template #append>
-      <NavMenu />
-      <base-divider vertical inset class="mx-2 my-auto" length="16" />
-      <NavLang />
-      <NavTheme />
-      <base-divider vertical class="mx-2 my-auto" length="16" />
-      <NavUser />
+      <nav-menu />
+      <v-divider vertical inset class="mx-2 my-auto" length="16" />
+      <nav-lang />
+      <nav-theme />
+      <v-divider vertical class="mx-2 my-auto" length="16" />
+      <nav-user />
     </template>
-  </base-toolbar>
+  </v-toolbar>
 </template>
 
 <style lang="scss">

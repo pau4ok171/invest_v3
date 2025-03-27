@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useAuthStore } from '@/store/auth'
@@ -56,7 +53,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
   <div class="detail-sidebar__main">
     <p class="detail-sidebar__title">
       {{ company.title }}
-      <base-button
+      <v-btn
         icon="$iCopy"
         @click="addToClipboard"
         size="small"
@@ -81,7 +78,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
 
     <section class="detail-sidebar__button-list">
       <template v-if="company.is_watchlisted">
-        <base-button
+        <v-btn
           icon="$ratingFull"
           color="blue"
           rounded="lg"
@@ -92,7 +89,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
           @click="companyDetailStore.toggleWatchlisted"
         />
 
-        <base-button
+        <v-btn
           prepend-icon="$iPen"
           text="Add Note"
           color="blue"
@@ -102,7 +99,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
       </template>
 
       <template v-else>
-        <base-button
+        <v-btn
           prepend-icon="$ratingEmpty"
           text="Add to watchlist"
           color="blue"

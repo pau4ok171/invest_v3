@@ -1,27 +1,14 @@
 <script setup lang="ts">
 // Components
-import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
-import BaseButtonToggle from '@/apps/visagiste/components/BaseButtonToggle/BaseButtonToggle.vue'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
-import BaseCardSubtitle from '@/apps/visagiste/components/BaseCard/BaseCardSubtitle.vue'
-import BaseCol from '@/apps/visagiste/components/BaseGrid/BaseCol.vue'
-import BaseDivider from '@/apps/visagiste/components/BaseDivider/BaseDivider.vue'
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
-import BaseList from '@/apps/visagiste/components/BaseList/BaseList.vue'
-import BaseListItem from '@/apps/visagiste/components/BaseList/BaseListItem.vue'
-import BaseRow from '@/apps/visagiste/components/BaseGrid/BaseRow.vue'
-import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
 import DCFChart from '@/components/charts/DCFChart.vue'
 import KeyValuationMetricChart from '@/components/charts/KeyValuationMetricChart.vue'
 import KeyValuationMetricTable from '@/components/company_detail/content_list/valuation/KeyValuationMetricTable.vue'
 import KeyValuationMetricTabList from '@/components/company_detail/content_list/valuation/KeyValuationMetricTabList.vue'
-
 import MultiplierVsPeersChart from '@/components/charts/MultiplierVsPeersChart.vue'
 import HistoricalMultiplierChart from '@/components/charts/HistoricalMultiplierChart.vue'
+import MultiplierVsIndustryChart from '@/components/charts/MultiplierVsIndustryChart.vue'
+import MultiplierVsFairChart from '@/components/charts/MultiplierVsFairChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -32,8 +19,6 @@ import { computed, ref } from 'vue'
 // Types
 import type { Statement } from '@/types/statements'
 import type { DetailCompany } from '@/types/invest'
-import MultiplierVsIndustryChart from '@/components/charts/MultiplierVsIndustryChart.vue'
-import MultiplierVsFairChart from '@/components/charts/MultiplierVsFairChart.vue'
 
 export interface FairValueTab {
   name: string
@@ -124,17 +109,17 @@ const passed = computed(() =>
 </script>
 
 <template>
-  <base-card color="surface" class="mb-4">
-    <base-card-item
-      class="bg-surface-light"
+  <v-card color="surface-light" class="mb-4">
+    <v-card-item
+      class="bg-surface"
       title="1 Valuation"
       :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
     >
-      <base-card color="surface-bright" width="50%" class="mt-4" flat>
-        <base-card-text>Valuation Score {{ passed }}/6</base-card-text>
-        <base-card-item>
-          <base-list bg-color="surface-bright">
-            <base-list-item
+      <v-card color="surface-bright" width="50%" class="mt-4" flat>
+        <v-card-text>Valuation Score {{ passed }}/6</v-card-text>
+        <v-card-item>
+          <v-list bg-color="surface-bright">
+            <v-list-item
               v-for="s in statements"
               :key="s.id"
               density="compact"
@@ -142,7 +127,7 @@ const passed = computed(() =>
               nav
             >
               <template #prepend>
-                <base-icon
+                <v-icon
                   :icon="s.status === 'PASS' ? '$iCheck' : '$iCross'"
                   :color="s.status === 'PASS' ? 'success' : 'error'"
                   class="fill-rule-evenodd"
@@ -150,15 +135,15 @@ const passed = computed(() =>
               </template>
               {{ s.title }}
               <template #append>
-                <base-icon icon="$dropdown" />
+                <v-icon icon="$dropdown" />
               </template>
-            </base-list-item>
-          </base-list>
-        </base-card-item>
-      </base-card>
-    </base-card-item>
+            </v-list-item>
+          </v-list>
+        </v-card-item>
+      </v-card>
+    </v-card-item>
 
-    <base-card-item
+    <v-card-item
       title="1.1 Share Price vs Fair Value"
       :subtitle="`What is the Fair Price of ${company.ticker || 'Company'} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`"
     >
@@ -166,43 +151,43 @@ const passed = computed(() =>
       <company-detail-check name="IsUndervaluedBasedOnDCF" />
       <company-detail-check name="IsHighlyUndervaluedBasedOnDCF" />
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>1.2 Key Valuation Metric</base-card-title>
-    <base-card-subtitle>{{
+    <v-card-title>1.2 Key Valuation Metric</v-card-title>
+    <v-card-subtitle>{{
       `Which metric is best to use when looking at relative valuation for ${company.ticker}?`
-    }}</base-card-subtitle>
-    <base-card-item>
-      <base-row>
-        <base-col cols="6">
+    }}</v-card-subtitle>
+    <v-card-item>
+      <v-row>
+        <v-col cols="6">
           <key-valuation-metric-tab-list
             :tabs="fairValueTabs"
             v-model:selected="fairValueSelected"
           />
-        </base-col>
-        <base-col cols="6">
+        </v-col>
+        <v-col cols="6">
           <key-valuation-metric-chart
             v-if="fairValueSelected.id !== 'others'"
             :tabs="fairValueTabs"
             :selected="fairValueSelected"
           />
           <key-valuation-metric-table v-else />
-        </base-col>
-      </base-row>
+        </v-col>
+      </v-row>
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>{{
+    <v-card-title>{{
       `1.3 ${peersSelected.name} Ratio vs Peers`
-    }}</base-card-title>
-    <base-card-subtitle>{{
+    }}</v-card-title>
+    <v-card-subtitle>{{
       `How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`
-    }}</base-card-subtitle>
-    <base-card-item>
+    }}</v-card-subtitle>
+    <v-card-item>
       <div style="display: flex; justify-self: flex-end">
-        <base-select
+        <v-select
           :items="multiplierTabs"
           v-model="peersSelected"
           return-object
@@ -222,20 +207,20 @@ const passed = computed(() =>
         name="IsGoodValueComparingPriceToEarningsToPeersAverageValue"
       />
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>1.4 Historical Price to Earnings Ratio</base-card-title>
-    <base-card-subtitle style="white-space: normal">
+    <v-card-title>1.4 Historical Price to Earnings Ratio</v-card-title>
+    <v-card-subtitle style="white-space: normal">
       Historical Price to Earnings Ratio compares a stock's price to its
       earnings over time. Higher ratios indicate that investors are willing to
       pay more for the stock.
-    </base-card-subtitle>
+    </v-card-subtitle>
 
-    <base-card-item>
-      <base-row>
-        <base-col>
-          <base-select
+    <v-card-item>
+      <v-row>
+        <v-col>
+          <v-select
             :items="multiplierTabs"
             v-model="historicalSelected"
             return-object
@@ -247,34 +232,34 @@ const passed = computed(() =>
             density="compact"
             hide-details
           />
-        </base-col>
+        </v-col>
 
-        <base-col>
+        <v-col>
           <div class="company-detail-valuation__tabs">
-            <base-button-toggle
+            <v-btn-toggle
               variant="outlined"
               v-model="historicalTabSelected"
             >
-              <base-button text="3M" />
-              <base-button text="1Y" />
-              <base-button text="3Y" />
-              <base-button text="5Y" />
-            </base-button-toggle>
+              <v-btn text="3M" />
+              <v-btn text="1Y" />
+              <v-btn text="3Y" />
+              <v-btn text="5Y" />
+            </v-btn-toggle>
           </div>
-        </base-col>
-      </base-row>
+        </v-col>
+      </v-row>
 
       <historical-multiplier-chart />
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>1.5 Price to Earnings Ratio vs Industry</base-card-title>
-    <base-card-subtitle>{{
+    <v-card-title>1.5 Price to Earnings Ratio vs Industry</v-card-title>
+    <v-card-subtitle>{{
       `How does ${company.ticker}'s PE Ratio compare vs other companies in the European Banks Industry?`
-    }}</base-card-subtitle>
-    <base-card-item>
-      <base-select
+    }}</v-card-subtitle>
+    <v-card-item>
+      <v-select
         :items="multiplierTabs"
         v-model="industrySelected"
         return-object
@@ -293,27 +278,27 @@ const passed = computed(() =>
         name="IsGoodValueComparingPriceToEarningsToIndustry"
       />
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>1.6 Price to Earnings Ratio vs Fair Ratio</base-card-title>
-    <base-card-subtitle style="white-space: normal">{{
+    <v-card-title>1.6 Price to Earnings Ratio vs Fair Ratio</v-card-title>
+    <v-card-subtitle style="white-space: normal">{{
       `What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`
-    }}</base-card-subtitle>
-    <base-card-item>
+    }}</v-card-subtitle>
+    <v-card-item>
       <multiplier-vs-fair-chart />
 
       <company-detail-check name="IsGoodValueComparingRatioToFairRatio" />
 
-      <base-divider class="my-4" />
-    </base-card-item>
+      <v-divider class="my-4" />
+    </v-card-item>
 
-    <base-card-title>1.7 Analyst Price Targets</base-card-title>
-    <base-card-subtitle
+    <v-card-title>1.7 Analyst Price Targets</v-card-title>
+    <v-card-subtitle
       >What is the analyst 12-month forecast and do we have any statistical
-      confidence in the consensus price target?</base-card-subtitle
+      confidence in the consensus price target?</v-card-subtitle
     >
-    <base-card-item>
+    <v-card-item>
       <div
         style="
           height: 500px;
@@ -324,8 +309,8 @@ const passed = computed(() =>
       >
         [ANALYST PRICE TARGETS CHART]
       </div>
-    </base-card-item>
-  </base-card>
+    </v-card-item>
+  </v-card>
 </template>
 
 <style lang="scss">

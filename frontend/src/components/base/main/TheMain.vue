@@ -1,11 +1,11 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="main">
+  <v-main class="main">
     <div class="main__inner">
       <slot />
     </div>
-  </div>
+  </v-main>
 </template>
 
 <style lang="scss">

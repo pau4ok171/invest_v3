@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import BaseList from '@/apps/visagiste/components/BaseList/BaseList.vue'
-
 // Utilities
 import { onMounted, ref } from 'vue'
 
@@ -73,11 +70,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <base-list
+  <v-list
     :items="sections"
     v-model:selected="activeSection"
     @update:selected="changeSection"
     density="compact"
     bg-color="background"
+    active-class="bg-info"
   />
 </template>

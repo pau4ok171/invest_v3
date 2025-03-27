@@ -1,18 +1,10 @@
 <script setup lang="ts">
-// Components
-import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
-import BaseAvatar from '@/apps/visagiste/components/BaseAvatar/BaseAvatar.vue'
-import BaseChip from '@/apps/visagiste/components/BaseChip/BaseChip.vue'
-
 // Composables
 import { useCompanyListStore } from '@/store/companyList'
 
 // Utilities
 import { computed, ref } from 'vue'
 import { useAuthStore } from '@/store/auth'
-import BaseInfiniteScroll from '@/apps/visagiste/components/BaseInfiniteScroll/BaseInfiniteScroll.vue'
-import BaseDataTableVirtual from '@/apps/visagiste/components/BaseDataTable/BaseDataTableVirtual.vue'
-import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
 
 const companyListStore = useCompanyListStore()
 const authStore = useAuthStore()
@@ -84,11 +76,11 @@ function humanize(val: number, currencyUnit: string) {
 </script>
 
 <template>
-  <base-infinite-scroll
+  <v-infinite-scroll
     @load="companyListStore.fetchCompanies"
     empty-text=""
   >
-    <base-data-table-virtual
+    <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
       :headers
@@ -99,7 +91,7 @@ function humanize(val: number, currencyUnit: string) {
     >
       <template #item.companyLogo="{ item }">
         <router-link :to="item.to">
-          <base-avatar :image="item.companyLogo" variant="tonal" />
+          <v-avatar :image="item.companyLogo" variant="tonal" />
         </router-link>
       </template>
       <template #item.companyName="{ item }: { item: CompanyItem }">
@@ -134,7 +126,7 @@ function humanize(val: number, currencyUnit: string) {
       </template>
 
       <template #item.watchlisted="{ item }: { item: CompanyItem }">
-        <base-button
+        <v-btn
           :icon="item.watchlisted ? '$ratingFull' : '$ratingEmpty'"
           variant="text"
           density="compact"
@@ -144,32 +136,32 @@ function humanize(val: number, currencyUnit: string) {
       </template>
 
       <template #item.sector="{ item }: { item: CompanyItem }">
-        <base-chip :text="item.sector" label color="blue" />
+        <v-chip :text="item.sector" label color="blue" />
       </template>
 
       <template #body.append v-if="companyListStore.fetching">
         <tr v-for="i in 20" :key="i">
-          <td><base-skeleton-loader loading type="avatar" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="text" /></td>
-          <td><base-skeleton-loader loading type="chip" /></td>
-          <td><base-skeleton-loader loading type="button" /></td>
+          <td><v-skeleton-loader loading type="avatar" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="text" /></td>
+          <td><v-skeleton-loader loading type="chip" /></td>
+          <td><v-skeleton-loader loading type="button" /></td>
         </tr>
       </template>
-    </base-data-table-virtual>
-  </base-infinite-scroll>
+    </v-data-table-virtual>
+  </v-infinite-scroll>
 </template>
 
 <style lang="scss">
-.company-list-companies-table.base-table {
-  > .base-table__wrapper {
+.company-list-companies-table.v-table {
+  > .v-table__wrapper {
     > table {
       > tbody {
         > tr {
