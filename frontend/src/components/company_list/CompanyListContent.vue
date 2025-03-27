@@ -101,10 +101,10 @@ function humanize(val: number = 0, currencyUnit: string = '') {
         <router-link :to="item.to">{{ item.lastPrice }}</router-link>
       </template>
       <template #item.return7D="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to">{{ item.return7D }}</router-link>
+        <router-link :to="item.to" :class="!item.return7D.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return7D }}</router-link>
       </template>
       <template #item.return1Y="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to">{{ item.return1Y }}</router-link>
+        <router-link :to="item.to" :class="!item.return1Y.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return1Y }}</router-link>
       </template>
       <template #item.marketCap="{ item }: { item: CompanyItem }">
         <router-link :to="item.to">{{ item.marketCap }}</router-link>
