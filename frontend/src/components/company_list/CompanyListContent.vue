@@ -76,10 +76,7 @@ function humanize(val: number, currencyUnit: string) {
 </script>
 
 <template>
-  <v-infinite-scroll
-    @load="companyListStore.fetchCompanies"
-    empty-text=""
-  >
+  <v-infinite-scroll @load="companyListStore.fetchCompanies" empty-text="">
     <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
@@ -176,6 +173,8 @@ function humanize(val: number, currencyUnit: string) {
               padding: 0 16px;
               align-items: start;
               justify-content: center;
+              text-decoration: none;
+              color: inherit;
             }
           }
         }
