@@ -46,7 +46,7 @@ const items = computed<CompanyItem[]>(() =>
   companyListStore.companies.map((c) => ({
     companyLogo: c.logo_url,
     companyName: c.title,
-    lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price.toFixed(2)}`,
+    lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
     return7D: `${c.return_1y.toFixed(2)}%`,
     return1Y: `${c.return_7d.toFixed(2)}%`,
     marketCap: humanize(
@@ -62,10 +62,10 @@ const items = computed<CompanyItem[]>(() =>
     to: c.absolute_url,
     uid: c.uid,
     watchlisted: c.is_watchlisted,
-  }))
+  })) as CompanyItem[]
 )
 
-function humanize(val: number, currencyUnit: string) {
+function humanize(val: number = 0, currencyUnit: string = '') {
   if (val === 0) return 'n/a'
   for (const unit of ['', 't', 'M', 'B', 'T']) {
     if (Math.abs(val) < 1000) return currencyUnit + val.toFixed(2) + unit
@@ -80,8 +80,8 @@ function humanize(val: number, currencyUnit: string) {
     <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
-      :headers
-      :items
+      :headers="headers"
+      :items="items"
       hover
       :hide-no-data="companyListStore.fetching"
       hideDefaultFooter
