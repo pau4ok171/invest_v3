@@ -76,7 +76,7 @@ function humanize(val: number = 0, currencyUnit: string = '') {
 </script>
 
 <template>
-  <v-infinite-scroll @load="companyListStore.fetchCompanies" empty-text="">
+  <v-infinite-scroll @load="companyListStore.fetchCompanies" empty-text="" class="overflow-y-hidden">
     <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
