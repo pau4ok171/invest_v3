@@ -52,6 +52,12 @@ function createNote() {
 </script>
 
 <template>
+  <v-defaults-provider :defaults="{
+    VSkeletonLoader: {
+      color: 'surface'
+    },
+  }">
+
   <v-card
     class="px-4 mb-4"
     style="z-index: 1"
@@ -59,6 +65,7 @@ function createNote() {
   >
     <template #image>
       <v-img
+        v-if="!companyDetailStore.fetchingCompany"
         class="opacity-70"
         :src="companyDetailStore.company.sector.main_header"
         cover
@@ -163,6 +170,7 @@ function createNote() {
       <company-detail-header-info-panel />
     </v-card-text>
   </v-card>
+  </v-defaults-provider>
 </template>
 
 <style scoped>

@@ -76,6 +76,5 @@ onMounted(() => {
     @update:selected="changeSection"
     density="compact"
     bg-color="background"
-    active-class="bg-info"
   />
 </template>
