@@ -6,7 +6,7 @@ import CompanyDetailSidebarFooter from '@/components/company_detail/sidebar/Comp
 
 // Utilities
 import { onMounted, onUnmounted, ref } from 'vue'
-import { debounce } from '@/apps/visagiste/utils'
+import { debounce } from '@/util/helpers'
 
 const headerRef = ref<InstanceType<typeof CompanyDetailSidebarHeader>>()
 const bodyRef = ref<InstanceType<typeof CompanyDetailSidebarMain>>()

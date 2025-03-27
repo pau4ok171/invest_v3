@@ -31,12 +31,10 @@ import {
   isBaseValidators,
   isKeyOfPreviousFormattedDetailCompany,
 } from '@/types/admin.types'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
 export default defineComponent({
   name: 'AdminModelForm',
   components: {
-    BaseButton,
     AdminField,
   },
   setup: () => {
@@ -241,7 +239,7 @@ export default defineComponent({
 <template>
   <div class="admin-model__admin-model-form">
     <div class="admin-model-form__reset-button-wrapper">
-      <base-button
+      <v-btn
         icon="$iReset"
         color="info"
         rounded="lg"
@@ -280,7 +278,7 @@ export default defineComponent({
       "
     />
 
-    <base-button
+    <v-btn
       text="save"
       color="info"
       rounded="lg"

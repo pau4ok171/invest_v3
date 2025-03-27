@@ -1,1 +1,0 @@
-export { default as BaseBadge, useBaseBadgeProps } from './BaseBadge.vue'

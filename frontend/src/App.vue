@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // Components
-import { BaseApp } from '@/apps/visagiste/components/BaseApp'
 import PageNotFoundView from "@/views/PageNotFoundView.vue";
 
 // Composables
@@ -26,10 +25,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <base-app>
-    <AppLayout>
+  <v-app>
+    <app-layout>
       <RouterView v-if="!pageStore.notFound" />
-      <PageNotFoundView v-else/>
-    </AppLayout>
-  </base-app>
+      <page-not-found-view v-else/>
+    </app-layout>
+  </v-app>
 </template>

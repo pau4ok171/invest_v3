@@ -1,1 +1,0 @@
-export { default as BaseDivider, useBaseDividerProps } from './BaseDivider.vue'

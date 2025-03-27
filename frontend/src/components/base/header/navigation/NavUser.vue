@@ -2,15 +2,6 @@
 // Components
 import AuthModalMenu from '@/components/base/auth/AuthModalMenu.vue'
 
-// Base Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import { BaseMenu } from '@/apps/visagiste/components/BaseMenu'
-import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
-import { BaseCard } from '@/apps/visagiste/components/BaseCard/'
-import { BaseList } from '@/apps/visagiste/components/BaseList'
-import { BaseListItem } from '@/apps/visagiste/components/BaseList'
-import { BaseDivider } from '@/apps/visagiste/components/BaseDivider'
-
 // Composables
 import { useAuthStore } from '@/store/auth'
 
@@ -36,54 +27,59 @@ function onLogout() {
   localStorage.removeItem('userid')
 
   authStore.token = ''
-  authStore.userInfo = {}
+  authStore.userInfo = {
+    first_name: '',
+    is_anonymous: true,
+    is_staff: false,
+    last_name: '',
+    stage_in_days: 0
+  }
 }
 </script>
 
 <template>
   <div class="nav-user__wrapper">
     <template v-if="authStore.isAuthenticated">
-      <base-menu>
+      <v-menu>
         <template #activator="{ props }">
-          <base-button
+          <v-btn
             v-bind="props"
             icon="$iUser"
             variant="text"
-            size="large"
             rounded="lg"
           />
         </template>
         <template #default>
-          <base-card>
-            <base-list>
-              <base-list-item
+          <v-card>
+            <v-list>
+              <v-list-item
                 v-if="authStore.userInfo.is_staff"
                 :to="{ name: 'admin' }"
                 title="Admin Panel"
               />
-              <base-list-item
+              <v-list-item
                 v-for="item in items"
                 :key="item.id"
                 :title="item.title"
                 :to="item.to"
               />
-              <base-divider />
-              <base-list-item @click="onLogout" title="Logout" />
-            </base-list>
-          </base-card>
+              <v-divider />
+              <v-list-item @click="onLogout" title="Logout" />
+            </v-list>
+          </v-card>
         </template>
-      </base-menu>
+      </v-menu>
     </template>
 
     <template v-else>
-      <base-dialog v-model="dialog" max-width="700">
+      <v-dialog v-model="dialog" max-width="700">
         <template #activator="{ props: activatorProps }">
-          <base-button text="login" color="blue" v-bind="activatorProps" />
+          <v-btn text="login" color="info" v-bind="activatorProps" />
         </template>
         <template #default>
-          <base-card title="Finargo">
+          <v-card title="Finargo">
             <template #append>
-              <base-button
+              <v-btn
                 icon="$close"
                 density="compact"
                 variant="text"
@@ -91,9 +87,9 @@ function onLogout() {
               />
             </template>
             <AuthModalMenu />
-          </base-card>
+          </v-card>
         </template>
-      </base-dialog>
+      </v-dialog>
     </template>
   </div>
 </template>

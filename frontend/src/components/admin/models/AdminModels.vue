@@ -3,12 +3,10 @@ import { defineComponent } from 'vue'
 import AdminModelsCompanyItem from '@/components/admin/models/AdminModelsCompanyItem.vue'
 import axios from 'axios'
 import type { IAdminCompany } from '@/types/admin.types'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
 export default defineComponent({
   name: 'AdminModels',
   components: {
-    BaseButton,
     AdminModelsCompanyItem,
   },
   data() {
@@ -36,7 +34,7 @@ export default defineComponent({
   <div class="admin-models">
     <div class="admin-models__header">
       <h1>Select Company to change</h1>
-      <base-button
+      <v-btn
         text="add company"
         color="info"
         rounded="lg"

@@ -1,0 +1,8 @@
+@forward 'vuetify/settings'
+with (
+  $layers: true,
+);
+
+@layer vuetify {
+  @layer reset, transitions, base, components, overrides, colors, theme, utilities;
+};

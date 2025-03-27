@@ -3,8 +3,6 @@
 import SmallPriceChart from '@/components/charts/SmallPriceChart.vue'
 import CompanyDetailHeaderInfoItem from '@/components/company_detail/header/CompanyDetailHeaderInfoItem.vue'
 import CompanyDetailHeaderAnalystsButtonModalMenuContainer from '@/components/company_detail/header/CompanyDetailHeaderAnalystModalMenuContainer.vue'
-import BaseSkeletonLoader from '@/apps/visagiste/components/BaseSkeletonLoader/BaseSkeletonLoader.vue'
-import BaseProgressCircular from '@/apps/visagiste/components/BaseProgressCircular/BaseProgressCircular.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -34,7 +32,7 @@ function humanizeFinancial(
 
 <template>
   <div class="detail-header__info-panel" v-if="company.price_data">
-    <base-skeleton-loader
+    <v-skeleton-loader
       v-if="loading"
       type="text"
       width="100"
@@ -50,7 +48,7 @@ function humanizeFinancial(
       </template>
     </CompanyDetailHeaderInfoItem>
 
-    <base-skeleton-loader
+    <v-skeleton-loader
       v-if="loading"
       type="text"
       width="100"
@@ -70,7 +68,7 @@ function humanizeFinancial(
       </template>
     </CompanyDetailHeaderInfoItem>
 
-    <base-skeleton-loader
+    <v-skeleton-loader
       v-if="loading"
       type="text"
       width="100"
@@ -91,7 +89,7 @@ function humanizeFinancial(
       </template>
     </CompanyDetailHeaderInfoItem>
 
-    <base-skeleton-loader
+    <v-skeleton-loader
       v-if="loading"
       type="text"
       width="100"
@@ -118,7 +116,7 @@ function humanizeFinancial(
         class="w-100 d-flex justify-center align-center bg-surface"
         style="height: 44px"
       >
-        <base-progress-circular indeterminate />
+        <v-progress-circular indeterminate />
       </div>
       <SmallPriceChart v-else />
     </CompanyDetailHeaderInfoItem>
@@ -126,7 +124,7 @@ function humanizeFinancial(
     <CompanyDetailHeaderInfoItem nowrap small key="info-updated">
       <template v-slot:title><p>Updated</p></template>
       <template v-slot:value>
-        <base-skeleton-loader v-if="loading" type="text" />
+        <v-skeleton-loader v-if="loading" type="text" />
         <span v-else>
           <template v-if="company.reports.length">{{
             company.reports[0]?.updated
@@ -139,7 +137,7 @@ function humanizeFinancial(
     <CompanyDetailHeaderInfoItem nowrap on-row small key="info-data">
       <template v-slot:title><p>Data</p></template>
       <template v-slot:value>
-        <base-skeleton-loader v-if="loading" type="text" width="150" />
+        <v-skeleton-loader v-if="loading" type="text" width="150" />
         <span v-else class="detail-header__info-panel-total-ideas d-flex">
           <span>Financials</span>
           <template v-if="totalIdeas > 0">
@@ -162,9 +160,9 @@ function humanizeFinancial(
   align-items: flex-end;
 }
 .detail-header__error-color {
-  color: rgb(var(--base-theme-success));
+  color: rgb(var(--v-theme-success));
 }
 .detail-header__success-color {
-  color: rgb(var(--base-theme-error));
+  color: rgb(var(--v-theme-error));
 }
 </style>

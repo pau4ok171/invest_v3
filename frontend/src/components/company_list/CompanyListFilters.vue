@@ -1,12 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import { BaseDialog } from '@/apps/visagiste/components/BaseDialog'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseSelect from '@/apps/visagiste/components/BaseSelect/BaseSelect.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseToolbar from '@/apps/visagiste/components/BaseToolbar/BaseToolbar.vue'
-
 // Composables
 import { useCompanyListStore } from '@/store/companyList'
 
@@ -34,7 +26,7 @@ watch(sector, async (newVal) => {
 <template>
   <section class="company-list__filters">
     <div class="company-list__basic-filters">
-      <base-select
+      <v-select
         v-model="country"
         :items="companyListStore.filters.country"
         :loading="companyListStore.fetching"
@@ -47,7 +39,7 @@ watch(sector, async (newVal) => {
         hide-details
       />
 
-      <base-select
+      <v-select
         v-model="sector"
         :items="companyListStore.filters.sector"
         :loading="companyListStore.fetching"
@@ -60,9 +52,9 @@ watch(sector, async (newVal) => {
       />
     </div>
 
-    <base-dialog v-model="dialog" max-width="500">
+    <v-dialog v-model="dialog" max-width="500">
       <template #activator="{ props: activatorProps }">
-        <base-button
+        <v-btn
           v-bind="activatorProps"
           text="advanced filters"
           append-icon="$iFilter"
@@ -71,14 +63,14 @@ watch(sector, async (newVal) => {
       </template>
 
       <template #default>
-        <base-card>
-          <base-toolbar title="Advanced filters">
-            <base-button variant="text" icon="$close" @click="dialog = false" />
-          </base-toolbar>
-          <base-card-text>TO BE ADDED</base-card-text>
-        </base-card>
+        <v-card>
+          <v-toolbar title="Advanced filters">
+            <v-btn variant="text" icon="$close" @click="dialog = false" />
+          </v-toolbar>
+          <v-card-text>TO BE ADDED</v-card-text>
+        </v-card>
       </template>
-    </base-dialog>
+    </v-dialog>
   </section>
 </template>
 

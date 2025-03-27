@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -43,7 +40,7 @@ const company = computed(() => store.company)
     </div>
     <div class="detail-key-valuation-metric__tab-desc">
       <div class="detail-key-valuation-metric__tab-icon">
-        <base-icon icon="$iSolidStar" color="info" />
+        <v-icon icon="$iSolidStar" color="info" />
       </div>
 
       <div class="detail-key-valuation-metric__text">

@@ -1,14 +1,7 @@
 <script setup lang="ts">
 // Components
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
-import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
 import PriceChart from '@/components/charts/PriceChart.vue'
-import BaseRow from '@/apps/visagiste/components/BaseGrid/BaseRow.vue'
-import BaseCol from '@/apps/visagiste/components/BaseGrid/BaseCol.vue'
 import CompanyDetailNewsItem from '@/components/company_detail/content_list/summary/news/CompanyDetailNewsItem.vue'
-import BaseCardActions from '@/apps/visagiste/components/BaseCard/BaseCardActions.vue'
-import BaseButton from '@/apps/visagiste/components/BaseButton/BaseButton.vue'
 import CompanyDetailShareholderReturnsTable
   from "@/components/company_detail/content_list/summary/shareholder_returns/CompanyDetailShareholderReturnsTable.vue";
 import CompanyDetailStatement from "@/components/company_detail/base/CompanyDetailStatement.vue";
@@ -27,50 +20,50 @@ const company = computed(() => companyDetailStore.company)
 </script>
 
 <template>
-  <base-card color="surface-light" class="mb-4">
-    <base-card-title>History Chart & Performance</base-card-title>
-    <base-card-item><PriceChart /></base-card-item>
+  <v-card color="surface-light" class="mb-4">
+    <v-card-title>History Chart & Performance</v-card-title>
+    <v-card-item><price-chart /></v-card-item>
 
-    <base-card-title>Recent News & Updates</base-card-title>
-    <base-card-item>
-        <base-row>
-          <base-col
+    <v-card-title>Recent News & Updates</v-card-title>
+    <v-card-item>
+        <v-row>
+          <v-col
             v-for="item in company.company_news.slice(0, 6)"
             :key="item.id"
             cols="6"
           >
             <company-detail-news-item :item />
-          </base-col>
-        </base-row>
+          </v-col>
+        </v-row>
 
-        <base-card-actions>
+        <v-card-actions>
           <!-- TODO: Create Dialog for news on CompanyDetailPriceHistoryPerformance -->
-          <base-button color="info" block variant="tonal">
+          <v-btn color="info" block variant="tonal">
             see more updates
-          </base-button>
-        </base-card-actions>
-    </base-card-item>
+          </v-btn>
+        </v-card-actions>
+    </v-card-item>
 
-    <base-card-item>
-      <base-row>
-        <base-col cols="6">
-          <base-card-title>Shareholder Returns</base-card-title>
+    <v-card-item>
+      <v-row>
+        <v-col cols="6">
+          <v-card-title>Shareholder Returns</v-card-title>
           <company-detail-shareholder-returns-table />
-          <base-button color="info" block variant="tonal" >
+          <v-btn color="info" block variant="tonal" >
             <company-detail-shareholder-returns-dialog/>
 
             See full shareholder returns
-          </base-button>
+          </v-btn>
           <company-detail-statement name="Is1YearReturnInLineOrAboveIndustry" />
           <company-detail-statement name="Is1YearReturnInLineOrAboveMarket" />
-        </base-col>
-        <base-col cols="6">
-          <base-card-title>Price Volatility</base-card-title>
+        </v-col>
+        <v-col cols="6">
+          <v-card-title>Price Volatility</v-card-title>
           <price-volatility-chart/>
           <company-detail-statement name="HasPriceStability" />
           <company-detail-statement name="HasReturnsVolatilityImprovedOverPastYear" />
-        </base-col>
-      </base-row>
-    </base-card-item>
-  </base-card>
+        </v-col>
+      </v-row>
+    </v-card-item>
+  </v-card>
 </template>

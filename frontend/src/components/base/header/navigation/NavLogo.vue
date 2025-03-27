@@ -14,6 +14,6 @@
   font-size: 30px;
   font-weight: 900;
   user-select: none;
-  color: rgb(var(--base-theme-on-background));
+  color: rgb(var(--v-theme-on-background));
 }
 </style>

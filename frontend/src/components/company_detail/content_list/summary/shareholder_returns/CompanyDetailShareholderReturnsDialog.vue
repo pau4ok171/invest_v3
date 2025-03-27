@@ -1,9 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -12,7 +7,6 @@ import { computed, shallowRef } from 'vue'
 
 // Types
 import type { DetailCompany } from '@/types/invest'
-import BaseDialog from '@/apps/visagiste/components/BaseDialog/BaseDialog.vue'
 
 export interface Period {
   name: string
@@ -39,10 +33,10 @@ function humanize(item: Record<any, any>, p: Period) {
 </script>
 
 <template>
-  <base-dialog activator="parent" v-model="dialog" max-width="750">
-    <base-card>
+  <v-dialog activator="parent" v-model="dialog" max-width="750">
+    <v-card>
       <template #append>
-        <base-button
+        <v-btn
           icon="$close"
           density="compact"
           variant="text"
@@ -50,7 +44,7 @@ function humanize(item: Record<any, any>, p: Period) {
         />
       </template>
 
-      <base-card-text>
+      <v-card-text>
         <table class="detail-analysts-modal-menu__table">
           <thead>
             <tr>
@@ -71,9 +65,9 @@ function humanize(item: Record<any, any>, p: Period) {
             </tr>
           </tbody>
         </table>
-      </base-card-text>
-    </base-card>
-  </base-dialog>
+      </v-card-text>
+    </v-card>
+  </v-dialog>
 </template>
 
 <style scoped>

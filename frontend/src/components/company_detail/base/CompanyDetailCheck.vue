@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -28,7 +25,7 @@ const check = computed<Statement | undefined>(
 
 <template>
   <blockquote class="company-detail-check">
-    <base-icon
+    <v-icon
       class="fill-rule-evenodd"
       :icon="check?.status === 'PASS' ? '$iCheck' : '$iCross'"
       :color="check?.status === 'PASS' ? 'success' : 'error'"

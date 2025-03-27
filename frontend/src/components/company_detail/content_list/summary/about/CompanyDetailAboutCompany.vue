@@ -1,14 +1,4 @@
 <script setup lang="ts">
-// Components
-import BaseCard from '@/apps/visagiste/components/BaseCard/BaseCard.vue'
-import BaseCardTitle from '@/apps/visagiste/components/BaseCard/BaseCardTitle.vue'
-import BaseCardText from '@/apps/visagiste/components/BaseCard/BaseCardText.vue'
-import BaseCardActions from '@/apps/visagiste/components/BaseCard/BaseCardActions.vue'
-import BaseCardItem from '@/apps/visagiste/components/BaseCard/BaseCardItem.vue'
-import BaseTable from '@/apps/visagiste/components/BaseTable/BaseTable.vue'
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
@@ -32,11 +22,11 @@ function humanize(val: number | string) {
 </script>
 
 <template>
-  <base-card color="surface-light" class="mb-4">
-    <base-card-title>About the Company</base-card-title>
+  <v-card id="about-company-section" color="surface-light" class="mb-4">
+    <v-card-title>About the Company</v-card-title>
 
-    <base-card-item>
-      <base-table class="company-detail__about-company-table">
+    <v-card-item>
+      <v-table class="company-detail__about-company-table">
         <thead>
           <tr>
             <th>Founded</th>
@@ -66,16 +56,16 @@ function humanize(val: number | string) {
                 rel="noopener noreferrer nofollow"
               >
                 {{ company.website }}
-                <base-icon icon="$iExtraLink" />
+                <v-icon icon="$iExtraLink" />
               </a>
             </td>
             <td v-else>n/a</td>
           </tr>
         </tbody>
-      </base-table>
-    </base-card-item>
+      </v-table>
+    </v-card-item>
 
-    <base-card-text>
+    <v-card-text>
       <div
         :class="[
           'company-detail-about-company__description',
@@ -84,9 +74,9 @@ function humanize(val: number | string) {
       >
         {{ description }}
       </div>
-    </base-card-text>
-    <base-card-actions>
-      <base-button
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
         v-if="!!description"
         :text="reduced ? 'Show More' : 'Show Less'"
         color="info"
@@ -94,8 +84,8 @@ function humanize(val: number | string) {
         size="small"
         @click="reduced = !reduced"
       />
-    </base-card-actions>
-  </base-card>
+    </v-card-actions>
+  </v-card>
 </template>
 
 <style lang="scss" scoped>
@@ -114,7 +104,7 @@ function humanize(val: number | string) {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #1b222d 50%);
+  background: linear-gradient(to bottom, rgb(0, 0, 0, 0), rgb(var(--v-theme-surface-light)) 50%);
   width: 100%;
   height: 60px;
   opacity: 1;

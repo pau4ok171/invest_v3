@@ -19,7 +19,7 @@ import CompanyListOptions from '@/components/company_list/CompanyListOptions.vue
 .company-list__header {
   padding-bottom: 8px;
   border-bottom: 1px solid
-    rgba(var(--base-theme-on-background), var(--base-border-opacity));
+    rgba(var(--v-theme-on-background), var(--v-border-opacity));
   display: grid;
 }
 </style>

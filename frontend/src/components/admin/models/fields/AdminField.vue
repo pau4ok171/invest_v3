@@ -1,6 +1,5 @@
 <script lang="ts">
 // Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 import AdminTextField from '@/components/admin/models/fields/AdminTextField.vue'
 import AdminCharField from '@/components/admin/models/fields/AdminCharField.vue'
 import AdminYearField from '@/components/admin/models/fields/AdminYearField.vue'
@@ -20,7 +19,6 @@ import type { AdminModelValue, IFormattedSector } from '@/types/admin.types'
 export default defineComponent({
   name: 'AdminField',
   components: {
-    BaseButton,
     AdminImageField,
     AdminSelectorField,
     AdminCheckBoxField,
@@ -99,7 +97,7 @@ export default defineComponent({
   <div class="admin-field__fieldset">
     <div class="admin-field__field-wrapper">
       <div class="admin-field__reset-button-wrapper">
-        <base-button
+        <v-btn
           icon="$iReset"
           size="x-small"
           density="comfortable"

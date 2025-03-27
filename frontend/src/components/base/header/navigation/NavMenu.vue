@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { RoutesHeaderEnum } from '@/router/routes.types'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 </script>
 
 <template>
   <div class="navigation__nav-menu">
-    <RouterLink
+    <v-btn
       v-for="routeName in RoutesHeaderEnum"
       :key="routeName"
+      class="text-capitalize px-2"
+      :text="routeName"
       :to="{ name: routeName }"
-    >
-      <base-button
-        :text="routeName"
-        variant="text"
-        style="text-transform: capitalize; padding-inline: 8px"
-      />
-    </RouterLink>
+      variant="text"
+    />
   </div>
 </template>
 

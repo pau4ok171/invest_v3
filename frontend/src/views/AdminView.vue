@@ -8,7 +8,6 @@ import AdminModel from '@/components/admin/models/AdminModel.vue'
 import { previousComponentList } from '@/components/admin/models/components'
 import { useAdminStore } from '@/store/admin'
 import { AdminComponentName } from '@/types/admin.types'
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
 
 const adminStore = useAdminStore()
 
@@ -72,7 +71,7 @@ watch(WatchActiveComponent, () => {
     </div>
     <div class="admin-content">
       <div class="admin-content__back">
-        <base-button
+        <v-btn
           prepend-icon="$prev"
           text=""
           color="info"

@@ -21,7 +21,7 @@ import 'highcharts/modules/stock'
 import 'highcharts/highcharts-more'
 import 'highcharts/modules/solid-gauge'
 import { defaultChartOpts } from '@/components/charts/DefaultChartOpts'
-import visagiste from '@/plugins/visagiste'
+import { vuetify } from '@/vuetify'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -63,5 +63,5 @@ app
       followCursor: 'horizontal',
     },
   })
-  .use(visagiste)
+  .use(vuetify)
   .mount('#app')

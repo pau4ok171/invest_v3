@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import { BaseButton } from '@/apps/visagiste/components/BaseButton'
-
 // Composables
 import { useCompanyListStore } from '@/store/companyList'
 
@@ -15,9 +12,9 @@ const companyListStore = useCompanyListStore()
       <p>{{ companyListStore.totalCompanyLength }} companies</p>
     </div>
     <div class="company-list__view-modes">
-      <base-button icon="$iTableMode" variant="text" disabled />
+      <v-btn icon="$iTableMode" variant="text" disabled />
 
-      <base-button icon="$iTileMode" variant="text" />
+      <v-btn icon="$iTileMode" variant="text" />
     </div>
   </section>
 </template>

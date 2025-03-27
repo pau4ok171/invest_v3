@@ -1,7 +1,4 @@
 <script setup lang="ts">
-// Components
-import BaseIcon from '@/apps/visagiste/components/BaseIcon/BaseIcon.vue'
-
 const props = defineProps({
   question: String,
   response: String,
@@ -13,7 +10,7 @@ const props = defineProps({
     <p class="company-detail-inducement__question">{{ props.question }}</p>
     <a href="#" class="company-detail-inducement__answer">
       {{ props.response }}
-      <base-icon icon="$iArrowDown" color="info" />
+      <v-icon icon="$iArrowDown" color="info" />
     </a>
   </div>
 </template>
