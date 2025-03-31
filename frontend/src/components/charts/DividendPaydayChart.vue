@@ -68,7 +68,7 @@ function humanize(date: DateTime) {
 
 <template>
   <div class="dividend-payday-chart__wrapper">
-    <DataNotAvailable v-if="!available" chart-name="Dividend Payday Chart" />
+    <data-not-available v-if="!available" chart-name="Dividend Payday Chart" />
     <div v-else class="dividend-payday-chart">
       <svg height="168" width="100%" shape-rendering="crispEdges">
         <svg
