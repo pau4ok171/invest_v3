@@ -111,7 +111,7 @@ const passed = computed(() =>
 <template>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
-      class="bg-surface"
+      class="bg-surface pt-8 px-8"
       title="1 Valuation"
       :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
     >
@@ -146,6 +146,7 @@ const passed = computed(() =>
     <v-card-item
       title="1.1 Share Price vs Fair Value"
       :subtitle="`What is the Fair Price of ${company.ticker || 'Company'} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`"
+      class="pt-8 px-8"
     >
       <d-c-f-chart />
       <company-detail-check name="IsUndervaluedBasedOnDCF" />
@@ -188,6 +189,7 @@ const passed = computed(() =>
     <v-card-item>
       <div style="display: flex; justify-self: flex-end">
         <v-select
+          class="mb-4"
           :items="multiplierTabs"
           v-model="peersSelected"
           return-object
@@ -260,6 +262,7 @@ const passed = computed(() =>
     }}</v-card-subtitle>
     <v-card-item>
       <v-select
+        class="mb-4"
         :items="multiplierTabs"
         v-model="industrySelected"
         return-object
