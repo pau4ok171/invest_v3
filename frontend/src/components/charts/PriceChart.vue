@@ -81,27 +81,31 @@ watch(
 
 <template>
   <div class="detail-price-chart__wrapper">
-    <FetchingData v-if="companyDetailStore.fetchingCompany" />
+    <fetching-data v-if="companyDetailStore.fetchingCompany" />
 
     <template v-else>
-      <div role="tablist" class="detail-price-chart__tablist">
+      <v-btn-toggle
+        mandatory
+        density="compact"
+        variant="text"
+        selected-class="text-info"
+        style="display: grid; grid-template-columns: repeat(6, 1fr)"
+      >
         <v-btn
           v-for="tab in tablist"
           :key="tab.value"
           :text="tab.value"
-          variant="text"
-          :disabled="tab.value === current"
           @click="changeZoom(tab)"
         />
-      </div>
-      <div class="detail-price-chart">
-        <charts
-          ref="chartEl"
-          :constructorType="'stockChart'"
-          :options="chartOpts"
-          :callback="afterCreate"
-        />
-      </div>
+      </v-btn-toggle>
+
+      <charts
+        ref="chartEl"
+        class="detail-price-chart"
+        :constructorType="'stockChart'"
+        :options="chartOpts"
+        :callback="afterCreate"
+      />
     </template>
   </div>
 </template>
