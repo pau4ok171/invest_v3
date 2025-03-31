@@ -22,7 +22,7 @@ function humanize(val: number | string) {
 </script>
 
 <template>
-  <v-card id="about-company-section" color="surface-light" class="mb-4">
+  <v-card id="about-company-section" color="surface-light" class="mb-4 pa-4">
     <v-card-title>About the Company</v-card-title>
 
     <v-card-item>
