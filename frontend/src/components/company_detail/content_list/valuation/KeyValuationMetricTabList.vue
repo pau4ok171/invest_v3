@@ -3,7 +3,7 @@
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
 // Utilities
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Types
 import type { PropType } from 'vue'
@@ -11,7 +11,7 @@ import type { FairValueTab } from '@/components/company_detail/content_list/valu
 
 const props = defineProps({
   tabs: {
-    type: Object as PropType<Record<string, FairValueTab>>,
+    type: Object as PropType<FairValueTab[]>,
     required: true,
   },
   selected: {
@@ -22,26 +22,31 @@ const props = defineProps({
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const emit = defineEmits()
+
+const modelValue = ref(0)
+
+watch(modelValue, (value) => {
+  emit('update:selected', props.tabs[value])
+})
 </script>
 
 <template>
-  <div class="detail-key-valuation-metric__tab-list">
-    <div role="tablist" class="detail-key-valuation-metric__tab-button-list">
-      <button
-        role="tab"
-        class="detail-key-valuation-metric__tab-button"
+  <div>
+    <v-btn-toggle
+      class="mb-4"
+      v-model="modelValue"
+      variant="outlined"
+      density="comfortable"
+      mandatory
+      selected-class="text-info"
+    >
+      <v-btn
         v-for="tab in tabs"
-        :key="tab.id"
-        :disabled="tab.id === selected.id"
-        @click="$emit('update:selected', tab)"
-      >
-        {{ tab.name }}
-      </button>
-    </div>
-    <div class="detail-key-valuation-metric__tab-desc">
-      <div class="detail-key-valuation-metric__tab-icon">
-        <v-icon icon="$iSolidStar" color="info" />
-      </div>
+        :key="`key-valuation-tab-${tab.id}`"
+        :text="tab.name"
+      />
+    </v-btn-toggle>
 
       <div class="detail-key-valuation-metric__text">
         <p class="detail-key-valuation-metric__text-desc">
