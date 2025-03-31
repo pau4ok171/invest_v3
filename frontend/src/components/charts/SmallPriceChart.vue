@@ -18,14 +18,14 @@ watch(
 
 <template>
   <charts
-    class="price-history-chart"
+    class="small-price-history-chart"
     constructorType="stockChart"
     :options="chartOpts"
   />
 </template>
 
 <style scoped>
-.price-history-chart {
+.small-price-history-chart {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,5 +33,6 @@ watch(
   max-width: 100%;
   height: 40px;
   line-height: 1.5;
+  pointer-events: none;
 }
 </style>
