@@ -19,15 +19,15 @@ const company = computed(() => store.company)
 </script>
 
 <template>
-  <v-card color="surface-light" class="mb-4">
+  <v-card color="surface-light" class="mb-4 pa-4">
     <v-card-title>{{ company.title }} Fundamental Summary</v-card-title>
     <v-card-item>
       <v-row>
         <v-col cols="6">
-          <FundamentalSummaryChart />
+          <fundamental-summary-chart />
         </v-col>
         <v-col cols="6">
-          <CompanyDetailFundamentalSummaryTable />
+          <company-detail-fundamental-summary-table />
           <company-detail-inducement
             question="Is SBER overvalued?"
             response="See Fair Value and valuation analysis"
@@ -42,10 +42,10 @@ const company = computed(() => store.company)
     <v-card-item>
       <v-row>
         <v-col cols="6">
-          <EarningsRevenueChart />
+          <earnings-revenue-chart />
         </v-col>
         <v-col cols="6">
-          <CompanyDetailEarningsRevenueTable />
+          <company-detail-earnings-revenue-table />
           <company-detail-inducement
             question="How did SBER perform over the long term?"
             response="See historical performance and comparison"
@@ -60,14 +60,14 @@ const company = computed(() => store.company)
     <v-card-item>
       <v-row>
         <v-col cols="6">
-          <CompanyDetailDividendsTable />
+          <company-detail-dividends-table />
           <company-detail-inducement
             question="Does SBER pay a reliable dividends?"
             response="See SBER dividend history and benchmarks"
           />
         </v-col>
         <v-col cols="6">
-          <DividendPaydayChart />
+          <dividend-payday-chart />
         </v-col>
       </v-row>
     </v-card-item>

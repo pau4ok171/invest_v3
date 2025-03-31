@@ -15,5 +15,11 @@
   font-weight: 900;
   user-select: none;
   color: rgb(var(--v-theme-on-background));
+  text-decoration: none;
+
+  > a {
+    text-decoration: none;
+    color: inherit;
+  }
 }
 </style>

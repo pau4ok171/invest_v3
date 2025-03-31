@@ -57,7 +57,7 @@ const caption = computed(
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .key-valuation-metrics__table-wrapper {
   min-height: 280px;
 }
@@ -89,12 +89,12 @@ const caption = computed(
   height: 38px;
   padding-bottom: 8px;
   vertical-align: bottom;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface-light), 0.1);
 }
 .key-valuation-metrics__table-text {
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface-light), 0.7);
   border-bottom: 1px dotted rgb(35, 148, 223);
   cursor: help;
   width: fit-content;

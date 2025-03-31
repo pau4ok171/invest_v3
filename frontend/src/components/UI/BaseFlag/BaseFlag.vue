@@ -15,14 +15,16 @@ export default defineComponent({
 </script>
 
 <template>
-  <i
-    :class="[
-      'base-flag',
-      'fi',
-      [`fi-${code}`],
-      {
-        fis: square,
-      },
-    ]"
-  />
+  <v-avatar>
+    <i
+      :class="[
+        'base-flag',
+        'fi',
+        [`fi-${code}`],
+        {
+          fis: square,
+        },
+      ]"
+    />
+  </v-avatar>
 </template>

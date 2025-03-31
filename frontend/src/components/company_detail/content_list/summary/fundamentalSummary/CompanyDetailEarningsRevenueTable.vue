@@ -83,7 +83,7 @@ const debtEquityRatio = computed(() => {
   </section>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-earnings-revenue-table {
   font-size: 1rem;
   line-height: 1.5;
@@ -93,10 +93,11 @@ const debtEquityRatio = computed(() => {
   height: 38px;
   vertical-align: bottom;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-right: 8px;
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface-light), 0.1);
 }
 .detail-earnings-revenue-table td:first-child {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface-light), 0.7);
 }
 .detail-earnings-revenue-table td:last-child {
   text-align: right;
@@ -113,7 +114,7 @@ const debtEquityRatio = computed(() => {
 .detail-earnings-revenue-table__title {
   font-size: .875rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--v-theme-on-surface-light), 0.5);
 }
 .detail-earnings-revenue-table__text {
   font-size: .875rem;

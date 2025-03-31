@@ -25,7 +25,7 @@ interface ChartData {
 
 const props = defineProps({
   tabs: {
-    type: Object as PropType<Record<string, FairValueTab>>,
+    type: Object as PropType<FairValueTab[]>,
     required: true,
   },
   selected: {
@@ -46,10 +46,9 @@ const name = computed(() => props.selected.name)
 const value = computed(() => {
   if (!chartData.value.length) return
 
-  if (props.tabs.pe.id === props.selected.id)
-    return chartData.value.earnings.mult
-  if (props.tabs.pb.id === props.selected.id) return chartData.value.book.mult
-  if (props.tabs.ps.id === props.selected.id) return chartData.value.sales.mult
+  if (props.selected?.id === 'pe') return chartData.value.earnings.mult
+  if (props.selected?.id === 'pb') return chartData.value.book.mult
+  if (props.selected?.id === 'ps') return chartData.value.sales.mult
 })
 
 const chartRef = ref<typeof Chart>()
@@ -332,7 +331,7 @@ watch(
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .detail-key-valuation-metric__chart-wrapper {
   display: grid;
   height: 280px;
@@ -359,6 +358,6 @@ watch(
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface-light), 0.7);
 }
 </style>

@@ -261,13 +261,11 @@ onBeforeUnmount(() => {
   height: 100%;
 
   p {
-    color: #fff;
     font-weight: 400;
     font-size: 1.125rem;
     line-height: 1.5;
   }
   h1 {
-    color: #fff;
     font-weight: 500;
     font-size: 1.5rem;
     line-height: 1.25;
@@ -278,7 +276,6 @@ onBeforeUnmount(() => {
   }
   ul li {
     list-style-type: disc;
-    color: rgb(255, 255, 255);
     padding-left: 4px;
     margin-left: 24px;
     margin-top: 8px;

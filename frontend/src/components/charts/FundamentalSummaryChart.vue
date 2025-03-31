@@ -227,7 +227,7 @@ onBeforeMount(() => {
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .fundamental-summary-chart {
   display: flex;
   justify-content: center;
@@ -241,6 +241,6 @@ onBeforeMount(() => {
 }
 .fundamental-summary-chart__middle-label {
   line-height: 1.7;
-  fill: rgba(255, 255, 255, 0.7);
+  fill: rgba(var(--v-theme-on-surface-light), 0.7);
 }
 </style>

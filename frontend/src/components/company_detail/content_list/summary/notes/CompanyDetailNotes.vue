@@ -52,7 +52,7 @@ function editNote(note: Note) {
       </template>
     </v-empty-state>
 
-    <v-container v-else>
+    <v-card-item v-else>
       <v-row class="mb-2">
         <v-col v-for="note in notes.slice(0, 3)" :key="`note-${note.id}`">
           <v-card color="surface-bright" @click="() => editNote(note)">
@@ -84,8 +84,8 @@ function editNote(note: Note) {
         </v-col>
       </v-row>
       <!-- TODO: Create Dialog for notes on CompanyDetailNotes -->
-      <v-btn color="blue" text="See More" block />
-    </v-container>
+      <v-btn color="info" text="See More" block variant="tonal" />
+    </v-card-item>
   </v-card>
 </template>
 

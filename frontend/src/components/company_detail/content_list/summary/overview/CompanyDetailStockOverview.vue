@@ -48,12 +48,12 @@ function onAboutCompanyClick() {
           </v-card-actions>
         </v-col>
         <v-col>
-          <SnowflakeChart :chartData="snowflake as number[]" />
+          <snowflake-chart :chartData="snowflake as number[]" style="width: 280px; height: 280px" />
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12">
-          <CompanyDetailRiskReward />
+          <company-detail-risk-reward />
         </v-col>
       </v-row>
     </v-container>

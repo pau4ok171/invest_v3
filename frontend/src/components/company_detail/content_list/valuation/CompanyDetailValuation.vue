@@ -41,37 +41,37 @@ const statements = computed<Statement[]>(() =>
     (s) => s.area === 'VALUE' && s.outcome === 1002
   )
 )
-const fairValueTabs = computed<Record<string, FairValueTab>>(() => {
+const fairValueTabs = computed<FairValueTab[]>(() => {
   const ticker = company.value.ticker || 'Company'
-  return {
-    pe: {
+  return [
+    {
       name: 'PE',
       id: 'pe',
       value: 1,
       metric: `As ${ticker} is profitable we use its Price-To-Earnings Ratio for relative valuation analysis`,
     },
-    pb: {
+    {
       name: 'PB',
       id: 'pb',
       value: 2,
       metric: `For ${ticker} we can also use its Price-To-Book Ratio for relative valuation analysis`,
     },
-    ps: {
+    {
       name: 'PS',
       id: 'ps',
       value: 3,
       metric: `As ${ticker} is a bank we don’t use its Price-To-Sales Ratio as the key metric for relative valuation analysis`,
     },
-    others: {
+    {
       name: 'Others',
       id: 'others',
       value: 0,
       metric:
         'Other financial metrics that can be useful for relative valuation',
     },
-  }
+  ]
 })
-const fairValueSelected = ref(fairValueTabs.value['pe'])
+const fairValueSelected = ref(fairValueTabs.value[0])
 
 const multiplierTabs = [
   {
@@ -111,7 +111,7 @@ const passed = computed(() =>
 <template>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
-      class="bg-surface"
+      class="bg-surface pt-8 px-8"
       title="1 Valuation"
       :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
     >
@@ -146,6 +146,7 @@ const passed = computed(() =>
     <v-card-item
       title="1.1 Share Price vs Fair Value"
       :subtitle="`What is the Fair Price of ${company.ticker || 'Company'} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`"
+      class="pt-8 px-8"
     >
       <d-c-f-chart />
       <company-detail-check name="IsUndervaluedBasedOnDCF" />
@@ -154,11 +155,11 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>1.2 Key Valuation Metric</v-card-title>
-    <v-card-subtitle>{{
-      `Which metric is best to use when looking at relative valuation for ${company.ticker}?`
-    }}</v-card-subtitle>
-    <v-card-item>
+    <v-card-item
+      title="1.2 Key Valuation Metric"
+      :subtitle="`Which metric is best to use when looking at relative valuation for ${company.ticker}?`"
+      class="px-8"
+    >
       <v-row>
         <v-col cols="6">
           <key-valuation-metric-tab-list
@@ -179,15 +180,14 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>{{
-      `1.3 ${peersSelected.name} Ratio vs Peers`
-    }}</v-card-title>
-    <v-card-subtitle>{{
-      `How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`
-    }}</v-card-subtitle>
-    <v-card-item>
+    <v-card-item
+      :title=" `1.3 ${peersSelected.name} Ratio vs Peers`"
+      :subtitle="`How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`"
+      class="px-8"
+    >
       <div style="display: flex; justify-self: flex-end">
         <v-select
+          class="mb-4"
           :items="multiplierTabs"
           v-model="peersSelected"
           return-object
@@ -210,15 +210,18 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>1.4 Historical Price to Earnings Ratio</v-card-title>
-    <v-card-subtitle style="white-space: normal">
-      Historical Price to Earnings Ratio compares a stock's price to its
-      earnings over time. Higher ratios indicate that investors are willing to
-      pay more for the stock.
-    </v-card-subtitle>
-
-    <v-card-item>
-      <v-row>
+    <v-card-item
+      title="1.4 Historical Price to Earnings Ratio"
+      class="px-8"
+    >
+      <template #subtitle>
+        <span style="white-space: normal">
+          Historical Price to Earnings Ratio compares a stock's price to its
+          earnings over time. Higher ratios indicate that investors are willing to
+          pay more for the stock.
+        </span>
+      </template>
+      <v-row class="mb-0">
         <v-col>
           <v-select
             :items="multiplierTabs"
@@ -239,6 +242,9 @@ const passed = computed(() =>
             <v-btn-toggle
               variant="outlined"
               v-model="historicalTabSelected"
+              density="comfortable"
+              mandatory
+              selected-class="text-info"
             >
               <v-btn text="3M" />
               <v-btn text="1Y" />
@@ -254,12 +260,13 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>1.5 Price to Earnings Ratio vs Industry</v-card-title>
-    <v-card-subtitle>{{
-      `How does ${company.ticker}'s PE Ratio compare vs other companies in the European Banks Industry?`
-    }}</v-card-subtitle>
-    <v-card-item>
+    <v-card-item
+      title="1.5 Price to Earnings Ratio vs Industry"
+      :subtitle="`How does ${company.ticker}'s PE Ratio compare vs other companies in the European Banks Industry?`"
+      class="px-8"
+    >
       <v-select
+        class="mb-4"
         :items="multiplierTabs"
         v-model="industrySelected"
         return-object
@@ -281,11 +288,21 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>1.6 Price to Earnings Ratio vs Fair Ratio</v-card-title>
+    <v-card-title></v-card-title>
     <v-card-subtitle style="white-space: normal">{{
-      `What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`
+
     }}</v-card-subtitle>
-    <v-card-item>
+    <v-card-item
+      title="1.6 Price to Earnings Ratio vs Fair Ratio"
+      class="px-8"
+    >
+      <template #subtitle>
+        <span style="white-space: normal">
+          {{
+            `What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`
+          }}
+        </span>
+      </template>
       <multiplier-vs-fair-chart />
 
       <company-detail-check name="IsGoodValueComparingRatioToFairRatio" />
@@ -293,12 +310,11 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title>1.7 Analyst Price Targets</v-card-title>
-    <v-card-subtitle
-      >What is the analyst 12-month forecast and do we have any statistical
-      confidence in the consensus price target?</v-card-subtitle
+    <v-card-item
+      title="1.7 Analyst Price Targets"
+      subtitle="What is the analyst 12-month forecast and do we have any statistical confidence in the consensus price target?"
+      class="px-8"
     >
-    <v-card-item>
       <div
         style="
           height: 500px;

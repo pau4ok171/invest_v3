@@ -40,7 +40,6 @@ watch(selected, () => {
             :key="item.id"
             :title="item.title"
             :value="item.id"
-            active-class="text-primary"
             rounded
           >
             <template #prepend>

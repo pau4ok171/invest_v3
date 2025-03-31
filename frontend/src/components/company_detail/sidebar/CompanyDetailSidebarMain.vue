@@ -113,7 +113,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-sidebar__main {
   opacity: 0;
 }
@@ -132,7 +132,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .detail-sidebar__button-list {
   display: flex;

@@ -10,7 +10,6 @@
 
 <style lang="scss">
 .main {
-  padding: 64px 24px 24px;
   display: flex;
   position: relative;
   flex-wrap: wrap;

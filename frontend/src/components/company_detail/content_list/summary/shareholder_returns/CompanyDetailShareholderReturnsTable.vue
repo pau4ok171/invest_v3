@@ -69,12 +69,12 @@ function getClass(value: number | undefined) {
   </table>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-shareholder-return__table {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--v-theme-on-surface-light), 0.5);
   border-spacing: 0;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--v-theme-on-surface-light), 0.1);
   margin-bottom: 16px;
 }
 .detail-shareholder-return__table tr {
@@ -90,7 +90,7 @@ function getClass(value: number | undefined) {
   width: 25%;
   vertical-align: top;
   padding: 4px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(var(--v-theme-on-surface-light), 0.1);
 }
 .detail-shareholder-return__table th:first-child,
 .detail-shareholder-return__table td:first-child {

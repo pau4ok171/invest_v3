@@ -46,7 +46,7 @@ const items = computed<CompanyItem[]>(() =>
   companyListStore.companies.map((c) => ({
     companyLogo: c.logo_url,
     companyName: c.title,
-    lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price.toFixed(2)}`,
+    lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
     return7D: `${c.return_1y.toFixed(2)}%`,
     return1Y: `${c.return_7d.toFixed(2)}%`,
     marketCap: humanize(
@@ -62,10 +62,10 @@ const items = computed<CompanyItem[]>(() =>
     to: c.absolute_url,
     uid: c.uid,
     watchlisted: c.is_watchlisted,
-  }))
+  })) as CompanyItem[]
 )
 
-function humanize(val: number, currencyUnit: string) {
+function humanize(val: number = 0, currencyUnit: string = '') {
   if (val === 0) return 'n/a'
   for (const unit of ['', 't', 'M', 'B', 'T']) {
     if (Math.abs(val) < 1000) return currencyUnit + val.toFixed(2) + unit
@@ -76,15 +76,12 @@ function humanize(val: number, currencyUnit: string) {
 </script>
 
 <template>
-  <v-infinite-scroll
-    @load="companyListStore.fetchCompanies"
-    empty-text=""
-  >
+  <v-infinite-scroll @load="companyListStore.fetchCompanies" empty-text="" class="overflow-y-hidden">
     <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
-      :headers
-      :items
+      :headers="headers"
+      :items="items"
       hover
       :hide-no-data="companyListStore.fetching"
       hideDefaultFooter
@@ -104,10 +101,10 @@ function humanize(val: number, currencyUnit: string) {
         <router-link :to="item.to">{{ item.lastPrice }}</router-link>
       </template>
       <template #item.return7D="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to">{{ item.return7D }}</router-link>
+        <router-link :to="item.to" :class="!item.return7D.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return7D }}</router-link>
       </template>
       <template #item.return1Y="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to">{{ item.return1Y }}</router-link>
+        <router-link :to="item.to" :class="!item.return1Y.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return1Y }}</router-link>
       </template>
       <template #item.marketCap="{ item }: { item: CompanyItem }">
         <router-link :to="item.to">{{ item.marketCap }}</router-link>
@@ -176,6 +173,8 @@ function humanize(val: number, currencyUnit: string) {
               padding: 0 16px;
               align-items: start;
               justify-content: center;
+              text-decoration: none;
+              color: inherit;
             }
           }
         }
@@ -183,17 +182,17 @@ function humanize(val: number, currencyUnit: string) {
     }
   }
 }
-.base-skeleton-loader__avatar {
+.v-skeleton-loader__avatar {
   width: 40px;
   min-width: 40px;
   height: 40px;
   min-height: 40px;
 }
-.base-skeleton-loader__chip {
+.v-skeleton-loader__chip {
   margin-left: 4px;
   border-radius: 4px;
 }
-.base-skeleton-loader__button {
+.v-skeleton-loader__button {
   border-radius: 4px;
   height: 24px;
   margin: 4px;

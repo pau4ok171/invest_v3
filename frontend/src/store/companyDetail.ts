@@ -147,6 +147,53 @@ export const useCompanyDetailStore = defineStore({
     },
   },
   actions: {
+    async createPortfolio(portfolioName: string): Promise<'success' | 'error'> {
+      const formData = new FormData()
+      const formDataFields: Object = {
+        portfolio_name: portfolioName,
+      }
+      Object.entries(formDataFields).forEach(([key, val]) =>
+        formData.append(key, val)
+      )
+
+      try {
+        const response = await axios.post('portfolio/api/v1/portfolios/portfolios/', formData)
+
+        this.portfolios.push(response.data)
+        toast.success(`Portfolio ${response.data.name} was created`)
+        return 'success'
+      } catch (error) {
+          console.log(error)
+          toast.error('Something was wrong...')
+          return 'error'
+      }
+    },
+    async updatePortfolio(action: 'include' | 'exclude', portfolio: Portfolio) {
+      const formData = new FormData()
+      Object.entries({
+        action: action,
+        company_id: this.company.id,
+      }).forEach(([key, val]: [string, any]) => formData.append(key, val))
+
+      await axios
+        .put(`portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`, formData)
+        .then((response) => {
+          this.updatePortfolios(response.data)
+          if (action === 'include') {
+            toast.success(
+              `${this.company.slug?.toUpperCase()} was added to ${portfolio.name}`
+            )
+          } else {
+            toast.success(
+              `${this.company.slug?.toUpperCase()} was remove from ${portfolio.name}`
+            )
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          toast.error('Something was wrong...')
+        })
+    },
     updatePortfolios(portfolio: Portfolio) {
       let portfolios: Portfolio[] = []
 

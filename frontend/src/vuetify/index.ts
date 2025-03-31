@@ -22,4 +22,15 @@ export const vuetify= createVuetify({
       mdi,
     },
   },
+  defaults: {
+    VList: {
+      activeClass: 'text-info'
+    },
+    VSelect: {
+      activeClass: 'text-info',
+    },
+    VSkeletonLoader: {
+      color: 'background',
+    },
+  },
 })
