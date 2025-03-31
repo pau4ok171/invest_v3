@@ -72,7 +72,7 @@ export default defineComponent({
   </form>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .form {
   margin-top: 25px;
   min-height: 238px;
@@ -82,11 +82,11 @@ export default defineComponent({
   margin-top: 8px;
   text-align: right;
   text-decoration: underline;
-  color: rgb(35, 148, 223);
+  color: rgb(var(--v-theme-info));
 }
 .form__errors {
   padding: 12px;
   margin-bottom: 16px;
-  background-color: var(--color-error);
+  background-color: rgb(var(--v-theme-error));
 }
 </style>

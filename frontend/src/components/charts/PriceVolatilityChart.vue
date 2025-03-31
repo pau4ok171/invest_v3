@@ -71,8 +71,8 @@ function humanize(value: number = 0) {
       >
         <g>
           <path d="M35 49V45H360V49H35Z" fill="url(#paint0_linear)"></path>
-          <rect x="34" y="43" width="1" height="8" fill="white"></rect>
-          <rect x="360" y="43" width="1" height="8" fill="white"></rect>
+          <rect x="34" y="43" width="1" height="8" fill="rgb(var(--v-theme-on-surface-light))"></rect>
+          <rect x="360" y="43" width="1" height="8" fill="rgb(var(--v-theme-on-surface-light))"></rect>
           <text
             x="0"
             y="51"
@@ -145,7 +145,7 @@ function humanize(value: number = 0) {
           y="55"
           class="price-volatility-chart__svg"
         >
-          <rect x="198" y="-6" width="1" height="68" fill="white"></rect>
+          <rect x="198" y="-6" width="1" height="68" fill="rgb(var(--v-theme-on-surface-light))"></rect>
           <text
             v-tippy="marketTooltip"
             x="198"
@@ -194,7 +194,7 @@ function humanize(value: number = 0) {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .price-volatility-chart__wrapper {
   visibility: visible;
   height: 170px;
@@ -221,7 +221,7 @@ function humanize(value: number = 0) {
   outline: none;
 }
 .price-volatility-chart__label {
-  fill: #fff;
+  fill: rgb(var(--v-theme-on-surface-light));
 }
 .price-volatility-chart__label--dark {
   fill: #262e3a;

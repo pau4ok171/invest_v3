@@ -332,7 +332,7 @@ watch(
   </div>
 </template>
 
-<style>
+<style lang="scss">
 .detail-key-valuation-metric__chart-wrapper {
   display: grid;
   height: 280px;
@@ -359,6 +359,6 @@ watch(
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface-light), 0.7);
 }
 </style>

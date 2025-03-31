@@ -2,14 +2,14 @@ export const chartOpts = {
   chart: {
     type: 'solidgauge',
     height: 280,
-    backgroundColor: '#1b222d',
+    backgroundColor: 'rgb(var(--v-theme-surface-light))',
     spacingTop: 80,
     events: {},
   },
   pane: {
     size: 184,
     background: {
-      backgroundColor: '#1b222d',
+      backgroundColor: 'rgb(var(--v-theme-on-surface-light))',
       borderWidth: 0,
     }
   },

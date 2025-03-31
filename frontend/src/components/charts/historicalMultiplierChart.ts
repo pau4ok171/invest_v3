@@ -19,7 +19,7 @@ export const chartOpts = {
   chart: {
     type: 'areaspline',
     spacingTop: 60,
-    backgroundColor: '#1b222d',
+    backgroundColor: 'rgb(var(--v-theme-surface-light))',
     plotBackgroundColor: 'url(#ActualBackgroundGradient)',
     style: {
       fontFamily: 'inherit',
@@ -95,7 +95,7 @@ export const chartOpts = {
     ],
     labels: {
       style: {
-        color: '#fff'
+        color: 'rgb(var(--v-theme-on-surface-light))'
       }
     },
     crosshair: {
@@ -105,8 +105,8 @@ export const chartOpts = {
   yAxis: [
     {
       opposite: false,
-      tickColor: 'rgba(255, 255, 255, .1)',
-      gridLineColor: 'rgba(255, 255, 255, .1)',
+      tickColor: 'rgba(var(--v-theme-on-surface-light), .1)',
+      gridLineColor: 'rgba(var(--v-theme-on-surface-light), .1)',
       gridLineWidth: 1,
       tickLength: 30,
       tickWidth: 1,
@@ -120,11 +120,11 @@ export const chartOpts = {
         step: 4,
         x: -20,
         style: {
-          color: '#fff'
+          color: 'rgb(var(--v-theme-on-surface-light))'
         }
       },
     }, {
-      tickColor: 'rgba(255, 255, 255, .1)',
+      tickColor: 'rgba(var(--v-theme-on-surface-light), .1)',
       tickLength: 30,
       gridLineWidth: 0,
       tickWidth: 1,

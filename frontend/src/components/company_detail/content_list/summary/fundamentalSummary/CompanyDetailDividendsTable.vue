@@ -43,7 +43,7 @@ const payoutRatio = computed(() => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .detail-dividends-table {
   display: flex;
   flex-flow: wrap;
@@ -64,6 +64,6 @@ const payoutRatio = computed(() => {
   font-size: 1rem;
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--v-theme-on-surface-light), 0.7);
 }
 </style>

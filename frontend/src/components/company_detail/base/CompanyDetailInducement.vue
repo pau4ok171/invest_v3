@@ -19,7 +19,7 @@ const props = defineProps({
 .company-detail-inducement__question {
   line-height: 1.5;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--v-theme-on-surface-light), 0.5);
   margin-top: 35px;
 }
 .company-detail-inducement__answer {

@@ -300,19 +300,33 @@ onMounted(() => {
 <style lang="scss">
 .snowflake {
   position: relative;
-}
-.snowflake svg {
+
+  svg {
   width: 280px;
   height: 280px;
+  }
+  .highcharts-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .highcharts-pane {
+    fill: rgb(var(--v-theme-hc-snowflake-bg-light));
+  }
+  .highcharts-xaxis-grid {
+    > .highcharts-grid-line {
+      stroke: rgb(var(--v-theme-hc-snowflake-bg-light));
+    }
+  }
+  .highcharts-yaxis-grid {
+    > .highcharts-grid-line {
+      stroke: rgb(var(--v-theme-hc-snowflake-bg-dark));
+    }
+  }
 }
 .snowflake--small svg {
   width: 132px;
   height: 132px;
-}
-.snowflake-chart .highcharts-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .snowflake-labels {
   position: absolute;
@@ -347,6 +361,6 @@ onMounted(() => {
   transform: translate(4.4%, -1.7%) rotate(0.4deg);
 }
 .snowflake-labels__label-text {
-  fill: #fff;
+  fill: rgb(var(--v-theme-on-surface-light));
 }
 </style>

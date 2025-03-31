@@ -83,7 +83,7 @@ export const chartOpts = {
     events: {
         load: drawAdditionalElements
     },
-    backgroundColor: '#1b222d',
+    backgroundColor: 'rgb(var(--v-theme-surface-light))',
     spacingTop: 45,
     spacingRight: 45,
     plotBackgroundColor: 'url(#Chart_Fail_Pattern)',
@@ -111,7 +111,7 @@ export const chartOpts = {
         x: 10,
         formatter: setDataSeriesTextFormat,
       },
-        data: [{y: 9.8,}, {y: 6.3,}, {y: 2.6, color: '#1b222d'}, {y: 2.2,}, {y: 0.8,}]
+        data: [{y: 9.8,}, {y: 6.3,}, {y: 2.6, color: 'rgb(var(--v-theme-surface-light))'}, {y: 2.2,}, {y: 0.8,}]
       }, {
         name: 'PS',
         visible: false,
@@ -124,7 +124,7 @@ export const chartOpts = {
           x: 10,
           formatter: setDataSeriesTextFormat,
         },
-        data: [{y: 3,}, {y: 2.6,}, {y: 1.2, color: '#1b222d'}, {y: 0.5,}, {y: 0.3,}]
+        data: [{y: 3,}, {y: 2.6,}, {y: 1.2, color: 'rgb(var(--v-theme-surface-light))'}, {y: 0.5,}, {y: 0.3,}]
       }, {
         name: 'PB',
         visible: false,
@@ -143,7 +143,7 @@ export const chartOpts = {
             y: 0.6,
           }, {
             y: 0.5,
-            color: '#1b222d'
+            color: 'rgb(var(--v-theme-surface-light))'
           }, {
             y: 0.3,
           }, {
@@ -156,9 +156,9 @@ export const chartOpts = {
       firstEl: 'PE',
       gridLineWidth: 0,
       lineWidth: 1,
-      lineColor: 'rgba(255, 255, 255, .2)',
+      lineColor: 'rgba(var(--v-theme-on-surface-light), .2)',
       tickInterval: 2.5, // Расстояние между чертами
-      tickColor: 'rgba(255, 255, 255, .2)',
+      tickColor: 'rgba(var(--v-theme-on-surface-light), .2)',
       tickWidth: 1,
       title: {
         enabled: false
@@ -166,7 +166,7 @@ export const chartOpts = {
       labels: {
         style: {
           fontSize: '.75rem',
-          color: '#fff',
+          color: 'rgb(var(--v-theme-on-surface-light))',
         },
         formatter: function (this: any) {return this.isFirst ? this.chart.yAxis[0].options.firstEl : this.value}},
       max: 10, // Макс значение по оси
@@ -179,7 +179,7 @@ export const chartOpts = {
       labels: {
         style: {
           fontSize: '.75rem',
-          color: '#fff',
+          color: 'rgb(var(--v-theme-on-surface-light))',
         },
         formatter: function (this: any) {
           const index = Number(this.value)
@@ -216,7 +216,7 @@ function drawVAxisEls(chart: any) {
 
   chart.renderer.rect(boxX, boxY, boxW, boxH)
     .attr({
-      fill: '#262e3a',
+      fill: 'rgb(var(--v-theme-surface-bright))',
       'rx': 4, // BorderRadius
     })
     .add()

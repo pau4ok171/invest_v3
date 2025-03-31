@@ -38,7 +38,7 @@ const chartOpts = ref(_chartOpts)
   width: auto;
 }
 .multiple-vs-peers-chart__v-axis-name {
-  fill: rgb(255, 255, 255);
+  fill: rgb(var(--v-theme-on-surface-light));
   border-bottom: 1px dotted rgb(35, 148, 223);
   width: fit-content;
   line-height: 16px;
@@ -46,21 +46,21 @@ const chartOpts = ref(_chartOpts)
   font-size: 0.75rem;
 }
 .multiple-vs-peers-chart__middle-label-name {
-  fill: #1b222d;
-  font-size: 0.8125rem;
+  fill: rgb(var(--v-theme-surface-light));
+  font-size: 0.75rem;
 }
 .multiple-vs-peers-chart__data-label-value {
   line-height: 1.5;
   font-weight: 500;
-  color: #fff;
+  color: rgb(var(--v-theme-on-surface-light));
   font-size: 0.75rem;
 }
 .multiple-vs-peers-chart__data-label-name {
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--v-theme-on-surface-light), 0.8);
   padding-right: 10px;
   font-weight: normal;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 .multiple-vs-peers-chart__data-label-name--selected {
   background: linear-gradient(
@@ -71,6 +71,6 @@ const chartOpts = ref(_chartOpts)
   padding: 0 6px;
   border-radius: 4px;
   margin-top: 2px;
-  color: rgb(255, 255, 255);
+  color: rgb(var(--v-theme-on-surface-light));
 }
 </style>

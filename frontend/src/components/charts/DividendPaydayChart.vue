@@ -229,7 +229,7 @@ function humanize(date: DateTime) {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .dividend-payday-chart svg {
   width: 100%;
   height: 100%;
@@ -248,7 +248,7 @@ function humanize(date: DateTime) {
   opacity: 0.5;
 }
 .dividend-payday-chart__more-info-icon > path {
-  fill: #fff;
+  fill: rgb(var(--v-theme-on-surface-light));
 }
 .dividend-payday-chart__connector {
   stroke: #5f6875;

@@ -114,61 +114,72 @@ watch(
   display: grid;
   grid-template-columns: repeat(6, auto);
 }
-.detail-price-chart svg {
-  width: 100%;
-  height: 100%;
-  fill: none;
-}
-.detail-price-chart .highcharts-button-box {
-  overflow: visible;
-  font: inherit;
-  -webkit-font-smoothing: inherit;
-  letter-spacing: inherit;
-  background-color: transparent;
-  cursor: pointer;
-  position: relative;
-  display: block;
-  width: 100%;
-  height: auto;
-  border-top: 1px solid transparent;
-  border-left: 1px solid transparent;
-  border-right: 1px solid transparent;
-  padding: 4px;
-
-  border-radius: 4px;
-}
-.detail-price-chart .highcharts-button > text,
-#price-history-chart .highcharts-label > text,
-#price-history-chart .highcharts-tooltip-box > text {
-  font-size: 1.3rem !important;
-  line-height: 1.5 !important;
-  font-weight: 500 !important;
-  fill: rgba(255, 255, 255, 0.3) !important;
-}
-.detail-price-chart .highcharts-button-pressed > text {
-  fill: rgb(var(--v-theme-info)) !important;
-}
-.detail-price-chart .highcharts-button-hover > text {
-  fill: rgb(var(--v-theme-info)) !important;
-}
-.detail-price-chart .price-history-chart-point-box__date {
-  fill: rgba(255, 255, 255, 0.7);
-  line-height: 1.4;
-}
-.detail-price-chart .price-history-chart-point-box__price {
-  fill: #fff;
-  font-weight: 900;
-}
-.detail-price-chart .highcharts-navigator-mask-inside {
-  cursor: grab !important;
-  rx: 4;
-  ry: 4;
-  stroke-width: 1;
-  stroke: rgb(35, 148, 223);
-}
-.detail-price-chart .highcharts-navigator-mask-outside {
-  fill: rgba(21, 27, 36, 0.3);
-  rx: 4;
-  ry: 4;
+.detail-price-chart {
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+  }
+  .highcharts-button-box {
+    overflow: visible;
+    font: inherit;
+    -webkit-font-smoothing: inherit;
+    letter-spacing: inherit;
+    background-color: transparent;
+    cursor: pointer;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    padding: 4px;
+    border-radius: 4px;
+  }
+  .highcharts-background {
+    fill: rgb(var(--v-theme-surface-light));
+  }
+  .highcharts-button > text,
+  #price-history-chart .highcharts-label > text,
+  #price-history-chart .highcharts-tooltip-box > text {
+    font-size: 1.3rem !important;
+    line-height: 1.5 !important;
+    font-weight: 500 !important;
+    fill: rgba(var(--v-theme-on-surface-light), 0.3) !important;
+  }
+  .highcharts-button-pressed > text {
+    fill: rgb(var(--v-theme-info)) !important;
+  }
+  .highcharts-button-hover > text {
+    fill: rgb(var(--v-theme-info)) !important;
+  }
+  .price-history-chart-point-box__date {
+    fill: rgba(var(--v-theme-on-surface-light), 0.7);
+    line-height: 1.4;
+  }
+  .price-history-chart-point-box__price {
+    fill: rgb(var(--v-theme-on-surface-light));
+    font-weight: 900;
+  }
+  .highcharts-navigator-mask-inside {
+    cursor: grab !important;
+    rx: 4;
+    ry: 4;
+    stroke-width: 1;
+    stroke: rgb(var(--v-theme-info));
+  }
+  .highcharts-navigator-mask-outside {
+    cursor: pointer;
+    fill: rgba(var(--v-theme-surface-light), 0.3);
+    rx: 4;
+    ry: 4;
+  }
+  .highcharts-xaxis-labels.highcharts-navigator-xaxis {
+    > text > tspan {
+      fill: rgb(var(--v-theme-surface-light));
+      stroke: rgb(var(--v-theme-surface-light));
+    }
+  }
 }
 </style>

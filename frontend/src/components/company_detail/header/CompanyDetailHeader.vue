@@ -154,7 +154,7 @@ function createNote() {
   </v-defaults-provider>
 </template>
 
-<style scoped>
+<style lang="scss">
 .company-header__image-mask {
   position: absolute;
   left: 0;
@@ -163,6 +163,13 @@ function createNote() {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  background: rgb(12 9 9 / 70%);
+  background: rgba(var(--v-theme-mask), var(--v-medium-emphasis-opacity));
+}
+.company-detail-header__skeleton-loader {
+  > .v-skeleton-loader__button {
+    height: 28px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 }
 </style>

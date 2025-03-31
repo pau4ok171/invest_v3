@@ -15,6 +15,9 @@ const finargoDarkTheme = {
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FB8C00',
+    mask: '#0C0909',
+    'hc-snowflake-bg-light': '#4b5966',
+    'hc-snowflake-bg-dark': '#283440',
   },
   variables: {
     'border-color': '#FFFFFF',
@@ -53,6 +56,9 @@ const finargoLightTheme = {
     info: '#2196F3',
     success: '#4CAF50',
     warning: '#FB8C00',
+    mask: '#ababab',
+    'hc-snowflake-bg-light': '#ccd2d4',
+    'hc-snowflake-bg-dark': '#576262',
   },
   variables: {
     'border-color': '#000000',

@@ -11,7 +11,7 @@ export const chartOpts = {
   chart: {
     spacingTop: 40,
     height: 324,
-    backgroundColor: '#1b222d',
+    backgroundColor: 'rgb(var(--v-theme-surface-light))',
     plotBackgroundColor: 'url(#Chart_Fail_Pattern)',
     style: {
       fontFamily: 'inherit',
@@ -23,9 +23,9 @@ export const chartOpts = {
   xAxis: {
     tickInterval: 1.5,
     showLastLabel: true,
-    lineColor: '#494e57',
+    lineColor: 'rgba(var(--v-theme-on-surface-light), .7)',
     tickLength: 4,
-    tickColor: '#494e57',
+    tickColor: 'rgba(var(--v-theme-on-surface-light), .7)',
     labels: {
       step: 4,
       distance: 10,
@@ -33,7 +33,7 @@ export const chartOpts = {
         return this.isLast ? `${this.value}+` : this.value
       },
       style: {
-        color: '#fff',
+        color: 'rgb(var(--v-theme-on-surface-light))',
         fontSize: 11,
       },
     },
@@ -45,7 +45,7 @@ export const chartOpts = {
       offset: 10,
       x: -5,
       style: {
-        color: '#fff',
+        color: 'rgb(var(--v-theme-on-surface-light))',
         fontSize: 10,
         fontWeight: 'normal',
       },
@@ -55,15 +55,15 @@ export const chartOpts = {
     min: 0,
     max: 48,
     gridLineWidth: 1,
-    gridLineColor: 'rgba(255,255,255,.1)',
+    gridLineColor: 'rgba(var(--v-theme-on-surface-light),.1)',
     tickInterval: 48 / 4,
-    lineColor: '#494e57',
+    lineColor: 'rgba(var(--v-theme-on-surface-light), .7)',
     top: '3.0%',
     height: '97,5%',
     labels: {
       step: 4,
       style: {
-        color: '#fff',
+        color: 'rgb(var(--v-theme-on-surface-light))',
         fontSize: 11,
       },
       x: 20,
@@ -77,7 +77,7 @@ export const chartOpts = {
       offset: -15,
       y: -9,
       style: {
-        color: '#fff',
+        color: 'rgb(var(--v-theme-on-surface-light))',
         fontSize: 11,
         fontWeight: 'normal',
       },

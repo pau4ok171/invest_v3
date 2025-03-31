@@ -143,7 +143,7 @@ function draw(event: Event) {
   chart.renderer
     .rect(line1X, line1Y, 0.5, line1H)
     .attr({
-      fill: '#fff',
+      fill: 'rgb(var(--v-theme-on-surface-light))',
       opacity: 0.7,
       zIndex: 10,
     })
@@ -153,7 +153,7 @@ function draw(event: Event) {
   chart.renderer
     .rect(line2X, line2Y, 0.5, line2H)
     .attr({
-      fill: '#fff',
+      fill: 'rgb(var(--v-theme-on-surface-light))',
       opacity: 0.7,
     })
     .add()
@@ -285,7 +285,7 @@ onBeforeMount(() => {
   font-family: inherit;
 }
 .dcf-chart .highcharts-background {
-  fill: #1b222d;
+  fill: rgb(var(--v-theme-surface-light));
 }
 .dcf-chart .highcharts-plot-background {
   fill: url(#Chart_Fail_Pattern);
@@ -293,7 +293,7 @@ onBeforeMount(() => {
 .dcf-chart .highcharts-color-0 {
   outline: none;
   stroke-width: 0;
-  fill: #1b222d;
+  fill: rgb(var(--v-theme-surface-light));
 }
 .dcf-chart .highcharts-color-1 {
   outline: none;
@@ -301,13 +301,13 @@ onBeforeMount(() => {
   fill: url(#BarGradient);
 }
 .dcf-chart__data-label-value {
-  fill: #fff;
+  fill: rgb(var(--v-theme-on-surface-light));
   font-size: 1.5rem;
   line-height: 1.25;
   font-weight: 500;
 }
 .dcf-chart__data-label-name {
-  fill: #fff;
+  fill: rgb(var(--v-theme-on-surface-light));
   font-size: 1rem;
   line-height: 1.5;
   font-weight: 500;

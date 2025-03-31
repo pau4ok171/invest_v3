@@ -24,7 +24,6 @@ export const chartOpts =  {
     size: '80%',
     endAngle: 360,
     background: {
-      backgroundColor: '#4b5966',
       borderWidth: 0,
       outerRadius: '108%',
     }
@@ -35,7 +34,6 @@ export const chartOpts =  {
     min: 0,
     max: 360,
     lineColor: 'transparent',
-    gridLineColor: '#4b5966',
     gridLineWidth: 3,
     gridZIndex: 2,
     labels: {
@@ -47,7 +45,6 @@ export const chartOpts =  {
     tickInterval: 2,
     min: 0,
     max: 6,
-    gridLineColor: "#283440",
     gridLineWidth: 18,
     gridLineInterpolation: 'circle',
     labels: {

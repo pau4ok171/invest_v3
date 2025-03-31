@@ -31,7 +31,7 @@ const companyListStore = useCompanyListStore()
   font-size: 0.75rem;
   font-weight: normal;
   line-height: 1.5;
-  color: rgb(var(--base-theme-on-surface-variant));
+  color: rgb(var(--v-theme-on-surface-variant));
 }
 .company-list__view-modes {
   display: grid;

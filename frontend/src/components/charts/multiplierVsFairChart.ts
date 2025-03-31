@@ -30,7 +30,7 @@ export const chartOpts = {
       distance: 20,
       style: {
         fontSize: '12px',
-        color: '#fff'
+        color: 'rgb(var(--v-theme-on-surface-light))'
       }
     },
     lineWidth: 0,
