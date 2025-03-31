@@ -66,7 +66,7 @@ onMounted(() => {
 
 <template>
   <div class="earnings-revenue-chart">
-    <DataNotAvailable v-if="!available" chart-name="Earnings Revenue Chart" />
+    <data-not-available v-if="!available" chart-name="Earnings Revenue Chart" />
     <charts v-else constructorType="chart" :options="chartOptions" />
   </div>
 </template>
