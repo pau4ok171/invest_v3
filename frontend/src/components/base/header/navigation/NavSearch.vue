@@ -96,7 +96,6 @@ onUnmounted(() => {
     <template #default>
       <v-card>
         <v-text-field
-          class="mb-4"
           prepend-inner-icon="$iSearch"
           placeholder="Looking for..."
           single-line
@@ -120,7 +119,7 @@ onUnmounted(() => {
 
         <v-card-text
           v-if="!searchResponse.length"
-          class="px-4 py-0 mb-4 d-flex flex-wrap justify-center align-center"
+          class="px-4 py-0 my-4 d-flex flex-wrap justify-center align-center"
         >
           <div class="text-center">
             <v-icon
@@ -131,8 +130,8 @@ onUnmounted(() => {
             <v-list-subheader title="Your search results will appear here" />
           </div>
         </v-card-text>
-
-        <v-list v-else>
+        <v-card-item v-else class="px-2">
+        <v-list slim>
           <v-list-item
             v-for="item in searchResponse"
             :key="item.uid"
@@ -156,6 +155,7 @@ onUnmounted(() => {
             </template>
           </v-list-item>
         </v-list>
+        </v-card-item>
       </v-card>
     </template>
   </v-dialog>
