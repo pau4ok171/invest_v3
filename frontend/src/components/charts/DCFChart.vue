@@ -223,15 +223,15 @@ onBeforeMount(() => {
 
 <template>
   <div class="dcf-chart">
-    <FetchingData v-if="store.fetchingCompany" />
+    <fetching-data v-if="store.fetchingCompany" />
     <charts
       v-else-if="available"
       constructorType="chart"
       :options="chartOpts"
     />
-    <DataNotAvailable v-else chart-name="DCF Chart" />
-    <FailPattern />
-    <BarGradient />
+    <data-not-available v-else chart-name="DCF Chart" />
+    <fail-pattern />
+    <bar-gradient />
   </div>
 </template>
 
