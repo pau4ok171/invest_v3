@@ -79,15 +79,25 @@ function createNote() {
       <v-breadcrumbs :items="breadcrumbs" />
       <v-card-item>
         <template #prepend>
-          <v-skeleton-loader v-if="loading" type="avatar" />
+          <v-skeleton-loader v-if="loading" type="avatar" height="60" />
           <v-avatar v-else :image="company.logo_url" size="60" />
         </template>
         <template #title>
-          <v-skeleton-loader v-if="loading" type="text" width="250" />
+          <v-skeleton-loader
+            v-if="loading"
+            type="text"
+            width="250"
+            height="28"
+          />
           <template v-else>{{ company.title }}</template>
         </template>
         <template #subtitle>
-          <v-skeleton-loader v-if="loading" type="text" width="250" />
+          <v-skeleton-loader
+            v-if="loading"
+            type="text"
+            width="250"
+            height="28"
+          />
           <template v-else>
             {{
               `${company.market.title}:${company.slug?.toUpperCase()} Stock Report`
@@ -96,9 +106,13 @@ function createNote() {
         </template>
       </v-card-item>
       <v-card-actions class="justify-end">
-        <template v-if="loading">
-          <v-skeleton-loader width="250" type="button@3" />
-        </template>
+        <v-skeleton-loader
+          v-if="loading"
+          class="company-detail-header__skeleton-loader"
+          width="250"
+          type="button@3"
+          height="28"
+        />
         <template v-else>
           <v-btn
             v-if="!company.is_watchlisted"
