@@ -41,37 +41,37 @@ const statements = computed<Statement[]>(() =>
     (s) => s.area === 'VALUE' && s.outcome === 1002
   )
 )
-const fairValueTabs = computed<Record<string, FairValueTab>>(() => {
+const fairValueTabs = computed<FairValueTab[]>(() => {
   const ticker = company.value.ticker || 'Company'
-  return {
-    pe: {
+  return [
+    {
       name: 'PE',
       id: 'pe',
       value: 1,
       metric: `As ${ticker} is profitable we use its Price-To-Earnings Ratio for relative valuation analysis`,
     },
-    pb: {
+    {
       name: 'PB',
       id: 'pb',
       value: 2,
       metric: `For ${ticker} we can also use its Price-To-Book Ratio for relative valuation analysis`,
     },
-    ps: {
+    {
       name: 'PS',
       id: 'ps',
       value: 3,
       metric: `As ${ticker} is a bank we don’t use its Price-To-Sales Ratio as the key metric for relative valuation analysis`,
     },
-    others: {
+    {
       name: 'Others',
       id: 'others',
       value: 0,
       metric:
         'Other financial metrics that can be useful for relative valuation',
     },
-  }
+  ]
 })
-const fairValueSelected = ref(fairValueTabs.value['pe'])
+const fairValueSelected = ref(fairValueTabs.value[0])
 
 const multiplierTabs = [
   {
