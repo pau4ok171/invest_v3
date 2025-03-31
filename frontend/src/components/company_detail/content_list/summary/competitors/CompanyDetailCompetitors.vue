@@ -42,19 +42,19 @@ function humanizeFinancial(
 <template>
   <v-card
     color="surface-light"
-    class="mb-4"
-    :title="`${company.ticker} Competitors`"
+    class="mb-4 pa-4"
   >
+    <v-card-title>{{ `${company.ticker} Competitors` }}</v-card-title>
     <v-card-item>
-      <v-container>
         <v-row>
           <v-col v-for="c in competitors" :key="c.id" cols="3">
             <v-card variant="text" :to="c.to">
               <v-card-item>
-                <SnowflakeChart
+                <snowflake-chart
                   :key="`competitor-snowflake-${c.id}`"
                   :chart-data="c.snowflake"
                   small
+                  style="width: 132px; height: 132px; transform: translateX(-50%); left: 50%;"
                 />
               </v-card-item>
               <v-card-text class="competitor__title">{{
@@ -72,7 +72,6 @@ function humanizeFinancial(
             </v-card>
           </v-col>
         </v-row>
-      </v-container>
     </v-card-item>
   </v-card>
 </template>
