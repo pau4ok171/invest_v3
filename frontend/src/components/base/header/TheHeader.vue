@@ -9,7 +9,7 @@ import NavLogo from '@/components/base/header/navigation/NavLogo.vue'
 </script>
 
 <template>
-  <v-toolbar class="header px-md-3" color="background" flat>
+  <v-app-bar class="header px-md-3" color="background" flat>
     <template #prepend>
       <nav-logo />
       <div class="px-1"></div>
@@ -23,7 +23,7 @@ import NavLogo from '@/components/base/header/navigation/NavLogo.vue'
       <v-divider vertical class="mx-2 my-auto" length="16" />
       <nav-user />
     </template>
-  </v-toolbar>
+  </v-app-bar>
 </template>
 
 <style lang="scss">
