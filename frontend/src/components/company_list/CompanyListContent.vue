@@ -182,17 +182,17 @@ function humanize(val: number = 0, currencyUnit: string = '') {
     }
   }
 }
-.base-skeleton-loader__avatar {
+.v-skeleton-loader__avatar {
   width: 40px;
   min-width: 40px;
   height: 40px;
   min-height: 40px;
 }
-.base-skeleton-loader__chip {
+.v-skeleton-loader__chip {
   margin-left: 4px;
   border-radius: 4px;
 }
-.base-skeleton-loader__button {
+.v-skeleton-loader__button {
   border-radius: 4px;
   height: 24px;
   margin: 4px;
