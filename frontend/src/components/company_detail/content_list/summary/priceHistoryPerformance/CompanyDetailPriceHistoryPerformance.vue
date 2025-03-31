@@ -20,7 +20,7 @@ const company = computed(() => companyDetailStore.company)
 </script>
 
 <template>
-  <v-card color="surface-light" class="mb-4">
+  <v-card color="surface-light" class="mb-4 pa-4">
     <v-card-title>History Chart & Performance</v-card-title>
     <v-card-item><price-chart /></v-card-item>
 
