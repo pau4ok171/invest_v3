@@ -46,7 +46,7 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
     <v-list-item v-for="item in risks" :key="item.id">
       <template #prepend>
         <v-icon
-          icon="$iAlert"
+          icon="$iAlertCircle"
           :color="item.severity === 'MAJOR' ? 'error' : 'warning'"
         />
       </template>
@@ -60,6 +60,7 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
         v-bind="activatorProps"
         text="see all risks checks"
         color="info"
+        variant="tonal"
       />
     </template>
     <template #default>
