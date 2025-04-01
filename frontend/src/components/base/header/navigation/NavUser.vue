@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Components
-import AuthModalMenu from '@/components/base/auth/AuthModalMenu.vue'
+import AuthDialog from "@/components/base/auth/AuthDialog.vue";
 
 // Composables
 import { useAuthStore } from '@/store/auth'
@@ -72,24 +72,10 @@ function onLogout() {
     </template>
 
     <template v-else>
-      <v-dialog v-model="dialog" max-width="700">
-        <template #activator="{ props: activatorProps }">
-          <v-btn text="login" color="info" v-bind="activatorProps" />
-        </template>
-        <template #default>
-          <v-card title="Finargo">
-            <template #append>
-              <v-btn
-                icon="$close"
-                density="compact"
-                variant="text"
-                @click="dialog = false"
-              />
-            </template>
-            <AuthModalMenu />
-          </v-card>
-        </template>
-      </v-dialog>
+      <v-btn color="info" variant="outlined">
+        <auth-dialog />
+        login
+      </v-btn>
     </template>
   </div>
 </template>
