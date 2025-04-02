@@ -1,10 +1,12 @@
 <script setup lang="ts">
 // Components
 import BookIcon from '@/components/icons/BookIcon.vue'
+import CompanyDetailNote from '@/components/company_detail/content_list/summary/notes/CompanyDetailNote.vue'
 import CompanyDetailNotesDialog from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { usePageStore } from '@/store/page'
 import { useAuthStore } from '@/store/auth'
 
 // Utilities
@@ -14,13 +16,13 @@ import { computed } from 'vue'
 import type { Note } from '@/types/notes'
 
 const authStore = useAuthStore()
+const pageStore = usePageStore()
 const companyDetailStore = useCompanyDetailStore()
 const notes = computed<Note[]>(() => companyDetailStore.notes)
-const note = computed<Note>(() => companyDetailStore.note)
 
-function editNote(note: Note) {
-  companyDetailStore.note = note
-  companyDetailStore.notesEditorIsActive = true
+function onOpenLateral() {
+  companyDetailStore.lateralMenuComponentName = 'notes'
+  pageStore.extended = true
 }
 </script>
 
@@ -55,47 +57,17 @@ function editNote(note: Note) {
     <v-card-item v-else>
       <v-row class="mb-2">
         <v-col v-for="note in notes.slice(0, 3)" :key="`note-${note.id}`">
-          <v-card color="surface-bright" @click="() => editNote(note)">
-            <v-card-text class="company-detail-notes__note-text">{{
-              note.text
-            }}</v-card-text>
-            <v-card-item>
-              <template #prepend>
-                <span class="mr-1">{{
-                  note.created === note.updated ? 'Created' : 'Updated'
-                }}</span>
-                <time v-if="note.updated" :datetime="note.updated">{{
-                  new Date(note.updated).toLocaleDateString('ru-RU')
-                }}</time>
-              </template>
-              <template #append>
-                <v-btn
-                  icon="$iDelete"
-                  variant="text"
-                  color="error"
-                  density="comfortable"
-                  size="small"
-                  rounded="lg"
-                  @click.stop="companyDetailStore.deleteNote(note)"
-                />
-              </template>
-            </v-card-item>
-          </v-card>
+          <company-detail-note :note />
         </v-col>
       </v-row>
-      <!-- TODO: Create Dialog for notes on CompanyDetailNotes -->
-      <v-btn color="info" text="See More" block variant="tonal" />
+      <v-btn
+        color="info"
+        text="See More"
+        block
+        variant="tonal"
+        @click="onOpenLateral"
+        :disabled="pageStore.extended"
+      />
     </v-card-item>
   </v-card>
 </template>
-
-<style scoped>
-.company-detail-notes__note-text {
-  height: 75px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-</style>

@@ -12,6 +12,7 @@ export const useAuthStore = defineStore({
       stage_in_days: number
     },
     token: '',
+    hasAccount: true,
   }),
   getters: {
     isAuthenticated: (state) => {
