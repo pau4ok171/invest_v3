@@ -140,6 +140,7 @@ export const useCompanyDetailStore = defineStore({
     fetchingPriceData: false,
     fetchingCompany: false,
     watchlistLoading: false,
+    lateralMenuComponentName: null as 'notes' | 'news' | null,
   }),
   getters: {
     chartPriceData(state) {

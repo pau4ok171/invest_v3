@@ -2,6 +2,7 @@
 // Components
 import CompanyDetailHeader from '@/components/company_detail/header/CompanyDetailHeader.vue'
 import CompanyDetailContent from '@/components/company_detail/CompanyDetailContent.vue'
+import CompanyDetailRightSidebar from '@/components/company_detail/rightSidebar/companyDetailRightSidebar.vue'
 import NotesEditor from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
 
 // Composables
@@ -42,7 +43,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <CompanyDetailHeader />
-  <CompanyDetailContent />
-  <NotesEditor />
+  <section style="max-width: 1200px">
+    <company-detail-header />
+    <company-detail-content />
+  </section>
+  <company-detail-right-sidebar />
+  <notes-editor />
 </template>

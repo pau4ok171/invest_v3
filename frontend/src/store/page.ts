@@ -5,5 +5,6 @@ export const usePageStore = defineStore({
   state: () => ({
     notFound: false,
     loading: false,
+    extended: false,
   }),
 })
