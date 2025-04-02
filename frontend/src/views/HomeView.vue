@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="page-not-found">HOME VIEW</div>
+  <div class="d-flex justify-center w-100 h-100">
+    <div class="page-not-found">HOME VIEW</div>
+  </div>
 </template>
 
 <style scoped>

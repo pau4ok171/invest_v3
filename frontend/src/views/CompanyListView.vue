@@ -18,7 +18,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section>
+  <section class="d-flex justify-center w-100 h-100 flex-column">
     <CompanyListHeader />
 
     <CompanyListContent />
