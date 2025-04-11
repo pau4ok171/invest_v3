@@ -66,15 +66,31 @@ export const useCompanyListStore = defineStore({
     lastUpdate(state) {
       if (!this.companies.length) return undefined
       if (this.companies.length === 1) return this.companies[0].updated
-      return state.companies.reduce((prev: ListCompany, cur: ListCompany) => prev.updated > cur.updated ? prev : cur).updated
+      return state.companies.reduce((prev: ListCompany, cur: ListCompany) =>
+        prev.updated > cur.updated ? prev : cur
+      ).updated
     },
   },
   actions: {
+    buildInitUrl() {
+      return `api/v1/invest/companies/?${new URLSearchParams({
+        country: this.activeFilters.country.slug,
+        sector: this.activeFilters.sector.slug,
+        _limit: '20',
+      })}`
+    },
+    async changeFilter(options: FilterOptions) {
+      if (options.filterName === 'country') {
+        this.activeFilters.sector = this.filters.sector[0]
+      }
+      this.activeFilters[options.filterName] = options.item
+      await this.fetchFiltersByCountry()
+      await this.fetchCompanies({ done: (status: string) => status }, true)
+    },
     async fetchCompanies(
       { done }: FetchCompaniesOptions,
       clear: boolean = false
     ) {
-
       try {
         //
         if (this.companiesAbortController) {
@@ -95,7 +111,7 @@ export const useCompanyListStore = defineStore({
         // 3. Execute request
         this.fetching = true
         const response = await axios.get<CompaniesResponse>(this.nextUrl, {
-          signal: this.companiesAbortController.signal
+          signal: this.companiesAbortController.signal,
         })
 
         // 4. Success response process
@@ -118,31 +134,6 @@ export const useCompanyListStore = defineStore({
         this.companiesAbortController = null
         this.fetching = false
       }
-    },
-    resetCompaniesState() {
-      this.nextUrl = this.buildInitUrl()
-      this.companies = []
-      this.totalCompanyLength = 0
-    },
-    buildInitUrl() {
-      return `api/v1/invest/companies/?${new URLSearchParams({
-        country: this.activeFilters.country.slug,
-        sector: this.activeFilters.sector.slug,
-        _limit: '20',
-      })}`
-    },
-    hasValidNextUrl(nextUrl: string | null): nextUrl is string {
-      return !!nextUrl && nextUrl.trim() !== ''
-    },
-    handleSuccessResponse(data: CompaniesResponse) {
-      this.companies = [...this.companies, ...data.results]
-      this.nextUrl = data.next
-      this.totalCompanyLength = data.count
-    },
-    handleError(error: unknown) {
-      console.log(error)
-      // It's possible to send error to a system of monitoring
-      // Sentry.captureException(error)
     },
     async fetchFilters() {
       await axios
@@ -176,21 +167,29 @@ export const useCompanyListStore = defineStore({
         })
         .catch((error) => console.log(error))
     },
-    async changeFilter(options: FilterOptions) {
-      if (options.filterName === 'country') {
-        this.activeFilters.sector = this.filters.sector[0]
-      }
-      this.activeFilters[options.filterName] = options.item
-      await this.fetchFiltersByCountry()
-      await this.fetchCompanies({ done: (status: string) => status }, true)
+    handleError(error: unknown) {
+      console.log(error)
+      // It's possible to send error to a system of monitoring
+      // Sentry.captureException(error)
     },
-    async toggleWatchlisted(
-      item: {
-        watchlisted: boolean
-        uid: string
-        ticker: string
-      }
-    ) {
+    handleSuccessResponse(data: CompaniesResponse) {
+      this.companies = [...this.companies, ...data.results]
+      this.nextUrl = data.next
+      this.totalCompanyLength = data.count
+    },
+    hasValidNextUrl(nextUrl: string | null): nextUrl is string {
+      return !!nextUrl && nextUrl.trim() !== ''
+    },
+    resetCompaniesState() {
+      this.nextUrl = this.buildInitUrl()
+      this.companies = []
+      this.totalCompanyLength = 0
+    },
+    async toggleWatchlisted(item: {
+      watchlisted: boolean
+      uid: string
+      ticker: string
+    }) {
       const formData = new FormData()
       const formDataPayload: Object = {
         uid: item.uid,
