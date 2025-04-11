@@ -1,11 +1,21 @@
-// Vuetify
+// Styles
 import 'vuetify/styles'
-import { createVuetify } from "vuetify";
-import { themes } from "@/vuetify/themes";
-import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
+
+// Components
+import { VFileUpload } from 'vuetify/labs/VFileUpload'
+
+// Composables
+import { createVuetify } from 'vuetify'
+
+// Utilities
+import { themes } from '@/vuetify/themes'
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { aliases as iAliases } from '@/vuetify/iconsets/iIcons/i-svg'
 
-export const vuetify= createVuetify({
+export const vuetify = createVuetify({
+  components: {
+    VFileUpload,
+  },
   theme: {
     defaultTheme: 'finargo-dark',
     themes: {
@@ -24,7 +34,7 @@ export const vuetify= createVuetify({
   },
   defaults: {
     VList: {
-      activeClass: 'text-info'
+      activeClass: 'text-info',
     },
     VSelect: {
       activeClass: 'text-info',

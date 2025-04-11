@@ -1,8 +1,8 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "AdminModelIndicator",
+  name: 'AdminModelIndicator',
   props: {
     isActive: {
       type: Boolean,
@@ -13,39 +13,42 @@ export default defineComponent({
 </script>
 
 <template>
-<div>
-  <div class="admin-model-indicator" :class="{'admin-model-indicator--is-active': isActive}">
-    <div class="admin-model-indicator__bounce1"></div>
-    <div class="admin-model-indicator__bounce2"></div>
+  <div class="d-flex justify-center align-center">
+    <div
+      class="admin-model-indicator"
+      :class="{ 'admin-model-indicator--is-active': isActive }"
+    >
+      <div
+        class="admin-model-indicator__bounce admin-model-indicator__bounce1"
+      ></div>
+      <div
+        class="admin-model-indicator__bounce admin-model-indicator__bounce2"
+      ></div>
+    </div>
   </div>
-</div>
 </template>
 
 <style scoped lang="scss">
 .admin-model-indicator {
-  position: absolute;
+  position: relative;
+  width: 8px;
+  height: 8px;
 
-  .admin-model-indicator__bounce1,
-  .admin-model-indicator__bounce2 {
+  .admin-model-indicator__bounce {
     border-radius: 50%;
     position: absolute;
     background-color: #b01111;
-    top: 0;
-    left: 0;
     width: 8px;
     height: 8px;
   }
-
   .admin-model-indicator__bounce1 {
     opacity: 0.5;
-    -webkit-animation: in-bounce 2s infinite ease-in-out;
-    animation: in-bounce 2s infinite ease-in-out;
+    animation: bounce 2s infinite ease-in-out;
   }
-
-  @keyframes in-bounce {
+  @keyframes bounce {
     0%,
     100% {
-      transform: scale(1.0);
+      transform: scale(1);
     }
     50% {
       transform: scale(2);
@@ -53,10 +56,8 @@ export default defineComponent({
   }
 }
 .admin-model-indicator--is-active {
-
-  .admin-model-indicator__bounce1,
-  .admin-model-indicator__bounce2 {
-      background-color:  #4B8232;
-    }
+  .admin-model-indicator__bounce {
+    background-color: #4b8232;
   }
+}
 </style>
