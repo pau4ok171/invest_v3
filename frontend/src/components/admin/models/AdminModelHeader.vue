@@ -154,7 +154,7 @@ watchEffect(() => {
               prepend-icon="$iDelete"
               :disabled="store.isNew"
             >
-              <v-dialog activator="parent" max-width="500">
+              <v-dialog activator="parent" max-width="500" v-model="dialog">
                 <v-card>
                   <v-card-title>Deletion {{ state.companyName }}</v-card-title>
                   <v-card-text>
