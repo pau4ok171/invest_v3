@@ -1,15 +1,14 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script setup lang="ts">
+// Utilities
+import { onMounted } from 'vue'
 
-export default defineComponent({
-  name: "AdminStaff"
+onMounted(() => {
+  document.title = 'ADMIN STAFF'
 })
 </script>
 
 <template>
-<div class="page-not-found">
-  ADMIN STAFF
-</div>
+  <div class="page-not-found">ADMIN STAFF</div>
 </template>
 
 <style scoped>

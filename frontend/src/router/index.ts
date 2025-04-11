@@ -6,6 +6,7 @@ import { usePageStore } from '@/store/page'
 // Utilities
 import { loadLayoutMiddleware } from '@/router/middleware/loadLayout.middleware'
 import { RouteNamesEnum } from '@/router/routes.types'
+import { AppLayoutsEnum } from '@/layouts/layouts.types'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,6 +30,71 @@ const router = createRouter({
         }
         next()
       },
+      meta: {
+        layout: AppLayoutsEnum.admin,
+      },
+      children: [
+        {
+          path: 'models',
+          name: 'adminModels',
+          component: () => import('@/components/admin/models/AdminModels.vue'),
+          meta: {
+            layout: AppLayoutsEnum.admin,
+          },
+          children: [
+            {
+              path: 'companies',
+              name: 'adminModelsCompanies',
+              component: () =>
+                import('@/components/admin/models/company/AdminModelsCompanies.vue'),
+              meta: {
+                layout: AppLayoutsEnum.admin,
+              },
+            },
+            {
+              path: 'companies/new',
+              name: 'adminCompanyModelNew',
+              component: () => import('@/components/admin/models/company/AdminModelCompany.vue'),
+              meta: {
+                layout: AppLayoutsEnum.admin,
+              },
+            },
+            {
+              path: 'companies/:companyUID([A-Za-z0-9-]+)',
+              name: 'adminCompanyModel',
+              component: () => import('@/components/admin/models/company/AdminModelCompany.vue'),
+              meta: {
+                layout: AppLayoutsEnum.admin,
+              },
+              props: true,
+            },
+          ],
+        },
+        {
+          path: 'dashboard',
+          name: 'adminDashboard',
+          component: () => import('@/components/admin/dashboard/AdminDashboard.vue'),
+          meta: {
+            layout: AppLayoutsEnum.admin,
+          },
+        },
+        {
+          path: 'staff',
+          name: 'adminStaff',
+          component: () => import('@/components/admin/staff/AdminStaff.vue'),
+          meta: {
+            layout: AppLayoutsEnum.admin,
+          },
+        },
+        {
+          path: 'settings',
+          name: 'adminSettings',
+          component: () => import('@/components/admin/settings/AdminSettings.vue'),
+          meta: {
+            layout: AppLayoutsEnum.admin,
+          },
+        },
+      ],
     },
     {
       path: '/dashboard',
