@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Composables
-import { useCompanyListStore } from '@/store/companyList'
+import { useCompanyListStore } from '@/store/companyList/companyList'
 
 const companyListStore = useCompanyListStore()
 </script>
@@ -9,7 +9,12 @@ const companyListStore = useCompanyListStore()
   <section class="company-list__options">
     <div></div>
     <div class="company-list__company-count">
-      <v-skeleton-loader v-if="companyListStore.fetching" loading type="text" width="150" />
+      <v-skeleton-loader
+        v-if="companyListStore.fetching"
+        loading
+        type="text"
+        width="150"
+      />
       <p v-else>{{ companyListStore.totalCompanyLength }} companies</p>
     </div>
     <div class="company-list__view-modes">

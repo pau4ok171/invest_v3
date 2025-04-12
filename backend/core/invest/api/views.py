@@ -91,52 +91,20 @@ class CompanyListView(ListAPIView):
         return queryset
 
 
-class CompanyListFilters(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
+class CompanyListCountries(ListAPIView):
+    serializer_class = CountrySerializer
 
-    def __init__(self):
-        super().__init__()
-        self.companies = None
-
-    def get(self, request, *args, **kwargs):
-        self.companies = Company.objects.filter(is_visible=True)
-        return Response(
-            data={
-                'filters': {
-                    'country': self.get_country_filters(),
-                    'sector': self.get_sector_filters(),
-                },
-            },
-            status=status.HTTP_200_OK
-        )
-
-    def get_sector_filters(self):
-        sectors = Sector.objects.filter(company__pk__in=self.companies).distinct()
-        sector_serializer = SectorSerializer(sectors, many=True)
-        return sector_serializer.data
-
-    def get_country_filters(self):
-        countries = Country.objects.filter(company__pk__in=self.companies).distinct()
-        country_serializer = CountrySerializer(countries, many=True)
-        return country_serializer.data
+    def get_queryset(self):
+        companies = Company.objects.filter(is_visible=True)
+        return Country.objects.filter(company__pk__in=companies).distinct()
 
 
-class CompanyListSectorFilters(CompanyListFilters):
-    def get(self, request, *args, **kwargs):
-        country_slug = self.kwargs.get('country_slug', 'global')
-        self.companies = Company.objects.filter(is_visible=True)
+class CompanyListSectors(ListAPIView):
+    serializer_class = SectorSerializer
 
-        if not country_slug == 'global':
-            self.companies = self.companies.filter(country__name_iso=country_slug)
-
-        return Response(
-            data={
-                'filters': {
-                    'sector': self.get_sector_filters(),
-                },
-            },
-            status=status.HTTP_200_OK
-        )
+    def get_queryset(self):
+        companies = Company.objects.filter(is_visible=True)
+        return Sector.objects.filter(company__pk__in=companies).distinct()
 
 
 class WatchlistedCompanyAPIView(APIView):

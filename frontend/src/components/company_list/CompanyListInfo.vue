@@ -1,39 +1,49 @@
 <script setup lang="ts">
 // Composables
-import { useCompanyListStore } from '@/store/companyList'
+import { useCompanyListStore } from '@/store/companyList/companyList'
 
-const companyListStore = useCompanyListStore()
+// Utilities
+import { computed } from 'vue'
+
+// Types
+import type { CountryState } from '@/store/companyList/types'
+
+const store = useCompanyListStore()
+const countryState = computed<CountryState>(() => store.countryState)
 </script>
 
 <template>
   <section class="company-list__info">
     <div class="company-list__title">
-      Largest {{ companyListStore.activeFilters.country.title }} Stocks
+      Largest {{ store.countryState.title }} Stocks
     </div>
     <div class="company-list__updated">
       <span>Updated </span>
       <v-skeleton-loader
         class="d-inline-block mt-n3 ml-n3"
-        v-if="companyListStore.fetching"
+        v-if="store.fetching"
         width="120"
         type="text"
       />
       <template v-else>
         {{
-          companyListStore.lastUpdate
-            ? new Date(companyListStore.lastUpdate).toLocaleDateString('ru-RU')
+          store.lastUpdate
+            ? new Date(store.lastUpdate).toLocaleDateString('ru-RU')
             : 'n/a'
         }}
       </template>
     </div>
     <div class="company-list__description">
       Discover
-      {{ companyListStore.activeFilters.country.title }} companies<template
-        v-if="companyListStore.activeFilters.country.markets"
+      {{ countryState.title }} companies<template
+        v-if="store.countryState.markets.length"
       >
         that are on the
-        {{ companyListStore.activeFilters.country.markets[0]?.title }}</template
-      >.
+        {{ countryState.markets[0]?.title }}</template
+      >
+      <template v-else>
+        from around the world
+      </template>.
     </div>
   </section>
 </template>

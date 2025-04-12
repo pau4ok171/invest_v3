@@ -29,9 +29,21 @@ class CountrySerializer(serializers.ModelSerializer):
 
 
 class SectorSerializer(serializers.ModelSerializer):
+    countries = serializers.SerializerMethodField()
+
     class Meta:
         model = Sector
-        fields = ['title', 'slug']
+        fields = (
+            'id',
+            'title',
+            'slug',
+            'countries',
+        )
+
+    @staticmethod
+    def get_countries(obj):
+        countries = Country.objects.filter(company__sector=obj).distinct()
+        return CountrySerializer(countries, many=True).data
 
 
 class SectorDetailSerializer(serializers.ModelSerializer):

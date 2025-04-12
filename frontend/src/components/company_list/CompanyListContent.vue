@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Composables
-import { useCompanyListStore } from '@/store/companyList'
+import { useCompanyListStore } from '@/store/companyList/companyList'
 
 // Utilities
 import { computed, ref } from 'vue'
@@ -42,27 +42,28 @@ const headers = ref([
   { key: 'watchlisted', title: '', sortable: false },
 ])
 
-const items = computed<CompanyItem[]>(() =>
-  companyListStore.companies.map((c) => ({
-    companyLogo: c.logo_url,
-    companyName: c.title,
-    lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
-    return7D: `${c.return_1y.toFixed(2)}%`,
-    return1Y: `${c.return_7d.toFixed(2)}%`,
-    marketCap: humanize(
-      c.price_data.capitalisation,
-      c.formatting.primaryCurrencySymbol
-    ),
-    consensus: 'TBA',
-    fairValue: 'TBA',
-    growth: 'TBA',
-    dividendYield: 'TBA',
-    sector: c.sector.title,
-    ticker: c.ticker,
-    to: c.absolute_url,
-    uid: c.uid,
-    watchlisted: c.is_watchlisted,
-  })) as CompanyItem[]
+const items = computed<CompanyItem[]>(
+  () =>
+    companyListStore.companies.map((c) => ({
+      companyLogo: c.logo_url,
+      companyName: c.title,
+      lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
+      return7D: `${c.return_1y.toFixed(2)}%`,
+      return1Y: `${c.return_7d.toFixed(2)}%`,
+      marketCap: humanize(
+        c.price_data.capitalisation,
+        c.formatting.primaryCurrencySymbol
+      ),
+      consensus: 'TBA',
+      fairValue: 'TBA',
+      growth: 'TBA',
+      dividendYield: 'TBA',
+      sector: c.sector.title,
+      ticker: c.ticker,
+      to: c.absolute_url,
+      uid: c.uid,
+      watchlisted: c.is_watchlisted,
+    })) as CompanyItem[]
 )
 
 function humanize(val: number = 0, currencyUnit: string = '') {
@@ -76,7 +77,11 @@ function humanize(val: number = 0, currencyUnit: string = '') {
 </script>
 
 <template>
-  <v-infinite-scroll @load="companyListStore.fetchCompanies" empty-text="" class="overflow-y-hidden">
+  <v-infinite-scroll
+    @load="companyListStore.fetchCompanies"
+    empty-text=""
+    class="overflow-y-hidden"
+  >
     <v-data-table-virtual
       class="company-list-companies-table bg-background"
       :style="{ fontSize: '.75rem' }"
@@ -101,10 +106,22 @@ function humanize(val: number = 0, currencyUnit: string = '') {
         <router-link :to="item.to">{{ item.lastPrice }}</router-link>
       </template>
       <template #item.return7D="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to" :class="!item.return7D.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return7D }}</router-link>
+        <router-link
+          :to="item.to"
+          :class="
+            !item.return7D.startsWith('-') ? 'text-success' : 'text-error'
+          "
+          >{{ item.return7D }}</router-link
+        >
       </template>
       <template #item.return1Y="{ item }: { item: CompanyItem }">
-        <router-link :to="item.to" :class="!item.return1Y.startsWith('-') ? 'text-success' : 'text-error'">{{ item.return1Y }}</router-link>
+        <router-link
+          :to="item.to"
+          :class="
+            !item.return1Y.startsWith('-') ? 'text-success' : 'text-error'
+          "
+          >{{ item.return1Y }}</router-link
+        >
       </template>
       <template #item.marketCap="{ item }: { item: CompanyItem }">
         <router-link :to="item.to">{{ item.marketCap }}</router-link>

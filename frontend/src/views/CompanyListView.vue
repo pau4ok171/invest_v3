@@ -4,21 +4,21 @@ import CompanyListHeader from '@/components/company_list/CompanyListHeader.vue'
 import CompanyListContent from '@/components/company_list/CompanyListContent.vue'
 
 // Composables
-import { useCompanyListStore } from '@/store/companyList'
+import { useCompanyListStore } from '@/store/companyList/companyList'
 
 // Utilities
 import { onMounted } from 'vue'
 
-const companyListStore = useCompanyListStore()
+const store = useCompanyListStore()
 
 onMounted(async () => {
   document.title = 'Stocks'
-  await companyListStore.fetchFilters()
+  await store.initFilters()
 })
 </script>
 
 <template>
-  <section class="d-flex justify-center w-100 h-100 flex-column">
+  <section class="d-flex w-100 h-100 flex-column">
     <CompanyListHeader />
 
     <CompanyListContent />

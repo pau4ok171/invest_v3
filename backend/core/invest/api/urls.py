@@ -7,8 +7,8 @@ urlpatterns = [
     # Objects
     path('companies/', views.CompanyListView.as_view()),
     path('companies/<slug:company_slug>', views.CompanyDetailAPIView.as_view()),
-    path('filters/', views.CompanyListFilters.as_view()),
-    path('filters/sector/<country_slug>', views.CompanyListSectorFilters.as_view()),
+    path('countries/', views.CompanyListCountries.as_view()),
+    path('sectors/', views.CompanyListSectors.as_view()),
     path('price_data/<slug:company_slug>/', views.PriceChartList.as_view()),
     path('toggle_to_watchlist/', views.WatchlistedCompanyAPIView.as_view()),
     # Functions

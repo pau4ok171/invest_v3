@@ -1,52 +1,63 @@
 <script setup lang="ts">
 // Composables
-import { useCompanyListStore } from '@/store/companyList'
+import { useCompanyListStore } from '@/store/companyList/companyList'
 
 // Utilities
-import { ref, shallowRef, watch } from 'vue'
+import { shallowRef } from 'vue'
 
-const companyListStore = useCompanyListStore()
+// Types
+import type { CountryState, DependentState } from '@/store/companyList/types'
+
+const store = useCompanyListStore()
 
 const dialog = shallowRef(false)
-const country = ref({ slug: 'global', title: 'Global' })
-const sector = ref({ slug: 'any', title: 'Any' })
 
-watch(country, async (newVal) => {
-  await companyListStore.changeFilter({ filterName: 'country', item: newVal })
-  country.value = companyListStore.activeFilters.country
-  sector.value = companyListStore.activeFilters.sector
-}, { deep: true })
-watch(sector, async (newVal) => {
-  await companyListStore.changeFilter({ filterName: 'sector', item: newVal })
-  country.value = companyListStore.activeFilters.country
-  sector.value = companyListStore.activeFilters.sector
-}, { deep: true })
+async function onUpdateCountry(modelValue: CountryState) {
+  if (store.countryState.key === modelValue.key) return
+
+  store.countryState = modelValue
+  store.resetSectorState()
+
+  if (store.sectorState.key === 'any') {
+    await store.fetchCompanies({ done: (status: string) => status }, true)
+  }
+}
+
+async function onUpdateSector(modelValue: DependentState) {
+  if (store.sectorState.key === modelValue.key) return
+
+  store.sectorState = modelValue
+  await store.fetchCompanies({ done: (status: string) => status }, true)
+}
 </script>
 
 <template>
   <section class="company-list__filters">
     <div class="company-list__basic-filters">
       <v-select
-        v-model="country"
-        :items="companyListStore.filters.country"
-        :loading="companyListStore.fetching"
+        :model-value="store.countryState"
+        @update:model-value="onUpdateCountry"
+        :items="store.countries"
+        :loading="store.fetching"
         variant="solo-filled"
         density="compact"
         single-line
         item-title="title"
-        item-value="slug"
+        item-value="key"
         return-object
         hide-details
       />
 
       <v-select
-        v-model="sector"
-        :items="companyListStore.filters.sector"
-        :loading="companyListStore.fetching"
+        :model-value="store.sectorState"
+        @update:model-value="onUpdateSector"
+        :items="store.filteredSectors"
+        :loading="store.fetching"
         variant="solo-filled"
         density="compact"
         single-line
-        item-value="slug"
+        item-title="title"
+        item-value="key"
         return-object
         hide-details
       />
@@ -74,7 +85,7 @@ watch(sector, async (newVal) => {
   </section>
 </template>
 
-<style>
+<style scoped>
 .company-list__filters {
   display: grid;
   grid-template-columns: auto auto;
