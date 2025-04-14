@@ -34,3 +34,21 @@ export interface WatchlistItem {
 
 export type InfiniteScrollSide = 'start' | 'end' | 'both'
 export type InfiniteScrollStatus = 'ok' | 'empty' | 'loading' | 'error'
+
+export interface CompanyItem {
+  companyLogo: string
+  companyName: string
+  lastPrice: string
+  return7D: string
+  return1Y: string
+  marketCap: string
+  consensus: string
+  fairValue: string
+  growth: string
+  dividendYield: string
+  sector: string
+  watchlisted: boolean
+  ticker: string
+  to: string
+  uid: string
+}
