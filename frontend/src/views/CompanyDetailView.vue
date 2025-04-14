@@ -14,17 +14,22 @@ import { useRoute } from 'vue-router'
 import { onMounted, watch } from 'vue'
 import { RouteNamesEnum } from '@/router/routes.types'
 
+const props = defineProps({
+  companySlug: {
+    type: String,
+    required: true,
+  },
+})
+
 const route = useRoute()
 const pageStore = usePageStore()
 const companyDetailStore = useCompanyDetailStore()
 
 async function init() {
-  const companySlug = route.params?.companySlug as string
-
   pageStore.loading = true
 
-  await companyDetailStore.fetchCompany(companySlug)
-  await companyDetailStore.fetchPriceData(companySlug)
+  await companyDetailStore.fetchCompany(props.companySlug)
+  await companyDetailStore.fetchPriceData(props.companySlug)
 
   pageStore.loading = false
 

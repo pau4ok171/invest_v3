@@ -120,6 +120,7 @@ const router = createRouter({
       path: '/markets/:companySlug',
       name: RouteNamesEnum.company_detail,
       component: () => import('@/views/CompanyDetailView.vue'),
+      props: true,
     },
     {
       path: '/watchlist',
