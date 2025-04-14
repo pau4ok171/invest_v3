@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Components
 import CompanyDetailRiskReward from '@/components/company_detail/content_list/summary/overview/CompanyDetailRiskReward.vue'
-import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
+import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -48,7 +48,7 @@ function onAboutCompanyClick() {
           </v-card-actions>
         </v-col>
         <v-col>
-          <snowflake-chart :chartData="snowflake as number[]" style="width: 280px; height: 280px" />
+          <snowflake-chart :data="snowflake" size="280" />
         </v-col>
       </v-row>
       <v-row>
