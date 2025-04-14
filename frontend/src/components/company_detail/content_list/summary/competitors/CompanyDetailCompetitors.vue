@@ -9,12 +9,15 @@ import { useCompanyDetailStore } from '@/store/companyDetail'
 import { computed } from 'vue'
 
 // Types
-import type { DetailCompany } from '@/types/invest'
+import type { Competitor, DetailCompany } from '@/types/invest'
 
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
+const _competitors = computed<Competitor[]>(
+  () => companyDetailStore.competitors
+)
 const competitors = computed(() =>
-  companyDetailStore.competitors.map((c) => ({
+  _competitors.value.map((c) => ({
     id: c.id,
     to: c.absolute_url,
     title: c.title,
@@ -22,7 +25,7 @@ const competitors = computed(() =>
     market: c.market,
     priceData: c.price_data,
     formatting: c.formatting,
-    snowflake: Object.values(c.snowflake),
+    snowflake: c.snowflake,
   }))
 )
 
@@ -40,38 +43,32 @@ function humanizeFinancial(
 </script>
 
 <template>
-  <v-card
-    color="surface-light"
-    class="mb-4 pa-4"
-  >
+  <v-card color="surface-light" class="mb-4 pa-4">
     <v-card-title>{{ `${company.ticker} Competitors` }}</v-card-title>
     <v-card-item>
-        <v-row>
-          <v-col v-for="c in competitors" :key="c.id" cols="3">
-            <v-card variant="text" :to="c.to">
-              <v-card-item>
-                <snowflake-chart
-                  :key="`competitor-snowflake-${c.id}`"
-                  :chart-data="c.snowflake"
-                  small
-                  style="width: 132px; height: 132px; transform: translateX(-50%); left: 50%;"
-                />
-              </v-card-item>
-              <v-card-text class="competitor__title">{{
-                c.title
-              }}</v-card-text>
-              <v-card-text class="competitor__subtitle"
-                >{{ c.market.title }}:{{ c.ticker }}</v-card-text
-              >
-              <v-card-text class="competitor__cap">{{
-                humanizeFinancial(
-                  c.priceData.capitalisation,
-                  c.formatting.primaryCurrencySymbol
-                )
-              }}</v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+      <v-row>
+        <v-col v-for="c in competitors" :key="c.id" cols="3">
+          <v-card variant="text" :to="c.to">
+            <v-card-item>
+              <snowflake-chart
+                :key="`competitor-snowflake-${c.id}`"
+                :data="c.snowflake"
+                size="132"
+              />
+            </v-card-item>
+            <v-card-text class="competitor__title">{{ c.title }}</v-card-text>
+            <v-card-text class="competitor__subtitle"
+              >{{ c.market.title }}:{{ c.ticker }}</v-card-text
+            >
+            <v-card-text class="competitor__cap">{{
+              humanizeFinancial(
+                c.priceData.capitalisation,
+                c.formatting.primaryCurrencySymbol
+              )
+            }}</v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-card-item>
   </v-card>
 </template>
