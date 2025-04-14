@@ -28,10 +28,6 @@ const breadcrumbs = computed(() => [
   {
     title: companyDetailStore.company.title || 'Company',
     disabled: true,
-    to: {
-      name: RouteNamesEnum.company_detail,
-      params: { companySlug: companyDetailStore.company.slug },
-    },
   },
 ])
 
