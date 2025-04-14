@@ -195,7 +195,7 @@ class HighROECheck(BaseCheck):
     def populate(self) -> None:
         self.statement = types.Statement(
             company=self.company_object,
-            name='IsGrowingFasterThanIndustry',
+            name='IsReturnOnEquityAboveThreshold',
             title='High ROE',
             description='',
             question=f'Is {self.slug.upper()}\'s return on equity above 20%?',

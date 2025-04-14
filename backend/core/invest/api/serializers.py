@@ -8,6 +8,7 @@ from rest_framework.fields import empty
 from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, \
     Currency, Dividend, SectorMarket
 from statements.models import Statement
+from statements.api.serializers import StatementSerializer
 from statements.types import Area, Status
 from news.api.serializers import NewsSerializer
 
@@ -370,11 +371,11 @@ class CompanyPeersSerializer(CompanySerializer):
     def get_snowflake(obj):
         statements = Statement.objects.filter(company=obj)
         return {
-            "value": statements.filter(area=Area.VALUE, status=Status.PASS).count(),
-            "future": statements.filter(area=Area.FUTURE, status=Status.PASS).count(),
-            "past": statements.filter(area=Area.PAST, status=Status.PASS).count(),
-            "health": statements.filter(area=Area.HEALTH, status=Status.PASS).count(),
-            "dividends": statements.filter(area=Area.DIVIDENDS, status=Status.PASS).count(),
+            "value": StatementSerializer(statements.filter(area=Area.VALUE, status=Status.PASS, outcome=1002), many=True).data,
+            "future": StatementSerializer(statements.filter(area=Area.FUTURE, status=Status.PASS, outcome=1002), many=True).data,
+            "past": StatementSerializer(statements.filter(area=Area.PAST, status=Status.PASS, outcome=1002), many=True).data,
+            "health": StatementSerializer(statements.filter(area=Area.HEALTH, status=Status.PASS, outcome=1002), many=True).data,
+            "dividends": StatementSerializer(statements.filter(area=Area.DIVIDENDS, status=Status.PASS, outcome=1002), many=True).data,
         }
 
 

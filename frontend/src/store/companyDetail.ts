@@ -11,6 +11,8 @@ import type {
   DetailCompany,
   News,
   Report,
+  Snowflake,
+  SnowflakeKey,
 } from '@/types/invest'
 import type { Portfolio } from '@/types/portfolios'
 import type { Note } from '@/types/notes'
@@ -23,7 +25,6 @@ interface CompanyResponse {
   portfolios: Portfolio[]
   notes: Note[]
   statements: Statement[]
-  snowflake: number[]
   peers: Competitor[]
 }
 
@@ -134,7 +135,13 @@ export const useCompanyDetailStore = defineStore({
     portfolios: [] as Portfolio[],
     notes: [] as Note[],
     statements: {} as Record<string, Statement>,
-    snowflake: [] as Number[],
+    snowflake: {
+      value: [],
+      future: [],
+      past: [],
+      health: [],
+      dividends: [],
+    } as Snowflake,
     competitors: [] as Competitor[],
     note: {} as Note,
     noteSavedContent: '',
@@ -160,15 +167,18 @@ export const useCompanyDetailStore = defineStore({
       )
 
       try {
-        const response = await axios.post('portfolio/api/v1/portfolios/portfolios/', formData)
+        const response = await axios.post(
+          'portfolio/api/v1/portfolios/portfolios/',
+          formData
+        )
 
         this.portfolios.push(response.data)
         toast.success(`Portfolio ${response.data.name} was created`)
         return 'success'
       } catch (error) {
-          console.log(error)
-          toast.error('Something was wrong...')
-          return 'error'
+        console.log(error)
+        toast.error('Something was wrong...')
+        return 'error'
       }
     },
     async updatePortfolio(action: 'include' | 'exclude', portfolio: Portfolio) {
@@ -179,7 +189,10 @@ export const useCompanyDetailStore = defineStore({
       }).forEach(([key, val]: [string, any]) => formData.append(key, val))
 
       await axios
-        .put(`portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`, formData)
+        .put(
+          `portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`,
+          formData
+        )
         .then((response) => {
           this.updatePortfolios(response.data)
           if (action === 'include') {
@@ -264,7 +277,24 @@ export const useCompanyDetailStore = defineStore({
         },
         {}
       )
-      this.snowflake = Object.values(data.snowflake)
+      this.snowflake = data.statements
+        .filter(
+          (s) =>
+            ['VALUE', 'FUTURE', 'PAST', 'HEALTH', 'DIVIDENDS'].includes(
+              s.area
+            ) && s.outcome === 1002
+        )
+        .reduce((acc, s) => {
+          const key = s.area.toLowerCase() as SnowflakeKey
+
+          if (!acc[key]) {
+            acc[key] = []
+          }
+
+          acc[key].push(s)
+          return acc
+        }, {} as Snowflake)
+
       this.competitors = data.peers
     },
     async toggleWatchlisted() {

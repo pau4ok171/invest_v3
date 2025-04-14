@@ -1,169 +1,304 @@
 <script setup lang="ts">
 // Utilities
-import { computed, onMounted, ref, watch } from 'vue'
-import { chartOpts } from '@/components/charts/snowflakeChartOpts'
-import Highcharts from 'highcharts'
+import { computed } from 'vue'
 
 // Types
 import type { PropType } from 'vue'
+import type { Options } from 'highcharts'
+import type {Snowflake, SnowflakeKey} from "@/types/invest";
 
-const snowflakeChartColor5 = '#6bc51a'
-const snowflakeChartBorderColor5 = '#79ee04'
+// Colors
+const seriesColor5 = '#6bc51a'
+const seriesBorderColor5 = '#79ee04'
 
-const snowflakeChartColor4 = '#b2c319'
-const snowflakeChartBorderColor4 = '#def30b'
+const seriesColor4 = '#b2c319'
+const seriesBorderColor4 = '#def30b'
 
-const snowflakeChartColor3 = '#c7a028'
-const snowflakeChartBorderColor3 = '#ffc413'
+const seriesColor3 = '#c7a028'
+const seriesBorderColor3 = '#ffc413'
 
-const snowflakeChartColor2 = '#c75633'
-const snowflakeChartBorderColor2 = '#ff5a23'
+const seriesColor2 = '#c75633'
+const seriesBorderColor2 = '#ff5a23'
 
-const snowflakeChartColor1 = '#c74a35'
-const snowflakeChartBorderColor1 = '#fb4a27'
+const seriesColor1 = '#c74a35'
+const seriesBorderColor1 = '#fb4a27'
+
+const successIcon = '<svg class="snowflake-chart-tooltip__success-icon" width="24" height="24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM5.70711 13.7071L9.29289 17.2929C9.68342 17.6834 10.3166 17.6834 10.7071 17.2929L18.2929 9.70711C18.6834 9.31658 18.6834 8.68342 18.2929 8.29289L17.7071 7.70711C17.3166 7.31658 16.6834 7.31658 16.2929 7.70711L10 14L7.70711 11.7071C7.31658 11.3166 6.68342 11.3166 6.29289 11.7071L5.70711 12.2929C5.31658 12.6834 5.31658 13.3166 5.70711 13.7071Z"></path></svg>'
+const errorIcon = '<svg class="snowflake-chart-tooltip__error-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM12 10L8.70711 6.70711C8.31658 6.31658 7.68342 6.31658 7.29289 6.70711L6.70711 7.29289C6.31658 7.68342 6.31658 8.31658 6.70711 8.70711L10 12L6.70711 15.2929C6.31658 15.6834 6.31658 16.3166 6.70711 16.7071L7.29289 17.2929C7.68342 17.6834 8.31658 17.6834 8.70711 17.2929L12 14L15.2929 17.2929C15.6834 17.6834 16.3166 17.6834 16.7071 17.2929L17.2929 16.7071C17.6834 16.3166 17.6834 15.6834 17.2929 15.2929L14 12L17.2929 8.70711C17.6834 8.31658 17.6834 7.68342 17.2929 7.29289L16.7071 6.70711C16.3166 6.31658 15.6834 6.31658 15.2929 6.70711L12 10Z"></path></svg>'
 
 const props = defineProps({
-  chartData: {
-    type: Object as PropType<Array<number>>,
+  data: {
+    type: Object as PropType<Snowflake>,
     required: true,
   },
-  small: {
-    type: Boolean,
+  size: {
+    type: [Number, String],
+    default: '280px',
   },
 })
 
-const chartOptions = ref(chartOpts)
-
-const chartSize = computed(() => (props.small ? 140 : 280))
-
-watch(
-  () => props.chartData,
-  () => {
-    chartOptions.value.series[0].data = props.chartData as []
-    const score = props.chartData.reduce(
-      (acc: number, data: number) => acc + data,
-      0
-    )
-    const series = chartOptions.value.series
-
-    switch (true) {
-      case score <= 5:
-        series[0].fillColor = snowflakeChartColor1
-        series[0].lineColor = snowflakeChartBorderColor1
-        break
-      case score <= 10:
-        series[0].fillColor = snowflakeChartColor2
-        series[0].lineColor = snowflakeChartBorderColor2
-        break
-      case score <= 15:
-        series[0].fillColor = snowflakeChartColor3
-        series[0].lineColor = snowflakeChartBorderColor3
-        break
-      case score <= 20:
-        series[0].fillColor = snowflakeChartColor4
-        series[0].lineColor = snowflakeChartBorderColor4
-        break
-    }
+const tooltipItems = [
+  {
+    title: 'Valuation',
+    desc: 'Is the company undervalued compared to its peers, industry and forecasted cash flows?',
   },
-  { deep: true }
-)
+  {
+    title: 'Future',
+    desc: 'How is the company forecast to perform in the next 1-3 years?',
+  },
+  {
+    title: 'Past',
+    desc: 'How has the company performed over the past 5 years?',
+  },
+  {
+    title: 'Health',
+    desc: 'Does the company have strong financial health and manageable debt?',
+  },
+  {
+    title: 'Dividend',
+    desc: 'Does the company pay a good, reliable and sustainable dividend?',
+  },
+]
+const order: SnowflakeKey[] = ['value', 'future', 'past', 'health', 'dividends']
+const points = computed(() => order.map((key) =>
+  props.data[key].reduce((acc, v) => acc + (v.status === 'PASS' ? 1: 0), 0)
+))
 
-onMounted(() => {
-  const series = [
-    {
-      type: 'areaspline',
-      clip: false,
-      enableMouseTracking: true,
-      fillColor: snowflakeChartColor5, // Цвет заливки
-      lineColor: snowflakeChartBorderColor5, // Цвет границы
-      lineWidth: 2, // Толщина границы
-      opacity: 0.75, // Прозрачность фона
-      xAxis: 0,
-      yAxis: 0,
-      marker: {
-        enabled: false,
-      },
-      data: props.chartData,
-      trackByArea: true,
-    },
-  ]
-  let xAxis = [
-    {
-      pane: 0,
-      tickInterval: 72,
-      min: 0,
-      max: 360,
-      lineColor: 'transparent',
-      gridLineColor: '#4b5966',
-      gridLineWidth: 3,
-      gridZIndex: 2,
-      labels: {
-        enabled: false,
-      },
-    },
-  ]
-  let yAxis = [
-    {
-      pane: 0,
-      tickInterval: 2,
-      min: 0,
-      max: 6,
-      gridLineColor: '#283440',
-      gridLineWidth: 18,
-      gridLineInterpolation: 'circle',
-      labels: {
-        enabled: false,
-      },
-    },
-  ]
-  if (props.small) {
-    chartOptions.value.chart.height = 132
-    xAxis[0].gridLineWidth = 1
-    yAxis[0].gridLineWidth = 8
-  }
-  const score = props.chartData.reduce(
-    (acc: number, data: number) => acc + data,
-    0
-  )
+const colors = computed(() => {
+  const score =
+    points.value.reduce((acc: number, val: number) => acc + val, 0) || 0
+
+  let areaColor
+  let borderColor
 
   switch (true) {
     case score <= 5:
-      series[0].fillColor = snowflakeChartColor1
-      series[0].lineColor = snowflakeChartBorderColor1
+      areaColor = seriesColor1
+      borderColor = seriesBorderColor1
       break
     case score <= 10:
-      series[0].fillColor = snowflakeChartColor2
-      series[0].lineColor = snowflakeChartBorderColor2
+      areaColor = seriesColor2
+      borderColor = seriesBorderColor2
       break
     case score <= 15:
-      series[0].fillColor = snowflakeChartColor3
-      series[0].lineColor = snowflakeChartBorderColor3
+      areaColor = seriesColor3
+      borderColor = seriesBorderColor3
       break
     case score <= 20:
-      series[0].fillColor = snowflakeChartColor4
-      series[0].lineColor = snowflakeChartBorderColor4
+      areaColor = seriesColor4
+      borderColor = seriesBorderColor4
       break
+    default:
+      areaColor = seriesColor5
+      borderColor = seriesBorderColor5
   }
 
-  chartOptions.value = Highcharts.merge(chartOptions.value, {
-    series,
-    xAxis,
-    yAxis,
-  })
+  return { areaColor, borderColor }
 })
+
+const options = computed<Options>(() => ({
+  chart: {
+    polar: true,
+    type: 'column',
+    backgroundColor: 'transparent',
+    height: props.size,
+  },
+  accessibility: {
+    enabled: false,
+  },
+  title: {
+    text: undefined,
+  },
+  legend: {
+    enabled: false,
+  },
+  credits: {
+    enabled: false,
+  },
+  xAxis: {
+    categories: ['Value', 'Future', 'Past', 'Health', 'Dividend'],
+    tickmarkPlacement: 'on',
+    gridLineColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+    gridLineWidth: 3,
+    lineWidth: 0,
+    labels: {
+      enabled: false,
+    },
+  },
+  yAxis: {
+    min: 0,
+    max: 6,
+    tickInterval: 1,
+    labels: {
+      enabled: false,
+    },
+    gridLineWidth: 0,
+  },
+  series: [
+    {
+      name: 'Tests',
+      type: 'areaspline',
+      clip: false, // Отключаем обрезание по границам
+      data: points.value,
+      pointPlacement: 'on',
+      fillColor: colors.value.areaColor,
+      lineColor: colors.value.borderColor,
+      lineWidth: 2,
+      opacity: 0.75,
+      zIndex: 1,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+    },
+    {
+      name: 'Hover',
+      animation: {
+        duration: 300,
+      },
+      data: [6, 6, 6, 6, 6], // Максимальное значение
+      type: 'column',
+      pointPlacement: 'on',
+      color: 'transparent',
+      enableMouseTracking: true,
+      states: {
+        hover: {
+          color: 'rgba(255, 255, 255, 0.4)', // Подсветка сектора
+          halo: {
+            enabled: false,
+          },
+          lineWidth: 0,
+        },
+      },
+      zIndex: 2,
+    },
+    // ---- Фоновые кольца (чередующиеся) ----
+    {
+      name: 'Background 1',
+      type: 'areasplinerange',
+      pointPlacement: 'on',
+      data: [
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+        [0, 1],
+      ],
+      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+      fillOpacity: 1,
+      lineWidth: 0,
+      zIndex: -3,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+    },
+    {
+      name: 'Background 3',
+      type: 'areasplinerange',
+      pointPlacement: 'on',
+      data: [
+        [2, 3],
+        [2, 3],
+        [2, 3],
+        [2, 3],
+        [2, 3],
+      ],
+      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+      fillOpacity: 1,
+      lineWidth: 0,
+      zIndex: 0,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+    },
+    {
+      name: 'Background 5',
+      type: 'areasplinerange',
+      pointPlacement: 'on',
+      data: [
+        [4, 5],
+        [4, 5],
+        [4, 5],
+        [4, 5],
+        [4, 5],
+      ],
+      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+      fillOpacity: 1,
+      lineWidth: 0,
+      zIndex: 0,
+      marker: {
+        enabled: false,
+        states: {
+          hover: {
+            enabled: false,
+          },
+        },
+      },
+    },
+  ],
+  tooltip: {
+    shared: true,
+    outside: true,
+    useHTML: true,
+    formatter() {
+      const item = tooltipItems[this.index]
+      const key = order[this.index]
+      const statement = props.data[key]
+      const icons = Object.values(statement).map(s => s.status === 'PASS' ? successIcon : errorIcon)
+      return `
+      <div class="snowflake-chart-tooltip">
+        <div class="snowflake-chart-tooltip__title text-h6"><span class="text-disabled">${this.index + 1}</span><span class="snowflake-chart-tooltip__title-separator"></span><span>${item.title}</span></div>
+        <div class="snowflake-chart-tooltip__desc text-subtitle-2 mb-4">${item.desc}</div>
+        <div class="snowflake-chart-tooltip__checks text-subtitle-2">
+            <div>Analysis Checks <span class="text-disabled">${this.options.y}/6</span></div>
+            <div>${icons.join('')}</div>
+        </div>
+      </div>
+      `
+    },
+  },
+  plotOptions: {
+    column: {
+      // Убираем промежутки между столбцами
+      grouping: false,
+      pointPadding: 0,
+      groupPadding: 0,
+      borderWidth: 0,
+    },
+  },
+  pane: [
+    {
+      background: [
+        {
+          backgroundColor: 'rgb(var(--v-theme-hc-snowflake-bg-dark))',
+          borderWidth: 0,
+          outerRadius: '100%',
+        },
+      ],
+    },
+  ],
+}))
 </script>
 
 <template>
-  <div :class="['snowflake', { 'snowflake--small': small }]">
-    <div class="snowflake-labels">
-      <svg
-        :width="chartSize"
-        :height="chartSize"
-        viewBox="0 0 241 231"
-        fill="none"
-        class="snowflake-labels__inner"
-      >
-        <g class="snowflake-labels__item snowflake-labels__item--value">
+  <div class="snowflake-chart">
+    <div class="snowflake-chart__labels">
+      <svg :width="size" :height="size" viewBox="0 0 241 231">
+        <g class="snowflake-chart__labels-value">
           <path
             d="M104.414 8.87181L105.614 1.95417L107.24 1.7169L105.391 10.6068L103.961 10.8126L99.7113 2.79367L101.322 2.55652L104.414 8.87181Z"
             class="snowflake-labels__label-text"
@@ -185,7 +320,7 @@ onMounted(() => {
             class="snowflake-labels__label-text"
           ></path>
         </g>
-        <g class="snowflake-labels__item snowflake-labels__item--dividend">
+        <g class="snowflake-chart__labels-dividend">
           <path
             d="M8.95363 114.171L0.490265 113.412L0.714163 110.928C0.77387 110.184 1.01269 109.53 1.38586 108.995C1.77395 108.444 2.28145 108.043 2.9233 107.775C3.56514 107.507 4.28161 107.418 5.07272 107.492L5.49067 107.522C6.2967 107.596 6.98332 107.82 7.56546 108.191C8.1476 108.563 8.56554 109.054 8.84914 109.679C9.13275 110.303 9.23724 110.988 9.1626 111.746L8.95363 114.171ZM1.8038 112.059L7.89384 112.594L7.9834 111.642C8.04311 110.869 7.86399 110.259 7.41619 109.813C6.9684 109.366 6.2967 109.084 5.40111 109.009L4.92346 108.965C4.01294 108.89 3.28153 109.024 2.77403 109.381C2.2516 109.738 1.968 110.289 1.89336 111.047L1.8038 112.059Z"
             class="snowflake-labels__label-text"
@@ -219,7 +354,7 @@ onMounted(() => {
             class="snowflake-labels__label-text"
           ></path>
         </g>
-        <g class="snowflake-labels__item snowflake-labels__item--future">
+        <g class="snowflake-chart__labels-future">
           <path
             d="M223.523 68.4198L221.896 65.4302L218.732 67.1406L218.03 65.8466L225.493 61.8159L228.061 66.5457L227.016 67.1109L225.15 63.6751L222.926 64.8799L224.553 67.8694L223.523 68.4198Z"
             class="snowflake-labels__label-text"
@@ -245,7 +380,7 @@ onMounted(() => {
             class="snowflake-labels__label-text"
           ></path>
         </g>
-        <g class="snowflake-labels__item snowflake-labels__item--health">
+        <g class="snowflake-chart__labels-health">
           <path
             d="M35.9111 207.026L34.8961 205.97L37.6127 203.367L34.9856 200.645L32.269 203.248L31.2391 202.192L37.359 196.332L38.374 197.388L35.8215 199.827L38.4486 202.549L41.001 200.11L42.0161 201.166L35.9111 207.026Z"
             class="snowflake-labels__label-text"
@@ -271,7 +406,7 @@ onMounted(() => {
             class="snowflake-labels__label-text"
           ></path>
         </g>
-        <g class="snowflake-labels__item snowflake-labels__item--past">
+        <g class="snowflake-chart__labels-past">
           <path
             d="M178.37 223.461L179.953 226.183L178.669 226.927L174.415 219.609L177.221 217.988C178.042 217.512 178.818 217.348 179.55 217.497C180.281 217.646 180.848 218.062 181.251 218.776C181.669 219.49 181.759 220.189 181.52 220.858C181.281 221.528 180.729 222.108 179.878 222.599L178.37 223.461ZM177.773 222.435L179.311 221.543C179.759 221.275 180.057 220.977 180.162 220.62C180.281 220.263 180.221 219.892 179.983 219.49C179.759 219.088 179.445 218.85 179.072 218.746C178.699 218.657 178.296 218.717 177.863 218.955L176.296 219.862L177.773 222.435Z"
             class="snowflake-labels__label-text"
@@ -291,76 +426,79 @@ onMounted(() => {
         </g>
       </svg>
     </div>
-    <div class="snowflake-chart">
-      <charts :constructorType="'chart'" :options="chartOptions" />
+    <div class="snowflake-chart__chart">
+      <charts constructorType="chart" :options="options" />
     </div>
   </div>
 </template>
 
 <style lang="scss">
-.snowflake {
+.snowflake-chart {
   position: relative;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 
-  svg {
-  width: 280px;
-  height: 280px;
-  }
-  .highcharts-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .highcharts-pane {
-    fill: rgb(var(--v-theme-hc-snowflake-bg-light));
-  }
-  .highcharts-xaxis-grid {
-    > .highcharts-grid-line {
-      stroke: rgb(var(--v-theme-hc-snowflake-bg-light));
-    }
-  }
-  .highcharts-yaxis-grid {
-    > .highcharts-grid-line {
-      stroke: rgb(var(--v-theme-hc-snowflake-bg-dark));
-    }
+  &__chart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
-.snowflake--small svg {
-  width: 132px;
-  height: 132px;
-}
-.snowflake-labels {
-  position: absolute;
-  width: 100%;
-}
-.snowflake-labels > canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-.snowflake-labels__inner {
-  position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
-}
-.snowflake-labels__item--value {
+.snowflake-chart__labels-value {
   transform: translate(0%, 2%);
 }
-.snowflake-labels__item--future {
+.snowflake-chart__labels-future {
   transform: translate(-4%, -1%);
 }
-.snowflake-labels__item--past {
+.snowflake-chart__labels-past {
   transform: translate(-2.3%, -5.6%);
 }
-.snowflake-labels__item--health {
+.snowflake-chart__labels-health {
   transform: translate(3%, -5%);
 }
-.snowflake-labels__item--dividend {
+.snowflake-chart__labels-dividend {
   transform: translate(4.4%, -1.7%) rotate(0.4deg);
 }
-.snowflake-labels__label-text {
+.snowflake-chart__labels {
   fill: rgb(var(--v-theme-on-surface-light));
+}
+.highcharts-tooltip-container {
+  > svg {
+    display: none;
+  }
+}
+.snowflake-chart-tooltip {
+  background: rgb(var(--v-theme-surface));
+  color: rgb(var(--v-theme-on-surface));
+  padding: 16px 8px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  width: 296px;
+
+  &__title {
+    &-separator {
+      display: inline-block;
+      height: 16px;
+      background-color: white;
+      width: 1px;
+      margin: 0 4px;
+    }
+  }
+  &__desc {
+    text-wrap: initial;
+  }
+  &__success-icon {
+    fill-rule: evenodd;
+    fill: rgb(var(--v-theme-success));
+    opacity: var(--v-medium-emphasis-opacity);
+  }
+  &__error-icon {
+    fill-rule: evenodd;
+    fill: rgb(var(--v-theme-error));
+    opacity: var(--v-medium-emphasis-opacity);
+  }
 }
 </style>

@@ -1,3 +1,5 @@
+import { Statement } from '@/types/statements'
+
 export interface DetailCompany {
   absolute_url: string
   analyst_ideas: Array<AnalystIdea>
@@ -170,13 +172,8 @@ export interface Competitor {
   uid: string
 }
 
-export interface Snowflake {
-  dividends: number
-  future: number
-  health: number
-  past: number
-  value: number
-}
+export type SnowflakeKey = 'value' | 'future' | 'past' | 'health' | 'dividends'
+export type Snowflake = Record<SnowflakeKey, Statement[]>
 
 export interface Candle {
   close: number
