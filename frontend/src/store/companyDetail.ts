@@ -312,15 +312,12 @@ export const useCompanyDetailStore = defineStore({
 
         if (this.company.is_watchlisted) {
           status = 'deleted'
-          const _ = await axios.delete('/api/v1/invest/toggle_to_watchlist/', {
+          await axios.delete('/api/v1/invest/toggle_to_watchlist/', {
             data: formData,
           })
         } else {
           status = 'added'
-          const _ = await axios.patch(
-            '/api/v1/invest/toggle_to_watchlist/',
-            formData
-          )
+          await axios.patch('/api/v1/invest/toggle_to_watchlist/', formData)
         }
 
         this.company.is_watchlisted = status === 'added'
@@ -336,7 +333,7 @@ export const useCompanyDetailStore = defineStore({
     },
     async deleteNote(note: Note) {
       try {
-        const _ = await axios.delete(`/notes/api/v1/notes/${note.id}`)
+        await axios.delete(`/notes/api/v1/notes/${note.id}`)
 
         this.notes = this.notes.filter((n) => n.id !== note.id)
         toast.success('Note was successfully deleted')
