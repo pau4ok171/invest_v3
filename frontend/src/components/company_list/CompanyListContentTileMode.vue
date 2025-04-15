@@ -45,6 +45,7 @@ const authStore = useAuthStore()
 
             <v-card-item style="height: 185px"
               ><snowflake-chart
+                class="company-list-tile-content__snowflake"
                 :data="item.snowflake"
                 size="154"
                 :interactive="false"
@@ -213,6 +214,20 @@ const authStore = useAuthStore()
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+  .company-list-tile-content__snowflake {
+    animation: 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 0s 1 normal forwards running snowflake-entry;
+  }
+}
+
+@keyframes snowflake-entry {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>
