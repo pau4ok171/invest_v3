@@ -2,7 +2,7 @@
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
 
-const companyListStore = useCompanyListStore()
+const store = useCompanyListStore()
 </script>
 
 <template>
@@ -10,17 +10,18 @@ const companyListStore = useCompanyListStore()
     <div></div>
     <div class="company-list__company-count">
       <v-skeleton-loader
-        v-if="companyListStore.fetching"
+        v-if="store.fetching"
         loading
         type="text"
         width="150"
       />
-      <p v-else>{{ companyListStore.totalCompanyLength }} companies</p>
+      <p v-else>{{ store.totalCompanyLength }} companies</p>
     </div>
     <div class="company-list__view-modes">
-      <v-btn icon="$iTableMode" variant="text" disabled />
-
-      <v-btn icon="$iTileMode" variant="text" />
+      <v-btn-toggle v-model="store.contentMode" mandatory>
+        <v-btn icon="$iTableMode" variant="text" value="table" />
+        <v-btn icon="$iTileMode" variant="text" value="tile" />
+      </v-btn-toggle>
     </div>
   </section>
 </template>
