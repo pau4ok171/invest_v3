@@ -5,16 +5,15 @@ import CompanyListContentTileMode from '@/components/company_list/CompanyListCon
 
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
-import { useAuthStore } from '@/store/auth'
 
 // Utilities
 import { computed } from 'vue'
 
 // Types
 import type { CompanyItem } from '@/store/companyList/types'
+import type { ListCompany, Snowflake, SnowflakeKey } from '@/types/invest'
 
 const store = useCompanyListStore()
-const authStore = useAuthStore()
 
 const items = computed<CompanyItem[]>(
   () =>
@@ -37,8 +36,28 @@ const items = computed<CompanyItem[]>(
       to: c.absolute_url,
       uid: c.uid,
       watchlisted: c.is_watchlisted,
-    })) as CompanyItem[]
+      snowflake: getSnowflake(c),
+    })) satisfies CompanyItem[]
 )
+
+function getSnowflake(item: ListCompany) {
+  return item.statements
+    .filter(
+      (s) =>
+        ['VALUE', 'FUTURE', 'PAST', 'HEALTH', 'DIVIDENDS'].includes(s.area) &&
+        s.outcome === 1002
+    )
+    .reduce((acc, s) => {
+      const key = s.area.toLowerCase() as SnowflakeKey
+
+      if (!acc[key]) {
+        acc[key] = []
+      }
+
+      acc[key].push(s)
+      return acc
+    }, {} as Snowflake)
+}
 
 function humanize(val: number = 0, currencyUnit: string = '') {
   if (val === 0) return 'n/a'

@@ -1,5 +1,5 @@
 // Types
-import type { ListCompany, Market } from '@/types/invest'
+import type { ListCompany, Market, Snowflake } from '@/types/invest'
 
 export interface BaseState {
   id: number
@@ -51,4 +51,5 @@ export interface CompanyItem {
   ticker: string
   to: string
   uid: string
+  snowflake: Snowflake
 }

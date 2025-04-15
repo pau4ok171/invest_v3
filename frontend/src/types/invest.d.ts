@@ -50,6 +50,7 @@ export interface ListCompany {
   return_7d: number
   return_90d: number
   sector: Sector
+  statements: Statement[]
   ticker: string
   title: string
   uid: string

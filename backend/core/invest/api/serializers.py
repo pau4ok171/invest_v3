@@ -124,6 +124,7 @@ class CompanySerializer(serializers.ModelSerializer):
     is_watchlisted = serializers.SerializerMethodField('get_is_watchlisted')
     price_data = serializers.SerializerMethodField('get_price_data')
     formatting = serializers.SerializerMethodField('get_formatting')
+    statements = serializers.SerializerMethodField('get_statements')
 
     class Meta:
         model = Company
@@ -146,6 +147,7 @@ class CompanySerializer(serializers.ModelSerializer):
             'return_1y',
             'return_3y',
             'return_5y',
+            'statements',
         )
 
     def __init__(self, instance=None, data=empty, **kwargs):
@@ -201,6 +203,11 @@ class CompanySerializer(serializers.ModelSerializer):
             past_price = past_price.first().close
             return (last_price - past_price) / past_price * 100
         return 0
+
+    @staticmethod
+    def get_statements(instance):
+        statements = Statement.objects.filter(company=instance)
+        return StatementSerializer(statements, many=True).data
 
     @staticmethod
     def get_formatting(obj):
