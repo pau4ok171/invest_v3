@@ -54,6 +54,7 @@ function humanizeFinancial(
                 :key="`competitor-snowflake-${c.id}`"
                 :data="c.snowflake"
                 size="132"
+                :interactive="false"
               />
             </v-card-item>
             <v-card-text class="competitor__title">{{ c.title }}</v-card-text>

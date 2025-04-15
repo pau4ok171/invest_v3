@@ -37,6 +37,10 @@ const props = defineProps({
     type: [Number, String],
     default: '280px',
   },
+  interactive: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const tooltipItems = [
@@ -168,7 +172,7 @@ const options = computed<Options>(() => ({
       type: 'column',
       pointPlacement: 'on',
       color: 'transparent',
-      enableMouseTracking: true,
+      enableMouseTracking: props.interactive,
       states: {
         hover: {
           color: 'rgba(255, 255, 255, 0.4)', // Подсветка сектора
@@ -255,6 +259,7 @@ const options = computed<Options>(() => ({
     },
   ],
   tooltip: {
+    enabled: props.interactive,
     shared: true,
     outside: true,
     useHTML: true,
@@ -301,7 +306,12 @@ const options = computed<Options>(() => ({
 </script>
 
 <template>
-  <div class="snowflake-chart">
+  <div
+    :class="[
+      'snowflake-chart',
+      { 'snowflake-chart--non-interactive': !interactive },
+    ]"
+  >
     <div class="snowflake-chart__labels">
       <svg :width="size" :height="size" viewBox="0 0 241 231">
         <g class="snowflake-chart__labels-value">
@@ -445,6 +455,9 @@ const options = computed<Options>(() => ({
   justify-content: center;
   align-items: center;
 
+  &--non-interactive {
+    pointer-events: none;
+  }
   &__chart {
     position: absolute;
     top: 50%;
