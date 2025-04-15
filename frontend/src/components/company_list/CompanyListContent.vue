@@ -37,6 +37,7 @@ const items = computed<CompanyItem[]>(
       uid: c.uid,
       watchlisted: c.is_watchlisted,
       snowflake: getSnowflake(c),
+      description: c.description,
     })) satisfies CompanyItem[]
 )
 
