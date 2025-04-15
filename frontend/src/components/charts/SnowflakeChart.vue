@@ -5,7 +5,7 @@ import { computed } from 'vue'
 // Types
 import type { PropType } from 'vue'
 import type { Options } from 'highcharts'
-import type {Snowflake, SnowflakeKey} from "@/types/invest";
+import type { Snowflake, SnowflakeKey } from '@/types/invest'
 
 // Colors
 const seriesColor5 = '#6bc51a'
@@ -23,8 +23,10 @@ const seriesBorderColor2 = '#ff5a23'
 const seriesColor1 = '#c74a35'
 const seriesBorderColor1 = '#fb4a27'
 
-const successIcon = '<svg class="snowflake-chart-tooltip__success-icon" width="24" height="24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM5.70711 13.7071L9.29289 17.2929C9.68342 17.6834 10.3166 17.6834 10.7071 17.2929L18.2929 9.70711C18.6834 9.31658 18.6834 8.68342 18.2929 8.29289L17.7071 7.70711C17.3166 7.31658 16.6834 7.31658 16.2929 7.70711L10 14L7.70711 11.7071C7.31658 11.3166 6.68342 11.3166 6.29289 11.7071L5.70711 12.2929C5.31658 12.6834 5.31658 13.3166 5.70711 13.7071Z"></path></svg>'
-const errorIcon = '<svg class="snowflake-chart-tooltip__error-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM12 10L8.70711 6.70711C8.31658 6.31658 7.68342 6.31658 7.29289 6.70711L6.70711 7.29289C6.31658 7.68342 6.31658 8.31658 6.70711 8.70711L10 12L6.70711 15.2929C6.31658 15.6834 6.31658 16.3166 6.70711 16.7071L7.29289 17.2929C7.68342 17.6834 8.31658 17.6834 8.70711 17.2929L12 14L15.2929 17.2929C15.6834 17.6834 16.3166 17.6834 16.7071 17.2929L17.2929 16.7071C17.6834 16.3166 17.6834 15.6834 17.2929 15.2929L14 12L17.2929 8.70711C17.6834 8.31658 17.6834 7.68342 17.2929 7.29289L16.7071 6.70711C16.3166 6.31658 15.6834 6.31658 15.2929 6.70711L12 10Z"></path></svg>'
+const successIcon =
+  '<svg class="snowflake-chart-tooltip__success-icon" width="24" height="24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM5.70711 13.7071L9.29289 17.2929C9.68342 17.6834 10.3166 17.6834 10.7071 17.2929L18.2929 9.70711C18.6834 9.31658 18.6834 8.68342 18.2929 8.29289L17.7071 7.70711C17.3166 7.31658 16.6834 7.31658 16.2929 7.70711L10 14L7.70711 11.7071C7.31658 11.3166 6.68342 11.3166 6.29289 11.7071L5.70711 12.2929C5.31658 12.6834 5.31658 13.3166 5.70711 13.7071Z"></path></svg>'
+const errorIcon =
+  '<svg class="snowflake-chart-tooltip__error-icon" width="24" height="24" viewBox="0 0 24 24"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM0 12C0 5.37258 5.37258 0 12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12ZM12 10L8.70711 6.70711C8.31658 6.31658 7.68342 6.31658 7.29289 6.70711L6.70711 7.29289C6.31658 7.68342 6.31658 8.31658 6.70711 8.70711L10 12L6.70711 15.2929C6.31658 15.6834 6.31658 16.3166 6.70711 16.7071L7.29289 17.2929C7.68342 17.6834 8.31658 17.6834 8.70711 17.2929L12 14L15.2929 17.2929C15.6834 17.6834 16.3166 17.6834 16.7071 17.2929L17.2929 16.7071C17.6834 16.3166 17.6834 15.6834 17.2929 15.2929L14 12L17.2929 8.70711C17.6834 8.31658 17.6834 7.68342 17.2929 7.29289L16.7071 6.70711C16.3166 6.31658 15.6834 6.31658 15.2929 6.70711L12 10Z"></path></svg>'
 
 const props = defineProps({
   data: {
@@ -60,9 +62,11 @@ const tooltipItems = [
   },
 ]
 const order: SnowflakeKey[] = ['value', 'future', 'past', 'health', 'dividends']
-const points = computed(() => order.map((key) =>
-  props.data[key].reduce((acc, v) => acc + (v.status === 'PASS' ? 1: 0), 0)
-))
+const points = computed(() =>
+  order.map((key) =>
+    props.data[key].reduce((acc, v) => acc + (v.status === 'PASS' ? 1 : 0), 0)
+  )
+)
 
 const colors = computed(() => {
   const score =
@@ -258,7 +262,9 @@ const options = computed<Options>(() => ({
       const item = tooltipItems[this.index]
       const key = order[this.index]
       const statement = props.data[key]
-      const icons = Object.values(statement).map(s => s.status === 'PASS' ? successIcon : errorIcon)
+      const icons = Object.values(statement).map((s) =>
+        s.status === 'PASS' ? successIcon : errorIcon
+      )
       return `
       <div class="snowflake-chart-tooltip">
         <div class="snowflake-chart-tooltip__title text-h6"><span class="text-disabled">${this.index + 1}</span><span class="snowflake-chart-tooltip__title-separator"></span><span>${item.title}</span></div>
