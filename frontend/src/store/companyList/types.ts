@@ -52,4 +52,5 @@ export interface CompanyItem {
   to: string
   uid: string
   snowflake: Snowflake
+  description: string
 }

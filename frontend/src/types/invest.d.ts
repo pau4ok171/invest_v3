@@ -38,6 +38,7 @@ export interface ListCompany {
   absolute_url: string
   average_weekly_mouvement: number
   country: Country
+  description: string
   formatting: Formatting
   is_watchlisted: boolean
   logo_url: string
