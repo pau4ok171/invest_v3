@@ -37,6 +37,7 @@ export const useCompanyListStore = defineStore('companyList', {
     nextUrl: '/api/v1/invest/companies?_limit=20' as string | null,
     totalCompanyLength: 0,
     fetching: false,
+    contentMode: 'table' as 'table' | 'tile',
   }),
   getters: {
     lastUpdate(state): string | undefined {
