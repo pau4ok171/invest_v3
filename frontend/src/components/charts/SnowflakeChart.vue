@@ -104,173 +104,175 @@ const colors = computed(() => {
   return { areaColor, borderColor }
 })
 
-const options = computed<Options>(() => ({
-  chart: {
-    polar: true,
-    type: 'column',
-    backgroundColor: 'transparent',
-    height: props.size,
-  },
-  accessibility: {
-    enabled: false,
-  },
-  title: {
-    text: undefined,
-  },
-  legend: {
-    enabled: false,
-  },
-  credits: {
-    enabled: false,
-  },
-  xAxis: {
-    categories: ['Value', 'Future', 'Past', 'Health', 'Dividend'],
-    tickmarkPlacement: 'on',
-    gridLineColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
-    gridLineWidth: 3,
-    lineWidth: 0,
-    labels: {
-      enabled: false,
-    },
-  },
-  yAxis: {
-    min: 0,
-    max: 6,
-    tickInterval: 1,
-    labels: {
-      enabled: false,
-    },
-    gridLineWidth: 0,
-  },
-  series: [
-    {
-      name: 'Tests',
-      type: 'areaspline',
-      clip: false, // Отключаем обрезание по границам
-      data: points.value,
-      pointPlacement: 'on',
-      fillColor: colors.value.areaColor,
-      lineColor: colors.value.borderColor,
-      lineWidth: 2,
-      opacity: 0.75,
-      zIndex: 1,
-      marker: {
+const options = computed<Options>(
+  () =>
+    ({
+      chart: {
+        polar: true,
+        type: 'column',
+        backgroundColor: 'transparent',
+        height: props.size,
+      },
+      accessibility: {
         enabled: false,
-        states: {
-          hover: {
-            enabled: false,
-          },
+      },
+      title: {
+        text: undefined,
+      },
+      legend: {
+        enabled: false,
+      },
+      credits: {
+        enabled: false,
+      },
+      xAxis: {
+        categories: ['Value', 'Future', 'Past', 'Health', 'Dividend'],
+        tickmarkPlacement: 'on',
+        gridLineColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+        gridLineWidth: 3,
+        lineWidth: 0,
+        labels: {
+          enabled: false,
         },
       },
-    },
-    {
-      name: 'Hover',
-      animation: {
-        duration: 300,
+      yAxis: {
+        min: 0,
+        max: 6,
+        tickInterval: 1,
+        labels: {
+          enabled: false,
+        },
+        gridLineWidth: 0,
       },
-      data: [6, 6, 6, 6, 6], // Максимальное значение
-      type: 'column',
-      pointPlacement: 'on',
-      color: 'transparent',
-      enableMouseTracking: props.interactive,
-      states: {
-        hover: {
-          color: 'rgba(255, 255, 255, 0.4)', // Подсветка сектора
-          halo: {
+      series: [
+        {
+          name: 'Tests',
+          type: 'areaspline',
+          clip: false, // Отключаем обрезание по границам
+          data: points.value,
+          pointPlacement: 'on',
+          fillColor: colors.value.areaColor,
+          lineColor: colors.value.borderColor,
+          lineWidth: 2,
+          opacity: 0.75,
+          zIndex: 1,
+          marker: {
             enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
           },
+        },
+        {
+          name: 'Hover',
+          animation: {
+            duration: 300,
+          },
+          data: [6, 6, 6, 6, 6], // Максимальное значение
+          type: 'column',
+          pointPlacement: 'on',
+          color: 'transparent',
+          enableMouseTracking: props.interactive,
+          states: {
+            hover: {
+              color: 'rgba(var(--v-theme-on-surface), 0.4)', // Подсветка сектора
+              halo: {
+                enabled: false,
+              },
+              lineWidth: 0,
+            },
+          },
+          zIndex: 2,
+        },
+        // ---- Фоновые кольца (чередующиеся) ----
+        {
+          name: 'Background 1',
+          type: 'areasplinerange',
+          pointPlacement: 'on',
+          data: [
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+            [0, 1],
+          ],
+          fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+          fillOpacity: 1,
           lineWidth: 0,
-        },
-      },
-      zIndex: 2,
-    },
-    // ---- Фоновые кольца (чередующиеся) ----
-    {
-      name: 'Background 1',
-      type: 'areasplinerange',
-      pointPlacement: 'on',
-      data: [
-        [0, 1],
-        [0, 1],
-        [0, 1],
-        [0, 1],
-        [0, 1],
-      ],
-      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
-      fillOpacity: 1,
-      lineWidth: 0,
-      zIndex: -3,
-      marker: {
-        enabled: false,
-        states: {
-          hover: {
+          zIndex: -3,
+          marker: {
             enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
           },
         },
-      },
-    },
-    {
-      name: 'Background 3',
-      type: 'areasplinerange',
-      pointPlacement: 'on',
-      data: [
-        [2, 3],
-        [2, 3],
-        [2, 3],
-        [2, 3],
-        [2, 3],
-      ],
-      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
-      fillOpacity: 1,
-      lineWidth: 0,
-      zIndex: 0,
-      marker: {
-        enabled: false,
-        states: {
-          hover: {
+        {
+          name: 'Background 3',
+          type: 'areasplinerange',
+          pointPlacement: 'on',
+          data: [
+            [2, 3],
+            [2, 3],
+            [2, 3],
+            [2, 3],
+            [2, 3],
+          ],
+          fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+          fillOpacity: 1,
+          lineWidth: 0,
+          zIndex: 0,
+          marker: {
             enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
           },
         },
-      },
-    },
-    {
-      name: 'Background 5',
-      type: 'areasplinerange',
-      pointPlacement: 'on',
-      data: [
-        [4, 5],
-        [4, 5],
-        [4, 5],
-        [4, 5],
-        [4, 5],
-      ],
-      fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
-      fillOpacity: 1,
-      lineWidth: 0,
-      zIndex: 0,
-      marker: {
-        enabled: false,
-        states: {
-          hover: {
+        {
+          name: 'Background 5',
+          type: 'areasplinerange',
+          pointPlacement: 'on',
+          data: [
+            [4, 5],
+            [4, 5],
+            [4, 5],
+            [4, 5],
+            [4, 5],
+          ],
+          fillColor: 'rgb(var(--v-theme-hc-snowflake-bg-light))',
+          fillOpacity: 1,
+          lineWidth: 0,
+          zIndex: 0,
+          marker: {
             enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
           },
         },
-      },
-    },
-  ],
-  tooltip: {
-    enabled: props.interactive,
-    shared: true,
-    outside: true,
-    useHTML: true,
-    formatter() {
-      const item = tooltipItems[this.index]
-      const key = order[this.index]
-      const statement = props.data[key]
-      const icons = Object.values(statement).map((s) =>
-        s.status === 'PASS' ? successIcon : errorIcon
-      )
-      return `
+      ],
+      tooltip: {
+        enabled: props.interactive,
+        shared: true,
+        outside: true,
+        useHTML: true,
+        formatter() {
+          const item = tooltipItems[this.index]
+          const key = order[this.index]
+          const statement = props.data[key]
+          const icons = Object.values(statement).map((s) =>
+            s.status === 'PASS' ? successIcon : errorIcon
+          )
+          return `
       <div class="snowflake-chart-tooltip">
         <div class="snowflake-chart-tooltip__title text-h6"><span class="text-disabled">${this.index + 1}</span><span class="snowflake-chart-tooltip__title-separator"></span><span>${item.title}</span></div>
         <div class="snowflake-chart-tooltip__desc text-subtitle-2 mb-4">${item.desc}</div>
@@ -280,29 +282,30 @@ const options = computed<Options>(() => ({
         </div>
       </div>
       `
-    },
-  },
-  plotOptions: {
-    column: {
-      // Убираем промежутки между столбцами
-      grouping: false,
-      pointPadding: 0,
-      groupPadding: 0,
-      borderWidth: 0,
-    },
-  },
-  pane: [
-    {
-      background: [
-        {
-          backgroundColor: 'rgb(var(--v-theme-hc-snowflake-bg-dark))',
+        },
+      },
+      plotOptions: {
+        column: {
+          // Убираем промежутки между столбцами
+          grouping: false,
+          pointPadding: 0,
+          groupPadding: 0,
           borderWidth: 0,
-          outerRadius: '100%',
+        },
+      },
+      pane: [
+        {
+          background: [
+            {
+              backgroundColor: 'rgb(var(--v-theme-hc-snowflake-bg-dark))',
+              borderWidth: 0,
+              outerRadius: '100%',
+            },
+          ],
         },
       ],
-    },
-  ],
-}))
+    }) satisfies Options
+)
 </script>
 
 <template>
@@ -497,14 +500,12 @@ const options = computed<Options>(() => ({
   flex-direction: column;
   width: 296px;
 
-  &__title {
-    &-separator {
-      display: inline-block;
-      height: 16px;
-      background-color: white;
-      width: 1px;
-      margin: 0 4px;
-    }
+  &__title-separator {
+    display: inline-block;
+    height: 16px;
+    background-color: rgb(var(--v-theme-on-surface));
+    width: 1px;
+    margin: 0 4px;
   }
   &__desc {
     text-wrap: initial;
