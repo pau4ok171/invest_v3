@@ -43,6 +43,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   variant="text"
                   size="small"
                   rounded="lg"
+                  :color="item.watchlisted ? 'info': undefined"
                   :disabled="!authStore.isAuthenticated"
                   @click.prevent.stop="store.toggleWatchlisted(item)"
                 />
@@ -150,6 +151,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   variant="text"
                   size="small"
                   rounded="lg"
+                  :color="item.watchlisted ? 'info': undefined"
                   :disabled="!authStore.isAuthenticated"
                   @click.prevent.stop="store.toggleWatchlisted(item)"
                 />

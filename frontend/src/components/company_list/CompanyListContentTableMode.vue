@@ -111,6 +111,7 @@ const headers = ref([
         size="small"
         rounded="lg"
         density="comfortable"
+        :color="item.watchlisted ? 'info': undefined"
         :disabled="!authStore.isAuthenticated"
         @click="store.toggleWatchlisted(item)"
       />
