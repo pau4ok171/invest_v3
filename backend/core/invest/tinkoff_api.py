@@ -1,16 +1,16 @@
-import asyncio
 import datetime
 
 import decouple
 from datetime import timedelta
-from dateutil import relativedelta
 
 from invest.models import CandlePerDay, Company
-from asgiref.sync import sync_to_async
+from asgiref.sync import async_to_sync
 
 from tinkoff.invest import AsyncClient, CandleInterval, Client
-from tinkoff.invest.utils import now, quotation_to_decimal
+from tinkoff.invest.utils import quotation_to_decimal
 from tinkoff.invest.exceptions import RequestError
+
+from channels.layers import get_channel_layer
 
 TOKEN_API = decouple.config('TINKOFF_KEY')
 
@@ -18,7 +18,28 @@ TOKEN_API = decouple.config('TINKOFF_KEY')
 def main():
     companies = get_companies()
 
-    return [process_company_candles(company) for company in companies]
+    candles = [process_company_candles(company) for company in companies]
+
+    for company in companies:
+        price = CandlePerDay.objects.filter(company=company['id']).latest('time')
+        send_price_update(company['uid'], price.close)
+
+    return candles
+
+
+def send_price_update(uid, new_price):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'price_updates',
+        {
+            'type': 'send_price_update',
+            'data': {
+                'uid': uid,
+                'price': new_price,
+                'timestamp': str(datetime.datetime.now())
+            }
+        }
+    )
 
 
 def get_companies():
@@ -29,8 +50,8 @@ def process_company_candles(company):
     candles = get_candles_by_instrument(instrument_id=company['id'], instrument_uid=company['uid'])
     if candles:
         add_candles_to_db(candles)
-        return f'Company({company["id"]}) uid->{company["uid"]} ({len(candles)})candles'
-    return None
+        return f'Company id: {company["id"]} candles: {len(candles)}'
+    return f'Company id: {company["id"]} candles: NOT_FOUND'
 
 
 def get_candles_by_instrument(instrument_id, instrument_uid) -> list[dict]:

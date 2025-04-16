@@ -8,20 +8,31 @@ import vuetify from 'vite-plugin-vuetify'
 export default defineConfig({
   server: {
     headers: {
-      "Content-Security-Policy": "default-src 'self'; " +
+      'Content-Security-Policy':
+        "default-src 'self'; " +
         "script-src 'self' 'unsafe-inline'; " +
         "style-src 'self' 'unsafe-inline';" +
         "img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 http://localhost:5173; " +
         "font-src 'self'; " +
         "object-src 'none';" +
-        "connect-src 'self' http://localhost:8000 http://127.0.0.1:8000"
+        "connect-src 'self' ws://localhost:8000 http://localhost:8000 http://127.0.0.1:8000",
+    },
+    proxy: {
+      '/ws': {
+        target: 'http://localhost:8000',
+        ws: true,
+        changeOrigin: true,
+      },
     },
   },
-  plugins: [vue(), vuetify({
-    styles: {
-      configFile: 'src/styles/settings.scss',
-    },
-  })],
+  plugins: [
+    vue(),
+    vuetify({
+      styles: {
+        configFile: 'src/styles/settings.scss',
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
