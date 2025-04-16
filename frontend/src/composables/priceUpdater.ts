@@ -8,17 +8,17 @@ export const usePriceUpdater = () => {
   const priceChanges = ref<PriceChanges>({})
   const activeAnimations = ref<ActiveAnimations>({})
 
-  const updatePrice = (uid: string, newPrice: number, oldPrice: number) => {
+  const updatePrice = (key: string, newPrice: number, oldPrice: number) => {
     const change = newPrice - oldPrice
 
     if (change !== 0) {
-      priceChanges.value[uid] = change
-      activeAnimations.value[uid] = change > 0 ? 'up' : 'down'
+      priceChanges.value[key] = change
+      activeAnimations.value[key] = change > 0 ? 'up' : 'down'
     }
 
     setTimeout(() => {
-      delete priceChanges.value[uid]
-      delete activeAnimations.value[uid]
+      delete priceChanges.value[key]
+      delete activeAnimations.value[key]
     }, 1200)
   }
 

@@ -7,16 +7,19 @@ import CompanyDetailHeaderAnalystsDialog from '@/components/company_detail/heade
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
 // Utilities
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 
 // Types
 import type { DetailCompany } from '@/types/invest'
+import type { ActiveAnimations } from '@/composables/priceUpdater'
 
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const loading = computed(() => companyDetailStore.fetchingCompany)
 
 const totalIdeas = computed(() => company.value.analyst_ideas.length)
+
+const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 
 function humanize(val: number = 0, currencySymbol: string = ''): string {
   if (val === 0) return 'n/a'
@@ -32,16 +35,25 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
   <v-row
     no-gutters
     style="font-size: 0.75rem"
-    class="mb-1"
+    class="company-detail-header__info mb-1"
     align-content="center"
   >
     <v-col cols="1" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
         <span class="text-uppercase opacity-70">Last Price</span>
-        <span>{{
-          `${company.formatting.primaryCurrencySymbol}${company.price_data.last_price?.toFixed(2)}`
-        }}</span>
+        <span
+          :class="[
+            'price',
+            {
+              'price-positive': activeAnimations[company.slug] === 'up',
+              'price-negative': activeAnimations[company.slug] === 'down',
+            },
+          ]"
+          >{{
+            `${company.formatting.primaryCurrencySymbol}${company.price_data.last_price?.toFixed(2)}`
+          }}</span
+        >
       </template>
     </v-col>
     <v-col cols="1" class="d-flex flex-column">
@@ -127,3 +139,20 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
     </v-col>
   </v-row>
 </template>
+
+<style lang="scss">
+.company-detail-header__info {
+  .price {
+    padding: 4px;
+    border-radius: 4px;
+    color: inherit;
+    transition: color 0.4s ease-in-out;
+  }
+  .price-positive {
+    color: rgb(var(--v-theme-success));
+  }
+  .price-negative {
+    color: rgb(var(--v-theme-error));
+  }
+}
+</style>

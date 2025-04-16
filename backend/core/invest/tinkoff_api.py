@@ -23,6 +23,7 @@ def main():
     for company in companies:
         price = CandlePerDay.objects.filter(company=company['id']).latest('time')
         send_price_update(company['uid'], price.close)
+        send_detail_price_update(company['slug'], price.close)
 
     return candles
 
@@ -42,8 +43,23 @@ def send_price_update(uid, new_price):
     )
 
 
+def send_detail_price_update(slug, new_price):
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        f'company_{slug}',
+        {
+            'type': 'company_price_update',
+            'data': {
+                'slug': slug,
+                'price': new_price,
+                'timestamp': str(datetime.datetime.now())
+            }
+        }
+    )
+
+
 def get_companies():
-    return Company.objects.filter(is_visible=True).values('id', 'uid')
+    return Company.objects.filter(is_visible=True).values('id', 'uid', 'slug')
 
 
 def process_company_candles(company):
