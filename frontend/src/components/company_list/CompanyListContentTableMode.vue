@@ -4,11 +4,12 @@ import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useAuthStore } from '@/store/auth'
 
 // Utilities
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 
 // Types
 import type { PropType } from 'vue'
 import type { CompanyItem } from '@/store/companyList/types'
+import type { ActiveAnimations } from '@/composables/priceUpdater'
 
 const props = defineProps({
   items: {
@@ -18,6 +19,8 @@ const props = defineProps({
 
 const store = useCompanyListStore()
 const authStore = useAuthStore()
+
+const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 
 const headers = ref([
   { key: 'companyLogo', title: '', sortable: false },
@@ -57,7 +60,19 @@ const headers = ref([
       </router-link>
     </template>
     <template #item.lastPrice="{ item }: { item: CompanyItem }">
-      <router-link :to="item.to">{{ item.lastPrice }}</router-link>
+      <router-link :to="item.to">
+        <span
+          :class="[
+            'price',
+            {
+              'price-positive': activeAnimations[item.uid] === 'up',
+              'price-negative': activeAnimations[item.uid] === 'down',
+            },
+          ]"
+        >
+          {{ item.lastPrice }}
+        </span>
+      </router-link>
     </template>
     <template #item.return7D="{ item }: { item: CompanyItem }">
       <router-link
@@ -162,6 +177,23 @@ const headers = ref([
     height: 24px;
     margin: 4px;
     max-width: 24px;
+  }
+  .price {
+    padding: 4px;
+    border-radius: 4px;
+    color: inherit;
+    background-color: transparent;
+    transition:
+      color 0.6s ease-in,
+      background-color 0.6s ease-in;
+  }
+  .price-positive {
+    color: rgb(var(--v-theme-success));
+    background-color: rgba(0, 255, 0, 0.12);
+  }
+  .price-negative {
+    color: rgb(var(--v-theme-error));
+    background-color: rgba(255, 0, 0, 0.12);
   }
 }
 </style>

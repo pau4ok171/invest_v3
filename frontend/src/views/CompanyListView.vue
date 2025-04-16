@@ -5,15 +5,49 @@ import CompanyListContent from '@/components/company_list/CompanyListContent.vue
 
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { useWebsocket } from '@/composables/websocket'
+import { usePriceUpdater } from '@/composables/priceUpdater'
 
 // Utilities
-import { onMounted } from 'vue'
+import { onMounted, provide } from 'vue'
 
 const store = useCompanyListStore()
+
+const { priceChanges, activeAnimations, updatePrice } = usePriceUpdater()
+
+provide('priceChanges', priceChanges)
+provide('activeAnimations', activeAnimations)
+
+// Websocket
+const { connect } = useWebsocket({
+  url: 'ws/api/v1/prices',
+  maxReconnectAttempts: 5,
+  reconnectInterval: 3000,
+
+  onMessage: (data) => {
+    const company = store.companies.find((c) => c.uid === data.uid)
+    if (!company) return
+
+    const oldPrice = company.price_data.last_price
+    company.price_data.last_price = data.price
+
+    updatePrice(data.uid, data.price, oldPrice)
+  },
+  onOpen: () => {
+    console.log('Websocket connected')
+  },
+
+  onError: (error) => {
+    console.log('Websocket error', error)
+  },
+})
 
 onMounted(async () => {
   document.title = 'Stocks'
   await store.initFilters()
+
+  // Connect to Websocket
+  connect()
 })
 </script>
 

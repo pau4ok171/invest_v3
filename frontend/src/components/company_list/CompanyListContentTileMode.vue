@@ -6,9 +6,13 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useAuthStore } from '@/store/auth'
 
+// Utilities
+import { inject } from 'vue'
+
 // Types
 import type { PropType } from 'vue'
 import type { CompanyItem } from '@/store/companyList/types'
+import type { ActiveAnimations } from '@/composables/priceUpdater'
 
 const props = defineProps({
   items: {
@@ -18,6 +22,8 @@ const props = defineProps({
 
 const store = useCompanyListStore()
 const authStore = useAuthStore()
+
+const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 </script>
 
 <template>
@@ -78,7 +84,20 @@ const authStore = useAuthStore()
               <v-row no-gutters>
                 <v-col
                   ><div class="d-flex justify-center">
-                    <v-chip label size="small">{{ item.lastPrice }}</v-chip>
+                    <v-chip
+                      label
+                      class="price"
+                      size="small"
+                      :color="
+                        activeAnimations[item.uid]
+                          ? activeAnimations[item.uid] === 'up'
+                            ? 'success'
+                            : 'error'
+                          : undefined
+                      "
+                    >
+                      {{ item.lastPrice }}
+                    </v-chip>
                   </div></v-col
                 >
                 <v-col
@@ -216,7 +235,15 @@ const authStore = useAuthStore()
     text-overflow: ellipsis;
   }
   .company-list-tile-content__snowflake {
-    animation: 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 0s 1 normal forwards running snowflake-entry;
+    animation: 700ms cubic-bezier(0.34, 1.56, 0.64, 1) 0s 1 normal forwards
+      running snowflake-entry;
+  }
+  .price {
+    color: inherit;
+    transition:
+      color 0.6s ease-in,
+      background-color 0.6s ease-in;
+    background-color: transparent;
   }
 }
 
