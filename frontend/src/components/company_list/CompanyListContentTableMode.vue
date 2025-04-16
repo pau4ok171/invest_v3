@@ -108,7 +108,9 @@ const headers = ref([
       <v-btn
         :icon="item.watchlisted ? '$ratingFull' : '$ratingEmpty'"
         variant="text"
-        density="compact"
+        size="small"
+        rounded="lg"
+        density="comfortable"
         :disabled="!authStore.isAuthenticated"
         @click="store.toggleWatchlisted(item)"
       />
