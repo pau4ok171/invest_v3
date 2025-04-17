@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - app_network
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASSWORD: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app_network
+
+  backend:
+    build: ./backend
+    command: daphne -b 0.0.0.0 -p 8000 config.asgi:application
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.config.settings.local
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
+    depends_on:
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - app_network
+
+  celery_worker:
+    build: ./backend
+    command: celery -A config worker --loglevel=info
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.config.settings.local
+      - CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
+    depends_on:
+      - rabbitmq
+      - backend
+    networks:
+      - app_network
+
+  celery_beat:
+    build: ./backend
+    command: celery -A config beat --loglevel=info
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.config.settings.local
+      - CELERY_BROKER_URL=amqp://admin:admin@rabbitmq:5672//
+    depends_on:
+      - rabbitmq
+      - backend
+    networks:
+      - app_network
+
+  frontent:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - app_network
+
+volumes:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  app_network:
+    driver: bridge
+
+healthcheck:
+  redis:
+    test: ["CMD", "redis-cli", "ping"]
+    interval: 5s
+    timeout: 30s
+    retries: 3
+  rabbitmq:
+    test: ["CMD", "rabbitmqctl", "status"]
+    interval: 10s
+    timeout: 30s
+    retries: 5
