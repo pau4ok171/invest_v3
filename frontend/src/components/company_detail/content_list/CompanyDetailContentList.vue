@@ -2,6 +2,10 @@
 // Components
 import CompanyDetailSummary from '@/components/company_detail/content_list/summary/CompanyDetailSummary.vue'
 import CompanyDetailValuation from '@/components/company_detail/content_list/valuation/CompanyDetailValuation.vue'
+import CompanyDetailFuture from '@/components/company_detail/content_list/future/CompanyDetailFuture.vue'
+import CompanyDetailPast from '@/components/company_detail/content_list/past/CompanyDetailPast.vue'
+import CompanyDetailHealth from '@/components/company_detail/content_list/health/CompanyDetailHealth.vue'
+import CompanyDetailDividend from '@/components/company_detail/content_list/dividend/CompanyDetailDividend.vue'
 </script>
 
 <template>
@@ -14,19 +18,15 @@ import CompanyDetailValuation from '@/components/company_detail/content_list/val
 
       <company-detail-valuation id="value" class="section_observer" />
 
+      <company-detail-future id="future" class="section_observer" />
+
+      <company-detail-past id="past" class="section_observer" />
+
+      <company-detail-health id="health" class="section_observer" />
+
+      <company-detail-dividend id="dividend" class="section_observer" />
+
       <template v-if="false">
-        <div id="future" class="section_observer"></div>
-        <div class="detail__future"></div>
-
-        <div id="past" class="section_observer"></div>
-        <div class="detail__past"></div>
-
-        <div id="health" class="section_observer"></div>
-        <div class="detail__health"></div>
-
-        <div id="dividend" class="section_observer"></div>
-        <div class="detail__dividend"></div>
-
         <div id="management" class="section_observer"></div>
         <div class="detail__management"></div>
 

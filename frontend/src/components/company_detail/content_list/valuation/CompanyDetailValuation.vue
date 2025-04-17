@@ -9,6 +9,7 @@ import MultiplierVsPeersChart from '@/components/charts/MultiplierVsPeersChart.v
 import HistoricalMultiplierChart from '@/components/charts/HistoricalMultiplierChart.vue'
 import MultiplierVsIndustryChart from '@/components/charts/MultiplierVsIndustryChart.vue'
 import MultiplierVsFairChart from '@/components/charts/MultiplierVsFairChart.vue'
+import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -115,32 +116,44 @@ const passed = computed(() =>
       title="1 Valuation"
       :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
     >
-      <v-card color="surface-bright" width="50%" class="mt-4" flat>
-        <v-card-text>Valuation Score {{ passed }}/6</v-card-text>
-        <v-card-item>
-          <v-list bg-color="surface-bright">
-            <v-list-item
-              v-for="s in statements"
-              :key="s.id"
-              density="compact"
-              link
-              nav
-            >
-              <template #prepend>
-                <v-icon
-                  :icon="s.status === 'PASS' ? '$iCheck' : '$iCross'"
-                  :color="s.status === 'PASS' ? 'success' : 'error'"
-                  class="fill-rule-evenodd"
-                />
-              </template>
-              {{ s.title }}
-              <template #append>
-                <v-icon icon="$dropdown" />
-              </template>
-            </v-list-item>
-          </v-list>
-        </v-card-item>
-      </v-card>
+      <v-row>
+        <v-col cols="6">
+          <v-card color="surface-bright" width="100%" class="mt-4" flat>
+            <v-card-text>Valuation Score {{ passed }}/6</v-card-text>
+            <v-card-item>
+              <v-list bg-color="surface-bright">
+                <v-list-item
+                  v-for="s in statements"
+                  :key="s.id"
+                  density="compact"
+                  link
+                  nav
+                >
+                  <template #prepend>
+                    <v-icon
+                      :icon="s.status === 'PASS' ? '$iCheck' : '$iCross'"
+                      :color="s.status === 'PASS' ? 'success' : 'error'"
+                      class="fill-rule-evenodd"
+                    />
+                  </template>
+                  {{ s.title }}
+                  <template #append>
+                    <v-icon icon="$dropdown" />
+                  </template>
+                </v-list-item>
+              </v-list>
+            </v-card-item>
+          </v-card>
+        </v-col>
+
+        <v-col cols="6">
+          <snowflake-chart
+            :data="store.snowflake"
+            size="200"
+            :interactive="false"
+          />
+        </v-col>
+      </v-row>
     </v-card-item>
 
     <v-card-item
@@ -181,7 +194,7 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      :title=" `1.3 ${peersSelected.name} Ratio vs Peers`"
+      :title="`1.3 ${peersSelected.name} Ratio vs Peers`"
       :subtitle="`How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`"
       class="px-8"
     >
@@ -210,15 +223,12 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-item
-      title="1.4 Historical Price to Earnings Ratio"
-      class="px-8"
-    >
+    <v-card-item title="1.4 Historical Price to Earnings Ratio" class="px-8">
       <template #subtitle>
         <span style="white-space: normal">
           Historical Price to Earnings Ratio compares a stock's price to its
-          earnings over time. Higher ratios indicate that investors are willing to
-          pay more for the stock.
+          earnings over time. Higher ratios indicate that investors are willing
+          to pay more for the stock.
         </span>
       </template>
       <v-row class="mb-0">
@@ -288,14 +298,7 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-title></v-card-title>
-    <v-card-subtitle style="white-space: normal">{{
-
-    }}</v-card-subtitle>
-    <v-card-item
-      title="1.6 Price to Earnings Ratio vs Fair Ratio"
-      class="px-8"
-    >
+    <v-card-item title="1.6 Price to Earnings Ratio vs Fair Ratio" class="px-8">
       <template #subtitle>
         <span style="white-space: normal">
           {{
