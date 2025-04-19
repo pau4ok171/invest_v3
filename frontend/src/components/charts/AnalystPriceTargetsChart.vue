@@ -1,179 +1,284 @@
 <script setup lang="ts">
-// Components
-import Chart05Gradient01 from '@/components/lineair_gradient/Chart05Gradient01.vue'
-import Chart05Gradient02 from '@/components/lineair_gradient/Chart05Gradient02.vue'
+// Composables
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
 
 // Types
 import type { Options } from 'highcharts'
+import { DateTime } from 'ts-luxon'
+
+interface AnalystChartData {
+  currency: string
+  items: ChartData[]
+}
 
 interface ChartData {
   datetime: number | 'current'
   sharePrice: number
   average1YPrice: number
   dispersion: number
+  analysts: number
 }
 
-const currentDare = Date.now()
+const { t } = useI18n()
 
-const data: ChartData[] = [
-  {
-    datetime: 1774990800,
-    sharePrice: 110.15,
-    average1YPrice: 171.89,
-    dispersion: 0.122,
-  },
-  {
-    datetime: 1772312400,
-    sharePrice: 124.92,
-    average1YPrice: 173.62,
-    dispersion: 0.109,
-  },
-  {
-    datetime: 1769893200,
-    sharePrice: 120.07,
-    average1YPrice: 174.25,
-    dispersion: 0.108,
-  },
-  {
-    datetime: 1767214800,
-    sharePrice: 134.29,
-    average1YPrice: 172.95,
-    dispersion: 0.102,
-  },
-  {
-    datetime: 1764536400,
-    sharePrice: 138.25,
-    average1YPrice: 171.19,
-    dispersion: 0.104,
-  },
-  {
-    datetime: 1761944400,
-    sharePrice: 135.4,
-    average1YPrice: 150.43,
-    dispersion: 0.131,
-  },
-  {
-    datetime: 1759266000,
-    sharePrice: 117.0,
-    average1YPrice: 149.8,
-    dispersion: 0.127,
-  },
-  {
-    datetime: 1756674000,
-    sharePrice: 119.37,
-    average1YPrice: 148.68,
-    dispersion: 0.138,
-  },
-  {
-    datetime: 1753995600,
-    sharePrice: 109.21,
-    average1YPrice: 139.23,
-    dispersion: 0.173,
-  },
-  {
-    datetime: 1751317200,
-    sharePrice: 124.3,
-    average1YPrice: 132.34,
-    dispersion: 0.166,
-  },
-  {
-    datetime: 1748725200,
-    sharePrice: 109.63,
-    average1YPrice: 119.29,
-    dispersion: 0.118,
-  },
-  {
-    datetime: 1746046800,
-    sharePrice: 83.04,
-    average1YPrice: 99.9,
-    dispersion: 0.142,
-  },
-  {
-    datetime: 1743454800,
-    sharePrice: 90.36,
-    average1YPrice: 96.39,
-    dispersion: 0.157,
-  },
-  {
-    datetime: 1740776400,
-    sharePrice: 82.28,
-    average1YPrice: 88.04,
-    dispersion: 0.18,
-  },
-  {
-    datetime: 1738357200,
-    sharePrice: 63.03,
-    average1YPrice: 66.63,
-    dispersion: 0.199,
-  },
-  {
-    datetime: 1735678800,
-    sharePrice: 49.52,
-    average1YPrice: 65.63,
-    dispersion: 0.19,
-  },
-  {
-    datetime: 1733000400,
-    sharePrice: 46.77,
-    average1YPrice: 65.29,
-    dispersion: 0.194,
-  },
-  {
-    datetime: 1730408400,
-    sharePrice: 42.33,
-    average1YPrice: 63.91,
-    dispersion: 0.197,
-  },
-  {
-    datetime: 1727730000,
-    sharePrice: 43.5,
-    average1YPrice: 63.87,
-    dispersion: 0.2,
-  },
-  {
-    datetime: 1725138000,
-    sharePrice: 48.51,
-    average1YPrice: 62.97,
-    dispersion: 0.214,
-  },
-  {
-    datetime: 1722459600,
-    sharePrice: 46.51,
-    average1YPrice: 49.26,
-    dispersion: 0.17,
-  },
-  {
-    datetime: 1719781200,
-    sharePrice: 42.3,
-    average1YPrice: 46.0,
-    dispersion: 0.169,
-  },
-  {
-    datetime: 1717189200,
-    sharePrice: 39.77,
-    average1YPrice: 43.02,
-    dispersion: 0.211,
-  },
-  {
-    datetime: 1714510800,
-    sharePrice: 28.91,
-    average1YPrice: 28.15,
-    dispersion: 0.147,
-  },
-  {
-    datetime: 1711918800,
-    sharePrice: 27.78,
-    average1YPrice: 27.51,
-    dispersion: 0.15,
-  },
-]
+const currentDate = DateTime.now()
 
-const sharePrices = data.map((p) => p.sharePrice).reverse()
-const averages = data.map((p) => p.average1YPrice).reverse()
-const averagesRange = data
+function drawToolbarConnector(point, chart) {
+  // Координаты линии
+  const fromX = point.plotX + chart.plotBox.x
+  const fromY = chart.plotBox.y + chart.plotHeight
+  const toX = point.plotX + chart.plotBox.x
+  const toY = -20
+
+  // Рисуем новую линию
+  return chart.renderer
+    .path(['M', fromX, fromY, 'L', toX, toY])
+    .attr({
+      'stroke-width': 1,
+      stroke: '#A54CEC',
+      zIndex: 4,
+    })
+    .add()
+}
+
+function getTooltip(chart) {
+  const dataIndex = chart.index
+  const dataInstance = data.items[dataIndex]
+  const date = DateTime.fromMillis(chart.category as number).toFormat(
+    'LLL dd yyyy'
+  )
+  const analysts = t('analyst', { n: dataInstance.analysts })
+  const sharePrice = `${data.currency}${dataInstance.sharePrice}`
+  const analyticsPrice = `${data.currency}${dataInstance.average1YPrice}`
+  const diff =
+    (dataInstance.average1YPrice - dataInstance.sharePrice) /
+    dataInstance.sharePrice
+  const isPos = diff >= 0
+  const marge = `${isPos ? '+' : ''}${(diff * 100).toFixed(2)}%`
+  const colorClass =
+    diff >= 0.15 ? 'text-success' : diff < 0 ? 'text-error' : 'text-disabled'
+  const isAgr = dataInstance.dispersion < 0.15
+  const agrStatus = isAgr ? 'Good' : 'Low'
+  const agrText = isAgr
+    ? 'Analysts agreement range is spread less than 15% from the average'
+    : 'Analysts agreement range is spread more than 15% from the average'
+  const agrColor = isAgr ? 'text-success' : 'text-error'
+
+  return `
+      <div class="analyst-price-targets-chart-tooltip">
+        <div class="analyst-price-targets-chart-tooltip__header">
+          <div class="text-info">${date}</div>
+          <div class="text-capitalize">${analysts}</div>
+        </div>
+        <div class="analyst-price-targets-chart-tooltip__divider"></div>
+        <div class="analyst-price-targets-chart-tooltip__grid">
+           <div>Share Price</div>
+           <div class="analyst-price-targets-chart-tooltip__share-price">${sharePrice}</div>
+        </div>
+        <div class="analyst-price-targets-chart-tooltip__divider"></div>
+        <div class="analyst-price-targets-chart-tooltip__grid">
+            <div>Average 1Y Price Target</div>
+            <div class="analyst-price-targets-chart-tooltip__average">${analyticsPrice} <span class="${colorClass} ml-4">${marge}</span></div>
+        </div>
+        <div class="analyst-price-targets-chart-tooltip__divider"></div>
+        <div class="analyst-price-targets-chart-tooltip__grid">
+          <div>Agreement</div>
+          <div class="d-flex flex-column">
+            <div class="${agrColor}">${agrStatus}</div>
+            <div>${agrText}</div>
+          </div>
+        </div>
+      </div>
+      `
+}
+
+const data: AnalystChartData = {
+  currency: 'US$',
+  items: [
+    {
+      datetime: 1774990800,
+      sharePrice: 110.15,
+      average1YPrice: 171.89,
+      dispersion: 0.122,
+      analysts: 56,
+    },
+    {
+      datetime: 1772312400,
+      sharePrice: 124.92,
+      average1YPrice: 173.62,
+      dispersion: 0.109,
+      analysts: 55,
+    },
+    {
+      datetime: 1769893200,
+      sharePrice: 120.07,
+      average1YPrice: 174.25,
+      dispersion: 0.108,
+      analysts: 54,
+    },
+    {
+      datetime: 1767214800,
+      sharePrice: 134.29,
+      average1YPrice: 172.95,
+      dispersion: 0.102,
+      analysts: 53,
+    },
+    {
+      datetime: 1764536400,
+      sharePrice: 138.25,
+      average1YPrice: 171.19,
+      dispersion: 0.104,
+      analysts: 53,
+    },
+    {
+      datetime: 1761944400,
+      sharePrice: 135.4,
+      average1YPrice: 150.43,
+      dispersion: 0.131,
+      analysts: 52,
+    },
+    {
+      datetime: 1759266000,
+      sharePrice: 117.0,
+      average1YPrice: 149.8,
+      dispersion: 0.127,
+      analysts: 53,
+    },
+    {
+      datetime: 1756674000,
+      sharePrice: 119.37,
+      average1YPrice: 148.68,
+      dispersion: 0.138,
+      analysts: 51,
+    },
+    {
+      datetime: 1753995600,
+      sharePrice: 109.21,
+      average1YPrice: 139.23,
+      dispersion: 0.173,
+      analysts: 51,
+    },
+    {
+      datetime: 1751317200,
+      sharePrice: 124.3,
+      average1YPrice: 132.34,
+      dispersion: 0.166,
+      analysts: 50,
+    },
+    {
+      datetime: 1748725200,
+      sharePrice: 109.63,
+      average1YPrice: 119.29,
+      dispersion: 0.118,
+      analysts: 50,
+    },
+    {
+      datetime: 1746046800,
+      sharePrice: 83.04,
+      average1YPrice: 99.9,
+      dispersion: 0.142,
+      analysts: 51,
+    },
+    {
+      datetime: 1743454800,
+      sharePrice: 90.36,
+      average1YPrice: 96.39,
+      dispersion: 0.157,
+      analysts: 51,
+    },
+    {
+      datetime: 1740776400,
+      sharePrice: 82.28,
+      average1YPrice: 88.04,
+      dispersion: 0.18,
+      analysts: 51,
+    },
+    {
+      datetime: 1738357200,
+      sharePrice: 63.03,
+      average1YPrice: 66.63,
+      dispersion: 0.199,
+      analysts: 49,
+    },
+    {
+      datetime: 1735678800,
+      sharePrice: 49.52,
+      average1YPrice: 65.63,
+      dispersion: 0.19,
+      analysts: 49,
+    },
+    {
+      datetime: 1733000400,
+      sharePrice: 46.77,
+      average1YPrice: 65.29,
+      dispersion: 0.194,
+      analysts: 50,
+    },
+    {
+      datetime: 1730408400,
+      sharePrice: 42.33,
+      average1YPrice: 63.91,
+      dispersion: 0.197,
+      analysts: 49,
+    },
+    {
+      datetime: 1727730000,
+      sharePrice: 43.5,
+      average1YPrice: 63.87,
+      dispersion: 0.2,
+      analysts: 49,
+    },
+    {
+      datetime: 1725138000,
+      sharePrice: 48.51,
+      average1YPrice: 62.97,
+      dispersion: 0.214,
+      analysts: 49,
+    },
+    {
+      datetime: 1722459600,
+      sharePrice: 46.51,
+      average1YPrice: 49.26,
+      dispersion: 0.17,
+      analysts: 47,
+    },
+    {
+      datetime: 1719781200,
+      sharePrice: 42.3,
+      average1YPrice: 46.0,
+      dispersion: 0.169,
+      analysts: 45,
+    },
+    {
+      datetime: 1717189200,
+      sharePrice: 39.77,
+      average1YPrice: 43.02,
+      dispersion: 0.211,
+      analysts: 45,
+    },
+    {
+      datetime: 1714510800,
+      sharePrice: 28.91,
+      average1YPrice: 28.15,
+      dispersion: 0.147,
+      analysts: 44,
+    },
+    {
+      datetime: 1711918800,
+      sharePrice: 27.78,
+      average1YPrice: 27.51,
+      dispersion: 0.15,
+      analysts: 44,
+    },
+  ],
+}
+
+const sharePrices = data.items.map((p) => p.sharePrice).reverse()
+const averages = data.items.map((p) => p.average1YPrice).reverse()
+const averagesRange = data.items
   .map((p) => [
     p.average1YPrice * (1 - p.dispersion),
     p.average1YPrice * (1 + p.dispersion),
@@ -189,8 +294,155 @@ const options = computed<Options>(() => ({
     events: {
       load: function () {
         const chart = this
+
+        let toolbarConnector
+        let sharePriceMarker
+        let analystMarker
+        let markerConnector
+        let markerPolygon
+        let oneYearZone
+
+        // Отключаем обрезание
+        chart.renderer.clipRect = null
+
         // Блокируем стандартное скрытие
         chart.tooltip.hide = function () {}
+
+        // Перехватываем обновление tooltip
+        const originalRefresh = chart.tooltip.refresh
+        chart.tooltip.refresh = function (point) {
+          // Удаляем предыдущие значения
+          if (toolbarConnector) toolbarConnector.destroy()
+          if (sharePriceMarker) sharePriceMarker.destroy()
+          if (analystMarker) analystMarker.destroy()
+          if (markerConnector) markerConnector.destroy()
+          if (markerPolygon) markerPolygon.destroy()
+          if (oneYearZone) oneYearZone.destroy()
+
+          // Вызываем оригинальный метод
+          originalRefresh.apply(this, arguments)
+
+          // Если это наша целевая серия
+          if (point) {
+            toolbarConnector = drawToolbarConnector(point, chart)
+
+            const index = point.index
+
+            const dataInstance = data.items[index]
+            const isAgr = dataInstance.dispersion < 0.15
+            const agrColor = isAgr
+              ? 'rgb(var(--v-theme-success))'
+              : 'rgb(var(--v-theme-error))'
+            const agrGradient = isAgr
+              ? 'url(#Chart_POS_Gradient_02)'
+              : 'url(#Chart_NEG_Gradient_02)'
+
+            // Координаты текущей точки
+            const currentX = point.plotX + chart.plotBox.x
+            const currentY = point.plotY + chart.plotBox.y
+
+            const sharePriceSeries = chart.series.find(
+              (f) => f.name === 'Share Price'
+            )
+            const targetRangeSeries = chart.series.find(
+              (f) => f.name === 'Price Target Range'
+            )
+
+            const sharePricePoint = sharePriceSeries
+              ? sharePriceSeries.points[index]
+              : undefined
+
+            const targetRangePoint = targetRangeSeries
+              ? targetRangeSeries.points[index]
+              : undefined
+
+            // Координаты точки 12 месяцев назад
+            const yearAgoX = sharePricePoint.plotX + chart.plotBox.x
+            const yearAgoY = sharePricePoint.plotY + chart.plotBox.y
+
+            const targetUpX = targetRangePoint.plotX + chart.plotBox.x
+            const targetUpY = targetRangePoint.plotHigh + chart.plotBox.y
+            const targetDownX = targetRangePoint.plotX + chart.plotBox.x
+            const targetDownY = targetRangePoint.plotLow + chart.plotBox.y
+
+            // Рисуем соединительную линию
+            markerConnector = chart.renderer
+              .path(['M', currentX, currentY, 'L', yearAgoX, yearAgoY])
+              .attr({
+                'stroke-width': 2,
+                stroke: agrColor,
+                dashstyle: 'Dash',
+                zIndex: 5,
+              })
+              .add()
+
+            const points = [
+              // Точка Share Price (год назад) [x, y]
+              [yearAgoX, yearAgoY],
+              // Верхняя граница диапазона  [x, y]
+              [targetUpX, targetUpY],
+              // Нижняя граница диапазона  [x, y]
+              [targetDownX, targetDownY],
+            ]
+
+            // 4. Рисуем полигон
+            markerPolygon = chart.renderer
+              .path([
+                'M',
+                points[0][0],
+                points[0][1],
+                'L',
+                points[1][0],
+                points[1][1],
+                'L',
+                points[2][0],
+                points[2][1],
+                'Z', // Замыкаем путь
+              ])
+              .attr({
+                fill: agrGradient,
+                zIndex: 4,
+              })
+              .add()
+
+            // Маркер для точки 12 месяцев назад
+            sharePriceMarker = chart.renderer
+              .circle(yearAgoX, yearAgoY, 5)
+              .attr({
+                fill: 'rgb(var(--v-theme-info))',
+                stroke: 'white',
+                'stroke-width': 2,
+                zIndex: 5,
+              })
+              .add()
+
+            analystMarker = chart.renderer
+              .circle(currentX, currentY, 5)
+              .attr({
+                fill: '#A54CEC',
+                stroke: 'white',
+                'stroke-width': 2,
+                zIndex: 5,
+              })
+              .add()
+
+            // One year zone
+            oneYearZone = chart.renderer
+              .rect(
+                yearAgoX,
+                chart.plotTop,
+                currentX - yearAgoX,
+                chart.plotHeight
+              )
+              .attr({
+                fill: 'url(#YearMarkerGradient)',
+                stroke: 'rgba(35, 148, 223, 0.1)',
+                'stroke-width': 1,
+                zIndex: -1,
+              })
+              .add()
+          }
+        }
       },
     },
   },
@@ -205,11 +457,35 @@ const options = computed<Options>(() => ({
   },
   xAxis: {
     type: 'datetime',
-    plotLines: [
+    plotBands: [
       {
-        color: '#666',
-        width: 2,
-        value: currentDare,
+        from: 0,
+        to: currentDate.toMillis(),
+        color: 'url(#Actual_Background_Gradient)',
+        label: {
+          text: 'Past',
+          align: 'right',
+          style: {
+            color: 'rgb(var(--v-theme-on-surface))',
+          },
+          x: -10,
+        },
+        zIndex: -1,
+      },
+      {
+        from: currentDate.toMillis(),
+        to: currentDate.plus({ year: 1 }).toMillis(),
+        color: 'transparent',
+        label: {
+          text: '12m forecast',
+          align: 'left',
+          style: {
+            color: '#606060',
+            opacity: 1,
+          },
+          x: 10,
+        },
+        zIndex: -1,
       },
     ],
     labels: {
@@ -292,9 +568,8 @@ const options = computed<Options>(() => ({
       name: 'Price Target Range',
       type: 'areasplinerange',
       data: averagesRange,
-      color: '#A54CEC',
+      color: 'url(#Chart_05_Gradient_02)',
       fillOpacity: 0.5,
-      fill: 'url(#Chart_05_Gradient_02)',
       lineWidth: 0,
       linkedTo: ':previous',
       zIndex: 0,
@@ -303,48 +578,24 @@ const options = computed<Options>(() => ({
     },
   ],
   tooltip: {
+    animation: {
+      duration: 0,
+    },
     useHTML: true,
     outside: true,
     stickOnContact: true,
-    // Критически важные дополнения:
     style: {
-      pointerEvents: 'none', // Позволяет курсору "проходить сквозь" tooltip
-      zIndex: 1000, // Гарантирует поверх других элементов
+      pointerEvents: 'none',
+      zIndex: 10,
     },
     positioner: function (boxWidth, boxHeight, point) {
       return {
-        x: point.plotX + this.chart.plotLeft - boxWidth,
-        y: this.chart.plotTop - boxHeight - 20,
+        x: point.plotX + this.chart.plotLeft - boxWidth + 8,
+        y: this.chart.plotTop - boxHeight,
       }
     },
     formatter: function () {
-      console.log(this)
-      return `
-      <div class="analyst-price-targets-chart-tooltip">
-        <div class="analyst-price-targets-chart-tooltip__header">
-          <div class="text-info">Apr 18 2025</div>
-          <div>54 Analysts</div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-           <div>Share Price</div>
-           <div class="analyst-price-targets-chart-tooltip__share-price">US$101.49</div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-            <div>Average 1Y Price Target</div>
-            <div class="analyst-price-targets-chart-tooltip__average">US$165.66 <span class="text-success ml-4">+63.2%</span></div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-          <div>Agreement</div>
-          <div class="d-flex flex-column">
-            <div class="text-success">Good</div>
-            <div>Analysts agreement range is spread less than 15% from the average</div>
-          </div>
-        </div>
-      </div>
-      `
+      return getTooltip(this)
     },
   },
   legend: {
@@ -360,36 +611,6 @@ const options = computed<Options>(() => ({
     margin: 15,
     padding: 5,
   },
-  annotations: [
-    {
-      labels: [
-        {
-          point: {
-            x: currentDare - 3 * 30 * 24 * 3600 * 1000,
-            y: 50,
-            xAxis: 0,
-            yAxis: 0,
-          },
-          text: 'Past',
-          style: {
-            color: '#666',
-          },
-        },
-        {
-          point: {
-            x: currentDare + 3 * 30 * 24 * 3600 * 1000,
-            y: 50,
-            xAxis: 0,
-            yAxis: 0,
-          },
-          text: '12M Forecast',
-          style: {
-            color: '#666',
-          },
-        },
-      ],
-    },
-  ],
 }))
 </script>
 
@@ -401,8 +622,6 @@ const options = computed<Options>(() => ({
       constructorType="chart"
       :options="options"
     />
-    <chart05-gradient01 />
-    <chart05-gradient02 />
   </div>
 </template>
 
@@ -431,7 +650,7 @@ const options = computed<Options>(() => ({
   color: rgba(var(--v-theme-on-surface), 0.5);
   font-size: 0.75rem;
   padding: 12px 8px;
-  border-radius: 8px;
+  border-radius: 4px;
   flex-direction: column;
   width: 340px;
 

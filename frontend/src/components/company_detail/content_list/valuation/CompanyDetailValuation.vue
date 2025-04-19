@@ -20,6 +20,7 @@ import { computed, ref } from 'vue'
 // Types
 import type { Statement } from '@/types/statements'
 import type { DetailCompany } from '@/types/invest'
+import AnalystPriceTargetsChart from "@/components/charts/AnalystPriceTargetsChart.vue";
 
 export interface FairValueTab {
   name: string
@@ -318,16 +319,9 @@ const passed = computed(() =>
       subtitle="What is the analyst 12-month forecast and do we have any statistical confidence in the consensus price target?"
       class="px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [ANALYST PRICE TARGETS CHART]
-      </div>
+      <analyst-price-targets-chart />
+
+      <company-detail-check name="IsAnalystForecastTrustworthy" />
     </v-card-item>
   </v-card>
 </template>
