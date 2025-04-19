@@ -5,6 +5,7 @@ import { BaseFlag } from '@/components/UI/BaseFlag'
 // Composables
 import { ref, watch } from 'vue'
 import { useLocale } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 const langs = [
   { id: 'en', title: 'English', iso: 'gb' },
@@ -16,9 +17,14 @@ const langs = [
 
 const selected = ref(['ru'])
 const { current } = useLocale()
+const { locale } = useI18n()
+
+current.value = selected.value[0]
+locale.value = selected.value[0]
 
 watch(selected, () => {
   current.value = selected.value[0]
+  locale.value = selected.value[0]
 })
 </script>
 
@@ -29,10 +35,10 @@ watch(selected, () => {
     </template>
     <template #default>
       <v-card>
-        <v-list v-model:selected="selected" slim nav density="compact">
+        <v-list v-model:selected="selected" slim nav density="compact" mandatory>
           <v-list-subheader
             class="text-high-emphasis text-uppercase font-weight-black"
-            >
+          >
             Translations
           </v-list-subheader>
           <v-list-item

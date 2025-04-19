@@ -22,6 +22,7 @@ import 'highcharts/highcharts-more'
 import 'highcharts/modules/solid-gauge'
 import { defaultChartOpts } from '@/components/charts/DefaultChartOpts'
 import { vuetify } from '@/vuetify'
+import { i18n } from '@/i18n/i18n'
 
 const app = createApp(App)
 const pinia = createPinia()
@@ -40,6 +41,7 @@ Highcharts.setOptions({
 app
   .use(router)
   .use(pinia)
+  .use(i18n)
   .use(VueAxios, axios)
   .use(HighchartsVue, { tagName: 'charts' })
   .use(Vue3Toastify, {
