@@ -4,6 +4,7 @@ import CompanyDetailHeader from '@/components/company_detail/header/CompanyDetai
 import CompanyDetailContent from '@/components/company_detail/CompanyDetailContent.vue'
 import CompanyDetailRightSidebar from '@/components/company_detail/rightSidebar/companyDetailRightSidebar.vue'
 import NotesEditor from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
+import LinearGradientDef from '@/components/lineair_gradient/linearGradientDef.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -87,4 +88,5 @@ onUnmounted(() => {
   </section>
   <company-detail-right-sidebar />
   <notes-editor />
+  <linear-gradient-def />
 </template>
