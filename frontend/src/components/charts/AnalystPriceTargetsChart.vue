@@ -4,11 +4,16 @@ import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref } from 'vue'
-
-// Types
-import type { Options, Point, SVGElement } from 'highcharts'
 import { DateTime } from 'ts-luxon'
 
+// Types
+import type { Options, Point, SVGElement, SVGPathArray } from 'highcharts'
+
+// Constants
+const CHART_HEIGHT = 356
+const TOOLTIP_WIDTH = 340
+
+// Interfaces
 interface AnalystChartData {
   currency: string
   items: ChartData[]
@@ -22,217 +27,20 @@ interface ChartData {
   analysts: number
 }
 
+// Reactive states
 const { t } = useI18n()
-
 const currentDate = DateTime.now()
-
-function drawToolbarConnector(point: Point) {
-  const chart = point.series.chart
-  // Координаты линии
-  const fromX = (point.plotX || 0) + chart.plotLeft
-  const fromY = chart.plotTop + chart.plotHeight
-  const toX = (point.plotX || 0) + chart.plotLeft
-  const toY = -20
-
-  // Рисуем новую линию
-  return chart.renderer
-    .path(['M', fromX, fromY, 'L', toX, toY])
-    .attr({
-      'stroke-width': 1,
-      stroke: '#A54CEC',
-      zIndex: 4,
-    })
-    .add()
-}
-
-let toolbarConnector = null as SVGElement | null
-let sharePriceMarker = null as SVGElement | null
-let analystMarker = null as SVGElement | null
-let markerConnector = null as SVGElement | null
-let markerPolygon = null as SVGElement | null
-let oneYearZone = null as SVGElement | null
-
 const currentPoint = ref<Point | null>(null)
-const tooltipData = computed(() => {
-  if (!currentPoint.value) return null
-  const chart = currentPoint.value.series.chart
-
-  const posX = (currentPoint.value.plotX || 0) + chart.plotLeft
-  const dataIndex = currentPoint.value.index
-  const dataInstance = data.items[dataIndex]
-  const date = DateTime.fromMillis(
-    currentPoint.value.category as number
-  ).toFormat('LLL dd yyyy')
-  const analysts = t('analyst', { n: dataInstance.analysts })
-  const sharePrice = `${data.currency}${dataInstance.sharePrice}`
-  const analyticsPrice = `${data.currency}${dataInstance.average1YPrice}`
-  const diff =
-    (dataInstance.average1YPrice - dataInstance.sharePrice) /
-    dataInstance.sharePrice
-  const isPos = diff >= 0
-  const marge = `${isPos ? '+' : ''}${(diff * 100).toFixed(2)}%`
-  const margeColorClass =
-    diff >= 0.15 ? 'text-success' : diff < 0 ? 'text-error' : 'text-disabled'
-  const isAgr = dataInstance.dispersion < 0.15
-  const agrStatus = isAgr ? 'Good' : 'Low'
-  const agrText = isAgr
-    ? 'Analysts agreement range is spread less than 15% from the average'
-    : 'Analysts agreement range is spread more than 15% from the average'
-  const agrColorClass = isAgr ? 'text-success' : 'text-error'
-  const tooltipStyle = { transform: `translateX(${posX - 340}px)` }
-
-  return {
-    date,
-    analysts,
-    sharePrice,
-    analyticsPrice,
-    margeColorClass,
-    marge,
-    agrColorClass,
-    agrStatus,
-    agrText,
-    tooltipStyle,
-  }
-})
-
-function updateTooltip(point: Point) {
-  updatePointElements(point)
-  currentPoint.value = point
+const chartElements = {
+  toolbarConnector: null as SVGElement | null,
+  sharePriceMarker: null as SVGElement | null,
+  analystMarker: null as SVGElement | null,
+  markerConnector: null as SVGElement | null,
+  markerPolygon: null as SVGElement | null,
+  oneYearZone: null as SVGElement | null,
 }
 
-function updatePointElements(point: Point) {
-  const chart = point.series.chart
-
-  console.log(point)
-
-  // Удаляем предыдущие значения
-  if (toolbarConnector) toolbarConnector.destroy()
-  if (sharePriceMarker) sharePriceMarker.destroy()
-  if (analystMarker) analystMarker.destroy()
-  if (markerConnector) markerConnector.destroy()
-  if (markerPolygon) markerPolygon.destroy()
-  if (oneYearZone) oneYearZone.destroy()
-
-  // Если это наша целевая серия
-  if (point) {
-    toolbarConnector = drawToolbarConnector(point)
-
-    const index = point.index
-
-    const dataInstance = data.items[index]
-    const isAgr = dataInstance.dispersion < 0.15
-    const agrColor = isAgr
-      ? 'rgb(var(--v-theme-success))'
-      : 'rgb(var(--v-theme-error))'
-    const agrGradient = isAgr
-      ? 'url(#Chart_POS_Gradient_02)'
-      : 'url(#Chart_NEG_Gradient_02)'
-
-    // Координаты текущей точки
-    const currentX = (point.plotX || 0) + chart.plotLeft
-    const currentY = (point.plotY || 0) + chart.plotTop
-
-    const sharePriceSeries = chart.series.find((f) => f.name === 'Share Price')
-    const targetRangeSeries = chart.series.find(
-      (f) => f.name === 'Price Target Range'
-    )
-
-    const sharePricePoint = sharePriceSeries
-      ? sharePriceSeries.points[index]
-      : undefined
-
-    const targetRangePoint = targetRangeSeries
-      ? (targetRangeSeries.points[index] as Point & {
-          plotHigh?: number
-          plotLow?: number
-        })
-      : undefined
-
-    if (!sharePricePoint || !targetRangePoint) return
-
-    // Координаты точки 12 месяцев назад
-    const yearAgoX = (sharePricePoint.plotX || 0) + chart.plotLeft
-    const yearAgoY = (sharePricePoint.plotY || 0) + chart.plotTop
-
-    const targetUpX = (targetRangePoint.plotX || 0) + chart.plotLeft
-    const targetUpY = (targetRangePoint.plotHigh || 0) + chart.plotTop
-    const targetDownX = (targetRangePoint.plotX || 0) + chart.plotLeft
-    const targetDownY = (targetRangePoint.plotLow || 0) + chart.plotTop
-
-    // Рисуем соединительную линию
-    markerConnector = chart.renderer
-      .path(['M', currentX, currentY, 'L', yearAgoX, yearAgoY])
-      .attr({
-        'stroke-width': 2,
-        stroke: agrColor,
-        dashstyle: 'Dash',
-        zIndex: 5,
-      })
-      .add()
-
-    const points = [
-      // Точка Share Price (год назад) [x, y]
-      [yearAgoX, yearAgoY],
-      // Верхняя граница диапазона  [x, y]
-      [targetUpX, targetUpY],
-      // Нижняя граница диапазона  [x, y]
-      [targetDownX, targetDownY],
-    ]
-
-    // 4. Рисуем полигон
-    markerPolygon = chart.renderer
-      .path([
-        'M',
-        points[0][0],
-        points[0][1],
-        'L',
-        points[1][0],
-        points[1][1],
-        'L',
-        points[2][0],
-        points[2][1],
-        'Z', // Замыкаем путь
-      ])
-      .attr({
-        fill: agrGradient,
-        zIndex: 4,
-      })
-      .add()
-
-    // Маркер для точки 12 месяцев назад
-    sharePriceMarker = chart.renderer
-      .circle(yearAgoX, yearAgoY, 5)
-      .attr({
-        fill: 'rgb(var(--v-theme-info))',
-        stroke: 'white',
-        'stroke-width': 2,
-        zIndex: 5,
-      })
-      .add()
-
-    analystMarker = chart.renderer
-      .circle(currentX, currentY, 5)
-      .attr({
-        fill: '#A54CEC',
-        stroke: 'white',
-        'stroke-width': 2,
-        zIndex: 5,
-      })
-      .add()
-
-    // One year zone
-    oneYearZone = chart.renderer
-      .rect(yearAgoX, chart.plotTop, currentX - yearAgoX, chart.plotHeight)
-      .attr({
-        fill: 'url(#YearMarkerGradient)',
-        stroke: 'rgba(35, 148, 223, 0.1)',
-        'stroke-width': 1,
-        zIndex: -1,
-      })
-      .add()
-  }
-}
-
+// Chart data
 const data: AnalystChartData = {
   currency: 'US$',
   items: [
@@ -414,28 +222,107 @@ const data: AnalystChartData = {
   ],
 }
 
-const sharePrices = data.items.map((p) => p.sharePrice).reverse()
-const averages = data.items.map((p) => p.average1YPrice).reverse()
-const averagesRange = data.items
-  .map((p) => [
-    p.average1YPrice * (1 - p.dispersion),
-    p.average1YPrice * (1 + p.dispersion),
-  ])
-  .reverse()
+// Computed data series
+const [sharePrices, averages, averagesRange] = [
+  data.items.map((p) => p.sharePrice).reverse(),
+  data.items.map((p) => p.average1YPrice).reverse(),
+  data.items
+    .map((p) => [
+      p.average1YPrice * (1 - p.dispersion),
+      p.average1YPrice * (1 + p.dispersion),
+    ])
+    .reverse(),
+]
 
+// Helper functions
+const destroyChartElements = () => {
+  Object.values(chartElements).forEach((el) => el?.destroy())
+  Object.keys(chartElements).forEach((key) => {
+    chartElements[key as keyof typeof chartElements] = null
+  })
+}
+
+const drawConnector = (point: Point) => {
+  const chart = point.series.chart
+  const fromX = (point.plotX || 0) + chart.plotLeft
+  const fromY = chart.plotTop + chart.plotHeight
+  const toX = fromX
+  const toY = -20
+
+  return chart.renderer
+    .path(['M', fromX, fromY, 'L', toX, toY] as unknown as SVGPathArray)
+    .attr({
+      'stroke-width': 1,
+      stroke: 'rgb(var(--v-theme-hc-average-series-color))',
+      zIndex: 4,
+    })
+    .add()
+}
+
+const getAgreementStatus = (dispersion: number) => {
+  const isAgr = dispersion < 0.15
+  return {
+    isAgr,
+    color: isAgr ? 'text-success' : 'text-error',
+    status: isAgr ? 'Good' : 'Low',
+    text: isAgr
+      ? 'Analysts agreement range is spread less than 15% from the average'
+      : 'Analysts agreement range is spread more than 15% from the average',
+  }
+}
+
+// Computed properties
+const tooltipData = computed(() => {
+  if (!currentPoint.value) return null
+
+  const point = currentPoint.value
+  const dataIndex = currentPoint.value.index
+  const dataInstance = data.items[dataIndex]
+
+  const date = DateTime.fromMillis(point.category as number).toFormat(
+    'LLL dd yyyy'
+  )
+  const analysts = t('analyst', { n: dataInstance.analysts })
+  const diff =
+    (dataInstance.average1YPrice - dataInstance.sharePrice) /
+    dataInstance.sharePrice
+  const isPos = diff >= 0
+  const agreement = getAgreementStatus(dataInstance.dispersion)
+  const tooltipPos =
+    (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
+      ? (point.plotX || 0) + point.series.chart.plotLeft
+      : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
+
+  return {
+    date,
+    analysts,
+    sharePrice: `${data.currency}${dataInstance.sharePrice}`,
+    analyticsPrice: `${data.currency}${dataInstance.average1YPrice}`,
+    margeColorClass:
+      diff >= 0.15 ? 'text-success' : diff < 0 ? 'text-error' : 'text-disabled',
+    marge: `${isPos ? '+' : ''}${(diff * 100).toFixed(2)}%`,
+    agrColorClass: agreement.color,
+    agrStatus: agreement.status,
+    agrText: agreement.text,
+    tooltipStyle: {
+      transform: `translateX(${tooltipPos}px)`,
+    },
+  }
+})
+
+// Chart options
 const options = computed<Options>(
   () =>
     ({
       chart: {
         type: 'spline',
-        height: 356,
+        height: CHART_HEIGHT,
         width: null,
         backgroundColor: 'transparent',
         events: {
-          load: function () {
+          load() {
             const points = this.series[2].points
-            const lastPoint = points[points.length - 1]
-            updateTooltip(lastPoint)
+            updateTooltip(points[points.length - 1])
           },
         },
       },
@@ -529,7 +416,7 @@ const options = computed<Options>(
           },
           point: {
             events: {
-              mouseOver: function () {
+              mouseOver() {
                 updateTooltip(this)
               },
             },
@@ -537,8 +424,8 @@ const options = computed<Options>(
           pointStart: '2023-04-01',
           pointIntervalUnit: 'month',
           events: {
-            legendItemClick: function () {
-              return false
+            legendItemClick() {
+              return false // Highcharts ожидает boolean
             },
           },
           states: {
@@ -565,7 +452,7 @@ const options = computed<Options>(
           name: 'Average 1Y Target',
           type: 'spline',
           data: averages,
-          color: '#A54CEC',
+          color: 'rgb(var(--v-theme-hc-average-series-color))',
           lineWidth: 3,
           pointStart: Date.parse('2024-04-01'),
           enableMouseTracking: true,
@@ -601,6 +488,119 @@ const options = computed<Options>(
       },
     }) satisfies Options
 )
+
+// Core functions
+const updatePointElements = (point: Point) => {
+  destroyChartElements()
+
+  const chart = point.series.chart
+  const dataInstance = data.items[point.index]
+  const agreement = getAgreementStatus(dataInstance.dispersion)
+
+  // Draw main elements
+  chartElements.toolbarConnector = drawConnector(point)
+
+  const currentX = (point.plotX || 0) + chart.plotLeft
+  const currentY = (point.plotY || 0) + chart.plotTop
+
+  const sharePriceSeries = chart.series.find((f) => f.name === 'Share Price')
+  const targetRangeSeries = chart.series.find(
+    (f) => f.name === 'Price Target Range'
+  )
+
+  if (!sharePriceSeries || !targetRangeSeries) return
+
+  const sharePricePoint = sharePriceSeries.points[point.index]
+  const targetRangePoint = targetRangeSeries.points[point.index] as Point & {
+    plotHigh: number
+    plotLow: number
+  }
+
+  // Draw connection elements
+  const yearAgoX = (sharePricePoint.plotX || 0) + chart.plotLeft
+  const yearAgoY = (sharePricePoint.plotY || 0) + chart.plotTop
+
+  chartElements.markerConnector = chart.renderer
+    .path([
+      'M',
+      currentX,
+      currentY,
+      'L',
+      yearAgoX,
+      yearAgoY,
+    ] as unknown as SVGPathArray)
+    .attr({
+      'stroke-width': 2,
+      stroke: agreement.isAgr
+        ? 'rgb(var(--v-theme-success))'
+        : 'rgb(var(--v-theme-error))',
+      dashstyle: 'Dash',
+      zIndex: 5,
+    })
+    .add()
+
+  // Draw polygon
+  const polygonPoints = [
+    [yearAgoX, yearAgoY],
+    [currentX, (targetRangePoint.plotHigh || 0) + chart.plotTop],
+    [currentX, (targetRangePoint.plotLow || 0) + chart.plotTop],
+  ]
+
+  chartElements.markerPolygon = chart.renderer
+    .path([
+      'M',
+      ...polygonPoints[0],
+      'L',
+      ...polygonPoints[1],
+      'L',
+      ...polygonPoints[2],
+      'Z',
+    ] as unknown as SVGPathArray)
+    .attr({
+      fill: agreement.isAgr
+        ? 'url(#Chart_POS_Gradient_02)'
+        : 'url(#Chart_NEG_Gradient_02)',
+      zIndex: 4,
+    })
+    .add()
+
+  // Draw markers
+  chartElements.sharePriceMarker = chart.renderer
+    .circle(yearAgoX, yearAgoY, 5)
+    .attr({
+      fill: 'rgb(var(--v-theme-info))',
+      stroke: 'white',
+      'stroke-width': 2,
+      zIndex: 5,
+    })
+    .add()
+
+  chartElements.analystMarker = chart.renderer
+    .circle(currentX, currentY, 5)
+    .attr({
+      fill: 'rgb(var(--v-theme-hc-average-series-color))',
+      stroke: 'white',
+      'stroke-width': 2,
+      zIndex: 5,
+    })
+    .add()
+
+  // Draw year zone
+  chartElements.oneYearZone = chart.renderer
+    .rect(yearAgoX, chart.plotTop, currentX - yearAgoX, chart.plotHeight)
+    .attr({
+      fill: 'url(#YearMarkerGradient)',
+      stroke: 'rgba(35, 148, 223, 0.1)',
+      'stroke-width': 1,
+      zIndex: -1,
+    })
+    .add()
+}
+
+const updateTooltip = (point: Point) => {
+  updatePointElements(point)
+  currentPoint.value = point
+}
 </script>
 
 <template>
@@ -666,60 +666,22 @@ const options = computed<Options>(
 </template>
 
 <style lang="scss">
-.analyst-price-targets-chart__tooltip-box {
-  height: 190px;
-  position: relative;
-  display: flex;
-  align-items: end;
-}
-.analyst-price-targets-chart__chart {
-  position: relative;
-  display: grid;
-  justify-content: center;
-  align-items: center;
-
-  .highcharts-legend {
-    pointer-events: none;
-  }
-}
-.highcharts-tooltip-container {
-  > svg {
-    display: none;
-  }
-}
-.analyst-price-targets-chart-tooltip {
-  display: flex;
-  background: rgb(var(--v-theme-surface));
-  color: rgba(var(--v-theme-on-surface), 0.5);
-  font-size: 0.75rem;
-  padding: 12px 8px;
-  border-radius: 4px;
-  flex-direction: column;
-  width: 340px;
-
-  &__header {
+.analyst-price-targets-chart {
+  &__tooltip-box {
+    height: 190px;
+    position: relative;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: end;
   }
-  &__divider {
-    width: 100%;
-    height: 1px;
-    background-color: rgb(51, 51, 51);
-    margin: 4px 0;
-  }
-  &__grid {
+  &__chart {
+    position: relative;
     display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 16px;
-    white-space: break-spaces;
-    overflow-wrap: break-word;
-  }
-  &__share-price {
-    color: rgb(var(--v-theme-info));
-  }
-  &__average {
-    color: #a54cec;
+    justify-content: center;
+    align-items: center;
+
+    .highcharts-legend {
+      pointer-events: none;
+    }
   }
 }
 </style>
