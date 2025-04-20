@@ -18,6 +18,7 @@ const finargoDarkTheme = {
     mask: '#0C0909',
     'hc-snowflake-bg-light': '#4b5966',
     'hc-snowflake-bg-dark': '#283440',
+    'hc-average-series-color': '#a54cec',
   },
   variables: {
     'border-color': '#FFFFFF',
@@ -59,6 +60,7 @@ const finargoLightTheme = {
     mask: '#ababab',
     'hc-snowflake-bg-light': '#ccd2d4',
     'hc-snowflake-bg-dark': '#576262',
+    'hc-average-series-color': '#a54cec',
   },
   variables: {
     'border-color': '#000000',
