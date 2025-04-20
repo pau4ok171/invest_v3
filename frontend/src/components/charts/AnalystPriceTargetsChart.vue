@@ -3,10 +3,10 @@
 import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 // Types
-import type { Options } from 'highcharts'
+import type { Options, Point, SVGElement } from 'highcharts'
 import { DateTime } from 'ts-luxon'
 
 interface AnalystChartData {
@@ -26,11 +26,12 @@ const { t } = useI18n()
 
 const currentDate = DateTime.now()
 
-function drawToolbarConnector(point, chart) {
+function drawToolbarConnector(point: Point) {
+  const chart = point.series.chart
   // Координаты линии
-  const fromX = point.plotX + chart.plotBox.x
-  const fromY = chart.plotBox.y + chart.plotHeight
-  const toX = point.plotX + chart.plotBox.x
+  const fromX = (point.plotX || 0) + chart.plotLeft
+  const fromY = chart.plotTop + chart.plotHeight
+  const toX = (point.plotX || 0) + chart.plotLeft
   const toY = -20
 
   // Рисуем новую линию
@@ -44,12 +45,24 @@ function drawToolbarConnector(point, chart) {
     .add()
 }
 
-function getTooltip(chart) {
-  const dataIndex = chart.index
+let toolbarConnector = null as SVGElement | null
+let sharePriceMarker = null as SVGElement | null
+let analystMarker = null as SVGElement | null
+let markerConnector = null as SVGElement | null
+let markerPolygon = null as SVGElement | null
+let oneYearZone = null as SVGElement | null
+
+const currentPoint = ref<Point | null>(null)
+const tooltipData = computed(() => {
+  if (!currentPoint.value) return null
+  const chart = currentPoint.value.series.chart
+
+  const posX = (currentPoint.value.plotX || 0) + chart.plotLeft
+  const dataIndex = currentPoint.value.index
   const dataInstance = data.items[dataIndex]
-  const date = DateTime.fromMillis(chart.category as number).toFormat(
-    'LLL dd yyyy'
-  )
+  const date = DateTime.fromMillis(
+    currentPoint.value.category as number
+  ).toFormat('LLL dd yyyy')
   const analysts = t('analyst', { n: dataInstance.analysts })
   const sharePrice = `${data.currency}${dataInstance.sharePrice}`
   const analyticsPrice = `${data.currency}${dataInstance.average1YPrice}`
@@ -58,41 +71,166 @@ function getTooltip(chart) {
     dataInstance.sharePrice
   const isPos = diff >= 0
   const marge = `${isPos ? '+' : ''}${(diff * 100).toFixed(2)}%`
-  const colorClass =
+  const margeColorClass =
     diff >= 0.15 ? 'text-success' : diff < 0 ? 'text-error' : 'text-disabled'
   const isAgr = dataInstance.dispersion < 0.15
   const agrStatus = isAgr ? 'Good' : 'Low'
   const agrText = isAgr
     ? 'Analysts agreement range is spread less than 15% from the average'
     : 'Analysts agreement range is spread more than 15% from the average'
-  const agrColor = isAgr ? 'text-success' : 'text-error'
+  const agrColorClass = isAgr ? 'text-success' : 'text-error'
+  const tooltipStyle = { transform: `translateX(${posX - 340}px)` }
 
-  return `
-      <div class="analyst-price-targets-chart-tooltip">
-        <div class="analyst-price-targets-chart-tooltip__header">
-          <div class="text-info">${date}</div>
-          <div class="text-capitalize">${analysts}</div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-           <div>Share Price</div>
-           <div class="analyst-price-targets-chart-tooltip__share-price">${sharePrice}</div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-            <div>Average 1Y Price Target</div>
-            <div class="analyst-price-targets-chart-tooltip__average">${analyticsPrice} <span class="${colorClass} ml-4">${marge}</span></div>
-        </div>
-        <div class="analyst-price-targets-chart-tooltip__divider"></div>
-        <div class="analyst-price-targets-chart-tooltip__grid">
-          <div>Agreement</div>
-          <div class="d-flex flex-column">
-            <div class="${agrColor}">${agrStatus}</div>
-            <div>${agrText}</div>
-          </div>
-        </div>
-      </div>
-      `
+  return {
+    date,
+    analysts,
+    sharePrice,
+    analyticsPrice,
+    margeColorClass,
+    marge,
+    agrColorClass,
+    agrStatus,
+    agrText,
+    tooltipStyle,
+  }
+})
+
+function updateTooltip(point: Point) {
+  updatePointElements(point)
+  currentPoint.value = point
+}
+
+function updatePointElements(point: Point) {
+  const chart = point.series.chart
+
+  console.log(point)
+
+  // Удаляем предыдущие значения
+  if (toolbarConnector) toolbarConnector.destroy()
+  if (sharePriceMarker) sharePriceMarker.destroy()
+  if (analystMarker) analystMarker.destroy()
+  if (markerConnector) markerConnector.destroy()
+  if (markerPolygon) markerPolygon.destroy()
+  if (oneYearZone) oneYearZone.destroy()
+
+  // Если это наша целевая серия
+  if (point) {
+    toolbarConnector = drawToolbarConnector(point)
+
+    const index = point.index
+
+    const dataInstance = data.items[index]
+    const isAgr = dataInstance.dispersion < 0.15
+    const agrColor = isAgr
+      ? 'rgb(var(--v-theme-success))'
+      : 'rgb(var(--v-theme-error))'
+    const agrGradient = isAgr
+      ? 'url(#Chart_POS_Gradient_02)'
+      : 'url(#Chart_NEG_Gradient_02)'
+
+    // Координаты текущей точки
+    const currentX = (point.plotX || 0) + chart.plotLeft
+    const currentY = (point.plotY || 0) + chart.plotTop
+
+    const sharePriceSeries = chart.series.find((f) => f.name === 'Share Price')
+    const targetRangeSeries = chart.series.find(
+      (f) => f.name === 'Price Target Range'
+    )
+
+    const sharePricePoint = sharePriceSeries
+      ? sharePriceSeries.points[index]
+      : undefined
+
+    const targetRangePoint = targetRangeSeries
+      ? (targetRangeSeries.points[index] as Point & {
+          plotHigh?: number
+          plotLow?: number
+        })
+      : undefined
+
+    if (!sharePricePoint || !targetRangePoint) return
+
+    // Координаты точки 12 месяцев назад
+    const yearAgoX = (sharePricePoint.plotX || 0) + chart.plotLeft
+    const yearAgoY = (sharePricePoint.plotY || 0) + chart.plotTop
+
+    const targetUpX = (targetRangePoint.plotX || 0) + chart.plotLeft
+    const targetUpY = (targetRangePoint.plotHigh || 0) + chart.plotTop
+    const targetDownX = (targetRangePoint.plotX || 0) + chart.plotLeft
+    const targetDownY = (targetRangePoint.plotLow || 0) + chart.plotTop
+
+    // Рисуем соединительную линию
+    markerConnector = chart.renderer
+      .path(['M', currentX, currentY, 'L', yearAgoX, yearAgoY])
+      .attr({
+        'stroke-width': 2,
+        stroke: agrColor,
+        dashstyle: 'Dash',
+        zIndex: 5,
+      })
+      .add()
+
+    const points = [
+      // Точка Share Price (год назад) [x, y]
+      [yearAgoX, yearAgoY],
+      // Верхняя граница диапазона  [x, y]
+      [targetUpX, targetUpY],
+      // Нижняя граница диапазона  [x, y]
+      [targetDownX, targetDownY],
+    ]
+
+    // 4. Рисуем полигон
+    markerPolygon = chart.renderer
+      .path([
+        'M',
+        points[0][0],
+        points[0][1],
+        'L',
+        points[1][0],
+        points[1][1],
+        'L',
+        points[2][0],
+        points[2][1],
+        'Z', // Замыкаем путь
+      ])
+      .attr({
+        fill: agrGradient,
+        zIndex: 4,
+      })
+      .add()
+
+    // Маркер для точки 12 месяцев назад
+    sharePriceMarker = chart.renderer
+      .circle(yearAgoX, yearAgoY, 5)
+      .attr({
+        fill: 'rgb(var(--v-theme-info))',
+        stroke: 'white',
+        'stroke-width': 2,
+        zIndex: 5,
+      })
+      .add()
+
+    analystMarker = chart.renderer
+      .circle(currentX, currentY, 5)
+      .attr({
+        fill: '#A54CEC',
+        stroke: 'white',
+        'stroke-width': 2,
+        zIndex: 5,
+      })
+      .add()
+
+    // One year zone
+    oneYearZone = chart.renderer
+      .rect(yearAgoX, chart.plotTop, currentX - yearAgoX, chart.plotHeight)
+      .attr({
+        fill: 'url(#YearMarkerGradient)',
+        stroke: 'rgba(35, 148, 223, 0.1)',
+        'stroke-width': 1,
+        zIndex: -1,
+      })
+      .add()
+  }
 }
 
 const data: AnalystChartData = {
@@ -285,338 +423,240 @@ const averagesRange = data.items
   ])
   .reverse()
 
-const options = computed<Options>(() => ({
-  chart: {
-    type: 'spline',
-    height: 356,
-    width: null,
-    backgroundColor: 'transparent',
-    events: {
-      load: function () {
-        const chart = this
-
-        let toolbarConnector
-        let sharePriceMarker
-        let analystMarker
-        let markerConnector
-        let markerPolygon
-        let oneYearZone
-
-        // Отключаем обрезание
-        chart.renderer.clipRect = null
-
-        // Блокируем стандартное скрытие
-        chart.tooltip.hide = function () {}
-
-        // Перехватываем обновление tooltip
-        const originalRefresh = chart.tooltip.refresh
-        chart.tooltip.refresh = function (point) {
-          // Удаляем предыдущие значения
-          if (toolbarConnector) toolbarConnector.destroy()
-          if (sharePriceMarker) sharePriceMarker.destroy()
-          if (analystMarker) analystMarker.destroy()
-          if (markerConnector) markerConnector.destroy()
-          if (markerPolygon) markerPolygon.destroy()
-          if (oneYearZone) oneYearZone.destroy()
-
-          // Вызываем оригинальный метод
-          originalRefresh.apply(this, arguments)
-
-          // Если это наша целевая серия
-          if (point) {
-            toolbarConnector = drawToolbarConnector(point, chart)
-
-            const index = point.index
-
-            const dataInstance = data.items[index]
-            const isAgr = dataInstance.dispersion < 0.15
-            const agrColor = isAgr
-              ? 'rgb(var(--v-theme-success))'
-              : 'rgb(var(--v-theme-error))'
-            const agrGradient = isAgr
-              ? 'url(#Chart_POS_Gradient_02)'
-              : 'url(#Chart_NEG_Gradient_02)'
-
-            // Координаты текущей точки
-            const currentX = point.plotX + chart.plotBox.x
-            const currentY = point.plotY + chart.plotBox.y
-
-            const sharePriceSeries = chart.series.find(
-              (f) => f.name === 'Share Price'
-            )
-            const targetRangeSeries = chart.series.find(
-              (f) => f.name === 'Price Target Range'
-            )
-
-            const sharePricePoint = sharePriceSeries
-              ? sharePriceSeries.points[index]
-              : undefined
-
-            const targetRangePoint = targetRangeSeries
-              ? targetRangeSeries.points[index]
-              : undefined
-
-            // Координаты точки 12 месяцев назад
-            const yearAgoX = sharePricePoint.plotX + chart.plotBox.x
-            const yearAgoY = sharePricePoint.plotY + chart.plotBox.y
-
-            const targetUpX = targetRangePoint.plotX + chart.plotBox.x
-            const targetUpY = targetRangePoint.plotHigh + chart.plotBox.y
-            const targetDownX = targetRangePoint.plotX + chart.plotBox.x
-            const targetDownY = targetRangePoint.plotLow + chart.plotBox.y
-
-            // Рисуем соединительную линию
-            markerConnector = chart.renderer
-              .path(['M', currentX, currentY, 'L', yearAgoX, yearAgoY])
-              .attr({
-                'stroke-width': 2,
-                stroke: agrColor,
-                dashstyle: 'Dash',
-                zIndex: 5,
-              })
-              .add()
-
-            const points = [
-              // Точка Share Price (год назад) [x, y]
-              [yearAgoX, yearAgoY],
-              // Верхняя граница диапазона  [x, y]
-              [targetUpX, targetUpY],
-              // Нижняя граница диапазона  [x, y]
-              [targetDownX, targetDownY],
-            ]
-
-            // 4. Рисуем полигон
-            markerPolygon = chart.renderer
-              .path([
-                'M',
-                points[0][0],
-                points[0][1],
-                'L',
-                points[1][0],
-                points[1][1],
-                'L',
-                points[2][0],
-                points[2][1],
-                'Z', // Замыкаем путь
-              ])
-              .attr({
-                fill: agrGradient,
-                zIndex: 4,
-              })
-              .add()
-
-            // Маркер для точки 12 месяцев назад
-            sharePriceMarker = chart.renderer
-              .circle(yearAgoX, yearAgoY, 5)
-              .attr({
-                fill: 'rgb(var(--v-theme-info))',
-                stroke: 'white',
-                'stroke-width': 2,
-                zIndex: 5,
-              })
-              .add()
-
-            analystMarker = chart.renderer
-              .circle(currentX, currentY, 5)
-              .attr({
-                fill: '#A54CEC',
-                stroke: 'white',
-                'stroke-width': 2,
-                zIndex: 5,
-              })
-              .add()
-
-            // One year zone
-            oneYearZone = chart.renderer
-              .rect(
-                yearAgoX,
-                chart.plotTop,
-                currentX - yearAgoX,
-                chart.plotHeight
-              )
-              .attr({
-                fill: 'url(#YearMarkerGradient)',
-                stroke: 'rgba(35, 148, 223, 0.1)',
-                'stroke-width': 1,
-                zIndex: -1,
-              })
-              .add()
-          }
-        }
+const options = computed<Options>(
+  () =>
+    ({
+      chart: {
+        type: 'spline',
+        height: 356,
+        width: null,
+        backgroundColor: 'transparent',
+        events: {
+          load: function () {
+            const points = this.series[2].points
+            const lastPoint = points[points.length - 1]
+            updateTooltip(lastPoint)
+          },
+        },
       },
-    },
-  },
-  accessibility: {
-    enabled: false,
-  },
-  title: {
-    text: undefined,
-  },
-  credits: {
-    enabled: false,
-  },
-  xAxis: {
-    type: 'datetime',
-    plotBands: [
-      {
-        from: 0,
-        to: currentDate.toMillis(),
-        color: 'url(#Actual_Background_Gradient)',
-        label: {
-          text: 'Past',
-          align: 'right',
+      accessibility: {
+        enabled: false,
+      },
+      title: {
+        text: undefined,
+      },
+      credits: {
+        enabled: false,
+      },
+      xAxis: {
+        type: 'datetime',
+        plotBands: [
+          {
+            from: 0,
+            to: currentDate.toMillis(),
+            color: 'url(#Actual_Background_Gradient)',
+            label: {
+              text: 'Past',
+              align: 'right',
+              style: {
+                color: 'rgb(var(--v-theme-on-surface))',
+              },
+              x: -10,
+            },
+            zIndex: -1,
+          },
+          {
+            from: currentDate.toMillis(),
+            to: currentDate.plus({ year: 1 }).toMillis(),
+            color: 'transparent',
+            label: {
+              text: '12m forecast',
+              align: 'left',
+              style: {
+                color: '#606060',
+                opacity: 1,
+              },
+              x: 10,
+            },
+            zIndex: -1,
+          },
+        ],
+        labels: {
+          format: '{value:%Y}', // Показывать только год
+          align: 'center',
+          step: 1, // Показывать каждый год
           style: {
             color: 'rgb(var(--v-theme-on-surface))',
           },
-          x: -10,
         },
-        zIndex: -1,
+        tickInterval: 365 * 24 * 3600 * 1000, // Интервал в 1 год (в миллисекундах)
+        tickColor: 'rgb(70, 82, 96)',
+        gridLineWidth: 0,
+        lineColor: 'rgb(70, 82, 96)',
       },
-      {
-        from: currentDate.toMillis(),
-        to: currentDate.plus({ year: 1 }).toMillis(),
-        color: 'transparent',
-        label: {
-          text: '12m forecast',
-          align: 'left',
-          style: {
-            color: '#606060',
-            opacity: 1,
+      yAxis: {
+        title: { text: '' }, // Скрываем заголовок
+        gridLineWidth: 1,
+        gridLineColor: 'rgba(var(--v-theme-on-surface), 0.1)',
+        lineWidth: 0,
+        plotLines: [
+          {
+            color: 'rgb(70, 82, 96)',
+            width: 1,
+            value: 200, // ДОЛЖНА БЫТЬ РАВНА МАКС
+            zIndex: 5,
           },
-          x: 10,
+        ],
+        labels: {
+          formatter: function () {
+            return this.isFirst
+              ? `US$20`
+              : this.isLast
+                ? `US$${this.value}`
+                : ''
+          },
+          style: {
+            color: 'rgb(var(--v-theme-on-surface))',
+          },
         },
-        zIndex: -1,
+        min: 20,
+        max: 200,
       },
-    ],
-    labels: {
-      format: '{value:%Y}', // Показывать только год
-      align: 'center',
-      step: 1, // Показывать каждый год
-      style: {
-        color: 'rgb(var(--v-theme-on-surface))',
+      plotOptions: {
+        series: {
+          marker: {
+            enabled: false,
+          },
+          point: {
+            events: {
+              mouseOver: function () {
+                updateTooltip(this)
+              },
+            },
+          },
+          pointStart: '2023-04-01',
+          pointIntervalUnit: 'month',
+          events: {
+            legendItemClick: function () {
+              return false
+            },
+          },
+          states: {
+            inactive: {
+              opacity: 1, // Полная видимость даже при "неактивности"
+            },
+            hover: {
+              enabled: false, // Отключаем hover эффекты
+            },
+          },
+        },
       },
-    },
-    tickInterval: 365 * 24 * 3600 * 1000, // Интервал в 1 год (в миллисекундах)
-    tickColor: 'rgb(70, 82, 96)',
-    gridLineWidth: 0,
-    lineColor: 'rgb(70, 82, 96)',
-  },
-  yAxis: {
-    title: { text: '' }, // Скрываем заголовок
-    gridLineWidth: 1,
-    gridLineColor: 'rgba(var(--v-theme-on-surface), 0.1)',
-    lineWidth: 0,
-    plotLines: [
-      {
-        color: 'rgb(70, 82, 96)',
-        width: 1,
-        value: 200, // ДОЛЖНА БЫТЬ РАВНА МАКС
-        zIndex: 5,
-      },
-    ],
-    labels: {
-      formatter: function () {
-        return this.isFirst ? `US$20` : this.isLast ? `US$${this.value}` : ''
-      },
-      style: {
-        color: 'rgb(var(--v-theme-on-surface))',
-      },
-    },
-    min: 20,
-    max: 200,
-  },
-  plotOptions: {
-    series: {
-      marker: {
+      series: [
+        {
+          name: 'Share Price',
+          type: 'spline',
+          data: sharePrices,
+          color: 'rgb(var(--v-theme-info))',
+          lineWidth: 3,
+          pointStart: Date.parse('2023-04-01'),
+          enableMouseTracking: false,
+        },
+        {
+          name: 'Average 1Y Target',
+          type: 'spline',
+          data: averages,
+          color: '#A54CEC',
+          lineWidth: 3,
+          pointStart: Date.parse('2024-04-01'),
+          enableMouseTracking: true,
+        },
+        {
+          name: 'Price Target Range',
+          type: 'areasplinerange',
+          data: averagesRange,
+          color: 'url(#Chart_05_Gradient_02)',
+          fillOpacity: 0.5,
+          lineWidth: 0,
+          linkedTo: ':previous',
+          zIndex: 0,
+          pointStart: Date.parse('2024-04-01'),
+          enableMouseTracking: false,
+        },
+      ],
+      tooltip: {
         enabled: false,
       },
-      pointStart: '2023-04-01',
-      pointIntervalUnit: 'month',
-      events: {
-        legendItemClick: function () {
-          return false
+      legend: {
+        align: 'left',
+        verticalAlign: 'bottom',
+        symbolHeight: 12,
+        symbolWidth: 12,
+        symbolRadius: 6,
+        itemStyle: {
+          color: 'rgb(var(--v-theme-on-surface))',
+          fontSize: '0,75rem',
         },
+        margin: 15,
+        padding: 5,
       },
-      states: {
-        inactive: {
-          opacity: 1, // Полная видимость даже при "неактивности"
-        },
-        hover: {
-          enabled: false, // Отключаем hover эффекты
-        },
-      },
-    },
-  },
-  series: [
-    {
-      name: 'Share Price',
-      data: sharePrices,
-      color: 'rgb(var(--v-theme-info))',
-      lineWidth: 3,
-      pointStart: Date.parse('2023-04-01'),
-      enableMouseTracking: false,
-    },
-    {
-      name: 'Average 1Y Target',
-      data: averages,
-      color: '#A54CEC',
-      lineWidth: 3,
-      pointStart: Date.parse('2024-04-01'),
-      enableMouseTracking: true,
-    },
-    {
-      name: 'Price Target Range',
-      type: 'areasplinerange',
-      data: averagesRange,
-      color: 'url(#Chart_05_Gradient_02)',
-      fillOpacity: 0.5,
-      lineWidth: 0,
-      linkedTo: ':previous',
-      zIndex: 0,
-      pointStart: Date.parse('2024-04-01'),
-      enableMouseTracking: false,
-    },
-  ],
-  tooltip: {
-    animation: {
-      duration: 0,
-    },
-    useHTML: true,
-    outside: true,
-    stickOnContact: true,
-    style: {
-      pointerEvents: 'none',
-      zIndex: 10,
-    },
-    positioner: function (boxWidth, boxHeight, point) {
-      return {
-        x: point.plotX + this.chart.plotLeft - boxWidth + 8,
-        y: this.chart.plotTop - boxHeight,
-      }
-    },
-    formatter: function () {
-      return getTooltip(this)
-    },
-  },
-  legend: {
-    align: 'left',
-    verticalAlign: 'bottom',
-    symbolHeight: 12,
-    symbolWidth: 12,
-    symbolRadius: 6,
-    itemStyle: {
-      color: 'rgb(var(--v-theme-on-surface))',
-      fontSize: '0,75rem',
-    },
-    margin: 15,
-    padding: 5,
-  },
-}))
+    }) satisfies Options
+)
 </script>
 
 <template>
   <div class="analyst-price-targets-chart">
-    <div class="analyst-price-targets-chart__tooltip-box"></div>
+    <div class="analyst-price-targets-chart__tooltip-box">
+      <v-card
+        v-if="tooltipData"
+        width="340"
+        :style="tooltipData.tooltipStyle"
+        class="text-caption text-disabled"
+      >
+        <v-card-item>
+          <v-row no-gutters>
+            <v-col class="text-high-emphasis">{{ tooltipData.date }}</v-col>
+            <v-col
+              ><div class="text-capitalize d-flex justify-end">
+                {{ tooltipData.analysts }}
+              </div></v-col
+            >
+          </v-row>
+          <v-divider />
+          <v-row no-gutters>
+            <v-col cols="4">Share Price</v-col>
+            <v-col offset="1"
+              ><div class="text-info">
+                {{ tooltipData.sharePrice }}
+              </div></v-col
+            >
+          </v-row>
+          <v-divider />
+          <v-row no-gutters>
+            <v-col cols="4">Average 1Y Price Target</v-col>
+            <v-col offset="1"
+              ><div class="text-hc-average-series-color">
+                {{ tooltipData.analyticsPrice }}
+              </div></v-col
+            >
+            <v-col :class="tooltipData.margeColorClass">{{
+              tooltipData.marge
+            }}</v-col>
+          </v-row>
+          <v-divider />
+          <v-row no-gutters>
+            <v-col cols="4">Agreement</v-col>
+            <v-col offset="1">
+              <div :class="tooltipData.agrColorClass">
+                {{ tooltipData.agrStatus }}
+              </div>
+              <div>
+                {{ tooltipData.agrText }}
+              </div>
+            </v-col>
+          </v-row>
+        </v-card-item>
+      </v-card>
+    </div>
     <charts
       class="analyst-price-targets-chart__chart"
       constructorType="chart"
@@ -628,6 +668,9 @@ const options = computed<Options>(() => ({
 <style lang="scss">
 .analyst-price-targets-chart__tooltip-box {
   height: 190px;
+  position: relative;
+  display: flex;
+  align-items: end;
 }
 .analyst-price-targets-chart__chart {
   position: relative;
