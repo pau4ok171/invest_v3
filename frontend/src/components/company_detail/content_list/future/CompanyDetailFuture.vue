@@ -2,6 +2,7 @@
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
+import EarningsAndRevenueGrowthForecastChart from "@/components/charts/EarningsAndRevenueGrowthForecastChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -84,16 +85,7 @@ const passed = computed(() =>
       title="2.1 Earnings and Revenue Growth Forecasts"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Earnings and Revenue Growth Forecasts CHART]
-      </div>
+      <earnings-and-revenue-growth-forecast-chart />
     </v-card-item>
 
     <v-divider class="my-4" />
