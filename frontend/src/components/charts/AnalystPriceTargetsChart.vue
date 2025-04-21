@@ -347,6 +347,8 @@ const options = computed<Options>(
               align: 'right',
               style: {
                 color: 'rgb(var(--v-theme-on-surface))',
+                fontWeight: '400',
+                fontSize: '0.75rem',
               },
               x: -10,
             },
@@ -357,11 +359,13 @@ const options = computed<Options>(
             to: currentDate.plus({ year: 1 }).toMillis(),
             color: 'transparent',
             label: {
-              text: '12m forecast',
+              text: '12m Forecast',
               align: 'left',
               style: {
                 color: '#606060',
                 opacity: 1,
+                fontWeight: '400',
+                fontSize: '0.75rem',
               },
               x: 10,
             },
