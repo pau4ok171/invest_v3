@@ -559,7 +559,7 @@ const options = computed<Options>(
         lineWidth: 0,
         labels: {
           formatter: function () {
-            return this.isFirst ? `US$0` : this.isLast ? `US$$300b` : ''
+            return this.isFirst ? `US$0` : this.isLast ? `US$300b` : ''
           },
           style: {
             color: 'rgb(var(--v-theme-on-surface))',
