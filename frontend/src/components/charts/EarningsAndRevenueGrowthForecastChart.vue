@@ -2,8 +2,8 @@
 // Composables
 
 // Utilities
-import { computed } from 'vue'
-import {DateTime} from "ts-luxon";
+import { computed, ref } from 'vue'
+import { DateTime } from 'ts-luxon'
 
 // Types
 import type { Options } from 'highcharts'
@@ -34,6 +34,13 @@ interface ChartData {
 
 // Reactive states
 const currentDate = DateTime.now()
+const activeLegends = ref<string[]>(['revenue', 'earnings'])
+const legends = [
+  { text: 'Revenue', value: 'revenue' },
+  { text: 'Earnings', value: 'earnings' },
+  { text: 'Free Cash Flow', value: 'fcf' },
+  { text: 'Cash From Op', value: 'cfo' },
+]
 
 // TODO: REPLACE WITH NEEDED DATA
 const tooltipData = {
@@ -434,11 +441,26 @@ const data: ChartData = {
 }
 
 const [date, revenue, earnings, fcf, cfo] = [
-  data.financialData.map(p => p.date).slice(0, 16).reverse(),
-  data.financialData.map(p => [p.date, p.revenue]).slice(0, 16).reverse(),
-  data.financialData.map(p => [p.date, p.earnings]).slice(0, 16).reverse(),
-  data.financialData.map(p => [p.date, p.freeCashFlow]).slice(0, 16).reverse(),
-  data.financialData.map(p => [p.date, p.cashFromOp]).slice(0, 16).reverse(),
+  data.financialData
+    .map((p) => p.date)
+    .slice(0, 16)
+    .reverse(),
+  data.financialData
+    .map((p) => [p.date, p.revenue])
+    .slice(0, 16)
+    .reverse(),
+  data.financialData
+    .map((p) => [p.date, p.earnings])
+    .slice(0, 16)
+    .reverse(),
+  data.financialData
+    .map((p) => [p.date, p.freeCashFlow])
+    .slice(0, 16)
+    .reverse(),
+  data.financialData
+    .map((p) => [p.date, p.cashFromOp])
+    .slice(0, 16)
+    .reverse(),
 ]
 
 const options = computed<Options>(
@@ -537,11 +559,7 @@ const options = computed<Options>(
         lineWidth: 0,
         labels: {
           formatter: function () {
-            return this.isFirst
-              ? `US$0`
-              : this.isLast
-                ? `US$$300b`
-                : ''
+            return this.isFirst ? `US$0` : this.isLast ? `US$$300b` : ''
           },
           style: {
             color: 'rgb(var(--v-theme-on-surface))',
@@ -558,6 +576,7 @@ const options = computed<Options>(
           color: EARNINGS_COLOR,
           fillColor: 'url(#Chart_01_Gradient_02)',
           lineWidth: 3,
+          visible: activeLegends.value.includes('revenue'),
         },
         {
           type: 'areaspline',
@@ -566,6 +585,7 @@ const options = computed<Options>(
           color: REVENU_COLOR,
           fillColor: 'url(#Chart_02_Gradient_02)',
           lineWidth: 3,
+          visible: activeLegends.value.includes('earnings'),
         },
         {
           type: 'areaspline',
@@ -574,6 +594,7 @@ const options = computed<Options>(
           color: FCF_COLOR,
           fillColor: 'url(#Chart_03_Gradient_02)',
           lineWidth: 3,
+          visible: activeLegends.value.includes('fcf'),
         },
         {
           type: 'areaspline',
@@ -582,6 +603,7 @@ const options = computed<Options>(
           color: CFO_COLOR,
           fillColor: 'url(#Chart_04_Gradient_02)',
           lineWidth: 3,
+          visible: activeLegends.value.includes('cfo'),
         },
       ],
     }) satisfies Options
@@ -647,6 +669,29 @@ const options = computed<Options>(
       constructorType="chart"
       :options="options"
     />
+    <v-btn-toggle multiple variant="outlined" v-model="activeLegends">
+      <v-btn
+        v-for="item in legends"
+        :key="`legend-${item.value}`"
+        class="earnings-and-revenue-growth-forecast-chart__legend-button"
+        :value="item.value"
+        size="small"
+        :text="item.text"
+      >
+        <template #prepend>
+          <span
+            :class="[
+              'earnings-and-revenue-growth-forecast-chart__circle-indicator',
+              `earnings-and-revenue-growth-forecast-chart__circle-indicator--${item.value}`,
+              {
+                [`earnings-and-revenue-growth-forecast-chart__circle-indicator--${item.value}-active`]:
+                  activeLegends.includes(item.value),
+              },
+            ]"
+          />
+        </template>
+      </v-btn>
+    </v-btn-toggle>
   </div>
 </template>
 
@@ -662,6 +707,45 @@ const options = computed<Options>(
     position: relative;
     display: grid;
     justify-content: center;
+  }
+  &__legend-button {
+    text-transform: none;
+  }
+  &__circle-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background-color: transparent;
+    transition: background-color 0.3s;
+
+    &--revenue {
+      border-color: rgb(35, 148, 223);
+      &-active {
+        background-color: rgb(35, 148, 223);
+      }
+    }
+    &--earnings {
+      border-color: rgb(113, 231, 214);
+
+      &-active {
+        background-color: rgb(113, 231, 214);
+      }
+    }
+    &--fcf {
+      border-color: rgb(187, 71, 134);
+
+      &-active {
+        background-color: rgb(187, 71, 134);
+      }
+    }
+    &--cfo {
+      border-color: rgb(229, 176, 97);
+
+      &-active {
+        background-color: rgb(229, 176, 97);
+      }
+    }
   }
 }
 </style>
