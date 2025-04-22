@@ -3,6 +3,7 @@
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
 import EarningsAndRevenueGrowthForecastChart from "@/components/charts/EarningsAndRevenueGrowthForecastChart.vue";
+import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -94,16 +95,28 @@ const passed = computed(() =>
       title="2.2 Analyst Future Growth Forecasts"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Analyst Future Growth Forecasts CHART]
-      </div>
+      <v-row class="mt-2">
+        <v-col>
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Company', value: 20.6, suffix: '%' },
+              { name: 'Industry', value: 22.9, suffix: '%' },
+              { name: 'Market', value: 13.3, suffix: '%' },
+            ]"
+            title="Forecast Annual Earnings Growth"
+          />
+        </v-col>
+        <v-col>
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Company', value: 20.2, suffix: '%' },
+              { name: 'Industry', value: 16.0, suffix: '%' },
+              { name: 'Market', value: 8.2, suffix: '%' },
+            ]"
+            title="Forecast Annual Revenue Growth"
+          />
+        </v-col>
+      </v-row>
 
       <company-detail-check name="IsExpectedProfitGrowthAboveRiskFreeRate" />
       <company-detail-check name="IsExpectedAnnualProfitGrowthAboveMarket" />
