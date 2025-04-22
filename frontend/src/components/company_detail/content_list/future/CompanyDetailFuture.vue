@@ -4,6 +4,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
 import EarningsAndRevenueGrowthForecastChart from "@/components/charts/EarningsAndRevenueGrowthForecastChart.vue";
 import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
+import EPSGrowthForecastChart from "@/components/charts/EPSGrowthForecastChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -39,7 +40,7 @@ const passed = computed(() =>
       title="2 Future Growth"
     >
       <v-card-subtitle>
-        {{ `${company.ticker} is forecast to grow earnings and revenue by 20.6% and 20.4% per annum respectively. EPS is expected to grow by 20.3% per annum. Return on equity is forecast to be 50.3% in 3 years.` }}
+        {{ `${company.ticker} is forecast to grow earnings and revenue by 20.6% and 20.4% per year respectively. EPS is expected to grow by 20.3% per year. Return on equity is forecast to be 50.3% in 3 years.` }}
       </v-card-subtitle>
 
       <v-row>
@@ -131,16 +132,7 @@ const passed = computed(() =>
       title="2.3 Earnings per Share Growth Forecasts"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Earnings per Share Growth Forecasts CHART]
-      </div>
+      <e-p-s-growth-forecast-chart />
     </v-card-item>
 
     <v-divider class="my-4" />
