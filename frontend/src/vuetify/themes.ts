@@ -19,6 +19,10 @@ const finargoDarkTheme = {
     'hc-snowflake-bg-light': '#4b5966',
     'hc-snowflake-bg-dark': '#283440',
     'hc-average-series-color': '#a54cec',
+    'hc-series1-color': '#2394DF',
+    'hc-series2-color': '#71E7D6',
+    'hc-series3-color': '#BB4786',
+    'hc-series4-color': '#E5B061',
   },
   variables: {
     'border-color': '#FFFFFF',
@@ -61,6 +65,10 @@ const finargoLightTheme = {
     'hc-snowflake-bg-light': '#ccd2d4',
     'hc-snowflake-bg-dark': '#576262',
     'hc-average-series-color': '#a54cec',
+    'hc-series1-color': '#2394DF',
+    'hc-series2-color': '#71E7D6',
+    'hc-series3-color': '#BB4786',
+    'hc-series4-color': '#E5B061',
   },
   variables: {
     'border-color': '#000000',
