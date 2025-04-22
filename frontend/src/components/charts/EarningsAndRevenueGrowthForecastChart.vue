@@ -4,7 +4,14 @@ import { computed, nextTick, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Options, Point, SVGPathArray, SVGElement, Series } from 'highcharts'
+import type {
+  Options,
+  Point,
+  SVGPathArray,
+  SVGElement,
+  Series,
+  Chart,
+} from 'highcharts'
 
 // Constants
 const CHART_HEIGHT = 356
@@ -31,22 +38,40 @@ interface ChartData {
 }
 
 // Reactive states
+const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
 const chartElements = {
-  toolbarConnector: null as SVGElement | null,
-  revenueMarker: null as SVGElement | null,
-  earningsMarker: null as SVGElement | null,
-  fcfMarker: null as SVGElement | null,
-  cfoMarker: null as SVGElement | null,
+  tooltipConnector: null as SVGElement | null,
+  markers: null as SVGElement[] | null,
   oneYearZone: null as SVGElement | null,
 }
 const activeLegends = ref<string[]>(['revenue', 'earnings'])
-const legends = [
-  { text: 'Revenue', value: 'revenue' },
-  { text: 'Earnings', value: 'earnings' },
-  { text: 'Free Cash Flow', value: 'fcf' },
-  { text: 'Cash From Op', value: 'cfo' },
+const legendOptions = [
+  {
+    text: 'Revenue',
+    value: 'revenue',
+    color: EARNINGS_COLOR,
+    fillColor: 'url(#Chart_01_Gradient_02)',
+  },
+  {
+    text: 'Earnings',
+    value: 'earnings',
+    color: REVENU_COLOR,
+    fillColor: 'url(#Chart_02_Gradient_02)',
+  },
+  {
+    text: 'Free Cash Flow',
+    value: 'fcf',
+    color: FCF_COLOR,
+    fillColor: 'url(#Chart_03_Gradient_02)',
+  },
+  {
+    text: 'Cash From Op',
+    value: 'cfo',
+    color: CFO_COLOR,
+    fillColor: 'url(#Chart_04_Gradient_02)',
+  },
 ]
 
 const tooltipData = computed(() => {
@@ -500,10 +525,12 @@ const [date, revenue, earnings, fcf, cfo] = [
 
 // Helper functions
 const destroyChartElements = () => {
-  Object.values(chartElements).forEach((el) => el?.destroy())
-  Object.keys(chartElements).forEach((key) => {
-    chartElements[key as keyof typeof chartElements] = null
-  })
+  if (chartElements.markers) {
+    chartElements.markers.forEach((m) => m?.destroy())
+    chartElements.markers = null
+  }
+  chartElements.tooltipConnector?.destroy()
+  chartElements.oneYearZone?.destroy()
 }
 
 const drawConnector = (point: Point) => {
@@ -523,21 +550,105 @@ const drawConnector = (point: Point) => {
     .add()
 }
 
-function findPointOneYearAgo(series: Series, datetimeInMills: number): Point | null {
+const updateMarkers = (point: Point) => {
+  const chart = point.series.chart
+  // Создаем маркеры для всех активных серий
+  chartElements.markers = activeLegends.value
+    .map((seriesName) => {
+      const series = chart.series.find((s) => s.name === seriesName)
+      if (!series || !series.visible) return null
+
+      const seriesPoint = series.points[point.index]
+      if (!seriesPoint) return null
+
+      return chart.renderer
+        .circle(
+          (seriesPoint.plotX || 0) + chart.plotLeft,
+          (seriesPoint.plotY || 0) + chart.plotTop,
+          5
+        )
+        .attr({
+          fill: legendOptions.find((l) => l.value === seriesName)?.color,
+          stroke: 'white',
+          'stroke-width': 2,
+          zIndex: 5,
+        })
+        .add()
+    })
+    .filter(Boolean) as SVGElement[]
+}
+
+function findPointOneYearAgo(
+  series: Series,
+  datetimeInMills: number
+): Point | null {
   // Ищем ближайшую точку
-  let closestPoint = null;
-  let minDiff = Infinity;
-  const yearAgo = DateTime.fromMillis(datetimeInMills).minus({ year: 1 }).toMillis()
+  let closestPoint = null
+  let minDiff = Infinity
+  const yearAgo = DateTime.fromMillis(datetimeInMills)
+    .minus({ year: 1 })
+    .toMillis()
 
-  series.points.forEach(point => {
-    const diff = Math.abs(point.x - yearAgo);
+  series.points.forEach((point) => {
+    const diff = Math.abs(point.x - yearAgo)
     if (diff < minDiff) {
-      minDiff = diff;
-      closestPoint = point;
+      minDiff = diff
+      closestPoint = point
     }
-  });
+  })
 
-  return closestPoint;
+  return closestPoint
+}
+
+const updatePointElements = (point: Point) => {
+  destroyChartElements()
+
+  const chart = point.series?.chart
+  if (!chart) return
+
+  // Draw main elements
+  chartElements.tooltipConnector = drawConnector(point)
+
+  // Update markers for all visible series
+  updateMarkers(point)
+
+  // Draw one year zone
+  const activeSeries = chart.series.find(
+    (s) => s.visible && activeLegends.value.includes(s.name)
+  )
+  if (activeSeries) {
+    const pointOneYAgo = findPointOneYearAgo(activeSeries, point.x as number)
+
+    if (pointOneYAgo) {
+      const fromX = (pointOneYAgo.plotX || 0) + chart.plotLeft
+      const toX = (point.plotX || 0) + chart.plotLeft
+
+      chartElements.oneYearZone = chart.renderer
+        .rect(fromX, chart.plotTop, toX - fromX, chart.plotHeight)
+        .attr({
+          fill: 'url(#YearMarkerGradient)',
+          stroke: 'rgba(35, 148, 223, 0.1)',
+          'stroke-width': 1,
+          zIndex: -1,
+        })
+        .add()
+    }
+  }
+}
+
+const getSeriesData = (seriesName: string) => {
+  switch (seriesName) {
+    case 'revenue':
+      return revenue
+    case 'earnings':
+      return earnings
+    case 'fcf':
+      return fcf
+    case 'cfo':
+      return cfo
+    default:
+      return []
+  }
 }
 
 const options = computed<Options>(
@@ -658,158 +769,19 @@ const options = computed<Options>(
         min: 0,
         max: 300000,
       },
-      series: [
-        {
-          type: 'areaspline',
-          name: 'revenue',
-          data: revenue,
-          color: EARNINGS_COLOR,
-          fillColor: 'url(#Chart_01_Gradient_02)',
-          lineWidth: 3,
-          visible: activeLegends.value.includes('revenue'),
-        },
-        {
-          type: 'areaspline',
-          name: 'earnings',
-          data: earnings,
-          color: REVENU_COLOR,
-          fillColor: 'url(#Chart_02_Gradient_02)',
-          lineWidth: 3,
-          visible: activeLegends.value.includes('earnings'),
-        },
-        {
-          type: 'areaspline',
-          name: 'fcf',
-          data: fcf,
-          color: FCF_COLOR,
-          fillColor: 'url(#Chart_03_Gradient_02)',
-          lineWidth: 3,
-          visible: activeLegends.value.includes('fcf'),
-        },
-        {
-          type: 'areaspline',
-          name: 'cfo',
-          data: cfo,
-          color: CFO_COLOR,
-          fillColor: 'url(#Chart_04_Gradient_02)',
-          lineWidth: 3,
-          visible: activeLegends.value.includes('cfo'),
-        },
-      ],
+      series: legendOptions.map((series) => ({
+        type: 'areaspline',
+        name: series.value,
+        data: getSeriesData(series.value),
+        color: series.color,
+        fillColor: series.fillColor,
+        lineWidth: 3,
+        visible: activeLegends.value.includes(series.value),
+      })),
     }) satisfies Options
 )
 
 // Core functions
-const updatePointElements = (point: Point) => {
-  destroyChartElements()
-
-  const chart = point.series?.chart
-
-  if (!chart) return
-
-  const dataInstance = data.financialData.find((f) => f.date === point.category)
-
-  if (!dataInstance) return
-
-  // Draw main elements
-  chartElements.toolbarConnector = drawConnector(point)
-
-  const pointX = (point.plotX || 0) + chart.plotLeft
-
-  // Find series points Y position
-  const revenuePoint = chart.series.find((s) => s.name === 'revenue')?.points?.[
-    point.index
-  ]
-  const earningsPoint = chart.series.find((s) => s.name === 'earnings')
-    ?.points?.[point.index]
-  const fcfPoint = chart.series.find((s) => s.name === 'fcf')?.points?.[
-    point.index
-  ]
-  const cfoPoint = chart.series.find((s) => s.name === 'cfo')?.points?.[
-    point.index
-  ]
-
-  const revenueY = revenuePoint
-    ? (revenuePoint.plotY || 0) + chart.plotTop
-    : null
-  const earningsY = earningsPoint
-    ? (earningsPoint.plotY || 0) + chart.plotTop
-    : null
-  const fcfY = fcfPoint ? (fcfPoint.plotY || 0) + chart.plotTop : null
-  const cfoY = cfoPoint ? (cfoPoint.plotY || 0) + chart.plotTop : null
-
-  // Draw markers
-  chartElements.revenueMarker =
-    revenueY && activeLegends.value.includes('revenue')
-      ? chart.renderer
-          .circle(pointX, revenueY, 5)
-          .attr({
-            fill: 'rgb(var(--v-theme-hc-series1-color))',
-            stroke: 'white',
-            'stroke-width': 2,
-            zIndex: 5,
-          })
-          .add()
-      : null
-
-  chartElements.earningsMarker =
-    earningsY && activeLegends.value.includes('earnings')
-      ? chart.renderer
-          .circle(pointX, earningsY, 5)
-          .attr({
-            fill: 'rgb(var(--v-theme-hc-series2-color))',
-            stroke: 'white',
-            'stroke-width': 2,
-            zIndex: 5,
-          })
-          .add()
-      : null
-  chartElements.fcfMarker =
-    fcfY && activeLegends.value.includes('fcf')
-      ? chart.renderer
-          .circle(pointX, fcfY, 5)
-          .attr({
-            fill: 'rgb(var(--v-theme-hc-series3-color))',
-            stroke: 'white',
-            'stroke-width': 2,
-            zIndex: 5,
-          })
-          .add()
-      : null
-
-  chartElements.cfoMarker =
-    cfoY && activeLegends.value.includes('cfo')
-      ? chart.renderer
-          .circle(pointX, cfoY, 5)
-          .attr({
-            fill: 'rgb(var(--v-theme-hc-series4-color))',
-            stroke: 'white',
-            'stroke-width': 2,
-            zIndex: 5,
-          })
-          .add()
-      : null
-
-  // Draw year zone
-  const activeLegend = activeLegends.value[0]
-  const activeSeries = chart.series.find(s => s.name === activeLegend)
-  if (!activeSeries) return;
-
-  const pointOneYAgo = findPointOneYearAgo(activeSeries, activeSeries.points[point.index].category as number)
-
-  chartElements.oneYearZone = pointOneYAgo
-    ? chart.renderer
-      .rect((pointOneYAgo.plotX || 0) + chart.plotLeft, chart.plotTop, pointX - ((pointOneYAgo.plotX || 0) + chart.plotLeft), chart.plotHeight)
-      .attr({
-        fill: 'url(#YearMarkerGradient)',
-        stroke: 'rgba(35, 148, 223, 0.1)',
-        'stroke-width': 1,
-        zIndex: -1,
-      })
-      .add()
-    : null
-}
-
 const updateTooltip = (point: Point, force: boolean = false) => {
   if (currentPoint.value && point.index === currentPoint.value.index && !force)
     return
@@ -819,11 +791,22 @@ const updateTooltip = (point: Point, force: boolean = false) => {
 }
 
 watch(
-  () => activeLegends,
+  activeLegends,
   () => {
-    if (currentPoint.value) {
-      nextTick(() => updateTooltip(currentPoint.value, true))
-    }
+    nextTick(() => {
+      if (currentPoint.value) {
+        const chart = chartRef.value?.chart
+        if (!chart) return
+
+        const mainSeries = chart.series.find((s) => s.visible)
+        if (!mainSeries) return
+
+        const updatedPoint = mainSeries.points[currentPoint.value.index]
+        if (updatedPoint) {
+          updateTooltip(currentPoint.value, true)
+        }
+      }
+    })
   },
   { deep: true }
 )
@@ -937,13 +920,14 @@ watch(
       </v-card>
     </div>
     <charts
+      ref="chartRef"
       class="earnings-and-revenue-growth-forecast-chart__chart"
       constructorType="chart"
       :options="options"
     />
     <v-btn-toggle multiple mandatory variant="outlined" v-model="activeLegends">
       <v-btn
-        v-for="item in legends"
+        v-for="item in legendOptions"
         :key="`legend-${item.value}`"
         class="earnings-and-revenue-growth-forecast-chart__legend-button"
         :value="item.value"
@@ -952,14 +936,13 @@ watch(
       >
         <template #prepend>
           <span
-            :class="[
-              'earnings-and-revenue-growth-forecast-chart__circle-indicator',
-              `earnings-and-revenue-growth-forecast-chart__circle-indicator--${item.value}`,
-              {
-                [`earnings-and-revenue-growth-forecast-chart__circle-indicator--${item.value}-active`]:
-                  activeLegends.includes(item.value),
-              },
-            ]"
+            class="earnings-and-revenue-growth-forecast-chart__circle-indicator"
+            :style="{
+              backgroundColor: activeLegends.includes(item.value)
+                ? item.color
+                : 'transparent',
+              borderColor: item.color,
+            }"
           />
         </template>
       </v-btn>
@@ -990,37 +973,9 @@ watch(
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    border: 1px solid transparent;
-    background-color: transparent;
+    border: 1px solid;
+    margin-right: 8px;
     transition: background-color 0.3s;
-
-    &--revenue {
-      border-color: rgb(35, 148, 223);
-      &-active {
-        background-color: rgb(35, 148, 223);
-      }
-    }
-    &--earnings {
-      border-color: rgb(113, 231, 214);
-
-      &-active {
-        background-color: rgb(113, 231, 214);
-      }
-    }
-    &--fcf {
-      border-color: rgb(187, 71, 134);
-
-      &-active {
-        background-color: rgb(187, 71, 134);
-      }
-    }
-    &--cfo {
-      border-color: rgb(229, 176, 97);
-
-      &-active {
-        background-color: rgb(229, 176, 97);
-      }
-    }
   }
 }
 </style>
