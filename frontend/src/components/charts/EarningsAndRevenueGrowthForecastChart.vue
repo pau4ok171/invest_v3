@@ -1,16 +1,14 @@
 <script setup lang="ts">
-// Composables
-
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Options } from 'highcharts'
+import type { Options, Point, SVGPathArray, SVGElement, Series } from 'highcharts'
 
 // Constants
 const CHART_HEIGHT = 356
-const TOOLTIP_WIDTH = 340
+const TOOLTIP_WIDTH = 380
 const EARNINGS_COLOR = 'rgb(35, 148, 223)'
 const REVENU_COLOR = 'rgb(113, 231, 214)'
 const FCF_COLOR = 'rgb(187, 71, 134)'
@@ -34,6 +32,15 @@ interface ChartData {
 
 // Reactive states
 const currentDate = DateTime.now()
+const currentPoint = ref<Point | null>(null)
+const chartElements = {
+  toolbarConnector: null as SVGElement | null,
+  revenueMarker: null as SVGElement | null,
+  earningsMarker: null as SVGElement | null,
+  fcfMarker: null as SVGElement | null,
+  cfoMarker: null as SVGElement | null,
+  oneYearZone: null as SVGElement | null,
+}
 const activeLegends = ref<string[]>(['revenue', 'earnings'])
 const legends = [
   { text: 'Revenue', value: 'revenue' },
@@ -42,19 +49,47 @@ const legends = [
   { text: 'Cash From Op', value: 'cfo' },
 ]
 
-// TODO: REPLACE WITH NEEDED DATA
-const tooltipData = {
-  tooltipStyle: undefined,
-  date: undefined,
-  analysts: undefined,
-  sharePrice: undefined,
-  analyticsPrice: undefined,
-  margeColorClass: undefined,
-  marge: undefined,
-  agrColorClass: undefined,
-  agrStatus: undefined,
-  agrText: undefined,
-}
+const tooltipData = computed(() => {
+  if (!currentPoint.value) return null
+
+  const point = currentPoint.value
+  const dataKey = point.category
+  const dataInstance = data.financialData.find((f) => f.date === dataKey)
+
+  if (!dataInstance) return null
+
+  const tooltipPos =
+    (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
+      ? (point.plotX || 0) + point.series.chart.plotLeft
+      : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
+
+  return {
+    date: DateTime.fromMillis(point.category as number).toFormat('LLL dd yyyy'),
+    revenue: {
+      value: `${data.currency}${dataInstance.revenue / 1000}b`,
+      analysts: 50,
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+    },
+    earnings: {
+      value: `${data.currency}${dataInstance.earnings / 1000}b`,
+      analysts: 40,
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+    },
+    fcf: {
+      value: `${data.currency}${dataInstance.freeCashFlow / 1000}b`,
+      analysts: 30,
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+    },
+    cfo: {
+      value: `${data.currency}${dataInstance.cashFromOp / 1000}b`,
+      analysts: 20,
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+    },
+    tooltipStyle: {
+      transform: `translateX(${tooltipPos}px)`,
+    },
+  }
+})
 
 // Data
 const data: ChartData = {
@@ -463,6 +498,48 @@ const [date, revenue, earnings, fcf, cfo] = [
     .reverse(),
 ]
 
+// Helper functions
+const destroyChartElements = () => {
+  Object.values(chartElements).forEach((el) => el?.destroy())
+  Object.keys(chartElements).forEach((key) => {
+    chartElements[key as keyof typeof chartElements] = null
+  })
+}
+
+const drawConnector = (point: Point) => {
+  const chart = point.series.chart
+  const fromX = (point.plotX || 0) + chart.plotLeft
+  const fromY = chart.plotTop + chart.plotHeight
+  const toX = fromX
+  const toY = -20
+
+  return chart.renderer
+    .path(['M', fromX, fromY, 'L', toX, toY] as unknown as SVGPathArray)
+    .attr({
+      'stroke-width': 1,
+      stroke: 'rgb(var(--v-theme-hc-average-series-color))',
+      zIndex: 4,
+    })
+    .add()
+}
+
+function findPointOneYearAgo(series: Series, datetimeInMills: number): Point | null {
+  // Ищем ближайшую точку
+  let closestPoint = null;
+  let minDiff = Infinity;
+  const yearAgo = DateTime.fromMillis(datetimeInMills).minus({ year: 1 }).toMillis()
+
+  series.points.forEach(point => {
+    const diff = Math.abs(point.x - yearAgo);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestPoint = point;
+    }
+  });
+
+  return closestPoint;
+}
+
 const options = computed<Options>(
   () =>
     ({
@@ -470,6 +547,12 @@ const options = computed<Options>(
         type: 'areaspline',
         height: CHART_HEIGHT,
         backgroundColor: 'transparent',
+        events: {
+          load() {
+            const points = this.series[0].points
+            updateTooltip(points[points.length - 1])
+          },
+        },
       },
       accessibility: {
         enabled: false,
@@ -497,6 +580,13 @@ const options = computed<Options>(
             },
             hover: {
               enabled: false,
+            },
+          },
+          point: {
+            events: {
+              mouseOver() {
+                updateTooltip(this)
+              },
             },
           },
         },
@@ -608,6 +698,135 @@ const options = computed<Options>(
       ],
     }) satisfies Options
 )
+
+// Core functions
+const updatePointElements = (point: Point) => {
+  destroyChartElements()
+
+  const chart = point.series?.chart
+
+  if (!chart) return
+
+  const dataInstance = data.financialData.find((f) => f.date === point.category)
+
+  if (!dataInstance) return
+
+  // Draw main elements
+  chartElements.toolbarConnector = drawConnector(point)
+
+  const pointX = (point.plotX || 0) + chart.plotLeft
+
+  // Find series points Y position
+  const revenuePoint = chart.series.find((s) => s.name === 'revenue')?.points?.[
+    point.index
+  ]
+  const earningsPoint = chart.series.find((s) => s.name === 'earnings')
+    ?.points?.[point.index]
+  const fcfPoint = chart.series.find((s) => s.name === 'fcf')?.points?.[
+    point.index
+  ]
+  const cfoPoint = chart.series.find((s) => s.name === 'cfo')?.points?.[
+    point.index
+  ]
+
+  const revenueY = revenuePoint
+    ? (revenuePoint.plotY || 0) + chart.plotTop
+    : null
+  const earningsY = earningsPoint
+    ? (earningsPoint.plotY || 0) + chart.plotTop
+    : null
+  const fcfY = fcfPoint ? (fcfPoint.plotY || 0) + chart.plotTop : null
+  const cfoY = cfoPoint ? (cfoPoint.plotY || 0) + chart.plotTop : null
+
+  // Draw markers
+  chartElements.revenueMarker =
+    revenueY && activeLegends.value.includes('revenue')
+      ? chart.renderer
+          .circle(pointX, revenueY, 5)
+          .attr({
+            fill: 'rgb(var(--v-theme-hc-series1-color))',
+            stroke: 'white',
+            'stroke-width': 2,
+            zIndex: 5,
+          })
+          .add()
+      : null
+
+  chartElements.earningsMarker =
+    earningsY && activeLegends.value.includes('earnings')
+      ? chart.renderer
+          .circle(pointX, earningsY, 5)
+          .attr({
+            fill: 'rgb(var(--v-theme-hc-series2-color))',
+            stroke: 'white',
+            'stroke-width': 2,
+            zIndex: 5,
+          })
+          .add()
+      : null
+  chartElements.fcfMarker =
+    fcfY && activeLegends.value.includes('fcf')
+      ? chart.renderer
+          .circle(pointX, fcfY, 5)
+          .attr({
+            fill: 'rgb(var(--v-theme-hc-series3-color))',
+            stroke: 'white',
+            'stroke-width': 2,
+            zIndex: 5,
+          })
+          .add()
+      : null
+
+  chartElements.cfoMarker =
+    cfoY && activeLegends.value.includes('cfo')
+      ? chart.renderer
+          .circle(pointX, cfoY, 5)
+          .attr({
+            fill: 'rgb(var(--v-theme-hc-series4-color))',
+            stroke: 'white',
+            'stroke-width': 2,
+            zIndex: 5,
+          })
+          .add()
+      : null
+
+  // Draw year zone
+  const activeLegend = activeLegends.value[0]
+  const activeSeries = chart.series.find(s => s.name === activeLegend)
+  if (!activeSeries) return;
+
+  const pointOneYAgo = findPointOneYearAgo(activeSeries, activeSeries.points[point.index].category as number)
+
+  chartElements.oneYearZone = pointOneYAgo
+    ? chart.renderer
+      .rect((pointOneYAgo.plotX || 0) + chart.plotLeft, chart.plotTop, pointX - ((pointOneYAgo.plotX || 0) + chart.plotLeft), chart.plotHeight)
+      .attr({
+        fill: 'url(#YearMarkerGradient)',
+        stroke: 'rgba(35, 148, 223, 0.1)',
+        'stroke-width': 1,
+        zIndex: -1,
+      })
+      .add()
+    : null
+}
+
+const updateTooltip = (point: Point, force: boolean = false) => {
+  if (currentPoint.value && point.index === currentPoint.value.index && !force)
+    return
+
+  updatePointElements(point)
+  currentPoint.value = point
+}
+
+watch(
+  () => activeLegends,
+  () => {
+    if (currentPoint.value) {
+      nextTick(() => updateTooltip(currentPoint.value, true))
+    }
+  },
+  { deep: true }
+)
 </script>
 
 <template>
@@ -615,52 +834,105 @@ const options = computed<Options>(
     <div class="earnings-and-revenue-growth-forecast-chart__tooltip-box">
       <v-card
         v-if="tooltipData"
-        width="340"
+        :width="TOOLTIP_WIDTH"
         :style="tooltipData.tooltipStyle"
-        class="text-caption text-disabled"
+        class="text-disabled"
       >
         <v-card-item>
           <v-row no-gutters>
             <v-col class="text-high-emphasis">{{ tooltipData.date }}</v-col>
-            <v-col
-              ><div class="text-capitalize d-flex justify-end">
-                {{ tooltipData.analysts }}
-              </div></v-col
-            >
+            <v-col></v-col>
+            <v-col><div class="text-center">Analysts</div></v-col>
+            <v-col>Last Updated</v-col>
           </v-row>
-          <v-divider />
-          <v-row no-gutters>
-            <v-col cols="4">Share Price</v-col>
-            <v-col offset="1"
-              ><div class="text-info">
-                {{ tooltipData.sharePrice }}
-              </div></v-col
-            >
-          </v-row>
-          <v-divider />
-          <v-row no-gutters>
-            <v-col cols="4">Average 1Y Price Target</v-col>
-            <v-col offset="1"
-              ><div class="text-hc-average-series-color">
-                {{ tooltipData.analyticsPrice }}
-              </div></v-col
-            >
-            <v-col :class="tooltipData.margeColorClass">{{
-              tooltipData.marge
-            }}</v-col>
-          </v-row>
-          <v-divider />
-          <v-row no-gutters>
-            <v-col cols="4">Agreement</v-col>
-            <v-col offset="1">
-              <div :class="tooltipData.agrColorClass">
-                {{ tooltipData.agrStatus }}
-              </div>
-              <div>
-                {{ tooltipData.agrText }}
-              </div>
-            </v-col>
-          </v-row>
+
+          <template v-if="activeLegends.includes('revenue')">
+            <v-divider />
+
+            <v-row no-gutters>
+              <v-col>Revenue</v-col>
+              <v-col>
+                <div class="text-hc-series1-color">
+                  {{ tooltipData.revenue.value
+                  }}<span class="text-disabled">/yr</span>
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                <div class="text-center">
+                  {{ tooltipData.revenue.analysts }}
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                {{ tooltipData.revenue.lastUpdated }}
+              </v-col>
+            </v-row>
+          </template>
+
+          <template v-if="activeLegends.includes('earnings')">
+            <v-divider />
+
+            <v-row no-gutters>
+              <v-col>Earnings</v-col>
+              <v-col>
+                <div class="text-hc-series2-color">
+                  {{ tooltipData.earnings.value
+                  }}<span class="text-disabled">/yr</span>
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                <div class="text-center">
+                  {{ tooltipData.earnings.analysts }}
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                {{ tooltipData.earnings.lastUpdated }}
+              </v-col>
+            </v-row>
+          </template>
+
+          <template v-if="activeLegends.includes('fcf')">
+            <v-divider />
+
+            <v-row no-gutters>
+              <v-col>Free Cash Flow</v-col>
+              <v-col>
+                <div class="text-hc-series3-color">
+                  {{ tooltipData.fcf.value
+                  }}<span class="text-disabled">/yr</span>
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                <div class="text-center">
+                  {{ tooltipData.fcf.analysts }}
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                {{ tooltipData.fcf.lastUpdated }}
+              </v-col>
+            </v-row>
+          </template>
+
+          <template v-if="activeLegends.includes('cfo')">
+            <v-divider />
+
+            <v-row no-gutters>
+              <v-col>Cash From Op</v-col>
+              <v-col>
+                <div class="text-hc-series4-color">
+                  {{ tooltipData.cfo.value
+                  }}<span class="text-disabled">/yr</span>
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                <div class="text-center">
+                  {{ tooltipData.cfo.analysts }}
+                </div>
+              </v-col>
+              <v-col class="text-high-emphasis">
+                {{ tooltipData.cfo.lastUpdated }}
+              </v-col>
+            </v-row>
+          </template>
         </v-card-item>
       </v-card>
     </div>
@@ -669,7 +941,7 @@ const options = computed<Options>(
       constructorType="chart"
       :options="options"
     />
-    <v-btn-toggle multiple variant="outlined" v-model="activeLegends">
+    <v-btn-toggle multiple mandatory variant="outlined" v-model="activeLegends">
       <v-btn
         v-for="item in legends"
         :key="`legend-${item.value}`"
@@ -702,6 +974,9 @@ const options = computed<Options>(
     position: relative;
     display: flex;
     align-items: end;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.125rem;
   }
   &__chart {
     position: relative;
