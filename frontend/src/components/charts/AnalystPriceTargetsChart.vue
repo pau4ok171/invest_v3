@@ -32,7 +32,7 @@ const { t } = useI18n()
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
 const chartElements = {
-  toolbarConnector: null as SVGElement | null,
+  tooltipConnector: null as SVGElement | null,
   sharePriceMarker: null as SVGElement | null,
   analystMarker: null as SVGElement | null,
   markerConnector: null as SVGElement | null,
@@ -502,7 +502,7 @@ const updatePointElements = (point: Point) => {
   const agreement = getAgreementStatus(dataInstance.dispersion)
 
   // Draw main elements
-  chartElements.toolbarConnector = drawConnector(point)
+  chartElements.tooltipConnector = drawConnector(point)
 
   const currentX = (point.plotX || 0) + chart.plotLeft
   const currentY = (point.plotY || 0) + chart.plotTop
