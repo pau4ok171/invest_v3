@@ -172,40 +172,6 @@ const options = computed<Options>(() => {
     },
     series: [
       {
-        type: 'gauge',
-        name: props.data[0].name,
-        data: [seriesPositions[0]],
-        dial: {
-          radius: '80%',
-          backgroundColor: '#2394df',
-          baseWidth: 12,
-          topWidth: 1,
-          baseLength: '80%',
-          rearLength: '20%',
-        },
-        pivot: {
-          backgroundColor: '#494e57',
-          radius: 12,
-        },
-      },
-      {
-        type: 'gauge',
-        name: props.data[1].name,
-        data: [seriesPositions[1]],
-        dial: {
-          radius: '60%',
-          backgroundColor: '#71e7d6',
-          baseWidth: 12,
-          topWidth: 1,
-          baseLength: '80%', // Длина линии
-          rearLength: '20%',
-        },
-        pivot: {
-          backgroundColor: '#494e57',
-          radius: 12,
-        },
-      },
-      {
         type: 'solidgauge',
         name: `${props.data[0].name}Line`,
         data: [
@@ -228,6 +194,52 @@ const options = computed<Options>(() => {
             y: seriesPositions[1],
           },
         ],
+      },
+      {
+        type: 'gauge',
+        name: props.data[0].name,
+        data: [seriesPositions[0]],
+        dial: {
+          radius: '85%',
+          backgroundColor: '#2394df',
+          baseWidth: 8,
+          topWidth: 4,
+          baseLength: '10%',
+          rearLength: '0%',
+        },
+        pivot: {
+          radius: 0,
+        },
+      },
+      {
+        type: 'gauge',
+        name: props.data[1].name,
+        data: [seriesPositions[1]],
+        dial: {
+          radius: '70%',
+          backgroundColor: '#71e7d6',
+          baseWidth: 8,
+          topWidth: 4,
+          baseLength: '10%',
+          rearLength: '0%',
+        },
+        pivot: {
+          radius: 0,
+        },
+      },
+      {
+        type: 'gauge',
+        name: 'pivot',
+        data: [0],
+        dial: {
+          baseWidth: 0,
+          topWidth: 0,
+        },
+        pivot: {
+          backgroundColor: '#494e57',
+          radius: 12,
+        },
+        zIndex: 1,
       },
     ],
     plotOptions: {
@@ -258,5 +270,3 @@ const options = computed<Options>(() => {
     />
   </div>
 </template>
-
-<style scoped lang="scss"></style>
