@@ -15,6 +15,7 @@ import { computed } from 'vue'
 // Types
 import type { DetailCompany } from '@/types/invest'
 import type { Statement } from '@/types/statements'
+import GaugeChart from "@/components/charts/GaugeChart.vue";
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
@@ -97,7 +98,7 @@ const passed = computed(() =>
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
-        <v-col>
+        <v-col cols="6">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 20.6, suffix: '%' },
@@ -107,7 +108,7 @@ const passed = computed(() =>
             title="Forecast Annual Earnings Growth"
           />
         </v-col>
-        <v-col>
+        <v-col cols="6">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 20.2, suffix: '%' },
@@ -141,18 +142,9 @@ const passed = computed(() =>
       title="2.4 Future Return on Equity"
       class="pt-8 px-8"
     >
-      <v-row>
+      <v-row class="my-2">
         <v-col cols="6">
-          <div
-            style="
-              height: 500px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            [Future Return on Equity CHART]
-          </div>
+          <gauge-chart :data="[{ name: 'Company', value: 52.9 }, { name: 'Industry', value: 11.9 }]" title="Future ROE (3yrs)" />
         </v-col>
         <v-col cols="6">
           <company-detail-check name="IsReturnOnEquityForecastAboveBenchmark" />
