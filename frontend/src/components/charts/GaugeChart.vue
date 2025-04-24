@@ -100,7 +100,7 @@ const options = computed<Options>(() => {
     pane: [
       {
         size: '95%',
-        center: ['50%', '60%'],
+        center: ['50%', '70%'],
         startAngle: -135,
         endAngle: 135,
         background: [
@@ -268,5 +268,41 @@ const options = computed<Options>(() => {
       constructor-type="chart"
       :options="options"
     />
+    <v-card width="144" class="gauge-chart__caption" color="surface-light" flat>
+      <v-row no-gutters>
+        <v-col cols="12" class="text-subtitle-1 text-center">
+          {{ title || 'Gauge' }}
+        </v-col>
+      </v-row>
+      <v-row no-gutters class="text-subtitle-1 text-hc-series1-color">
+        <v-col>
+          {{ props.data[0].name }}
+        </v-col>
+        <v-col class="text-end">
+          {{ props.data[0].value }}%
+        </v-col>
+      </v-row>
+      <v-divider/>
+      <v-row no-gutters class="text-subtitle-2 text-hc-series2-color">
+        <v-col>
+          {{ props.data[1].name }}
+        </v-col>
+        <v-col class="text-end">
+          {{ props.data[1].value }}%
+        </v-col>
+      </v-row>
+    </v-card>
   </div>
 </template>
+
+<style scoped lang="scss">
+.gauge-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__caption {
+    margin-top: -24px;
+  }
+}
+</style>
