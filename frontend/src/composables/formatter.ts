@@ -1,6 +1,6 @@
-type FinUnit = '' | 'K' | 'M' | 'B' | 'T'
+export type FinUnit = '' | 'K' | 'M' | 'B' | 'T'
 
-interface FinancialData {
+export interface FinancialData {
   currency: string
   value: number
   finUnit: FinUnit
