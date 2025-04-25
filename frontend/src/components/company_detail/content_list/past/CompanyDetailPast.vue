@@ -2,6 +2,7 @@
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
+import SankeyChart from "@/components/charts/SankeyChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -87,16 +88,7 @@ const passed = computed(() =>
       :subtitle="`How ${company.ticker} makes and spends money. Based on latest reported earnings, on an LTM basis.`"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Revenue & Expenses Breakdown CHART]
-      </div>
+      <sankey-chart />
     </v-card-item>
 
     <v-divider class="my-4" />
