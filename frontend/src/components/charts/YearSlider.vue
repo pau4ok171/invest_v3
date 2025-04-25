@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Utilities
-import { computed, ref } from 'vue'
+import {computed, onUnmounted, ref} from 'vue'
 import { indexOf } from 'lodash'
 
 const props = defineProps({
@@ -21,7 +21,9 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const trackRef = ref<HTMLElement | null>(null)
+const thumbRef = ref<HTMLElement | null>(null)
 const selectedYear = ref<number>(props.modelValue)
+const isDragging = ref(false)
 
 const values: number[] = []
 for (let i = props.minYear; i <= props.maxYear; i++) {
@@ -30,10 +32,7 @@ for (let i = props.minYear; i <= props.maxYear; i++) {
 
 const left = computed(() => {
   const index = indexOf(values, selectedYear.value)
-  const step = trackRef.value ? trackRef.value.clientWidth / 12 : null
-
-  if (index < 0 || step == null) return '0px'
-
+  const step = trackRef.value ? trackRef.value.clientWidth / values.length : 0
   return `${index * step}px`
 })
 
@@ -41,6 +40,47 @@ const handleClick = (year: number) => {
   selectedYear.value = year
   emit('update:modelValue', selectedYear.value)
 }
+
+// Начало перетаскивания
+const startDrag = (e: MouseEvent) => {
+  isDragging.value = true
+  document.addEventListener('mousemove', handleDrag)
+  document.addEventListener('mouseup', stopDrag)
+  handleDrag(e)
+}
+
+// Обработка перетаскивания
+const handleDrag = (e: MouseEvent) => {
+  if (!isDragging.value || !trackRef.value) return
+
+  const trackRect = trackRef.value.getBoundingClientRect()
+  const clientX = e.clientX
+  let position = (clientX - trackRect.left) / trackRect.width
+
+  // Ограничиваем положение в пределах трека
+  position = Math.max(0, Math.min(1, position))
+
+  const index = Math.round(position * (values.length - 1))
+  const newYear = values[index]
+
+  if (newYear !== selectedYear.value) {
+    selectedYear.value = newYear
+    emit('update:modelValue', newYear)
+  }
+}
+
+// Завершение перетаскивания
+const stopDrag = () => {
+  isDragging.value = false
+  document.removeEventListener('mousemove', handleDrag)
+  document.removeEventListener('mouseup', stopDrag)
+}
+
+// Очистка событий при размонтировании
+onUnmounted(() => {
+  document.removeEventListener('mousemove', handleDrag)
+  document.removeEventListener('mouseup', stopDrag)
+})
 </script>
 
 <template>
@@ -65,7 +105,12 @@ const handleClick = (year: number) => {
         </p>
       </div>
     </div>
-    <div class="year-slider__thumb" :style="{ left: left }" />
+    <div
+      ref="thumbRef"
+      class="year-slider__thumb"
+      :style="{ left: left }"
+      @mousedown="startDrag"
+    />
   </div>
 </template>
 
