@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Components
+import YearSlider from '@/components/charts/YearSlider.vue'
+
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
 
@@ -7,8 +10,7 @@ import { computed, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Chart, Options } from 'highcharts'
-import YearSlider from '@/components/charts/YearSlider.vue'
+import type { Chart, Options, SankeyNodeObject, Point } from 'highcharts'
 
 // Constants
 const CHART_HEIGHT = 500
@@ -172,12 +174,6 @@ const options = computed<Options>(
       title: {
         text: undefined,
       },
-      accessibility: {
-        point: {
-          valueDescriptionFormat:
-            '{index}. {point.from} to {point.to}: {point.weight}.',
-        },
-      },
       series: [
         {
           type: 'sankey',
@@ -215,6 +211,57 @@ const options = computed<Options>(
           },
         },
       ],
+      tooltip: {
+        followPointer: false,
+        outside: true,
+        padding: 0,
+        useHTML: true,
+        formatter: function () {
+          if (this?.formatPrefix === 'node') {
+            const node = this as SankeyNodeObject
+            const name = node.name
+            const sum = fin({
+              currency: data.currency,
+              value: node.sum,
+              finUnit: data.financialUnit,
+            })
+
+            return `
+              <div class="sankey-chart__tooltip text-subtitle-2">
+                <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
+              </div>
+            `
+          }
+
+          if (this?.formatPrefix === 'point') {
+            const point = this as Point
+            const name = point.toNode.name
+            const sum = fin({
+              currency: data.currency,
+              value: point.weight,
+              finUnit: data.financialUnit,
+            })
+            const from = point.fromNode.name
+            const weight =
+              ((point.weight / point.fromNode.sum) * 100).toFixed(2) + '%'
+
+            return `
+              <div class="sankey-chart__tooltip text-subtitle-2">
+                <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
+                <div class="sankey-chart__divider"></div>
+                <div class="d-flex justify-space-between text-disabled"><div>${from}</div><div>${weight}</div></div>
+              </div>
+            `
+          }
+          return ''
+        },
+        positioner: function (labelWidth, labelHeight, point) {
+          return {
+            x: point.plotX + this.chart.plotLeft - labelWidth / 2,
+            y: point.plotY + this.chart.plotTop - labelHeight,
+          }
+        },
+      },
     }) satisfies Options
 )
 
@@ -304,4 +351,21 @@ watch(selectedYear, updateChart)
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss">
+.sankey-chart {
+  &__tooltip {
+    width: 340px;
+    padding: 12px 8px;
+    border-radius: 8px;
+    color: rgb(var(--v-theme-on-surface));
+    background-color: rgb(var(--v-theme-surface));
+    pointer-events: none;
+  }
+  &__divider {
+    width: 100%;
+    height: 1px;
+    margin: 4px 0;
+    background-color: rgba(var(--v-theme-on-surface), 0.2);
+  }
+}
+</style>
