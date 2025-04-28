@@ -88,7 +88,7 @@ const passed = computed(() =>
       :subtitle="`How ${company.ticker} makes and spends money. Based on latest reported earnings, on an LTM basis.`"
       class="pt-8 px-8"
     >
-      <sankey-chart />
+      <sankey-chart class="mt-4" />
     </v-card-item>
 
     <v-divider class="my-4" />
