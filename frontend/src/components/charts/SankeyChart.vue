@@ -3,17 +3,19 @@
 import { useFinancialFormatter } from '@/composables/formatter'
 
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Options } from 'highcharts'
+import type { Chart, Options } from 'highcharts'
+import YearSlider from '@/components/charts/YearSlider.vue'
 
 // Constants
 const CHART_HEIGHT = 500
 
 const { fin } = useFinancialFormatter()
 
+const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const selectedYear = ref<number>(currentDate.year)
 
@@ -203,7 +205,6 @@ const options = computed<Options>(
             y: -40, // Смещаем выше узла
             useHTML: true,
             nodeFormatter: function () {
-              console.log(this)
               return `<div class="text-truncate">${this.point.name}</div><div class="text-medium-emphasis">${fin({ currency: data.currency, value: this.point.sum, finUnit: data.financialUnit })}</div>`
             },
             style: {
@@ -218,9 +219,10 @@ const options = computed<Options>(
 )
 
 // Helper functions
-function updateChart(year) {
-  this.chart.series[0].update({
-    data: this.getSankeyData(this.selectedYear),
+function updateChart() {
+  if (!chartRef.value) return
+  chartRef.value.chart.series[0].update({
+    data: getSankeyData(selectedYear.value),
   })
 }
 function getSankeyData(year: number) {
@@ -280,11 +282,21 @@ function getSankeyNodes() {
     },
   ]
 }
+
+watch(selectedYear, updateChart)
 </script>
 
 <template>
   <div class="sankey-chart">
+    <year-slider
+      :model-value="selectedYear"
+      @update:model-value="(val: number) => (selectedYear = val)"
+      :min-year="2014"
+      :max-year="2025"
+    />
+
     <charts
+      ref="chartRef"
       class="sankey-chart__chart"
       constructor-type="chart"
       :options="options"

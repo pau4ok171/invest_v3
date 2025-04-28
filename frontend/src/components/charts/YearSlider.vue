@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Utilities
-import {computed, onUnmounted, ref} from 'vue'
+import { computed, onUnmounted, ref } from 'vue'
 import { indexOf } from 'lodash'
 
 const props = defineProps({
