@@ -117,6 +117,7 @@ const tooltipData = computed(() => {
       value: dataInstance.revenue[1],
       finUnit: data.financialUnit,
     }),
+    profiteMargin: dataInstance.revenue[1] !== 0 ? (dataInstance.earnings[1] / dataInstance.revenue[1] * 100).toFixed(2) + '%' : undefined,
     earnings: fin({
       currency: data.currency,
       value: dataInstance.earnings[1],
@@ -525,7 +526,7 @@ watch(
               <v-col>Revenue</v-col>
               <v-col>
                 <div class="text-hc-series1-color">
-                  {{ tooltipData.revenue }}
+                  {{ tooltipData.revenue }}<span class="text-disabled"> /yr</span>
                 </div>
               </v-col>
             </v-row>
@@ -537,7 +538,10 @@ watch(
               <v-col>Earnings</v-col>
               <v-col>
                 <div class="text-hc-series2-color">
-                  {{ tooltipData.earnings }}
+                  {{ tooltipData.earnings }}<span class="text-disabled"> /yr</span>
+                </div>
+                <div v-if="tooltipData.profiteMargin" class="text-high-emphasis">
+                  {{ tooltipData.profiteMargin }} <span class="text-disabled">Profit margin</span>
                 </div>
               </v-col>
             </v-row>
