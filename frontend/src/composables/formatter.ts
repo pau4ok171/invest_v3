@@ -9,7 +9,7 @@ export interface FinancialData {
 export function useFinancialFormatter() {
   /**
    * Конвертирует финансовые данные в удобочитаемый формат
-   * Пример: { currency: 'US$', value: 16456, finUnit: 'm' } → "US$16.456B"
+   * Пример: { currency: 'US$', value: 16456, finUnit: 'M' } → "US$16.456B"
    */
   const fin = (data: FinancialData): string => {
     const units = [
