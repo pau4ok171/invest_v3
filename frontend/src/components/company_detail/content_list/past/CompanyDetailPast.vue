@@ -3,6 +3,7 @@
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
 import SankeyChart from "@/components/charts/SankeyChart.vue";
+import EarningsRevenueHistoryChart from "@/components/charts/EarningsRevenueHistoryChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -94,16 +95,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item title="3.2 Earnings and Revenue History" class="pt-8 px-8">
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Earnings and Revenue History CHART]
-      </div>
+      <earnings-revenue-history-chart class="mb-4" />
 
       <company-detail-check name="HasHighQualityPastEarnings" />
       <company-detail-check name="HasPastNetProfitMarginImprovedOverLastYear" />
