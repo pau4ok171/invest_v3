@@ -10,10 +10,44 @@ import { computed, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Chart, Options, SankeyNodeObject, Point } from 'highcharts'
+import type {
+  Chart,
+  Options,
+  SankeyNodeObject,
+  Point,
+  SeriesSankeyOptions,
+} from 'highcharts'
+import type { FinUnit } from '@/composables/formatter'
 
 // Constants
 const CHART_HEIGHT = 500
+
+// Interfaces
+interface ChartData {
+  currency: string
+  financialUnit: FinUnit
+  financialData: FinancialData
+}
+interface FinancialData {
+  [year: number]: Record<string, number>
+}
+interface SankeyPoint extends Point {
+  formatPrefix: string
+  name: string
+  sum: number
+  weight: number
+  toNode: SankeyNode
+  fromNode: SankeyNode
+}
+interface SankeyNode extends SankeyNodeObject {
+  formatPrefix: string
+  name: string
+  sum: number
+}
+
+const isSankeyNode = (point: SankeyPoint | SankeyNode): point is SankeyNode => {
+  return point.formatPrefix === 'node'
+}
 
 const { fin } = useFinancialFormatter()
 
@@ -21,7 +55,7 @@ const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const selectedYear = ref<number>(currentDate.year)
 
-const data = {
+const data: ChartData = {
   currency: 'US$',
   financialUnit: 'M',
   financialData: {
@@ -198,10 +232,24 @@ const options = computed<Options>(
             padding: 0,
             verticalAlign: 'top',
             overflow: 'allow',
-            y: -40, // Смещаем выше узла
+            y: -40,
             useHTML: true,
             nodeFormatter: function () {
-              return `<div class="text-truncate">${this.point.name}</div><div class="text-medium-emphasis">${fin({ currency: data.currency, value: this.point.sum, finUnit: data.financialUnit })}</div>`
+              const point = (
+                'point' in this ? (this as any).point : null
+              ) as SankeyPoint | null
+              if (!point) return ''
+
+              return `
+                <div class="text-truncate">${point.name}</div>
+                <div class="text-medium-emphasis">
+                  ${fin({
+                    currency: data.currency,
+                    value: point.sum,
+                    finUnit: data.financialUnit,
+                  })}
+                </div>
+              `
             },
             style: {
               color: '#333',
@@ -217,43 +265,16 @@ const options = computed<Options>(
         padding: 0,
         useHTML: true,
         formatter: function () {
-          if (this?.formatPrefix === 'node') {
-            const node = this as SankeyNodeObject
-            const name = node.name
-            const sum = fin({
-              currency: data.currency,
-              value: node.sum,
-              finUnit: data.financialUnit,
-            })
+          const point = (
+            'point' in this ? (this as any).point : null
+          ) as SankeyPoint | null
+          if (!point) return ''
 
-            return `
-              <div class="sankey-chart__tooltip text-subtitle-2">
-                <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
-              </div>
-            `
+          if (isSankeyNode(point)) {
+            return getNodeTooltip(point)
           }
 
-          if (this?.formatPrefix === 'point') {
-            const point = this as Point
-            const name = point.toNode.name
-            const sum = fin({
-              currency: data.currency,
-              value: point.weight,
-              finUnit: data.financialUnit,
-            })
-            const from = point.fromNode.name
-            const weight =
-              ((point.weight / point.fromNode.sum) * 100).toFixed(2) + '%'
-
-            return `
-              <div class="sankey-chart__tooltip text-subtitle-2">
-                <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
-                <div class="sankey-chart__divider"></div>
-                <div class="d-flex justify-space-between text-disabled"><div>${from}</div><div>${weight}</div></div>
-              </div>
-            `
-          }
-          return ''
+          return getPointTooltip(point)
         },
         positioner: function (labelWidth, labelHeight, point) {
           return {
@@ -270,7 +291,7 @@ function updateChart() {
   if (!chartRef.value) return
   chartRef.value.chart.series[0].update({
     data: getSankeyData(selectedYear.value),
-  })
+  } as SeriesSankeyOptions)
 }
 function getSankeyData(year: number) {
   const _data = data.financialData[year]
@@ -328,6 +349,39 @@ function getSankeyNodes() {
       color: 'rgb(113, 231, 214)',
     },
   ]
+}
+
+const getNodeTooltip = (point: SankeyNode): string => {
+  const name = point.name
+  const sum = fin({
+    currency: data.currency,
+    value: point.sum,
+    finUnit: data.financialUnit,
+  })
+  return `
+    <div class="sankey-chart__tooltip text-subtitle-2">
+      <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
+    </div>
+  `
+}
+
+const getPointTooltip = (point: SankeyPoint): string => {
+  const name = point.toNode.name
+  const sum = fin({
+    currency: data.currency,
+    value: point.weight,
+    finUnit: data.financialUnit,
+  })
+  const from = point.fromNode.name
+  const weight = ((point.weight / point.fromNode.sum) * 100).toFixed(2) + '%'
+
+  return `
+    <div class="sankey-chart__tooltip text-subtitle-2">
+      <div class="d-flex justify-space-between"><div>${name}</div><div>${sum}</div></div>
+      <div class="sankey-chart__divider"></div>
+      <div class="d-flex justify-space-between text-disabled"><div>${from}</div><div>${weight}</div></div>
+    </div>
+  `
 }
 
 watch(selectedYear, updateChart)
