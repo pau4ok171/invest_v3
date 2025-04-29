@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Utilities
-import { computed, onUnmounted, ref } from 'vue'
-import { indexOf } from 'lodash'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { indexOf, debounce } from 'lodash'
 
 const props = defineProps({
   maxYear: {
@@ -24,15 +24,28 @@ const trackRef = ref<HTMLElement | null>(null)
 const thumbRef = ref<HTMLElement | null>(null)
 const selectedYear = ref<number>(props.modelValue)
 const isDragging = ref(false)
+const trackWidth = ref(0)
 
 const values: number[] = []
 for (let i = props.minYear; i <= props.maxYear; i++) {
   values.push(i)
 }
 
+// Обновляем ширину трека при изменении размеров
+const updateTrackWidth = () => {
+  if (trackRef.value) {
+    trackWidth.value = trackRef.value.clientWidth
+  }
+}
+
+// Дебаунсим обработчик ресайза
+const handleResize = debounce(() => {
+  updateTrackWidth()
+}, 100)
+
 const left = computed(() => {
   const index = indexOf(values, selectedYear.value)
-  const step = trackRef.value ? trackRef.value.clientWidth / values.length : 0
+  const step = trackWidth.value / values.length
   return `${index * step}px`
 })
 
@@ -41,7 +54,6 @@ const handleClick = (year: number) => {
   emit('update:modelValue', selectedYear.value)
 }
 
-// Начало перетаскивания
 const startDrag = (e: MouseEvent) => {
   isDragging.value = true
   document.addEventListener('mousemove', handleDrag)
@@ -49,7 +61,6 @@ const startDrag = (e: MouseEvent) => {
   handleDrag(e)
 }
 
-// Обработка перетаскивания
 const handleDrag = (e: MouseEvent) => {
   if (!isDragging.value || !trackRef.value) return
 
@@ -57,7 +68,6 @@ const handleDrag = (e: MouseEvent) => {
   const clientX = e.clientX
   let position = (clientX - trackRect.left) / trackRect.width
 
-  // Ограничиваем положение в пределах трека
   position = Math.max(0, Math.min(1, position))
 
   const index = Math.round(position * (values.length - 1))
@@ -69,17 +79,29 @@ const handleDrag = (e: MouseEvent) => {
   }
 }
 
-// Завершение перетаскивания
 const stopDrag = () => {
   isDragging.value = false
   document.removeEventListener('mousemove', handleDrag)
   document.removeEventListener('mouseup', stopDrag)
 }
 
-// Очистка событий при размонтировании
-onUnmounted(() => {
-  document.removeEventListener('mousemove', handleDrag)
-  document.removeEventListener('mouseup', stopDrag)
+// Инициализация и подписка на события
+onMounted(() => {
+  updateTrackWidth()
+  window.addEventListener('resize', handleResize)
+
+  // Наблюдаем за изменениями размеров трека
+  const resizeObserver = new ResizeObserver(handleResize)
+  if (trackRef.value) {
+    resizeObserver.observe(trackRef.value)
+  }
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+    resizeObserver.disconnect()
+    document.removeEventListener('mousemove', handleDrag)
+    document.removeEventListener('mouseup', stopDrag)
+  })
 })
 </script>
 
