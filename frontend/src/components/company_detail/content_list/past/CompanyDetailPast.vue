@@ -4,6 +4,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
 import SankeyChart from "@/components/charts/SankeyChart.vue";
 import EarningsRevenueHistoryChart from "@/components/charts/EarningsRevenueHistoryChart.vue";
+import FCFAnalysisChart from "@/components/charts/FCFAnalysisChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -107,16 +108,7 @@ const passed = computed(() =>
       title="3.3 Free Cash Flow vs Earnings Analysis"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Free Cash Flow vs Earnings Analysis CHART]
-      </div>
+      <f-c-f-analysis-chart />
     </v-card-item>
 
     <v-divider class="my-4" />
