@@ -3,6 +3,7 @@
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
 import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
+import DebtToEquityChart from "@/components/charts/DebtToEquityChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -113,16 +114,7 @@ const passed = computed(() =>
       title="4.2 Debt to Equity History and Analysis"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Debt to Equity History and Analysis CHART]
-      </div>
+      <debt-to-equity-chart class="mb-8" />
 
       <company-detail-check name="IsDebtLevelAppropriate" />
       <company-detail-check name="HasDebtReducedOverTime" />
