@@ -2,6 +2,7 @@
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
+import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -81,16 +82,26 @@ const passed = computed(() =>
       title="4.1 Financial Position Analysis"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Financial Position Analysis CHART]
-      </div>
+      <v-row class="mt-2">
+        <v-col cols="6">
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Assets', value: 80.13, prefix: 'US$', suffix: 'B' },
+              { name: 'Liabilities', value: 18.05, prefix: 'US$', suffix: 'B' },
+            ]"
+            title="Short Term"
+          />
+        </v-col>
+        <v-col cols="6">
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Assets', value: 31.48, prefix: 'US$', suffix: 'B' },
+              { name: 'Liabilities', value: 14.23, prefix: 'US$', suffix: 'B' },
+            ]"
+            title="Long Term"
+          />
+        </v-col>
+      </v-row>
 
       <company-detail-check name="AreShortTermLiabilitiesCovered" />
       <company-detail-check name="AreLongTermLiabilitiesCovered" />
