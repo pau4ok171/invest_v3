@@ -268,7 +268,7 @@ const options = computed<Options>(() => {
       constructor-type="chart"
       :options="options"
     />
-    <v-card width="144" class="gauge-chart__caption" color="surface-light" flat>
+    <v-card width="144" class="gauge-chart__caption" flat>
       <v-row no-gutters>
         <v-col cols="12" class="text-subtitle-1 text-center">
           {{ title || 'Gauge' }}
@@ -283,7 +283,7 @@ const options = computed<Options>(() => {
         </v-col>
       </v-row>
       <v-divider/>
-      <v-row no-gutters class="text-subtitle-2 text-hc-series2-color">
+      <v-row no-gutters class="text-caption text-hc-series2-color">
         <v-col>
           {{ props.data[1].name }}
         </v-col>
@@ -302,6 +302,7 @@ const options = computed<Options>(() => {
   align-items: center;
 
   &__caption {
+    background-color: transparent;
     margin-top: -24px;
   }
 }
