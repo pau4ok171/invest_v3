@@ -24,6 +24,7 @@ const finargoDarkTheme = {
     'hc-series3-color': '#BB4786',
     'hc-series4-color': '#E5B061',
     'hc-series5-color': '#A54CEC',
+    'hc-series-neg-color': '#E64141',
   },
   variables: {
     'border-color': '#FFFFFF',
@@ -71,6 +72,7 @@ const finargoLightTheme = {
     'hc-series3-color': '#BB4786',
     'hc-series4-color': '#E5B061',
     'hc-series5-color': '#A54CEC',
+    'hc-series-neg-color': '#E64141',
   },
   variables: {
     'border-color': '#000000',
