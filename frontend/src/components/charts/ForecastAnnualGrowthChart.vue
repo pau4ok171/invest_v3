@@ -67,6 +67,7 @@ const options = computed<Options>(
         dataLabels: [
           {
             enabled: true,
+            verticalAlign: 'bottom',
             formatter: () => {
               return `${o.prefix || ''}${o.value.toFixed(1)}${o.suffix || ''}`
             },
@@ -76,6 +77,7 @@ const options = computed<Options>(
               fontWeight: '500',
               textOutline: 'none',
               stroke: 'none',
+              color: 'rgb(var(--v-theme-on-surface))',
             },
           },
           {
@@ -88,6 +90,7 @@ const options = computed<Options>(
               fontSize: '0.875rem',
               textOutline: 'none',
               stroke: 'none',
+              color: 'rgb(var(--v-theme-on-surface))',
             },
             formatter: function () {
               return this.series.name
