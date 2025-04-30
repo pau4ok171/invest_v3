@@ -6,6 +6,7 @@ import SankeyChart from "@/components/charts/SankeyChart.vue";
 import EarningsRevenueHistoryChart from "@/components/charts/EarningsRevenueHistoryChart.vue";
 import FCFAnalysisChart from "@/components/charts/FCFAnalysisChart.vue";
 import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
+import GaugeChart from "@/components/charts/GaugeChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -148,16 +149,7 @@ const passed = computed(() =>
     <v-card-item title="3.5 Return on Equity" class="pt-8 px-8">
       <v-row>
         <v-col cols="6">
-          <div
-            style="
-              height: 500px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            [Return on Equity CHART]
-          </div>
+          <gauge-chart :data="[{name: 'Company', value: 91.9,}, {name: 'Industry', value: 11.9,}]" title="ROE" />
         </v-col>
         <v-col cols="6">
           <company-detail-check name="IsReturnOnEquityAboveThreshold" />
@@ -168,33 +160,15 @@ const passed = computed(() =>
 
     <v-divider class="my-4" />
 
-      <v-row>
+      <v-row class="mb-2">
         <v-col cols="6">
           <v-card-item title="3.6 Return on Assets" class="pt-8 px-8">
-            <div
-              style="
-                height: 500px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              [Return on Assets CHART]
-            </div>
+            <gauge-chart :data="[{name: 'Company', value: 63.9,}, {name: 'Industry', value: 7.0,}]" title="ROA" />
           </v-card-item>
         </v-col>
         <v-col cols="6">
           <v-card-item title="3.7 Return on Capital Employed" class="pt-8 px-8">
-            <div
-              style="
-                height: 500px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              "
-            >
-              [Return on Capital Employed CHART]
-            </div>
+            <gauge-chart :data="[{name: 'Last Year', value: 87.1,}, {name: '3 Years Ago', value: 25.1,}]" title="ROCE" />
           </v-card-item>
         </v-col>
       </v-row>
