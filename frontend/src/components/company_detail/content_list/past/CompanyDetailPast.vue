@@ -5,6 +5,7 @@ import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCh
 import SankeyChart from "@/components/charts/SankeyChart.vue";
 import EarningsRevenueHistoryChart from "@/components/charts/EarningsRevenueHistoryChart.vue";
 import FCFAnalysisChart from "@/components/charts/FCFAnalysisChart.vue";
+import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -114,16 +115,28 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item title="3.4 Past Earnings Growth Analysis" class="pt-8 px-8">
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Past Earnings Growth Analysis CHART]
-      </div>
+      <v-row class="mt-2">
+        <v-col cols="6">
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Company', value: 62.2, suffix: '%' },
+              { name: 'Industry', value: 12.4, suffix: '%' },
+              { name: 'Market', value: 12.0, suffix: '%' },
+            ]"
+            title="Past 5 Years Annual Earnings Growth"
+          />
+        </v-col>
+        <v-col cols="6">
+          <forecast-annual-growth-chart
+            :data="[
+              { name: 'Company', value: 146.9, suffix: '%' },
+              { name: 'Industry', value: -1.7, suffix: '%' },
+              { name: 'Market', value: 4.8, suffix: '%' },
+            ]"
+            title="Last 1 Year Earnings Growth"
+          />
+        </v-col>
+      </v-row>
 
       <company-detail-check name="HasGrownProfitsOverPast5Years" />
       <company-detail-check name="HasProfitGrowthAccelerated" />
