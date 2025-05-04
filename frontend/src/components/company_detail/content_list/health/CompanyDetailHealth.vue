@@ -4,6 +4,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
 import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
 import DebtToEquityChart from "@/components/charts/DebtToEquityChart.vue";
+import TreemapChart from "@/components/charts/TreemapChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -128,18 +129,39 @@ const passed = computed(() =>
       title="4.3 Balance Sheet"
       class="pt-8 px-8"
     >
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Balance Sheet CHART]
-      </div>
+      <v-row class="mt-2">
+        <v-col cols="6">
+          <treemap-chart
+            title="Assets"
+            :data="{
+              currency: 'US$',
+              finUnit: 'B',
+              finData: [
+                {name: 'Cash & Short Term Investments', value: 43.2},
+                {name: 'Long Term & Other Assets', value: 27.2},
+                {name: 'Receivables', value: 23.1},
+                {name: 'Inventory', value: 10.1},
+                {name: 'Physical Assets', value: 8.1},
+              ],
+          }"
+          />
+        </v-col>
+        <v-col cols="6">
+          <treemap-chart
+            title="Liabilities + Equity"
+            :data="{
+              currency: 'US$',
+              finUnit: 'B',
+              finData: [
+                {name: 'Equity', value: 79.2},
+                {name: 'Other Liabilities', value: 17.5},
+                {name: 'Debt', value: 8.5},
+                {name: 'Account Payable', value: 6.3},
+              ],
+            }"
+          />
+        </v-col>
+      </v-row>
     </v-card-item>
   </v-card>
 </template>
-
-<style scoped lang="scss"></style>
