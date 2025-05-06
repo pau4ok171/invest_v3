@@ -3,6 +3,7 @@
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
 import UpcomingDividendPaymentChart from "@/components/charts/UpcomingDividendPaymentChart.vue";
+import StabilityGrowthPaymentsChart from "@/components/charts/StabilityGrowthPaymentsChart.vue";
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -83,16 +84,7 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item title="5.2 Stability and Growth of Payments" class="pt-8 px-8">
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Stability and Growth of Payments CHART]
-      </div>
+      <stability-growth-payments-chart />
 
       <company-detail-check name="IsDividendStable" />
       <company-detail-check name="IsDividendGrowing" />
