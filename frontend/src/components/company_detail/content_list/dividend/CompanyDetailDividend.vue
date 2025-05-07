@@ -2,8 +2,10 @@
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
-import UpcomingDividendPaymentChart from "@/components/charts/UpcomingDividendPaymentChart.vue";
-import StabilityGrowthPaymentsChart from "@/components/charts/StabilityGrowthPaymentsChart.vue";
+import UpcomingDividendPaymentChart from '@/components/charts/UpcomingDividendPaymentChart.vue'
+import StabilityGrowthPaymentsChart from '@/components/charts/StabilityGrowthPaymentsChart.vue'
+import ForecastAnnualGrowthChart from '@/components/charts/ForecastAnnualGrowthChart.vue'
+import RoundGaugeChart from '@/components/charts/RoundGaugeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -84,7 +86,7 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item title="5.2 Stability and Growth of Payments" class="pt-8 px-8">
-      <stability-growth-payments-chart />
+      <stability-growth-payments-chart class="mb-8" />
 
       <company-detail-check name="IsDividendStable" />
       <company-detail-check name="IsDividendGrowing" />
@@ -92,17 +94,18 @@ const passed = computed(() =>
 
     <v-divider class="my-4" />
 
-    <v-card-item title="5.2 Dividend Yield vs Market" class="pt-8 px-8">
-      <div
-        style="
-          height: 500px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        "
-      >
-        [Dividend Yield vs Market CHART]
-      </div>
+    <v-card-item title="5.3 Dividend Yield vs Market" class="pt-8 px-8">
+      <forecast-annual-growth-chart
+        class="mb-8"
+        :data="[
+          { name: 'Company', value: 0.04, suffix: '%' },
+          { name: 'Market Bottom 25%', value: 1.6, suffix: '%' },
+          { name: 'Market Top 25%', value: 4.9, suffix: '%' },
+          { name: 'Industry Average', value: 0.6, suffix: '%' },
+          { name: 'Forecast (up to 3 years)', value: 0.04, suffix: '%' },
+        ]"
+        title="Current Dividend Yield Vs Market & Industry"
+      />
 
       <company-detail-check name="IsDividendSignificant" />
       <company-detail-check name="IsDividendYieldTopTier" />
@@ -113,35 +116,29 @@ const passed = computed(() =>
     <v-row>
       <v-col cols="6">
         <v-card-item
-          title="5.3 Earnings Payout to Shareholders"
+          title="5.4 Earnings Payout to Shareholders"
           class="pt-8 px-8"
         >
-          <div
-            style="
-              height: 500px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            [Earnings Payout to Shareholders CHART]
-          </div>
+          <round-gauge-chart
+            :value="30"
+            suffix="%"
+            title="Current"
+            series-text="Paid as dividend"
+            rest-text="Earnings Retained"
+          />
 
           <company-detail-check name="IsDividendCovered" />
         </v-card-item>
       </v-col>
       <v-col cols="6">
-        <v-card-item title="5.4 Cash Payout to Shareholders" class="pt-8 px-8">
-          <div
-            style="
-              height: 500px;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            "
-          >
-            [Cash Payout to Shareholders CHART]
-          </div>
+        <v-card-item title="5.5 Cash Payout to Shareholders" class="pt-8 px-8">
+          <round-gauge-chart
+            value="29"
+            suffix="%"
+            title="2028"
+            series-text="Paid as dividend"
+            rest-text="Earnings Retained"
+          />
 
           <company-detail-check name="IsDividendCoveredByFreeCashFlow" />
         </v-card-item>
@@ -149,5 +146,3 @@ const passed = computed(() =>
     </v-row>
   </v-card>
 </template>
-
-<style scoped lang="scss"></style>
