@@ -120,6 +120,7 @@ const passed = computed(() =>
           class="pt-8 px-8"
         >
           <round-gauge-chart
+            class="my-4"
             :value="30"
             suffix="%"
             title="Current"
@@ -133,6 +134,7 @@ const passed = computed(() =>
       <v-col cols="6">
         <v-card-item title="5.5 Cash Payout to Shareholders" class="pt-8 px-8">
           <round-gauge-chart
+            class="my-4"
             value="29"
             suffix="%"
             title="2028"
