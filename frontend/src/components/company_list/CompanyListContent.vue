@@ -83,5 +83,3 @@ function humanize(val: number = 0, currencyUnit: string = '') {
     <company-list-content-tile-mode v-else :items />
   </v-infinite-scroll>
 </template>
-
-<style lang="scss"></style>

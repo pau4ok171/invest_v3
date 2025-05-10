@@ -27,8 +27,8 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 </script>
 
 <template>
-  <v-row style="max-width: 1200px">
-    <v-col v-for="item in items" :key="item.uid" cols="3">
+  <v-row>
+    <v-col v-for="item in items" :key="item.uid" cols="12" xxl="2" xl="3" sm="4" xs="12">
       <v-hover #="{ isHovering, props }">
         <v-card v-bind="props" :to="item.to" rounded="lg">
           <div class="company-list-tile-content" v-show="!isHovering">

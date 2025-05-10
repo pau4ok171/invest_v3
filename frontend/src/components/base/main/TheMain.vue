@@ -1,17 +1,29 @@
 <script setup lang="ts">
 // Composables
 import { usePageStore } from '@/store/page'
+import { useDisplay } from 'vuetify'
 
 // Utilities
 import { computed } from 'vue'
 
 const store = usePageStore()
+const { lg, xl } = useDisplay()
 const extended = computed(() => store.extended)
+
+const maxWidth = computed(() => {
+  if (extended.value) {
+    return xl.value ? '1590px' : lg.value ? '1200px' : '100%'
+  }
+  return xl.value ? '1200px' : '100%'
+})
 </script>
 
 <template>
   <v-main class="main">
-    <div :class="['main__inner', { 'main__inner--extended': extended }]">
+    <div
+      class="main__inner"
+      :style="{ maxWidth }"
+    >
       <slot />
     </div>
   </v-main>
@@ -29,15 +41,11 @@ const extended = computed(() => store.extended)
 }
 .main__inner {
   position: relative;
-  max-width: 1200px;
   display: flex;
   flex-direction: row;
   gap: 16px;
   width: 100%;
+  padding: 0 16px;
   transition: 0.6s cubic-bezier(0.83, 0, 0.17, 1);
-
-  &--extended {
-    max-width: 1590px;
-  }
 }
 </style>
