@@ -3,7 +3,7 @@
 import { computed, ref } from 'vue'
 
 // Types
-import type { Chart, Options, SVGElement } from 'highcharts'
+import type {Chart, Options, SVGElement, SVGPathArray} from 'highcharts'
 
 const props = defineProps({
   value: [Number, String],
@@ -42,62 +42,130 @@ const drawAnnotations = (chart: Chart) => {
   // Угол для середины пустой зоны
   const emptyMidAngle = filledAngle + (360 - filledAngle) / 2
 
-  // Функция для создания линии в точном формате
-  const createFormattedLine = (
-    angle: number,
-    text: string,
-    color: string,
-    isFilled: boolean
-  ) => {
-    // Начальная точка на окружности (смещение -90° чтобы 0° был вверху)
-    const startAngle = angle - 90
-    const [align, side] = [
-      angle > 90 && angle < 270 ? 'bottom' : ('top' as 'top' | 'bottom'),
-      angle > 0 && angle < 180 ? 'right' : ('left' as 'right' | 'left'),
-    ]
-    console.log('start ', align, side)
-    const startRad = (startAngle * Math.PI) / 180
-    const start = {
-      x: centerX + radius * Math.cos(startRad),
-      y: centerY + radius * Math.sin(startRad),
-    }
-    const end = {
-      x: centerX + radius * 1.4 * Math.cos(startRad),
-      y: centerY + radius * 1.4 * Math.sin(startRad),
-    }
+  const getPathByPosition = (startX: number, startY: number, align: 'top' | 'bottom', side: 'left' | 'right'): SVGPathArray => {
+  // Варианты для разных положений
+  const paths = {
+    'top-right': [
+      'M', startX, startY,
+      'L', startX + 3.951, startY - 3.065,
+      'C',
+      startX + 7.902, startY - 6.129,
+      startX + 15.803, startY - 12.258,
+      startX + 19.754, startY - 19.818,
+      'C',
+      startX + 23.705, startY - 27.377,
+      startX + 23.705, startY - 36.366,
+      startX + 23.705, startY - 40.86,
+      'L',
+      startX + 23.705, startY - 45.355
+    ] as unknown as SVGPathArray,
+    'top-left': [
+      'M', startX, startY,
+      'L', startX - 3.951, startY - 3.065,
+      'C',
+      startX - 7.902, startY - 6.129,
+      startX - 15.803, startY - 12.258,
+      startX - 19.754, startY - 19.818,
+      'C',
+      startX - 23.705, startY - 27.377,
+      startX - 23.705, startY - 36.366,
+      startX - 23.705, startY - 40.86,
+      'L',
+      startX - 23.705, startY - 45.355
+    ]  as unknown as SVGPathArray,
+    'bottom-right': [
+      'M', startX, startY,
+      'L', startX + 3.951, startY + 3.065,
+      'C',
+      startX + 7.902, startY + 6.129,
+      startX + 15.803, startY + 12.258,
+      startX + 19.754, startY + 19.818,
+      'C',
+      startX + 23.705, startY + 27.377,
+      startX + 23.705, startY + 36.366,
+      startX + 23.705, startY + 40.86,
+      'L',
+      startX + 23.705, startY + 45.355
+    ]  as unknown as SVGPathArray,
+    'bottom-left': [
+      'M', startX, startY,
+      'L', startX - 3.951, startY + 3.065,
+      'C',
+      startX - 7.902, startY + 6.129,
+      startX - 15.803, startY + 12.258,
+      startX - 19.754, startY + 19.818,
+      'C',
+      startX - 23.705, startY + 27.377,
+      startX - 23.705, startY + 36.366,
+      startX - 23.705, startY + 40.86,
+      'L',
+      startX - 23.705, startY + 45.355
+    ] as unknown as SVGPathArray,
+  };
 
-    const path = ['M', start.x, start.y, 'L', end.x, end.y]
+  const position = `${align}-${side}` as keyof typeof paths;
+  return paths[position] || paths['top-right'] // По умолчанию top-right
+};
 
-    // Создаем линию
-    const line = chart.renderer
-      .path(path)
-      .attr({
-        stroke: color,
-        'stroke-width': 1,
-        fill: 'none',
-        zIndex: 5,
-      })
-      .add()
+// Обновленная функция createFormattedLine
+const createFormattedLine = (
+  angle: number,
+  text: string,
+  color: string,
+  isFilled: boolean
+) => {
+  const startAngle = angle - 90;
+  const [align, side] = [
+    angle > 90 && angle < 270 ? 'bottom' : 'top',
+    angle > 0 && angle < 180 ? 'right' : 'left',
+  ];
 
-    // Создаем подпись
-    const label = chart.renderer
-      .text(
-        text,
-        side === 'left' ? end.x - 10 : end.x + 10,
-        align === 'top' ? end.y - 10 : end.y + 15
-      )
-      .attr({
-        align: 'center',
-        zIndex: 5,
-      })
-      .css({
-        color: isFilled ? '#fff' : 'rgba(255,255,255,0.5)',
-        fontSize: '12px',
-      })
-      .add()
+  const startRad = (startAngle * Math.PI) / 180;
+  const start = {
+    x: centerX + radius * Math.cos(startRad),
+    y: centerY + radius * Math.sin(startRad),
+  };
 
-    chartElements.value.push(line, label)
-  }
+  // Получаем путь
+  const path = getPathByPosition(start.x, start.y, align, side);
+
+  // Получаем последнюю точку пути (конец линии)
+  const pathPoints = path.filter(p => typeof p === 'number');
+  const endX = pathPoints[pathPoints.length - 2] as number;
+  const endY = pathPoints[pathPoints.length - 1] as number;
+
+  // Создаем линию
+  const line = chart.renderer
+    .path(path)
+    .attr({
+      stroke: color,
+      'stroke-width': 1,
+      fill: 'none',
+      zIndex: 5,
+    })
+    .add();
+
+  // Создаем подпись с выравниванием по центру
+  const label = chart.renderer
+    .text(text, 0, 0) // Временная позиция
+    .attr({
+      align: 'center',
+      zIndex: 5,
+    })
+    .css({
+      color: isFilled ? 'rgb(var(--v-theme-on-surface))' : 'rgba(var(--v-theme-on-surface), 0.5)',
+      fontSize: '0.75rem',
+    })
+    .add();
+
+  // Позиционируем текст так, чтобы его центр совпадал с концом линии
+  label.translate(
+    endX, // Центрируем по горизонтали
+    align === 'top' ? endY - 5 : endY + 15 // Вертикальное позиционирование
+  );
+
+  chartElements.value.push(line, label);
+};
 
   // Создаем линии и подписи в точном соответствии с вашим примером
   createFormattedLine(
@@ -118,7 +186,7 @@ const options = computed<Options>(() => {
       plotBackgroundColor: undefined,
       plotBackgroundImage: undefined,
       plotShadow: false,
-      height: '45%',
+      height: '200px',
       events: {
         load: function () {
           drawAnnotations(this)
@@ -183,7 +251,8 @@ const options = computed<Options>(() => {
       {
         startAngle: 0,
         endAngle: 360,
-        center: ['50%', '55%'],
+        center: ['50%', '50%'],
+        size: '60%',
         background: [
           {
             backgroundColor: 'rgb(95, 104, 117)',
@@ -208,7 +277,7 @@ const options = computed<Options>(() => {
   </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 .round-gauge-chart {
   height: 200px;
   display: flex;
