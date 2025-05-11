@@ -9,7 +9,7 @@ import NavLogo from '@/components/base/header/navigation/NavLogo.vue'
 </script>
 
 <template>
-  <v-app-bar class="header px-md-3" color="background" flat>
+  <v-app-bar class="header px-md-3" color="background" flat :extended="false">
     <template #prepend>
       <nav-logo />
       <div class="px-1"></div>
