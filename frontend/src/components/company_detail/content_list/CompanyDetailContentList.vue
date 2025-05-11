@@ -6,34 +6,49 @@ import CompanyDetailFuture from '@/components/company_detail/content_list/future
 import CompanyDetailPast from '@/components/company_detail/content_list/past/CompanyDetailPast.vue'
 import CompanyDetailHealth from '@/components/company_detail/content_list/health/CompanyDetailHealth.vue'
 import CompanyDetailDividend from '@/components/company_detail/content_list/dividend/CompanyDetailDividend.vue'
+
+// Composables
+import { useSectionContext } from '@/composables/sectionObserver'
+
+// Utilities
+import { onMounted } from 'vue'
+import { SECTIONS } from '@/assets/static/companyDetail'
+
+const { registerSection } = useSectionContext()
+
+onMounted(() => {
+  SECTIONS.forEach((section) => {
+    const el = document.querySelector(`#${section.value}`)
+    if (el) {
+      registerSection(section.value, el)
+    }
+  })
+})
 </script>
 
 <template>
   <div class="detail__content-list">
     <article>
-      <company-detail-summary
-        id="overview"
-        class="detail__summary section_observer"
-      />
+      <company-detail-summary id="overview" />
 
-      <company-detail-valuation id="value" class="section_observer" />
+      <company-detail-valuation id="value" />
 
-      <company-detail-future id="future" class="section_observer" />
+      <company-detail-future id="future" />
 
-      <company-detail-past id="past" class="section_observer" />
+      <company-detail-past id="past" />
 
-      <company-detail-health id="health" class="section_observer" />
+      <company-detail-health id="health" />
 
-      <company-detail-dividend id="dividend" class="section_observer" />
+      <company-detail-dividend id="dividend" />
 
       <template v-if="false">
-        <div id="management" class="section_observer"></div>
+        <div id="management"></div>
         <div class="detail__management"></div>
 
-        <div id="owners" class="section_observer"></div>
+        <div id="owners"></div>
         <div class="detail__ownership"></div>
 
-        <div id="other" class="section_observer"></div>
+        <div id="other"></div>
         <div class="detail__other"></div>
       </template>
     </article>
