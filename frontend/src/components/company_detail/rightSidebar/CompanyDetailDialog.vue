@@ -45,39 +45,7 @@ const componentIs: ComputedRef<NonNullable<LateralMenuComponent>> = computed(
 </script>
 
 <template>
-  <transition type="animation" name="lateral-menu">
-    <div class="notes-lateral-menu" v-if="store.extended">
-      <component :is="componentIs" />
-    </div>
-  </transition>
+  <v-dialog v-model="store.extended" max-width="700">
+    <component :is="componentIs" />
+  </v-dialog>
 </template>
-
-<style scoped lang="scss">
-.notes-lateral-menu {
-  position: fixed;
-  left: 1368px;
-  top: 76px;
-  right: 4px;
-  overflow: hidden;
-  height: calc(-88px + 100vh);
-  width: 374px;
-}
-.lateral-menu-enter-active {
-  animation: 800ms cubic-bezier(0.83, 0, 0.17, 1) 0s 1 normal none running
-    lateral-menu;
-}
-.lateral-menu-leave-active {
-  animation: 800ms cubic-bezier(0.83, 0, 0.17, 1) 0s 1 reverse none running
-    lateral-menu;
-}
-@keyframes lateral-menu {
-  0% {
-    transform: scaleX(0);
-    transform-origin: 100% 100%;
-  }
-  100% {
-    transform: scaleX(1);
-    transform-origin: 100% 100%;
-  }
-}
-</style>

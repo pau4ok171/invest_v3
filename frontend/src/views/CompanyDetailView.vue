@@ -5,6 +5,7 @@ import CompanyDetailContent from '@/components/company_detail/CompanyDetailConte
 import CompanyDetailRightSidebar from '@/components/company_detail/rightSidebar/companyDetailRightSidebar.vue'
 import NotesEditor from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
 import LinearGradientDef from '@/components/lineair_gradient/linearGradientDef.vue'
+import CompanyDetailDialog from '@/components/company_detail/rightSidebar/CompanyDetailDialog.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -12,6 +13,7 @@ import { usePageStore } from '@/store/page'
 import { useRoute } from 'vue-router'
 import { useWebsocket } from '@/composables/websocket'
 import { usePriceUpdater } from '@/composables/priceUpdater'
+import { useDisplay } from 'vuetify'
 
 // Utilities
 import { onMounted, onUnmounted, provide, watch } from 'vue'
@@ -27,6 +29,8 @@ const props = defineProps({
 const route = useRoute()
 const pageStore = usePageStore()
 const store = useCompanyDetailStore()
+
+const { lgAndUp } = useDisplay()
 
 async function init() {
   pageStore.loading = true
@@ -86,7 +90,8 @@ onUnmounted(() => {
     <company-detail-header />
     <company-detail-content />
   </section>
-  <company-detail-right-sidebar />
+  <company-detail-right-sidebar v-if="lgAndUp" />
+  <company-detail-dialog v-else />
   <notes-editor />
   <linear-gradient-def />
 </template>

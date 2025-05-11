@@ -7,12 +7,12 @@ import { useDisplay } from 'vuetify'
 import { computed } from 'vue'
 
 const store = usePageStore()
-const { lg, xl } = useDisplay()
+const { lg, xl, lgAndUp } = useDisplay()
 const extended = computed(() => store.extended)
 
 const maxWidth = computed(() => {
-  if (extended.value) {
-    return xl.value ? '1590px' : lg.value ? '1200px' : '100%'
+  if (extended.value && lgAndUp.value) {
+    return xl.value ? '1630px' : lg.value ? '1200px' : '100%'
   }
   return xl.value ? '1200px' : '100%'
 })
@@ -20,10 +20,7 @@ const maxWidth = computed(() => {
 
 <template>
   <v-main class="main">
-    <div
-      class="main__inner"
-      :style="{ maxWidth }"
-    >
+    <div class="main__inner" :style="{ maxWidth }">
       <slot />
     </div>
   </v-main>

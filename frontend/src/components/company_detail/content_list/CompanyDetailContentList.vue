@@ -40,12 +40,19 @@ import CompanyDetailDividend from '@/components/company_detail/content_list/divi
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use 'vuetify/settings' as vuetify;
+
 .detail__content-list {
   position: relative;
   width: 100%;
   min-height: 0;
   flex: 0 0 75%;
   max-width: 75%;
+
+  @media #{map-get(vuetify.$display-breakpoints, 'lg-and-down')} {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 </style>
