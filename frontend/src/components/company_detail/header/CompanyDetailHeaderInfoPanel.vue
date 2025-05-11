@@ -33,12 +33,11 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
 
 <template>
   <v-row
-    no-gutters
     style="font-size: 0.75rem"
     class="company-detail-header__info mb-1"
     align-content="center"
   >
-    <v-col cols="1" class="d-flex flex-column">
+    <v-col lg="1" sm="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
         <span class="text-uppercase opacity-70">Last Price</span>
@@ -56,7 +55,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         >
       </template>
     </v-col>
-    <v-col cols="1" class="d-flex flex-column">
+    <v-col lg="1" sm="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
         <span class="text-uppercase opacity-70">Market cap</span>
@@ -68,7 +67,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         }}</span>
       </template>
     </v-col>
-    <v-col cols="1" class="d-flex flex-column">
+    <v-col lg="1" sm="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
         <span class="text-uppercase opacity-70">7D</span>
@@ -82,7 +81,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         >
       </template>
     </v-col>
-    <v-col cols="1" class="d-flex flex-column">
+    <v-col lg="1" sm="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
         <span class="text-uppercase opacity-70">1Y</span>
@@ -96,11 +95,11 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         >
       </template>
     </v-col>
-    <v-col class="d-flex justify-center">
+    <v-col lg="auto" sm="12" class="d-flex justify-md-center">
       <v-progress-circular v-if="loading" indeterminate color="info" />
       <small-price-chart v-else />
     </v-col>
-    <v-col cols="2" class="d-flex align-center">
+    <v-col cols="2" lg="2" sm="3" class="d-flex align-center">
       <span class="text-uppercase opacity-70 mr-1">Updated</span>
       <v-skeleton-loader
         v-if="loading"
@@ -115,7 +114,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         <template v-else>n/a</template>
       </span>
     </v-col>
-    <v-col cols="2" class="d-flex align-center">
+    <v-col lg="2" sm="3" class="d-flex align-center">
       <span class="text-uppercase opacity-70 mr-1">Data</span>
       <v-skeleton-loader
         v-if="loading"
