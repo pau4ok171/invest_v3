@@ -23,6 +23,8 @@ const { lgAndUp } = useDisplay()
         :model-value="[activeSection]"
         @update:model-value="(section) => changeSection([section as string])"
         selected-class="text-info"
+        center-active
+        show-arrows
       >
         <v-tab
           v-for="section in SECTIONS"
