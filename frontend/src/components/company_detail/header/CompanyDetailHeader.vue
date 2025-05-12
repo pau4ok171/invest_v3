@@ -101,7 +101,7 @@ function createNote() {
           </template>
         </template>
       </v-card-item>
-      <v-card-actions class="justify-end">
+      <v-card-actions class="justify-lg-end">
         <v-skeleton-loader
           v-if="loading"
           class="company-detail-header__skeleton-loader"
