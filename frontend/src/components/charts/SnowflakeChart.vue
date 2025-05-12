@@ -452,11 +452,17 @@ const options = computed<Options>(
 </template>
 
 <style lang="scss">
+@use 'vuetify/settings' as vuetify;
+
 .snowflake-chart {
   position: relative;
   display: grid;
   justify-content: center;
   align-items: center;
+
+  @media #{map-get(vuetify.$display-breakpoints, 'sm-and-down')} {
+    max-width: 280px;
+  }
 
   &--non-interactive {
     pointer-events: none;

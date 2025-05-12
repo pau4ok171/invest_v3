@@ -33,7 +33,7 @@ function onAboutCompanyClick() {
   <v-card color="surface-light" class="mb-4">
     <v-container>
       <v-row>
-        <v-col cols="7">
+        <v-col md="7" sm="12">
           <v-card-title>{{ company.ticker }} Stock Overview</v-card-title>
           <v-card-text>{{ company.short_description }}</v-card-text>
           <v-card-actions>

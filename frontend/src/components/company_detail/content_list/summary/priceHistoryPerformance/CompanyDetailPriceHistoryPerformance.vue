@@ -35,7 +35,8 @@ function onOpenLateral() {
         <v-col
           v-for="item in company.company_news.slice(0, 6)"
           :key="item.id"
-          cols="6"
+          md="6"
+          sm="12"
         >
           <company-detail-news-item :item />
         </v-col>
@@ -56,7 +57,7 @@ function onOpenLateral() {
 
     <v-card-item>
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" sm="12">
           <v-card-title>Shareholder Returns</v-card-title>
           <company-detail-shareholder-returns-table />
           <v-btn color="info" block variant="tonal">
@@ -67,7 +68,7 @@ function onOpenLateral() {
           <company-detail-statement name="Is1YearReturnInLineOrAboveIndustry" />
           <company-detail-statement name="Is1YearReturnInLineOrAboveMarket" />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" sm="12">
           <v-card-title>Price Volatility</v-card-title>
           <price-volatility-chart />
           <company-detail-statement name="HasPriceStability" />
