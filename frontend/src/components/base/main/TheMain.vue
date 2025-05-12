@@ -40,7 +40,6 @@ const maxWidth = computed(() => {
   position: relative;
   display: flex;
   flex-direction: row;
-  gap: 16px;
   width: 100%;
   padding: 0 16px;
   transition: 0.6s cubic-bezier(0.83, 0, 0.17, 1);
