@@ -41,7 +41,7 @@ const passed = computed(() =>
       :subtitle="`${company.ticker} has a total shareholder equity of $79.3B and total debt of $8.5B, which brings its debt-to-equity ratio to 10.7%. Its total assets and total liabilities are $111.6B and $32.3B respectively. ${company.ticker}'s EBIT is $81.5B making its interest coverage ratio -52.9. It has cash and short-term investments of $43.2B.`"
     >
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
             <v-card-text>Financial Health Score {{ passed }}/6</v-card-text>
             <v-card-item>
@@ -70,7 +70,7 @@ const passed = computed(() =>
           </v-card>
         </v-col>
 
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <snowflake-chart
             :data="store.snowflake"
             size="200"
@@ -85,7 +85,7 @@ const passed = computed(() =>
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Assets', value: 80.13, prefix: 'US$', suffix: 'B' },
@@ -94,7 +94,7 @@ const passed = computed(() =>
             title="Short Term"
           />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Assets', value: 31.48, prefix: 'US$', suffix: 'B' },

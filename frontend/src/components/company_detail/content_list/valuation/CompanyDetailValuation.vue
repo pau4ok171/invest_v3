@@ -118,7 +118,7 @@ const passed = computed(() =>
       :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
     >
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
             <v-card-text>Valuation Score {{ passed }}/6</v-card-text>
             <v-card-item>
@@ -147,7 +147,7 @@ const passed = computed(() =>
           </v-card>
         </v-col>
 
-        <v-col cols="6">
+        <v-col md="6" sm="12">
           <snowflake-chart
             :data="store.snowflake"
             size="200"
@@ -175,13 +175,13 @@ const passed = computed(() =>
       class="px-8"
     >
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <key-valuation-metric-tab-list
             :tabs="fairValueTabs"
             v-model:selected="fairValueSelected"
           />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <key-valuation-metric-chart
             v-if="fairValueSelected.id !== 'others'"
             :tabs="fairValueTabs"

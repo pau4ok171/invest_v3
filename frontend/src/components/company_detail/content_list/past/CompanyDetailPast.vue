@@ -48,7 +48,7 @@ const passed = computed(() =>
       </v-card-subtitle>
 
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
             <v-card-text>Past Score {{ passed }}/6</v-card-text>
             <v-card-item>
@@ -77,7 +77,7 @@ const passed = computed(() =>
           </v-card>
         </v-col>
 
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <snowflake-chart
             :data="store.snowflake"
             size="200"
@@ -117,7 +117,7 @@ const passed = computed(() =>
 
     <v-card-item title="3.4 Past Earnings Growth Analysis" class="pt-8 px-8">
       <v-row class="mt-2">
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 62.2, suffix: '%' },
@@ -127,7 +127,7 @@ const passed = computed(() =>
             title="Past 5 Years Annual Earnings Growth"
           />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 146.9, suffix: '%' },
@@ -148,10 +148,10 @@ const passed = computed(() =>
 
     <v-card-item title="3.5 Return on Equity" class="pt-8 px-8">
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <gauge-chart :data="[{name: 'Company', value: 91.9,}, {name: 'Industry', value: 11.9,}]" title="ROE" />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <company-detail-check name="IsReturnOnEquityAboveThreshold" />
         </v-col>
       </v-row>
@@ -161,12 +161,12 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
       <v-row class="mb-2">
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card-item title="3.6 Return on Assets" class="pt-8 px-8">
             <gauge-chart :data="[{name: 'Company', value: 63.9,}, {name: 'Industry', value: 7.0,}]" title="ROA" />
           </v-card-item>
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card-item title="3.7 Return on Capital Employed" class="pt-8 px-8">
             <gauge-chart :data="[{name: 'Last Year', value: 87.1,}, {name: '3 Years Ago', value: 25.1,}]" title="ROCE" />
           </v-card-item>

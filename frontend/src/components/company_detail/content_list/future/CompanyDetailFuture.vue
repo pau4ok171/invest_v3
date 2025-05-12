@@ -45,7 +45,7 @@ const passed = computed(() =>
       </v-card-subtitle>
 
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
             <v-card-text>Future Score {{ passed }}/6</v-card-text>
             <v-card-item>
@@ -74,7 +74,7 @@ const passed = computed(() =>
           </v-card>
         </v-col>
 
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <snowflake-chart
             :data="store.snowflake"
             size="200"
@@ -98,7 +98,7 @@ const passed = computed(() =>
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 20.6, suffix: '%' },
@@ -108,7 +108,7 @@ const passed = computed(() =>
             title="Forecast Annual Earnings Growth"
           />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
               { name: 'Company', value: 20.2, suffix: '%' },
@@ -143,10 +143,10 @@ const passed = computed(() =>
       class="pt-8 px-8"
     >
       <v-row class="my-2">
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <gauge-chart :data="[{ name: 'Company', value: 52.9 }, { name: 'Industry', value: 11.9 }]" title="Future ROE (3yrs)" />
         </v-col>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <company-detail-check name="IsReturnOnEquityForecastAboveBenchmark" />
         </v-col>
       </v-row>

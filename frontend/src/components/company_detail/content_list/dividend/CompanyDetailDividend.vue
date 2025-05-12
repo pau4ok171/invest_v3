@@ -42,7 +42,7 @@ const passed = computed(() =>
       :subtitle="`${company.ticker} is a dividend paying company with a current yield of 0.036%.`"
     >
       <v-row>
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
             <v-card-text>Dividend Score {{ passed }}/6</v-card-text>
             <v-card-item>
@@ -71,7 +71,7 @@ const passed = computed(() =>
           </v-card>
         </v-col>
 
-        <v-col cols="6">
+        <v-col md="6" cols="12">
           <snowflake-chart
             :data="store.snowflake"
             size="200"
@@ -114,7 +114,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-row>
-      <v-col cols="6">
+      <v-col md="6" cols="12">
         <v-card-item
           title="5.4 Earnings Payout to Shareholders"
           class="pt-8 px-8"
@@ -131,7 +131,7 @@ const passed = computed(() =>
           <company-detail-check name="IsDividendCovered" />
         </v-card-item>
       </v-col>
-      <v-col cols="6">
+      <v-col md="6" cols="12">
         <v-card-item title="5.5 Cash Payout to Shareholders" class="pt-8 px-8">
           <round-gauge-chart
             class="my-4"

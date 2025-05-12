@@ -47,7 +47,7 @@ function humanizeFinancial(
     <v-card-title>{{ `${company.ticker} Competitors` }}</v-card-title>
     <v-card-item>
       <v-row>
-        <v-col v-for="c in competitors" :key="c.id" md="3" sm="6">
+        <v-col v-for="c in competitors" :key="c.id" md="3" cols="6">
           <v-card variant="text" :to="c.to">
             <v-card-item>
               <snowflake-chart
