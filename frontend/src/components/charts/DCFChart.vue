@@ -9,10 +9,22 @@ import FetchingData from '@/components/charts/FetchingData.vue'
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
 // Utilities
-import { computed, onBeforeMount, ref, shallowRef } from 'vue'
-import { chartOpts as _chartOpts } from '@/components/charts/DCFChart'
+import { computed, ref } from 'vue'
 
-interface DiffMode {
+// Types
+import type { Chart, Options, Point, SeriesOptionsType } from 'highcharts'
+import { SVGElement } from 'highcharts'
+
+type ValuationStatus = 'undervalued' | 'overvalued' | 'aboutRight'
+
+interface PlotBox {
+  x: number
+  y: number
+  height: number
+  width: number
+}
+
+interface ValuationDiff {
   type: string
   class: string
   color: string
@@ -20,11 +32,12 @@ interface DiffMode {
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const available = ref(true)
+const currentDiff = ref<ValuationStatus>('aboutRight')
+const diffPercentage = ref(0)
+const chartElements = ref<SVGElement[]>([])
 
-const chartOpts = ref(_chartOpts)
-const available = shallowRef(true)
-const diff = shallowRef(0)
-const diffMode = ref({
+const VALUATION_MODES: Record<ValuationStatus, ValuationDiff> = {
   undervalued: {
     type: 'Undervalued',
     class: 'dcf-chart__data-label-diff--undervalued',
@@ -35,190 +48,271 @@ const diffMode = ref({
     class: 'dcf-chart__data-label-diff--overvalued',
     color: '#e64141',
   },
-  about_right: {
+  aboutRight: {
     type: 'About Right',
     class: 'dcf-chart__data-label-diff--about-right',
     color: '#eeb219',
   },
-})
-const current = ref<DiffMode>({ type: '', class: '', color: '' })
+}
 
-function getSeries() {
-  const currency_symbol = company.value.formatting.primaryCurrencySymbol
-  const dataLabelFormat =
-    `` +
-    `<tspan class='dcf-chart__data-label-name'>{series.name}</tspan>` +
-    `<br>` +
-    `<tspan class='dcf-chart__data-label-value'>{series.yData}${currency_symbol}</tspan>`
+const chartOptions = computed<Options>(
+  () =>
+    ({
+      chart: {
+        type: 'bar',
+        height: 358,
+        styledMode: true,
+        borderWidth: 0,
+        spacingTop: 69,
+        spacingBottom: 80,
+        className: 'dcf-chart__container',
+        events: {
+          load: drawChartElements,
+          redraw: drawChartElements,
+        },
+      },
+      title: {
+        text: undefined,
+      },
+      xAxis: {
+        visible: false,
+      },
+      yAxis: getYAxisOptions(),
+      legend: {
+        enabled: false,
+      },
+      plotOptions: {
+        bar: {
+          groupPadding: 0.1,
+          borderWidth: 0,
+          borderRadius: 0,
+          pointWidth: 72, // Высота бары
+        },
+      },
+      series: getChartSeries(),
+    }) satisfies Options
+)
 
+function getCurrentValuationStatus(diff: number): ValuationStatus {
+  if (diff >= 20) return 'undervalued'
+  if (diff <= -20) return 'overvalued'
+  return 'aboutRight'
+}
+
+function getYAxisOptions() {
   const currentValue = company.value.price_data.last_price || 1
-
   const fairValue = Number((currentValue * 1.2).toFixed(2))
-  diff.value = +(((fairValue - currentValue) / currentValue) * 100).toFixed(2)
-  const highest = Math.max(currentValue, fairValue)
+  const highestValue = Math.max(currentValue, fairValue)
 
-  if (diff.value >= 20) {
-    current.value = diffMode.value['undervalued']
-  } else if (diff.value <= -20) {
-    current.value = diffMode.value['overvalued']
-  } else {
-    current.value = diffMode.value['about_right']
-  }
-
-  chartOpts.value.yAxis = {
+  return {
     visible: false,
-    max: highest * 1.5, // Максимальное значение по ширине [ЗАВИСИТ ОТ МАКСИМАЛЬНОГО ЗНАЧЕНИЯ СТОИМОСТИ]
+    max: highestValue * 1.5,
   }
+}
 
-  chartOpts.value.series = [
+function getChartSeries(): SeriesOptionsType[] {
+  if (!company.value) return []
+
+  const currencySymbol = company.value.formatting.primaryCurrencySymbol
+  const currentValue = company.value.price_data.last_price || 1
+  const fairValue = Number((currentValue * 1.2).toFixed(2))
+
+  diffPercentage.value = +(
+    ((fairValue - currentValue) / currentValue) *
+    100
+  ).toFixed(2)
+  currentDiff.value = getCurrentValuationStatus(diffPercentage.value)
+
+  return [
     {
       name: 'Current Price',
+      type: 'bar',
       data: [currentValue],
       enableMouseTracking: false,
       dataLabels: {
         align: 'right',
         enabled: true,
-        format: dataLabelFormat,
+        useHTML: true,
+        formatter: function (this: Point) {
+          return `
+            <div class="d-flex flex-column" style="width: 100px">
+              <div class='dcf-chart__data-label-name'>Current Price</div>
+              <div class='dcf-chart__data-label-value'>${this.y}${currencySymbol}</div>
+            </div>
+          `
+        },
       },
     },
     {
       name: 'Fair Price',
+      type: 'bar',
       data: [fairValue],
       enableMouseTracking: false,
       dataLabels: {
         align: 'right',
         enabled: true,
-        format: dataLabelFormat,
+        useHTML: true,
+        formatter: function (this: Point) {
+          return `
+            <div class="d-flex flex-column" style="width: 100px">
+              <div class='dcf-chart__data-label-name'>Fair Price</div>
+              <div class='dcf-chart__data-label-value'>${this.y}${currencySymbol}</div>
+            </div>
+          `
+        },
       },
     },
-  ] as any
+  ]
 }
 
-function draw(event: Event) {
-  const chart = event.target as any
-  // BACKGROUND
-  const plotBox = chart.plotBox
-  const x1 = plotBox.x
-  const y1 = plotBox.y
-  const w = chart.series[1].data[0].tooltipPos[2]
-  const h = plotBox.height
-  chart.renderer
-    .rect(x1, y1, w * 1.2, h)
-    .attr({
-      fill: '#eeb219',
-    })
-    .add()
+function drawChartElements(this: Chart) {
+  chartElements.value.forEach((el) => el?.destroy())
+  chartElements.value = []
 
-  chart.renderer
-    .rect(x1, y1, w * 0.8, h)
-    .attr({
-      fill: '#2dc97e',
-    })
-    .add()
+  if (!this.series?.[0].points?.[0]) return
+  const currentMode = VALUATION_MODES[currentDiff.value]
+  const box: PlotBox = {
+    x: this.plotLeft,
+    y: this.plotTop,
+    height: this.plotHeight,
+    width: this.plotWidth,
+  }
 
-  // LINES
+  drawBackground(this, box)
+  drawPriceLines(this, box, currentMode)
+  drawDifferenceLabel(this, box, currentMode)
+  drawThresholdLabels(this, box)
+}
+
+function drawBackground(chart: Chart, plotBox: PlotBox) {
+  const { x, y, height } = plotBox
+  const barWidth = chart.series[1].data[0].shapeArgs?.height || 0
+
+  chartElements.value.push(
+    chart.renderer
+      .rect(x, y, barWidth * 1.2, height)
+      .attr({
+        fill: '#eeb219',
+      })
+      .add()
+  )
+
+  chartElements.value.push(
+    chart.renderer
+      .rect(x, y, barWidth * 0.8, height)
+      .attr({
+        fill: '#2dc97e',
+      })
+      .add()
+  )
+}
+
+function drawPriceLines(chart: Chart, plotBox: PlotBox, mode: ValuationDiff) {
   const OUTLINE_OFFSET = 24
-  const point2XOffset = chart.series[0].pointXOffset
-  const client2X = chart.series[0].points[0].clientX
+  const { x, y, height } = plotBox
 
-  const line1X = chart.series[1].data[0].tooltipPos[2] + plotBox.x - 1
-  const line1Y = plotBox.y + 0.5 - OUTLINE_OFFSET
-  const line1H = plotBox.height - 1 + OUTLINE_OFFSET
+  const fairPriceX = (chart.series[1].data[0].shapeArgs?.height || 0) + x
+  const currentPriceX = (chart.series[0].data[0].shapeArgs?.height || 0) + x
 
-  const line2X = chart.series[0].data[0].tooltipPos[2] + plotBox.x - 1
-  const line2Y = plotBox.y + 0.5 - OUTLINE_OFFSET
-  const line2H = plotBox.height - 1 + OUTLINE_OFFSET - client2X - point2XOffset
+  // Fair price line
+  chartElements.value.push(
+    chart.renderer
+      .rect(
+        fairPriceX,
+        y + 0.5 - OUTLINE_OFFSET,
+        0.5,
+        height - 1 + OUTLINE_OFFSET
+      )
+      .attr({
+        fill: 'rgb(var(--v-theme-on-surface-light))',
+        opacity: 0.7,
+        zIndex: 10,
+      })
+      .add()
+  )
+  // Current price line
+  chartElements.value.push(
+    chart.renderer
+      .rect(
+        currentPriceX,
+        y + 0.5 - OUTLINE_OFFSET,
+        0.5,
+        height - 1 + OUTLINE_OFFSET
+      )
+      .attr({
+        fill: 'rgb(var(--v-theme-on-surface-light))',
+        opacity: 0.7,
+      })
+      .add()
+  )
+  // Connecting line
+  const lineX = Math.min(currentPriceX, fairPriceX) + 0.5
+  const lineY = y + 0.5 - OUTLINE_OFFSET
+  const lineWidth = Math.abs(currentPriceX - fairPriceX) - 0.5
 
-  const line3X = line2X < line1X ? line2X + 0.5 : line1X + 0.5
-  const line3Y = plotBox.y + 0.5 - OUTLINE_OFFSET
-  const line3W = Math.abs(line2X - line1X) - 0.5
+  chartElements.value.push(
+    chart.renderer
+      .rect(lineX, lineY, lineWidth, 2)
+      .attr({ fill: mode.color })
+      .add()
+  )
+}
 
-  const dataDiffLabelFormat =
-    `` +
-    `<tspan class=\"dcf-chart__data-label-diff-value\">${diff.value}%</tspan>` +
-    `<br>` +
-    `<tspan class=\"dcf-chart__data-label-diff-type\">${current.value.type}</tspan>`
+function drawDifferenceLabel(
+  chart: Chart,
+  plotBox: PlotBox,
+  mode: ValuationDiff
+) {
+  const OUTLINE_OFFSET = 24
+  const { x, y } = plotBox
 
-  // FAIR PRICE LINE
-  chart.renderer
-    .rect(line1X, line1Y, 0.5, line1H)
-    .attr({
-      fill: 'rgb(var(--v-theme-on-surface-light))',
-      opacity: 0.7,
-      zIndex: 10,
-    })
-    .add()
+  const fairPriceX = (chart.series[1].data[0].shapeArgs?.height || 0) + x
+  const currentPriceX = (chart.series[0].data[0].shapeArgs?.height || 0) + x
+  const lineX = Math.min(currentPriceX, fairPriceX) + 0.5
 
-  // CURRENT PRICE LINE
-  chart.renderer
-    .rect(line2X, line2Y, 0.5, line2H)
-    .attr({
-      fill: 'rgb(var(--v-theme-on-surface-light))',
-      opacity: 0.7,
-    })
-    .add()
+  const labelText = `
+    <tspan class="dcf-chart__data-label-diff-value">${diffPercentage.value}%</tspan>
+    <br>
+    <tspan class="dcf-chart__data-label-diff-type">${mode.type}</tspan>
+  `
 
-  // CONNECTING LINE
-  chart.renderer
-    .rect(line3X, line3Y, line3W, 2)
-    .attr({
-      fill: current.value.color, // [ЗАВИСИТ ОТ ОТНОШЕНИЯ СПРАВЕДЛИВОЙ ОЦЕНКИ: ПЕРЕОЦЕНЕН, НЕДООЦЕНЕН]
-    })
-    .add()
+  chartElements.value.push(
+    chart.renderer
+      .text(labelText, lineX, y - 22 + 0.5 - OUTLINE_OFFSET)
+      .attr({ class: mode.class })
+      .add()
+  )
+}
 
-  // CONNECTING LINE LABEL
-  chart.renderer
-    .text(dataDiffLabelFormat, line3X, line3Y - 22)
-    .attr({
-      class: current.value.class,
-    })
-    .add()
-
-  // TEXT
-  const textY = plotBox.y + plotBox.height
+function drawThresholdLabels(chart: Chart, plotBox: PlotBox) {
+  const { y, height } = plotBox
+  const barWidth = chart.series[1].data[0].shapeArgs?.height || 0
+  const textY = y + height
   const textYOffset = 12
   const textXOffset = 12
-  chart.renderer
-    .text(
-      "<tspan class='dcf-chart__label-level-name'>20% Undervalued</tspan>",
-      w * 0.8 + textXOffset,
-      textY + textYOffset
-    )
-    .attr({
-      rotation: -35,
-      class: 'dcf-chart__data-label-diff--undervalued',
-    })
-    .add()
 
-  chart.renderer
-    .text(
-      "<tspan class='dcf-chart__label-level-name'>About Right</tspan>",
-      w + textXOffset,
-      textY + textYOffset
-    )
-    .attr({
-      rotation: -35,
-      class: 'dcf-chart__data-label-diff--about-right',
-    })
-    .add()
+  const labels = [
+    { text: '20% Undervalued', x: barWidth * 0.8, class: 'undervalued' },
+    { text: 'About Right', x: barWidth, class: 'about_right' },
+    { text: '20% Overvalued', x: barWidth * 1.2, class: 'overvalued' },
+  ]
 
-  chart.renderer
-    .text(
-      "<tspan class='dcf-chart__label-level-name'>20% Overvalued</tspan>",
-      w * 1.2 + textXOffset,
-      textY + textYOffset
+  labels.forEach((label) => {
+    chartElements.value.push(
+      chart.renderer
+        .text(
+          `<tspan class='dcf-chart__label-level-name'>${label.text}</tspan>`,
+          label.x + textXOffset,
+          textY + textYOffset
+        )
+        .attr({
+          rotation: -35,
+          class: `dcf-chart__data-label-diff--${label.class}`,
+        })
+        .add()
     )
-    .attr({
-      rotation: -35,
-      class: 'dcf-chart__data-label-diff--overvalued',
-    })
-    .add()
+  })
 }
-
-onBeforeMount(() => {
-  getSeries()
-  chartOpts.value.chart.events = { load: draw }
-})
 </script>
 
 <template>
@@ -227,7 +321,7 @@ onBeforeMount(() => {
     <charts
       v-else-if="available"
       constructorType="chart"
-      :options="chartOpts"
+      :options="chartOptions"
     />
     <data-not-available v-else chart-name="DCF Chart" />
     <fail-pattern />
@@ -315,7 +409,7 @@ onBeforeMount(() => {
 .dcf-chart__data-label-diff--undervalued {
   fill: #2dc97e;
 }
-.dcf-chart__data-label-diff--about-right {
+.dcf-chart__data-label-diff--about_right {
   fill: #eeb219;
 }
 .dcf-chart__data-label-diff--overvalued {
