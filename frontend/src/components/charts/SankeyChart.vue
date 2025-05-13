@@ -4,6 +4,7 @@ import YearSlider from '@/components/charts/YearSlider.vue'
 
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
+import { useDisplay } from 'vuetify'
 
 // Utilities
 import { computed, ref, watch } from 'vue'
@@ -49,8 +50,8 @@ const isSankeyNode = (point: SankeyPoint | SankeyNode): point is SankeyNode => {
   return point.formatPrefix === 'node'
 }
 
+const { width } = useDisplay()
 const { fin } = useFinancialFormatter()
-
 const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const selectedYear = ref<number>(currentDate.year)
@@ -277,9 +278,24 @@ const options = computed<Options>(
           return getPointTooltip(point)
         },
         positioner: function (labelWidth, labelHeight, point) {
+          const PADDING = 32
+          const chart = this.chart
+          const chartWidth = width.value
+          const plotX = point.plotX + chart.plotLeft
+
+          // Вычисляем оптимальную позицию по X
+          const x = Math.max(
+            -PADDING, // Не выходить за левый край
+            Math.min(
+              plotX - labelWidth / 2, // Центрировать относительно точки
+              chartWidth - labelWidth - 2 * PADDING // Не выходить за правый край
+            )
+          )
+          const y = point.plotY + this.chart.plotTop - labelHeight
+
           return {
-            x: point.plotX + this.chart.plotLeft - labelWidth / 2,
-            y: point.plotY + this.chart.plotTop - labelHeight,
+            x,
+            y,
           }
         },
       },
