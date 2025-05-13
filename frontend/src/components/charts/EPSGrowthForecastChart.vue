@@ -638,6 +638,7 @@ watch(
         :value="item.value"
         size="small"
         :text="item.text"
+        variant="elevated"
       >
         <template #prepend>
           <span

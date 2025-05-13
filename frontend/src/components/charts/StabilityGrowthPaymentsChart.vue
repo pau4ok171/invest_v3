@@ -631,7 +631,7 @@ watch(
       :options="options"
     />
 
-    <v-btn-toggle multiple mandatory variant="outlined" v-model="activeLegends">
+    <v-btn-toggle class="d-flex flex-wrap" :style="{ height: smAndDown ? '96px' : '48px' }" multiple mandatory variant="outlined" v-model="activeLegends">
       <v-btn
         v-for="item in legendOptions"
         :key="`legend-${item.value}`"
@@ -639,6 +639,7 @@ watch(
         :value="item.value"
         size="small"
         :text="item.text"
+        variant="elevated"
       >
         <template #prepend>
           <span
