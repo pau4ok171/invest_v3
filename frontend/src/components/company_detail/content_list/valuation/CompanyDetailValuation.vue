@@ -75,30 +75,30 @@ const fairValueTabs = computed<FairValueTab[]>(() => {
 })
 const fairValueSelected = ref(fairValueTabs.value[0])
 
-const multiplierTabs = [
+const multiplierTabs: MultiplierTab[] = [
   {
     name: 'Price to Earnings',
     shortName: 'PE',
-    id: 'price_to_earnings',
+    id: 'pe',
     value: 1,
   },
   {
     name: 'Price to Book',
     shortName: 'PB',
-    id: 'price_to_book',
+    id: 'pb',
     value: 2,
   },
   {
     name: 'Price to Sales',
     shortName: 'PS',
-    id: 'price_to_sales',
+    id: 'ps',
     value: 3,
   },
 ]
-const peersSelected = ref(multiplierTabs[0])
-const historicalSelected = ref(multiplierTabs[0])
+const peersSelected = ref<MultiplierTab>(multiplierTabs[0])
+const historicalSelected = ref<MultiplierTab>(multiplierTabs[0])
 const historicalTabSelected = ref([0])
-const industrySelected = ref(multiplierTabs[0])
+const industrySelected = ref<MultiplierTab>(multiplierTabs[0])
 
 const passed = computed(() =>
   statements.value.reduce((acc, s) => {
@@ -199,9 +199,9 @@ const passed = computed(() =>
       :subtitle="`How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`"
       class="px-8"
     >
-      <div style="display: flex; justify-self: flex-end">
+      <div style="display: flex; justify-self: flex-start">
         <v-select
-          class="mb-4"
+          class="my-4"
           :items="multiplierTabs"
           v-model="peersSelected"
           return-object
@@ -215,7 +215,7 @@ const passed = computed(() =>
         />
       </div>
 
-      <multiplier-vs-peers-chart :tabs="multiplierTabs" />
+      <multiplier-vs-peers-chart :tabs="multiplierTabs" :activeTab="peersSelected" />
 
       <company-detail-check
         name="IsGoodValueComparingPriceToEarningsToPeersAverageValue"
