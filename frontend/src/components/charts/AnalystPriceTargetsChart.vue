@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useI18n } from 'vue-i18n'
+import { useDisplay } from "vuetify";
 
 // Utilities
 import { computed, ref } from 'vue'
@@ -28,6 +29,7 @@ interface ChartData {
 }
 
 // Reactive states
+const { smAndDown } = useDisplay()
 const { t } = useI18n()
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
@@ -288,8 +290,9 @@ const tooltipData = computed(() => {
     dataInstance.sharePrice
   const isPos = diff >= 0
   const agreement = getAgreementStatus(dataInstance.dispersion)
-  const tooltipPos =
-    (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
+  const tooltipPos = smAndDown.value
+    ? 0
+    : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
       ? (point.plotX || 0) + point.series.chart.plotLeft
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
@@ -670,12 +673,18 @@ const updateTooltip = (point: Point) => {
 </template>
 
 <style lang="scss">
+@use 'vuetify/settings' as vuetify;
+
 .analyst-price-targets-chart {
   &__tooltip-box {
     height: 190px;
     position: relative;
     display: flex;
     align-items: end;
+
+    @media #{map-get(vuetify.$display-breakpoints, 'sm-and-down')} {
+      justify-content: center;
+    }
   }
   &__chart {
     position: relative;

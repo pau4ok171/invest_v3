@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Composables
+import {useDisplay} from "vuetify";
+
 // Utilities
 import { computed, nextTick, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
@@ -38,6 +41,7 @@ interface ChartData {
 }
 
 // Reactive states
+const { smAndDown } = useDisplay()
 const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
@@ -83,8 +87,9 @@ const tooltipData = computed(() => {
 
   if (!dataInstance) return null
 
-  const tooltipPos =
-    (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
+  const tooltipPos = smAndDown.value
+    ? 0
+    : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
       ? (point.plotX || 0) + point.series.chart.plotLeft
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
@@ -951,6 +956,8 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use 'vuetify/settings' as vuetify;
+
 .earnings-and-revenue-growth-forecast-chart {
   &__tooltip-box {
     height: 190px;
@@ -960,6 +967,10 @@ watch(
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 1.125rem;
+
+    @media #{map-get(vuetify.$display-breakpoints, 'sm-and-down')} {
+      justify-content: center;
+    }
   }
   &__chart {
     position: relative;

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
+import { useDisplay } from 'vuetify'
 
 // Utilities
 import { computed, nextTick, ref, watch } from 'vue'
@@ -53,6 +54,7 @@ const isRangePoint = (point: Point): point is RangePoint => {
 }
 
 // Reactive states
+const { smAndDown } = useDisplay()
 const { fin } = useFinancialFormatter()
 const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
@@ -105,8 +107,9 @@ const tooltipData = computed(() => {
 
   if (!dataInstance) return null
 
-  const tooltipPos =
-    (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
+  const tooltipPos = smAndDown.value
+    ? 0
+    : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH <= 0
       ? (point.plotX || 0) + point.series.chart.plotLeft
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
@@ -117,7 +120,12 @@ const tooltipData = computed(() => {
       value: dataInstance.revenue[1],
       finUnit: data.financialUnit,
     }),
-    profiteMargin: dataInstance.revenue[1] !== 0 ? (dataInstance.earnings[1] / dataInstance.revenue[1] * 100).toFixed(2) + '%' : undefined,
+    profiteMargin:
+      dataInstance.revenue[1] !== 0
+        ? ((dataInstance.earnings[1] / dataInstance.revenue[1]) * 100).toFixed(
+            2
+          ) + '%'
+        : undefined,
     earnings: fin({
       currency: data.currency,
       value: dataInstance.earnings[1],
@@ -526,7 +534,8 @@ watch(
               <v-col>Revenue</v-col>
               <v-col>
                 <div class="text-hc-series1-color">
-                  {{ tooltipData.revenue }}<span class="text-disabled"> /yr</span>
+                  {{ tooltipData.revenue
+                  }}<span class="text-disabled"> /yr</span>
                 </div>
               </v-col>
             </v-row>
@@ -538,10 +547,15 @@ watch(
               <v-col>Earnings</v-col>
               <v-col>
                 <div class="text-hc-series2-color">
-                  {{ tooltipData.earnings }}<span class="text-disabled"> /yr</span>
+                  {{ tooltipData.earnings
+                  }}<span class="text-disabled"> /yr</span>
                 </div>
-                <div v-if="tooltipData.profiteMargin" class="text-high-emphasis">
-                  {{ tooltipData.profiteMargin }} <span class="text-disabled">Profit margin</span>
+                <div
+                  v-if="tooltipData.profiteMargin"
+                  class="text-high-emphasis"
+                >
+                  {{ tooltipData.profiteMargin }}
+                  <span class="text-disabled">Profit margin</span>
                 </div>
               </v-col>
             </v-row>
@@ -619,6 +633,8 @@ watch(
 </template>
 
 <style scoped lang="scss">
+@use 'vuetify/settings' as vuetify;
+
 .earnings-revenue-history-chart {
   &__tooltip-box {
     height: 190px;
@@ -628,6 +644,10 @@ watch(
     font-weight: 400;
     font-size: 0.75rem;
     line-height: 1.125rem;
+
+    @media #{map-get(vuetify.$display-breakpoints, 'sm-and-down')} {
+      justify-content: center;
+    }
   }
   &__chart {
     position: relative;
