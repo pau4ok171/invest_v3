@@ -291,7 +291,7 @@ const options = computed<Options>(
               chartWidth - labelWidth - 2 * PADDING // Не выходить за правый край
             )
           )
-          const y = point.plotY + this.chart.plotTop - labelHeight
+          const y = point.plotY + chart.plotTop - labelHeight
 
           return {
             x,
