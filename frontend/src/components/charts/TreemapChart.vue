@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
+import { useDisplay } from 'vuetify'
 
 // Utilities
 import { computed } from 'vue'
@@ -29,6 +30,7 @@ const props = defineProps({
   title: String,
 })
 
+const { width } = useDisplay()
 const { fin } = useFinancialFormatter()
 
 const options = computed<Options>(
@@ -103,9 +105,30 @@ const options = computed<Options>(
           return `<div class="treemap-chart__tooltip">${point.name}: ${value}</div>`
         },
         positioner: function (labelWidth, labelHeight, point) {
+          const PADDING = 10
+          const chart = this.chart
+          const container = chart.container
+
+          const labelLeft =
+            container.getBoundingClientRect().left +
+            chart.plotLeft +
+            point.plotX -
+            labelWidth / 2
+          const labelRight = labelLeft + labelWidth
+
+          let x = point.plotX + chart.plotLeft - labelWidth / 2
+
+          if (labelLeft < PADDING) {
+            x =
+              PADDING -
+              (container.getBoundingClientRect().left + chart.plotLeft)
+          } else if (labelRight > width.value - PADDING) {
+            x += width.value - PADDING - labelRight
+          }
+
           return {
-            x: point.plotX + this.chart.plotLeft - labelWidth / 2,
-            y: point.plotY + this.chart.plotTop - labelHeight / 2,
+            x,
+            y: point.plotY + chart.plotTop - labelHeight / 2,
           }
         },
       },
