@@ -31,7 +31,7 @@ const route = useRoute()
 const chartEl = ref<typeof Chart>()
 const chartOpts = ref(_chartOpts)
 
-const current = shallowRef('1Y')
+const current = shallowRef(['1Y'])
 const intervalId = shallowRef(-1)
 const tablist = ref<Tablist>({
   M1: { value: '1M', min: DateTime.now().minus({ months: 1 }) },
@@ -43,7 +43,7 @@ const tablist = ref<Tablist>({
 })
 
 function changeZoom(tab: Tab) {
-  current.value = tab.value
+  current.value = [tab.value]
   const chart = chartEl?.value?.chart
   const chartMax = chart.xAxis[1].max || DateTime.now().ts
   chart.xAxis[0].setExtremes(tab.min.ts, chartMax)
@@ -89,11 +89,13 @@ watch(
         density="compact"
         variant="text"
         selected-class="text-info"
+        v-model="current"
         style="display: grid; grid-template-columns: repeat(6, 1fr)"
       >
         <v-btn
           v-for="tab in tablist"
           :key="tab.value"
+          :value="tab.value"
           :text="tab.value"
           @click="changeZoom(tab)"
         />
