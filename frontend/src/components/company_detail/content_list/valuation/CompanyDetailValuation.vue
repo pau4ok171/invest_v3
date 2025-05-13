@@ -232,7 +232,7 @@ const passed = computed(() =>
           to pay more for the stock.
         </span>
       </template>
-      <v-row class="mb-0">
+      <v-row class="mb-0 mt-4">
         <v-col>
           <v-select
             :items="multiplierTabs"
@@ -249,7 +249,7 @@ const passed = computed(() =>
         </v-col>
 
         <v-col>
-          <div class="company-detail-valuation__tabs">
+          <div class="d-flex justify-start justify-sm-end">
             <v-btn-toggle
               variant="outlined"
               v-model="historicalTabSelected"
@@ -277,7 +277,7 @@ const passed = computed(() =>
       class="px-8"
     >
       <v-select
-        class="mb-4"
+        class="my-4"
         :items="multiplierTabs"
         v-model="industrySelected"
         return-object
@@ -331,9 +331,5 @@ const passed = computed(() =>
   > svg > path {
     fill-rule: evenodd;
   }
-}
-.company-detail-valuation__tabs {
-  display: flex;
-  justify-content: flex-end;
 }
 </style>
