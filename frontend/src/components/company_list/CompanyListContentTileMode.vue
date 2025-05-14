@@ -28,9 +28,17 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 
 <template>
   <v-row>
-    <v-col v-for="item in items" :key="item.uid" cols="12" xxl="2" xl="3" sm="4" xs="12">
+    <v-col
+      v-for="item in items"
+      :key="item.uid"
+      class="d-flex align-center justify-center"
+      cols="12"
+      sm="6"
+      md="4"
+      xl="3"
+    >
       <v-hover #="{ isHovering, props }">
-        <v-card v-bind="props" :to="item.to" rounded="lg">
+        <v-card width="280" v-bind="props" :to="item.to" rounded="lg">
           <div class="company-list-tile-content" v-show="!isHovering">
             <v-card-item
               style="height: 70px"
@@ -43,7 +51,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   variant="text"
                   size="small"
                   rounded="lg"
-                  :color="item.watchlisted ? 'info': undefined"
+                  :color="item.watchlisted ? 'info' : undefined"
                   :disabled="!authStore.isAuthenticated"
                   @click.prevent.stop="store.toggleWatchlisted(item)"
                 />
@@ -151,7 +159,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   variant="text"
                   size="small"
                   rounded="lg"
-                  :color="item.watchlisted ? 'info': undefined"
+                  :color="item.watchlisted ? 'info' : undefined"
                   :disabled="!authStore.isAuthenticated"
                   @click.prevent.stop="store.toggleWatchlisted(item)"
                 />
@@ -213,6 +221,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
       v-if="store.fetching"
       v-for="i in 20"
       :key="`tile-item-skeleton-${i}`"
+      class="d-flex align-center justify-center"
     >
       <v-card width="276" height="320" rounded="lg">
         <v-skeleton-loader

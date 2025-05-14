@@ -46,7 +46,7 @@ const headers = ref([
     :items="props.items"
     hover
     :hide-no-data="store.fetching"
-    hideDefaultFooter
+    hide-default-footer
   >
     <template #item.companyLogo="{ item }">
       <router-link :to="item.to" class="px-xl-4">
@@ -77,31 +77,45 @@ const headers = ref([
     <template #item.return7D="{ item }: { item: CompanyItem }">
       <router-link
         :to="item.to"
-        :class="[!item.return7D.startsWith('-') ? 'text-success' : 'text-error', 'px-xl-4']"
+        :class="[
+          !item.return7D.startsWith('-') ? 'text-success' : 'text-error',
+          'px-xl-4',
+        ]"
         >{{ item.return7D }}</router-link
       >
     </template>
     <template #item.return1Y="{ item }: { item: CompanyItem }">
       <router-link
         :to="item.to"
-        :class="[!item.return1Y.startsWith('-') ? 'text-success' : 'text-error', 'px-xl-4']"
+        :class="[
+          !item.return1Y.startsWith('-') ? 'text-success' : 'text-error',
+          'px-xl-4',
+        ]"
         >{{ item.return1Y }}</router-link
       >
     </template>
     <template #item.marketCap="{ item }: { item: CompanyItem }">
-      <router-link :to="item.to" class="px-xl-4">{{ item.marketCap }}</router-link>
+      <router-link :to="item.to" class="px-xl-4">{{
+        item.marketCap
+      }}</router-link>
     </template>
     <template #item.consensus="{ item }: { item: CompanyItem }">
-      <router-link :to="item.to" class="px-xl-4">{{ item.consensus }}</router-link>
+      <router-link :to="item.to" class="px-xl-4">{{
+        item.consensus
+      }}</router-link>
     </template>
     <template #item.fairValue="{ item }: { item: CompanyItem }">
-      <router-link :to="item.to" class="px-xl-4">{{ item.fairValue }}</router-link>
+      <router-link :to="item.to" class="px-xl-4">{{
+        item.fairValue
+      }}</router-link>
     </template>
     <template #item.growth="{ item }: { item: CompanyItem }">
       <router-link :to="item.to" class="px-xl-4">{{ item.growth }}</router-link>
     </template>
     <template #item.dividendYield="{ item }: { item: CompanyItem }">
-      <router-link :to="item.to" class="px-xl-4">{{ item.dividendYield }}</router-link>
+      <router-link :to="item.to" class="px-xl-4">{{
+        item.dividendYield
+      }}</router-link>
     </template>
 
     <template #item.watchlisted="{ item }: { item: CompanyItem }">
@@ -111,7 +125,7 @@ const headers = ref([
         size="small"
         rounded="lg"
         density="comfortable"
-        :color="item.watchlisted ? 'info': undefined"
+        :color="item.watchlisted ? 'info' : undefined"
         :disabled="!authStore.isAuthenticated"
         @click="store.toggleWatchlisted(item)"
       />
@@ -149,8 +163,16 @@ const headers = ref([
       > thead {
         > tr {
           > th {
+            padding-inline: 4px;
+
             @media #{map-get(vuetify.$display-breakpoints, 'lg-and-down')} {
-              padding: 0;
+              &:nth-child(2) {
+                position: sticky;
+                left: -4px;
+                top: 0;
+                z-index: 1;
+                background-color: rgb(var(--v-theme-background));
+              }
             }
           }
         }
@@ -158,7 +180,17 @@ const headers = ref([
       > tbody {
         > tr {
           > td {
-            padding: 0;
+            padding-inline: 4px;
+
+            @media #{map-get(vuetify.$display-breakpoints, 'lg-and-down')} {
+              &:nth-child(2) {
+                position: sticky;
+                left: -4px;
+                top: 0;
+                z-index: 1;
+                background-color: rgb(var(--v-theme-background));
+              }
+            }
 
             > a {
               display: flex;

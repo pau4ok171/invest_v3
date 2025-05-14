@@ -6,7 +6,7 @@ import CompanyListOptions from '@/components/company_list/CompanyListOptions.vue
 </script>
 
 <template>
-  <v-card>
+  <v-card color="background" flat>
     <v-card-item>
       <company-list-filters />
       <company-list-info />

@@ -74,7 +74,7 @@ function humanize(val: number = 0, currencyUnit: string = '') {
   <v-infinite-scroll
     @load="store.fetchCompanies"
     empty-text=""
-    class="overflow-y-hidden"
+    class="overflow-hidden"
   >
     <company-list-content-table-mode
       v-if="store.contentMode === 'table'"

@@ -52,9 +52,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="d-flex w-100 h-100 flex-column">
+  <div class="d-flex w-100 h-100 flex-column">
     <CompanyListHeader />
 
     <CompanyListContent />
-  </section>
+  </div>
 </template>
