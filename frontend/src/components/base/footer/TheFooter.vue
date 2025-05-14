@@ -3,6 +3,15 @@
 import Logo from '@/components/icons/Logo.vue'
 import SmallLogo from '@/components/icons/SmallLogo.vue'
 
+// Composables
+import { usePageStore } from '@/store/page'
+
+// Utilities
+import { onMounted, onUnmounted, ref } from 'vue'
+
+// Types
+import type { VNodeRef } from 'vue'
+
 const pages = [
   { name: 'About Us', to: 'aboutUs', key: 'aboutUs' },
   { name: 'Plan & Pricing', to: 'planPricing', key: 'planPricing' },
@@ -17,11 +26,41 @@ const socials = [
   { icon: '$iTgSocial', link: 'https://telegram.org/', key: 'telegram' },
   { icon: '$iVkSocial', link: 'https://vk.ru/', key: 'vk' },
 ]
+
+const store = usePageStore()
+const footerRef = ref<VNodeRef | null>(null)
+
+onMounted(() => {
+  if (!footerRef.value) return
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        store.footerOnViewport = entry.isIntersecting
+      })
+    },
+    {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    }
+  )
+
+  observer.observe(footerRef.value.$el)
+
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+})
 </script>
 
 <template>
-  <v-footer class="d-flex align-center justify-center">
-    <v-card width="1200" class="mt-8" flat>
+  <v-footer
+    ref="footerRef"
+    color="background"
+    class="d-flex align-center justify-center"
+  >
+    <v-card color="background" width="1200" class="mt-8" flat>
       <v-card-item>
         <router-link :to="{ name: 'home' }"
           ><logo class="mb-8" style="height: 40px"
@@ -74,5 +113,3 @@ const socials = [
     </v-card>
   </v-footer>
 </template>
-
-<style scoped lang="scss"></style>

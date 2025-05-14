@@ -6,5 +6,6 @@ export const usePageStore = defineStore({
     notFound: false,
     loading: false,
     extended: false,
+    footerOnViewport: false,
   }),
 })

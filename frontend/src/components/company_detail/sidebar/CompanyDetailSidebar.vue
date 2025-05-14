@@ -4,12 +4,23 @@ import CompanyDetailSidebarHeader from '@/components/company_detail/sidebar/Comp
 import CompanyDetailSidebarMain from '@/components/company_detail/sidebar/CompanyDetailSidebarMain.vue'
 import CompanyDetailSidebarFooter from '@/components/company_detail/sidebar/CompanyDetailSidebarFooter.vue'
 
+// Composables
+import { usePageStore } from '@/store/page'
+
 // Utilities
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { debounce } from '@/util/helpers'
 
+// Types
+import type { StyleValue } from 'vue'
+
+const store = usePageStore()
 const headerRef = ref<InstanceType<typeof CompanyDetailSidebarHeader>>()
 const bodyRef = ref<InstanceType<typeof CompanyDetailSidebarMain>>()
+
+const sidebarStyles = computed(() => {
+  return { position: store.footerOnViewport ? 'sticky' : 'fixed' } as StyleValue
+})
 
 function changeOpacity() {
   const opacity = String(calculateOpacity())
@@ -57,7 +68,7 @@ onUnmounted(() => {
 
 <template>
   <div class="detail-sidebar">
-    <section class="detail-sidebar__inner">
+    <section class="detail-sidebar__inner" :style="sidebarStyles">
       <CompanyDetailSidebarHeader ref="headerRef" />
 
       <CompanyDetailSidebarMain ref="bodyRef" />
