@@ -7,14 +7,14 @@ import { useDisplay } from 'vuetify'
 import { computed } from 'vue'
 
 const store = usePageStore()
-const { lg, xl, lgAndUp } = useDisplay()
+const { mdAndUp, lg, xl, lgAndUp } = useDisplay()
 const extended = computed(() => store.extended)
 
 const maxWidth = computed(() => {
   if (extended.value && lgAndUp.value) {
-    return xl.value ? '1630px' : lg.value ? '1200px' : '100%'
+    return xl.value ? '1630px' : mdAndUp.value ? '1200px' : '100%'
   }
-  return xl.value ? '1200px' : '100%'
+  return mdAndUp.value ? '1200px' : '100%'
 })
 </script>
 

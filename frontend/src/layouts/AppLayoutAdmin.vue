@@ -2,6 +2,7 @@
 // Components
 import TheHeader from '@/components/base/header/TheHeader.vue'
 import TheMain from '@/components/base/main/TheMain.vue'
+import TheFooter from "@/components/base/footer/TheFooter.vue";
 
 // Utilities
 import { reactive } from 'vue'
@@ -34,4 +35,6 @@ const headers = reactive([
   </v-navigation-drawer>
 
   <the-main><slot /></the-main>
+
+  <the-footer />
 </template>
