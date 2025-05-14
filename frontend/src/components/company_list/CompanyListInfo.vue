@@ -13,12 +13,13 @@ const countryState = computed<CountryState>(() => store.countryState)
 </script>
 
 <template>
-  <section class="company-list__info">
-    <div class="company-list__title">
+  <div class="mt-4">
+    <div class="text-h5 mb-2">
       Largest {{ store.countryState.title }} Stocks
     </div>
-    <div class="company-list__updated">
-      <span>Updated </span>
+
+    <div class="text-caption mb-2">
+      <span class="text-medium-emphasis text-uppercase">Updated </span>
       <v-skeleton-loader
         class="d-inline-block mt-n3 ml-n3"
         v-if="store.fetching"
@@ -33,7 +34,8 @@ const countryState = computed<CountryState>(() => store.countryState)
         }}
       </template>
     </div>
-    <div class="company-list__description">
+
+    <div class="text-caption text-medium-emphasis">
       Discover
       {{ countryState.title }} companies<template
         v-if="store.countryState.markets.length"
@@ -41,37 +43,7 @@ const countryState = computed<CountryState>(() => store.countryState)
         that are on the
         {{ countryState.markets[0]?.title }}</template
       >
-      <template v-else>
-        from around the world
-      </template>.
+      <template v-else> from around the world</template>.
     </div>
-  </section>
+  </div>
 </template>
-
-<style lang="scss">
-.company-list__info {
-  padding: 10px 0;
-  display: grid;
-  grid-row: 2 / auto;
-}
-.company-list__title {
-  margin-bottom: 8px;
-  font-size: 1.75rem;
-  line-height: 1.25;
-  font-weight: 500;
-}
-.company-list__updated {
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-.company-list__updated span {
-  color: rgb(var(--v-theme-on-surface-variant));
-  text-transform: uppercase;
-}
-.company-list__description {
-  margin-top: 16px;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: rgb(var(--v-theme-on-surface-variant));
-}
-</style>

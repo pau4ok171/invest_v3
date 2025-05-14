@@ -6,9 +6,12 @@ const store = useCompanyListStore()
 </script>
 
 <template>
-  <section class="company-list__options">
-    <div></div>
-    <div class="company-list__company-count">
+  <v-row no-gutters>
+    <v-col cols="3"></v-col>
+
+    <v-col
+      class="d-flex align-center justify-center text-caption text-medium-emphasis"
+    >
       <v-skeleton-loader
         v-if="store.fetching"
         loading
@@ -16,33 +19,13 @@ const store = useCompanyListStore()
         width="150"
       />
       <p v-else>{{ store.totalCompanyLength }} companies</p>
-    </div>
-    <div class="company-list__view-modes">
-      <v-btn-toggle v-model="store.contentMode" mandatory>
-        <v-btn icon="$iTableMode" variant="text" value="table" />
-        <v-btn icon="$iTileMode" variant="text" value="tile" />
-      </v-btn-toggle>
-    </div>
-  </section>
-</template>
+    </v-col>
 
-<style lang="scss">
-.company-list__options {
-  display: grid;
-  grid-template-columns: 250px auto 250px;
-}
-.company-list__company-count {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: normal;
-  line-height: 1.5;
-  color: rgb(var(--v-theme-on-surface-variant));
-}
-.company-list__view-modes {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: end;
-}
-</style>
+    <v-col cols="3" class="d-flex justify-end">
+      <v-btn-toggle v-model="store.contentMode" mandatory variant="text">
+        <v-btn icon="$iTableMode" value="table" />
+        <v-btn icon="$iTileMode" value="tile" />
+      </v-btn-toggle>
+    </v-col>
+  </v-row>
+</template>

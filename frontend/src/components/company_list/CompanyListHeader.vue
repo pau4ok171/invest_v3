@@ -6,20 +6,12 @@ import CompanyListOptions from '@/components/company_list/CompanyListOptions.vue
 </script>
 
 <template>
-  <section class="company-list__header">
-    <CompanyListInfo />
-
-    <CompanyListFilters />
-
-    <CompanyListOptions />
-  </section>
+  <v-card>
+    <v-card-item>
+      <company-list-filters />
+      <company-list-info />
+      <company-list-options />
+      <v-divider class="my-2" />
+    </v-card-item>
+  </v-card>
 </template>
-
-<style lang="scss">
-.company-list__header {
-  padding-bottom: 8px;
-  border-bottom: 1px solid
-    rgba(var(--v-theme-on-background), var(--v-border-opacity));
-  display: grid;
-}
-</style>

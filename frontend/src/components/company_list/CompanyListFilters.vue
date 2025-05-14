@@ -32,8 +32,8 @@ async function onUpdateSector(modelValue: DependentState) {
 </script>
 
 <template>
-  <section class="company-list__filters">
-    <div class="company-list__basic-filters">
+  <div class="d-flex align-center justify-space-between mt-2">
+    <div class="d-flex ga-2">
       <v-select
         :model-value="store.countryState"
         @update:model-value="onUpdateCountry"
@@ -82,21 +82,5 @@ async function onUpdateSector(modelValue: DependentState) {
         </v-card>
       </template>
     </v-dialog>
-  </section>
+  </div>
 </template>
-
-<style scoped>
-.company-list__filters {
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-template-rows: 40px;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 16px;
-}
-.company-list__basic-filters {
-  display: grid;
-  column-gap: 8px;
-  grid-template-columns: auto auto;
-}
-</style>
