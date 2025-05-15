@@ -40,13 +40,8 @@ const passed = computed(() =>
     <v-card-item
       class="bg-surface pt-8 px-8"
       title="3 Past Earnings Performance"
+      :subtitle="`${company.ticker} has been growing earnings at an average annual rate of 62.2%, while the ${company.sector.title} industry saw earnings growing at 13.5% annually. Revenues have been growing at an average rate of 46.6% per year. ${company.ticker}'s return on equity is 91.9%, and it has net margins of 55.8%.`"
     >
-      <v-card-subtitle>
-        {{
-          `${company.ticker} has been growing earnings at an average annual rate of 62.2%, while the ${company.sector.title} industry saw earnings growing at 13.5% annually. Revenues have been growing at an average rate of 46.6% per year. ${company.ticker}'s return on equity is 91.9%, and it has net margins of 55.8%.`
-        }}
-      </v-card-subtitle>
-
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>

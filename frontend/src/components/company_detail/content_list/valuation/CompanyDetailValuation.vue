@@ -20,7 +20,7 @@ import { computed, ref } from 'vue'
 // Types
 import type { Statement } from '@/types/statements'
 import type { DetailCompany } from '@/types/invest'
-import AnalystPriceTargetsChart from "@/components/charts/AnalystPriceTargetsChart.vue";
+import AnalystPriceTargetsChart from '@/components/charts/AnalystPriceTargetsChart.vue'
 
 export interface FairValueTab {
   name: string
@@ -215,7 +215,10 @@ const passed = computed(() =>
         />
       </div>
 
-      <multiplier-vs-peers-chart :tabs="multiplierTabs" :activeTab="peersSelected" />
+      <multiplier-vs-peers-chart
+        :tabs="multiplierTabs"
+        :activeTab="peersSelected"
+      />
 
       <company-detail-check
         name="IsGoodValueComparingPriceToEarningsToPeersAverageValue"
@@ -224,14 +227,11 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-item title="1.4 Historical Price to Earnings Ratio" class="px-8">
-      <template #subtitle>
-        <span style="white-space: normal">
-          Historical Price to Earnings Ratio compares a stock's price to its
-          earnings over time. Higher ratios indicate that investors are willing
-          to pay more for the stock.
-        </span>
-      </template>
+    <v-card-item
+      title="1.4 Historical Price to Earnings Ratio"
+      subtitle="Historical Price to Earnings Ratio compares a stock's price to its earnings over time. Higher ratios indicate that investors are willing to pay more for the stock."
+      class="px-8"
+    >
       <v-row class="mb-0 mt-4">
         <v-col>
           <v-select
@@ -299,14 +299,7 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-item title="1.6 Price to Earnings Ratio vs Fair Ratio" class="px-8">
-      <template #subtitle>
-        <span style="white-space: normal">
-          {{
-            `What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`
-          }}
-        </span>
-      </template>
+    <v-card-item title="1.6 Price to Earnings Ratio vs Fair Ratio" :subtitle="`What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`" class="px-8">
       <multiplier-vs-fair-chart />
 
       <company-detail-check name="IsGoodValueComparingRatioToFairRatio" />

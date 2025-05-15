@@ -39,11 +39,8 @@ const passed = computed(() =>
     <v-card-item
       class="bg-surface pt-8 px-8"
       title="2 Future Growth"
+      :subtitle="`${company.ticker} is forecast to grow earnings and revenue by 20.6% and 20.4% per year respectively. EPS is expected to grow by 20.3% per year. Return on equity is forecast to be 50.3% in 3 years.`"
     >
-      <v-card-subtitle style="white-space: normal;">
-        {{ `${company.ticker} is forecast to grow earnings and revenue by 20.6% and 20.4% per year respectively. EPS is expected to grow by 20.3% per year. Return on equity is forecast to be 50.3% in 3 years.` }}
-      </v-card-subtitle>
-
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>

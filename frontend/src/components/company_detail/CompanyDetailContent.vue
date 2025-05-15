@@ -38,7 +38,13 @@ const { lgAndUp } = useDisplay()
 
     <company-detail-sidebar v-else />
 
-    <company-detail-content-list />
+    <v-defaults-provider :defaults="{
+      VCardSubtitle: {
+        style: { whiteSpace: 'normal' }
+      }
+    }">
+      <company-detail-content-list />
+    </v-defaults-provider>
   </div>
 </template>
 
