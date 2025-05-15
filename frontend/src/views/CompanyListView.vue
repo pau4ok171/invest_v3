@@ -5,6 +5,7 @@ import CompanyListContent from '@/components/company_list/CompanyListContent.vue
 
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { usePageStore } from '@/store/page'
 import { useWebsocket } from '@/composables/websocket'
 import { usePriceUpdater } from '@/composables/priceUpdater'
 
@@ -12,6 +13,7 @@ import { usePriceUpdater } from '@/composables/priceUpdater'
 import { onMounted, provide } from 'vue'
 
 const store = useCompanyListStore()
+const pageStore = usePageStore()
 
 const { priceChanges, activeAnimations, updatePrice } = usePriceUpdater()
 
@@ -44,6 +46,7 @@ const { connect } = useWebsocket({
 
 onMounted(async () => {
   document.title = 'Stocks'
+  pageStore.loading = false
   await store.initFilters()
 
   // Connect to Websocket

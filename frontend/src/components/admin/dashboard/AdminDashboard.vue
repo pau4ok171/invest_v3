@@ -1,9 +1,15 @@
 <script setup lang="ts">
+// Composables
+import { usePageStore } from '@/store/page'
+
 // Utilities
 import { onMounted } from 'vue'
 
+const store = usePageStore()
+
 onMounted(() => {
   document.title = 'ADMIN DASHBOARD'
+  store.loading = false
 })
 </script>
 

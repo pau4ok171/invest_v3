@@ -36,5 +36,5 @@ const headers = reactive([
 
   <the-main><slot /></the-main>
 
-  <the-footer />
+  <the-footer style="z-index: 5000" />
 </template>

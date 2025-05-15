@@ -76,6 +76,7 @@ watch(route, (to) => {
 })
 
 onMounted(async () => {
+  pageStore.loading = false
   await init()
   connect()
 })

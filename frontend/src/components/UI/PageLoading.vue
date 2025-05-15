@@ -1,11 +1,16 @@
 <script setup lang="ts">
+// Components
+import Logo from '@/components/icons/Logo.vue'
+
+// Composables
+import { usePageStore } from '@/store/page'
+
 // Utilities
 import { computed } from 'vue'
+import { debouncedRef } from '@vueuse/core'
 
 const props = defineProps({
-  modelValue: Boolean,
   title: String,
-  message: String,
   progress: {
     type: Number,
     default: null,
@@ -14,18 +19,19 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['update:modelValue'])
-
-const isLoading = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const store = usePageStore()
+const isLoading = debouncedRef(
+  computed(() => store.loading),
+  300
+)
 </script>
 
 <template>
   <v-dialog v-model="isLoading" persistent width="400">
-    <v-card class="admin-loading-dialog" rounded="lg">
+    <v-card class="loading-dialog" rounded="lg">
       <v-card-text class="text-center pa-6">
+        <div class="mb-4"><logo style="height: 40px" /></div>
+
         <v-progress-circular
           indeterminate
           color="primary"
@@ -38,11 +44,7 @@ const isLoading = computed({
           {{ title || 'Загрузка данных...' }}
         </h3>
 
-        <p class="text-body-1 text-medium-emphasis">
-          {{ message || 'Пожалуйста, подождите' }}
-        </p>
-
-        <div v-if="progress !== null" class="mt-4">
+        <div v-if="progress != null" class="mt-4">
           <v-progress-linear
             :model-value="progress"
             height="8"
@@ -60,7 +62,7 @@ const isLoading = computed({
 </template>
 
 <style scoped lang="scss">
-.admin-loading-dialog {
+.loading-dialog {
   backdrop-filter: blur(8px);
   border: 1px solid rgba(0, 0, 0, 0.12);
 

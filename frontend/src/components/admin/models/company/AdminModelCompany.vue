@@ -2,15 +2,15 @@
 // Components
 import AdminModelCompanyForm from '@/components/admin/models/company/AdminModelCompanyForm.vue'
 import AdminModelHeader from '@/components/admin/models/AdminModelHeader.vue'
-import PageLoading from '@/components/UI/PageLoading.vue'
 
 // Composables
 import { useAdminModelStore } from '@/store/admin/admin'
+import { usePageStore } from '@/store/page'
 import { useAsyncState } from '@vueuse/core'
 import { useRouter } from 'vue-router'
 
 // Utilities
-import { onUnmounted } from 'vue'
+import { onUnmounted, watch } from 'vue'
 
 const props = defineProps({
   companyUID: {
@@ -20,15 +20,25 @@ const props = defineProps({
 })
 
 const store = useAdminModelStore()
+const pageStore = usePageStore()
 const router = useRouter()
 
 async function initialize() {
-  await store.initStore(props.companyUID, router)
-  await store.fetchCompany()
+  pageStore.loading = true
+  try {
+    await store.initStore(props.companyUID, router)
+    await store.fetchCompany()
+  } finally {
+    pageStore.loading = false
+  }
 }
 
-const { isLoading, error } = useAsyncState(initialize(), null, {
+const { isLoading } = useAsyncState(initialize(), null, {
   immediate: true,
+})
+
+watch(isLoading, (newVal) => {
+  pageStore.loading = newVal
 })
 
 onUnmounted(() => {
@@ -45,14 +55,12 @@ onUnmounted(() => {
         <admin-model-company-form class="mb-4" />
       </div>
     </template>
-    <template #fallback>
-      <page-loading :model-value="true" />
-    </template>
   </Suspense>
 </template>
 
 <style scoped lang="scss">
 .admin-model-company {
+  min-height: 100vh;
   width: 100%;
   margin-top: 16px;
 }

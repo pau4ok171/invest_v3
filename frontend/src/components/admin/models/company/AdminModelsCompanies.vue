@@ -4,6 +4,7 @@ import AdminModelIndicator from '@/components/admin/models/AdminModelIndicator.v
 
 // Composables
 import { useRouter } from 'vue-router'
+import { usePageStore } from '@/store/page'
 
 // Utilities
 import { computed, ref, shallowRef, onMounted } from 'vue'
@@ -15,6 +16,7 @@ import type { IAdminCompany } from '@/types/admin.types'
 type CompaniesResponse = IAdminCompany[]
 
 const router = useRouter()
+const store = usePageStore()
 const companies = ref<IAdminCompany[]>([])
 const fetching = shallowRef(false)
 
@@ -68,6 +70,7 @@ function getCellProps() {
 
 onMounted(async () => {
   document.title = 'ADMIN MODELS'
+  store.loading = false
   await fetchCompanies()
 })
 </script>

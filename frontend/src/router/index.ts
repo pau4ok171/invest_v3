@@ -144,7 +144,15 @@ router.beforeEach(async (route) => {
   const pageStore = usePageStore()
 
   pageStore.notFound = false
+  pageStore.loading = true
+
   await loadLayoutMiddleware(route)
+})
+
+router.afterEach(() => {
+  const pageStore = usePageStore()
+
+  setTimeout(() => pageStore.loading = false, 15000)
 })
 
 export default router

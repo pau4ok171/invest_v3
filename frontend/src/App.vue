@@ -1,6 +1,8 @@
 <script setup lang="ts">
 // Components
+import AppLayout from '@/layouts/AppLayout.vue'
 import PageNotFoundView from "@/views/PageNotFoundView.vue";
+import PageLoading from "@/components/UI/PageLoading.vue";
 
 // Composables
 import { useAuthStore } from '@/store/auth'
@@ -10,7 +12,6 @@ import { usePageStore } from '@/store/page'
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import axios from 'axios'
-import AppLayout from '@/layouts/AppLayout.vue'
 
 const authStore = useAuthStore()
 const pageStore = usePageStore()
@@ -27,6 +28,7 @@ onMounted(() => {
 <template>
   <v-app>
     <app-layout>
+      <page-loading />
       <RouterView v-if="!pageStore.notFound" />
       <page-not-found-view v-else/>
     </app-layout>
