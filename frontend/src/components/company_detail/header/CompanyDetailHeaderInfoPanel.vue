@@ -96,7 +96,9 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="12" class="d-flex justify-lg-center">
-      <v-progress-circular v-if="loading" indeterminate color="info" />
+      <div v-if="loading" class="d-flex justify-center" style="width: 300px;">
+        <v-progress-circular indeterminate color="info" />
+      </div>
       <small-price-chart v-else />
     </v-col>
     <v-col lg="2" cols="3" class="d-flex align-center">
@@ -125,13 +127,14 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       <span v-else class="d-flex align-end">
         <span>Financials</span>
         <v-btn
+          v-if="totalIdeas > 0"
           class="text-capitalize text-decoration-underline"
           style="margin-bottom: -1px; margin-left: -4px"
           variant="text"
           size="small"
           density="comfortable"
         >
-          <company-detail-header-analysts-dialog v-if="totalIdeas > 0" />
+          <company-detail-header-analysts-dialog />
           {{ `+ ${totalIdeas} Analysts` }}
         </v-btn>
       </span>
