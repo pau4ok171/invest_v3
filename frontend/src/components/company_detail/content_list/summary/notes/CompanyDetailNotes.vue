@@ -8,6 +8,7 @@ import CompanyDetailNotesDialog from '@/components/company_detail/content_list/s
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { usePageStore } from '@/store/page'
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -19,6 +20,7 @@ const authStore = useAuthStore()
 const pageStore = usePageStore()
 const companyDetailStore = useCompanyDetailStore()
 const notes = computed<Note[]>(() => companyDetailStore.notes)
+const { t } = useI18n()
 
 function onOpenLateral() {
   companyDetailStore.lateralMenuComponentName = 'notes'
@@ -62,7 +64,7 @@ function onOpenLateral() {
       </v-row>
       <v-btn
         color="info"
-        text="See More"
+        :text="t('buttons.seeMore')"
         block
         variant="tonal"
         @click="onOpenLateral"

@@ -2,6 +2,7 @@
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { EditorContent, useEditor } from '@tiptap/vue-3'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, onBeforeUnmount, shallowRef, watch } from 'vue'
@@ -20,6 +21,7 @@ const dialog = computed(() => companyDetailStore.notesEditorIsActive)
 const expanded = shallowRef(false)
 const timeoutId = shallowRef(-1)
 const saveStatus = shallowRef('Saved')
+const { t } = useI18n()
 
 companyDetailStore.noteSavedContent = note.value.body || ''
 
@@ -107,7 +109,7 @@ async function postNote() {
 }
 
 watch(
-    () => note.value,
+  () => note.value,
   (value) => {
     if (!editor.value || editor.value.getHTML() === value.body) return
 
@@ -156,7 +158,7 @@ onBeforeUnmount(() => {
             rounded="lg"
             variant="text"
             density="comfortable"
-            @click="() => expanded = !expanded"
+            @click="() => (expanded = !expanded)"
           />
           <v-card-text>MISC:SBER</v-card-text>
         </template>
@@ -214,7 +216,7 @@ onBeforeUnmount(() => {
               :model-value="usedVolume"
             />
             <v-btn
-              text="Close"
+              :text="t('buttons.close')"
               color="info"
               @click="() => (companyDetailStore.notesEditorIsActive = false)"
             />

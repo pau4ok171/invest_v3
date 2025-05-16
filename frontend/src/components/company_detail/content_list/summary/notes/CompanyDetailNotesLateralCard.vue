@@ -5,6 +5,7 @@ import CompanyDetailNote from '@/components/company_detail/content_list/summary/
 // Composables
 import { usePageStore } from '@/store/page'
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -15,6 +16,7 @@ import type { Note } from '@/types/notes'
 const pageStore = usePageStore()
 const store = useCompanyDetailStore()
 const notes = computed<Note[]>(() => store.notes)
+const { t } = useI18n()
 </script>
 
 <template>
@@ -24,7 +26,7 @@ const notes = computed<Note[]>(() => store.notes)
         <v-btn
           class="mr-1"
           prepend-icon="$plus"
-          text="Add"
+          :text="t('buttons.add')"
           size="small"
           variant="tonal"
           color="info"

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from "vue-i18n";
 
 // Utilities
 import { computed, shallowRef } from 'vue'
@@ -10,6 +11,7 @@ import type { DetailCompany } from '@/types/invest'
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 
 const description = computed(() => company.value.description)
 const reduced = shallowRef(true)
@@ -78,7 +80,7 @@ function humanize(val: number | string) {
     <v-card-actions>
       <v-btn
         v-if="!!description"
-        :text="reduced ? 'Show More' : 'Show Less'"
+        :text="reduced ? t('buttons.seeMore') : t('buttons.seeLess')"
         color="info"
         rounded="large"
         size="small"

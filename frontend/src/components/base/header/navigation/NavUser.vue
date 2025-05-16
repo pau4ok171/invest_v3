@@ -1,15 +1,17 @@
 <script setup lang="ts">
 // Components
-import AuthDialog from "@/components/base/auth/AuthDialog.vue";
+import AuthDialog from '@/components/base/auth/AuthDialog.vue'
 
 // Composables
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { ref, shallowRef } from 'vue'
 import axios from 'axios'
 
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const items = ref([
   { title: 'Profile', to: '/profile', id: 'profile' },
@@ -32,7 +34,7 @@ function onLogout() {
     is_anonymous: true,
     is_staff: false,
     last_name: '',
-    stage_in_days: 0
+    stage_in_days: 0,
   }
 }
 </script>
@@ -42,12 +44,7 @@ function onLogout() {
     <template v-if="authStore.isAuthenticated">
       <v-menu>
         <template #activator="{ props }">
-          <v-btn
-            v-bind="props"
-            icon="$iUser"
-            variant="text"
-            rounded="lg"
-          />
+          <v-btn v-bind="props" icon="$iUser" variant="text" rounded="lg" />
         </template>
         <template #default>
           <v-card>
@@ -74,7 +71,7 @@ function onLogout() {
     <template v-else>
       <v-btn color="info" variant="outlined">
         <auth-dialog />
-        login
+        {{ t('buttons.login') }}
       </v-btn>
     </template>
   </div>

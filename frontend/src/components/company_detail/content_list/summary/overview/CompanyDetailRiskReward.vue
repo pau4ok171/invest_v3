@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, shallowRef } from 'vue'
@@ -11,6 +12,7 @@ import type { DetailCompany } from '@/types/invest'
 
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
+const { t } = useI18n()
 
 const dialog = shallowRef(false)
 
@@ -58,7 +60,7 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
     <template #activator="{ props: activatorProps }">
       <v-btn
         v-bind="activatorProps"
-        text="see all risks checks"
+        :text="t('buttons.seeAllRisksChecks')"
         color="info"
         variant="tonal"
       />

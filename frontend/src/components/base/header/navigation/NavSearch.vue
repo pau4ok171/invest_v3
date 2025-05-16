@@ -2,6 +2,9 @@
 // Components
 import BaseFlag from '@/components/UI/BaseFlag/BaseFlag.vue'
 
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
 import { onMounted, onUnmounted, ref, shallowRef, watch } from 'vue'
 import axios from 'axios'
@@ -12,6 +15,7 @@ import type { SearchCompany } from '@/types/invest'
 const searchResponse = ref<SearchCompany[]>([])
 const model = shallowRef(false)
 const timeoutId = shallowRef(-1)
+const { t } = useI18n()
 
 function onUpdate(v: string) {
   clearTimeout(timeoutId.value)
@@ -86,7 +90,7 @@ onUnmounted(() => {
         class="text-body-2 text-capitalize px-3"
       >
         <span class="me-n1">
-          <span>Search</span>
+          <span>{{ t('buttons.search') }}</span>
           <span class="py-1 px-2 ms-2 border rounded text-disabled text-caption"
             >Ctrl+K</span
           >
@@ -131,30 +135,30 @@ onUnmounted(() => {
           </div>
         </v-card-text>
         <v-card-item v-else class="px-2">
-        <v-list slim>
-          <v-list-item
-            v-for="item in searchResponse"
-            :key="item.uid"
-            :to="item.absolute_url"
-            @click="model = false"
-          >
-            <template #prepend>
-              <base-flag :code="item.country.slug" />
-            </template>
-            <template #default>
-              <v-list-item-title v-html="item.title" />
-              <v-list-item-subtitle v-html="item.ticker" />
-            </template>
-            <template #append>
-              <v-chip
-                :text="item.sector.title"
-                label
-                color="info"
-                size="small"
-              />
-            </template>
-          </v-list-item>
-        </v-list>
+          <v-list slim>
+            <v-list-item
+              v-for="item in searchResponse"
+              :key="item.uid"
+              :to="item.absolute_url"
+              @click="model = false"
+            >
+              <template #prepend>
+                <base-flag :code="item.country.slug" />
+              </template>
+              <template #default>
+                <v-list-item-title v-html="item.title" />
+                <v-list-item-subtitle v-html="item.ticker" />
+              </template>
+              <template #append>
+                <v-chip
+                  :text="item.sector.title"
+                  label
+                  color="info"
+                  size="small"
+                />
+              </template>
+            </v-list-item>
+          </v-list>
         </v-card-item>
       </v-card>
     </template>

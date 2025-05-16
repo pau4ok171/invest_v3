@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { shallowRef } from 'vue'
@@ -9,8 +10,8 @@ import { shallowRef } from 'vue'
 import type { CountryState, DependentState } from '@/store/companyList/types'
 
 const store = useCompanyListStore()
-
 const dialog = shallowRef(false)
+const { t } = useI18n()
 
 async function onUpdateCountry(modelValue: CountryState) {
   if (store.countryState.key === modelValue.key) return
@@ -67,7 +68,7 @@ async function onUpdateSector(modelValue: DependentState) {
       <template #activator="{ props: activatorProps }">
         <v-btn
           v-bind="activatorProps"
-          text="advanced filters"
+          :text="t('buttons.advancedFilters')"
           append-icon="$iFilter"
           variant="text"
         />

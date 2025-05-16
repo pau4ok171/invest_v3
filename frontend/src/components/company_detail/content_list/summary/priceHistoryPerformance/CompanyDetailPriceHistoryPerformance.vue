@@ -10,6 +10,7 @@ import CompanyDetailShareholderReturnsDialog from '@/components/company_detail/c
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { usePageStore } from '@/store/page'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -17,6 +18,7 @@ import { computed } from 'vue'
 const companyDetailStore = useCompanyDetailStore()
 const pageStore = usePageStore()
 const company = computed(() => companyDetailStore.company)
+const { t } = useI18n()
 
 function onOpenLateral() {
   companyDetailStore.lateralMenuComponentName = 'news'
@@ -50,7 +52,7 @@ function onOpenLateral() {
           @click="onOpenLateral"
           :disabled="pageStore.extended"
         >
-          see more updates
+          {{ t('buttons.seeMoreUpdates') }}
         </v-btn>
       </v-card-actions>
     </v-card-item>
@@ -63,7 +65,7 @@ function onOpenLateral() {
           <v-btn color="info" block variant="tonal">
             <company-detail-shareholder-returns-dialog />
 
-            See full shareholder returns
+            {{ t('buttons.seeFullShareholderReturns') }}
           </v-btn>
           <company-detail-statement name="Is1YearReturnInLineOrAboveIndustry" />
           <company-detail-statement name="Is1YearReturnInLineOrAboveMarket" />

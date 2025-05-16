@@ -10,9 +10,11 @@ import HistoricalMultiplierChart from '@/components/charts/HistoricalMultiplierC
 import MultiplierVsIndustryChart from '@/components/charts/MultiplierVsIndustryChart.vue'
 import MultiplierVsFairChart from '@/components/charts/MultiplierVsFairChart.vue'
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
+import AnalystPriceTargetsChart from '@/components/charts/AnalystPriceTargetsChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref } from 'vue'
@@ -20,7 +22,6 @@ import { computed, ref } from 'vue'
 // Types
 import type { Statement } from '@/types/statements'
 import type { DetailCompany } from '@/types/invest'
-import AnalystPriceTargetsChart from '@/components/charts/AnalystPriceTargetsChart.vue'
 
 export interface FairValueTab {
   name: string
@@ -38,6 +39,7 @@ export interface MultiplierTab {
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 const statements = computed<Statement[]>(() =>
   Object.values(store.statements).filter(
     (s) => s.area === 'VALUE' && s.outcome === 1002
@@ -65,7 +67,7 @@ const fairValueTabs = computed<FairValueTab[]>(() => {
       metric: `As ${ticker} is a bank we don’t use its Price-To-Sales Ratio as the key metric for relative valuation analysis`,
     },
     {
-      name: 'Others',
+      name: t('buttons.others'),
       id: 'others',
       value: 0,
       metric:
@@ -299,7 +301,11 @@ const passed = computed(() =>
       <v-divider class="my-4" />
     </v-card-item>
 
-    <v-card-item title="1.6 Price to Earnings Ratio vs Fair Ratio" :subtitle="`What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`" class="px-8">
+    <v-card-item
+      title="1.6 Price to Earnings Ratio vs Fair Ratio"
+      :subtitle="`What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`"
+      class="px-8"
+    >
       <multiplier-vs-fair-chart />
 
       <company-detail-check name="IsGoodValueComparingRatioToFairRatio" />

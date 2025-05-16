@@ -5,6 +5,7 @@ import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 // Composables
 import { useAuthStore } from '@/store/auth'
 import { useVuelidate } from '@vuelidate/core'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
@@ -37,6 +38,7 @@ const rules = {
 
 const v$ = useVuelidate(rules, state)
 const store = useAuthStore()
+const { t } = useI18n()
 
 const isValid = computed(() => !v$.value.$invalid)
 const isLoadig = shallowRef(false)
@@ -146,7 +148,7 @@ async function login() {
 
       <v-card-actions class="justify-end">
         <v-btn
-          text="Forgot password?"
+          :text="t('buttons.forgotPassword')"
           variant="plain"
           color="info"
           class="text-capitalize"
@@ -154,7 +156,7 @@ async function login() {
         />
       </v-card-actions>
       <v-btn
-        text="Login"
+        :text="t('buttons.login')"
         :disabled="!isValid"
         :loading="isLoadig"
         @click="login"
@@ -189,7 +191,7 @@ async function login() {
           >Don't have account?</span
         >
         <v-btn
-          text="create"
+          :text="t('buttons.create')"
           class="text-capitalize"
           variant="plain"
           slim

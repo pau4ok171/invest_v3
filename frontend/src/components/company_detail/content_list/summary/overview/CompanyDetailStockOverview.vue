@@ -1,10 +1,11 @@
 <script setup lang="ts">
 // Components
 import CompanyDetailRiskReward from '@/components/company_detail/content_list/summary/overview/CompanyDetailRiskReward.vue'
-import SnowflakeChart from "@/components/charts/SnowflakeChart.vue";
+import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -15,6 +16,7 @@ import type { DetailCompany } from '@/types/invest'
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const snowflake = computed(() => companyDetailStore.snowflake)
+const { t } = useI18n()
 
 function onAboutCompanyClick() {
   const goTo = (document as Document)
@@ -39,7 +41,7 @@ function onAboutCompanyClick() {
           <v-card-actions>
             <v-btn
               prepend-icon="$iInfo"
-              text="about the company"
+              :text="t('buttons.aboutTheCompany')"
               variant="plain"
               color="info"
               size="small"

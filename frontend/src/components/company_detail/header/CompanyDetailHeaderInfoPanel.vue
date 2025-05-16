@@ -5,6 +5,7 @@ import CompanyDetailHeaderAnalystsDialog from '@/components/company_detail/heade
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, inject } from 'vue'
@@ -16,6 +17,7 @@ import type { ActiveAnimations } from '@/composables/priceUpdater'
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const loading = computed(() => companyDetailStore.fetchingCompany)
+const { t } = useI18n()
 
 const totalIdeas = computed(() => company.value.analyst_ideas.length)
 
@@ -96,7 +98,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="12" class="d-flex justify-lg-center">
-      <div v-if="loading" class="d-flex justify-center" style="width: 300px;">
+      <div v-if="loading" class="d-flex justify-center" style="width: 300px">
         <v-progress-circular indeterminate color="info" />
       </div>
       <small-price-chart v-else />
@@ -135,7 +137,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
           density="comfortable"
         >
           <company-detail-header-analysts-dialog />
-          {{ `+ ${totalIdeas} Analysts` }}
+          {{ `+ ${t('buttons.analysts', { n: totalIdeas })}` }}
         </v-btn>
       </span>
     </v-col>

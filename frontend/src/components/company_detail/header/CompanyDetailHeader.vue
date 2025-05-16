@@ -6,6 +6,7 @@ import CompanyDetailPortfolioDialog from '@/components/company_detail/content_li
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -18,6 +19,7 @@ const companyDetailStore = useCompanyDetailStore()
 const authStore = useAuthStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const loading = computed(() => companyDetailStore.fetchingCompany)
+const { t } = useI18n()
 
 const breadcrumbs = computed(() => [
   {
@@ -113,7 +115,7 @@ function createNote() {
           <v-btn
             v-if="!company.is_watchlisted"
             prepend-icon="$ratingEmpty"
-            text="add to watchlist"
+            :text="t('buttons.addToWatchlist')"
             color="info"
             variant="flat"
             :loading="companyDetailStore.watchlistLoading"
@@ -137,7 +139,7 @@ function createNote() {
 
             <v-btn
               prepend-icon="$iEdit"
-              text="add note"
+              :text="t('buttons.addNote')"
               @click="createNote"
               variant="flat"
               color="info"
@@ -153,7 +155,7 @@ function createNote() {
           >
             <company-detail-portfolio-dialog />
 
-            Add to portfolio
+            {{ t('buttons.addToPortfolio') }}
           </v-btn>
         </template>
       </v-card-actions>

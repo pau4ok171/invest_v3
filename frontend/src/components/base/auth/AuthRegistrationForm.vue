@@ -5,6 +5,7 @@ import GoogleIcon from '@/components/icons/GoogleIcon.vue'
 // Composables
 import { useAuthStore } from '@/store/auth'
 import { useVuelidate } from '@vuelidate/core'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
@@ -23,6 +24,7 @@ interface RegistrationForm {
 }
 
 const { withAsync, withMessage } = helpers
+const { t } = useI18n()
 
 const initialState = {
   username: '',
@@ -225,7 +227,7 @@ async function register() {
       </v-card-item>
 
       <v-btn
-        text="Registration"
+        :text="t('buttons.registration')"
         :disabled="!isValid"
         :loading="isLoadig"
         @click="register"
@@ -260,7 +262,7 @@ async function register() {
           >Have yet account?</span
         >
         <v-btn
-          text="login"
+          :text="t('buttons.login')"
           class="text-capitalize"
           variant="plain"
           slim
