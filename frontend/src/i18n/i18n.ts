@@ -1,5 +1,6 @@
 // Utilities
 import { createI18n } from 'vue-i18n'
+import { messages } from '@/i18n/locales'
 
 // Types
 import type { PluralizationRule } from 'vue-i18n'
@@ -23,16 +24,5 @@ export const i18n = createI18n({
     ru: ruRule,
   },
   fallbackLocale: 'en',
-  messages: {
-    en: {
-      analyst: 'no analysts | {n} analyst | {n} analysts',
-
-    },
-    ru: {
-      analyst: 'нет аналитиков | {n} аналитик | {n} аналитика | {n} аналитиков',
-    },
-    fr: {},
-    de: {},
-    es: {},
-  },
+  messages: messages,
 })
