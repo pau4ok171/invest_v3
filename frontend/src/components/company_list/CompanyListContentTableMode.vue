@@ -2,9 +2,10 @@
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { inject, ref } from 'vue'
+import { computed, inject } from 'vue'
 
 // Types
 import type { PropType } from 'vue'
@@ -19,21 +20,28 @@ const props = defineProps({
 
 const store = useCompanyListStore()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 
-const headers = ref([
+const headers = computed(() => [
   { key: 'companyLogo', title: '', sortable: false },
-  { key: 'companyName', title: 'Компания' },
-  { key: 'lastPrice', title: 'Цена' },
-  { key: 'return7D', title: '7Д Изм' },
-  { key: 'return1Y', title: '1Г Изм' },
-  { key: 'marketCap', title: 'Кап' },
-  { key: 'consensus', title: 'Консенсус' },
-  { key: 'fairValue', title: 'Стоимость' },
-  { key: 'growth', title: 'Рост' },
-  { key: 'dividendYield', title: 'Див' },
-  { key: 'sector', title: 'Сектор' },
+  { key: 'companyName', title: t('companyList.dataTable.headers.company') },
+  { key: 'lastPrice', title: t('companyList.dataTable.headers.lastPrice') },
+  { key: 'return7D', title: t('companyList.dataTable.headers.return7d') },
+  { key: 'return1Y', title: t('companyList.dataTable.headers.return1y') },
+  { key: 'marketCap', title: t('companyList.dataTable.headers.marketCap') },
+  {
+    key: 'consensus',
+    title: t('companyList.dataTable.headers.analystsTarget'),
+  },
+  { key: 'fairValue', title: t('companyList.dataTable.headers.valuation') },
+  { key: 'growth', title: t('companyList.dataTable.headers.growth') },
+  {
+    key: 'dividendYield',
+    title: t('companyList.dataTable.headers.dividendYield'),
+  },
+  { key: 'sector', title: t('companyList.dataTable.headers.industry') },
   { key: 'watchlisted', title: '', sortable: false },
 ])
 </script>

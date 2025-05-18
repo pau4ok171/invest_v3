@@ -5,6 +5,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { inject } from 'vue'
@@ -22,20 +23,18 @@ const props = defineProps({
 
 const store = useCompanyListStore()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
 const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 </script>
 
 <template>
-  <v-row>
+  <v-row justify="center">
     <v-col
       v-for="item in items"
       :key="item.uid"
       class="d-flex align-center justify-center"
-      cols="12"
-      sm="6"
-      md="4"
-      xl="3"
+      cols="auto"
     >
       <v-hover #="{ isHovering, props }">
         <v-card width="280" v-bind="props" :to="item.to" rounded="lg">
@@ -79,14 +78,14 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   ><div
                     class="d-flex justify-center text-caption text-medium-emphasis"
                   >
-                    7D
+                    {{ t('companyList.dataTile.return7d') }}
                   </div></v-col
                 >
                 <v-col
                   ><div
                     class="d-flex justify-center text-caption text-medium-emphasis"
                   >
-                    1Y
+                    {{ t('companyList.dataTile.return1y') }}
                   </div></v-col
                 >
               </v-row>
@@ -184,14 +183,14 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   ><div
                     class="d-flex justify-center text-caption text-medium-emphasis"
                   >
-                    Growth
+                    {{ t('companyList.dataTile.growth') }}
                   </div></v-col
                 >
                 <v-col
                   ><div
                     class="d-flex justify-center text-caption text-medium-emphasis"
                   >
-                    Target
+                    {{ t('companyList.dataTile.analystsTarget') }}
                   </div></v-col
                 >
               </v-row>
@@ -222,6 +221,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
       v-for="i in 20"
       :key="`tile-item-skeleton-${i}`"
       class="d-flex align-center justify-center"
+      cols="auto"
     >
       <v-card width="276" height="320" rounded="lg">
         <v-skeleton-loader

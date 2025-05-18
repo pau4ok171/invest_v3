@@ -53,4 +53,30 @@ export const en = {
     disclaimer: 'Any advice contained in this website is general advice only and has been prepared without considering your objectives, financial situation or needs. You should not rely on any advice and/or information contained in this website and before making any investment decision we recommend that you consider whether it is appropriate for your situation and seek appropriate financial, taxation and legal advice. Please read our Financial Services Guide before deciding whether to obtain financial services from us.',
     rights: 'All rights reserved.',
   },
+  common: {
+    updated: 'Updated',
+  },
+  companyList: {
+    companies: 'No Companies | {n} Company | {n} Companies',
+    dataTable: {
+      headers: {
+        company: 'Company',
+        lastPrice: 'Last Price',
+        return7d: '7D Return',
+        return1y: '1Y Return',
+        marketCap: 'Market Cap',
+        analystsTarget: 'Analysts Target',
+        valuation: 'Valuation',
+        growth: 'Growth',
+        dividendYield: 'Div Yield',
+        industry: 'Industry',
+      },
+    },
+    dataTile: {
+      return7d: '7D',
+      return1y: '1Y',
+      growth: 'Growth',
+      analystsTarget: 'Target',
+    },
+  },
 }

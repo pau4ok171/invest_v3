@@ -1,8 +1,10 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { useI18n } from 'vue-i18n'
 
 const store = useCompanyListStore()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -18,7 +20,7 @@ const store = useCompanyListStore()
         type="text"
         width="150"
       />
-      <p v-else>{{ store.totalCompanyLength }} companies</p>
+      <p v-else>{{ t('companyList.companies', store.totalCompanyLength) }}</p>
     </v-col>
 
     <v-col cols="3" class="d-flex justify-end">

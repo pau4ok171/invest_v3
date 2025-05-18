@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -10,6 +11,7 @@ import type { CountryState } from '@/store/companyList/types'
 
 const store = useCompanyListStore()
 const countryState = computed<CountryState>(() => store.countryState)
+const { t } = useI18n()
 </script>
 
 <template>
@@ -19,9 +21,11 @@ const countryState = computed<CountryState>(() => store.countryState)
     </div>
 
     <div class="text-caption mb-2">
-      <span class="text-medium-emphasis text-uppercase">Updated </span>
+      <span class="text-medium-emphasis text-uppercase mr-1">
+        {{ t('common.updated') }}
+      </span>
       <v-skeleton-loader
-        class="d-inline-block mt-n3 ml-n3"
+        class="d-inline-block mt-n3"
         v-if="store.fetching"
         width="120"
         type="text"
