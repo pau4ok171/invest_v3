@@ -5,6 +5,7 @@ import SmallLogo from '@/components/icons/SmallLogo.vue'
 
 // Composables
 import { usePageStore } from '@/store/page'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { onMounted, onUnmounted, ref } from 'vue'
@@ -14,7 +15,7 @@ import type { VNodeRef } from 'vue'
 
 const pages = [
   { name: 'About Us', to: 'aboutUs', key: 'aboutUs' },
-  { name: 'Plan & Pricing', to: 'planPricing', key: 'planPricing' },
+  { name: 'Plan & Pricing', to: 'planPricing', key: 'planAndPricing' },
   { name: 'Articles', to: 'articles', key: 'articles' },
   { name: 'Help Center', to: 'helpCenter', key: 'helpCenter' },
   { name: 'Screener', to: 'screener', key: 'screener' },
@@ -29,6 +30,7 @@ const socials = [
 
 const store = usePageStore()
 const footerRef = ref<VNodeRef | null>(null)
+const { t } = useI18n()
 
 onMounted(() => {
   if (!footerRef.value) return
@@ -70,20 +72,13 @@ onMounted(() => {
             v-for="page in pages"
             :key="page.key"
             :to="page.to"
-            :text="page.name"
+            :text="t(`header.${page.key}`)"
             color="info"
             variant="plain"
           />
         </div>
         <p class="on-surface text-medium-emphasis text-caption mb-4">
-          Any advice contained in this website is general advice only and has
-          been prepared without considering your objectives, financial situation
-          or needs. You should not rely on any advice and/or information
-          contained in this website and before making any investment decision we
-          recommend that you consider whether it is appropriate for your
-          situation and seek appropriate financial, taxation and legal advice.
-          Please read our Financial Services Guide before deciding whether to
-          obtain financial services from us.
+          {{ t('footer.disclaimer') }}
         </p>
         <v-divider class="my-4" />
         <div class="d-flex justify-space-between">
@@ -95,7 +90,7 @@ onMounted(() => {
               ><small-logo class="h-100"
             /></router-link>
             <span class="on-surface text-medium-emphasis text-caption"
-              >© 2025 Finargo. All rights reserved.</span
+              >© 2025 Finargo. {{ t('footer.rights') }}</span
             >
           </div>
           <div>

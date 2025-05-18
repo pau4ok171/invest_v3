@@ -101,7 +101,7 @@ onUnmounted(() => {
       <v-card>
         <v-text-field
           prepend-inner-icon="$iSearch"
-          placeholder="Looking for..."
+          :placeholder="t('header.searchPlaceholder')"
           single-line
           persistent-placeholder
           hide-details
@@ -131,7 +131,7 @@ onUnmounted(() => {
               size="150"
               icon="$iSearchList"
             />
-            <v-list-subheader title="Your search results will appear here" />
+            <v-list-subheader :title="t('header.searchEmpty')" />
           </div>
         </v-card-text>
         <v-card-item v-else class="px-2">

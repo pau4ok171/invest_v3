@@ -1,6 +1,11 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
 import { RoutesHeaderEnum } from '@/router/routes.types'
+
+const { t } = useI18n()
 </script>
 
 <template>
@@ -17,7 +22,7 @@ import { RoutesHeaderEnum } from '@/router/routes.types'
         variant="text"
       >
         <template #title>
-          <div class="text-capitalize">{{ routeName }}</div>
+          <div class="text-capitalize">{{ t(`header.${routeName}`) }}</div>
         </template>
       </v-list-item>
     </v-list>

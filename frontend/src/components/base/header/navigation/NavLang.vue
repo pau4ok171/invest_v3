@@ -17,7 +17,7 @@ const langs = [
 
 const selected = ref(['ru'])
 const { current } = useLocale()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 
 current.value = selected.value[0]
 locale.value = selected.value[0]
@@ -35,11 +35,17 @@ watch(selected, () => {
     </template>
     <template #default>
       <v-card>
-        <v-list v-model:selected="selected" slim nav density="compact" mandatory>
+        <v-list
+          v-model:selected="selected"
+          slim
+          nav
+          density="compact"
+          mandatory
+        >
           <v-list-subheader
             class="text-high-emphasis text-uppercase font-weight-black"
           >
-            Translations
+            {{ t('header.translations') }}
           </v-list-subheader>
           <v-list-item
             v-for="item in langs"

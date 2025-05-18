@@ -7,18 +7,18 @@ import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { ref, shallowRef } from 'vue'
+import { shallowRef } from 'vue'
 import axios from 'axios'
 
 const authStore = useAuthStore()
 const { t } = useI18n()
 
-const items = ref([
-  { title: 'Profile', to: '/profile', id: 'profile' },
-  { title: 'Plan & Pricing', to: '/pricing', id: 'pricing' },
-  { title: 'Notifications', to: '/notifications', id: 'notifications' },
-  { title: 'HelpCenter', to: '/helpcenter', id: 'help' },
-])
+const items = [
+  { to: '/profile', id: 'profile' },
+  { to: '/pricing', id: 'planAndPricing' },
+  { to: '/notifications', id: 'notifications' },
+  { to: '/helpcenter', id: 'helpCenter' },
+]
 const dialog = shallowRef(false)
 
 function onLogout() {
@@ -52,16 +52,16 @@ function onLogout() {
               <v-list-item
                 v-if="authStore.userInfo.is_staff"
                 :to="{ name: 'admin' }"
-                title="Admin Panel"
+                :title="t('header.adminPanel')"
               />
               <v-list-item
                 v-for="item in items"
                 :key="item.id"
-                :title="item.title"
+                :title="t(`header.${item.id}`)"
                 :to="item.to"
               />
               <v-divider />
-              <v-list-item @click="onLogout" title="Logout" />
+              <v-list-item @click="onLogout" :title="t('header.logout')" />
             </v-list>
           </v-card>
         </template>
