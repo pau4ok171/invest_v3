@@ -57,6 +57,10 @@ export const ru = {
     updated: 'Обновлено',
     or: 'Или',
   },
+  loader: {
+    defaultText: 'Загрузка данных...',
+    defaultProgress: '{n}% завершено',
+  },
   companyList: {
     header: {
       companies: 'Нет Компаний | {n} Компания | {n} Компании | {n} Компаний',

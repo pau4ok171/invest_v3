@@ -57,6 +57,10 @@ export const en = {
     updated: 'Updated',
     or: 'Or',
   },
+  loader: {
+    defaultText: 'Loading data...',
+    defaultProgress: '{n}% completed',
+  },
   companyList: {
     header: {
       companies: 'No Companies | {n} Company | {n} Companies',

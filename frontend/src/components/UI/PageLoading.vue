@@ -4,6 +4,7 @@ import Logo from '@/components/icons/Logo.vue'
 
 // Composables
 import { usePageStore } from '@/store/page'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -24,6 +25,7 @@ const isLoading = debouncedRef(
   computed(() => store.loading),
   300
 )
+const { t } = useI18n()
 </script>
 
 <template>
@@ -41,7 +43,7 @@ const isLoading = debouncedRef(
         />
 
         <h3 class="text-h5 font-weight-medium mb-2">
-          {{ title || 'Загрузка данных...' }}
+          {{ title || t('loader.defaultText') }}
         </h3>
 
         <div v-if="progress != null" class="mt-4">
@@ -53,7 +55,7 @@ const isLoading = debouncedRef(
             striped
           />
           <span class="text-caption text-medium-emphasis">
-            {{ progress }}% завершено
+            {{ t('loader.defaultProgress', progress) }}
           </span>
         </div>
       </v-card-text>
