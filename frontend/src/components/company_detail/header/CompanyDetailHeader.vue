@@ -98,7 +98,7 @@ function createNote() {
           />
           <template v-else>
             {{
-              `${company.market.title}:${company.slug?.toUpperCase()} Stock Report`
+              `${company.market.title}:${company.slug?.toUpperCase()} ${t('companyDetail.header.stockReport')}`
             }}
           </template>
         </template>

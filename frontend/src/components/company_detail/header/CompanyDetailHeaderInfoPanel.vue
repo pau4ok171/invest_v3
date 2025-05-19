@@ -39,10 +39,12 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
     class="company-detail-header__info mb-1"
     align-content="center"
   >
-    <v-col lg="1" cols="2" class="d-flex flex-column">
+    <v-col lg="auto" cols="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
-        <span class="text-uppercase opacity-70">Last Price</span>
+        <span class="text-uppercase opacity-70">{{
+          t('companyDetail.header.lastPrice')
+        }}</span>
         <span
           :class="[
             'price',
@@ -57,10 +59,12 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         >
       </template>
     </v-col>
-    <v-col lg="1" cols="2" class="d-flex flex-column">
+    <v-col lg="auto" cols="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
-        <span class="text-uppercase opacity-70">Market cap</span>
+        <span class="text-uppercase opacity-70">{{
+          t('companyDetail.header.marketCap')
+        }}</span>
         <span>{{
           humanize(
             company.price_data.capitalisation,
@@ -69,10 +73,12 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         }}</span>
       </template>
     </v-col>
-    <v-col lg="1" cols="2" class="d-flex flex-column">
+    <v-col lg="auto" cols="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
-        <span class="text-uppercase opacity-70">7D</span>
+        <span class="text-uppercase opacity-70">{{
+          t('companyDetail.header.return7d')
+        }}</span>
         <span
           :class="[
             company.return_7d && company.return_7d > 0
@@ -83,10 +89,12 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         >
       </template>
     </v-col>
-    <v-col lg="1" cols="2" class="d-flex flex-column">
+    <v-col lg="auto" cols="2" class="d-flex flex-column">
       <v-skeleton-loader v-if="loading" type="text" max-height="40" />
       <template v-else>
-        <span class="text-uppercase opacity-70">1Y</span>
+        <span class="text-uppercase opacity-70">{{
+          t('companyDetail.header.return1y')
+        }}</span>
         <span
           :class="[
             company.return_1y && company.return_1y > 0
@@ -101,10 +109,12 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       <div v-if="loading" class="d-flex justify-center" style="width: 300px">
         <v-progress-circular indeterminate color="info" />
       </div>
-      <small-price-chart v-else />
+      <small-price-chart style="width: 200px" v-else />
     </v-col>
     <v-col lg="2" cols="3" class="d-flex align-center">
-      <span class="text-uppercase opacity-70 mr-1">Updated</span>
+      <span class="text-uppercase opacity-70 mr-1">{{
+        t('common.updated')
+      }}</span>
       <v-skeleton-loader
         v-if="loading"
         type="text"
@@ -118,8 +128,10 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         <template v-else>n/a</template>
       </span>
     </v-col>
-    <v-col lg="2" cols="3" class="d-flex align-center">
-      <span class="text-uppercase opacity-70 mr-1">Data</span>
+    <v-col lg="auto" cols="auto" class="d-flex align-center">
+      <span class="text-uppercase opacity-70 mr-1">
+        {{ t('companyDetail.header.data') }}
+      </span>
       <v-skeleton-loader
         v-if="loading"
         type="text"
@@ -127,7 +139,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         width="150"
       />
       <span v-else class="d-flex align-end">
-        <span>Financials</span>
+        <span>{{ t('companyDetail.header.companyFinancials') }}</span>
         <v-btn
           v-if="totalIdeas > 0"
           class="text-capitalize text-decoration-underline"

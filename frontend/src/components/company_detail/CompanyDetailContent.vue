@@ -6,14 +6,24 @@ import CompanyDetailContentList from '@/components/company_detail/content_list/C
 // Composables
 import { useDisplay, useLayout } from 'vuetify'
 import { provideSectionContext } from '@/composables/sectionObserver'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
+import { computed } from 'vue'
 import { SECTIONS } from '@/assets/static/companyDetail'
 
 const layout = useLayout()
 const { activeSection, changeSection } = provideSectionContext(layout)
 
 const { lgAndUp } = useDisplay()
+const { t } = useI18n()
+
+const sections = computed(() =>
+  SECTIONS.map((s) => ({
+    ...s,
+    shortTitle: t(`companyDetail.sections.${s.value}Short`),
+  }))
+)
 </script>
 
 <template>
@@ -27,7 +37,7 @@ const { lgAndUp } = useDisplay()
         show-arrows
       >
         <v-tab
-          v-for="section in SECTIONS"
+          v-for="section in sections"
           :key="`section-tab-${section.value}`"
           class="text-body-2 text-capitalize"
           :text="section.shortTitle"
@@ -38,11 +48,13 @@ const { lgAndUp } = useDisplay()
 
     <company-detail-sidebar v-else />
 
-    <v-defaults-provider :defaults="{
-      VCardSubtitle: {
-        style: { whiteSpace: 'normal' }
-      }
-    }">
+    <v-defaults-provider
+      :defaults="{
+        VCardSubtitle: {
+          style: { whiteSpace: 'normal' },
+        },
+      }"
+    >
       <company-detail-content-list />
     </v-defaults-provider>
   </div>

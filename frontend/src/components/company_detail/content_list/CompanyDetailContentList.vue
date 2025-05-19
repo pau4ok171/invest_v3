@@ -31,7 +31,7 @@ onMounted(() => {
     <article>
       <company-detail-summary id="overview" />
 
-      <company-detail-valuation id="value" />
+      <company-detail-valuation id="valuation" />
 
       <company-detail-future id="future" />
 
@@ -45,7 +45,7 @@ onMounted(() => {
         <div id="management"></div>
         <div class="detail__management"></div>
 
-        <div id="owners"></div>
+        <div id="ownership"></div>
         <div class="detail__ownership"></div>
 
         <div id="other"></div>

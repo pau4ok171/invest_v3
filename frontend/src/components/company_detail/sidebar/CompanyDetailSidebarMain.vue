@@ -2,6 +2,7 @@
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useAuthStore } from '@/store/auth'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -13,6 +14,7 @@ import type { DetailCompany } from '@/types/invest'
 const companyDetailStore = useCompanyDetailStore()
 const authStore = useAuthStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
+const { t } = useI18n()
 
 function addToClipboard() {
   navigator.clipboard
@@ -61,13 +63,14 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
       />
     </p>
     <h3 v-if="company.market" class="detail-sidebar__text">
-      {{ company.market.title }}:{{ company.slug?.toUpperCase() }} Stock Report
+      {{ company.market.title }}:{{ company.slug?.toUpperCase() }}
+      {{ t('companyDetail.header.stockReport') }}
     </h3>
     <p
       v-if="company.price_data"
       class="detail-sidebar__text detail-sidebar__text--small"
     >
-      Mkt Cap:
+      {{ t('companyDetail.header.shortMarketCap') }}:
       {{
         humanizeFinancial(
           company.price_data.capitalisation,
@@ -91,7 +94,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
 
         <v-btn
           prepend-icon="$iPen"
-          text="Add Note"
+          :text="t('buttons.addNote')"
           color="blue"
           size="small"
           @click="createNote"
@@ -101,7 +104,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
       <template v-else>
         <v-btn
           prepend-icon="$ratingEmpty"
-          text="Add to watchlist"
+          :text="t('buttons.addToWatchlist')"
           color="blue"
           size="small"
           :loading="companyDetailStore.watchlistLoading"
