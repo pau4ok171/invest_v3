@@ -57,7 +57,14 @@ export const ru = {
     updated: 'Обновлено',
   },
   companyList: {
-    companies: 'Нет Компаний | {n} Компания | {n} Компании | {n} Компаний',
+    header: {
+      companies: 'Нет Компаний | {n} Компания | {n} Компании | {n} Компаний',
+      marketDescription: {
+        global: 'Международные компании со всего мира.',
+        country: 'Компании {country}, представленные на {market}.',
+      },
+      marketTitle: 'Крупнейшие {country} Компании',
+    },
     dataTable: {
       headers: {
         company: 'Компания',

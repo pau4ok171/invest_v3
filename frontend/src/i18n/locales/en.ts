@@ -57,7 +57,14 @@ export const en = {
     updated: 'Updated',
   },
   companyList: {
-    companies: 'No Companies | {n} Company | {n} Companies',
+    header: {
+      companies: 'No Companies | {n} Company | {n} Companies',
+      marketDescription: {
+        global: 'Discover Global companies from around the world.',
+        country: 'Discover {country} companies that are on {market}.',
+      },
+      marketTitle: 'Largest {country} Stocks',
+    },
     dataTable: {
       headers: {
         company: 'Company',

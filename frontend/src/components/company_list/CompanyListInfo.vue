@@ -12,12 +12,22 @@ import type { CountryState } from '@/store/companyList/types'
 const store = useCompanyListStore()
 const countryState = computed<CountryState>(() => store.countryState)
 const { t } = useI18n()
+
+const marketDescription = computed(() => {
+  if (countryState.value.key === 'global') {
+    return t('companyList.header.marketDescription.global')
+  }
+  return t('companyList.header.marketDescription.country', {
+    country: countryState.value.key,
+    market: countryState.value.markets[0]?.title,
+  })
+})
 </script>
 
 <template>
   <div class="mt-4">
     <div class="text-h5 mb-2">
-      Largest {{ store.countryState.title }} Stocks
+      {{ t('companyList.header.marketTitle', { country: countryState.key }) }}
     </div>
 
     <div class="text-caption mb-2">
@@ -40,14 +50,7 @@ const { t } = useI18n()
     </div>
 
     <div class="text-caption text-medium-emphasis">
-      Discover
-      {{ countryState.title }} companies<template
-        v-if="store.countryState.markets.length"
-      >
-        that are on the
-        {{ countryState.markets[0]?.title }}</template
-      >
-      <template v-else> from around the world</template>.
+      {{ marketDescription }}
     </div>
   </div>
 </template>

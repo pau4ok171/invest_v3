@@ -20,7 +20,7 @@ const { t } = useI18n()
         type="text"
         width="150"
       />
-      <p v-else>{{ t('companyList.companies', store.totalCompanyLength) }}</p>
+      <p v-else>{{ t('companyList.header.companies', store.totalCompanyLength) }}</p>
     </v-col>
 
     <v-col cols="3" class="d-flex justify-end">
