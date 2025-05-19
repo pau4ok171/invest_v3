@@ -55,6 +55,7 @@ export const en = {
   },
   common: {
     updated: 'Updated',
+    or: 'Or',
   },
   companyList: {
     header: {
@@ -85,5 +86,21 @@ export const en = {
       growth: 'Growth',
       analystsTarget: 'Target',
     },
+  },
+  labels: {
+    username: 'Login',
+    password: 'Password',
+    passwordConfirmation: 'Password Confirmation',
+  },
+  auth: {
+    dontHaveAccount: 'Don\'t have account?',
+    haveYetAccount: 'Have yet account?',
+    disclaimer: 'By using Finargo you are agreeing to our <a href="#" target="_blank">terms and conditions</a>. Finargo provides general investment advice only.',
+  },
+  validations: {
+    required: 'This field is required',
+    minLengthValue: '{property} must be at least {min} characters long',
+    passwordMismatch: 'Password confirmation does not match',
+    usernameYetTaken: 'This username is already taken',
   },
 }

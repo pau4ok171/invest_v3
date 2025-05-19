@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n'
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
 import axios from 'axios'
-import { required } from '@vuelidate/validators'
+import { required } from '@/common/vuelidate/validators'
 import { isObjectLike } from 'lodash'
 
 interface FormError {
@@ -112,7 +112,7 @@ async function login() {
         @input="v$.username.$touch"
         :disabled="isLoadig"
         prepend-inner-icon="$iUser"
-        label="Login"
+        :label="t('labels.username')"
         variant="outlined"
         class="my-2"
         autocomplete="username"
@@ -126,7 +126,7 @@ async function login() {
         @input="v$.password.$touch"
         :disabled="isLoadig"
         prepend-inner-icon="$iLock"
-        label="Password"
+        :label="t('labels.password')"
         variant="outlined"
         class="my-2"
         autocomplete="current-password"
@@ -166,7 +166,7 @@ async function login() {
         variant="tonal"
         class="mb-4"
       />
-      <v-divider>Or</v-divider>
+      <v-divider>{{ t('common.or') }}</v-divider>
 
       <v-card-actions class="justify-center">
         <v-btn variant="tonal">
@@ -187,9 +187,9 @@ async function login() {
       </v-card-actions>
 
       <v-card-text class="d-flex justify-center align-center">
-        <span style="line-height: 1.5; margin-bottom: -1px"
-          >Don't have account?</span
-        >
+        <span style="line-height: 1.5; margin-bottom: -1px">
+          {{ t('auth.dontHaveAccount') }}
+        </span>
         <v-btn
           :text="t('buttons.create')"
           class="text-capitalize"

@@ -55,6 +55,7 @@ export const ru = {
   },
   common: {
     updated: 'Обновлено',
+    or: 'Или',
   },
   companyList: {
     header: {
@@ -85,5 +86,21 @@ export const ru = {
       growth: 'Рост',
       analystsTarget: 'Цель',
     },
+  },
+  labels: {
+    username: 'Логин',
+    password: 'Пароль',
+    passwordConfirmation: 'Подтверждение пароля',
+  },
+  auth: {
+    dontHaveAccount: 'Еще нет аккаунта?',
+    haveYetAccount: 'Уже есть аккаунт?',
+    disclaimer: 'Используя Finargo, Вы соглашаетесь с нашими <a href="#" target="_blank">условиями использования</a>. Finargo предоставляет только общие инвестиционные рекомендации.',
+  },
+  validations: {
+    required: 'Это поле обязательно для заполнения',
+    minLengthValue: 'Поле {property} должно содержать минимум {min} символов',
+    passwordMismatch: 'Пароли не совпадают',
+    usernameYetTaken: 'Это имя уже занято',
   },
 }

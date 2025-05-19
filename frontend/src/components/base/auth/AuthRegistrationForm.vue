@@ -10,8 +10,10 @@ import { useI18n } from 'vue-i18n'
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
 import axios from 'axios'
-import { helpers, minLength, required, sameAs } from '@vuelidate/validators'
+import { helpers, sameAs } from '@vuelidate/validators'
+import { required, minLength } from '@/common/vuelidate/validators'
 import { isObjectLike } from 'lodash'
+import {i18n} from "@/i18n/i18n";
 
 interface FormError {
   title: string
@@ -45,7 +47,7 @@ const rules = {
     required,
     minLengthValue: minLength(8),
     unique: withMessage(
-      'This username is already taken',
+      i18n.global.t('validations.usernameYetTaken'),
       withAsync(usernameUniqueValidator)
     ),
   },
@@ -53,7 +55,7 @@ const rules = {
   passwordConfirmation: {
     required,
     sameAsRef: withMessage(
-      'The password has to match',
+      () => i18n.global.t('validations.passwordMismatch'),
       sameAs(computed(() => state.password))
     ),
   },
@@ -173,7 +175,7 @@ async function register() {
         @input="v$.username.$touch"
         :disabled="isLoadig"
         prepend-inner-icon="$iUser"
-        label="Login"
+        :label="t('labels.username')"
         variant="outlined"
         class="my-2"
         autocomplete="username"
@@ -187,7 +189,7 @@ async function register() {
         @input="v$.password.$touch"
         :disabled="isLoadig"
         prepend-inner-icon="$iLock"
-        label="Password"
+        :label="t('labels.password')"
         variant="outlined"
         class="my-2"
         autocomplete="new-password"
@@ -206,7 +208,7 @@ async function register() {
         @input="v$.passwordConfirmation.$touch"
         :disabled="isLoadig"
         prepend-inner-icon="$iLock"
-        label="Password Confirmation"
+        :label="t('labels.passwordConfirmation')"
         variant="outlined"
         class="my-2"
         autocomplete="new-password"
@@ -237,7 +239,7 @@ async function register() {
         variant="tonal"
         class="mb-4"
       />
-      <v-divider>Or</v-divider>
+      <v-divider>{{ t('common.or') }}</v-divider>
 
       <v-card-actions class="justify-center">
         <v-btn variant="tonal">
@@ -258,9 +260,9 @@ async function register() {
       </v-card-actions>
 
       <v-card-text class="d-flex justify-center align-center">
-        <span style="line-height: 1.5; margin-bottom: -1px"
-          >Have yet account?</span
-        >
+        <span style="line-height: 1.5; margin-bottom: -1px">
+          {{ t('auth.haveYetAccount') }}
+        </span>
         <v-btn
           :text="t('buttons.login')"
           class="text-capitalize"
@@ -271,12 +273,8 @@ async function register() {
         />
       </v-card-text>
 
-      <v-card-text class="d-flex justify-center opacity-50">
-        <span
-          >By using Finargo you are agreeing to our
-          <a href="#" target="_blank">terms and conditions</a>.<br />
-          Finargo provides general investment advice only.</span
-        >
+      <v-card-text class="d-flex justify-center text-medium-emphasis">
+        <span v-html="t('auth.disclaimer')" />
       </v-card-text>
     </v-card>
   </v-form>
