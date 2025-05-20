@@ -37,14 +37,20 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
 
 <template>
   <v-list bg-color="surface-light" class="mb-4">
-    <v-list-subheader title="Rewards" class="text-uppercase" />
+    <v-list-subheader
+      :title="t('companyDetail.overview.stockOverview.rewards')"
+      class="text-uppercase"
+    />
     <v-list-item v-for="item in rewards" :key="item.id">
       <template #prepend>
         <v-icon icon="$iSolidStar" color="success" />
       </template>
       <v-list-item-title>{{ item.description }}</v-list-item-title>
     </v-list-item>
-    <v-list-subheader title="Risks" class="text-uppercase" />
+    <v-list-subheader
+      :title="t('companyDetail.overview.stockOverview.risks')"
+      class="text-uppercase"
+    />
     <v-list-item v-for="item in risks" :key="item.id">
       <template #prepend>
         <v-icon
@@ -66,7 +72,7 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
       />
     </template>
     <template #default>
-      <v-card title="Risk Checks">
+      <v-card :title="t('companyDetail.overview.stockOverview.riskChecks')">
         <template #append>
           <v-btn
             icon="$close"
@@ -76,21 +82,24 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
           />
         </template>
         <v-card-text>
-          We perform automated risk checks on every company. We flag any failed
-          checks as potential investment risks. A company which passes all our
-          checks, however, is not 'risk free'.
+          {{ t('companyDetail.overview.stockOverview.riskChecksDesc') }}
         </v-card-text>
         <v-card-text>
-          <v-card-title
-            >{{ company.title }} ({{ company.slug?.toUpperCase() }}) Risk
-            Checks</v-card-title
-          >
+          <v-card-title>
+            {{ company.title }} ({{
+              `${company.slug?.toUpperCase()}) ${t('companyDetail.overview.stockOverview.riskChecks')}`
+            }}
+          </v-card-title>
           <v-list lines="two">
             <v-list-item v-for="item in items" :key="item.id">
               <template #prepend>
                 <v-chip
                   class="mr-3"
-                  :text="item.status"
+                  :text="
+                    t(
+                      `companyDetail.overview.stockOverview.${item.status.toLowerCase()}`
+                    )
+                  "
                   :color="item.status === 'PASS' ? 'success' : 'warning'"
                 />
               </template>
@@ -99,7 +108,15 @@ const items = computed<Statement[]>(() => [...rewards.value, ...risks.value])
                 item.description
               }}</v-list-item-subtitle>
               <template #append>
-                <v-chip :text="item.type" label color="info" />
+                <v-chip
+                  :text="
+                    t(
+                      `companyDetail.overview.stockOverview.${item.type.toLowerCase()}`
+                    )
+                  "
+                  label
+                  color="info"
+                />
               </template>
             </v-list-item>
           </v-list>

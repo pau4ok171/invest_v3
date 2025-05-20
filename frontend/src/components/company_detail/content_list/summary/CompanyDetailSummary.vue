@@ -10,11 +10,11 @@ import CompanyDetailFundamentalSummary from '@/components/company_detail/content
 
 <template>
   <div class="detail__summary">
-    <CompanyDetailStockOverview />
-    <CompanyDetailNotes />
-    <CompanyDetailCompetitors />
-    <CompanyDetailPriceHistoryPerformance />
-    <CompanyDetailAboutCompany />
-    <CompanyDetailFundamentalSummary />
+    <company-detail-stock-overview />
+    <company-detail-notes />
+    <company-detail-competitors />
+    <company-detail-price-history-performance />
+    <company-detail-about-company />
+    <company-detail-fundamental-summary />
   </div>
 </template>

@@ -20,8 +20,11 @@ const note = computed(() => companyDetailStore.note)
 const dialog = computed(() => companyDetailStore.notesEditorIsActive)
 const expanded = shallowRef(false)
 const timeoutId = shallowRef(-1)
-const saveStatus = shallowRef('Saved')
+const saving = shallowRef(false)
 const { t } = useI18n()
+const savingStatus = computed(() =>
+  t(`companyDetail.overview.notes.${saving.value ? 'saving' : 'saved'}`)
+)
 
 companyDetailStore.noteSavedContent = note.value.body || ''
 
@@ -44,7 +47,7 @@ const editor = useEditor({
     StarterKit,
     Placeholder.configure({
       emptyEditorClass: 'editor--empty-state',
-      placeholder: 'Write your thoughts, links, and company narrative',
+      placeholder: t('companyDetail.overview.notes.placeholder'),
     }),
     CharacterCount.configure({
       limit: CONTENT_MAX_LENGTH,
@@ -81,7 +84,7 @@ async function postNote() {
     updated: new Date().toISOString(),
   }).forEach(([key, val]: [string, any]) => formData.append(key, val))
 
-  saveStatus.value = 'Saving...'
+  saving.value = true
 
   if (note.value.id) {
     await axios
@@ -105,7 +108,7 @@ async function postNote() {
       .catch((error) => console.log(error))
   }
 
-  saveStatus.value = 'Saved'
+  saving.value = false
 }
 
 watch(
@@ -210,7 +213,7 @@ onBeforeUnmount(() => {
         </template>
         <template #append>
           <div class="notes-editor__footer-append">
-            {{ saveStatus }}
+            {{ savingStatus }}
             <v-progress-circular
               :color="limiterColor"
               :model-value="usedVolume"

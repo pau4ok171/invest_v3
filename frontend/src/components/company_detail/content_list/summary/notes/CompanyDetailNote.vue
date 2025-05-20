@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Types
 import type { PropType } from 'vue'
@@ -14,6 +15,7 @@ const props = defineProps({
 })
 
 const companyDetailStore = useCompanyDetailStore()
+const { t } = useI18n()
 
 function editNote(note: Note) {
   companyDetailStore.note = note
@@ -29,9 +31,13 @@ function editNote(note: Note) {
     <v-card-item>
       <template #prepend>
         <div class="opacity-50" style="font-size: 0.75rem">
-          <span class="mr-1">{{
-            note.created === note.updated ? 'Created' : 'Updated'
-          }}</span>
+          <span class="mr-1">
+            {{
+              t(
+                `common.${note.created === note.updated ? 'created' : 'updated'}`
+              )
+            }}
+          </span>
           <time v-if="note.updated" :datetime="note.updated">{{
             new Date(note.updated).toLocaleDateString('ru-RU')
           }}</time>

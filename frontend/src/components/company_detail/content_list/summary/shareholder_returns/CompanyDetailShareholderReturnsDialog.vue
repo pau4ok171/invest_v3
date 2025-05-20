@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, shallowRef } from 'vue'
@@ -15,16 +16,20 @@ export interface Period {
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 
 const dialog = shallowRef(false)
-const periods = [
-  { name: '7 Day', key: 'return_7d' },
-  { name: '30 Day', key: 'return_30d' },
-  { name: '90 Day', key: 'return_90d' },
-  { name: '1 Year', key: 'return_1y' },
-  { name: '3 Year', key: 'return_3y' },
-  { name: '5 Year', key: 'return_5y' },
-] as Period[]
+const periods = computed(
+  () =>
+    [
+      { name: t('date.days', 7), key: 'return_7d' },
+      { name: t('date.days', 30), key: 'return_30d' },
+      { name: t('date.days', 90), key: 'return_90d' },
+      { name: t('date.years', 1), key: 'return_1y' },
+      { name: t('date.years', 3), key: 'return_3y' },
+      { name: t('date.years', 5), key: 'return_5y' },
+    ] as Period[]
+)
 
 function humanize(item: Record<any, any>, p: Period) {
   const value = item[p.key]
@@ -50,8 +55,8 @@ function humanize(item: Record<any, any>, p: Period) {
             <tr>
               <th></th>
               <th>{{ company.ticker }}</th>
-              <th>Industry</th>
-              <th>Market</th>
+              <th>{{ t('finance.industry') }}</th>
+              <th>{{ t('finance.market') }}</th>
             </tr>
           </thead>
           <tbody>

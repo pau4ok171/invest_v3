@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
-import { useI18n } from "vue-i18n";
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, shallowRef } from 'vue'
@@ -25,16 +25,18 @@ function humanize(val: number | string) {
 
 <template>
   <v-card id="about-company-section" color="surface-light" class="mb-4 pa-4">
-    <v-card-title>About the Company</v-card-title>
+    <v-card-title>
+      {{ t('companyDetail.overview.aboutCompany.header') }}
+    </v-card-title>
 
     <v-card-item>
       <v-table class="company-detail__about-company-table">
         <thead>
           <tr>
-            <th>Founded</th>
-            <th>Employees</th>
-            <th>CEO</th>
-            <th>Website</th>
+            <th>{{ t('companyDetail.overview.aboutCompany.founded') }}</th>
+            <th>{{ t('companyDetail.overview.aboutCompany.employees') }}</th>
+            <th>{{ t('companyDetail.overview.aboutCompany.ceo') }}</th>
+            <th>{{ t('companyDetail.overview.aboutCompany.website') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -106,7 +108,11 @@ function humanize(val: number | string) {
   position: absolute;
   bottom: 0;
   left: 0;
-  background: linear-gradient(to bottom, rgb(0, 0, 0, 0), rgb(var(--v-theme-surface-light)) 50%);
+  background: linear-gradient(
+    to bottom,
+    rgb(0, 0, 0, 0),
+    rgb(var(--v-theme-surface-light)) 50%
+  );
   width: 100%;
   height: 60px;
   opacity: 1;

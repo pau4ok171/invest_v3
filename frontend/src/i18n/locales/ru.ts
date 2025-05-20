@@ -55,7 +55,27 @@ export const ru = {
   },
   common: {
     updated: 'Обновлено',
+    created: 'Создано',
     or: 'Или',
+  },
+  finance: {
+    market: 'Рынок',
+    industry: 'Отрасль',
+    ratio: 'Коэффициент',
+    eps: 'Прибыль на Акцию (EPS)',
+    grossMargin: 'Валовая Прибыль',
+    netProfitMargin: 'Чистая Прибыль',
+    debtEquityRatio: 'Коэф. Долг/Капитал (D/E)',
+    currentDivYield: 'Текущая Див. Доходность',
+    payoutRatio: 'Коэф. Выплат',
+  },
+  date: {
+    shortDays: '{n}Д',
+    shortMonths: '{n}М',
+    shortYears: '{n}Г',
+    days: '0 Дней | {n} День | {n} Дня | {n} Дней',
+    months: '0 Месяцев | {n} Месяц | {n} Месяца | {n} Месяцев',
+    years: '0 Лет | {n} Год | {n} Года | {n} Лет',
   },
   loader: {
     defaultText: 'Загрузка данных...',
@@ -137,6 +157,84 @@ export const ru = {
       managementShort: 'Руководство',
       ownershipShort: 'Акционеры',
       otherShort: 'Дополнительно',
+    },
+    overview: {
+      stockOverview: {
+        header: 'Обзор компании',
+        rewards: 'Преимущества',
+        risks: 'Риски',
+        riskChecks: 'Оценка рисков',
+        riskChecksDesc: 'Мы проводим автоматическую оценку рисков для каждой компании. Компании, не прошедшие проверки, помечаются как потенциально рискованные для инвестиций. Однако даже компания, прошедшая все проверки, не является \'безрисковой\'.',
+        pass: 'Пройдено',
+        fail: 'Провалено',
+      },
+      notes: {
+        header: 'Мои Заметки',
+        placeholder: 'Ваши заметки о компании, мысли и ссылки',
+        saved: 'Сохранено',
+        saving: 'Сохранение...',
+      },
+      competitors: {
+        header: 'Конкуренты',
+      },
+      historyPerformance: {
+        header: 'Исторический график и показатели',
+      },
+      updates: {
+        header: 'Последние новости и обновления',
+      },
+      shareholderReturns: {
+        header: 'Доходность акционеров',
+      },
+      priceVolatility: {
+        header: 'Волатильность цены',
+        low: 'Низкая',
+        high: 'Высокая',
+        avgMarketVolatility: 'Средняя рыночная волатильность',
+        companyTooltip: 'Среднее недельное изменение {ticker}',
+        industryTooltip: 'Среднее изменение по отрасли {industry}',
+      },
+      aboutCompany: {
+        header: 'О Компании',
+        founded: 'Основана',
+        employees: 'Сотрудники',
+        ceo: 'Генеральный Директор',
+        website: 'Веб-сайт',
+      },
+      fundamentalSummary: {
+        header: 'Фундаментальные показатели {title}',
+        ratio: '{ratio} Коэф.',
+        inducement: {
+          question: 'Переоценен ли {ticker}?',
+          response: 'См. справедливую стоимость и анализ оценки',
+        },
+      },
+      earningsAndRevenue: {
+        header: 'Прибыль и выручка',
+        lastReportedEarnings: 'Последняя отчетная прибыль',
+        nextEarnings: 'Следующий отчет о прибыли',
+        inducement: {
+          question: 'Как {ticker} показал себя в долгосрочной перспективе?',
+          response: 'См. исторические показатели и сравнение',
+        },
+      },
+      dividends: {
+        header: 'Дивиденды',
+        inducement: {
+          question: 'Выплачивает ли {ticker} стабильные дивиденды?',
+          response: 'См. историю дивидендов {ticker} и сравнение',
+        }
+      },
+    },
+    valuation: {
+      valuation: '',
+      shareFairValue: '',
+      keyValuationMetric: '',
+      peVsPeers: '',
+      historicalPE: '',
+      peVsIndustry: '',
+      peVsFair: '',
+      analystsPriceTargets: '',
     },
   },
 }

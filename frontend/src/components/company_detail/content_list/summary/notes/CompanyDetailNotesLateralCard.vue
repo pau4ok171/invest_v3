@@ -21,7 +21,10 @@ const { t } = useI18n()
 
 <template>
   <v-card height="100%">
-    <v-toolbar title="Notes" color="surface">
+    <v-toolbar
+      :title="t('companyDetail.overview.notes.header')"
+      color="surface"
+    >
       <template #append>
         <v-btn
           class="mr-1"

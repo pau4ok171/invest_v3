@@ -1,12 +1,14 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const { t } = useI18n()
 
 const pe = computed(() => {
   const marketCap = company.value.price_data.capitalisation
@@ -33,16 +35,26 @@ const pb = computed(() => {
     <div class="detail-fundamental-summary-table__in-row-item-box">
       <div class="detail-fundamental-summary-table__in-row-item">
         <h3 class="detail-fundamental-summary-table__title">{{ pe }}</h3>
-        <span class="detail-fundamental-summary-table__text">P/E Ratio</span>
+        <span class="detail-fundamental-summary-table__text">
+          {{
+            t('companyDetail.overview.fundamentalSummary.ratio', {
+              ratio: 'P/E',
+            })
+          }}
+        </span>
       </div>
       <div
         class="detail-fundamental-summary-table__in-row-item detail-fundamental-summary-table__flex-end"
       >
         <div>
           <h3 class="detail-fundamental-summary-table__subtitle">{{ pb }}</h3>
-          <span class="detail-fundamental-summary-table__subtext"
-            >P/B Ratio</span
-          >
+          <span class="detail-fundamental-summary-table__subtext">
+            {{
+              t('companyDetail.overview.fundamentalSummary.ratio', {
+                ratio: 'P/B',
+              })
+            }}
+          </span>
         </div>
       </div>
     </div>

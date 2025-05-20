@@ -1,12 +1,14 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const { t } = useI18n()
 
 const dividendYield = computed(() => {
   if (company.value.next_dividend.dividend_yield === undefined) {
@@ -33,11 +35,15 @@ const payoutRatio = computed(() => {
     <div class="detail-dividends-table">
       <div class="detail-dividends-table__item">
         <h3 class="detail-dividends-table__title">{{ dividendYield }}</h3>
-        <span class="detail-dividends-table__text">Current Dividend Yield</span>
+        <span class="detail-dividends-table__text">
+          {{ t('finance.currentDivYield') }}
+        </span>
       </div>
       <div class="detail-dividends-table__item">
         <h3 class="detail-dividends-table__title">{{ payoutRatio }}</h3>
-        <span class="detail-dividends-table__text">Payout Ratio</span>
+        <span class="detail-dividends-table__text">
+          {{ t('finance.payoutRatio') }}
+        </span>
       </div>
     </div>
   </div>

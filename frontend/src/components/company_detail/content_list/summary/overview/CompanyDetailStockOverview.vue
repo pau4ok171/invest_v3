@@ -36,7 +36,11 @@ function onAboutCompanyClick() {
     <v-container>
       <v-row>
         <v-col md="7" cols="12">
-          <v-card-title>{{ company.ticker }} Stock Overview</v-card-title>
+          <v-card-title>
+            {{
+              `${company.ticker} ${t('companyDetail.overview.stockOverview.header')}`
+            }}
+          </v-card-title>
           <v-card-text>{{ company.short_description }}</v-card-text>
           <v-card-actions>
             <v-btn

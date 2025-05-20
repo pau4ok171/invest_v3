@@ -2,7 +2,7 @@
 // Components
 import BookIcon from '@/components/icons/BookIcon.vue'
 import CompanyDetailNote from '@/components/company_detail/content_list/summary/notes/CompanyDetailNote.vue'
-import CompanyDetailNotesDialog from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
+import NotesEditor from '@/components/company_detail/content_list/summary/notes/NotesEditor.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
@@ -31,14 +31,14 @@ function onOpenLateral() {
 <template>
   <v-card color="surface-light" class="mb-4 pa-4">
     <v-card-title class="pt-4">
-      <v-badge color="surface-bright" :content="notes.length" floating
-        >My Notes</v-badge
-      >
+      <v-badge color="surface-bright" :content="notes.length" floating>
+        {{ t('companyDetail.overview.notes.header') }}
+      </v-badge>
     </v-card-title>
 
     <v-empty-state
       v-if="!notes.length"
-      title="Capture your thoughts, links and company narrative"
+      :title="t('companyDetail.overview.notes.placeholder')"
     >
       <template #media><book-icon /></template>
 
@@ -50,8 +50,8 @@ function onOpenLateral() {
           :disabled="!authStore.isAuthenticated"
           @click="() => (companyDetailStore.notesEditorIsActive = true)"
         >
-          <CompanyDetailNotesDialog />
-          Add Note
+          <notes-editor />
+          {{ t('buttons.addNote') }}
         </v-btn>
       </template>
     </v-empty-state>

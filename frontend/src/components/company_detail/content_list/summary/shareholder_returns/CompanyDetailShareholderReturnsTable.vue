@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -10,6 +11,7 @@ import type { DetailCompany } from '@/types/invest'
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 
 function humanize(value: number = 0) {
   return `${(value * 100).toFixed(1)}%`
@@ -27,9 +29,7 @@ function getClass(value: number | undefined) {
 </script>
 
 <template>
-  <table
-    class="detail-shareholder-return__table"
-  >
+  <table class="detail-shareholder-return__table">
     <thead>
       <tr>
         <th></th>
@@ -37,12 +37,12 @@ function getClass(value: number | undefined) {
         <th>
           {{ company.country.slug?.toUpperCase() }} {{ company.sector.title }}
         </th>
-        <th>{{ company.country.slug?.toUpperCase() }} Market</th>
+        <th>{{ `${company.country.slug?.toUpperCase()} ${t('finance.market')}` }}</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>7D</td>
+        <td>{{ t('date.shortDays', 7) }}</td>
         <td :class="getClass(company.return_7d)">
           {{ humanize(company.return_7d) }}
         </td>
@@ -54,7 +54,7 @@ function getClass(value: number | undefined) {
         </td>
       </tr>
       <tr>
-        <td>1Y</td>
+        <td>{{ t('date.shortYears', 1) }}</td>
         <td :class="getClass(company.return_1y)">
           {{ humanize(company.return_1y) }}
         </td>

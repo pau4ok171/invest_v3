@@ -4,6 +4,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -11,6 +12,7 @@ import { computed } from 'vue'
 // Types
 import type { Competitor, DetailCompany } from '@/types/invest'
 
+const { t } = useI18n()
 const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const _competitors = computed<Competitor[]>(
@@ -44,12 +46,16 @@ function humanizeFinancial(
 
 <template>
   <v-card color="surface-light" class="mb-4 pa-4">
-    <v-card-title>{{ `${company.ticker} Competitors` }}</v-card-title>
+    <v-card-title>
+      {{
+        `${company.ticker} ${t('companyDetail.overview.competitors.header')}`
+      }}
+    </v-card-title>
     <v-card-item>
       <v-row>
         <v-col v-for="c in competitors" :key="c.id" md="3" cols="6">
           <v-card variant="text" :to="c.to">
-            <v-card-item>
+            <v-card-item class="d-flex justify-center">
               <snowflake-chart
                 :key="`competitor-snowflake-${c.id}`"
                 :data="c.snowflake"

@@ -28,10 +28,14 @@ function onOpenLateral() {
 
 <template>
   <v-card color="surface-light" class="mb-4 pa-4">
-    <v-card-title>History Chart & Performance</v-card-title>
+    <v-card-title>
+      {{ t('companyDetail.overview.historyPerformance.header') }}
+    </v-card-title>
     <v-card-item><price-chart /></v-card-item>
 
-    <v-card-title>Recent News & Updates</v-card-title>
+    <v-card-title>
+      {{ t('companyDetail.overview.updates.header') }}
+    </v-card-title>
     <v-card-item>
       <v-row>
         <v-col
@@ -60,7 +64,9 @@ function onOpenLateral() {
     <v-card-item>
       <v-row>
         <v-col md="6" cols="12">
-          <v-card-title>Shareholder Returns</v-card-title>
+          <v-card-title>
+            {{ t('companyDetail.overview.shareholderReturns.header') }}
+          </v-card-title>
           <company-detail-shareholder-returns-table />
           <v-btn color="info" block variant="tonal">
             <company-detail-shareholder-returns-dialog />
@@ -71,7 +77,9 @@ function onOpenLateral() {
           <company-detail-statement name="Is1YearReturnInLineOrAboveMarket" />
         </v-col>
         <v-col md="6" cols="12">
-          <v-card-title>Price Volatility</v-card-title>
+          <v-card-title>
+            {{ t('companyDetail.overview.priceVolatility.header') }}
+          </v-card-title>
           <price-volatility-chart />
           <company-detail-statement name="HasPriceStability" />
           <company-detail-statement

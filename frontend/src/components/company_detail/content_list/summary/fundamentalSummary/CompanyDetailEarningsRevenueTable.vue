@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -11,6 +12,7 @@ import type { Report } from '@/types/invest'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const { t } = useI18n()
 
 const lastEarnings = computed(() =>
   company.value.last_reported_earnings
@@ -52,30 +54,44 @@ const debtEquityRatio = computed(() => {
 <template>
   <section class="detail-earnings-revenue-table__box">
     <div class="detail-earnings-revenue-table__item">
-      <p class="detail-earnings-revenue-table__title">Last Reported Earnings</p>
+      <p class="detail-earnings-revenue-table__title">
+        {{
+          t('companyDetail.overview.earningsAndRevenue.lastReportedEarnings')
+        }}
+      </p>
       <p class="detail-earnings-revenue-table__text">{{ lastEarnings }}</p>
     </div>
     <div class="detail-earnings-revenue-table__item">
-      <p class="detail-earnings-revenue-table__title">Next Earnings</p>
+      <p class="detail-earnings-revenue-table__title">
+        {{ t('companyDetail.overview.earningsAndRevenue.nextEarnings') }}
+      </p>
       <p class="detail-earnings-revenue-table__text">{{ nextEarnings }}</p>
     </div>
 
     <table class="detail-earnings-revenue-table table">
       <tbody>
         <tr>
-          <td><span>Earnings per share (EPS)</span></td>
+          <td>
+            <span>{{ t('finance.eps') }}</span>
+          </td>
           <td>{{ eps }}</td>
         </tr>
         <tr>
-          <td><span>Gross Margin</span></td>
+          <td>
+            <span>{{ t('finance.grossMargin') }}</span>
+          </td>
           <td>{{ grossMargin }}</td>
         </tr>
         <tr>
-          <td><span>Net Profit Margin</span></td>
+          <td>
+            <span>{{ t('finance.netProfitMargin') }}</span>
+          </td>
           <td>{{ netProfitMargin }}</td>
         </tr>
         <tr>
-          <td><span>Debt/Equity Ratio</span></td>
+          <td>
+            <span>{{ t('finance.debtEquityRatio') }}</span>
+          </td>
           <td>{{ debtEquityRatio }}</td>
         </tr>
       </tbody>
@@ -112,12 +128,12 @@ const debtEquityRatio = computed(() => {
   flex: 0 0 50%;
 }
 .detail-earnings-revenue-table__title {
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: rgba(var(--v-theme-on-surface-light), 0.5);
 }
 .detail-earnings-revenue-table__text {
-  font-size: .875rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 </style>

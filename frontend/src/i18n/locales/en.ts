@@ -55,7 +55,27 @@ export const en = {
   },
   common: {
     updated: 'Updated',
+    created: 'Created',
     or: 'Or',
+  },
+  finance: {
+    market: 'Market',
+    industry: 'Industry',
+    ratio: 'Ratio',
+    eps: 'Earnings per share (EPS)',
+    grossMargin: 'Gross Margin',
+    netProfitMargin: 'Net Profit Margin',
+    debtEquityRatio: 'Debt/Equity Ratio',
+    currentDivYield: 'Current Dividend Yield',
+    payoutRatio: 'Payout Ratio',
+  },
+  date: {
+    shortDays: '{n}D',
+    shortMonths: '{n}M',
+    shortYears: '{n}Y',
+    days: '0 Days | {n} Day | {n} Days',
+    months: '0 Months | {n} Month | {n} Months',
+    years: '0 Years | {n} Year | {n} Years',
   },
   loader: {
     defaultText: 'Loading data...',
@@ -137,6 +157,84 @@ export const en = {
       managementShort: 'Management',
       ownershipShort: 'Ownership',
       otherShort: 'Information',
+    },
+    overview: {
+      stockOverview: {
+        header: 'Stock Overview',
+        rewards: 'Rewards',
+        risks: 'Risks',
+        riskChecks: 'Risk Checks',
+        riskChecksDesc: 'We perform automated risk checks on every company. We flag any failed checks as potential investment risks. A company which passes all our checks, however, is not \'risk free\'.',
+        pass: 'Pass',
+        fail: 'Fail',
+      },
+      notes: {
+        header: 'My Notes',
+        placeholder: 'Capture your thoughts, links and company narrative',
+        saved: 'Saved',
+        saving: 'Saving...',
+      },
+      competitors: {
+        header: 'Competitors',
+      },
+      historyPerformance: {
+        header: 'History Chart & Performance',
+      },
+      updates: {
+        header: 'Recent News & Updates',
+      },
+      shareholderReturns: {
+        header: 'Shareholder Returns',
+      },
+      priceVolatility: {
+        header: 'Price Volatility',
+        low: 'Low',
+        high: 'High',
+        avgMarketVolatility: 'Avg. Market Volatility',
+        companyTooltip: '{ticker} Average Weekly Mouvement',
+        industryTooltip: '{industry} average mouvement',
+      },
+      aboutCompany: {
+        header: 'About the Company',
+        founded: 'Founded',
+        employees: 'Employees',
+        ceo: 'Ceo',
+        website: 'Website',
+      },
+      fundamentalSummary: {
+        header: '{title} Fundamental Summary',
+        ratio: '{ratio} Ratio',
+        inducement: {
+          question: 'Is {ticker} overvalued?',
+          response: 'See Fair Value and valuation analysis',
+        },
+      },
+      earningsAndRevenue: {
+        header: 'Earnings & Revenue',
+        lastReportedEarnings: 'Last Reported Earnings',
+        nextEarnings: 'Next Earnings',
+        inducement: {
+          question: 'How did {ticker} perform over the long term?',
+          response: 'See historical performance and comparison',
+        },
+      },
+      dividends: {
+        header: 'Dividends',
+        inducement: {
+          question: 'Does {ticker} pay a reliable dividends?',
+          response: 'See {ticker} dividend history and benchmarks',
+        }
+      },
+    },
+    valuation: {
+      valuation: '',
+      shareFairValue: '',
+      keyValuationMetric: '',
+      peVsPeers: '',
+      historicalPE: '',
+      peVsIndustry: '',
+      peVsFair: '',
+      analystsPriceTargets: '',
     },
   },
 }

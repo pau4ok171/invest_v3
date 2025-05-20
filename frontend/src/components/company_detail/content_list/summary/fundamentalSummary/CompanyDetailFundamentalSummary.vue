@@ -10,17 +10,25 @@ import CompanyDetailInducement from '@/components/company_detail/base/CompanyDet
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const { t } = useI18n()
 </script>
 
 <template>
   <v-card color="surface-light" class="mb-4 pa-4">
-    <v-card-title>{{ company.title }} Fundamental Summary</v-card-title>
+    <v-card-title>
+      {{
+        t('companyDetail.overview.fundamentalSummary.header', {
+          title: company.title,
+        })
+      }}
+    </v-card-title>
     <v-card-item>
       <v-row>
         <v-col cols="6">
@@ -29,8 +37,15 @@ const company = computed(() => store.company)
         <v-col cols="6">
           <company-detail-fundamental-summary-table />
           <company-detail-inducement
-            question="Is SBER overvalued?"
-            response="See Fair Value and valuation analysis"
+            :question="
+              t(
+                'companyDetail.overview.fundamentalSummary.inducement.question',
+                { ticker: company.ticker }
+              )
+            "
+            :response="
+              t('companyDetail.overview.fundamentalSummary.inducement.response')
+            "
           />
         </v-col>
       </v-row>
@@ -38,7 +53,9 @@ const company = computed(() => store.company)
       <v-divider class="mt-4" />
     </v-card-item>
 
-    <v-card-title>Earnings & Revenue</v-card-title>
+    <v-card-title>
+      {{ t('companyDetail.overview.earningsAndRevenue.header') }}
+    </v-card-title>
     <v-card-item>
       <v-row>
         <v-col cols="6">
@@ -47,8 +64,15 @@ const company = computed(() => store.company)
         <v-col cols="6">
           <company-detail-earnings-revenue-table />
           <company-detail-inducement
-            question="How did SBER perform over the long term?"
-            response="See historical performance and comparison"
+            :question="
+              t(
+                'companyDetail.overview.earningsAndRevenue.inducement.question',
+                { ticker: company.ticker }
+              )
+            "
+            :response="
+              t('companyDetail.overview.earningsAndRevenue.inducement.response')
+            "
           />
         </v-col>
       </v-row>
@@ -56,14 +80,22 @@ const company = computed(() => store.company)
       <v-divider class="mt-4" />
     </v-card-item>
 
-    <v-card-title>Dividends</v-card-title>
+    <v-card-title>
+      {{ t('companyDetail.overview.dividends.header') }}
+    </v-card-title>
     <v-card-item>
       <v-row>
         <v-col cols="6">
           <company-detail-dividends-table />
           <company-detail-inducement
-            question="Does SBER pay a reliable dividends?"
-            response="See SBER dividend history and benchmarks"
+            :question="
+              t('companyDetail.overview.dividends.inducement.question', {
+                ticker: company.ticker,
+              })
+            "
+            :response="
+              t('companyDetail.overview.dividends.inducement.response')
+            "
           />
         </v-col>
         <v-col cols="6">
