@@ -2,22 +2,24 @@
 // Composables
 import { usePageStore } from '@/store/page'
 import { useDisplay } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { onBeforeRouteUpdate } from 'vue-router'
 
 const store = usePageStore()
+const { t } = useI18n()
 const { mdAndDown } = useDisplay()
 
-const items = [
-  { title: 'Models', value: 'models', type: 'subheader' },
+const items = computed(() => [
+  { title: t('admin.models'), value: 'models', type: 'subheader' },
   {
     title: 'Companies',
     value: 'companies',
     props: { to: { name: 'adminModelsCompanies' } },
   },
-]
+])
 const selected = ref<string>('')
 
 onBeforeRouteUpdate((to, from, next) => {

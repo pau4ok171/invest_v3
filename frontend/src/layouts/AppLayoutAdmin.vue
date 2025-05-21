@@ -4,27 +4,32 @@ import TheHeader from '@/components/base/header/TheHeader.vue'
 import TheMain from '@/components/base/main/TheMain.vue'
 import TheFooter from '@/components/base/footer/TheFooter.vue'
 
-// Utilities
-import { ref } from 'vue'
+// Composables
+import { useI18n } from 'vue-i18n'
 
-const headers = [
+// Utilities
+import { computed, ref } from 'vue'
+
+const { t } = useI18n()
+
+const headers = computed(() => [
   {
-    title: 'Dashboard',
+    title: t('admin.dashboard'),
     props: { to: { name: 'adminDashboard' }, prependIcon: '$iDashboard' },
   },
   {
-    title: 'Models',
+    title: t('admin.models'),
     props: { to: { name: 'adminModels' }, prependIcon: '$iDatabase' },
   },
   {
-    title: 'Staff',
+    title: t('admin.staff'),
     props: { to: { name: 'adminStaff' }, prependIcon: '$iAccountTie' },
   },
   {
-    title: 'Settings',
+    title: t('admin.settings'),
     props: { to: { name: 'adminSettings' }, prependIcon: '$iCog' },
   },
-]
+])
 
 const rail = ref(true)
 </script>
@@ -32,11 +37,7 @@ const rail = ref(true)
 <template>
   <the-header />
 
-  <v-navigation-drawer
-    permanent
-    :rail="rail"
-    @click="rail = !rail"
-  >
+  <v-navigation-drawer permanent :rail="rail" @click="rail = !rail">
     <v-list :items="headers" nav @click.stop />
   </v-navigation-drawer>
 

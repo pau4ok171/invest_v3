@@ -127,6 +127,12 @@ export const ru = {
     passwordMismatch: 'Пароли не совпадают',
     usernameYetTaken: 'Это имя уже занято',
   },
+  admin: {
+    dashboard: 'Дашборд',
+    models: 'Модели',
+    staff: 'Персонал',
+    settings: 'Настройки',
+  },
   companyDetail: {
     header: {
       stockReport: 'Отчет по компании',

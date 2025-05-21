@@ -127,6 +127,12 @@ export const en = {
     passwordMismatch: 'Password confirmation does not match',
     usernameYetTaken: 'This username is already taken',
   },
+  admin: {
+    dashboard: 'Dashboard',
+    models: 'Models',
+    staff: 'Staff',
+    settings: 'Settings',
+  },
   companyDetail: {
     header: {
       stockReport: 'Stock Reports',
