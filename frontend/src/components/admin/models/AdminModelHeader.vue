@@ -7,6 +7,7 @@ import BaseFlag from '@/components/UI/BaseFlag/BaseFlag.vue'
 import { useAdminModelStore } from '@/store/admin/admin'
 import { useAuthStore } from '@/store/auth'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref, shallowRef, watchEffect } from 'vue'
@@ -20,6 +21,7 @@ const store = useAdminModelStore()
 const authStore = useAuthStore()
 const state = computed<IFormattedDetailCompany>(() => store.formState)
 const router = useRouter()
+const { t } = useI18n()
 
 const dialog = shallowRef(false)
 const logoURL = ref()
@@ -45,7 +47,7 @@ function addToClipboard(e: MouseEvent) {
   const target = e.target as HTMLElement
   navigator.clipboard
     .writeText(target.innerText)
-    .then(() => toast.success('Value is copied'))
+    .then(() => toast.success(t('toasts.valusIsCopied')))
     .catch((e) => console.log(e))
 }
 

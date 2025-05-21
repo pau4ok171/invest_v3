@@ -31,6 +31,20 @@ export const en = {
     search: 'Search',
     analysts: 'no analysts | {n} analyst | {n} analysts',
   },
+  toasts: {
+    valueIsCopied: 'Copied!',
+    noteSaved: 'Note saved successfully',
+    linkCopied: 'Link copied to clipboard',
+    portfolioCreated: 'Portfolio "{name}" created',
+    somethingWrong: 'Something went wrong...',
+    addedToPortfolio: 'Added {ticker} to "{portfolioName}"',
+    removedFromPortfolio: 'Removed {ticker} from "{portfolioName}"',
+    watchlist: {
+      added: '{ticker} added to watchlist',
+      removed: '{ticker} removed from watchlist',
+    },
+    noteDeleted: 'Note deleted',
+  },
   header: {
     searchPlaceholder: 'Looking for...',
     searchEmpty: 'Your search results will appear here',

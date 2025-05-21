@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { toast } from 'vue3-toastify'
+import { i18n } from '@/i18n/i18n'
 
 // Types
 import type {
@@ -173,11 +174,13 @@ export const useCompanyDetailStore = defineStore({
         )
 
         this.portfolios.push(response.data)
-        toast.success(`Portfolio ${response.data.name} was created`)
+        toast.success(
+          i18n.global.t('toasts.portfolioCreated', { name: response.data.name })
+        )
         return 'success'
       } catch (error) {
         console.log(error)
-        toast.error('Something was wrong...')
+        toast.error(i18n.global.t('toasts.somethingWrong'))
         return 'error'
       }
     },
@@ -197,17 +200,23 @@ export const useCompanyDetailStore = defineStore({
           this.updatePortfolios(response.data)
           if (action === 'include') {
             toast.success(
-              `${this.company.slug?.toUpperCase()} was added to ${portfolio.name}`
+              i18n.global.t('toasts.addedToPortfolio', {
+                ticker: this.company.ticker,
+                portfolioName: portfolio.name,
+              })
             )
           } else {
             toast.success(
-              `${this.company.slug?.toUpperCase()} was remove from ${portfolio.name}`
+              i18n.global.t('toasts.removedFromPortfolio', {
+                ticker: this.company.ticker,
+                portfolioName: portfolio.name,
+              })
             )
           }
         })
         .catch((error) => {
           console.log(error)
-          toast.error('Something was wrong...')
+          toast.error(i18n.global.t('toasts.somethingWrong'))
         })
     },
     updatePortfolios(portfolio: Portfolio) {
@@ -322,11 +331,16 @@ export const useCompanyDetailStore = defineStore({
 
         this.company.is_watchlisted = status === 'added'
         toast.success(
-          `${this.company.ticker} was successfully ${status === 'added' ? 'added to' : 'remove from'} watchlist`
+          i18n.global.t(
+            `toasts.watchlist.${status === 'added' ? 'added' : 'removed'}`,
+            {
+              ticker: this.company.ticker,
+            }
+          )
         )
       } catch (error) {
         console.log(error)
-        toast.error('Something was wrong... Try again')
+        toast.error(i18n.global.t('toasts.somethingWrong'))
       } finally {
         this.watchlistLoading = false
       }
@@ -336,10 +350,10 @@ export const useCompanyDetailStore = defineStore({
         await axios.delete(`/notes/api/v1/notes/${note.id}`)
 
         this.notes = this.notes.filter((n) => n.id !== note.id)
-        toast.success('Note was successfully deleted')
+        toast.success(i18n.global.t('toasts.noteDeleted'))
       } catch (error) {
         console.log(error)
-        toast.error('Something was wrong... Try again')
+        toast.error(i18n.global.t('toasts.somethingWrong'))
       }
     },
   },

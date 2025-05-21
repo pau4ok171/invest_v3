@@ -93,7 +93,7 @@ async function postNote() {
         companyDetailStore.noteSavedContent = response.data.body
         companyDetailStore.note = response.data
         companyDetailStore.updateNotes(response.data)
-        toast.success('Note successfully saved')
+        toast.success(t('toasts.noteSaved'))
       })
       .catch((error) => console.log(error))
   } else {
@@ -103,7 +103,7 @@ async function postNote() {
         companyDetailStore.noteSavedContent = response.data.body
         companyDetailStore.note = response.data
         companyDetailStore.addNote(response.data)
-        toast.success('Note successfully saved')
+        toast.success(t('toasts.noteSaved'))
       })
       .catch((error) => console.log(error))
   }

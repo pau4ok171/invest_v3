@@ -20,7 +20,7 @@ function addToClipboard() {
   navigator.clipboard
     .writeText(location.href)
     .then(() => {
-      toast.success('Link Copied')
+      toast.success(t('toasts.linkCopied'))
     })
     .catch((err) => {
       console.log(err)

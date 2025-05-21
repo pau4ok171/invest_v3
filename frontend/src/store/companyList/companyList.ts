@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { toast } from 'vue3-toastify'
+import { i18n } from '@/i18n/i18n'
 
 // Types
 import type { Country, ListCompany, Sector } from '@/types/invest'
@@ -190,13 +191,15 @@ export const useCompanyListStore = defineStore('companyList', {
           .then(() => {
             isSuccess = true
             toast.success(
-              `Company ${item.ticker.toUpperCase()} was removed from watchlist`
+              i18n.global.t('toasts.watchlist.removed', {
+                ticker: item.ticker,
+              })
             )
           })
           .catch((error) => {
             isSuccess = false
             console.log(error)
-            toast.error('Something was wrong...')
+            toast.error(i18n.global.t('toasts.somethingWrong'))
           })
       } else {
         await axios
@@ -204,13 +207,15 @@ export const useCompanyListStore = defineStore('companyList', {
           .then(() => {
             isSuccess = true
             toast.success(
-              `Company ${item.ticker.toUpperCase()} was added to watchlist`
+              i18n.global.t('toasts.watchlist.added', {
+                ticker: item.ticker,
+              })
             )
           })
           .catch((error) => {
             isSuccess = false
             console.log(error)
-            toast.error('Something was wrong...')
+            toast.error(i18n.global.t('toasts.somethingWrong'))
           })
       }
 

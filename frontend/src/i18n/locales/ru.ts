@@ -31,6 +31,20 @@ export const ru = {
     search: 'Поиск',
     analysts: 'нет аналитиков | {n} аналитик | {n} аналитика | {n} аналитиков',
   },
+  toasts: {
+    valueIsCopied: 'Скопировано!',
+    noteSaved: 'Заметка сохранена',
+    linkCopied: 'Ссылка скопирована',
+    portfolioCreated: 'Портфель "{name}" создан',
+    somethingWrong: 'Что-то пошло не так...',
+    addedToPortfolio: '{ticker} добавлен в "{portfolioName}"',
+    removedFromPortfolio: '{ticker} удалён из "{portfolioName}"',
+    watchlist: {
+      added: 'Теперь вы отслеживаете {ticker}',
+      removed: 'Вы больше не отслеживаете {ticker}',
+    },
+    noteDeleted: 'Заметка удалена',
+  },
   header: {
     searchPlaceholder: 'Найти...',
     searchEmpty: 'Здесь появятся результаты поиска',
