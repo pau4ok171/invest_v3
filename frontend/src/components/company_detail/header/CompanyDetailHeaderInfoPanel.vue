@@ -40,7 +40,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
     align-content="center"
   >
     <v-col lg="auto" cols="2" class="d-flex flex-column">
-      <v-skeleton-loader v-if="loading" type="text" max-height="40" />
+      <v-skeleton-loader v-if="loading" type="text" max-height="40" width="90" />
       <template v-else>
         <span class="text-uppercase opacity-70">{{
           t('companyDetail.header.lastPrice')
@@ -60,7 +60,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="2" class="d-flex flex-column">
-      <v-skeleton-loader v-if="loading" type="text" max-height="40" />
+      <v-skeleton-loader v-if="loading" type="text" max-height="40" width="90" />
       <template v-else>
         <span class="text-uppercase opacity-70">{{
           t('companyDetail.header.marketCap')
@@ -74,7 +74,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="2" class="d-flex flex-column">
-      <v-skeleton-loader v-if="loading" type="text" max-height="40" />
+      <v-skeleton-loader v-if="loading" type="text" max-height="40" width="90" />
       <template v-else>
         <span class="text-uppercase opacity-70">{{
           t('companyDetail.header.return7d')
@@ -90,7 +90,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="2" class="d-flex flex-column">
-      <v-skeleton-loader v-if="loading" type="text" max-height="40" />
+      <v-skeleton-loader v-if="loading" type="text" max-height="40" width="90" />
       <template v-else>
         <span class="text-uppercase opacity-70">{{
           t('companyDetail.header.return1y')
@@ -106,7 +106,7 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
       </template>
     </v-col>
     <v-col lg="auto" cols="12" class="d-flex justify-lg-center">
-      <div v-if="loading" class="d-flex justify-center" style="width: 300px">
+      <div v-if="loading" class="d-flex justify-center" style="width: 200px">
         <v-progress-circular indeterminate color="info" />
       </div>
       <small-price-chart style="width: 200px" v-else />
