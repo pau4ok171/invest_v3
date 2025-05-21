@@ -77,6 +77,20 @@ export const en = {
     months: '0 Months | {n} Month | {n} Months',
     years: '0 Years | {n} Year | {n} Years',
   },
+  pageTitles: {
+    default: 'Finargo - Market Insights, Financial Analysis & Smart Investments',
+    companyDetail: '{title} ({market}:{ticker}) - Company Overview, News, Analytics - Finargo',
+    companyList: 'Stocks',
+    admin: {
+      main: 'Admin Panel',
+      dashboard: 'Admin Dashboard',
+      models: 'Admin Models',
+      staff: 'Admin Staff',
+      settings: 'Admin Settings',
+    },
+    home: 'Home',
+    page404: '404 Page Not Found'
+  },
   loader: {
     defaultText: 'Loading data...',
     defaultProgress: '{n}% completed',

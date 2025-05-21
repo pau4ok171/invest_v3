@@ -1,12 +1,13 @@
 <script setup lang="ts">
 // Components
 import AppLayout from '@/layouts/AppLayout.vue'
-import PageNotFoundView from "@/views/PageNotFoundView.vue";
-import PageLoading from "@/components/UI/PageLoading.vue";
+import PageNotFoundView from '@/views/PageNotFoundView.vue'
+import PageLoading from '@/components/UI/PageLoading.vue'
 
 // Composables
 import { useAuthStore } from '@/store/auth'
 import { usePageStore } from '@/store/page'
+import { useTitle } from '@/composables/documentTitle'
 
 // Utilities
 import { onMounted } from 'vue'
@@ -15,6 +16,8 @@ import axios from 'axios'
 
 const authStore = useAuthStore()
 const pageStore = usePageStore()
+const { setTitle } = useTitle()
+setTitle('pageTitles.default')
 
 onMounted(() => {
   authStore.init()
@@ -30,7 +33,7 @@ onMounted(() => {
     <app-layout>
       <page-loading />
       <RouterView v-if="!pageStore.notFound" />
-      <page-not-found-view v-else/>
+      <page-not-found-view v-else />
     </app-layout>
   </v-app>
 </template>

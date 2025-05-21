@@ -1,12 +1,3 @@
-<script setup lang="ts">
-// Utilities
-import { onMounted } from 'vue'
-
-onMounted(() => {
-  document.title = 'Page Not Found - Finargo'
-})
-</script>
-
 <template>
   <div class="page-not-found">PAGE NOT FOUND</div>
 </template>

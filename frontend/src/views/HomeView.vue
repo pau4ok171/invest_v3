@@ -1,11 +1,14 @@
 <script setup lang="ts">
 // Composables
 import { usePageStore } from '@/store/page'
+import { useTitle } from '@/composables/documentTitle'
 
 // Utilities
 import { onMounted } from 'vue'
 
 const store = usePageStore()
+const { setTitle } = useTitle()
+setTitle('pageTitles.home')
 
 onMounted(() => {
   store.loading = false

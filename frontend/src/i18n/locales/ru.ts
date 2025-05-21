@@ -77,6 +77,20 @@ export const ru = {
     months: '0 Месяцев | {n} Месяц | {n} Месяца | {n} Месяцев',
     years: '0 Лет | {n} Год | {n} Года | {n} Лет',
   },
+  pageTitles: {
+    default: 'Finargo - Финансовые новости, аналитика, инвестиции',
+    companyDetail: '{title} ({market}:{ticker}) - Обзор компании, Новости, Аналитика - Finargo',
+    companyList: 'Рынки',
+    admin: {
+      main: 'Панель Администратора',
+      dashboard: 'Админ-Дашборд',
+      models: 'Админ-Модели',
+      staff: 'Админ-Персонал',
+      settings: 'Админ-Настройки',
+    },
+    home: 'Главная',
+    page404: '404 Страница не найдена'
+  },
   loader: {
     defaultText: 'Загрузка данных...',
     defaultProgress: '{n}% завершено',

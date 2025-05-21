@@ -1,14 +1,16 @@
 <script setup lang="ts">
 // Composables
 import { usePageStore } from '@/store/page'
+import { useTitle } from '@/composables/documentTitle'
 
 // Utilities
 import { onMounted } from 'vue'
 
 const store = usePageStore()
+const { setTitle } = useTitle()
+setTitle('pageTitles.admin.settings')
 
 onMounted(() => {
-  document.title = 'ADMIN SETTINGS'
   store.loading = false
 })
 </script>

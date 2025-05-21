@@ -69,7 +69,6 @@ function getCellProps() {
 }
 
 onMounted(async () => {
-  document.title = 'ADMIN MODELS'
   store.loading = false
   await fetchCompanies()
 })

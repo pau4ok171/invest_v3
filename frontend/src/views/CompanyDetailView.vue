@@ -14,6 +14,7 @@ import { useRoute } from 'vue-router'
 import { useWebsocket } from '@/composables/websocket'
 import { usePriceUpdater } from '@/composables/priceUpdater'
 import { useDisplay } from 'vuetify'
+import { useTitle } from '@/composables/documentTitle'
 
 // Utilities
 import { onMounted, onUnmounted, provide, watch } from 'vue'
@@ -29,6 +30,7 @@ const props = defineProps({
 const route = useRoute()
 const pageStore = usePageStore()
 const store = useCompanyDetailStore()
+const { setTitle } = useTitle()
 
 const { lgAndUp } = useDisplay()
 
@@ -40,7 +42,11 @@ async function init() {
 
   pageStore.loading = false
 
-  document.title = `${store.company.title} (${store.company.market.title}:${store.company.ticker}) - Обзор компании, Новости, Аналитика - Finargo`
+  setTitle('pageTitles.companyDetail', {
+    title: store.company.title,
+    market: store.company.market.title,
+    ticker: props.companySlug?.toUpperCase(),
+  })
 }
 
 const { priceChanges, activeAnimations, updatePrice } = usePriceUpdater()

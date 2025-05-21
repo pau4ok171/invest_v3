@@ -3,6 +3,7 @@
 import { usePageStore } from '@/store/page'
 import { useDisplay } from 'vuetify'
 import { useI18n } from 'vue-i18n'
+import { useTitle } from '@/composables/documentTitle'
 
 // Utilities
 import { computed, onMounted, ref } from 'vue'
@@ -10,6 +11,8 @@ import { onBeforeRouteUpdate } from 'vue-router'
 
 const store = usePageStore()
 const { t } = useI18n()
+const { setTitle } = useTitle()
+setTitle('pageTitles.admin.models')
 const { mdAndDown } = useDisplay()
 
 const items = computed(() => [
