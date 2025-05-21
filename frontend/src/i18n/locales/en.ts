@@ -227,14 +227,125 @@ export const en = {
       },
     },
     valuation: {
-      valuation: '',
-      shareFairValue: '',
-      keyValuationMetric: '',
-      peVsPeers: '',
-      historicalPE: '',
-      peVsIndustry: '',
-      peVsFair: '',
-      analystsPriceTargets: '',
+      title: 'Valuation',
+      subtitle: 'Is {ticker} undervalued to its fair value, analyst forecasts and its price relative to the market?',
+      score: 'Valuation Score',
+      shareFairValue: {
+        title: 'Share Price vs Fair Value',
+        subtitle: 'What is the Fair Price of {ticker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model',
+      },
+      keyValuationMetric: {
+        title: 'Key Valuation Metric',
+        subtitle: 'Which metric is best to use when looking at relative valuation for {ticker}?',
+        keyMetric: 'Key metric',
+        keyStatistics: 'Key Statistics',
+        peMetric: 'As {ticker} is profitable we use its Price-To-Earnings Ratio for relative valuation analysis',
+        pbMetric: 'For {ticker} we can also use its Price-To-Book Ratio for relative valuation analysis',
+        psMetric: 'AS {ticker} is a bank we don\'t use its Price-To-Sales Ratio as the key metric for relative valuation analysis',
+        otherMetric: 'Other financial metrics that can be useful for relative valuation',
+        evToRevenue: 'Entreprise Value/Revenue',
+        evToEBITDA: 'Entreprise Value/EBITDA',
+        pegRatio: 'PEG Ratio',
+        caption: '{ticker} key valuation metrics and ratios. From Price to Earnings, Price to Sales, Price to Book to Price to Earnings Growth Ratio, Entreprise Value and EBITDA',
+      },
+      peVsPeers: {
+        title: '{selected} Ratio vs Peers',
+        subtitle: 'How does {ticker}\'s {selected} Ratio compare to its peers?',
+      },
+      historicalPE: {
+        title: 'Historical Price to Earnings Ratio',
+        subtitle: 'Historical Price to Earnings Ratio compares a stock\'s price to its earnings over time. Higher ratios indicate that that investors are willing to pay more for the stock.',
+      },
+      peVsIndustry: {
+        title: 'Price to Earnings Ratio vs Industry',
+        subtitle: 'How does {ticker}\'s PE Ratio compare vs other companies in the {sector}?',
+      },
+      peVsFair: {
+        title: 'Price to Earnings Ratio vs Fair Ratio',
+        subtitle: 'What is {ticker}\' PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio tacking into account the company\'s forecast earnings growth, profit margins and other risk factors.',
+      },
+      analystsPriceTargets: {
+        title: 'Analyst Price Targets',
+        subtitle: 'What is the analyst 12-month forecast and do we have any statistical confidence in the consensus price target?',
+      },
+    },
+    future: {
+      title: 'Future Growth',
+      subtitle: '{ticker} is forecast to grow earnings and revenue by {earningsGrowth}% and {revenueGrowth}% per year respectively. EPS is expected to grow by {epsGrowth}% per year. Return on equity is forecast to be {roeGrowth}% in 3 years.',
+      score: 'Future Score',
+      earningsAndRevenueGrowth: {
+        title: 'Earnings and Revenue Growth Forecasts',
+      },
+      analystFutureGrowth: {
+        title: 'Analyst Future Growth Forecasts',
+      },
+      epsGrowth: {
+        title: 'Earnings per Share Growth Forecasts',
+      },
+      futureROE: {
+        title: 'Future Return on Equity',
+      },
+    },
+    past: {
+      title: 'Past Earnings Performance',
+      subtitle: '{ticker} has been growing earnings at an average annual rate of {earningsAverageGrowth}%, while the {sector} industry saw earnings growing at {industryAverageGrowth}% annually. Revenues have been growing at an average rate {revenueAverageGrowth}% per year. {ticker}\'s return on equity is {roe}%, and it has net margins of {netMargin}%.',
+      score: 'Past Score',
+      revenueExpensesBreakdown: {
+        title: 'Revenue & Expenses Breakdown',
+        subtitle: 'How {ticker} makes and spends money. Based on latest reported earnings, on at LTM basis.',
+      },
+      earningsRevenueHistory: {
+        title: 'Earnings and Revenue History',
+      },
+      fcfVsEarnings: {
+        title: 'Free Cash Flow vs Earnings Analysis',
+      },
+      pastEarningsGrowth: {
+        title: 'Past Earnings Growth Analysis',
+      },
+      roe: {
+        title: 'Return on Equity',
+      },
+      roa: {
+        title: 'Return on Assets',
+      },
+      roce: {
+        title: 'Return on Capital Employed',
+      },
+    },
+    health: {
+      title: 'Balance Sheet Health',
+      subtitle: '{ticker} has a total shareholder equity of {equity} and total debt of {debt}, which brings its debt-to-equity ratio to {deRatio}%. Its total assets and total liabilities are {assets} and {liabilities} respectively. {ticker}\'s EBIT is {ebit} making its interest coverage ratio -{interestCoverage}. It has cash and short-term investments of {cashAndEq}.',
+      score: 'Financial Health Score',
+      financialPosition: {
+        title: 'Financial Position',
+      },
+      deHistory: {
+        title: 'Debt to Equity History and Analysis',
+      },
+      balanceSheet: {
+        title: 'Balance Sheet',
+      },
+    },
+    dividend: {
+      title: 'Dividends and Buybacks',
+      subtitle: '{ticker} is a dividend paying company with a current yield of {divYield}%.',
+      score: 'Dividend Score',
+      upcomingPayment: {
+        title: 'Upcoming Dividend Payment',
+      },
+      stabilityAndGrowth: {
+        title: 'Stability and Growth of Payments',
+      },
+      yieldVsMarket: {
+        title: 'Dividend Yield vs Market',
+      },
+      earningsPayout: {
+        title: 'Earnings Payout to Shareholders',
+      },
+      cashPayout: {
+        title: 'Cash Payout to Shareholders',
+      },
     },
   },
 }

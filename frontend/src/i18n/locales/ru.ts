@@ -149,7 +149,7 @@ export const ru = {
       ownership: 'Структура акционеров',
       other: 'Дополнительные сведения',
       overviewShort: 'Обзор',
-      valuationShort: 'Оценка',
+      valuationShort: 'Стоимость',
       futureShort: 'Перспективы',
       pastShort: 'Прошлое',
       healthShort: 'Финансы',
@@ -160,10 +160,10 @@ export const ru = {
     },
     overview: {
       stockOverview: {
-        header: 'Обзор компании',
+        header: 'Обзор Компании',
         rewards: 'Преимущества',
         risks: 'Риски',
-        riskChecks: 'Оценка рисков',
+        riskChecks: 'Оценка Рисков',
         riskChecksDesc: 'Мы проводим автоматическую оценку рисков для каждой компании. Компании, не прошедшие проверки, помечаются как потенциально рискованные для инвестиций. Однако даже компания, прошедшая все проверки, не является \'безрисковой\'.',
         pass: 'Пройдено',
         fail: 'Провалено',
@@ -175,19 +175,19 @@ export const ru = {
         saving: 'Сохранение...',
       },
       competitors: {
-        header: 'Конкуренты',
+        header: 'Аналоги',
       },
       historyPerformance: {
-        header: 'Исторический график и показатели',
+        header: 'Исторический График и Показатели',
       },
       updates: {
-        header: 'Последние новости и обновления',
+        header: 'Последние Новости и Обновления',
       },
       shareholderReturns: {
-        header: 'Доходность акционеров',
+        header: 'Доходность Акционеров',
       },
       priceVolatility: {
-        header: 'Волатильность цены',
+        header: 'Волатильность Цены',
         low: 'Низкая',
         high: 'Высокая',
         avgMarketVolatility: 'Средняя рыночная волатильность',
@@ -202,15 +202,15 @@ export const ru = {
         website: 'Веб-сайт',
       },
       fundamentalSummary: {
-        header: 'Фундаментальные показатели {title}',
-        ratio: '{ratio} Коэф.',
+        header: 'Фундаментальные Показатели {title}',
+        ratio: '{ratio} Коэффициент',
         inducement: {
           question: 'Переоценен ли {ticker}?',
           response: 'См. справедливую стоимость и анализ оценки',
         },
       },
       earningsAndRevenue: {
-        header: 'Прибыль и выручка',
+        header: 'Прибыль и Выручка',
         lastReportedEarnings: 'Последняя отчетная прибыль',
         nextEarnings: 'Следующий отчет о прибыли',
         inducement: {
@@ -227,14 +227,125 @@ export const ru = {
       },
     },
     valuation: {
-      valuation: '',
-      shareFairValue: '',
-      keyValuationMetric: '',
-      peVsPeers: '',
-      historicalPE: '',
-      peVsIndustry: '',
-      peVsFair: '',
-      analystsPriceTargets: '',
+      title: 'Стоимость',
+      subtitle: 'Является ли {ticker} недооцененным по сравнению со справедливой стоимостью, прогнозами аналитиков и рыночной ценой?',
+      score: 'Оценка Стоимости',
+      shareFairValue: {
+        title: 'Цена Акции vs Справедливая Стоимость',
+        subtitle: 'Какова справедливая цена {ticker} с учетом будущих денежных потоков? Для этой оценки мы используем модель дисконтированных денежных потоков (DCF)',
+      },
+      keyValuationMetric: {
+        title: 'Ключевые Метрики Оценки',
+        subtitle: 'Какие показатели лучше всего использовать для относительной оценки {ticker}?',
+        keyMetric: 'Ключевой показатель',
+        keyStatistics: 'Ключевая Статистика',
+        peMetric: 'Поскольку {ticker} прибыльная компания, мы используем коэффициент P/E (Цена/Прибыль) для анализа относительной стоимости',
+        pbMetric: 'Для {ticker} мы также можем использовать коэффициент P/B (Цена/Балансовая стоимость)',
+        psMetric: 'Поскольку {ticker} является банком, мы не используем коэффициент P/S (Цена/Выручка) в качестве ключевого показателя',
+        otherMetric: 'Другие полезные метрики для относительной оценки',
+        evToRevenue: 'EV/Выручка',
+        evToEBITDA: 'EV/EBITDA',
+        pegRatio: 'PEG коэффициент',
+        caption: 'Ключевые метрики оценки {ticker}. От P/E до P/S, P/B, PEG коэффициента, Enterprise Value и EBITDA',
+      },
+      peVsPeers: {
+        title: 'Коэффициент {selected} vs Аналоги',
+        subtitle: 'Как коэффициент {selected} {ticker} сравнивается с аналогами?',
+      },
+      historicalPE: {
+        title: 'Исторический коэффициент P/E',
+        subtitle: 'Исторический коэффициент P/E сравнивает цену акции с прибылью за период. Более высокие значения указывают на готовность инвесторов платить больше за акцию.',
+      },
+      peVsIndustry: {
+        title: 'Коэффициент P/E vs Отрасль',
+        subtitle: 'Как коэффициент P/E {ticker} сравнивается с другими компаниями в секторе {sector}?',
+      },
+      peVsFair: {
+        title: 'Коэффициент P/E vs Справедливый P/E',
+        subtitle: 'Каков коэффициент P/E {ticker} по сравнению с его справедливым P/E? Это ожидаемый P/E с учетом прогнозируемого роста прибыли, маржи и других факторов риска.',
+      },
+      analystsPriceTargets: {
+        title: 'Целевые Цены Аналитиков',
+        subtitle: 'Каков 12-месячный прогноз аналитиков и насколько статистически достоверен консенсус-прогноз?',
+      },
+    },
+    future: {
+      title: 'Перспективы Роста',
+      subtitle: 'Прогнозируется, что {ticker} будет расти: прибыль на {earningsGrowth}%, выручка на {revenueGrowth}% в год. EPS ожидается рост на {epsGrowth}% ежегодно. Рентабельность капитала (ROE) прогнозируется на уровне {roeGrowth}% через 3 года.',
+      score: 'Оценка Перспектив',
+      earningsAndRevenueGrowth: {
+        title: 'Прогноз Роста Прибыли и Выручки',
+      },
+      analystFutureGrowth: {
+        title: 'Прогнозы Роста Аналитиков',
+      },
+      epsGrowth: {
+        title: 'Прогноз Роста Прибыли на Акцию (EPS)',
+      },
+      futureROE: {
+        title: 'Прогнозируемая Рентабельность Капитала (ROE)',
+      },
+    },
+    past: {
+      title: 'Исторические Результаты',
+      subtitle: '{ticker} демонстрировал средний рост прибыли {earningsAverageGrowth}% в год, тогда как в отрасли {sector} средний рост составил {industryAverageGrowth}%. Выручка росла в среднем на {revenueAverageGrowth}% ежегодно. Рентабельность капитала (ROE) - {roe}%, чистая маржа - {netMargin}%.',
+      score: 'Оценка Истории',
+      revenueExpensesBreakdown: {
+        title: 'Структура Выручки и Расходов',
+        subtitle: 'Как {ticker} зарабатывает и тратит деньги. На основе последней отчетности (LTM).',
+      },
+      earningsRevenueHistory: {
+        title: 'История Прибыли и Выручки',
+      },
+      fcfVsEarnings: {
+        title: 'Анализ Свободного Денежного Потока vs Прибыли',
+      },
+      pastEarningsGrowth: {
+        title: 'Анализ Исторического Роста Прибыли',
+      },
+      roe: {
+        title: 'Рентабельность Капитала (ROE)',
+      },
+      roa: {
+        title: 'Рентабельность Активов (ROA)',
+      },
+      roce: {
+        title: 'Рент. Влож. Капитала (ROCE)',
+      },
+    },
+    health: {
+      title: 'Финансовое Состояние',
+      subtitle: 'Собственный капитал {ticker} составляет {equity}, общий долг - {debt}, что дает коэффициент Debt/Equity {deRatio}%. Общие активы и обязательства - {assets} и {liabilities} соответственно. EBIT компании - {ebit}, коэффициент покрытия процентов - {interestCoverage}. Денежные средства и краткосрочные инвестиции - {cashAndEq}.',
+      score: 'Оценка Финансового Состояния',
+      financialPosition: {
+        title: 'Финансовое Положение',
+      },
+      deHistory: {
+        title: 'История и Анализ Debt/Equity',
+      },
+      balanceSheet: {
+        title: 'Балансовый Отчет',
+      },
+    },
+    dividend: {
+      title: 'Дивиденды и Байбэки',
+      subtitle: '{ticker} выплачивает дивиденды с текущей доходностью {divYield}%.',
+      score: 'Оценка Дивидендов',
+      upcomingPayment: {
+        title: 'Ближайшие Дивидендные Выплаты',
+      },
+      stabilityAndGrowth: {
+        title: 'Стабильность и Рост Выплат',
+      },
+      yieldVsMarket: {
+        title: 'Дивидендная Доходность vs Рынок',
+      },
+      earningsPayout: {
+        title: 'Выплаты Акционерам из Прибыли',
+      },
+      cashPayout: {
+        title: 'Денежные Выплаты Акционерам',
+      },
     },
   },
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref, watch } from 'vue'
@@ -25,6 +26,16 @@ const company = computed(() => store.company)
 const emit = defineEmits()
 
 const modelValue = ref(0)
+const { t } = useI18n()
+const metric = computed(() => {
+  const ticker = company.value.ticker || 'Company'
+  return props.selected
+    ? t(
+        `companyDetail.valuation.keyValuationMetric.${props.selected.id}Metric`,
+        { ticker }
+      )
+    : ''
+})
 
 watch(modelValue, (value) => {
   emit('update:selected', props.tabs[value])
@@ -54,8 +65,12 @@ watch(modelValue, (value) => {
       </template>
 
       <v-banner-text>
-        <span class="text-info mr-1">Key metric:</span>
-        <span>{{ selected.metric }}</span>
+        <span class="text-info mr-1"
+          >{{
+            t('companyDetail.valuation.keyValuationMetric.keyMetric')
+          }}:</span
+        >
+        <span>{{ metric }}</span>
       </v-banner-text>
     </v-banner>
   </div>

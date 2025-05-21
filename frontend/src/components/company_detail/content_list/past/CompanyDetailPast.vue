@@ -2,14 +2,15 @@
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
-import SankeyChart from "@/components/charts/SankeyChart.vue";
-import EarningsRevenueHistoryChart from "@/components/charts/EarningsRevenueHistoryChart.vue";
-import FCFAnalysisChart from "@/components/charts/FCFAnalysisChart.vue";
-import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
-import GaugeChart from "@/components/charts/GaugeChart.vue";
+import SankeyChart from '@/components/charts/SankeyChart.vue'
+import EarningsRevenueHistoryChart from '@/components/charts/EarningsRevenueHistoryChart.vue'
+import FCFAnalysisChart from '@/components/charts/FCFAnalysisChart.vue'
+import ForecastAnnualGrowthChart from '@/components/charts/ForecastAnnualGrowthChart.vue'
+import GaugeChart from '@/components/charts/GaugeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -20,6 +21,7 @@ import type { Statement } from '@/types/statements'
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 const statements = computed<Statement[]>(() =>
   Object.values(store.statements).filter(
     (s) => s.area === 'PAST' && s.outcome === 1002
@@ -39,13 +41,25 @@ const passed = computed(() =>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
       class="bg-surface pt-8 px-8"
-      title="3 Past Earnings Performance"
-      :subtitle="`${company.ticker} has been growing earnings at an average annual rate of 62.2%, while the ${company.sector.title} industry saw earnings growing at 13.5% annually. Revenues have been growing at an average rate of 46.6% per year. ${company.ticker}'s return on equity is 91.9%, and it has net margins of 55.8%.`"
+      :title="`3 ${t('companyDetail.past.title')}`"
+      :subtitle="
+        t('companyDetail.past.subtitle', {
+          ticker: company.ticker,
+          sector: company.sector.title,
+          earningsAverageGrowth: 62.2,
+          industryAverageGrowth: 13.5,
+          revenueAverageGrowth: 46.6,
+          roe: 91.9,
+          netMargin: 55.8,
+        })
+      "
     >
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
-            <v-card-text>Past Score {{ passed }}/6</v-card-text>
+            <v-card-text>
+              {{ `${t('companyDetail.past.score')} ${passed}/6` }}
+            </v-card-text>
             <v-card-item>
               <v-list bg-color="surface-bright">
                 <v-list-item
@@ -83,8 +97,12 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="3.1 Revenue & Expenses Breakdown"
-      :subtitle="`How ${company.ticker} makes and spends money. Based on latest reported earnings, on an LTM basis.`"
+      :title="`3.1 ${t('companyDetail.past.revenueExpensesBreakdown.title')}`"
+      :subtitle="
+        t('companyDetail.past.revenueExpensesBreakdown.subtitle', {
+          ticker: company.ticker,
+        })
+      "
       class="pt-8 px-8"
     >
       <sankey-chart class="mt-4" />
@@ -92,7 +110,10 @@ const passed = computed(() =>
 
     <v-divider class="my-4" />
 
-    <v-card-item title="3.2 Earnings and Revenue History" class="pt-8 px-8">
+    <v-card-item
+      :title="`3.2 ${t('companyDetail.past.earningsRevenueHistory.title')}`"
+      class="pt-8 px-8"
+    >
       <earnings-revenue-history-chart class="mb-4" />
 
       <company-detail-check name="HasHighQualityPastEarnings" />
@@ -102,7 +123,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="3.3 Free Cash Flow vs Earnings Analysis"
+      :title="`3.3 ${t('companyDetail.past.fcfVsEarnings.title')}`"
       class="pt-8 px-8"
     >
       <f-c-f-analysis-chart />
@@ -110,7 +131,10 @@ const passed = computed(() =>
 
     <v-divider class="my-4" />
 
-    <v-card-item title="3.4 Past Earnings Growth Analysis" class="pt-8 px-8">
+    <v-card-item
+      :title="`3.4 ${t('companyDetail.past.pastEarningsGrowth.title')}`"
+      class="pt-8 px-8"
+    >
       <v-row class="mt-2">
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
@@ -141,33 +165,57 @@ const passed = computed(() =>
 
     <v-divider class="my-4" />
 
-    <v-card-item title="3.5 Return on Equity" class="pt-8 px-8">
+    <v-card-item
+      :title="`3.5 ${t('companyDetail.past.roe.title')}`"
+      class="pt-8 px-8"
+    >
       <v-row>
         <v-col md="6" cols="12">
-          <gauge-chart :data="[{name: 'Company', value: 91.9,}, {name: 'Industry', value: 11.9,}]" title="ROE" />
+          <gauge-chart
+            :data="[
+              { name: 'Company', value: 91.9 },
+              { name: 'Industry', value: 11.9 },
+            ]"
+            title="ROE"
+          />
         </v-col>
         <v-col md="6" cols="12">
           <company-detail-check name="IsReturnOnEquityAboveThreshold" />
         </v-col>
       </v-row>
-
     </v-card-item>
 
     <v-divider class="my-4" />
 
-      <v-row class="mb-2">
-        <v-col md="6" cols="12">
-          <v-card-item title="3.6 Return on Assets" class="pt-8 px-8">
-            <gauge-chart :data="[{name: 'Company', value: 63.9,}, {name: 'Industry', value: 7.0,}]" title="ROA" />
-          </v-card-item>
-        </v-col>
-        <v-col md="6" cols="12">
-          <v-card-item title="3.7 Return on Capital Employed" class="pt-8 px-8">
-            <gauge-chart :data="[{name: 'Last Year', value: 87.1,}, {name: '3 Years Ago', value: 25.1,}]" title="ROCE" />
-          </v-card-item>
-        </v-col>
-      </v-row>
+    <v-row class="mb-2">
+      <v-col md="6" cols="12">
+        <v-card-item
+          :title="`3.6 ${t('companyDetail.past.roa.title')}`"
+          class="pt-8 px-8"
+        >
+          <gauge-chart
+            :data="[
+              { name: 'Company', value: 63.9 },
+              { name: 'Industry', value: 7.0 },
+            ]"
+            title="ROA"
+          />
+        </v-card-item>
+      </v-col>
+      <v-col md="6" cols="12">
+        <v-card-item
+          :title="`3.7 ${t('companyDetail.past.roce.title')}`"
+          class="pt-8 px-8"
+        >
+          <gauge-chart
+            :data="[
+              { name: 'Last Year', value: 87.1 },
+              { name: '3 Years Ago', value: 25.1 },
+            ]"
+            title="ROCE"
+          />
+        </v-card-item>
+      </v-col>
+    </v-row>
   </v-card>
 </template>
-
-<style scoped lang="scss"></style>

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
-import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
-import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
-import DebtToEquityChart from "@/components/charts/DebtToEquityChart.vue";
-import TreemapChart from "@/components/charts/TreemapChart.vue";
+import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
+import ForecastAnnualGrowthChart from '@/components/charts/ForecastAnnualGrowthChart.vue'
+import DebtToEquityChart from '@/components/charts/DebtToEquityChart.vue'
+import TreemapChart from '@/components/charts/TreemapChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -18,6 +19,7 @@ import type { Statement } from '@/types/statements'
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 const statements = computed<Statement[]>(() =>
   Object.values(store.statements).filter(
     (s) => s.area === 'HEALTH' && s.outcome === 1002
@@ -37,13 +39,27 @@ const passed = computed(() =>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
       class="bg-surface pt-8 px-8"
-      title="4 Balance Sheet Health"
-      :subtitle="`${company.ticker} has a total shareholder equity of $79.3B and total debt of $8.5B, which brings its debt-to-equity ratio to 10.7%. Its total assets and total liabilities are $111.6B and $32.3B respectively. ${company.ticker}'s EBIT is $81.5B making its interest coverage ratio -52.9. It has cash and short-term investments of $43.2B.`"
+      :title="`4 ${t('companyDetail.health.title')}`"
+      :subtitle="
+        t('companyDetail.health.subtitle', {
+          ticker: company.ticker,
+          equity: '$79.3B',
+          debt: '$8.5B',
+          deRatio: '10.7',
+          assets: '$111.6B',
+          liabilities: '$32.3B',
+          ebit: '$81.5B',
+          interestCoverage: '52.9',
+          cashAndEq: '$43.2B',
+        })
+      "
     >
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
-            <v-card-text>Financial Health Score {{ passed }}/6</v-card-text>
+            <v-card-text>
+              {{ `${t('companyDetail.health.score')} ${passed}/6` }}
+            </v-card-text>
             <v-card-item>
               <v-list bg-color="surface-bright">
                 <v-list-item
@@ -81,7 +97,7 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="4.1 Financial Position Analysis"
+      :title="`4.1 ${t('companyDetail.health.financialPosition.title')}`"
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
@@ -112,7 +128,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="4.2 Debt to Equity History and Analysis"
+      :title="`4.2 ${t('companyDetail.health.deHistory.title')}`"
       class="pt-8 px-8"
     >
       <debt-to-equity-chart class="mb-8" />
@@ -126,7 +142,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="4.3 Balance Sheet"
+      :title="`4.3 ${t('companyDetail.health.balanceSheet.title')}`"
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
@@ -137,13 +153,13 @@ const passed = computed(() =>
               currency: 'US$',
               finUnit: 'B',
               finData: [
-                {name: 'Cash & Short Term Investments', value: 43.2},
-                {name: 'Long Term & Other Assets', value: 27.2},
-                {name: 'Receivables', value: 23.1},
-                {name: 'Inventory', value: 10.1},
-                {name: 'Physical Assets', value: 8.1},
+                { name: 'Cash & Short Term Investments', value: 43.2 },
+                { name: 'Long Term & Other Assets', value: 27.2 },
+                { name: 'Receivables', value: 23.1 },
+                { name: 'Inventory', value: 10.1 },
+                { name: 'Physical Assets', value: 8.1 },
               ],
-          }"
+            }"
           />
         </v-col>
         <v-col cols="6">
@@ -153,10 +169,10 @@ const passed = computed(() =>
               currency: 'US$',
               finUnit: 'B',
               finData: [
-                {name: 'Equity', value: 79.2},
-                {name: 'Other Liabilities', value: 17.5},
-                {name: 'Debt', value: 8.5},
-                {name: 'Account Payable', value: 6.3},
+                { name: 'Equity', value: 79.2 },
+                { name: 'Other Liabilities', value: 17.5 },
+                { name: 'Debt', value: 8.5 },
+                { name: 'Account Payable', value: 6.3 },
               ],
             }"
           />

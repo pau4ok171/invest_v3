@@ -27,7 +27,6 @@ export interface FairValueTab {
   name: string
   id: string
   value: number
-  metric: string
 }
 
 export interface MultiplierTab {
@@ -46,32 +45,26 @@ const statements = computed<Statement[]>(() =>
   )
 )
 const fairValueTabs = computed<FairValueTab[]>(() => {
-  const ticker = company.value.ticker || 'Company'
   return [
     {
       name: 'PE',
       id: 'pe',
       value: 1,
-      metric: `As ${ticker} is profitable we use its Price-To-Earnings Ratio for relative valuation analysis`,
     },
     {
       name: 'PB',
       id: 'pb',
       value: 2,
-      metric: `For ${ticker} we can also use its Price-To-Book Ratio for relative valuation analysis`,
     },
     {
       name: 'PS',
       id: 'ps',
       value: 3,
-      metric: `As ${ticker} is a bank we don’t use its Price-To-Sales Ratio as the key metric for relative valuation analysis`,
     },
     {
       name: t('buttons.others'),
-      id: 'others',
+      id: 'other',
       value: 0,
-      metric:
-        'Other financial metrics that can be useful for relative valuation',
     },
   ]
 })
@@ -116,13 +109,17 @@ const passed = computed(() =>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
       class="bg-surface pt-8 px-8"
-      title="1 Valuation"
-      :subtitle="`Is ${company.ticker || 'Company'} undervalued compared to its fair value, analyst forecasts and its price relative to the market?`"
+      :title="`1 ${t('companyDetail.valuation.title')}`"
+      :subtitle="
+        t('companyDetail.valuation.subtitle', { ticker: company.ticker })
+      "
     >
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
-            <v-card-text>Valuation Score {{ passed }}/6</v-card-text>
+            <v-card-text>{{
+              `${t('companyDetail.valuation.score')} ${passed}/6`
+            }}</v-card-text>
             <v-card-item>
               <v-list bg-color="surface-bright">
                 <v-list-item
@@ -160,8 +157,12 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.1 Share Price vs Fair Value"
-      :subtitle="`What is the Fair Price of ${company.ticker || 'Company'} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model.`"
+      :title="`1.1 ${t('companyDetail.valuation.shareFairValue.title')}`"
+      :subtitle="
+        t('companyDetail.valuation.shareFairValue.subtitle', {
+          ticker: company.ticker,
+        })
+      "
       class="pt-8 px-8"
     >
       <d-c-f-chart />
@@ -172,8 +173,12 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.2 Key Valuation Metric"
-      :subtitle="`Which metric is best to use when looking at relative valuation for ${company.ticker}?`"
+      :title="`1.2 ${t('companyDetail.valuation.keyValuationMetric.title')}`"
+      :subtitle="
+        t('companyDetail.valuation.keyValuationMetric.subtitle', {
+          ticker: company.ticker,
+        })
+      "
       class="px-8"
     >
       <v-row>
@@ -185,7 +190,7 @@ const passed = computed(() =>
         </v-col>
         <v-col md="6" cols="12">
           <key-valuation-metric-chart
-            v-if="fairValueSelected.id !== 'others'"
+            v-if="fairValueSelected.id !== 'other'"
             :tabs="fairValueTabs"
             :selected="fairValueSelected"
           />
@@ -197,8 +202,8 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      :title="`1.3 ${peersSelected.name} Ratio vs Peers`"
-      :subtitle="`How does ${company.ticker}'s ${peersSelected.shortName} Ratio compare to its peers?`"
+      :title="`1.3 ${t('companyDetail.valuation.peVsPeers.title', { selected: peersSelected.name })}`"
+      :subtitle="`${t('companyDetail.valuation.peVsPeers.subtitle', { ticker: company.ticker, selected: peersSelected.shortName })}`"
       class="px-8"
     >
       <div style="display: flex; justify-self: flex-start">
@@ -230,8 +235,8 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.4 Historical Price to Earnings Ratio"
-      subtitle="Historical Price to Earnings Ratio compares a stock's price to its earnings over time. Higher ratios indicate that investors are willing to pay more for the stock."
+      :title="`1.4 ${t('companyDetail.valuation.historicalPE.title')}`"
+      :subtitle="t('companyDetail.valuation.historicalPE.subtitle')"
       class="px-8"
     >
       <v-row class="mb-0 mt-4">
@@ -274,8 +279,8 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.5 Price to Earnings Ratio vs Industry"
-      :subtitle="`How does ${company.ticker}'s PE Ratio compare vs other companies in the European Banks Industry?`"
+      :title="`1.5 ${t('companyDetail.valuation.peVsIndustry.title')}`"
+      :subtitle="`${t('companyDetail.valuation.peVsIndustry.subtitle', { ticker: company.ticker, sector: '[SECTOR]' })}`"
       class="px-8"
     >
       <v-select
@@ -302,8 +307,12 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.6 Price to Earnings Ratio vs Fair Ratio"
-      :subtitle="`What is ${company.ticker}'s PE Ratio compared to its Fair PE Ratio? This is the expected PE Ratio taking into account the company's forecast earnings growth, profit margins and other risk factors.`"
+      :title="`1.6 ${t('companyDetail.valuation.peVsFair.title')}`"
+      :subtitle="
+        t('companyDetail.valuation.peVsFair.subtitle', {
+          ticker: company.ticker,
+        })
+      "
       class="px-8"
     >
       <multiplier-vs-fair-chart />
@@ -314,8 +323,8 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="1.7 Analyst Price Targets"
-      subtitle="What is the analyst 12-month forecast and do we have any statistical confidence in the consensus price target?"
+      :title="`1.7 ${t('companyDetail.valuation.analystsPriceTargets.title')}`"
+      :subtitle="t('companyDetail.valuation.analystsPriceTargets.subtitle')"
       class="px-8"
     >
       <analyst-price-targets-chart />

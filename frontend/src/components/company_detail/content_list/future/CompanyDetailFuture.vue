@@ -1,13 +1,15 @@
 <script setup lang="ts">
 // Components
 import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
-import CompanyDetailCheck from "@/components/company_detail/base/CompanyDetailCheck.vue";
-import EarningsAndRevenueGrowthForecastChart from "@/components/charts/EarningsAndRevenueGrowthForecastChart.vue";
-import ForecastAnnualGrowthChart from "@/components/charts/ForecastAnnualGrowthChart.vue";
-import EPSGrowthForecastChart from "@/components/charts/EPSGrowthForecastChart.vue";
+import CompanyDetailCheck from '@/components/company_detail/base/CompanyDetailCheck.vue'
+import EarningsAndRevenueGrowthForecastChart from '@/components/charts/EarningsAndRevenueGrowthForecastChart.vue'
+import ForecastAnnualGrowthChart from '@/components/charts/ForecastAnnualGrowthChart.vue'
+import EPSGrowthForecastChart from '@/components/charts/EPSGrowthForecastChart.vue'
+import GaugeChart from '@/components/charts/GaugeChart.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -15,10 +17,10 @@ import { computed } from 'vue'
 // Types
 import type { DetailCompany } from '@/types/invest'
 import type { Statement } from '@/types/statements'
-import GaugeChart from "@/components/charts/GaugeChart.vue";
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 const statements = computed<Statement[]>(() =>
   Object.values(store.statements).filter(
     (s) => s.area === 'FUTURE' && s.outcome === 1002
@@ -38,13 +40,23 @@ const passed = computed(() =>
   <v-card color="surface-light" class="mb-4">
     <v-card-item
       class="bg-surface pt-8 px-8"
-      title="2 Future Growth"
-      :subtitle="`${company.ticker} is forecast to grow earnings and revenue by 20.6% and 20.4% per year respectively. EPS is expected to grow by 20.3% per year. Return on equity is forecast to be 50.3% in 3 years.`"
+      :title="`2 ${t('companyDetail.future.title')}`"
+      :subtitle="
+        t('companyDetail.future.subtitle', {
+          ticker: company.ticker,
+          earningsGrowth: 20.6,
+          revenueGrowth: 20.4,
+          epsGrowth: 20.3,
+          roeGrowth: 50.3,
+        })
+      "
     >
       <v-row>
         <v-col md="6" cols="12">
           <v-card color="surface-bright" width="100%" class="mt-4" flat>
-            <v-card-text>Future Score {{ passed }}/6</v-card-text>
+            <v-card-text>{{
+              `${t('companyDetail.future.score')} ${passed}/6`
+            }}</v-card-text>
             <v-card-item>
               <v-list bg-color="surface-bright">
                 <v-list-item
@@ -82,7 +94,7 @@ const passed = computed(() =>
     </v-card-item>
 
     <v-card-item
-      title="2.1 Earnings and Revenue Growth Forecasts"
+      :title="`2.1 ${t('companyDetail.future.earningsAndRevenueGrowth.title')}`"
       class="pt-8 px-8"
     >
       <earnings-and-revenue-growth-forecast-chart />
@@ -91,7 +103,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="2.2 Analyst Future Growth Forecasts"
+      :title="`2.2 ${t('companyDetail.future.analystFutureGrowth.title')}`"
       class="pt-8 px-8"
     >
       <v-row class="mt-2">
@@ -127,7 +139,7 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="2.3 Earnings per Share Growth Forecasts"
+      :title="`2.3 ${t('companyDetail.future.epsGrowth.title')}`"
       class="pt-8 px-8"
     >
       <e-p-s-growth-forecast-chart />
@@ -136,18 +148,23 @@ const passed = computed(() =>
     <v-divider class="my-4" />
 
     <v-card-item
-      title="2.4 Future Return on Equity"
+      :title="`2.4 ${t('companyDetail.future.futureROE.title')}`"
       class="pt-8 px-8"
     >
       <v-row class="my-2">
         <v-col md="6" cols="12">
-          <gauge-chart :data="[{ name: 'Company', value: 52.9 }, { name: 'Industry', value: 11.9 }]" title="Future ROE (3yrs)" />
+          <gauge-chart
+            :data="[
+              { name: 'Company', value: 52.9 },
+              { name: 'Industry', value: 11.9 },
+            ]"
+            title="Future ROE (3yrs)"
+          />
         </v-col>
         <v-col md="6" cols="12">
           <company-detail-check name="IsReturnOnEquityForecastAboveBenchmark" />
         </v-col>
       </v-row>
-
     </v-card-item>
   </v-card>
 </template>

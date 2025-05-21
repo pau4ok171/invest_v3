@@ -1,17 +1,14 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
-
-const caption = computed(
-  () =>
-    `${company.value.ticker} key valuation metrics and ratios. From Price to Earnings, Price to Sales and Price to Book to Price to Earnings Growth Ratio, Enterprise Value and EBITDA.`
-)
+const { t } = useI18n()
 </script>
 
 <template>
@@ -19,36 +16,40 @@ const caption = computed(
     <table class="key-valuation-metrics__table">
       <caption>
         {{
-          caption
+          t('companyDetail.valuation.keyValuationMetric.caption', {
+            ticker: company.ticker,
+          })
         }}
       </caption>
       <thead>
         <tr>
-          <th colspan="2">Key Statistics</th>
+          <th colspan="2">
+            {{ t('companyDetail.valuation.keyValuationMetric.keyStatistics') }}
+          </th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>
-            <span tabindex="0" class="key-valuation-metrics__table-text"
-              >Enterprise Value/Revenue</span
-            >
+            <span tabindex="0" class="key-valuation-metrics__table-text">
+              {{ t('companyDetail.valuation.keyValuationMetric.evToRevenue') }}
+            </span>
           </td>
           <td>n/a</td>
         </tr>
         <tr>
           <td>
-            <span tabindex="0" class="key-valuation-metrics__table-text"
-              >Enterprise Value/EBITDA</span
-            >
+            <span tabindex="0" class="key-valuation-metrics__table-text">
+              {{ t('companyDetail.valuation.keyValuationMetric.evToEBITDA') }}
+            </span>
           </td>
           <td>n/a</td>
         </tr>
         <tr>
           <td>
-            <span tabindex="0" class="key-valuation-metrics__table-text"
-              >PEG Ratio</span
-            >
+            <span tabindex="0" class="key-valuation-metrics__table-text">
+              {{ t('companyDetail.valuation.keyValuationMetric.pegRatio') }}
+            </span>
           </td>
           <td>0.3x</td>
         </tr>
