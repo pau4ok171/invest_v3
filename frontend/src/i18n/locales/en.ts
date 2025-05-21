@@ -147,6 +147,16 @@ export const en = {
     staff: 'Staff',
     settings: 'Settings',
   },
+  snowflake: {
+    analysisChecks: 'Analysis Checks',
+    tooltip: {
+      valuation: 'Is the company undervalued compared to its peers, industry and forecasted cash flows?',
+      future: 'How is the company forecast to perform in the next 1-3 years?',
+      past: 'How has the company performed over the past 5 years?',
+      health: 'Does the company have strong financial health and manageable debt?',
+      dividends: 'Does the company pay a good, reliable and sustainable dividend?',
+    },
+  },
   companyDetail: {
     header: {
       stockReport: 'Stock Reports',

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
 import { computed } from 'vue'
 
@@ -43,28 +46,30 @@ const props = defineProps({
   },
 })
 
-const tooltipItems = [
+const { t } = useI18n()
+
+const tooltipItems = computed(() => [
   {
-    title: 'Valuation',
-    desc: 'Is the company undervalued compared to its peers, industry and forecasted cash flows?',
+    title: t('companyDetail.sections.valuationShort'),
+    desc: t('snowflake.tooltip.valuation'),
   },
   {
-    title: 'Future',
-    desc: 'How is the company forecast to perform in the next 1-3 years?',
+    title: t('companyDetail.sections.futureShort'),
+    desc: t('snowflake.tooltip.future'),
   },
   {
-    title: 'Past',
-    desc: 'How has the company performed over the past 5 years?',
+    title: t('companyDetail.sections.pastShort'),
+    desc: t('snowflake.tooltip.past'),
   },
   {
-    title: 'Health',
-    desc: 'Does the company have strong financial health and manageable debt?',
+    title: t('companyDetail.sections.healthShort'),
+    desc: t('snowflake.tooltip.health'),
   },
   {
-    title: 'Dividend',
-    desc: 'Does the company pay a good, reliable and sustainable dividend?',
+    title: t('companyDetail.sections.dividendShort'),
+    desc: t('snowflake.tooltip.dividends'),
   },
-]
+])
 const order: SnowflakeKey[] = ['value', 'future', 'past', 'health', 'dividends']
 const points = computed(() =>
   order.map((key) =>
@@ -266,7 +271,7 @@ const options = computed<Options>(
         outside: true,
         useHTML: true,
         formatter() {
-          const item = tooltipItems[this.index]
+          const item = tooltipItems.value[this.index]
           const key = order[this.index]
           const statement = props.data[key]
           const icons = Object.values(statement).map((s) =>
@@ -277,7 +282,7 @@ const options = computed<Options>(
         <div class="snowflake-chart-tooltip__title text-h6"><span class="text-disabled">${this.index + 1}</span><span class="snowflake-chart-tooltip__title-separator"></span><span>${item.title}</span></div>
         <div class="snowflake-chart-tooltip__desc text-subtitle-2 mb-4">${item.desc}</div>
         <div class="snowflake-chart-tooltip__checks text-subtitle-2">
-            <div>Analysis Checks <span class="text-disabled">${this.options.y}/6</span></div>
+            <div>${t('snowflake.analysisChecks')} <span class="text-disabled">${this.options.y}/6</span></div>
             <div>${icons.join('')}</div>
         </div>
       </div>
