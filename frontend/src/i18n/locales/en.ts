@@ -282,6 +282,11 @@ export const en = {
       shareFairValue: {
         title: 'Share Price vs Fair Value',
         subtitle: 'What is the Fair Price of {ticker} when looking at its future cash flows? For this estimate we use a Discounted Cash Flow model',
+        currentPrice: 'Current Price',
+        fairPrice: 'Fair Price',
+        undervalued: 'Undervalued',
+        aboutRight: 'About Right',
+        overvalued: 'Overvalued',
       },
       keyValuationMetric: {
         title: 'Key Valuation Metric',

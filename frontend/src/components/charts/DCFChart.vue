@@ -7,9 +7,10 @@ import FetchingData from '@/components/charts/FetchingData.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Types
 import type { Chart, Options, Point, SeriesOptionsType } from 'highcharts'
@@ -32,28 +33,30 @@ interface ValuationDiff {
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
+const { t, locale } = useI18n()
+const chartRef = ref<{ chart: Chart }>()
 const available = ref(true)
 const currentDiff = ref<ValuationStatus>('aboutRight')
 const diffPercentage = ref(0)
 const chartElements = ref<SVGElement[]>([])
 
-const VALUATION_MODES: Record<ValuationStatus, ValuationDiff> = {
+const valuationModes = computed<Record<ValuationStatus, ValuationDiff>>(() => ({
   undervalued: {
-    type: 'Undervalued',
+    type: t('companyDetail.valuation.shareFairValue.undervalued'),
     class: 'dcf-chart__data-label-diff--undervalued',
     color: '#2dc97e',
   },
   overvalued: {
-    type: 'Overvalued',
+    type: t('companyDetail.valuation.shareFairValue.overvalued'),
     class: 'dcf-chart__data-label-diff--overvalued',
     color: '#e64141',
   },
   aboutRight: {
-    type: 'About Right',
+    type: t('companyDetail.valuation.shareFairValue.aboutRight'),
     class: 'dcf-chart__data-label-diff--about-right',
     color: '#eeb219',
   },
-}
+}))
 
 const chartOptions = computed<Options>(
   () =>
@@ -64,7 +67,7 @@ const chartOptions = computed<Options>(
         styledMode: true,
         borderWidth: 0,
         spacingTop: 69,
-        spacingBottom: 80,
+        spacingBottom: 100,
         className: 'dcf-chart__container',
         events: {
           load: drawChartElements,
@@ -89,7 +92,7 @@ const chartOptions = computed<Options>(
           pointWidth: 72, // Высота бары
         },
       },
-      series: getChartSeries(),
+      series: chartSeries.value,
     }) satisfies Options
 )
 
@@ -110,7 +113,7 @@ function getYAxisOptions() {
   }
 }
 
-function getChartSeries(): SeriesOptionsType[] {
+const chartSeries = computed<SeriesOptionsType[]>(() => {
   if (!company.value) return []
 
   const currencySymbol = company.value.formatting.primaryCurrencySymbol
@@ -135,8 +138,8 @@ function getChartSeries(): SeriesOptionsType[] {
         useHTML: true,
         formatter: function (this: Point) {
           return `
-            <div class="d-flex flex-column" style="width: 100px">
-              <div class='dcf-chart__data-label-name'>Current Price</div>
+            <div class="d-flex flex-column" style="width: 200px">
+              <div class='dcf-chart__data-label-name'>${t('companyDetail.valuation.shareFairValue.currentPrice')}</div>
               <div class='dcf-chart__data-label-value'>${this.y}${currencySymbol}</div>
             </div>
           `
@@ -154,8 +157,8 @@ function getChartSeries(): SeriesOptionsType[] {
         useHTML: true,
         formatter: function (this: Point) {
           return `
-            <div class="d-flex flex-column" style="width: 100px">
-              <div class='dcf-chart__data-label-name'>Fair Price</div>
+            <div class="d-flex flex-column" style="width: 200px">
+              <div class='dcf-chart__data-label-name'>${t('companyDetail.valuation.shareFairValue.fairPrice')}</div>
               <div class='dcf-chart__data-label-value'>${this.y}${currencySymbol}</div>
             </div>
           `
@@ -163,14 +166,14 @@ function getChartSeries(): SeriesOptionsType[] {
       },
     },
   ]
-}
+})
 
 function drawChartElements(this: Chart) {
   chartElements.value.forEach((el) => el?.destroy())
   chartElements.value = []
 
   if (!this.series?.[0].points?.[0]) return
-  const currentMode = VALUATION_MODES[currentDiff.value]
+  const currentMode = valuationModes.value[currentDiff.value]
   const box: PlotBox = {
     x: this.plotLeft,
     y: this.plotTop,
@@ -292,9 +295,21 @@ function drawThresholdLabels(chart: Chart, plotBox: PlotBox) {
   const textXOffset = 12
 
   const labels = [
-    { text: '20% Undervalued', x: barWidth * 0.8, class: 'undervalued' },
-    { text: 'About Right', x: barWidth, class: 'about_right' },
-    { text: '20% Overvalued', x: barWidth * 1.2, class: 'overvalued' },
+    {
+      text: `20% ${t('companyDetail.valuation.shareFairValue.undervalued')}`,
+      x: barWidth * 0.8,
+      class: 'undervalued',
+    },
+    {
+      text: t('companyDetail.valuation.shareFairValue.aboutRight'),
+      x: barWidth,
+      class: 'about_right',
+    },
+    {
+      text: `20% ${t('companyDetail.valuation.shareFairValue.overvalued')}`,
+      x: barWidth * 1.2,
+      class: 'overvalued',
+    },
   ]
 
   labels.forEach((label) => {
@@ -313,6 +328,12 @@ function drawThresholdLabels(chart: Chart, plotBox: PlotBox) {
     )
   })
 }
+
+watch(locale, () => {
+  if (!chartRef.value?.chart) return
+
+  chartRef.value.chart.series[0].update(chartSeries.value[0])
+})
 </script>
 
 <template>
@@ -320,6 +341,7 @@ function drawThresholdLabels(chart: Chart, plotBox: PlotBox) {
     <fetching-data v-if="store.fetchingCompany" />
     <charts
       v-else-if="available"
+      ref="chartRef"
       constructorType="chart"
       :options="chartOptions"
     />
