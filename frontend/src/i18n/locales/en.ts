@@ -90,6 +90,7 @@ export const en = {
     days: '0 Days | {n} Day | {n} Days',
     months: '0 Months | {n} Month | {n} Months',
     years: '0 Years | {n} Year | {n} Years',
+    max: 'Max',
   },
   pageTitles: {
     default: 'Finargo - Market Insights, Financial Analysis & Smart Investments',

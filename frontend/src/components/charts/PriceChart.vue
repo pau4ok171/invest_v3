@@ -4,79 +4,273 @@ import FetchingData from '@/components/charts/FetchingData.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
-import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { computed, onUnmounted, ref, shallowRef, watch } from 'vue'
-import { chartOpts as _chartOpts } from '@/components/charts/priceChartOpts'
+import { computed, ref, shallowRef, watch } from 'vue'
+import Highcharts from 'highcharts'
+import { debounce } from 'lodash'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Chart } from 'highcharts-vue'
+import type { Options, StockChart } from 'highcharts'
 
 type AllowedPeriod = '1M' | '3M' | '1Y' | '3Y' | '5Y' | 'Max'
 
 interface Tab {
   value: AllowedPeriod
-  min: Readonly<DateTime>
+  title: string
+  min: DateTime
 }
-type Tablist = { [value: string]: Tab }
+type Tablist = Record<string, Tab>
 
 const companyDetailStore = useCompanyDetailStore()
 const company = computed(() => companyDetailStore.company)
 const priceData = computed(() => companyDetailStore.chartPriceData)
+const { t, locale } = useI18n()
+const chartRef = ref<{ chart: StockChart }>()
 
-const route = useRoute()
+const current = shallowRef<Array<AllowedPeriod>>(['1Y'])
+const tablist = computed<Tablist>(() => ({
+  M1: {
+    value: '1M',
+    title: t('date.shortMonths', 1),
+    min: DateTime.now().minus({ months: 1 }),
+  },
+  M3: {
+    value: '3M',
+    title: t('date.shortMonths', 3),
+    min: DateTime.now().minus({ months: 3 }),
+  },
+  Y1: {
+    value: '1Y',
+    title: t('date.shortYears', 1),
+    min: DateTime.now().minus({ years: 1 }),
+  },
+  Y3: {
+    value: '3Y',
+    title: t('date.shortYears', 3),
+    min: DateTime.now().minus({ years: 3 }),
+  },
+  Y5: {
+    value: '5Y',
+    title: t('date.shortYears', 5),
+    min: DateTime.now().minus({ years: 5 }),
+  },
+  MAX: {
+    value: 'Max',
+    title: t('date.max'),
+    min: DateTime.now().minus({ years: 50 }),
+  },
+}))
 
-const chartEl = ref<typeof Chart>()
-const chartOpts = ref(_chartOpts)
+const tickInterval = computed(() => {
+  switch (current.value[0]) {
+    case '1M':
+      return 7 * 24 * 3600 * 1000 // 1 неделя
+    case '3M':
+      // Точное количество дней для 3 месяцев (~91 день)
+      return Math.floor((91 * 24 * 3600 * 1000) / 3) * 3 // Кратно 3 месяцам
+    case '1Y':
+      // Точное количество дней для квартала (~91 день)
+      return 91 * 24 * 3600 * 1000
+    case '3Y':
+      return 365 * 24 * 3600 * 1000 // 1 год
+    case '5Y':
+      return 365 * 24 * 3600 * 1000 // 1 год
+    case 'Max':
+      // Для максимального диапазона вычисляем оптимальный интервал
+      if (!priceData.value?.length) return 2 * 365 * 24 * 3600 * 1000
 
-const current = shallowRef(['1Y'])
-const intervalId = shallowRef(-1)
-const tablist = ref<Tablist>({
-  M1: { value: '1M', min: DateTime.now().minus({ months: 1 }) },
-  M3: { value: '3M', min: DateTime.now().minus({ months: 3 }) },
-  Y1: { value: '1Y', min: DateTime.now().minus({ years: 1 }) },
-  Y3: { value: '3Y', min: DateTime.now().minus({ years: 3 }) },
-  Y5: { value: '5Y', min: DateTime.now().minus({ years: 5 }) },
-  MAX: { value: 'Max', min: DateTime.now().minus({ years: 50 }) },
+      const dataRange =
+        priceData.value[priceData.value.length - 1][0] - priceData.value[0][0]
+      return dataRange > 10 * 365 * 24 * 3600 * 1000
+        ? 2 * 365 * 24 * 3600 * 1000
+        : 365 * 24 * 3600 * 1000
+    default:
+      return 30 * 24 * 3600 * 1000
+  }
+})
+
+const chartOptions = computed<Options>(() => {
+  return {
+    lang: {
+      locale: locale.value,
+    },
+    series: [
+      {
+        type: 'line',
+        data: priceData.value,
+        threshold: null,
+        tooltip: {
+          valueDecimals: 2,
+        },
+        marker: {
+          radius: 2,
+          fillColor: 'rgb(var(--v-theme-on-surface-light))',
+          states: {
+            hover: {
+              radius: 4,
+            },
+          },
+        },
+        lineWidth: 2,
+        color: 'rgb(var(--v-theme-info))',
+      },
+    ],
+    chart: {
+      marginTop: 40,
+      style: {
+        fontFamily: 'inherit',
+        fontSize: '1rem',
+        fontWeight: 'normal',
+      },
+      zooming: {
+        mouseWheel: {
+          enabled: false,
+        },
+      },
+      events: {
+        load() {
+          const chart = this
+          // Устанавливаем начальный зум (1 год) с учетом полного диапазона
+          current.value = ['1Y']
+          const tab = tablist.value.Y1
+          const minDate = tab.min.startOf('day').toMillis()
+          const maxDate = DateTime.now().toMillis()
+
+          chart.xAxis[0].setExtremes(minDate, maxDate)
+        },
+      },
+      reflow: true,
+    },
+    xAxis: [
+      {
+        visible: true,
+        crosshair: {
+          color: '#5C6874',
+          dashStyle: 'ShortDash',
+        },
+        type: 'datetime',
+        tickInterval: tickInterval.value,
+        labels: {
+          style: {
+            color: 'rgb(var(--v-theme-on-surface-light))',
+            opacity: 1,
+          },
+        },
+      },
+    ],
+    yAxis: [
+      {
+        visible: false,
+        crosshair: {
+          color: '#5C6874',
+          dashStyle: 'ShortDash',
+        },
+      },
+    ],
+    scrollbar: {
+      enabled: false,
+    },
+    rangeSelector: {
+      enabled: false,
+    },
+    navigator: {
+      height: 32,
+      top: 4,
+      outlineWidth: 0,
+      maskFill: 'rgba(35, 148, 223, 0.2)',
+      handles: {
+        enabled: false,
+      },
+      xAxis: {
+        visible: false,
+        gridLineWidth: 0,
+        labels: {
+          overflow: 'allow',
+          y: -10,
+          align: 'center',
+          style: {
+            color: 'rgb(var(--v-theme-on-surface-light))',
+            opacity: 1,
+            fontSize: '.75rem',
+          },
+        },
+      },
+    },
+    tooltip: {
+      backgroundColor: 'rgb(var(--v-theme-surface-bright))',
+      borderRadius: 3,
+      padding: 8,
+      borderWidth: 0,
+      headerFormat: '',
+      xDateFormat: '%a, %e %b %Y',
+      useHTML: true,
+      formatter: function () {
+        return `
+          <div class="custom-tooltip">
+            <div class="date">${DateTime.fromMillis(this.x).toFormat('EEE, d MMM yyyy', { locale: locale.value })}</div>
+            <div class="price">₽${this.y?.toFixed(2)}</div>
+          </div>
+        `
+      },
+      style: {
+        fontSize: '.875rem',
+      },
+    },
+    plotOptions: {
+      series: {
+        animation: {
+          duration: 500,
+        },
+        states: {
+          hover: {
+            halo: {
+              size: 5,
+              opacity: 0.1,
+            },
+          },
+        },
+      },
+    },
+  } satisfies Options
 })
 
 function changeZoom(tab: Tab) {
   current.value = [tab.value]
-  const chart = chartEl?.value?.chart
-  const chartMax = chart.xAxis[1].max || DateTime.now().ts
-  chart.xAxis[0].setExtremes(tab.min.ts, chartMax)
-}
+  const chart = chartRef.value?.chart
+  if (chart) {
+    // Устанавливаем начало периода на 00:00:00
+    const minDate = tab.min.startOf('day').toMillis()
+    // Устанавливаем текущее время как максимальную границу
+    const maxDate = DateTime.now().toMillis()
 
-function afterCreate(chart: any) {
-  chartOpts.value.series[0].data = priceData.value as []
-  const chartMax = chart.xAxis[1].max || DateTime.now().ts
-  chart.xAxis[0].setExtremes(tablist.value['Y1'].min.ts, chartMax)
-  setChartDataUpdateInterval()
-}
+    // Для месячного диапазона добавляем небольшой буфер (2 дня)
+    const buffer = tab.value === '1M' ? 2 * 24 * 3600 * 1000 : 0
 
-function setChartDataUpdateInterval() {
-  const companySlug = route.params?.companySlug as string
-  intervalId.value = setInterval(
-    async () => await companyDetailStore.fetchPriceData(companySlug),
-    1000 * 60 * 5
-  ) // 5min
-}
+    chart.xAxis[0].setExtremes(minDate, maxDate + buffer)
 
-onUnmounted(() => {
-  if (intervalId.value) {
-    window.clearInterval(intervalId.value)
+    // Обновляем интервал ticks после изменения масштаба
+    chart.xAxis[0].update({
+      tickInterval: tickInterval.value,
+    })
   }
-})
+}
 
-watch(
-  () => priceData.value,
-  () => {
-    chartOpts.value.series[0].data = priceData.value as []
-  },
-  { deep: true }
-)
+const reinitChart = () => {
+  if (!chartRef.value?.chart) return
+
+  const chart = chartRef.value.chart
+  const renderTo = chart.renderTo
+
+  chart.destroy()
+  const newChart = new Highcharts.StockChart(renderTo, chartOptions.value)
+
+  chartRef.value.chart = newChart
+}
+
+watch(locale, debounce(reinitChart, 100))
 </script>
 
 <template>
@@ -96,17 +290,16 @@ watch(
           v-for="tab in tablist"
           :key="tab.value"
           :value="tab.value"
-          :text="tab.value"
+          :text="tab.title"
           @click="changeZoom(tab)"
         />
       </v-btn-toggle>
 
       <charts
-        ref="chartEl"
+        ref="chartRef"
         class="detail-price-chart"
-        :constructorType="'stockChart'"
-        :options="chartOpts"
-        :callback="afterCreate"
+        constructorType="stockChart"
+        :options="chartOptions"
       />
     </template>
   </div>
@@ -115,10 +308,10 @@ watch(
 <style lang="scss">
 .detail-price-chart__wrapper {
   height: 430px;
-}
-.detail-price-chart__tablist {
-  display: grid;
-  grid-template-columns: repeat(6, auto);
+
+  @media (max-width: 600px) {
+    height: 350px;
+  }
 }
 .detail-price-chart {
   svg {
@@ -126,47 +319,21 @@ watch(
     height: 100%;
     fill: none;
   }
-  .highcharts-button-box {
-    overflow: visible;
-    font: inherit;
-    -webkit-font-smoothing: inherit;
-    letter-spacing: inherit;
-    background-color: transparent;
-    cursor: pointer;
-    position: relative;
-    display: block;
-    width: 100%;
-    height: auto;
-    border-top: 1px solid transparent;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    padding: 4px;
-    border-radius: 4px;
-  }
   .highcharts-background {
     fill: rgb(var(--v-theme-surface-light));
   }
-  .highcharts-button > text,
-  #price-history-chart .highcharts-label > text,
-  #price-history-chart .highcharts-tooltip-box > text {
-    font-size: 1.3rem !important;
-    line-height: 1.5 !important;
-    font-weight: 500 !important;
-    fill: rgba(var(--v-theme-on-surface-light), 0.3) !important;
-  }
-  .highcharts-button-pressed > text {
-    fill: rgb(var(--v-theme-info)) !important;
-  }
-  .highcharts-button-hover > text {
-    fill: rgb(var(--v-theme-info)) !important;
-  }
-  .price-history-chart-point-box__date {
-    fill: rgba(var(--v-theme-on-surface-light), 0.7);
-    line-height: 1.4;
-  }
-  .price-history-chart-point-box__price {
-    fill: rgb(var(--v-theme-on-surface-light));
-    font-weight: 900;
+  .custom-tooltip {
+    width: 200px;
+
+    .date {
+      color: rgba(var(--v-theme-on-surface-light), 0.7);
+      font-size: 0.875rem;
+    }
+    .price {
+      color: rgb(var(--v-theme-on-surface-light));
+      font-weight: 900;
+      font-size: 1rem;
+    }
   }
   .highcharts-navigator-mask-inside {
     cursor: grab !important;
@@ -181,10 +348,9 @@ watch(
     rx: 4;
     ry: 4;
   }
-  .highcharts-xaxis-labels.highcharts-navigator-xaxis {
-    > text > tspan {
-      fill: rgb(var(--v-theme-surface-light));
-      stroke: rgb(var(--v-theme-surface-light));
+  @media (max-width: 600px) {
+    .highcharts-tooltip {
+      font-size: 0.75rem !important;
     }
   }
 }
