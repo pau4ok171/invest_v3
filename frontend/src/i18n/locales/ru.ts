@@ -172,6 +172,9 @@ export const ru = {
       dividends: 'Выплачивает ли компания стабильные и устойчивые дивиденды?',
     },
   },
+  highcharts: {
+    dataNotAvailable: 'Недостаточно данных для отображения',
+  },
   companyDetail: {
     header: {
       stockReport: 'Отчет по компании',
@@ -235,9 +238,10 @@ export const ru = {
         header: 'Волатильность Цены',
         low: 'Низкая',
         high: 'Высокая',
-        avgMarketVolatility: 'Средняя рыночная волатильность',
-        companyTooltip: 'Среднее недельное изменение {ticker}',
-        industryTooltip: 'Среднее изменение по отрасли {industry}',
+        marketLabel: 'Средняя рыночная волатильность',
+        marketTooltip: 'Среднее изменение по {market} рынку {value}',
+        companyTooltip: 'Среднее недельное изменение {ticker} {value}',
+        industryTooltip: 'Среднее изменение по отрасли {industry} {value}',
       },
       aboutCompany: {
         header: 'О Компании',

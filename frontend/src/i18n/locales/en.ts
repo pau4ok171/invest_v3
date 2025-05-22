@@ -172,6 +172,9 @@ export const en = {
       dividends: 'Does the company pay a good, reliable and sustainable dividend?',
     },
   },
+  highcharts: {
+    dataNotAvailable: 'Insufficient data to display',
+  },
   companyDetail: {
     header: {
       stockReport: 'Stock Reports',
@@ -235,9 +238,10 @@ export const en = {
         header: 'Price Volatility',
         low: 'Low',
         high: 'High',
-        avgMarketVolatility: 'Avg. Market Volatility',
-        companyTooltip: '{ticker} Average Weekly Mouvement',
-        industryTooltip: '{industry} average mouvement',
+        marketLabel: 'Avg. Market Volatility',
+        marketTooltip: '{market} Market Average Mouvement {value}',
+        industryTooltip: '{industry} Industry Average Mouvement {value}',
+        companyTooltip: '{ticker} Average Weekly Mouvement {value}',
       },
       aboutCompany: {
         header: 'About the Company',

@@ -4,6 +4,7 @@ import DataNotAvailable from '@/components/charts/DataNotAvailable.vue'
 
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed } from 'vue'
@@ -13,17 +14,27 @@ import type { DetailCompany } from '@/types/invest'
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
+const { t } = useI18n()
 
 const companyTooltip = computed(() => ({
-  content: `${company.value.ticker} Average Weekly Mouvement ${humanize(company.value.average_weekly_mouvement)}`,
+  content: t('companyDetail.overview.priceVolatility.companyTooltip', {
+    ticker: company.value.ticker,
+    value: humanize(company.value.average_weekly_mouvement),
+  }),
   theme: 'black',
 }))
 const marketTooltip = computed(() => ({
-  content: `${company.value.country.slug?.toUpperCase()} Market Average Mouvement ${humanize(company.value.market.average_weekly_mouvement)}`,
+  content: t('companyDetail.overview.priceVolatility.marketTooltip', {
+    market: company.value.country.slug.toUpperCase(),
+    value: humanize(company.value.market.average_weekly_mouvement),
+  }),
   theme: 'black',
 }))
 const sectorTooltip = computed(() => ({
-  content: `${company.value.country.slug?.toUpperCase()} ${company.value.sector.title} Industry Average Mouvement ${humanize(company.value.sector_market.average_weekly_mouvement)}`,
+  content: t('companyDetail.overview.priceVolatility.industryTooltip', {
+    industry: company.value.sector.title,
+    value: humanize(company.value.sector_market.average_weekly_mouvement),
+  }),
   theme: 'black',
 }))
 const available = computed(
@@ -60,7 +71,7 @@ function humanize(value: number = 0) {
 </script>
 
 <template>
-  <DataNotAvailable v-if="!available" chart-name="Price Volatility Chart" />
+  <data-not-available v-if="!available" chart-name="Price Volatility Chart" />
   <div v-else class="price-volatility-chart__wrapper mb-10">
     <div id="price-volatility-chart" class="price-volatility-chart">
       <svg
@@ -71,15 +82,27 @@ function humanize(value: number = 0) {
       >
         <g>
           <path d="M35 49V45H360V49H35Z" fill="url(#paint0_linear)"></path>
-          <rect x="34" y="43" width="1" height="8" fill="rgb(var(--v-theme-on-surface-light))"></rect>
-          <rect x="360" y="43" width="1" height="8" fill="rgb(var(--v-theme-on-surface-light))"></rect>
+          <rect
+            x="34"
+            y="43"
+            width="1"
+            height="8"
+            fill="rgb(var(--v-theme-on-surface-light))"
+          ></rect>
+          <rect
+            x="360"
+            y="43"
+            width="1"
+            height="8"
+            fill="rgb(var(--v-theme-on-surface-light))"
+          ></rect>
           <text
             x="0"
             y="51"
             font-size="14"
             class="price-volatility-chart__label"
           >
-            Low
+            {{ t('companyDetail.overview.priceVolatility.low') }}
           </text>
           <text
             x="367"
@@ -87,7 +110,7 @@ function humanize(value: number = 0) {
             font-size="14"
             class="price-volatility-chart__label"
           >
-            High
+            {{ t('companyDetail.overview.priceVolatility.high') }}
           </text>
           <defs>
             <linearGradient
@@ -145,7 +168,13 @@ function humanize(value: number = 0) {
           y="55"
           class="price-volatility-chart__svg"
         >
-          <rect x="198" y="-6" width="1" height="68" fill="rgb(var(--v-theme-on-surface-light))"></rect>
+          <rect
+            x="198"
+            y="-6"
+            width="1"
+            height="68"
+            fill="rgb(var(--v-theme-on-surface-light))"
+          ></rect>
           <text
             v-tippy="marketTooltip"
             x="198"
@@ -155,7 +184,7 @@ function humanize(value: number = 0) {
             tabindex="0"
             class="price-volatility-chart__label"
           >
-            Avg. Market Volatility
+            {{ t('companyDetail.overview.priceVolatility.marketLabel') }}
           </text>
         </svg>
         <svg
@@ -186,7 +215,7 @@ function humanize(value: number = 0) {
             font-size="16"
             class="price-volatility- price-volatility-chart__label--dark"
           >
-            Industry
+            {{ t('finance.industry') }}
           </text>
         </svg>
       </svg>

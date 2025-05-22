@@ -1,15 +1,20 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 const props = defineProps({
   chartName: {
     type: String,
     required: true,
   },
 })
+
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="chart-data-not-available">
-    <p>Insufficient data to display {{ props.chartName }}</p>
+    <p>{{ t('highcharts.dataNotAvailable') }} {{ props.chartName }}</p>
   </div>
 </template>
 
@@ -20,6 +25,7 @@ const props = defineProps({
   flex-direction: column;
   gap: 16px;
   align-items: center;
+  text-align: center;
   padding: 16px;
   height: 100%;
   background-color: rgb(var(--base-theme-surface-bright));
