@@ -316,6 +316,7 @@ export const ru = {
       peVsIndustry: {
         title: 'Коэффициент P/E vs Отрасль',
         subtitle: 'Как коэффициент P/E {ticker} сравнивается с другими компаниями в секторе {sector}?',
+        nombreOfCompanies: 'Кол-во компаний',
       },
       peVsFair: {
         title: 'Коэффициент P/E vs Справедливый P/E',

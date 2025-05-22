@@ -316,6 +316,7 @@ export const en = {
       peVsIndustry: {
         title: 'Price to Earnings Ratio vs Industry',
         subtitle: 'How does {ticker}\'s PE Ratio compare vs other companies in the {sector}?',
+        nombreOfCompanies: 'No. of Companies',
       },
       peVsFair: {
         title: 'Price to Earnings Ratio vs Fair Ratio',
