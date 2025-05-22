@@ -305,6 +305,9 @@ export const ru = {
       peVsPeers: {
         title: 'Коэффициент {selected} vs Аналоги',
         subtitle: 'Как коэффициент {selected} {ticker} сравнивается с аналогами?',
+        peerAvg: 'Аналоги Ср.',
+        earningsGrowth: 'Рост Прибыли',
+        salesGrowth: 'Рост Выручки',
       },
       historicalPE: {
         title: 'Исторический коэффициент P/E',

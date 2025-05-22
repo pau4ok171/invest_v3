@@ -6,7 +6,7 @@ import FetchingData from '@/components/charts/FetchingData.vue'
 import { useCompanyDetailStore } from '@/store/companyDetail'
 
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Types
 import type { PropType } from 'vue'
@@ -19,6 +19,7 @@ import type {
   SeriesBarOptions,
   SVGPathArray,
 } from 'highcharts'
+import { useI18n } from 'vue-i18n'
 
 type SeriesKey = 'pe' | 'pb' | 'ps'
 
@@ -35,6 +36,8 @@ const props = defineProps({
 
 const store = useCompanyDetailStore()
 const chartElements = ref<SVGElement[]>([])
+const chartRef = ref<{ chart: Chart }>()
+const { t, locale } = useI18n()
 
 // Mock data
 const peersData = [
@@ -291,11 +294,13 @@ function drawVAxisElements(chart: Chart) {
   // X-axis label
   const textOffsetX = 8
   const textOffsetY = 18
-  const textValueType = activeTabData.value?.id === 'ps' ? 'Sales' : 'Earnings'
+  const textValueType = t(
+    `companyDetail.valuation.peVsPeers.${activeTabData.value?.id === 'ps' ? 'salesGrowth' : 'earningsGrowth'}`
+  ).split(' ')
   const textFormat = `
     <div class="d-flex flex-column text-caption text-medium-emphasis mt-n4">
-      <div class='multiple-vs-peers-chart__v-axis-name'>${textValueType}</div>
-      <div class='multiple-vs-peers-chart__v-axis-name'>Growth</div>
+      <div class='multiple-vs-peers-chart__v-axis-name'>${textValueType[0]}</div>
+      <div class='multiple-vs-peers-chart__v-axis-name'>${textValueType[1]}</div>
     </div>
   `
 
@@ -359,7 +364,7 @@ function drawMiddleElements(chart: Chart) {
     .add(labelGroup)
 
   // Middle label
-  const labelW = 100
+  const labelW = 140
   const labelH = 25
   const labelX = averagePosX + 1 - labelW + 11
 
@@ -372,12 +377,12 @@ function drawMiddleElements(chart: Chart) {
     .add(labelGroup)
 
   // Middle text
-  const textX = averagePosX - labelW / 2 - 30
+  const textX = averagePosX - labelW / 2 - 40
   const textY = plotBox.y - polygonH - labelH / 2 + 5
 
   chart.renderer
     .text(
-      `<tspan class='text-caption'>Peer Avg ${averageValue}x</tspan>`,
+      `<tspan class='text-caption'>${t('companyDetail.valuation.peVsPeers.peerAvg')} ${averageValue}x</tspan>`,
       textX,
       textY
     )
@@ -385,12 +390,21 @@ function drawMiddleElements(chart: Chart) {
 
   chartElements.value.push(labelGroup)
 }
+
+watch(locale, () => {
+  chartRef.value?.chart.redraw()
+})
 </script>
 
 <template>
   <div class="detail-multiplier-vs-peers-chart">
     <fetching-data v-if="store.fetchingCompany" />
-    <charts v-else :options="chartOptions" constructorType="chart" />
+    <charts
+      v-else
+      ref="chartRef"
+      :options="chartOptions"
+      constructorType="chart"
+    />
   </div>
 </template>
 

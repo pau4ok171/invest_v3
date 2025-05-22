@@ -305,6 +305,9 @@ export const en = {
       peVsPeers: {
         title: '{selected} Ratio vs Peers',
         subtitle: 'How does {ticker}\'s {selected} Ratio compare to its peers?',
+        peerAvg: 'Peer Avg',
+        earningsGrowth: 'Earnings Growth',
+        salesGrowth: 'Sales Growth',
       },
       historicalPE: {
         title: 'Historical Price to Earnings Ratio',
