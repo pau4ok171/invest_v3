@@ -407,20 +407,45 @@ export const ru = {
     },
     past: {
       title: 'Исторические Результаты',
-      subtitle: '{ticker} демонстрировал средний рост прибыли {earningsAverageGrowth}% в год, тогда как в отрасли {sector} средний рост составил {industryAverageGrowth}%. Выручка росла в среднем на {revenueAverageGrowth}% ежегодно. Рентабельность капитала (ROE) - {roe}%, чистая маржа - {netMargin}%.',
+      subtitle: 'Прибыль {ticker} росла в среднем на {earningsAverageGrowth}% в год, тогда как в отрасли {sector} средний рост составил {industryAverageGrowth}%. Выручка увеличивалась в среднем на {revenueAverageGrowth}% ежегодно. Рентабельность капитала (ROE) компании - {roe}%, чистая маржа - {netMargin}%.',
       score: 'Оценка Истории',
       revenueExpensesBreakdown: {
-        title: 'Структура Выручки и Расходов',
+        title: 'Структура Доходов и Расходов',
         subtitle: 'Как {ticker} зарабатывает и тратит деньги. На основе последней отчетности (LTM).',
       },
       earningsRevenueHistory: {
         title: 'История Прибыли и Выручки',
+        chart: {
+          actual: 'Факт',
+          tooltip: {
+            revenue: 'Выручка',
+            earnings: 'Прибыль',
+            year: 'год',
+            profitMargin: 'Рентабельность',
+            fcf: 'Свободный Денежный Поток (FCF)',
+            cfo: 'Денежный Поток от Операций (CFO)',
+            opex: 'Операционные Расходы',
+          },
+          legends: {
+            revenue: 'Выручка',
+            earnings: 'Прибыль',
+            fcf: 'Своб. Денежный Поток',
+            cfo: 'Ден. Поток от Операций',
+            opex: 'Операционные Расходы',
+          },
+        },
       },
       fcfVsEarnings: {
         title: 'Анализ Свободного Денежного Потока vs Прибыли',
       },
       pastEarningsGrowth: {
         title: 'Анализ Исторического Роста Прибыли',
+        y5GrowthChart: {
+          title: 'Годовой рост прибыли за 5 лет',
+        },
+        y1GrowthChart: {
+          title: 'Рост прибыли за последний год',
+        },
       },
       roe: {
         title: 'Рентабельность Капитала (ROE)',
@@ -430,6 +455,8 @@ export const ru = {
       },
       roce: {
         title: 'Рент. Влож. Капитала (ROCE)',
+        lastYear: 'Прошлый Год',
+        years3Ago: '3Г Назад',
       },
     },
     health: {

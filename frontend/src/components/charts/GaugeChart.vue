@@ -269,27 +269,29 @@ const options = computed<Options>(() => {
       :options="options"
     />
     <v-card width="144" class="gauge-chart__caption" flat>
-      <v-row no-gutters>
+      <v-row no-gutters class="justify-center align-center text-center">
         <v-col cols="12" class="text-subtitle-1 text-center">
           {{ title || 'Gauge' }}
         </v-col>
       </v-row>
-      <v-row no-gutters class="text-subtitle-1 text-hc-series1-color">
+      <v-row
+        no-gutters
+        class="justify-center align-center text-center text-subtitle-1 text-hc-series1-color"
+      >
         <v-col>
           {{ props.data[0].name }}
         </v-col>
-        <v-col class="text-end">
-          {{ props.data[0].value }}%
-        </v-col>
+        <v-col class="text-end"> {{ props.data[0].value }}% </v-col>
       </v-row>
-      <v-divider/>
-      <v-row no-gutters class="text-caption text-hc-series2-color">
+      <v-divider />
+      <v-row
+        no-gutters
+        class="justify-center align-center text-center text-caption text-hc-series2-color"
+      >
         <v-col>
           {{ props.data[1].name }}
         </v-col>
-        <v-col class="text-end">
-          {{ props.data[1].value }}%
-        </v-col>
+        <v-col class="text-end"> {{ props.data[1].value }}% </v-col>
       </v-row>
     </v-card>
   </div>

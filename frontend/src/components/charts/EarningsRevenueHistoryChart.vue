@@ -2,6 +2,7 @@
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
 import { useDisplay } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, nextTick, ref, watch } from 'vue'
@@ -57,6 +58,7 @@ const isRangePoint = (point: Point): point is RangePoint => {
 const { smAndDown } = useDisplay()
 const { fin } = useFinancialFormatter()
 const chartRef = ref<{ chart: Chart } | null>(null)
+const { t, locale } = useI18n()
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
 const chartElements = {
@@ -65,38 +67,38 @@ const chartElements = {
   oneYearZone: null as SVGElement | null,
 }
 const activeLegends = ref<string[]>(['revenue', 'earnings', 'fcf'])
-const legendOptions = [
+const legendOptions = computed(() => [
   {
-    text: 'Revenue',
+    text: t('companyDetail.past.earningsRevenueHistory.chart.legends.revenue'),
     value: 'revenue',
     color: 'rgb(var(--v-theme-hc-series1-color))',
     fillColor: 'url(#Chart_01_Gradient_02)',
   },
   {
-    text: 'Earnings',
+    text: t('companyDetail.past.earningsRevenueHistory.chart.legends.earnings'),
     value: 'earnings',
     color: 'rgb(var(--v-theme-hc-series2-color))',
     fillColor: 'url(#Chart_02_Gradient_02)',
   },
   {
-    text: 'Free Cash Flow',
+    text: t('companyDetail.past.earningsRevenueHistory.chart.legends.fcf'),
     value: 'fcf',
     color: 'rgb(var(--v-theme-hc-series3-color))',
     fillColor: 'url(#Chart_03_Gradient_02)',
   },
   {
-    text: 'Cash From Op',
+    text: t('companyDetail.past.earningsRevenueHistory.chart.legends.cfo'),
     value: 'cfo',
     color: 'rgb(var(--v-theme-hc-series4-color))',
     fillColor: 'url(#Chart_04_Gradient_02)',
   },
   {
-    text: 'Operating Expenses',
+    text: t('companyDetail.past.earningsRevenueHistory.chart.legends.opex'),
     value: 'opex',
     color: 'rgb(var(--v-theme-hc-series5-color))',
     fillColor: 'url(#Chart_05_Gradient_02)',
   },
-]
+])
 
 const tooltipData = computed(() => {
   if (!currentPoint.value) return null
@@ -114,7 +116,10 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat('LLL dd yyyy'),
+    date: DateTime.fromMillis(point.category as number).toFormat(
+      'LLL dd yyyy',
+      { locale: locale.value }
+    ),
     revenue: fin({
       currency: data.currency,
       value: dataInstance.revenue[1],
@@ -221,7 +226,9 @@ const updateMarkers = (point: Point) => {
       const seriesPoint = series.points[point.index] as Point | RangePoint
       if (!seriesPoint) return null
 
-      const baseColor = legendOptions.find((l) => l.value === seriesName)?.color
+      const baseColor = legendOptions.value.find(
+        (l) => l.value === seriesName
+      )?.color
 
       const baseMarkerStyle = {
         stroke: 'white',
@@ -403,7 +410,7 @@ const options = computed<Options>(() => ({
         to: currentDate.toMillis(),
         color: 'url(#Actual_Background_Gradient)',
         label: {
-          text: 'Actual',
+          text: t('companyDetail.past.earningsRevenueHistory.chart.actual'),
           align: 'right',
           style: {
             color: 'rgb(var(--v-theme-on-surface))',
@@ -449,7 +456,7 @@ const options = computed<Options>(() => ({
     min: 0,
     max: 140000,
   },
-  series: legendOptions.map((series) => ({
+  series: legendOptions.value.map((series) => ({
     type: 'areaspline',
     name: series.value,
     data: getSeriesData(series.value),
@@ -531,11 +538,23 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Revenue</v-col>
+              <v-col>
+                {{
+                  t(
+                    'companyDetail.past.earningsRevenueHistory.chart.tooltip.revenue'
+                  )
+                }}
+              </v-col>
               <v-col>
                 <div class="text-hc-series1-color">
-                  {{ tooltipData.revenue
-                  }}<span class="text-disabled"> /yr</span>
+                  {{ tooltipData.revenue }}
+                  <span class="text-disabled">
+                    /{{
+                      t(
+                        'companyDetail.past.earningsRevenueHistory.chart.tooltip.year'
+                      )
+                    }}</span
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -544,18 +563,34 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Earnings</v-col>
+              <v-col>{{
+                t(
+                  'companyDetail.past.earningsRevenueHistory.chart.tooltip.earnings'
+                )
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series2-color">
-                  {{ tooltipData.earnings
-                  }}<span class="text-disabled"> /yr</span>
+                  {{ tooltipData.earnings }}
+                  <span class="text-disabled">
+                    /{{
+                      t(
+                        'companyDetail.past.earningsRevenueHistory.chart.tooltip.year'
+                      )
+                    }}</span
+                  >
                 </div>
                 <div
                   v-if="tooltipData.profiteMargin"
                   class="text-high-emphasis"
                 >
                   {{ tooltipData.profiteMargin }}
-                  <span class="text-disabled">Profit margin</span>
+                  <span class="text-disabled">
+                    {{
+                      t(
+                        'companyDetail.past.earningsRevenueHistory.chart.tooltip.profitMargin'
+                      )
+                    }}
+                  </span>
                 </div>
               </v-col>
             </v-row>
@@ -564,7 +599,13 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Free Cash Flow</v-col>
+              <v-col>
+                {{
+                  t(
+                    'companyDetail.past.earningsRevenueHistory.chart.tooltip.fcf'
+                  )
+                }}
+              </v-col>
               <v-col>
                 <div class="text-hc-series3-color">
                   {{ tooltipData.fcf }}
@@ -576,7 +617,13 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Cash From Op</v-col>
+              <v-col>
+                {{
+                  t(
+                    'companyDetail.past.earningsRevenueHistory.chart.tooltip.cfo'
+                  )
+                }}
+              </v-col>
               <v-col>
                 <div class="text-hc-series4-color">
                   {{ tooltipData.cfo }}
@@ -588,7 +635,13 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Operating Expenses</v-col>
+              <v-col>
+                {{
+                  t(
+                    'companyDetail.past.earningsRevenueHistory.chart.tooltip.opex'
+                  )
+                }}
+              </v-col>
               <v-col>
                 <div class="text-hc-series5-color">
                   {{ tooltipData.opex }}
@@ -607,7 +660,14 @@ watch(
       :options="options"
     />
 
-    <v-btn-toggle class="d-flex flex-wrap" :style="{ height: smAndDown ? '96px' : '48px' }" multiple mandatory variant="outlined" v-model="activeLegends">
+    <v-btn-toggle
+      class="d-flex flex-wrap"
+      :style="{ height: smAndDown ? '96px' : '48px' }"
+      multiple
+      mandatory
+      variant="outlined"
+      v-model="activeLegends"
+    >
       <v-btn
         v-for="item in legendOptions"
         :key="`legend-${item.value}`"

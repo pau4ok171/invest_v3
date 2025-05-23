@@ -415,12 +415,38 @@ export const en = {
       },
       earningsRevenueHistory: {
         title: 'Earnings and Revenue History',
+        chart: {
+          actual: 'Actual',
+          tooltip: {
+            revenue: 'Revenue',
+            earnings: 'Earnings',
+            year: 'yr',
+            profitMargin: 'Profit margin',
+            fcf: 'Free Cash Flow',
+            cfo: 'Cash From Op',
+            opex: 'Operating Expenses',
+          },
+          legends: {
+            revenue: 'Revenue',
+            earnings: 'Earnings',
+            fcf: 'Free Cash Flow',
+            cfo: 'Cash From Op',
+            opex: 'Operating Expenses',
+          },
+        },
+
       },
       fcfVsEarnings: {
         title: 'Free Cash Flow vs Earnings Analysis',
       },
       pastEarningsGrowth: {
         title: 'Past Earnings Growth Analysis',
+        y5GrowthChart: {
+          title: 'Past 5 Years Annual Earnings Growth',
+        },
+        y1GrowthChart: {
+          title: 'Last 1 Year Earnings Growth',
+        },
       },
       roe: {
         title: 'Return on Equity',
@@ -430,6 +456,8 @@ export const en = {
       },
       roce: {
         title: 'Return on Capital Employed',
+        lastYear: 'Last Year',
+        years3Ago: '3 Years Ago',
       },
     },
     health: {

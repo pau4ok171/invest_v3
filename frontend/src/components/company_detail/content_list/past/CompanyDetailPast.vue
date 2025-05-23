@@ -139,21 +139,25 @@ const passed = computed(() =>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Company', value: 62.2, suffix: '%' },
-              { name: 'Industry', value: 12.4, suffix: '%' },
-              { name: 'Market', value: 12.0, suffix: '%' },
+              { name: t('finance.company'), value: 62.2, suffix: '%' },
+              { name: t('finance.industry'), value: 12.4, suffix: '%' },
+              { name: t('finance.market'), value: 12.0, suffix: '%' },
             ]"
-            title="Past 5 Years Annual Earnings Growth"
+            :title="
+              t('companyDetail.past.pastEarningsGrowth.y5GrowthChart.title')
+            "
           />
         </v-col>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Company', value: 146.9, suffix: '%' },
-              { name: 'Industry', value: -1.7, suffix: '%' },
-              { name: 'Market', value: 4.8, suffix: '%' },
+              { name: t('finance.company'), value: 146.9, suffix: '%' },
+              { name: t('finance.industry'), value: -1.7, suffix: '%' },
+              { name: t('finance.market'), value: 4.8, suffix: '%' },
             ]"
-            title="Last 1 Year Earnings Growth"
+            :title="
+              t('companyDetail.past.pastEarningsGrowth.y1GrowthChart.title')
+            "
           />
         </v-col>
       </v-row>
@@ -173,8 +177,8 @@ const passed = computed(() =>
         <v-col md="6" cols="12">
           <gauge-chart
             :data="[
-              { name: 'Company', value: 91.9 },
-              { name: 'Industry', value: 11.9 },
+              { name: t('finance.company'), value: 91.9 },
+              { name: t('finance.industry'), value: 11.9 },
             ]"
             title="ROE"
           />
@@ -195,8 +199,8 @@ const passed = computed(() =>
         >
           <gauge-chart
             :data="[
-              { name: 'Company', value: 63.9 },
-              { name: 'Industry', value: 7.0 },
+              { name: t('finance.company'), value: 63.9 },
+              { name: t('finance.industry'), value: 7.0 },
             ]"
             title="ROA"
           />
@@ -209,8 +213,8 @@ const passed = computed(() =>
         >
           <gauge-chart
             :data="[
-              { name: 'Last Year', value: 87.1 },
-              { name: '3 Years Ago', value: 25.1 },
+              { name: t('companyDetail.past.roce.lastYear'), value: 87.1 },
+              { name: t('companyDetail.past.roce.years3Ago'), value: 25.1 },
             ]"
             title="ROCE"
           />
