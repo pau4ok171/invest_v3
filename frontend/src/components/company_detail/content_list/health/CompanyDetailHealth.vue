@@ -104,19 +104,39 @@ const passed = computed(() =>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Assets', value: 80.13, prefix: 'US$', suffix: 'B' },
-              { name: 'Liabilities', value: 18.05, prefix: 'US$', suffix: 'B' },
+              {
+                name: t('companyDetail.health.financialPosition.assets'),
+                value: 80.13,
+                prefix: 'US$',
+                suffix: 'B',
+              },
+              {
+                name: t('companyDetail.health.financialPosition.liabilities'),
+                value: 18.05,
+                prefix: 'US$',
+                suffix: 'B',
+              },
             ]"
-            title="Short Term"
+            :title="t('companyDetail.health.financialPosition.shortTerm')"
           />
         </v-col>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Assets', value: 31.48, prefix: 'US$', suffix: 'B' },
-              { name: 'Liabilities', value: 14.23, prefix: 'US$', suffix: 'B' },
+              {
+                name: t('companyDetail.health.financialPosition.assets'),
+                value: 31.48,
+                prefix: 'US$',
+                suffix: 'B',
+              },
+              {
+                name: t('companyDetail.health.financialPosition.liabilities'),
+                value: 14.23,
+                prefix: 'US$',
+                suffix: 'B',
+              },
             ]"
-            title="Long Term"
+            :title="t('companyDetail.health.financialPosition.longTerm')"
           />
         </v-col>
       </v-row>
@@ -148,7 +168,7 @@ const passed = computed(() =>
       <v-row class="mt-2">
         <v-col cols="6">
           <treemap-chart
-            title="Assets"
+            :title="t('companyDetail.health.balanceSheet.assets')"
             :data="{
               currency: 'US$',
               finUnit: 'B',
@@ -164,7 +184,7 @@ const passed = computed(() =>
         </v-col>
         <v-col cols="6">
           <treemap-chart
-            title="Liabilities + Equity"
+            :title="`${t('companyDetail.health.balanceSheet.liabilities')} + ${t('companyDetail.health.balanceSheet.equity')}`"
             :data="{
               currency: 'US$',
               finUnit: 'B',

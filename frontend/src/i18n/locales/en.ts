@@ -466,12 +466,32 @@ export const en = {
       score: 'Financial Health Score',
       financialPosition: {
         title: 'Financial Position',
+        shortTerm: 'Short Term',
+        longTerm: 'Long Term',
+        assets: 'Assets',
+        liabilities: 'Liabilities',
       },
       deHistory: {
         title: 'Debt to Equity History and Analysis',
+        chart: {
+          tooltip: {
+            debt: 'Debt',
+            equity: 'Equity',
+            deRatio: 'Debt/Equity Ratio',
+            cashAndEq: 'Cash And Equivalents',
+          },
+          legends: {
+            debt: 'Debt',
+            equity: 'Equity',
+            cashAndEq: 'Cash And Equivalents',
+          },
+        },
       },
       balanceSheet: {
         title: 'Balance Sheet',
+        assets: 'Assets',
+        liabilities: 'Liabilities',
+        equity: 'Equity',
       },
     },
     dividend: {

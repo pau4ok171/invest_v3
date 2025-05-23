@@ -2,6 +2,7 @@
 // Composables
 import { useFinancialFormatter } from '@/composables/formatter'
 import { useDisplay } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, nextTick, ref, watch } from 'vue'
@@ -52,6 +53,7 @@ const isRangePoint = (point: Point): point is RangePoint => {
 // Reactive states
 const { smAndDown } = useDisplay()
 const { fin } = useFinancialFormatter()
+const { t, locale } = useI18n()
 const chartRef = ref<{ chart: Chart } | null>(null)
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
@@ -61,26 +63,26 @@ const chartElements = {
   oneYearZone: null as SVGElement | null,
 }
 const activeLegends = ref<string[]>(['debt', 'equity'])
-const legendOptions = [
+const legendOptions = computed(() => [
   {
-    text: 'Debt',
+    text: t('companyDetail.health.deHistory.chart.legends.debt'),
     value: 'debt',
     color: 'rgb(var(--v-theme-hc-series-neg-color))',
     fillColor: 'url(#Chart_NEG_Gradient_02)',
   },
   {
-    text: 'Equity',
+    text: t('companyDetail.health.deHistory.chart.legends.equity'),
     value: 'equity',
     color: 'rgb(var(--v-theme-hc-series1-color))',
     fillColor: 'url(#Chart_01_Gradient_02)',
   },
   {
-    text: 'Cash And Equivalents',
+    text: t('companyDetail.health.deHistory.chart.legends.cashAndEq'),
     value: 'cashAndEquivalents',
     color: 'rgb(var(--v-theme-hc-series2-color))',
     fillColor: 'url(#Chart_02_Gradient_02)',
   },
-]
+])
 
 const tooltipData = computed(() => {
   if (!currentPoint.value) return null
@@ -98,7 +100,10 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat('LLL dd yyyy'),
+    date: DateTime.fromMillis(point.category as number).toFormat(
+      'LLL dd yyyy',
+      { locale: locale.value }
+    ),
     debt: fin({
       currency: data.currency,
       value: dataInstance.debt[1],
@@ -189,7 +194,9 @@ const updateMarkers = (point: Point) => {
       const seriesPoint = series.points[point.index] as Point | RangePoint
       if (!seriesPoint) return null
 
-      const baseColor = legendOptions.find((l) => l.value === seriesName)?.color
+      const baseColor = legendOptions.value.find(
+        (l) => l.value === seriesName
+      )?.color
 
       const baseMarkerStyle = {
         stroke: 'white',
@@ -405,7 +412,7 @@ const options = computed<Options>(() => ({
     min: 0,
     max: 80000,
   },
-  series: legendOptions.map((series) => ({
+  series: legendOptions.value.map((series) => ({
     type: 'areaspline',
     name: series.value,
     data: getSeriesData(series.value),
@@ -487,7 +494,9 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Debt</v-col>
+              <v-col>{{
+                t('companyDetail.health.deHistory.chart.tooltip.debt')
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series-neg-color">
                   {{ tooltipData.debt }}
@@ -499,7 +508,9 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Equity</v-col>
+              <v-col>{{
+                t('companyDetail.health.deHistory.chart.tooltip.equity')
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series1-color">
                   {{ tooltipData.equity }}
@@ -508,7 +519,9 @@ watch(
                   <span class="text-high-emphasis">{{
                     tooltipData.debtEquityRatio
                   }}</span>
-                  Debt/Equity Ratio
+                  {{
+                    t('companyDetail.health.deHistory.chart.tooltip.deRatio')
+                  }}
                 </div>
               </v-col>
             </v-row>
@@ -517,7 +530,9 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Cash And Equivalents</v-col>
+              <v-col>{{
+                t('companyDetail.health.deHistory.chart.tooltip.cashAndEq')
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series2-color">
                   {{ tooltipData.cashAndEquivalents }}

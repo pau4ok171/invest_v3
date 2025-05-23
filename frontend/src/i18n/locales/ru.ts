@@ -465,12 +465,32 @@ export const ru = {
       score: 'Оценка Финансового Состояния',
       financialPosition: {
         title: 'Финансовое Положение',
+        shortTerm: 'Краткосрочное',
+        longTerm: 'Долгосрочное',
+        assets: 'Активы',
+        liabilities: 'Обязательства',
       },
       deHistory: {
         title: 'История и Анализ Debt/Equity',
+        chart: {
+          tooltip: {
+            debt: 'Долг',
+            equity: 'Капитал',
+            deRatio: 'Коэффициент Debt/Equity',
+            cashAndEq: 'Денежные Средства и Эквиваленты',
+          },
+          legends: {
+            debt: 'Долг',
+            equity: 'Капитал',
+            cashAndEq: 'Денежные Средства',
+          },
+        },
       },
       balanceSheet: {
         title: 'Балансовый Отчет',
+        assets: 'Активы',
+        liabilities: 'Обязательства',
+        equity: 'Капитал',
       },
     },
     dividend: {
