@@ -75,6 +75,7 @@ export const en = {
   finance: {
     market: 'Market',
     industry: 'Industry',
+    company: 'Company',
     ratio: 'Ratio',
     eps: 'Earnings per share (EPS)',
     grossMargin: 'Gross Margin',
@@ -355,15 +356,53 @@ export const en = {
       score: 'Future Score',
       earningsAndRevenueGrowth: {
         title: 'Earnings and Revenue Growth Forecasts',
+        chart: {
+          tooltip: {
+            analysts: 'Analysts',
+            lastUpdated: 'Last Updated',
+            year: 'yr',
+            revenue: 'Revenue',
+            earnings: 'Earnings',
+            fcf: 'Free Cash Flow',
+            cfo: 'Cash From Op',
+          },
+          legends: {
+            revenue: 'Revenue',
+            earnings: 'Earnings',
+            fcf: 'Free Cash Flow',
+            cfo: 'Cash From Op',
+          },
+          past: 'Past',
+          analystsForecasts: 'Analysts Forecasts'
+        },
       },
       analystFutureGrowth: {
         title: 'Analyst Future Growth Forecasts',
+        earningsGrowthTitle: 'Forecast Annual Earnings Growth',
+        revenueGrowthTitle: 'Forecast Annual Revenue Growth',
       },
       epsGrowth: {
         title: 'Earnings per Share Growth Forecasts',
+        chart: {
+          tooltip: {
+            eps: 'EPS',
+            analystsEps: 'Analysts\' EPS',
+            analystsNombre: 'Analysts\' No',
+            lastUpdated: 'Last Updated',
+          },
+          legends: {
+            eps: 'EPS',
+            analystsEpsRange: 'Analysts\' EPS Range',
+          },
+          actual: 'Actual',
+          analystsForecasts: 'Analysts Forecasts',
+        },
       },
       futureROE: {
         title: 'Future Return on Equity',
+        chart: {
+          title: 'Future ROE (3yrs)'
+        },
       },
     },
     past: {

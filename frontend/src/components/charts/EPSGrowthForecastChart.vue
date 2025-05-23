@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useDisplay } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, nextTick, ref, watch } from 'vue'
@@ -47,6 +48,7 @@ const isRangePoint = (point: Point): point is RangePoint => {
 // Reactive states
 const { smAndDown } = useDisplay()
 const chartRef = ref<{ chart: Chart } | null>(null)
+const { t, locale } = useI18n()
 const currentDate = DateTime.now()
 const currentPoint = ref<Point | null>(null)
 const chartElements = {
@@ -55,16 +57,16 @@ const chartElements = {
   oneYearZone: null as SVGElement | null,
 }
 const activeLegends = ref<string[]>(['eps', 'epsRange'])
-const legendOptions = [
+const legendOptions = computed(() => [
   {
-    text: 'EPS',
+    text: t('companyDetail.future.epsGrowth.chart.legends.eps'),
     value: 'eps',
   },
   {
-    text: "Analysts' EPS Range",
+    text: t('companyDetail.future.epsGrowth.chart.legends.analystsEpsRange'),
     value: 'epsRange',
   },
-]
+])
 
 const tooltipData = computed(() => {
   if (!currentPoint.value) return null
@@ -82,12 +84,16 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat('LLL dd yyyy'),
+    date: DateTime.fromMillis(point.category as number).toFormat(
+      'LLL dd yyyy',
+      { locale: locale.value }
+    ),
     eps: `${data.currency}${dataInstance.eps}`,
     epsRange: `${data.currency}${dataInstance.epsLow} - ${data.currency}${dataInstance.epsHigh}`,
     analysts: dataInstance.analysts,
     lastUpdated: DateTime.fromMillis(dataInstance.lastUpdated).toFormat(
-      'LLL dd yyyy'
+      'LLL dd yyyy',
+      { locale: locale.value }
     ),
     tooltipStyle: {
       transform: `translateX(${tooltipPos}px)`,
@@ -413,7 +419,7 @@ const options = computed<Options>(() => ({
         to: currentDate.toMillis(),
         color: 'url(#Actual_Background_Gradient)',
         label: {
-          text: 'Actual',
+          text: t('companyDetail.future.epsGrowth.chart.actual'),
           align: 'right',
           style: {
             color: 'rgb(var(--v-theme-on-surface))',
@@ -429,7 +435,7 @@ const options = computed<Options>(() => ({
         to: currentDate.plus({ year: 3 }).toMillis(),
         color: 'transparent',
         label: {
-          text: 'Analysts Forecasts',
+          text: t('companyDetail.future.epsGrowth.chart.analystsForecasts'),
           align: 'left',
           style: {
             color: '#606060',
@@ -568,7 +574,9 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>EPS</v-col>
+              <v-col>{{
+                t('companyDetail.future.epsGrowth.chart.tooltip.eps')
+              }}</v-col>
               <v-col>
                 <div
                   :class="
@@ -587,7 +595,9 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>Analysts' EPS</v-col>
+              <v-col>{{
+                t('companyDetail.future.epsGrowth.chart.tooltip.analystsEps')
+              }}</v-col>
               <v-col>
                 <div
                   :class="
@@ -605,7 +615,9 @@ watch(
           <v-divider />
 
           <v-row no-gutters>
-            <v-col>Analysts' No</v-col>
+            <v-col>{{
+              t('companyDetail.future.epsGrowth.chart.tooltip.analystsNombre')
+            }}</v-col>
             <v-col class="text-high-emphasis">
               {{ tooltipData.analysts || 'n/a' }}
             </v-col>
@@ -614,7 +626,9 @@ watch(
           <v-divider />
 
           <v-row no-gutters>
-            <v-col>Last Updated</v-col>
+            <v-col>{{
+              t('companyDetail.future.epsGrowth.chart.tooltip.lastUpdated')
+            }}</v-col>
             <v-col class="text-high-emphasis">
               {{ tooltipData.lastUpdated }}
             </v-col>

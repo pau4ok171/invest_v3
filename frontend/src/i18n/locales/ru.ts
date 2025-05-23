@@ -75,6 +75,7 @@ export const ru = {
   finance: {
     market: 'Рынок',
     industry: 'Отрасль',
+    company: 'Компания',
     ratio: 'Коэффициент',
     eps: 'Прибыль на Акцию (EPS)',
     grossMargin: 'Валовая Прибыль',
@@ -351,19 +352,57 @@ export const ru = {
     },
     future: {
       title: 'Перспективы Роста',
-      subtitle: 'Прогнозируется, что {ticker} будет расти: прибыль на {earningsGrowth}%, выручка на {revenueGrowth}% в год. EPS ожидается рост на {epsGrowth}% ежегодно. Рентабельность капитала (ROE) прогнозируется на уровне {roeGrowth}% через 3 года.',
+      subtitle: 'Прогнозируется, что {ticker} будет увеличивать прибыль на {earningsGrowth}% и выручку на {revenueGrowth}% в год. Ожидается рост EPS на {epsGrowth}% ежегодно. Рентабельность капитала (ROE) через 3 года составит {roeGrowth}%.',
       score: 'Оценка Перспектив',
       earningsAndRevenueGrowth: {
         title: 'Прогноз Роста Прибыли и Выручки',
+        chart: {
+          tooltip: {
+            analysts: 'Аналитики',
+            lastUpdated: 'Обновлено',
+            year: 'год',
+            revenue: 'Выручка',
+            earnings: 'Прибыль',
+            fcf: 'Своб. ден. поток (FCF)',
+            cfo: 'Ден. поток от оп. (CFO)',
+          },
+          legends: {
+            revenue: 'Выручка',
+            earnings: 'Прибыль',
+            fcf: 'Своб. денежный поток',
+            cfo: 'Денежный поток от операций',
+          },
+          past: 'История',
+          analystsForecasts: 'Прогнозы аналитиков'
+        },
       },
       analystFutureGrowth: {
         title: 'Прогнозы Роста Аналитиков',
+        earningsGrowthTitle: 'Прогнозируемый Годовой Рост Прибыли',
+        revenueGrowthTitle: 'Прогнозируемый Годовой Рост Выручки',
       },
       epsGrowth: {
         title: 'Прогноз Роста Прибыли на Акцию (EPS)',
+        chart: {
+          tooltip: {
+            eps: 'EPS',
+            analystsEps: 'Прогноз EPS Аналитиков',
+            analystsNombre: 'Кол-во Аналитиков',
+            lastUpdated: 'Обновлено',
+          },
+          legends: {
+            eps: 'EPS',
+            analystsEpsRange: 'Диапазон Прогнозов EPS',
+          },
+          actual: 'Факт',
+          analystsForecasts: 'Прогнозы Аналитиков',
+        },
       },
       futureROE: {
         title: 'Прогнозируемая Рентабельность Капитала (ROE)',
+        chart: {
+          title: 'Прогноз ROE (3 года)'
+        },
       },
     },
     past: {

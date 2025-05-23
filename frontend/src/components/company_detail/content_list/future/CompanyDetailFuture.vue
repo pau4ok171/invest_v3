@@ -110,21 +110,25 @@ const passed = computed(() =>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Company', value: 20.6, suffix: '%' },
-              { name: 'Industry', value: 22.9, suffix: '%' },
-              { name: 'Market', value: 13.3, suffix: '%' },
+              { name: t('finance.company'), value: 20.6, suffix: '%' },
+              { name: t('finance.industry'), value: 22.9, suffix: '%' },
+              { name: t('finance.market'), value: 13.3, suffix: '%' },
             ]"
-            title="Forecast Annual Earnings Growth"
+            :title="
+              t('companyDetail.future.analystFutureGrowth.earningsGrowthTitle')
+            "
           />
         </v-col>
         <v-col md="6" cols="12">
           <forecast-annual-growth-chart
             :data="[
-              { name: 'Company', value: 20.2, suffix: '%' },
-              { name: 'Industry', value: 16.0, suffix: '%' },
-              { name: 'Market', value: 8.2, suffix: '%' },
+              { name: t('finance.company'), value: 20.2, suffix: '%' },
+              { name: t('finance.industry'), value: 16.0, suffix: '%' },
+              { name: t('finance.market'), value: 8.2, suffix: '%' },
             ]"
-            title="Forecast Annual Revenue Growth"
+            :title="
+              t('companyDetail.future.analystFutureGrowth.revenueGrowthTitle')
+            "
           />
         </v-col>
       </v-row>
@@ -155,10 +159,10 @@ const passed = computed(() =>
         <v-col md="6" cols="12">
           <gauge-chart
             :data="[
-              { name: 'Company', value: 52.9 },
-              { name: 'Industry', value: 11.9 },
+              { name: t('finance.company'), value: 52.9 },
+              { name: t('finance.industry'), value: 11.9 },
             ]"
-            title="Future ROE (3yrs)"
+            :title="t('companyDetail.future.futureROE.title')"
           />
         </v-col>
         <v-col md="6" cols="12">
