@@ -1,14 +1,22 @@
 <script setup lang="ts">
 // Composables
 import { useI18n } from 'vue-i18n'
-import { useDisplay } from "vuetify";
+import { useDisplay } from 'vuetify'
 
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Options, Point, SVGElement, SVGPathArray } from 'highcharts'
+import type {
+  Chart,
+  Options,
+  Point,
+  SVGElement,
+  SVGPathArray,
+} from 'highcharts'
+import Highcharts from 'highcharts'
+import { debounce } from 'lodash'
 
 // Constants
 const CHART_HEIGHT = 356
@@ -21,7 +29,7 @@ interface AnalystChartData {
 }
 
 interface ChartData {
-  datetime: number | 'current'
+  datetime: number
   sharePrice: number
   average1YPrice: number
   dispersion: number
@@ -29,9 +37,9 @@ interface ChartData {
 }
 
 // Reactive states
+const chartRef = ref<{ chart: Chart }>()
 const { smAndDown } = useDisplay()
-const { t } = useI18n()
-const currentDate = DateTime.now()
+const { t, locale } = useI18n()
 const currentPoint = ref<Point | null>(null)
 const chartElements = {
   tooltipConnector: null as SVGElement | null,
@@ -266,10 +274,12 @@ const getAgreementStatus = (dispersion: number) => {
   return {
     isAgr,
     color: isAgr ? 'text-success' : 'text-error',
-    status: isAgr ? 'Good' : 'Low',
-    text: isAgr
-      ? 'Analysts agreement range is spread less than 15% from the average'
-      : 'Analysts agreement range is spread more than 15% from the average',
+    status: t(
+      `companyDetail.valuation.analystsPriceTargets.tooltip.agreement.status.${isAgr ? 'good' : 'low'}`
+    ),
+    text: t(
+      `companyDetail.valuation.analystsPriceTargets.tooltip.agreement.desc.${isAgr ? 'good' : 'low'}`
+    ),
   }
 }
 
@@ -282,9 +292,13 @@ const tooltipData = computed(() => {
   const dataInstance = data.items[dataIndex]
 
   const date = DateTime.fromMillis(point.category as number).toFormat(
-    'LLL dd yyyy'
+    'LLL dd yyyy',
+    { locale: locale.value }
   )
-  const analysts = t('analyst', { n: dataInstance.analysts })
+  const analysts = t(
+    'companyDetail.valuation.analystsPriceTargets.tooltip.analysts',
+    { n: dataInstance.analysts }
+  )
   const diff =
     (dataInstance.average1YPrice - dataInstance.sharePrice) /
     dataInstance.sharePrice
@@ -314,7 +328,7 @@ const tooltipData = computed(() => {
 })
 
 // Chart options
-const options = computed<Options>(
+const chartOptions = computed<Options>(
   () =>
     ({
       chart: {
@@ -342,11 +356,11 @@ const options = computed<Options>(
         type: 'datetime',
         plotBands: [
           {
-            from: 0,
-            to: currentDate.toMillis(),
+            from: DateTime.now().minus({ years: 1 }).toMillis(),
+            to: DateTime.now().toMillis(),
             color: 'url(#Actual_Background_Gradient)',
             label: {
-              text: 'Past',
+              text: t('companyDetail.valuation.analystsPriceTargets.past'),
               align: 'right',
               style: {
                 color: 'rgb(var(--v-theme-on-surface))',
@@ -358,11 +372,11 @@ const options = computed<Options>(
             zIndex: -1,
           },
           {
-            from: currentDate.toMillis(),
-            to: currentDate.plus({ year: 1 }).toMillis(),
+            from: DateTime.now().toMillis(),
+            to: DateTime.now().plus({ year: 1 }).toMillis(),
             color: 'transparent',
             label: {
-              text: '12m Forecast',
+              text: t('companyDetail.valuation.analystsPriceTargets.forecast'),
               align: 'left',
               style: {
                 color: '#606060',
@@ -482,6 +496,11 @@ const options = computed<Options>(
       },
       legend: {
         align: 'left',
+        labelFormatter: function () {
+          return t(
+            `companyDetail.valuation.analystsPriceTargets.legend.${this.index === 0 ? 'sharePrice' : 'avgTarget'}`
+          )
+        },
         verticalAlign: 'bottom',
         symbolHeight: 12,
         symbolWidth: 12,
@@ -608,6 +627,20 @@ const updateTooltip = (point: Point) => {
   updatePointElements(point)
   currentPoint.value = point
 }
+
+const reinitChart = () => {
+  if (!chartRef.value?.chart) return
+
+  const chart = chartRef.value.chart
+  const renderTo = chart.renderTo
+
+  chart.destroy()
+  const newChart = new Highcharts.Chart(renderTo, chartOptions.value)
+
+  chartRef.value.chart = newChart
+}
+
+watch(locale, debounce(reinitChart, 100))
 </script>
 
 <template>
@@ -630,7 +663,11 @@ const updateTooltip = (point: Point) => {
           </v-row>
           <v-divider />
           <v-row no-gutters>
-            <v-col cols="4">Share Price</v-col>
+            <v-col cols="4">{{
+              t(
+                'companyDetail.valuation.analystsPriceTargets.tooltip.sharePrice'
+              )
+            }}</v-col>
             <v-col offset="1"
               ><div class="text-info">
                 {{ tooltipData.sharePrice }}
@@ -639,7 +676,11 @@ const updateTooltip = (point: Point) => {
           </v-row>
           <v-divider />
           <v-row no-gutters>
-            <v-col cols="4">Average 1Y Price Target</v-col>
+            <v-col cols="4">{{
+              t(
+                'companyDetail.valuation.analystsPriceTargets.tooltip.avgTarget'
+              )
+            }}</v-col>
             <v-col offset="1"
               ><div class="text-hc-average-series-color">
                 {{ tooltipData.analyticsPrice }}
@@ -651,7 +692,11 @@ const updateTooltip = (point: Point) => {
           </v-row>
           <v-divider />
           <v-row no-gutters>
-            <v-col cols="4">Agreement</v-col>
+            <v-col cols="4">{{
+              t(
+                'companyDetail.valuation.analystsPriceTargets.tooltip.agreement.title'
+              )
+            }}</v-col>
             <v-col offset="1">
               <div :class="tooltipData.agrColorClass">
                 {{ tooltipData.agrStatus }}
@@ -665,9 +710,10 @@ const updateTooltip = (point: Point) => {
       </v-card>
     </div>
     <charts
+      ref="chartRef"
       class="analyst-price-targets-chart__chart"
       constructorType="chart"
-      :options="options"
+      :options="chartOptions"
     />
   </div>
 </template>

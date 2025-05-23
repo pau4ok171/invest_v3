@@ -325,6 +325,28 @@ export const en = {
       analystsPriceTargets: {
         title: 'Analyst Price Targets',
         subtitle: 'What is the analyst 12-month forecast and do we have any statistical confidence in the consensus price target?',
+        past: 'Past',
+        forecast: '12m Forecast',
+        tooltip: {
+          sharePrice: 'Share Price',
+          avgTarget: 'Average 1Y Price Target',
+          agreement: {
+            title: 'Agreement',
+            status: {
+              good: 'Good',
+              low: 'Low',
+            },
+            desc: {
+              good: 'Analysts agreement range is spread less than 15% from the average',
+              low: 'Analysts agreement range is spread more than 15% from the average',
+            },
+          },
+          analysts: 'No Analysts | {n} Analyst | {n} Analysts',
+        },
+        legend: {
+          sharePrice: 'Share Price',
+          avgTarget: 'Average 1Y Target',
+        },
       },
     },
     future: {
