@@ -273,7 +273,7 @@ async function register() {
         />
       </v-card-text>
 
-      <v-card-text class="d-flex justify-center text-medium-emphasis">
+      <v-card-text class="d-flex justify-center text-center text-medium-emphasis">
         <span v-html="t('auth.disclaimer')" />
       </v-card-text>
     </v-card>
