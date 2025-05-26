@@ -80,7 +80,9 @@ const legendOptions = computed(() => [
     yAxis: 0,
   },
   {
-    text: t('companyDetail.dividend.stabilityAndGrowth.legends.dividendPayments'),
+    text: t(
+      'companyDetail.dividend.stabilityAndGrowth.legends.dividendPayments'
+    ),
     value: 'dividendPayments',
     color: 'rgb(var(--v-theme-hc-series2-color))',
     fillColor: 'url(#Chart_02_Gradient_02)',
@@ -123,7 +125,9 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat('LLL dd yyyy', { locale: locale.value }),
+    date: DateTime.fromMillis(point.category as number).toFormat('DD', {
+      locale: locale.value,
+    }),
     dividendPayments: fin({
       currency: data.currency,
       value: dataInstance.dividendPayments[1],
@@ -245,7 +249,9 @@ const updateMarkers = (point: Point) => {
       const seriesPoint = series.points[point.index] as Point | RangePoint
       if (!seriesPoint) return null
 
-      const baseColor = legendOptions.value.find((l) => l.value === seriesName)?.color
+      const baseColor = legendOptions.value.find(
+        (l) => l.value === seriesName
+      )?.color
 
       const baseMarkerStyle = {
         stroke: 'white',
@@ -444,7 +450,9 @@ const options = computed<Options>(
             to: currentDate.plus({ year: 3 }).toMillis(),
             color: 'transparent',
             label: {
-              text: t('companyDetail.dividend.stabilityAndGrowth.analystsForecasts'),
+              text: t(
+                'companyDetail.dividend.stabilityAndGrowth.analystsForecasts'
+              ),
               align: 'left',
               style: {
                 color: '#606060',
@@ -575,11 +583,21 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.dividendPayments') }}</v-col>
+              <v-col>{{
+                t(
+                  'companyDetail.dividend.stabilityAndGrowth.tooltip.dividendPayments'
+                )
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series1-color">
                   {{ tooltipData.dividendPayments }}
-                  <span class="text-disabled">/{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.quarterly') }}</span>
+                  <span class="text-disabled"
+                    >/{{
+                      t(
+                        'companyDetail.dividend.stabilityAndGrowth.tooltip.quarterly'
+                      )
+                    }}</span
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -588,11 +606,21 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.annualAmount') }}</v-col>
+              <v-col>{{
+                t(
+                  'companyDetail.dividend.stabilityAndGrowth.tooltip.annualAmount'
+                )
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series3-color">
                   {{ tooltipData.annualAmount }}
-                  <span class="text-disabled">/{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.year') }}</span>
+                  <span class="text-disabled"
+                    >/{{
+                      t(
+                        'companyDetail.dividend.stabilityAndGrowth.tooltip.year'
+                      )
+                    }}</span
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -601,10 +629,19 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.eps') }}</v-col>
+              <v-col>{{
+                t('companyDetail.dividend.stabilityAndGrowth.tooltip.eps')
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series4-color">
-                  {{ tooltipData.eps }} <span class="text-disabled">/{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.year') }}</span>
+                  {{ tooltipData.eps }}
+                  <span class="text-disabled"
+                    >/{{
+                      t(
+                        'companyDetail.dividend.stabilityAndGrowth.tooltip.year'
+                      )
+                    }}</span
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -613,11 +650,21 @@ watch(
             <v-divider />
 
             <v-row no-gutters>
-              <v-col>{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.dividendYield') }}</v-col>
+              <v-col>{{
+                t(
+                  'companyDetail.dividend.stabilityAndGrowth.tooltip.dividendYield'
+                )
+              }}</v-col>
               <v-col>
                 <div class="text-hc-series2-color">
                   {{ tooltipData.dividendYield }}
-                  <span class="text-disabled">/{{ t('companyDetail.dividend.stabilityAndGrowth.tooltip.year') }}</span>
+                  <span class="text-disabled"
+                    >/{{
+                      t(
+                        'companyDetail.dividend.stabilityAndGrowth.tooltip.year'
+                      )
+                    }}</span
+                  >
                 </div>
               </v-col>
             </v-row>

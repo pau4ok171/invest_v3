@@ -12,18 +12,20 @@ import type { Report } from '@/types/invest'
 
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const lastEarnings = computed(() =>
   company.value.last_reported_earnings
-    ? DateTime.fromISO(company.value.last_reported_earnings).toFormat(
-        'LLL dd, yyyy'
-      )
+    ? DateTime.fromISO(company.value.last_reported_earnings).toFormat('DD', {
+        locale: locale.value,
+      })
     : 'n/a'
 )
 const nextEarnings = computed(() =>
   company.value.next_earnings
-    ? DateTime.fromISO(company.value.next_earnings).toFormat('LLL dd, yyyy')
+    ? DateTime.fromISO(company.value.next_earnings).toFormat('DD', {
+        locale: locale.value,
+      })
     : 'n/a'
 )
 const eps = computed(() => {

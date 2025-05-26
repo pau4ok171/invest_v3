@@ -100,29 +100,36 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat(
-      'LLL dd yyyy',
-      { locale: locale.value }
-    ),
+    date: DateTime.fromMillis(point.category as number).toFormat('DD', {
+      locale: locale.value,
+    }),
     revenue: {
       value: `${data.currency}${dataInstance.revenue / 1000}b`,
       analysts: 50,
-      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('DD', {
+        locale: locale.value,
+      }),
     },
     earnings: {
       value: `${data.currency}${dataInstance.earnings / 1000}b`,
       analysts: 40,
-      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('DD', {
+        locale: locale.value,
+      }),
     },
     fcf: {
       value: `${data.currency}${dataInstance.freeCashFlow / 1000}b`,
       analysts: 30,
-      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('DD', {
+        locale: locale.value,
+      }),
     },
     cfo: {
       value: `${data.currency}${dataInstance.cashFromOp / 1000}b`,
       analysts: 20,
-      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('LLL dd yyyy'),
+      lastUpdated: DateTime.fromMillis(1745193600000).toFormat('DD', {
+        locale: locale.value,
+      }),
     },
     tooltipStyle: {
       transform: `translateX(${tooltipPos}px)`,

@@ -100,10 +100,9 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat(
-      'LLL dd yyyy',
-      { locale: locale.value }
-    ),
+    date: DateTime.fromMillis(point.category as number).toFormat('DD', {
+      locale: locale.value,
+    }),
     debt: fin({
       currency: data.currency,
       value: dataInstance.debt[1],

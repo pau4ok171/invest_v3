@@ -1,4 +1,7 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
 import { computed, shallowRef } from 'vue'
 import { DateTime } from 'ts-luxon'
@@ -15,9 +18,10 @@ const props = defineProps({
 })
 
 const dialog = shallowRef(false)
+const { locale } = useI18n()
 
 const publishedAt = computed(() =>
-  DateTime.fromISO(props.item.date).toFormat('LLL dd')
+  DateTime.fromISO(props.item.date).toFormat('DD', { locale: locale.value })
 )
 </script>
 

@@ -172,7 +172,7 @@ function drawChartElements(this: Chart) {
   createLine(this, fromX, fromY, LINE_WIDTH, LINE_HEIGHT, 'hc-series1-color')
   createText(
     this,
-    `${t('companyDetail.dividend.upcomingPayment.chart.today')}<br/>${today.toFormat('MMM dd yyyy', { locale: locale.value })}`,
+    `${t('companyDetail.dividend.upcomingPayment.chart.today')}<br/>${today.toFormat('DD', { locale: locale.value })}`,
     fromX,
     fromY + LINE_HEIGHT + 20
   )
@@ -188,7 +188,7 @@ function drawChartElements(this: Chart) {
   )
   createText(
     this,
-    `${t('companyDetail.dividend.upcomingPayment.chart.exDividendDate')}<br/>${DateTime.fromSeconds(data.exDividendDate).toFormat('MMM dd yyyy', { locale: locale.value })}`,
+    `${t('companyDetail.dividend.upcomingPayment.chart.exDividendDate')}<br/>${DateTime.fromSeconds(data.exDividendDate).toFormat('DD', { locale: locale.value })}`,
     exDivFromX,
     fromY - LINE_HEIGHT - 50
   )
@@ -204,7 +204,7 @@ function drawChartElements(this: Chart) {
   )
   createText(
     this,
-    `<div class="text-hc-series3-color">${t('companyDetail.dividend.upcomingPayment.chart.dividendPayDate')}</div><div>${DateTime.fromSeconds(data.dividendPayDate).toFormat('MMM dd yyyy', { locale: locale.value })}</div>`,
+    `<div class="text-hc-series3-color">${t('companyDetail.dividend.upcomingPayment.chart.dividendPayDate')}</div><div>${DateTime.fromSeconds(data.dividendPayDate).toFormat('DD', { locale: locale.value })}</div>`,
     divPayFromX - 115,
     fromY + LINE_HEIGHT + 20,
     true

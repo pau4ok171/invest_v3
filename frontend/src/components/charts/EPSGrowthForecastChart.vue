@@ -84,17 +84,15 @@ const tooltipData = computed(() => {
       : (point.plotX || 0) + point.series.chart.plotLeft - TOOLTIP_WIDTH
 
   return {
-    date: DateTime.fromMillis(point.category as number).toFormat(
-      'LLL dd yyyy',
-      { locale: locale.value }
-    ),
+    date: DateTime.fromMillis(point.category as number).toFormat('DD', {
+      locale: locale.value,
+    }),
     eps: `${data.currency}${dataInstance.eps}`,
     epsRange: `${data.currency}${dataInstance.epsLow} - ${data.currency}${dataInstance.epsHigh}`,
     analysts: dataInstance.analysts,
-    lastUpdated: DateTime.fromMillis(dataInstance.lastUpdated).toFormat(
-      'LLL dd yyyy',
-      { locale: locale.value }
-    ),
+    lastUpdated: DateTime.fromMillis(dataInstance.lastUpdated).toFormat('DD', {
+      locale: locale.value,
+    }),
     tooltipStyle: {
       transform: `translateX(${tooltipPos}px)`,
     },

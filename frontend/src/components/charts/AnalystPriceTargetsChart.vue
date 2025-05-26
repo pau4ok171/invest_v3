@@ -291,10 +291,9 @@ const tooltipData = computed(() => {
   const dataIndex = currentPoint.value.index
   const dataInstance = data.items[dataIndex]
 
-  const date = DateTime.fromMillis(point.category as number).toFormat(
-    'LLL dd yyyy',
-    { locale: locale.value }
-  )
+  const date = DateTime.fromMillis(point.category as number).toFormat('DD', {
+    locale: locale.value,
+  })
   const analysts = t(
     'companyDetail.valuation.analystsPriceTargets.tooltip.analysts',
     { n: dataInstance.analysts }
