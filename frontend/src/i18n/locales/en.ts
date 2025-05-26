@@ -212,6 +212,15 @@ export const en = {
       placeholder: 'e.g. My new Portfolio',
       holdings: 'No Holdings|{n} Holding|{n} Holdings',
     },
+    analysts: {
+      title: 'Analysts',
+      subtitle: '{title} is covered by {n} Analysts|{title} is covered by {n} Analyst|{title} is covered by {n} Analysts',
+      table: {
+        institution: 'Institution',
+        target: 'Target',
+        score: 'Score',
+      },
+    },
     overview: {
       stockOverview: {
         header: 'Stock Overview',

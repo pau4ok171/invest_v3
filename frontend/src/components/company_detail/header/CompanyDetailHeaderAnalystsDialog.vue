@@ -1,11 +1,13 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, shallowRef } from 'vue'
 
 const companyDetailStore = useCompanyDetailStore()
+const { t } = useI18n()
 
 const dialog = shallowRef(false)
 const totalIdeas = computed(
@@ -14,13 +16,8 @@ const totalIdeas = computed(
 </script>
 
 <template>
-  <v-dialog
-    activator="parent"
-    v-model="dialog"
-    title="Analyst Sources"
-    max-width="700"
-  >
-    <v-card title="Analysts">
+  <v-dialog activator="parent" v-model="dialog" max-width="700">
+    <v-card :title="t('companyDetail.analysts.title')">
       <template #append>
         <v-btn
           icon="$close"
@@ -30,17 +27,21 @@ const totalIdeas = computed(
         />
       </template>
       <v-card-title>
-        {{ companyDetailStore.company.title }} is covered by
-        {{ totalIdeas }} analysts.
+        {{
+          t('companyDetail.analysts.subtitle', {
+            title: companyDetailStore.company.title,
+            n: totalIdeas,
+          })
+        }}
       </v-card-title>
       <v-divider />
       <v-card-item>
         <v-table>
           <thead>
             <tr>
-              <th>Institution</th>
-              <th>Target</th>
-              <th>Score</th>
+              <th>{{ t('companyDetail.analysts.table.institution') }}</th>
+              <th>{{ t('companyDetail.analysts.table.target') }}</th>
+              <th>{{ t('companyDetail.analysts.table.score') }}</th>
             </tr>
           </thead>
           <tbody>
