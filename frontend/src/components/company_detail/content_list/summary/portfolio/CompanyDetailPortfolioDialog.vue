@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref, shallowRef } from 'vue'
@@ -11,6 +12,7 @@ import type { Portfolio } from '@/types/portfolios'
 const store = useCompanyDetailStore()
 const company = computed(() => store.company)
 const portfolios = computed<Portfolio[]>(() => store.portfolios)
+const { t } = useI18n()
 
 const inputMode = shallowRef(false)
 const portfolioName = ref(null)
@@ -36,13 +38,8 @@ async function onCreatePortfolio() {
 </script>
 
 <template>
-  <v-dialog
-    activator="parent"
-    :title="`Add ${company.ticker} to Portfolio`"
-    max-width="700"
-    v-model="portfolioDialog"
-  >
-    <v-card title="Portfolio">
+  <v-dialog activator="parent" max-width="700" v-model="portfolioDialog">
+    <v-card :title="t('companyDetail.portfolio.title')">
       <template #append>
         <v-btn
           icon="$close"
@@ -59,14 +56,14 @@ async function onCreatePortfolio() {
             lines="two"
           >
             <v-list-item-title>{{ p.name }}</v-list-item-title>
-            <v-list-item-subtitle
-              >{{ p.positions.length }} Holdings</v-list-item-subtitle
-            >
+            <v-list-item-subtitle>
+              {{ t('companyDetail.portfolio.holdings', p.positions.length) }}
+            </v-list-item-subtitle>
             <template #append>
               <template v-if="p.positions.includes(company.id as number)">
                 <v-btn
                   prepend-icon="$iChecked"
-                  text="added"
+                  :text="t('buttons.added')"
                   color="success"
                   rounded="large"
                   readonly
@@ -85,7 +82,7 @@ async function onCreatePortfolio() {
               <template v-else>
                 <v-btn
                   prepend-icon="$plus"
-                  text="add"
+                  :text="t('buttons.add')"
                   color="info"
                   rounded="large"
                   @click="store.updatePortfolio('include', p)"
@@ -106,7 +103,7 @@ async function onCreatePortfolio() {
           }"
           @keydown.enter.stop="onCreatePortfolio"
           @keydown.esc.stop.prevent="inputMode = false"
-          placeholder="e.g. My new portfolio"
+          :placeholder="t('companyDetail.portfolio.placeholder')"
           single-line
           variant="solo-filled"
           density="comfortable"
@@ -117,7 +114,7 @@ async function onCreatePortfolio() {
 
         <v-btn
           v-else
-          text="new portfolio"
+          :text="t('buttons.newPortfolio')"
           color="primary"
           rounded="large"
           variant="tonal"

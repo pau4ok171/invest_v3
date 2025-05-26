@@ -207,6 +207,11 @@ export const ru = {
       ownershipShort: 'Акционеры',
       otherShort: 'Дополнительно',
     },
+    portfolio: {
+      title: 'Портфель',
+      placeholder: 'Например: Мой инвест портфель',
+      holdings: 'Нет Активов|{n} Актив|{n} Актива|{n} Активов',
+    },
     overview: {
       stockOverview: {
         header: 'Обзор Компании',

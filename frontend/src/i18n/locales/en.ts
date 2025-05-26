@@ -207,6 +207,11 @@ export const en = {
       ownershipShort: 'Ownership',
       otherShort: 'Information',
     },
+    portfolio: {
+      title: 'Portfolio',
+      placeholder: 'e.g. My new Portfolio',
+      holdings: 'No Holdings|{n} Holding|{n} Holdings',
+    },
     overview: {
       stockOverview: {
         header: 'Stock Overview',
