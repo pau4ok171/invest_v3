@@ -13,6 +13,8 @@ const langs = [
   { id: 'fr', title: 'Français', iso: 'fr' },
   { id: 'es', title: 'Español', iso: 'es' },
   { id: 'de', title: 'Deutsch', iso: 'de' },
+  { id: 'pl', title: 'Polski', iso: 'pl' },
+  { id: 'it', title: 'Italiano', iso: 'it' },
 ]
 
 const selected = ref(['ru'])
