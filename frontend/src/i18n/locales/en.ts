@@ -83,6 +83,9 @@ export const en = {
     debtEquityRatio: 'Debt/Equity Ratio',
     currentDivYield: 'Current Dividend Yield',
     payoutRatio: 'Payout Ratio',
+    pe: 'Price to Earnings',
+    pb: 'Price to Book',
+    ps: 'price to Sales',
   },
   date: {
     shortDays: '{n}D',

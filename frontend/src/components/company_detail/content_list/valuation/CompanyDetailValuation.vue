@@ -17,7 +17,7 @@ import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useI18n } from 'vue-i18n'
 
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Types
 import type { Statement } from '@/types/statements'
@@ -38,7 +38,7 @@ export interface MultiplierTab {
 
 const store = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => store.company)
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const statements = computed<Statement[]>(() =>
   Object.values(store.statements).filter(
     (s) => s.area === 'VALUE' && s.outcome === 1002
@@ -70,30 +70,30 @@ const fairValueTabs = computed<FairValueTab[]>(() => {
 })
 const fairValueSelected = ref(fairValueTabs.value[0])
 
-const multiplierTabs: MultiplierTab[] = [
+const multiplierTabs = computed<MultiplierTab[]>(() => [
   {
-    name: 'Price to Earnings',
+    name: t('finance.pe'),
     shortName: 'PE',
     id: 'pe',
     value: 1,
   },
   {
-    name: 'Price to Book',
+    name: t('finance.pb'),
     shortName: 'PB',
     id: 'pb',
     value: 2,
   },
   {
-    name: 'Price to Sales',
+    name: t('finance.ps'),
     shortName: 'PS',
     id: 'ps',
     value: 3,
   },
-]
-const peersSelected = ref<MultiplierTab>(multiplierTabs[0])
-const historicalSelected = ref<MultiplierTab>(multiplierTabs[0])
+])
+const peersSelected = ref<MultiplierTab>(multiplierTabs.value[0])
+const historicalSelected = ref<MultiplierTab>(multiplierTabs.value[0])
 const historicalTabSelected = ref([0])
-const industrySelected = ref<MultiplierTab>(multiplierTabs[0])
+const industrySelected = ref<MultiplierTab>(multiplierTabs.value[0])
 
 const passed = computed(() =>
   statements.value.reduce((acc, s) => {
@@ -103,6 +103,12 @@ const passed = computed(() =>
     return acc
   }, 0)
 )
+
+watch(locale, () => {
+  peersSelected.value.name = t(`finance.${peersSelected.value.id}`)
+  historicalSelected.value.name = t(`finance.${historicalSelected.value.id}`)
+  industrySelected.value.name = t(`finance.${industrySelected.value.id}`)
+})
 </script>
 
 <template>
@@ -216,7 +222,7 @@ const passed = computed(() =>
           item-title="name"
           variant="outlined"
           rounded="xl"
-          width="200"
+          max-width="fit-content"
           density="compact"
           hide-details
         />
@@ -249,7 +255,7 @@ const passed = computed(() =>
             item-title="name"
             variant="outlined"
             rounded="xl"
-            width="200"
+            max-width="fit-content"
             density="compact"
             hide-details
           />
@@ -292,7 +298,7 @@ const passed = computed(() =>
         item-title="name"
         variant="outlined"
         rounded="xl"
-        width="200"
+        max-width="fit-content"
         density="compact"
         hide-details
       />

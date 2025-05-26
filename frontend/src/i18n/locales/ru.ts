@@ -83,6 +83,9 @@ export const ru = {
     debtEquityRatio: 'Коэф. Долг/Капитал (D/E)',
     currentDivYield: 'Текущая Див. Доходность',
     payoutRatio: 'Коэф. Выплат',
+    pe: '(P/E) Цена/Прибыль',
+    pb: '(P/B) Цена/Балансовая Стоимость',
+    ps: '(P/S) Цена/Выручка',
   },
   date: {
     shortDays: '{n}Д',
