@@ -1,10 +1,19 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
 import { computed, ref } from 'vue'
 import { DateTime } from 'ts-luxon'
 
 // Types
-import type { Chart, Options, SVGElement, TooltipOptions, SeriesBarOptions } from 'highcharts'
+import type {
+  Chart,
+  Options,
+  SVGElement,
+  TooltipOptions,
+  SeriesBarOptions,
+} from 'highcharts'
 
 // Constants
 const BAR_WIDTH = 40
@@ -13,7 +22,7 @@ const LINE_HEIGHT = 56
 const TEXT_STYLE = {
   color: 'rgb(var(--v-theme-on-surface))',
   fontSize: '0.875rem',
-  fontWeight: '500'
+  fontWeight: '500',
 }
 
 // Data
@@ -25,23 +34,31 @@ const data = {
 // Refs
 const chartElements = ref<SVGElement[]>([])
 const today = DateTime.now()
+const { t, locale } = useI18n()
 
 // Computed properties
-const daysToDividend = computed(() =>
-  Math.round(DateTime.fromSeconds(data.exDividendDate).diff(today, 'days').days) + 1
+const daysToDividend = computed(
+  () =>
+    Math.round(
+      DateTime.fromSeconds(data.exDividendDate).diff(today, 'days').days
+    ) + 1
 )
 
-const daysToPayment = computed(() =>
-  Math.round(DateTime.fromSeconds(data.dividendPayDate).diff(
-    DateTime.fromSeconds(data.exDividendDate),
-    'days'
-  ).days) + 1
+const daysToPayment = computed(
+  () =>
+    Math.round(
+      DateTime.fromSeconds(data.dividendPayDate).diff(
+        DateTime.fromSeconds(data.exDividendDate),
+        'days'
+      ).days
+    ) + 1
 )
 
 const chartOptions = computed<Options>(() => {
   const todaySeconds = today.toSeconds()
   const totalDuration = data.dividendPayDate - todaySeconds
-  const exDividendPosition = (data.exDividendDate - todaySeconds) / totalDuration
+  const exDividendPosition =
+    (data.exDividendDate - todaySeconds) / totalDuration
 
   return {
     chart: {
@@ -51,7 +68,7 @@ const chartOptions = computed<Options>(() => {
       spacingRight: 0,
       events: {
         load: drawChartElements,
-        redraw: drawChartElements
+        redraw: drawChartElements,
       },
     },
     title: { text: undefined },
@@ -60,16 +77,18 @@ const chartOptions = computed<Options>(() => {
     yAxis: { visible: false, min: 0, max: 1 },
     tooltip: getTooltipConfig(),
     plotOptions: {
-      bar: getBarPlotOptions()
+      bar: getBarPlotOptions(),
     },
-    series: getChartSeries(exDividendPosition)
+    series: getChartSeries(exDividendPosition),
   } satisfies Options
 })
 
 // Methods
 function getTooltipConfig(): TooltipOptions {
   return {
-    format: `Buy in the next ${daysToDividend.value} days to receive the upcoming dividend`,
+    format: t('companyDetail.dividend.upcomingPayment.chart.tooltip', {
+      n: daysToDividend.value,
+    }),
     backgroundColor: 'rgb(var(--v-theme-surface))',
     style: {
       color: 'rgb(var(--v-theme-on-surface))',
@@ -93,7 +112,7 @@ function getBarPlotOptions() {
     states: {
       inactive: { enabled: false },
       hover: { enabled: false },
-    }
+    },
   }
 }
 
@@ -102,21 +121,25 @@ function getChartSeries(exDividendPosition: number): SeriesBarOptions[] {
     {
       type: 'bar',
       dataLabels: getDataLabelConfig(`${daysToPayment.value} days`, 'left'),
-      data: [{
-        x: 0,
-        y: 1,
-        color: 'rgb(var(--v-theme-hc-series3-color))',
-      }],
+      data: [
+        {
+          x: 0,
+          y: 1,
+          color: 'rgb(var(--v-theme-hc-series3-color))',
+        },
+      ],
     },
     {
       type: 'bar',
       dataLabels: getDataLabelConfig(`${daysToDividend.value} days`, 'right'),
-      data: [{
-        x: 0,
-        y: exDividendPosition,
-        color: 'rgb(var(--v-theme-hc-series1-color))',
-      }],
-    }
+      data: [
+        {
+          x: 0,
+          y: exDividendPosition,
+          color: 'rgb(var(--v-theme-hc-series1-color))',
+        },
+      ],
+    },
   ]
 }
 
@@ -130,7 +153,7 @@ function getDataLabelConfig(text: string, align: 'left' | 'right') {
       ...TEXT_STYLE,
       textOutline: 'none',
       stroke: 'none',
-    }
+    },
   }
 }
 
@@ -139,15 +162,17 @@ function drawChartElements(this: Chart) {
 
   const [mainSeries, exDividendSeries] = this.series
   const fromX = this.plotLeft
-  const fromY = this.plotTop + (mainSeries.points[0].shapeArgs?.x || 0) + BAR_WIDTH
+  const fromY =
+    this.plotTop + (mainSeries.points[0].shapeArgs?.x || 0) + BAR_WIDTH
   const exDivFromX = fromX + (exDividendSeries.points[0].shapeArgs?.height || 0)
-  const divPayFromX = fromX + (mainSeries.points[0].shapeArgs?.height || 0) - LINE_WIDTH
+  const divPayFromX =
+    fromX + (mainSeries.points[0].shapeArgs?.height || 0) - LINE_WIDTH
 
   // Today elements
   createLine(this, fromX, fromY, LINE_WIDTH, LINE_HEIGHT, 'hc-series1-color')
   createText(
     this,
-    `Today<br/>${today.toFormat('MMM dd yyyy')}`,
+    `${t('companyDetail.dividend.upcomingPayment.chart.today')}<br/>${today.toFormat('MMM dd yyyy', { locale: locale.value })}`,
     fromX,
     fromY + LINE_HEIGHT + 20
   )
@@ -163,16 +188,23 @@ function drawChartElements(this: Chart) {
   )
   createText(
     this,
-    `Ex Dividend Date<br/>${DateTime.fromSeconds(data.exDividendDate).toFormat('MMM dd yyyy')}`,
+    `${t('companyDetail.dividend.upcomingPayment.chart.exDividendDate')}<br/>${DateTime.fromSeconds(data.exDividendDate).toFormat('MMM dd yyyy', { locale: locale.value })}`,
     exDivFromX,
     fromY - LINE_HEIGHT - 50
   )
 
   // Dividend Pay elements
-  createLine(this, divPayFromX, fromY, LINE_WIDTH, LINE_HEIGHT, 'hc-series3-color')
+  createLine(
+    this,
+    divPayFromX,
+    fromY,
+    LINE_WIDTH,
+    LINE_HEIGHT,
+    'hc-series3-color'
+  )
   createText(
     this,
-    `<div class="text-hc-series3-color">Dividend Pay Date</div><div>${DateTime.fromSeconds(data.dividendPayDate).toFormat('MMM dd yyyy')}</div>`,
+    `<div class="text-hc-series3-color">${t('companyDetail.dividend.upcomingPayment.chart.dividendPayDate')}</div><div>${DateTime.fromSeconds(data.dividendPayDate).toFormat('MMM dd yyyy', { locale: locale.value })}</div>`,
     divPayFromX - 115,
     fromY + LINE_HEIGHT + 20,
     true
@@ -212,7 +244,7 @@ function createText(
 }
 
 function clearChartElements() {
-  chartElements.value.forEach(el => el.destroy())
+  chartElements.value.forEach((el) => el.destroy())
   chartElements.value = []
 }
 </script>

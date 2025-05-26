@@ -500,18 +500,56 @@ export const en = {
       score: 'Dividend Score',
       upcomingPayment: {
         title: 'Upcoming Dividend Payment',
+        chart: {
+          today: 'Today',
+          exDividendDate: 'Ex Dividend Date',
+          dividendPayDate: 'Dividend Pay Date',
+          tooltip: 'Buy in the next {n} day to receive the upcoming dividend | Buy in the next {n} days to receive the upcoming dividend',
+        },
       },
       stabilityAndGrowth: {
         title: 'Stability and Growth of Payments',
+        past: 'Past',
+        analystsForecasts: 'Analysts Forecasts',
+        tooltip: {
+          dividendPayments: 'Dividend Payements',
+          annualAmount: 'Annual Amount',
+          eps: 'Earnings per Share',
+          dividendYield: 'Dividend Yield',
+          quarterly: 'quarterly',
+          year: 'year',
+        },
+        legends: {
+          dividendYield: 'Dividend Yield',
+          dividendPayments: 'Dividend Payments',
+          annualAmount: 'Annual Amount',
+          eps: 'Earnings per Share',
+        },
       },
       yieldVsMarket: {
         title: 'Dividend Yield vs Market',
+        chart: {
+          title: 'Current Dividend Yield Vs Market & Industry',
+          marketBottom: 'Market Bottom 25%',
+          marketTop: 'Market Top 25%',
+          industryAverage: 'Industry Average',
+          forecast: 'Forecast (up to 3 years)',
+        },
       },
       earningsPayout: {
         title: 'Earnings Payout to Shareholders',
+        chart: {
+          current: 'Current',
+          paidAsDividend: 'Paid as Dividend',
+          earningsRetained: 'Earnings Retained',
+        },
       },
       cashPayout: {
         title: 'Cash Payout to Shareholders',
+        chart: {
+          paidAsDividend: 'Paid as Dividend',
+          earningsRetained: 'Earnings Retained',
+        },
       },
     },
   },

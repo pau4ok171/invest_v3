@@ -1,32 +1,43 @@
 <script setup lang="ts">
+// Composables
+import { useI18n } from 'vue-i18n'
+
 // Utilities
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 // Types
 import type { Chart, Options, SVGElement, SVGPathArray } from 'highcharts'
-
-// Types
-interface GaugeProps {
-  value?: number | string
-  prefix?: string
-  suffix?: string
-  title?: string
-  seriesText?: string
-  restText?: string
-}
 
 type PositionAlign = 'top' | 'bottom'
 type PositionSide = 'left' | 'right'
 type PositionKey = `${PositionAlign}-${PositionSide}`
 
 // Props
-const props = withDefaults(defineProps<GaugeProps>(), {
-  value: 0,
-  prefix: '',
-  suffix: '',
-  title: '',
-  seriesText: '',
-  restText: '',
+const props = defineProps({
+  value: {
+    type: [Number, String],
+    default: 0,
+  },
+  prefix: {
+    type: String,
+    default: '',
+  },
+  suffix: {
+    type: String,
+    default: '',
+  },
+  title: {
+    type: String,
+    default: '',
+  },
+  seriesText: {
+    type: String,
+    default: '',
+  },
+  restText: {
+    type: String,
+    default: '',
+  },
 })
 
 // Computed
@@ -39,7 +50,9 @@ const displayText = computed(() => ({
   restText: props.restText,
 }))
 
+const { locale } = useI18n()
 // Chart elements ref
+const chartRef = ref<{ chart: Chart }>()
 const chartElements = ref<SVGElement[]>([])
 
 // Path definitions
@@ -334,11 +347,19 @@ const chartOptions = computed<Options>(() => ({
     },
   ],
 }))
+watch(locale, () => {
+  if (!chartRef.value?.chart) return
+
+  const chart = chartRef.value.chart
+  chart.update({ series: chartOptions.value.series }, false)
+  chart.redraw()
+})
 </script>
 
 <template>
   <div class="round-gauge-chart">
     <charts
+      ref="chartRef"
       class="round-gauge-chart__chart"
       constructor-type="chart"
       :options="chartOptions"

@@ -494,23 +494,61 @@ export const ru = {
       },
     },
     dividend: {
-      title: 'Дивиденды и Байбэки',
-      subtitle: '{ticker} выплачивает дивиденды с текущей доходностью {divYield}%.',
+      title: 'Дивиденды и Обратный Выкуп',
+      subtitle: 'Компания {ticker} выплачивает дивиденды с текущей доходностью {divYield}%.',
       score: 'Оценка Дивидендов',
       upcomingPayment: {
         title: 'Ближайшие Дивидендные Выплаты',
+        chart: {
+          today: 'Сегодня',
+          exDividendDate: 'Экс-Дивидендная дата',
+          dividendPayDate: 'Дата Выплаты',
+          tooltip: 'Купите в течение {n} дней, чтобы получить предстоящие дивиденды | Купите в течение {n} дня, чтобы получить предстоящие дивиденды | Купите в течение {n} дней, чтобы получить предстоящие дивиденды | Купите в течение {n} дней, чтобы получить предстоящие дивиденды',
+        },
       },
       stabilityAndGrowth: {
         title: 'Стабильность и Рост Выплат',
+        past: 'История',
+        analystsForecasts: 'Прогнозы Аналитиков',
+        tooltip: {
+          dividendPayments: 'Дивидендные Выплаты',
+          annualAmount: 'Годовая Сумма',
+          eps: 'Прибыль на Акцию (EPS)',
+          dividendYield: 'Дивидендная Доходность',
+          quarterly: 'квартал',
+          year: 'год',
+        },
+        legends: {
+          dividendYield: 'Дивидендная Доходность',
+          dividendPayments: 'Дивидендные Выплаты',
+          annualAmount: 'Годовая Сумма',
+          eps: 'Прибыль на Акцию',
+        },
       },
       yieldVsMarket: {
         title: 'Дивидендная Доходность vs Рынок',
+        chart: {
+          title: 'Текущая доходность vs Рынок и Отрасль',
+          marketBottom: 'Нижние 25% Рынка',
+          marketTop: 'Верхние 25% Рынка',
+          industryAverage: 'Среднее по Отрасли',
+          forecast: 'Прогноз (до 3 лет)',
+        },
       },
       earningsPayout: {
-        title: 'Выплаты Акционерам из Прибыли',
+        title: 'Распределение Прибыли',
+        chart: {
+          current: 'Текущий',
+          paidAsDividend: 'Выплачено как Дивиденды',
+          earningsRetained: 'Нераспределенная Прибыль',
+        },
       },
       cashPayout: {
         title: 'Денежные Выплаты Акционерам',
+        chart: {
+          paidAsDividend: 'Выплачено как Дивиденды',
+          earningsRetained: 'Нераспределенная Прибыль',
+        },
       },
     },
   },

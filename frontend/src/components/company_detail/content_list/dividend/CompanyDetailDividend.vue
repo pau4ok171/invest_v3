@@ -116,13 +116,31 @@ const passed = computed(() =>
       <forecast-annual-growth-chart
         class="mb-8"
         :data="[
-          { name: 'Company', value: 0.04, suffix: '%' },
-          { name: 'Market Bottom 25%', value: 1.6, suffix: '%' },
-          { name: 'Market Top 25%', value: 4.9, suffix: '%' },
-          { name: 'Industry Average', value: 0.6, suffix: '%' },
-          { name: 'Forecast (up to 3 years)', value: 0.04, suffix: '%' },
+          { name: t('finance.company'), value: 0.04, suffix: '%' },
+          {
+            name: t('companyDetail.dividend.yieldVsMarket.chart.marketBottom'),
+            value: 1.6,
+            suffix: '%',
+          },
+          {
+            name: t('companyDetail.dividend.yieldVsMarket.chart.marketTop'),
+            value: 4.9,
+            suffix: '%',
+          },
+          {
+            name: t(
+              'companyDetail.dividend.yieldVsMarket.chart.industryAverage'
+            ),
+            value: 0.6,
+            suffix: '%',
+          },
+          {
+            name: t('companyDetail.dividend.yieldVsMarket.chart.forecast'),
+            value: 0.04,
+            suffix: '%',
+          },
         ]"
-        title="Current Dividend Yield Vs Market & Industry"
+        :title="t('companyDetail.dividend.yieldVsMarket.chart.title')"
       />
 
       <company-detail-check name="IsDividendSignificant" />
@@ -141,9 +159,13 @@ const passed = computed(() =>
             class="my-4"
             :value="30"
             suffix="%"
-            title="Current"
-            series-text="Paid as dividend"
-            rest-text="Earnings Retained"
+            :title="t('companyDetail.dividend.earningsPayout.chart.current')"
+            :series-text="
+              t('companyDetail.dividend.earningsPayout.chart.paidAsDividend')
+            "
+            :rest-text="
+              t('companyDetail.dividend.earningsPayout.chart.earningsRetained')
+            "
           />
 
           <company-detail-check name="IsDividendCovered" />
@@ -159,8 +181,12 @@ const passed = computed(() =>
             value="29"
             suffix="%"
             title="2028"
-            series-text="Paid as dividend"
-            rest-text="Earnings Retained"
+            :series-text="
+              t('companyDetail.dividend.earningsPayout.chart.paidAsDividend')
+            "
+            :rest-text="
+              t('companyDetail.dividend.earningsPayout.chart.earningsRetained')
+            "
           />
 
           <company-detail-check name="IsDividendCoveredByFreeCashFlow" />
