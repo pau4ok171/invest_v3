@@ -205,10 +205,33 @@ function drawChartElements(this: Chart) {
   createText(
     this,
     `<div class="text-hc-series3-color">${t('companyDetail.dividend.upcomingPayment.chart.dividendPayDate')}</div><div>${DateTime.fromSeconds(data.dividendPayDate).toFormat('DD', { locale: locale.value })}</div>`,
-    divPayFromX - 115,
+    divPayFromX,
     fromY + LINE_HEIGHT + 20,
-    true
+    true,
+    'right'
   )
+}
+
+function getTextWidth(
+  text: string,
+  fontSize = '0.875rem',
+  fontFamily = 'inherit'
+) {
+  // Создаем временный элемент для измерения
+  const span = document.createElement('span')
+  span.style.visibility = 'hidden'
+  span.style.position = 'absolute'
+  span.style.whiteSpace = 'nowrap'
+  span.style.fontSize = fontSize
+  span.style.fontFamily = fontFamily
+  span.style.fontWeight = '500'
+  span.innerHTML = text
+
+  document.body.appendChild(span)
+  const width = span.offsetWidth
+  document.body.removeChild(span)
+
+  return width
 }
 
 function createLine(
@@ -234,8 +257,14 @@ function createText(
   text: string,
   x: number,
   y: number,
-  useHTML = false
+  useHTML = false,
+  align: 'left' | 'right' = 'left'
 ) {
+  if (align === 'right') {
+    const textWidth = getTextWidth(text)
+    x = x - textWidth
+  }
+
   const textElement = chart.renderer
     .text(text, x, y, useHTML)
     .css(TEXT_STYLE)
