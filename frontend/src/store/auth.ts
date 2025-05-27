@@ -42,12 +42,31 @@ export const useAuthStore = defineStore({
     setToken(newToken: string | null = null) {
       if (newToken) {
         this.token = newToken
-        axios.defaults.headers.common['Authorization'] = `Token ${newToken}`
         localStorage.setItem('token', newToken)
       } else {
-        const token = localStorage.getItem('token')
-        this.token = token || ''
+        this.token = localStorage.getItem('token') || ''
+      }
+
+      // Всегда устанавливаем заголовок с текущим токеном
+      if (this.token) {
         axios.defaults.headers.common['Authorization'] = `Token ${this.token}`
+      } else {
+        delete axios.defaults.headers.common['Authorization']
+      }
+    },
+    async fetchUserProfile() {
+      if (!this.token) return
+
+      try {
+        // Добавляем завершающий слеш и правильный префикс URL
+        const response = await axios.get('/api/v1/profile/me/')
+        this.profile = response.data
+      } catch (error) {
+        console.error('Profile fetch error:', error)
+        // При ошибке 403 сбрасываем токен
+        if (axios.isAxiosError(error) && error.response?.status === 403) {
+          this.logout()
+        }
       }
     },
     async login(token: string) {
@@ -61,17 +80,6 @@ export const useAuthStore = defineStore({
 
       this.token = ''
       this.profile = {} as Profile
-    },
-    async fetchUserProfile() {
-      if (!this.token) return
-
-      try {
-        const response = await axios.get('api/v1/profile/me/')
-
-        this.profile = response.data
-      } catch (error) {
-        console.log(error)
-      }
     },
   },
 })

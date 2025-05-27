@@ -20,7 +20,7 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        protected_fields = ['id', 'register_date', 'auth_provider']
+        protected_fields = ['id', 'register_date', 'auth_provider', 'is_staff']
         for field in protected_fields:
             if field in request.data:
                 return Response(

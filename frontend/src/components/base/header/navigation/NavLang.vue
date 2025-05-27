@@ -3,9 +3,13 @@
 import { BaseFlag } from '@/components/UI/BaseFlag'
 
 // Composables
-import { ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useLocale } from 'vuetify'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/store/auth'
+
+// Utilities
+import axios from 'axios'
 
 const langs = [
   { id: 'en', title: 'English', iso: 'gb' },
@@ -17,17 +21,57 @@ const langs = [
   { id: 'it', title: 'Italiano', iso: 'it' },
 ]
 
-const selected = ref(['ru'])
+const authStore = useAuthStore()
 const { current } = useLocale()
 const { locale, t } = useI18n()
 
-current.value = selected.value[0]
-locale.value = selected.value[0]
-
-watch(selected, () => {
-  current.value = selected.value[0]
-  locale.value = selected.value[0]
+// Текущая локаль из профиля или сохраненная в localeStorage
+const currentLocale = computed({
+  get: () =>
+    [authStore.profile?.locale || localStorage.getItem('locale') || 'en'],
+  set: async (newLocale: [string]) => {
+    await changeLocale(newLocale[0])
+  },
 })
+
+// Инициализация локали при загрузке
+current.value = currentLocale.value[0]
+locale.value = currentLocale.value[0]
+
+const changeLocale = async (newLocale: string) => {
+  try {
+    // Обновляем локально
+    current.value = newLocale
+    locale.value = newLocale
+    localStorage.setItem('locale', newLocale)
+
+    // Обновляем в хранилище (если пользователь авторизован)
+    if (authStore.isAuthenticated) {
+      authStore.profile.locale = newLocale
+      await updateLocale(newLocale)
+    }
+  } catch (error) {
+    console.error('Failed to change locale:', error)
+  }
+}
+
+const updateLocale = async (newLocale: string) => {
+  try {
+    await axios.patch('/api/v1/profile/me/', { locale: newLocale })
+  } catch (error) {
+    console.error('Failed to update locale on server:', error)
+    throw error
+  }
+}
+
+watch(
+  () => authStore.profile?.locale,
+  async (newLocale) => {
+    if (newLocale && newLocale !== locale.value) {
+      await changeLocale(currentLocale.value[0])
+    }
+  }
+)
 </script>
 
 <template>
@@ -38,7 +82,7 @@ watch(selected, () => {
     <template #default>
       <v-card>
         <v-list
-          v-model:selected="selected"
+          v-model:selected="currentLocale"
           slim
           nav
           density="compact"

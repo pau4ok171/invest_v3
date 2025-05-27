@@ -13,7 +13,7 @@ const store = useAuthStore()
 const dialog = shallowRef(false)
 
 onUnmounted(() => {
-  store.hasAccount = true
+  store.authMode = 'login'
 })
 </script>
 
@@ -29,7 +29,7 @@ onUnmounted(() => {
         />
       </template>
       <v-card-item>
-        <auth-login-form v-if="store.hasAccount" />
+        <auth-login-form v-if="store.authMode === 'login'" />
         <auth-registration-form v-else />
       </v-card-item>
     </v-card>

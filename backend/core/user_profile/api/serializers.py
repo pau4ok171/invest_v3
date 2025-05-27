@@ -31,7 +31,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'id', 'name', 'email', 'first_name', 'last_name',
             'avatar', 'locale', 'register_date', 'country_iso',
             'currency', 'auth_provider', 'display_name',
-            'portfolios', 'watchlist', 'stock_view'
+            'portfolios', 'watchlist', 'stock_view', 'is_staff',
         ]
         extra_kwargs = {
             'email': {'required': False},
@@ -79,7 +79,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         return []
 
     def validate(self, attrs):
-        protected_fields = ['id', 'register_date', 'auth_provider']
+        protected_fields = ['id', 'register_date', 'auth_provider', 'is_staff']
         for field in protected_fields:
             if field in attrs and getattr(self.instance, field) != attrs[field]:
                 raise serializers.ValidationError(

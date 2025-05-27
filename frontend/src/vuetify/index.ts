@@ -13,7 +13,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 import { aliases as iAliases } from '@/vuetify/iconsets/iIcons/i-svg'
 
 // Locales
-import { ru, fr, de, es } from 'vuetify/locale'
+import { ru, fr, de, es, en, it, pl } from 'vuetify/locale'
 
 export const vuetify = createVuetify({
   components: {
@@ -29,7 +29,7 @@ export const vuetify = createVuetify({
   locale: {
     locale: 'ru',
     fallback: 'en',
-    messages: { ru, fr, de, es },
+    messages: { ru, fr, de, es, en, it, pl, },
   },
   icons: {
     aliases: {

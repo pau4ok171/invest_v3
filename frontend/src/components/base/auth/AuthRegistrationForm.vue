@@ -10,10 +10,12 @@ import { useI18n } from 'vue-i18n'
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
 import axios from 'axios'
+import { i18n } from '@/i18n/i18n'
+import { isObjectLike } from 'lodash'
+
+// Validators
 import { helpers, sameAs } from '@vuelidate/validators'
 import { required, minLength } from '@/common/vuelidate/validators'
-import { isObjectLike } from 'lodash'
-import {i18n} from "@/i18n/i18n";
 
 interface FormError {
   title: string
@@ -136,11 +138,7 @@ async function register() {
 
     const response = await axios.post('/api/v1/token/login/', formData)
 
-    const token = response.data.auth_token
-    store.token = token
-    axios.defaults.headers.common['Authorization'] = `Token ${token}`
-
-    localStorage.setItem('token', token)
+    store.setToken(response.data.auth_token)
 
     clear()
   } catch (error) {
@@ -269,11 +267,13 @@ async function register() {
           variant="plain"
           slim
           color="info"
-          @click="store.hasAccount = true"
+          @click="store.authMode = 'login'"
         />
       </v-card-text>
 
-      <v-card-text class="d-flex justify-center text-center text-medium-emphasis">
+      <v-card-text
+        class="d-flex justify-center text-center text-medium-emphasis"
+      >
         <span v-html="t('auth.disclaimer')" />
       </v-card-text>
     </v-card>

@@ -10,8 +10,10 @@ import { useI18n } from 'vue-i18n'
 // Utilities
 import { computed, reactive, ref, shallowRef } from 'vue'
 import axios from 'axios'
-import { required } from '@/common/vuelidate/validators'
 import { isObjectLike } from 'lodash'
+
+// Validators
+import { required } from '@/common/vuelidate/validators'
 
 interface FormError {
   title: string
@@ -73,11 +75,7 @@ async function login() {
 
     const response = await axios.post('/api/v1/token/login/', formData)
 
-    const token = response.data.auth_token
-    store.token = token
-    axios.defaults.headers.common['Authorization'] = `Token ${token}`
-
-    localStorage.setItem('token', token)
+    await store.login(response.data.auth_token)
 
     clear()
   } catch (error) {
@@ -196,7 +194,7 @@ async function login() {
           variant="plain"
           slim
           color="info"
-          @click="store.hasAccount = false"
+          @click="store.authMode = 'registration'"
         />
       </v-card-text>
     </v-card>

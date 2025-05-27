@@ -23,7 +23,8 @@ const router = createRouter({
       beforeEnter: (to, from, next) => {
         const authStore = useAuthStore()
         if (
-          !Object.hasOwn(authStore.userInfo, 'is_staff') ||
+          !authStore.isAuthenticated ||
+          !Object.hasOwn(authStore.profile, 'is_staff') ||
           !authStore.userInfo.is_staff
         ) {
           next(RouteNamesEnum.page_not_found)
@@ -46,7 +47,9 @@ const router = createRouter({
               path: 'companies',
               name: 'adminModelsCompanies',
               component: () =>
-                import('@/components/admin/models/company/AdminModelsCompanies.vue'),
+                import(
+                  '@/components/admin/models/company/AdminModelsCompanies.vue'
+                ),
               meta: {
                 layout: AppLayoutsEnum.admin,
               },
@@ -54,7 +57,10 @@ const router = createRouter({
             {
               path: 'companies/new',
               name: 'adminCompanyModelNew',
-              component: () => import('@/components/admin/models/company/AdminModelCompany.vue'),
+              component: () =>
+                import(
+                  '@/components/admin/models/company/AdminModelCompany.vue'
+                ),
               meta: {
                 layout: AppLayoutsEnum.admin,
               },
@@ -62,7 +68,10 @@ const router = createRouter({
             {
               path: 'companies/:companyUID([A-Za-z0-9-]+)',
               name: 'adminCompanyModel',
-              component: () => import('@/components/admin/models/company/AdminModelCompany.vue'),
+              component: () =>
+                import(
+                  '@/components/admin/models/company/AdminModelCompany.vue'
+                ),
               meta: {
                 layout: AppLayoutsEnum.admin,
               },
@@ -73,7 +82,8 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'adminDashboard',
-          component: () => import('@/components/admin/dashboard/AdminDashboard.vue'),
+          component: () =>
+            import('@/components/admin/dashboard/AdminDashboard.vue'),
           meta: {
             layout: AppLayoutsEnum.admin,
           },
@@ -89,7 +99,8 @@ const router = createRouter({
         {
           path: 'settings',
           name: 'adminSettings',
-          component: () => import('@/components/admin/settings/AdminSettings.vue'),
+          component: () =>
+            import('@/components/admin/settings/AdminSettings.vue'),
           meta: {
             layout: AppLayoutsEnum.admin,
           },
@@ -152,7 +163,7 @@ router.beforeEach(async (route) => {
 router.afterEach(() => {
   const pageStore = usePageStore()
 
-  setTimeout(() => pageStore.loading = false, 15000)
+  setTimeout(() => (pageStore.loading = false), 15000)
 })
 
 export default router

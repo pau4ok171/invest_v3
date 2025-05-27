@@ -12,19 +12,15 @@ import { useTitle } from '@/composables/documentTitle'
 // Utilities
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
-import axios from 'axios'
 
 const authStore = useAuthStore()
 const pageStore = usePageStore()
 const { setTitle } = useTitle()
 setTitle('pageTitles.default')
 
-onMounted(() => {
-  authStore.init()
-  axios.defaults.headers.common['Authorization'] = authStore.token
-    ? `Token ${authStore.token}`
-    : ''
-  authStore.fetchUserInfo()
+onMounted(async () => {
+  authStore.setToken()
+  await authStore.fetchUserProfile()
 })
 </script>
 

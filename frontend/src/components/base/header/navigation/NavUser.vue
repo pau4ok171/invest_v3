@@ -8,7 +8,6 @@ import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { shallowRef } from 'vue'
-import axios from 'axios'
 
 const authStore = useAuthStore()
 const { t } = useI18n()
@@ -20,23 +19,6 @@ const items = [
   { to: '/helpcenter', id: 'helpCenter' },
 ]
 const dialog = shallowRef(false)
-
-function onLogout() {
-  axios.defaults.headers.common['Authorization'] = ''
-
-  localStorage.removeItem('token')
-  localStorage.removeItem('username')
-  localStorage.removeItem('userid')
-
-  authStore.token = ''
-  authStore.userInfo = {
-    first_name: '',
-    is_anonymous: true,
-    is_staff: false,
-    last_name: '',
-    stage_in_days: 0,
-  }
-}
 </script>
 
 <template>
@@ -50,7 +32,7 @@ function onLogout() {
           <v-card>
             <v-list>
               <v-list-item
-                v-if="authStore.userInfo.is_staff"
+                v-if="authStore.profile.is_staff"
                 :to="{ name: 'admin' }"
                 :title="t('header.adminPanel')"
               />
@@ -61,7 +43,10 @@ function onLogout() {
                 :to="item.to"
               />
               <v-divider />
-              <v-list-item @click="onLogout" :title="t('header.logout')" />
+              <v-list-item
+                @click="authStore.logout()"
+                :title="t('header.logout')"
+              />
             </v-list>
           </v-card>
         </template>
