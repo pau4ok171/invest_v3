@@ -137,7 +137,7 @@ watchEffect(() => {
               <div>
                 {{
                   !state.createdBy.lastName
-                    ? `${profile.first_name} ${profile.last_name}`
+                    ? `${profile?.first_name} ${profile?.last_name}`
                     : state.updatedBy.lastName
                       ? `${state.updatedBy.lastName} ${state.updatedBy.firstName}`
                       : `${state.createdBy.lastName} ${state.createdBy.firstName}`
