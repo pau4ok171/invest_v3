@@ -67,6 +67,7 @@ const { t } = useI18n()
 .loading-dialog {
   backdrop-filter: blur(8px);
   border: 1px solid rgba(0, 0, 0, 0.12);
+  user-select: none;
 
   .v-progress-circular {
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
