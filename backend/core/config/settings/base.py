@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'news.apps.NewsConfig',
     'analysis.apps.AnalysisConfig',
     'site_admin.apps.AdminConfig',
+    'user_profile.apps.UserProfileConfig',
     # External apps
     'channels',
     'rest_framework',

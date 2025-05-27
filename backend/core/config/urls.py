@@ -25,6 +25,8 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('api/v1/admin/', include('site_admin.api.urls', namespace='admin_api')),
     path('', views.HomePageView.as_view(), name='home'),
+    # Profile
+    path('api/v1/', include('user_profile.api.urls', namespace='profile_api')),
 ]
 
 if settings.DEBUG:
