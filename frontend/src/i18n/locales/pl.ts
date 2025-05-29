@@ -29,7 +29,7 @@ export const pl = {
     yes: 'Tak',
     no: 'Nie',
     search: 'Szukaj',
-    analysts: 'brak analityka | {n} analityk | {n} analityków',
+    analysts: 'brak analityka | {n} analityk | {n} analityków | {n} analityków',
   },
   toasts: {
     valueIsCopied: 'Skopiowano!',
@@ -52,7 +52,7 @@ export const pl = {
     portfolio: 'Portfel',
     articles: 'Artykuły',
     markets: 'Rynki',
-    watchlist: 'Lista obserwowanych',
+    watchlist: 'Obserwowane',
     screener: 'Skaner',
     translations: 'Tłumaczenia',
     adminPanel: 'Panel administracyjny',
@@ -74,7 +74,7 @@ export const pl = {
   },
   finance: {
     market: 'Rynek',
-    industry: 'Branża',
+    industry: 'Sektor',
     company: 'Firma',
     ratio: 'Wskaźnik',
     eps: 'Zysk na akcję (EPS)',
@@ -91,9 +91,9 @@ export const pl = {
     shortDays: '{n}d',
     shortMonths: '{n}m',
     shortYears: '{n}r',
-    days: '0 dni | {n} dzień | {n} dni',
-    months: '0 miesięcy | {n} miesiąc | {n} miesięcy',
-    years: '0 lat | {n} rok | {n} lat',
+    days: '0 dni | {n} dzień | {n} dni | {n} dni',
+    months: '0 miesięcy | {n} miesiąc | {n} miesiące | {n} miesięcy',
+    years: '0 lat | {n} rok | {n} lata | {n} lat',
     max: 'Maks',
   },
   pageTitles: {
@@ -116,7 +116,7 @@ export const pl = {
   },
   companyList: {
     header: {
-      companies: 'Brak firm | {n} firma | {n} firm',
+      companies: 'Brak firm | {n} firma | {n} firmy | {n} firm',
       marketDescription: {
         global: 'Odkryj globalne firmy z całego świata.',
         country: 'Odkryj firmy z {country} notowane na {market}.',
@@ -129,12 +129,12 @@ export const pl = {
         lastPrice: 'Ostatnia cena',
         return7d: 'Zwrot 7d',
         return1y: 'Zwrot 1r',
-        marketCap: 'Kapitalizacja rynkowa',
-        analystsTarget: 'Cel analityka',
+        marketCap: 'Kapitalizacja',
+        analystsTarget: 'Prognozowana cena',
         valuation: 'Wycena',
         growth: 'Wzrost',
         dividendYield: 'Stopa dywidendy',
-        industry: 'Branża',
+        industry: 'Sektor',
       },
     },
     dataTile: {
@@ -183,7 +183,7 @@ export const pl = {
     header: {
       stockReport: 'Raporty akcji',
       lastPrice: 'Ostatnia cena',
-      marketCap: 'Kapitalizacja rynkowa',
+      marketCap: 'Kapitalizacja',
       shortMarketCap: 'Kap. rynk.',
       return7d: '7d',
       return1y: '1r',
@@ -213,20 +213,20 @@ export const pl = {
     portfolio: {
       title: 'Portfel',
       placeholder: 'np. Mój nowy portfel',
-      holdings: 'Brak udziałów | {n} udział | {n} udziały',
+      holdings: 'Brak udziałów | {n} udział | {n} udziały | {n} udziałów',
     },
     analysts: {
       title: 'Analitycy',
-      subtitle: '{title} jest śledzony przez {n} analityka | {title} jest śledzony przez {n} analityków | {title} jest śledzony przez {n} analityków',
+      subtitle: '{title} nie jest śledzony przez żadnego analityka | {title} jest śledzony przez {n} analityka | {title} jest śledzony przez {n} analityków | {title} jest śledzony przez {n} analityków',
       table: {
         institution: 'Instytucja',
-        target: 'Cel',
+        target: 'Prognoza',
         score: 'Ocena',
       },
     },
     overview: {
       stockOverview: {
-        header: 'Przegląd akcji',
+        header: 'Przegląd Firmy',
         rewards: 'Szanse',
         risks: 'Ryzyka',
         riskChecks: 'Kontrole ryzyka',
@@ -269,7 +269,7 @@ export const pl = {
         website: 'Strona internetowa',
       },
       fundamentalSummary: {
-        header: 'Podsumowanie fundamentalne {title}',
+        header: 'Analiza fundamentalna {title}',
         ratio: 'Wskaźnik {ratio}',
         inducement: {
           question: 'Czy {ticker} jest przewartościowany?',
@@ -332,7 +332,7 @@ export const pl = {
         subtitle: 'Historyczny wskaźnik P/E porównuje cenę akcji do zysków w czasie. Wyższe wskaźniki oznaczają, że inwestorzy są skłonni płacić więcej za akcje.',
       },
       peVsIndustry: {
-        title: 'P/E vs branża',
+        title: 'P/E vs Sektor',
         subtitle: 'Jak wskaźnik P/E {ticker} wypada na tle innych firm w branży {sector}?',
         nombreOfCompanies: 'Liczba firm',
       },
@@ -359,7 +359,7 @@ export const pl = {
               low: 'Głosy analityków przekraczają 15% od średniej',
             },
           },
-          analysts: 'brak analityka | {n} analityk | {n} analityków',
+          analysts: 'brak analityka | {n} analityk | {n} analityków | {n} analityków',
         },
         legend: {
           sharePrice: 'Cena akcji',
@@ -424,7 +424,7 @@ export const pl = {
     },
     past: {
       title: 'Przeszły wzrost zysków',
-      subtitle: '{ticker} zwiększał zyski średnio o {earningsAverageGrowth}% rocznie, podczas gdy branża {sector} rosła o {industryAverageGrowth}% rocznie. Przychody rosły średnio o {revenueAverageGrowth}% rocznie. Zwrot z kapitału własnego {ticker} wynosi {roe}%, z marżą netto {netMargin}%.',
+      subtitle: '{ticker} zwiększał zyski średnio o {earningsAverageGrowth}% rocznie, podczas gdy sektor {sector} rosła o {industryAverageGrowth}% rocznie. Przychody rosły średnio o {revenueAverageGrowth}% rocznie. Zwrot z kapitału własnego {ticker} wynosi {roe}%, z marżą netto {netMargin}%.',
       score: 'Wynik przeszłości',
       revenueExpensesBreakdown: {
         title: 'Podział przychodów i wydatków',
@@ -520,7 +520,7 @@ export const pl = {
           today: 'Dziś',
           exDividendDate: 'Data ex-dywidendy',
           dividendPayDate: 'Data wypłaty dywidendy',
-          tooltip: 'Kup w ciągu następnego {n} dnia, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę',
+          tooltip: 'Kup dziś, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dnia, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę',
         },
       },
       stabilityAndGrowth: {
@@ -545,7 +545,7 @@ export const pl = {
       yieldVsMarket: {
         title: 'Stopa dywidendy vs rynek',
         chart: {
-          title: 'Aktualna stopa dywidendy vs rynek i branża',
+          title: 'Aktualna stopa dywidendy vs Rynek i Sektor',
           marketBottom: 'Dolne 25% rynku',
           marketTop: 'Górne 25% rynku',
           industryAverage: 'Średnia branży',
