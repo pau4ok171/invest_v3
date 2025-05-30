@@ -11,7 +11,7 @@ class ProfileInline(admin.StackedInline):
     fk_name = 'user'
     fields = (
         'display_name', 'avatar', 'locale',
-        'country_iso', 'currency', 'auth_provider', 'bio',
+        'country', 'currency', 'auth_provider', 'bio',
         'external_link', 'stock_view',
         'watchlist_companies', 'portfolios'
     )
@@ -51,8 +51,8 @@ admin.site.register(User, CustomUserAdmin)
 # Отдельная регистрация Profile модели
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'display_name', 'locale', 'country_iso', 'currency')
-    list_filter = ('locale', 'country_iso', 'currency')
+    list_display = ('user', 'display_name', 'locale', 'country', 'currency')
+    list_filter = ('locale', 'country', 'currency')
     search_fields = ('user__username', 'display_name', 'user__email')
     raw_id_fields = ('user',)
     filter_horizontal = ('watchlist_companies', 'portfolios')
