@@ -1,11 +1,17 @@
 from django.db import models
 
 
+class NewsTypes(models.TextChoices):
+    DIVIDEND = 'DIVIDEND', 'Dividend'
+    UPDATE = 'UPDATE', 'Update'
+    ACTION = 'ACTION', 'Corporate Action'
+
+
 class News(models.Model):
     company = models.ForeignKey('invest.Company', related_name='company_news', on_delete=models.CASCADE)
     type = models.CharField(
         max_length=255,
-        choices={'DIVIDEND': 'dividend', 'UPDATE': 'update', 'ACTION': 'corporate action'}
+        choices=NewsTypes.choices
     )
     date = models.DateField()
     title = models.CharField(max_length=255)

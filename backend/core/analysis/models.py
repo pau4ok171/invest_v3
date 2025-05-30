@@ -3,7 +3,7 @@ from django.db import models
 
 class CompanyAnalysis(models.Model):
     company = models.ForeignKey('invest.Company', on_delete=models.CASCADE)
-    report = models.ForeignKey('invest.Report', on_delete=models.CASCADE)
+    report = models.ForeignKey('invest.ReportMetadata', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     # Operating Data

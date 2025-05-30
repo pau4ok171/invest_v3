@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from invest.models import Country, Currency, Company
+from notes.models import Note
 from portfolio.models import Portfolio
 
 
@@ -22,7 +23,7 @@ class Profile(models.Model):
     display_name = models.CharField(max_length=100, blank=True)
     avatar = models.ImageField(null=True, blank=True, upload_to=get_portfolio_path)
     locale = models.CharField(max_length=10, default='en')
-    country_iso = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
     auth_provider = models.CharField(max_length=50, default='email')
     bio = models.TextField(max_length=240, blank=True, null=True)

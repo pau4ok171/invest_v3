@@ -6,11 +6,6 @@ QUARTERS = [
     (4, '4 Quarter'),
 ]
 
-REPORT_TYPES = [
-    ('q', 'quarterly'),
-    ('a', 'annual'),
-]
-
 REPORT_FORMS = [
     ('ifrs', 'MSFO'),
     ('ras', 'RSBU'),

@@ -3,12 +3,12 @@ from django.contrib.auth.models import User
 
 
 class Note(models.Model):
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-    company = models.ForeignKey('invest.Company', on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name='notes')
+    company = models.ForeignKey('invest.Company', on_delete=models.PROTECT, related_name='notes')
     body = models.TextField()
     text = models.TextField(null=True, blank=True)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-updated']
+        ordering = ['-updated_at']
