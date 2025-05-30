@@ -262,6 +262,7 @@ class ReportMetadata(models.Model):
     scale_unit = models.IntegerField(default=1)
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
     # Additional Info
+    share_outstanding_eop = models.DecimalField(max_digits=15, decimal_places=2, default=0)  # end of period
     total_employees_figure = models.IntegerField(null=True)
 
     def __str__(self):
@@ -342,7 +343,6 @@ class BalanceSheet(models.Model):
     property_and_plant_and_equipment = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     retained_earnings = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     securities_and_investments = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    share_outstanding_eop = models.DecimalField(max_digits=15, decimal_places=2, default=0)  # end of period
     short_term_capital_lease_obligation = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     short_term_debt = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     short_term_debt_and_capital_lease_obligation = models.DecimalField(max_digits=15, decimal_places=2, default=0)
