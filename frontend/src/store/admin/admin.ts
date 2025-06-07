@@ -238,7 +238,10 @@ export const useAdminModelStore = defineStore('admin', {
     updateField(key: keyof IFormattedDetailCompany, val: any) {
       this.formState = { ...this.formState, [key]: val }
 
-      this.previousFormState[key].isDirty = !isEqual(val, this.previousFormState[key].value);
+      this.previousFormState[key].isDirty = !isEqual(
+        val,
+        this.previousFormState[key].value
+      )
 
       this._updateDependentFields(key)
     },
