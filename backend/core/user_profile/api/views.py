@@ -2,10 +2,12 @@ from django.contrib.auth.models import User
 
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from .serializers import UserProfileSerializer
 from ..permissions import IsProfileOwner
+from invest.models import Company
 
 
 class UserProfileViewSet(viewsets.ModelViewSet):
@@ -42,3 +44,31 @@ class UserProfileViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+    @action(detail=False, methods=['patch'])
+    def update_watchlist(self, request):
+        company_uid = request.data.get('company_uid')
+        action_type = request.data.get('action')
+
+        if not company_uid or action_type not in ['add', 'remove']:
+            return Response(
+                {"error": "Both 'action' and 'company_uid' are required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            company = get_object_or_404(Company, uid=company_uid)
+            profile = request.user.profile
+
+            if action_type == 'add':
+                profile.watchlisted_companies.add(company)
+            else:
+                profile.watchlisted_companies.remove(company)
+
+            serializer = self.get_serializer(request.user)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )

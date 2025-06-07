@@ -5,7 +5,6 @@ from django.db.models import Q
 from rest_framework import status, authentication
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 # Invest App
 from invest.api.serializers import (
@@ -22,7 +21,6 @@ from invest.models import Company, CandlePerDay, Country, Sector
 from invest.api.forms import (
     SearchListForm,
     UsernameVerificationForm,
-    CompanyUIDForm,
 )
 # Portfolio App
 from portfolio.models import Portfolio

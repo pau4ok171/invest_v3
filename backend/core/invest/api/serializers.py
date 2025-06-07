@@ -137,8 +137,6 @@ class CompanySerializer(serializers.ModelSerializer):
             'market',
             'sector',
             'absolute_url',
-            'is_watchlisted',
-            'description',
             'price_data',
             'formatting',
             'updated',

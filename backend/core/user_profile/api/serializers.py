@@ -75,7 +75,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_watchlist(obj):
         """Список компаний в watchlist"""
         if hasattr(obj, 'profile'):
-            return list(obj.profile.watchlist_companies.values_list('id', flat=True))
+            return list(obj.profile.watchlisted_companies.values_list('uid', flat=True))
         return []
 
     def validate(self, attrs):

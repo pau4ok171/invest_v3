@@ -28,7 +28,7 @@ class Profile(models.Model):
     auth_provider = models.CharField(max_length=50, default='email')
     bio = models.TextField(max_length=240, blank=True, null=True)
     external_link = models.URLField(null=True, blank=True)
-    watchlist_companies = models.ManyToManyField(Company, blank=True, related_name='profile_companies')
+    watchlisted_companies = models.ManyToManyField(Company, blank=True, related_name='profile_companies')
     portfolios = models.ManyToManyField(Portfolio, blank=True, related_name='profile_portfolios')
     stock_view = models.CharField(default='table', max_length=50, choices=STOCK_VIEW_CHOICES)
 

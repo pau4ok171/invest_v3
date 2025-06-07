@@ -7,7 +7,3 @@ class SearchListForm(forms.Form):
 
 class UsernameVerificationForm(forms.Form):
     username = forms.CharField(label='Username', max_length=255)
-
-
-class CompanyUIDForm(forms.Form):
-    uid = forms.UUIDField()
