@@ -32,8 +32,8 @@ function createNote() {
     id: null,
     text: null,
     body: null,
-    created: null,
-    updated: null,
+    created_at: null,
+    updated_at: null,
     company: company.value.id || -1,
   }
   companyDetailStore.noteSavedContent = ''
