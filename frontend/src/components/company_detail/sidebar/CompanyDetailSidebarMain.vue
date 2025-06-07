@@ -82,16 +82,16 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
     </p>
 
     <section class="detail-sidebar__button-list">
-      <template v-if="company.is_watchlisted">
+      <template v-if="authStore.profile.watchlist.includes(company.uid)">
         <v-btn
           icon="$ratingFull"
           color="blue"
           rounded="lg"
           size="small"
           density="comfortable"
-          :loading="companyDetailStore.watchlistLoading"
+          :loading="authStore.watchlistLoading"
           :disabled="!authStore.isAuthenticated"
-          @click="companyDetailStore.toggleWatchlisted"
+          @click="authStore.updateWatchlist(company)"
         />
 
         <v-btn
@@ -109,9 +109,9 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
           :text="t('buttons.addToWatchlist')"
           color="blue"
           size="small"
-          :loading="companyDetailStore.watchlistLoading"
+          :loading="authStore.watchlistLoading"
           :disabled="!authStore.isAuthenticated"
-          @click="companyDetailStore.toggleWatchlisted"
+          @click="authStore.updateWatchlist(company)"
         />
       </template>
     </section>

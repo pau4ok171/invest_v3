@@ -117,14 +117,14 @@ function createNote() {
         />
         <template v-else>
           <v-btn
-            v-if="!company.is_watchlisted"
+            v-if="!authStore.profile.watchlist.includes(company.uid)"
             prepend-icon="$ratingEmpty"
             :text="t('buttons.addToWatchlist')"
             color="info"
             variant="flat"
-            :loading="companyDetailStore.watchlistLoading"
+            :loading="authStore.watchlistLoading"
             :disabled="!authStore.isAuthenticated"
-            @click="companyDetailStore.toggleWatchlisted"
+            @click="authStore.updateWatchlist(company)"
             size="small"
           />
 
@@ -133,9 +133,9 @@ function createNote() {
               icon="$ratingFull"
               color="info"
               variant="flat"
-              :loading="companyDetailStore.watchlistLoading"
+              :loading="authStore.watchlistLoading"
               :disabled="!authStore.isAuthenticated"
-              @click="companyDetailStore.toggleWatchlisted"
+              @click="authStore.updateWatchlist(company)"
               size="small"
               rounded="lg"
               density="comfortable"

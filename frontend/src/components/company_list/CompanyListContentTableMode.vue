@@ -135,7 +135,7 @@ const headers = computed(() => [
         density="comfortable"
         :color="item.watchlisted ? 'info' : undefined"
         :disabled="!authStore.isAuthenticated"
-        @click="store.toggleWatchlisted(item)"
+        @click="authStore.updateWatchlist(item)"
       />
     </template>
 

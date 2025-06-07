@@ -52,7 +52,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   rounded="lg"
                   :color="item.watchlisted ? 'info' : undefined"
                   :disabled="!authStore.isAuthenticated"
-                  @click.prevent.stop="store.toggleWatchlisted(item)"
+                  @click.prevent.stop="authStore.updateWatchlist(item)"
                 />
               </template>
             </v-card-item>
@@ -160,7 +160,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
                   rounded="lg"
                   :color="item.watchlisted ? 'info' : undefined"
                   :disabled="!authStore.isAuthenticated"
-                  @click.prevent.stop="store.toggleWatchlisted(item)"
+                  @click.prevent.stop="authStore.updateWatchlist(item)"
                 />
               </template>
             </v-card-item>

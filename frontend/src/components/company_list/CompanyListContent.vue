@@ -39,7 +39,7 @@ const items = computed<CompanyItem[]>(
       ticker: c.ticker,
       to: c.absolute_url,
       uid: c.uid,
-      watchlisted: c.is_watchlisted,
+      watchlisted: authStore.profile.watchlist.includes(c.uid),
       snowflake: getSnowflake(c),
       description: getTranslation(c.translations, 'description'),
     })) satisfies CompanyItem[]
