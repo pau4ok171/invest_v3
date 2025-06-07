@@ -1,8 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import { toast } from 'vue3-toastify'
-import { i18n } from '@/i18n/i18n'
 
 // Types
 import type { Country, ListCompany, Sector } from '@/types/invest'
@@ -10,20 +8,29 @@ import type {
   CompaniesOptions,
   CompaniesResponse,
   CountryState,
-  DependentState,
-  WatchlistItem,
+  SectorState,
 } from './types'
 
 const defaultCountry: CountryState = {
   id: -1,
   key: 'global',
-  title: 'Global',
+  translations: {
+    en: {
+      name: 'Global',
+      name_genitive: 'Global',
+    },
+  },
   markets: [],
 }
-const defaultSector: DependentState = {
+const defaultSector: SectorState = {
   id: -1,
   key: 'any',
-  title: 'Any',
+  translations: {
+    en: {
+      title: 'Any',
+      description: '',
+    },
+  },
   parentKeys: [],
 }
 
@@ -32,9 +39,9 @@ export const useCompanyListStore = defineStore('companyList', {
     companiesAbortController: null as AbortController | null,
     companies: [] as ListCompany[],
     countries: [] as CountryState[],
-    sectors: [] as DependentState[],
+    sectors: [] as SectorState[],
     countryState: defaultCountry as CountryState,
-    sectorState: defaultSector as DependentState,
+    sectorState: defaultSector as SectorState,
     nextUrl: '/api/v1/invest/companies?_limit=20' as string | null,
     totalCompanyLength: 0,
     fetching: false,
@@ -70,14 +77,11 @@ export const useCompanyListStore = defineStore('companyList', {
         const countries = response.data.map((c) => ({
           id: c.id,
           key: c.slug,
-          title: c.title,
+          translations: c.translations,
           markets: c.markets,
         })) satisfies CountryState[]
 
-        this.countries = [
-          { id: -1, title: 'Global', key: 'global', markets: [] },
-          ...countries,
-        ] satisfies CountryState[]
+        this.countries = [defaultCountry, ...countries] satisfies CountryState[]
       } catch (e) {
         this._handleError(e)
       }
@@ -89,14 +93,11 @@ export const useCompanyListStore = defineStore('companyList', {
         const sectors = response.data.map((s) => ({
           id: s.id,
           key: s.slug,
-          title: s.title,
+          translations: s.translations,
           parentKeys: s.countries.map((c) => c.id),
-        })) satisfies DependentState[]
+        })) satisfies SectorState[]
 
-        this.sectors = [
-          { id: -1, title: 'Any', key: 'any', parentKeys: [] },
-          ...sectors,
-        ] satisfies DependentState[]
+        this.sectors = [defaultSector, ...sectors] satisfies SectorState[]
       } catch (e) {
         this._handleError(e)
       }
@@ -173,56 +174,6 @@ export const useCompanyListStore = defineStore('companyList', {
     },
     _hasValidNextUrl(nextUrl: string | null): nextUrl is string {
       return !!nextUrl && nextUrl.trim() !== ''
-    },
-    async toggleWatchlisted(item: WatchlistItem) {
-      const formData = new FormData()
-      const formDataPayload: Object = {
-        uid: item.uid,
-      }
-      Object.entries(formDataPayload).forEach(([key, val]) =>
-        formData.append(key, val)
-      )
-
-      let isSuccess = false
-
-      if (item.watchlisted) {
-        await axios
-          .delete('/api/v1/invest/toggle_to_watchlist/', { data: formData })
-          .then(() => {
-            isSuccess = true
-            toast.success(
-              i18n.global.t('toasts.watchlist.removed', {
-                ticker: item.ticker,
-              })
-            )
-          })
-          .catch((error) => {
-            isSuccess = false
-            console.log(error)
-            toast.error(i18n.global.t('toasts.somethingWrong'))
-          })
-      } else {
-        await axios
-          .patch('/api/v1/invest/toggle_to_watchlist/', formData)
-          .then(() => {
-            isSuccess = true
-            toast.success(
-              i18n.global.t('toasts.watchlist.added', {
-                ticker: item.ticker,
-              })
-            )
-          })
-          .catch((error) => {
-            isSuccess = false
-            console.log(error)
-            toast.error(i18n.global.t('toasts.somethingWrong'))
-          })
-      }
-
-      if (!isSuccess) return
-
-      const company = this.companies.find((c) => c.uid === item.uid)
-      if (company) company.is_watchlisted = !company.is_watchlisted
     },
   },
 })

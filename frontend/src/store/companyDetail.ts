@@ -33,21 +33,38 @@ function genDefaultCompany(): DetailCompany {
   return {
     absolute_url: '',
     analyst_ideas: [] as AnalystIdea[],
-    average_weekly_mouvement: 0,
     company_news: [] as News[],
+    translations: {
+      en: {
+        title: '',
+        short_title: '',
+        short_title_genitive: '',
+        description: '',
+        short_description: '',
+        city: '',
+      },
+    },
     country: {
       currency: {
         id: -1,
-        name: '',
-        name_iso: '',
+        translations: {
+          en: {
+            name: '',
+          },
+        },
+        iso_code: '',
         symbol: '',
       },
       id: -1,
       markets: [],
       slug: '',
-      title: '',
+      translations: {
+        en: {
+          name: '',
+          name_genitive: '',
+        },
+      },
     },
-    description: '',
     formatting: {
       primaryCurrencyISO: '',
       primaryCurrencySymbol: '',
@@ -57,8 +74,6 @@ function genDefaultCompany(): DetailCompany {
       tradingCurrencySymbol: '',
     },
     id: -1,
-    is_watchlisted: false,
-    last_reported_earnings: '',
     logo_url: '',
     market: {
       country: -1,
@@ -78,8 +93,12 @@ function genDefaultCompany(): DetailCompany {
     next_dividend: {
       currency: {
         id: -1,
-        name: '',
-        name_iso: '',
+        translations: {
+          en: {
+            name: '',
+          },
+        },
+        iso_code: '',
         symbol: '',
       },
       declared_date: '',
@@ -90,23 +109,33 @@ function genDefaultCompany(): DetailCompany {
       scale: '',
       scale_unit: 0,
     },
-    next_earnings: '',
+
     price_data: {
       capitalisation: 0,
       last_price: 0,
     },
     reports: [] as Report[],
-    return_1y: 0,
-    return_30d: 0,
-    return_3y: 0,
-    return_5y: 0,
-    return_7d: 0,
-    return_90d: 0,
+    performance: {
+      return_1y: 0,
+      return_30d: 0,
+      return_3y: 0,
+      return_5y: 0,
+      return_7d: 0,
+      return_90d: 0,
+      next_earnings: 0,
+      average_weekly_movement: 0,
+      last_reported_earnings: 0,
+    },
     sector: {
       id: -1,
       main_header: '',
       slug: '',
-      title: '',
+      translations: {
+        en: {
+          title: '',
+          description: '',
+        },
+      },
       countries: [],
     },
     sector_market: {
@@ -118,10 +147,8 @@ function genDefaultCompany(): DetailCompany {
       return_7d: 0,
       return_90d: 0,
     },
-    short_description: '',
     slug: '',
     ticker: '',
-    title: '',
     uid: '',
     website: '',
     year_founded: 0,
@@ -149,7 +176,6 @@ export const useCompanyDetailStore = defineStore({
     notesEditorIsActive: false,
     fetchingPriceData: false,
     fetchingCompany: false,
-    watchlistLoading: false,
     lateralMenuComponentName: null as 'notes' | 'news' | null,
   }),
   getters: {
@@ -305,45 +331,6 @@ export const useCompanyDetailStore = defineStore({
         }, {} as Snowflake)
 
       this.competitors = data.peers
-    },
-    async toggleWatchlisted() {
-      const formData = new FormData()
-      Object.entries({ uid: this.company.uid }).forEach(
-        ([key, val]: [string, any]) => {
-          formData.append(key, val)
-        }
-      )
-
-      let status = 'start' as 'start' | 'added' | 'deleted'
-
-      try {
-        this.watchlistLoading = true
-
-        if (this.company.is_watchlisted) {
-          status = 'deleted'
-          await axios.delete('/api/v1/invest/toggle_to_watchlist/', {
-            data: formData,
-          })
-        } else {
-          status = 'added'
-          await axios.patch('/api/v1/invest/toggle_to_watchlist/', formData)
-        }
-
-        this.company.is_watchlisted = status === 'added'
-        toast.success(
-          i18n.global.t(
-            `toasts.watchlist.${status === 'added' ? 'added' : 'removed'}`,
-            {
-              ticker: this.company.ticker,
-            }
-          )
-        )
-      } catch (error) {
-        console.log(error)
-        toast.error(i18n.global.t('toasts.somethingWrong'))
-      } finally {
-        this.watchlistLoading = false
-      }
     },
     async deleteNote(note: Note) {
       try {

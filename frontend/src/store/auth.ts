@@ -1,9 +1,13 @@
 // Utilities
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { toast } from 'vue3-toastify'
+import { i18n } from '@/i18n/i18n'
 
 // Types
 import type { Portfolio } from '@/types/portfolios'
+import type { DetailCompany } from '@/types/invest'
+import type { CompanyItem } from '@/store/companyList/types'
 
 export interface Profile {
   id: string
@@ -32,6 +36,8 @@ export const useAuthStore = defineStore({
     token: '',
     authMode: 'login' as AuthMode,
     profile: {} as Profile,
+    // WATCHLIST
+    watchlistLoading: false,
   }),
   getters: {
     isAuthenticated: (state) => {
@@ -80,6 +86,66 @@ export const useAuthStore = defineStore({
 
       this.token = ''
       this.profile = {} as Profile
+    },
+    // WATCHLIST
+    async updateWatchlist(company: DetailCompany | CompanyItem) {
+      if (!this.profile.watchlist) return
+
+      const { uid, ticker } = company
+      const isCurrentlyWatchlisted = this.profile.watchlist.includes(uid)
+      const action = isCurrentlyWatchlisted ? 'remove' : 'add'
+
+      try {
+        this.watchlistLoading = true
+
+        if (action === 'add') {
+          this.profile.watchlist.push(uid)
+        } else {
+          this.profile.watchlist = this.profile.watchlist.filter(
+            (company_uid) => company_uid !== uid
+          )
+        }
+
+        const response = await axios.patch<Profile>(
+          'api/v1/profile/update_watchlist/',
+          {
+            company_uid: uid,
+            action,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+
+        if (action === 'remove') {
+          toast.success(
+            i18n.global.t(`toasts.watchlist.removed`, {
+              ticker,
+            })
+          )
+        } else {
+          toast.success(
+            i18n.global.t(`toasts.watchlist.added`, {
+              ticker,
+            })
+          )
+        }
+      } catch (error) {
+        if (action === 'add') {
+          this.profile.watchlist = this.profile.watchlist.filter(
+            (company_uid) => company_uid !== uid
+          )
+        } else {
+          this.profile.watchlist.push(uid)
+        }
+
+        console.log(error)
+        toast.error(i18n.global.t('toasts.somethingWrong'))
+      } finally {
+        this.watchlistLoading = false
+      }
     },
   },
 })
