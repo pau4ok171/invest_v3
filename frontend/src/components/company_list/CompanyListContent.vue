@@ -5,6 +5,8 @@ import CompanyListContentTileMode from '@/components/company_list/CompanyListCon
 
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
+import { useTranslations } from '@/composables/translations'
+import { useAuthStore } from '@/store/auth'
 
 // Utilities
 import { computed } from 'vue'
@@ -14,12 +16,14 @@ import type { CompanyItem } from '@/store/companyList/types'
 import type { ListCompany, Snowflake, SnowflakeKey } from '@/types/invest'
 
 const store = useCompanyListStore()
+const authStore = useAuthStore()
+const { getTranslation } = useTranslations()
 
 const items = computed<CompanyItem[]>(
   () =>
     store.companies.map((c) => ({
       companyLogo: c.logo_url,
-      companyName: c.title,
+      companyName: getTranslation(c.translations, 'title'),
       lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
       return7D: `${c.return_1y.toFixed(2)}%`,
       return1Y: `${c.return_7d.toFixed(2)}%`,
@@ -31,13 +35,13 @@ const items = computed<CompanyItem[]>(
       fairValue: 'TBA',
       growth: 'TBA',
       dividendYield: 'TBA',
-      sector: c.sector.title,
+      sector: getTranslation(c.sector.translations, 'title'),
       ticker: c.ticker,
       to: c.absolute_url,
       uid: c.uid,
       watchlisted: c.is_watchlisted,
       snowflake: getSnowflake(c),
-      description: c.description,
+      description: getTranslation(c.translations, 'description'),
     })) satisfies CompanyItem[]
 )
 

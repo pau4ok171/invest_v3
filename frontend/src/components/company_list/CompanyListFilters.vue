@@ -2,18 +2,83 @@
 // Composables
 import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useI18n } from 'vue-i18n'
+import { useTranslations } from '@/composables/translations'
 
 // Utilities
-import { shallowRef } from 'vue'
+import { computed, shallowRef } from 'vue'
 
 // Types
-import type { CountryState, DependentState } from '@/store/companyList/types'
+import type { CountryState, SectorState } from '@/store/companyList/types'
 
 const store = useCompanyListStore()
 const dialog = shallowRef(false)
 const { t } = useI18n()
+const { getTranslation } = useTranslations()
 
-async function onUpdateCountry(modelValue: CountryState) {
+const countries = computed(() =>
+  store.countries
+    .map((obj) => {
+      const title =
+        obj.key === 'global'
+          ? t('companyList.header.global')
+          : getTranslation(obj.translations, 'name')
+
+      return {
+        ...obj,
+        title,
+      }
+    })
+    .sort((a, b) => {
+      if (a.key === 'global') return -1
+      if (b.key === 'global') return 1
+      return a.title.localeCompare(b.title)
+    })
+)
+
+const selectedCountry = computed(() => {
+  const title =
+    store.countryState.key === 'global'
+      ? t('companyList.header.global')
+      : getTranslation(store.countryState.translations, 'name')
+
+  return {
+    ...store.countryState,
+    title,
+  }
+})
+
+const sectors = computed(() =>
+  store.filteredSectors
+    .map((obj) => {
+      const title =
+        obj.key === 'any'
+          ? t('companyList.header.any')
+          : getTranslation(obj.translations, 'title')
+
+      return {
+        ...obj,
+        title,
+      }
+    })
+    .sort((a, b) => {
+      if (a.key === 'any') return -1
+      if (b.key === 'any') return 1
+      return a.title.localeCompare(b.title)
+    })
+)
+
+const selectedSector = computed(() => {
+  const title =
+    store.sectorState.key === 'any'
+      ? t('companyList.header.any')
+      : getTranslation(store.sectorState.translations, 'title')
+  return {
+    ...store.sectorState,
+    title,
+  }
+})
+
+const onUpdateCountry = async (modelValue: CountryState) => {
   if (store.countryState.key === modelValue.key) return
 
   store.countryState = modelValue
@@ -24,7 +89,7 @@ async function onUpdateCountry(modelValue: CountryState) {
   }
 }
 
-async function onUpdateSector(modelValue: DependentState) {
+const onUpdateSector = async (modelValue: SectorState) => {
   if (store.sectorState.key === modelValue.key) return
 
   store.sectorState = modelValue
@@ -36,9 +101,9 @@ async function onUpdateSector(modelValue: DependentState) {
   <div class="d-flex align-center justify-space-between mt-2">
     <div class="d-flex ga-2">
       <v-select
-        :model-value="store.countryState"
+        :model-value="selectedCountry"
         @update:model-value="onUpdateCountry"
-        :items="store.countries"
+        :items="countries"
         :loading="store.fetching"
         variant="solo-filled"
         density="compact"
@@ -50,9 +115,9 @@ async function onUpdateSector(modelValue: DependentState) {
       />
 
       <v-select
-        :model-value="store.sectorState"
+        :model-value="selectedSector"
         @update:model-value="onUpdateSector"
-        :items="store.filteredSectors"
+        :items="sectors"
         :loading="store.fetching"
         variant="solo-filled"
         density="compact"

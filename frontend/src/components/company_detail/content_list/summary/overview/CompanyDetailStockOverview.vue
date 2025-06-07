@@ -6,6 +6,7 @@ import SnowflakeChart from '@/components/charts/SnowflakeChart.vue'
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useI18n } from 'vue-i18n'
+import { useTranslations } from '@/composables/translations'
 
 // Utilities
 import { computed } from 'vue'
@@ -17,6 +18,7 @@ const companyDetailStore = useCompanyDetailStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const snowflake = computed(() => companyDetailStore.snowflake)
 const { t } = useI18n()
+const { getTranslation } = useTranslations()
 
 function onAboutCompanyClick() {
   const goTo = (document as Document)
@@ -41,7 +43,9 @@ function onAboutCompanyClick() {
               `${company.ticker} ${t('companyDetail.overview.stockOverview.header')}`
             }}
           </v-card-title>
-          <v-card-text>{{ company.short_description }}</v-card-text>
+          <v-card-text>{{
+            getTranslation(company.translations, 'short_description')
+          }}</v-card-text>
           <v-card-actions>
             <v-btn
               prepend-icon="$iInfo"

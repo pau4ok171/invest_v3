@@ -3,6 +3,7 @@
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
+import { useTranslations } from '@/composables/translations'
 
 // Utilities
 import { computed } from 'vue'
@@ -15,6 +16,7 @@ const companyDetailStore = useCompanyDetailStore()
 const authStore = useAuthStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const { t } = useI18n()
+const { getTranslation } = useTranslations()
 
 function addToClipboard() {
   navigator.clipboard
@@ -54,7 +56,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
 <template>
   <div class="detail-sidebar__main">
     <p class="detail-sidebar__title">
-      {{ company.title }}
+      {{ getTranslation(company.translations, 'title') }}
       <v-btn
         icon="$iCopy"
         @click="addToClipboard"

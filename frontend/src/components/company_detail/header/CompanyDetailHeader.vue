@@ -7,6 +7,7 @@ import CompanyDetailPortfolioDialog from '@/components/company_detail/content_li
 import { useCompanyDetailStore } from '@/store/companyDetail'
 import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
+import { useTranslations } from '@/composables/translations'
 
 // Utilities
 import { computed } from 'vue'
@@ -20,15 +21,16 @@ const authStore = useAuthStore()
 const company = computed<DetailCompany>(() => companyDetailStore.company)
 const loading = computed(() => companyDetailStore.fetchingCompany)
 const { t } = useI18n()
+const { getTranslation } = useTranslations()
 
 const breadcrumbs = computed(() => [
   {
-    title: 'Markets',
+    title: t('header.markets'),
     disabled: false,
     to: { name: RouteNamesEnum.company_list },
   },
   {
-    title: companyDetailStore.company.title || 'Company',
+    title: getTranslation(company.value.translations, 'title') || 'Company',
     disabled: true,
   },
 ])
@@ -87,7 +89,9 @@ function createNote() {
             width="250"
             height="28"
           />
-          <template v-else>{{ company.title }}</template>
+          <template v-else>{{
+            getTranslation(company.translations, 'title')
+          }}</template>
         </template>
         <template #subtitle>
           <v-skeleton-loader
