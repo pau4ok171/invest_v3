@@ -3,6 +3,6 @@ export interface Note {
     company: number,
     body: string | null,
     text: string | null,
-    created: string | null,
-    updated: string | null,
+    created_at: string | null,
+    updated_at: string | null,
 }

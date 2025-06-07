@@ -1,34 +1,66 @@
 import { Statement } from '@/types/statements'
 
+export interface CompanyTranslations {
+  [languageCode: string]: {
+    title: string
+    short_title: string
+    short_title_genitive: string
+    description: string
+    short_description: string
+    city: string
+  }
+}
+
+export interface CountryTranslations {
+  [languageCode: string]: {
+    name: string
+    name_genitive: string
+  }
+}
+
+export interface SectorTranslations {
+  [languageCode: string]: {
+    title: string
+    description: string
+  }
+}
+
+export interface CurrencyTranslations {
+  [languageCode: string]: {
+    name: string
+  }
+}
+
+export interface CompanyPerformance {
+  return_7d: number
+  return_30d: number
+  return_90d: number
+  return_1y: number
+  return_3y: number
+  return_5y: number
+  average_weekly_movement: number
+  last_reported_earnings: number | null
+  next_earnings: number | null
+}
+
 export interface DetailCompany {
   absolute_url: string
   analyst_ideas: Array<AnalystIdea>
-  average_weekly_mouvement: number
   company_news: Array<News>
   country: Country
-  description: string
+  translations: CompanyTranslations
   formatting: Formatting
   id: number
-  is_watchlisted: boolean
-  last_reported_earnings: string
   logo_url: string
   market: Market
   next_dividend: Dividend
-  next_earnings: string
   price_data: PriceData
   reports: Array<Report>
-  return_1y: number
-  return_30d: number
-  return_3y: number
-  return_5y: number
-  return_7d: number
-  return_90d: number
+  performance: CompanyPerformance
   sector: Sector
   sector_market: SectorMarket
-  short_description: string
   slug: string
   ticker: string
-  title: string
   uid: string
   website: string
   year_founded: number
@@ -36,24 +68,16 @@ export interface DetailCompany {
 
 export interface ListCompany {
   absolute_url: string
-  average_weekly_mouvement: number
   country: Country
-  description: string
+  translations: CompanyTranslations
   formatting: Formatting
-  is_watchlisted: boolean
   logo_url: string
   market: Market
   price_data: PriceData
-  return_1y: number
-  return_30d: number
-  return_3y: number
-  return_5y: number
-  return_7d: number
-  return_90d: number
+  performance: CompanyPerformance
   sector: Sector
   statements: Statement[]
   ticker: string
-  title: string
   uid: string
   updated: string
 }
@@ -65,7 +89,7 @@ export interface SearchCompany {
   market: Market
   sector: Sector
   ticker: string
-  title: string
+  translations: CompanyTranslations
   uid: string
 }
 
@@ -89,8 +113,8 @@ export interface Analyst {
 
 export interface Currency {
   id: number
-  name: string
-  name_iso: string
+  translations: CurrencyTranslations
+  iso_code: string
   symbol: string
 }
 
@@ -118,7 +142,7 @@ export interface Country {
   id: number
   markets: Market[]
   slug: string
-  title: string
+  translations: CountryTranslations
 }
 
 export interface Market {
@@ -155,7 +179,7 @@ export interface Sector {
   id: number
   main_header: string
   slug: string
-  title: string
+  translations: SectorTranslations
   countries: Country[]
 }
 
@@ -170,7 +194,7 @@ export interface Competitor {
   slug: string
   snowflake: Snowflake
   ticker: string
-  title: string
+  translations: CompanyTranslations
   uid: string
 }
 
