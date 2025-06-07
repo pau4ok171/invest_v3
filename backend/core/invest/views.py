@@ -8,11 +8,10 @@ from django.views.generic.edit import BaseCreateView
 from django.contrib.auth.views import LoginView
 from django.http.response import JsonResponse, HttpResponseRedirect, Http404
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
-from .models import Company, Report, Country, Sector, Sorter, CandlePerDay, AnalystIdea
+from . import models
 from .forms import CustomUserCreationForm
 
 from portfolio.models import Portfolio
@@ -73,7 +72,7 @@ class RegistrationView(BaseCreateView):
 
 
 class InvestCompanyListView(ListView):
-    model = Company
+    model = models.Company
     template_name = 'invest/company/list/list_v2.html'
     qs = None
 
@@ -83,21 +82,16 @@ class InvestCompanyListView(ListView):
 
         country_iso = self.kwargs.setdefault('country_iso', 'global')
         sector_slug = self.kwargs.setdefault('sector_slug', 'any')
-        sorter_slug = self.kwargs.setdefault('sorter_slug', 'market-cap-large')
 
         if country_iso != 'global':
             self.qs = self.qs.filter(country__name_iso=country_iso)
-            country_name = Country.objects.get(name_iso=country_iso).name
+            country_name = models.Country.objects.get(name_iso=country_iso).name
             self.kwargs.__setitem__('country_name', country_name)
 
         if sector_slug != 'any':
             self.qs = self.qs.filter(sector__slug=sector_slug)
-            sector_name = Sector.objects.get(slug=sector_slug).title
+            sector_name = models.Sector.objects.get(slug=sector_slug).title
             self.kwargs.__setitem__('sector_name', sector_name)
-
-        self.qs = self.get_sorted(sorter_slug)
-        sorter_name = Sorter.objects.get(slug=sorter_slug).title
-        self.kwargs.__setitem__('sorter_name', sorter_name)
 
         if self.qs:
             return self.qs
@@ -109,7 +103,6 @@ class InvestCompanyListView(ListView):
         context['selectors_list'] = {
             'country_list': self.get_country_list(),
             'sector_list': self.get_sector_list(),
-            'sorter_list': Sorter.objects.all(),
         }
         context['stock_count'] = self.get_queryset_count()
         context['last_update'] = self.last_updated()
@@ -122,30 +115,26 @@ class InvestCompanyListView(ListView):
     def last_updated(self):
         return self.qs.values_list('updated').latest('updated')[0]
 
-    def get_sorted(self, sorter_slug):
-        sorter = get_object_or_404(Sorter, slug=sorter_slug)
-        return self.qs.order_by(sorter.order_type)
-
     def get_sector_list(self):
         country_iso = self.kwargs.get('country_iso', None)
-        company_list = Company.objects.all().values('sector_id')
+        company_list = models.Company.objects.all().values('sector_id')
 
         if country_iso != 'global':
-            company_list = Company.objects.filter(country__name_iso=country_iso).values('sector_id')
+            company_list = models.Company.objects.filter(country__name_iso=country_iso).values('sector_id')
 
-        sector_list = Sector.objects.filter(id__in=company_list).distinct()
+        sector_list = models.Sector.objects.filter(id__in=company_list).distinct()
 
         return sector_list
 
     def get_country_list(self):
-        company_list = Company.objects.all().values('country_id')
-        country_list = Country.objects.filter(id__in=company_list).distinct()
+        company_list = models.Company.objects.all().values('country_id')
+        country_list = models.Country.objects.filter(id__in=company_list).distinct()
 
         return country_list
 
 
 class InvestCompanyDetailView(DetailView):
-    model = Company
+    model = models.Company
     template_name = 'invest/company/detail/detail.html'
 
     def get_queryset(self):
@@ -155,14 +144,14 @@ class InvestCompanyDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        report = Report.objects.filter(company__slug__exact=self.object.slug)
+        report = models.ReportMetadata.objects.filter(company__slug__exact=self.object.slug)
         context['report'] = report.latest('year', 'quarter') if report else None
 
         context['company_detail_header_info'] = self.get_company_detail_header_info()
         return context
 
     def get_company_detail_header_info(self):
-        candles = CandlePerDay.objects.filter(company__slug__exact=self.object.slug)
+        candles = models.CandlePerDay.objects.filter(company__slug__exact=self.object.slug)
         # currency = self.object
         # TODO: Add currency depending on Company's Country's Currency
         last_price = f'₽{candles.latest("time").close}'
@@ -170,7 +159,7 @@ class InvestCompanyDetailView(DetailView):
         return_7d = self.get_closest_available_return(candles, days=7)
         return_1y = self.get_closest_available_return(candles, years=1)
 
-        report = Report.objects.filter(company__slug__exact=self.object.slug)
+        report = models.ReportMetadata.objects.filter(company__slug__exact=self.object.slug)
         share_outstanding = report.latest('year', 'quarter').share_outstanding if report else None
 
         market_cap = candles.latest("time").close * share_outstanding if share_outstanding else 'n/a'
@@ -213,7 +202,7 @@ class InvestCompanyDetailView(DetailView):
         return f"₽{num:.1f}Q"
 
     def get_analyst_ideas(self):
-        analyst_ideas = AnalystIdea.objects.filter(
+        analyst_ideas = models.AnalystIdea.objects.filter(
             company__slug__exact=self.object.slug,
             date_target__gt=datetime.datetime.utcnow()
         )

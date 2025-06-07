@@ -11,7 +11,7 @@ from invest.api.serializers import (
     CompanySerializer,
     CandlePerDaySerializer,
     CountrySerializer,
-    SectorSerializer,
+    SectorFilterSerializer,
     CompanySearchSerializer,
     CompanyDetailSerializer,
     CompanyPeersSerializer
@@ -78,10 +78,16 @@ class CompanyListView(ListAPIView):
         country_slug = self.request.query_params.get('country', 'global')
         sector_slug = self.request.query_params.get('sector', 'any')
 
-        queryset = Company.objects.filter(is_visible=True)
+        queryset = Company.objects.filter(
+            is_visible=True
+        ).select_related(
+            'country',
+            'market',
+            'sector'
+        ).distinct()
 
         if not country_slug == 'global':
-            queryset = queryset.filter(country__name_iso=country_slug)
+            queryset = queryset.filter(country__iso_code=country_slug)
         if not sector_slug == 'any':
             queryset = queryset.filter(sector__slug=sector_slug)
 
@@ -92,41 +98,38 @@ class CompanyListCountries(ListAPIView):
     serializer_class = CountrySerializer
 
     def get_queryset(self):
-        companies = Company.objects.filter(is_visible=True)
-        return Country.objects.filter(company__pk__in=companies).distinct()
+        country_ids = Country.objects.filter(
+            company__is_visible=True
+        ).distinct().values_list('id', flat=True)
+
+        return (
+            Country.objects
+            .filter(id__in=country_ids)
+            .prefetch_related(
+                'translations',
+                'currency',
+                'markets'
+            )
+            .order_by('iso_code')
+        )
 
 
 class CompanyListSectors(ListAPIView):
-    serializer_class = SectorSerializer
+    serializer_class = SectorFilterSerializer
 
     def get_queryset(self):
-        companies = Company.objects.filter(is_visible=True)
-        return Sector.objects.filter(company__pk__in=companies).distinct()
+        sector_ids = Sector.objects.filter(
+            company__is_visible=True
+        ).distinct().values_list('id', flat=True)
 
-
-class WatchlistedCompanyAPIView(APIView):
-    authentication_classes = [authentication.TokenAuthentication]
-
-    def patch(self, request, *args, **kwargs):
-        form = CompanyUIDForm(self.request.data)
-        if form.is_valid():
-            company = Company.objects.get(uid=form.cleaned_data['uid'])
-            company.users_watchlist.add(self.request.user)
-            return Response(
-                data={
-                    "status": 201
-                },
-                status=status.HTTP_201_CREATED
+        return (
+            Sector.objects
+            .filter(id__in=sector_ids)
+            .prefetch_related(
+                'translations',
             )
-        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, *args, **kwargs):
-        form = CompanyUIDForm(self.request.data)
-        if form.is_valid():
-            company = Company.objects.get(uid=form.cleaned_data['uid'])
-            company.users_watchlist.remove(self.request.user)
-            return Response(data={"status": 204}, status=status.HTTP_204_NO_CONTENT)
-        return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
+            .order_by('slug')
+        )
 
 
 class CompanyDetailAPIView(RetrieveAPIView):
