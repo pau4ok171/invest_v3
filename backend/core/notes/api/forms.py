@@ -11,4 +11,4 @@ class NotesUpdateForm(forms.Form):
     note_id = forms.IntegerField(min_value=0)
     content = forms.CharField()
     text = forms.CharField(required=False)
-    updated = forms.DateTimeField()
+    updated_at = forms.DateTimeField()

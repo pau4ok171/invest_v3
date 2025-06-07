@@ -41,9 +41,9 @@ class NotesViewSet(ModelViewSet):
             note_id = form.cleaned_data['note_id']
             body = form.cleaned_data['content']
             text = form.cleaned_data.get('text', '')
-            updated = form.cleaned_data['updated']
+            updated_at = form.cleaned_data['updated_at']
 
-            Note.objects.filter(pk=note_id).update(body=body, text=text, updated=updated)
+            Note.objects.filter(pk=note_id).update(body=body, text=text, updated_at=updated_at)
             serializer = self.serializer_class(Note.objects.get(pk=note_id))
             return Response(serializer.data)
         return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
