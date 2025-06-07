@@ -19,9 +19,6 @@ urlpatterns = [
     # Portfolio
     path('portfolio/', include('portfolio.urls', namespace='portfolio')),
     path('api/v1/portfolio/', include('portfolio.api.urls', namespace='portfolio_api')),
-    # Watchlist
-    path('watchlist/', include('watchlist.urls', namespace='watchlist')),
-    path('api/v1/watchlist/', include('watchlist.api.urls', namespace='watchlist_api')),
     path('', include('django.contrib.auth.urls')),
     path('api/v1/admin/', include('site_admin.api.urls', namespace='admin_api')),
     path('', views.HomePageView.as_view(), name='home'),

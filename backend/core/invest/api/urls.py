@@ -10,7 +10,6 @@ urlpatterns = [
     path('countries/', views.CompanyListCountries.as_view()),
     path('sectors/', views.CompanyListSectors.as_view()),
     path('price_data/<slug:company_slug>/', views.PriceChartList.as_view()),
-    path('toggle_to_watchlist/', views.WatchlistedCompanyAPIView.as_view()),
     # Functions
     path('search_query/', views.search_query),
     path('validate_username/', views.validate_username),

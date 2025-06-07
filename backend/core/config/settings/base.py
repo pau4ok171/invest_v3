@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     # My apps
     'invest.apps.InvestConfig',
-    'watchlist.apps.WatchlistConfig',
     'portfolio.apps.PortfolioConfig',
     'notes.apps.NotesConfig',
     'statements.apps.StatementsConfig',
