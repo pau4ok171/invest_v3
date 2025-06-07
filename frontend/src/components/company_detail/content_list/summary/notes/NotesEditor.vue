@@ -81,7 +81,7 @@ async function postNote() {
     company_id: note.value.company || companyDetailStore.company.id,
     content: note.value.body,
     text: note.value.text,
-    updated: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   }).forEach(([key, val]: [string, any]) => formData.append(key, val))
 
   saving.value = true
@@ -129,8 +129,8 @@ onBeforeUnmount(() => {
     id: null,
     body: null,
     text: null,
-    created: null,
-    updated: null,
+    created_at: null,
+    updated_at: null,
     company: companyDetailStore.company.id || -1,
   }
   companyDetailStore.noteSavedContent = ''

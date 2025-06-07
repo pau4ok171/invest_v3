@@ -34,12 +34,12 @@ function editNote(note: Note) {
           <span class="mr-1">
             {{
               t(
-                `common.${note.created === note.updated ? 'created' : 'updated'}`
+                `common.${note.created_at === note.updated_at ? 'created' : 'updated'}`
               )
             }}
           </span>
-          <time v-if="note.updated" :datetime="note.updated">{{
-            new Date(note.updated).toLocaleDateString('ru-RU')
+          <time v-if="note.updated_at" :datetime="note.updated_at">{{
+            new Date(note.updated_at).toLocaleDateString('ru-RU')
           }}</time>
         </div>
       </template>
