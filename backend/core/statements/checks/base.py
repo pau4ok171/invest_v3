@@ -94,7 +94,12 @@ class BaseCheck:
         for k, v in fields.items():
             setattr(self, k, v)
 
-        self._process()
+    def to_dict(self):
+        return {
+            'type': self.__class__.__name__,
+            'statement': self.statement,
+            'result': self._process()
+        }
 
     def _process(self):
         self.populate()
