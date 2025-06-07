@@ -2,26 +2,38 @@ import time
 
 from dateutil.relativedelta import relativedelta
 from dateutil.utils import today
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from rest_framework.fields import empty
 
-from invest.models import Company, Country, Sector, Market, CandlePerDay, Sorter, Report, AnalystIdea, Analyst, \
-    Currency, Dividend, SectorMarket
+from invest.models import Company, Country, Sector, Market, CandlePerDay, ReportMetadata, AnalystIdea, Analyst, \
+    Currency, Dividend, SectorMarket, CompanyPerformance, MarketPerformance
 from statements.models import Statement
 from statements.api.serializers import StatementSerializer
 from statements.types import Area, Status
 from news.api.serializers import NewsSerializer
 
+from parler_rest.serializers import TranslatableModelSerializer, TranslatedFieldsField
 
-class CountrySerializer(serializers.ModelSerializer):
-    title = serializers.CharField(source='name')
-    slug = serializers.SlugField(source='name_iso')
+
+class CurrencySerializer(TranslatableModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Currency)
+
+    class Meta:
+        model = Currency
+        fields = '__all__'
+
+
+class CountrySerializer(TranslatableModelSerializer):
+    currency = CurrencySerializer(read_only=True)
+    translations = TranslatedFieldsField(shared_model=Country)
+    slug = serializers.SlugField(source='iso_code')
 
     class Meta:
         model = Country
         fields = (
             'id',
-            'title',
+            'translations',
             'slug',
             'currency',
             'markets',
@@ -29,39 +41,53 @@ class CountrySerializer(serializers.ModelSerializer):
         depth = 1
 
 
-class SectorSerializer(serializers.ModelSerializer):
+class SectorSerializer(TranslatableModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Sector)
+
+    class Meta:
+        model = Sector
+        fields = (
+            'id',
+            'translations',
+            'slug',
+        )
+
+
+class SectorFilterSerializer(TranslatableModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Sector)
     countries = serializers.SerializerMethodField()
 
     class Meta:
         model = Sector
         fields = (
             'id',
-            'title',
+            'translations',
             'slug',
             'countries',
         )
 
     @staticmethod
     def get_countries(obj):
-        countries = Country.objects.filter(company__sector=obj).distinct()
+        countries = Country.objects.translated('en').filter(company__sector=obj)
         return CountrySerializer(countries, many=True).data
 
 
 class SectorDetailSerializer(serializers.ModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Sector)
+
     class Meta:
         model = Sector
         fields = (
-            'title',
+            'translations',
             'slug',
             'main_header'
         )
 
 
-class MarketSerializer(serializers.ModelSerializer):
+class MarketPerformanceSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Market
+        model = MarketPerformance
         fields = (
-            'title',
             'return_7d',
             'return_30d',
             'return_90d',
@@ -71,6 +97,17 @@ class MarketSerializer(serializers.ModelSerializer):
             'average_weekly_mouvement',
             'volatility_10p',
             'volatility_90p',
+        )
+
+
+class MarketSerializer(serializers.ModelSerializer):
+    performance = MarketPerformanceSerializer(read_only=True)
+
+    class Meta:
+        model = Market
+        fields = (
+            'title',
+            'performance',
         )
 
 
@@ -95,6 +132,7 @@ class PriceDataSerialize(serializers.ModelSerializer):
 
 
 class CompanySearchSerializer(serializers.ModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Company)
     country = CountrySerializer(read_only=True)
     market = MarketSerializer(read_only=True)
     sector = SectorSerializer(read_only=True)
@@ -105,7 +143,7 @@ class CompanySearchSerializer(serializers.ModelSerializer):
         model = Company
         fields = (
             'uid',
-            'title',
+            'translations',
             'ticker',
             'logo_url',
             'country',
@@ -115,23 +153,40 @@ class CompanySearchSerializer(serializers.ModelSerializer):
         )
 
 
+class CompanyPerformanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CompanyPerformance
+        fields = (
+            'return_7d',
+            'return_30d',
+            'return_90d',
+            'return_1y',
+            'return_3y',
+            'return_5y',
+            'average_weekly_movement',
+            'last_reported_earnings',
+            'next_earnings',
+        )
+
+
 class CompanySerializer(serializers.ModelSerializer):
+    translations = TranslatedFieldsField(shared_model=Company)
     country = CountrySerializer(read_only=True)
     market = MarketSerializer(read_only=True)
     sector = SectorSerializer(read_only=True)
     logo_url = serializers.CharField(source='get_logo', read_only=True)
     absolute_url = serializers.CharField(source='get_absolute_url', read_only=True)
-    is_watchlisted = serializers.SerializerMethodField('get_is_watchlisted')
     price_data = serializers.SerializerMethodField('get_price_data')
     formatting = serializers.SerializerMethodField('get_formatting')
     statements = serializers.SerializerMethodField('get_statements')
+    performance = CompanyPerformanceSerializer(read_only=True)
 
     class Meta:
         model = Company
         fields = (
             'uid',
             'ticker',
-            'title',
+            'translations',
             'logo_url',
             'country',
             'market',
@@ -140,24 +195,13 @@ class CompanySerializer(serializers.ModelSerializer):
             'price_data',
             'formatting',
             'updated',
-            'return_7d',
-            'return_30d',
-            'return_90d',
-            'return_1y',
-            'return_3y',
-            'return_5y',
             'statements',
+            'performance',
         )
 
     def __init__(self, instance=None, data=empty, **kwargs):
         super().__init__(instance, data, **kwargs)
         self.candles = None
-
-    def get_is_watchlisted(self, instance) -> bool:
-        user = self.context['request'].user
-        if not user.is_anonymous:
-            return user.companies_watchlisted.filter(pk__exact=instance.id).exists()
-        return False
 
     def get_price_data(self, instance):
         self.get_candles(instance)
@@ -180,7 +224,7 @@ class CompanySerializer(serializers.ModelSerializer):
         if self.candles is None:
             self.get_candles(instance)
 
-        report = Report.objects.filter(company__pk=instance.id)
+        report = ReportMetadata.objects.filter(company__pk=instance.id)
         share_outstanding = report.latest('year', 'quarter').share_outstanding if report else None
 
         return self.candles.latest("time").close * share_outstanding if share_outstanding else 0
@@ -211,7 +255,7 @@ class CompanySerializer(serializers.ModelSerializer):
     @staticmethod
     def get_formatting(obj):
         return {
-            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencyISO': obj.country.currency.iso_code,
             'primaryCurrencySymbol': obj.country.currency.symbol,
             'reportCurrencyISO': '',
             'reportCurrencySymbol': '',
@@ -224,7 +268,7 @@ class ReportSerializer(serializers.ModelSerializer):
     updated = serializers.SerializerMethodField('get_updated')
 
     class Meta:
-        model = Report
+        model = ReportMetadata
         fields = (
             'updated',
             'total_employees_figure',
@@ -255,12 +299,6 @@ class AnalystSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class CurrencySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Currency
-        fields = '__all__'
-
-
 class AnalystIdeaSerializer(serializers.ModelSerializer):
     analyst = AnalystSerializer()
     currency = CurrencySerializer()
@@ -271,13 +309,16 @@ class AnalystIdeaSerializer(serializers.ModelSerializer):
 
 
 class CompanyDetailSerializer(CompanySerializer):
+    translations = TranslatedFieldsField(shared_model=Company)
     sector = SectorDetailSerializer(read_only=True)
+    country = CountrySerializer(read_only=True)
     sector_market = serializers.SerializerMethodField('get_sector_market')
     reports = ReportSerializer(many=True)
     analyst_ideas = AnalystIdeaSerializer(many=True)
     formatting = serializers.SerializerMethodField('get_formatting')
     company_news = NewsSerializer(many=True)
     next_dividend = serializers.SerializerMethodField('get_next_dividend')
+    performance = CompanyPerformanceSerializer(read_only=True)
 
     class Meta:
         model = Company
@@ -285,10 +326,8 @@ class CompanyDetailSerializer(CompanySerializer):
             'id',
             'uid',
             'ticker',
-            'title',
+            'translations',
             'slug',
-            'description',
-            'short_description',
             'year_founded',
             'website',
             'logo_url',
@@ -297,28 +336,19 @@ class CompanyDetailSerializer(CompanySerializer):
             'sector_market',
             'sector',
             'absolute_url',
-            'is_watchlisted',
             'price_data',
             'reports',
             'analyst_ideas',
             'formatting',
             'company_news',
             'next_dividend',
-            'last_reported_earnings',
-            'next_earnings',
-            'return_7d',
-            'return_30d',
-            'return_90d',
-            'return_1y',
-            'return_3y',
-            'return_5y',
-            'average_weekly_mouvement',
+            'performance',
         )
 
     @staticmethod
     def get_formatting(obj):
         return {
-            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencyISO': obj.country.currency.iso_code,
             'primaryCurrencySymbol': obj.country.currency.symbol,
             'reportCurrencyISO': '',
             'reportCurrencySymbol': '',
@@ -336,11 +366,19 @@ class CompanyDetailSerializer(CompanySerializer):
 
     @staticmethod
     def get_sector_market(instance: Company):
-        sector_market = SectorMarket.objects.get(market_id=instance.market.id, sector_id=instance.sector.id)
-        return SectorMarketSerializer(sector_market).data
+        try:
+            sector_market = SectorMarket.objects.get(
+                market_id=instance.market.id,
+                sector_id=instance.sector.id
+            )
+            return SectorMarketSerializer(sector_market).data
+
+        except ObjectDoesNotExist:
+            return {}
 
 
 class CompanyPeersSerializer(CompanySerializer):
+    translations = TranslatedFieldsField(shared_model=Company)
     sector = SectorDetailSerializer(read_only=True)
     formatting = serializers.SerializerMethodField('get_formatting')
     snowflake = serializers.SerializerMethodField('get_snowflake')
@@ -351,7 +389,7 @@ class CompanyPeersSerializer(CompanySerializer):
             'id',
             'uid',
             'ticker',
-            'title',
+            'translations',
             'slug',
             'country',
             'market',
@@ -365,7 +403,7 @@ class CompanyPeersSerializer(CompanySerializer):
     @staticmethod
     def get_formatting(obj):
         return {
-            'primaryCurrencyISO': obj.country.currency.name_iso,
+            'primaryCurrencyISO': obj.country.currency.iso_code,
             'primaryCurrencySymbol': obj.country.currency.symbol,
             'reportCurrencyISO': '',
             'reportCurrencySymbol': '',
@@ -420,12 +458,6 @@ class CandlePerDaySerializer(serializers.ModelSerializer):
 class CompanyPriceSerializer(serializers.ModelSerializer):
     class Meta:
         model = CandlePerDaySerializer
-        fields = '__all__'
-
-
-class SorterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Sorter
         fields = '__all__'
 
 
