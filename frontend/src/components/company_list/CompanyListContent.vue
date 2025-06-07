@@ -25,8 +25,8 @@ const items = computed<CompanyItem[]>(
       companyLogo: c.logo_url,
       companyName: getTranslation(c.translations, 'title'),
       lastPrice: `${c.formatting.primaryCurrencySymbol}${c.price_data.last_price?.toFixed(2)}`,
-      return7D: `${c.return_1y.toFixed(2)}%`,
-      return1Y: `${c.return_7d.toFixed(2)}%`,
+      return7D: `${c.performance.return_1y.toFixed(2)}%`,
+      return1Y: `${c.performance.return_7d.toFixed(2)}%`,
       marketCap: humanize(
         c.price_data.capitalisation,
         c.formatting.primaryCurrencySymbol

@@ -81,11 +81,11 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         }}</span>
         <span
           :class="[
-            company.return_7d && company.return_7d > 0
+            company.performance.return_7d && company.performance.return_7d > 0
               ? 'text-success'
               : 'text-error',
           ]"
-          >{{ `${company.return_7d?.toFixed(2)}%` }}</span
+          >{{ `${company.performance.return_7d?.toFixed(2)}%` }}</span
         >
       </template>
     </v-col>
@@ -97,11 +97,11 @@ function humanize(val: number = 0, currencySymbol: string = ''): string {
         }}</span>
         <span
           :class="[
-            company.return_1y && company.return_1y > 0
+            company.performance.return_1y && company.performance.return_1y > 0
               ? 'text-success'
               : 'text-error',
           ]"
-          >{{ `${company.return_1y && company.return_1y.toFixed(2)}%` }}</span
+          >{{ `${company.performance.return_1y && company.performance.return_1y.toFixed(2)}%` }}</span
         >
       </template>
     </v-col>
