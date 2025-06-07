@@ -377,11 +377,31 @@ class CompanyPeersSerializer(CompanySerializer):
     def get_snowflake(obj):
         statements = Statement.objects.filter(company=obj)
         return {
-            "value": StatementSerializer(statements.filter(area=Area.VALUE, status=Status.PASS, outcome=1002), many=True).data,
-            "future": StatementSerializer(statements.filter(area=Area.FUTURE, status=Status.PASS, outcome=1002), many=True).data,
-            "past": StatementSerializer(statements.filter(area=Area.PAST, status=Status.PASS, outcome=1002), many=True).data,
-            "health": StatementSerializer(statements.filter(area=Area.HEALTH, status=Status.PASS, outcome=1002), many=True).data,
-            "dividends": StatementSerializer(statements.filter(area=Area.DIVIDENDS, status=Status.PASS, outcome=1002), many=True).data,
+            "value": StatementSerializer(statements.filter(
+                area=Area.VALUE,
+                status=Status.PASS,
+                outcome=1002
+            ), many=True).data,
+            "future": StatementSerializer(statements.filter(
+                area=Area.FUTURE,
+                status=Status.PASS,
+                outcome=1002
+            ), many=True).data,
+            "past": StatementSerializer(statements.filter(
+                area=Area.PAST,
+                status=Status.PASS,
+                outcome=1002
+            ), many=True).data,
+            "health": StatementSerializer(statements.filter(
+                area=Area.HEALTH,
+                status=Status.PASS,
+                outcome=1002
+            ), many=True).data,
+            "dividends": StatementSerializer(statements.filter(
+                area=Area.DIVIDENDS,
+                status=Status.PASS,
+                outcome=1002
+            ), many=True).data,
         }
 
 

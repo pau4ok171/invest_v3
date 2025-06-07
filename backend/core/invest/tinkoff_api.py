@@ -1,101 +1,104 @@
 import datetime
+import logging
+from datetime import timedelta
+from typing import Optional, List, Dict
 
 import decouple
-from datetime import timedelta
-
-from invest.models import CandlePerDay, Company
 from asgiref.sync import async_to_sync
-
+from django.db.models import QuerySet
+from django.db import transaction
 from tinkoff.invest import AsyncClient, CandleInterval, Client
-from tinkoff.invest.utils import quotation_to_decimal
 from tinkoff.invest.exceptions import RequestError
-
+from tinkoff.invest.utils import quotation_to_decimal
 from channels.layers import get_channel_layer
 
+from invest.models import CandlePerDay, Company
+
+logger = logging.getLogger(__name__)
 TOKEN_API = decouple.config('TINKOFF_KEY')
 
 
-def main():
-    companies = get_companies()
+def main() -> List[str]:
+    """Основная функция для получения и обработке свечей."""
+    try:
+        companies = get_visible_companies()
+        if not companies.exists():
+            logger.warning('No visible companies found')
+            return ['No visible companies found']
 
-    candles = [process_company_candles(company) for company in companies]
+        results = []
+        for company in companies:
+            try:
+                result = process_company_candles(company)
+                results.append(result)
 
-    for company in companies:
-        price = CandlePerDay.objects.filter(company=company['id']).latest('time')
-        send_price_update(company['uid'], price.close)
-        send_detail_price_update(company['slug'], price.close)
+                latest_price = get_latest_price(company)
+                if latest_price:
+                    send_price_updates(company, latest_price.close)
 
-    return candles
+            except Exception as e:
+                logger.error(f'Error processing company {company.id}: {str(e)}')
+                results.append(f'Error processing company {company.id}')
 
+        return results
 
-def send_price_update(uid, new_price):
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        'price_updates',
-        {
-            'type': 'send_price_update',
-            'data': {
-                'uid': uid,
-                'price': new_price,
-                'timestamp': str(datetime.datetime.now())
-            }
-        }
-    )
-
-
-def send_detail_price_update(slug, new_price):
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f'company_{slug}',
-        {
-            'type': 'company_price_update',
-            'data': {
-                'slug': slug,
-                'price': new_price,
-                'timestamp': str(datetime.datetime.now())
-            }
-        }
-    )
+    except Exception as e:
+        logger.critical(f'Critical error in main task: {str(e)}')
+        return [f'Critical error: {str(e)}']
 
 
-def get_companies():
-    return Company.objects.filter(is_visible=True).values('id', 'uid', 'slug')
+def get_visible_companies() -> QuerySet:
+    """Получить видимые компании."""
+    return Company.objects.filter(is_visible=True).only('id', 'uid', 'slug')
 
 
-def process_company_candles(company):
-    candles = get_candles_by_instrument(instrument_id=company['id'], instrument_uid=company['uid'])
-    if candles:
-        add_candles_to_db(candles)
-        return f'Company id: {company["id"]} candles: {len(candles)}'
-    return f'Company id: {company["id"]} candles: NOT_FOUND'
+def process_company_candles(company: Company) -> str:
+    """Обработать свечи для одной компании."""
+    candles = get_candles_for_company(company)
+    if not candles:
+        return f'Company {company.id}: no candles found'
+
+    save_candles(candles)
+    return f'Company {company.id}: saved {len(candles)} candles'
 
 
-def get_candles_by_instrument(instrument_id, instrument_uid) -> list[dict]:
-    date_from = _get_date_from(instrument_id)
+def get_candles_for_company(company: Company) -> List[Dict]:
+    """Получить свечи для компании из API."""
+    date_from = get_start_date(company.id)
 
-    opts = {
-        'instrument_id': instrument_uid,
-        'from_': date_from,
-        'to': datetime.datetime.now(tz=datetime.timezone.utc) + timedelta(days=1),
-        'interval': CandleInterval.CANDLE_INTERVAL_DAY
-    }
     try:
         with Client(TOKEN_API) as client:
-            candles = [_get_dict(instrument_id, candle) for candle in client.get_all_candles(**opts)]
+            candles = client.get_all_candles(
+                instrument_id=company.uid,
+                from_=date_from,
+                to=datetime.datetime.now(tz=datetime.timezone.utc) + timedelta(days=1),
+                interval=CandleInterval.CANDLE_INTERVAL_DAY
+            )
+            return [prepare_candle_data(company.id, candle) for candle in candles]
+
     except RequestError as e:
-        print(f'[ERROR]: {e}')
+        logger.error(f'API error for company {company.id}: {str(e)}')
         return []
-    return candles
+    except Exception as e:
+        logger.error(f'Unexpected error for company {company.id}: {str(e)}')
+        return []
 
 
-def add_candles_to_db(candles):
-    for candle in candles:
-        CandlePerDay.objects.update_or_create(company__pk=candle['company_id'], time=candle['time'], defaults=candle)
+def get_start_date(company_id: int) -> datetime.datetime:
+    """Определить начальную дату для запроса свечей."""
+    last_candle = CandlePerDay.objects.filter(
+        company_id=company_id,
+    ).order_by('-time').first()
+
+    if last_candle:
+        return last_candle.time + timedelta(days=1) if last_candle.is_complete else last_candle.time
+    return datetime.datetime(2000, 1, 1, tzinfo=datetime.timezone.utc)
 
 
-def _get_dict(instrument_id, candle):
+def prepare_candle_data(company_id: int, candle) -> Dict:
+    """Подготовить данные для свечи для сохранения."""
     return {
-        'company_id': instrument_id,
+        'company_id': company_id,
         'open': float(quotation_to_decimal(candle.open)),
         'high': float(quotation_to_decimal(candle.high)),
         'low': float(quotation_to_decimal(candle.low)),
@@ -106,32 +109,56 @@ def _get_dict(instrument_id, candle):
     }
 
 
-def _get_date_from(instrument_id) -> datetime.datetime:
-    # Получить последнюю свечу из БД и проверить что записи по компании существуют
-    candle = CandlePerDay.objects.filter(company__pk=instrument_id).values('time', 'is_complete') or None
-    latest = candle.latest('time') if candle else None
-    if latest:
-        return latest['time'] + timedelta(days=1) if latest['is_complete'] else latest['time']
-    else:
-        return datetime.datetime(2000, 1, 1, tzinfo=datetime.timezone.utc)
-
-
-def get_info():
-    uids = Company.objects.all().values('id', 'uid')
-    with Client(TOKEN_API) as client:
-        res = [client.instruments.find_instrument(query=uid['uid']) for uid in uids]
-        print(res)
-
-
-def get_candles():
-    # Получить список UIDs
-    uids = Company.objects.filter(is_visible=True).values('uid')
-    with Client(TOKEN_API) as client:
-        for uid in uids:
-            res = client.instruments.find_instrument(
-                query=uid['uid']
+def save_candles(candles: List[Dict]) -> None:
+    """Сохранить свечи в базу данных."""
+    with transaction.atomic():
+        for candle in candles:
+            CandlePerDay.objects.update_or_create(
+                company_id=candle['company_id'],
+                time=candle['time'],
+                defaults=candle,
             )
 
 
+def get_latest_price(company: Company) -> Optional[CandlePerDay]:
+    """Получить последнюю цену компании."""
+    try:
+        return CandlePerDay.objects.filter(company=company).latest('time')
+    except CandlePerDay.DoesNotExist:
+        logger.warning(f'No candles found for company {company.id}')
+        return None
+
+
+def send_price_updates(company: Company, price: float) -> None:
+    """Отправить обновления цен через каналы."""
+    channel_layer = get_channel_layer()
+    timestamp = str(datetime.datetime.now())
+
+    async_to_sync(channel_layer.group_send)(
+        'price_updates',
+        {
+            'type': 'send_price_update',
+            'data': {
+                'uid': company.uid,
+                'price': price,
+                'timestamp': timestamp
+            }
+        }
+    )
+
+    async_to_sync(channel_layer.group_send)(
+        f'company_{company.slug}',
+        {
+            'type': 'company_price_update',
+            'data': {
+                'slug': company.slug,
+                'price': price,
+                'timestamp': timestamp
+            }
+        }
+    )
+
+
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
     print(main())

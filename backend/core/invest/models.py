@@ -499,6 +499,7 @@ class CandlePerDay(models.Model):
 
     class Meta:
         ordering = ['time']
+        unique_together = [['company', 'time']]
 
         verbose_name = 'Candle Per Day'
         verbose_name_plural = 'Candles Per Day'
