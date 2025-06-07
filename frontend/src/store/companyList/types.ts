@@ -1,17 +1,24 @@
 // Types
-import type { ListCompany, Market, Snowflake } from '@/types/invest'
+import type {
+  CountryTranslations,
+  ListCompany,
+  Market,
+  SectorTranslations,
+  Snowflake,
+} from '@/types/invest'
 
 export interface BaseState {
   id: number
   key: string
-  title: string
 }
 
 export interface CountryState extends BaseState {
+  translations: CountryTranslations
   markets: Market[]
 }
 
-export interface DependentState extends BaseState {
+export interface SectorState extends BaseState {
+  translations: SectorTranslations
   parentKeys: number[]
 }
 
@@ -24,12 +31,6 @@ export interface CompaniesResponse {
   results: ListCompany[]
   next: string | null
   count: number
-}
-
-export interface WatchlistItem {
-  watchlisted: boolean
-  uid: string
-  ticker: string
 }
 
 export type InfiniteScrollSide = 'start' | 'end' | 'both'

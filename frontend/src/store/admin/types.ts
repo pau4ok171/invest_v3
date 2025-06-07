@@ -1,5 +1,5 @@
 // Types
-import type {IFormattedDetailCompany} from "@/types/admin.types";
+import type { IFormattedDetailCompany } from '@/types/admin.types'
 
 export type FormState = {
   [K in keyof IFormattedDetailCompany]: IFormattedDetailCompany[K]
