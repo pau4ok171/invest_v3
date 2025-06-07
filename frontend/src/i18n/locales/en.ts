@@ -122,6 +122,8 @@ export const en = {
         country: 'Discover {country} companies that are on {market}.',
       },
       marketTitle: 'Largest {country} Stocks',
+      global: 'All Countries',
+      any: 'All Sectors',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const en = {
       },
       updates: {
         header: 'Recent News & Updates',
+        emptyNews: 'We are monitoring the company\'s news - as soon as something appears, you\'ll see it here',
       },
       shareholderReturns: {
         header: 'Shareholder Returns',

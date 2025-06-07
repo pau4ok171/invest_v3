@@ -122,6 +122,8 @@ export const fr = {
         country: 'Découvrez les entreprises {country} cotées sur {market}.',
       },
       marketTitle: 'Principales actions {country}',
+      global: 'Tous les pays',
+      any: 'Tous les secteurs',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const fr = {
       },
       updates: {
         header: 'Actualités récentes',
+        emptyNews: 'Nous suivons l\'actualité de l\'entreprise - dès qu\'il y aura du nouveau, vous le verrez ici',
       },
       shareholderReturns: {
         header: 'Rendement actionnarial',

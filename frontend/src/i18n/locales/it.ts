@@ -122,6 +122,8 @@ export const it = {
         country: 'Scopri aziende da {country} quotate su {market}.',
       },
       marketTitle: 'Le migliori azioni da {country}',
+      global: 'Tutti i paesi',
+      any: 'Tutti i settori',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const it = {
       },
       updates: {
         header: 'Ultime notizie e aggiornamenti',
+        emptyNews: 'Monitoriamo le notizie dell\'azienda - non appena apparirà qualcosa, la vedrai qui',
       },
       shareholderReturns: {
         header: 'Rendimenti per gli azionisti',

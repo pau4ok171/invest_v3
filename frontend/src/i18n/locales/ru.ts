@@ -122,6 +122,8 @@ export const ru = {
         country: 'Компании {country}, представленные на {market}.',
       },
       marketTitle: 'Крупнейшие {country} Компании',
+      global: 'Все страны',
+      any: 'Все секторы',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const ru = {
       },
       updates: {
         header: 'Последние Новости и Обновления',
+        emptyNews: 'Мы следим за новостями компании – как только что-то появится, вы увидите это здесь',
       },
       shareholderReturns: {
         header: 'Доходность Акционеров',

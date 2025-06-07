@@ -122,6 +122,8 @@ export const de = {
         country: 'Entdecken Sie Unternehmen aus {country}, die an {market} gelistet sind.',
       },
       marketTitle: 'Top Aktien aus {country}',
+      global: 'Alle Länder',
+      any: 'Alle Sektoren',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const de = {
       },
       updates: {
         header: 'Neueste Nachrichten und Updates',
+        emptyNews: 'Wir verfolgen die Nachrichten des Unternehmens - sobald etwas erscheint, sehen Sie es hier',
       },
       shareholderReturns: {
         header: 'Aktionärsrenditen',

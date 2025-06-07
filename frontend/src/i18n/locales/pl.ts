@@ -122,6 +122,8 @@ export const pl = {
         country: 'Odkryj firmy z {country} notowane na {market}.',
       },
       marketTitle: 'Najlepsze akcje z {country}',
+      global: 'Wszystkie kraje',
+      any: 'Wszystkie sektory',
     },
     dataTable: {
       headers: {
@@ -248,6 +250,7 @@ export const pl = {
       },
       updates: {
         header: 'Najnowsze wiadomości i aktualizacje',
+        emptyNews: 'Śledzimy wiadomości o firmie - gdy tylko coś się pojawi, zobaczysz to tutaj',
       },
       shareholderReturns: {
         header: 'Zwroty dla akcjonariuszy',
@@ -520,7 +523,7 @@ export const pl = {
           today: 'Dziś',
           exDividendDate: 'Data ex-dywidendy',
           dividendPayDate: 'Data wypłaty dywidendy',
-          tooltip: 'Kup dziś, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dnia, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę',
+          tooltip: 'Kup dziś, aby otrzymać następną dywidendę | Kup w ciągu następnego dnia, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę | Kup w ciągu następnych {n} dni, aby otrzymać następną dywidendę',
         },
       },
       stabilityAndGrowth: {
