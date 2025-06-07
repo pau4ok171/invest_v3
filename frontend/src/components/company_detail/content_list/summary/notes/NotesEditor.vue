@@ -21,7 +21,7 @@ const dialog = computed(() => companyDetailStore.notesEditorIsActive)
 const expanded = shallowRef(false)
 const timeoutId = shallowRef(-1)
 const saving = shallowRef(false)
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const savingStatus = computed(() =>
   t(`companyDetail.overview.notes.${saving.value ? 'saving' : 'saved'}`)
 )
@@ -136,6 +136,21 @@ onBeforeUnmount(() => {
   companyDetailStore.noteSavedContent = ''
 
   companyDetailStore.notesEditorIsActive = false
+})
+
+watch(locale, () => {
+  if (editor.value) {
+    const extension = editor.value.extensionManager.extensions.find(
+      (ext) => ext.name === 'placeholder'
+    )
+
+    if (extension) {
+      extension.options.placeholder = t(
+        'companyDetail.overview.notes.placeholder'
+      )
+      editor.value.view.updateState(editor.value.state)
+    }
+  }
 })
 </script>
 
