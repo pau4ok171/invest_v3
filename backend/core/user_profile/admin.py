@@ -13,9 +13,9 @@ class ProfileInline(admin.StackedInline):
         'display_name', 'avatar', 'locale',
         'country', 'currency', 'auth_provider', 'bio',
         'external_link', 'stock_view',
-        'watchlist_companies', 'portfolios'
+        'watchlisted_companies', 'portfolios'
     )
-    filter_horizontal = ('watchlist_companies', 'portfolios')
+    filter_horizontal = ('watchlisted_companies', 'portfolios')
 
 
 class CustomUserAdmin(UserAdmin):
@@ -55,4 +55,4 @@ class ProfileAdmin(admin.ModelAdmin):
     list_filter = ('locale', 'country', 'currency')
     search_fields = ('user__username', 'display_name', 'user__email')
     raw_id_fields = ('user',)
-    filter_horizontal = ('watchlist_companies', 'portfolios')
+    filter_horizontal = ('watchlisted_companies', 'portfolios')
