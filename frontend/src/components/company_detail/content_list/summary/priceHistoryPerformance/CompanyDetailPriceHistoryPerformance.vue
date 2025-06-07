@@ -48,7 +48,7 @@ function onOpenLateral() {
         </v-col>
       </v-row>
 
-      <v-card-actions>
+      <v-card-actions v-if="company.company_news.length">
         <v-btn
           color="info"
           block
@@ -59,6 +59,14 @@ function onOpenLateral() {
           {{ t('buttons.seeMoreUpdates') }}
         </v-btn>
       </v-card-actions>
+
+      <v-card-item v-else>
+        <v-empty-state
+          min-height="300"
+          :text="t('companyDetail.overview.updates.emptyNews')"
+          icon="$iNewsPaper"
+        />
+      </v-card-item>
     </v-card-item>
 
     <v-card-item>
