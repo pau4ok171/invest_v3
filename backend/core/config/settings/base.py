@@ -215,9 +215,11 @@ PARLER_LANGUAGES = {
 
 # UNFOLD
 UNFOLD = {
-    "SHOW_HISTORY": True, # show/hide "History" button, default: True
-    "SHOW_VIEW_ON_SITE": True, # show/hide "View on site" button, default: True
-    "SHOW_BACK_BUTTON": False, # show/hide "Back" button on changeform in header, default: False
+    "SHOW_HISTORY": True,  # show/hide "History" button, default: True
+    # "SHOW_LANGUAGES": True,
+    "ENVIRONMENT": "config.settings.utils.environment_callback",
+    "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
+    "SHOW_BACK_BUTTON": False,  # show/hide "Back" button on changeform in header, default: False
     "BORDER_RADIUS": "8px",
     "COLORS": {
         "base": {
@@ -238,7 +240,7 @@ UNFOLD = {
             "100": "243, 232, 255",
             "200": "233, 213, 255",
             "300": "216, 180, 254",
-            "400": "192, 132, 252",
+            "400": "33, 145, 235",
             "500": "33, 145, 235",
             "600": "33, 145, 235",
             "700": "126, 34, 206",
@@ -518,4 +520,3 @@ UNFOLD = {
         ],
     },
 }
-
