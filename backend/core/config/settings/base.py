@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from decouple import config as env_conf
+from django.utils.translation import gettext_lazy as _
+from django.urls import reverse_lazy
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,8 +27,12 @@ SECRET_KEY = env_conf('DJANGO_KEY')
 ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
+    # UNFOLD
+    'unfold',
+    'unfold.contrib.filters',
+    'unfold.contrib.forms',
+    'unfold.contrib.inlines',
     'parler',
     'daphne',
     'django.contrib.admin',
@@ -172,7 +178,7 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 LANGUAGES = [
     ('en', 'English'),
     ('ru', 'Русский'),
@@ -206,3 +212,310 @@ PARLER_LANGUAGES = {
         'hide_untranslated': False,  # the default; let .active_translations() return fallbacks too.
     }
 }
+
+# UNFOLD
+UNFOLD = {
+    "SHOW_HISTORY": True, # show/hide "History" button, default: True
+    "SHOW_VIEW_ON_SITE": True, # show/hide "View on site" button, default: True
+    "SHOW_BACK_BUTTON": False, # show/hide "Back" button on changeform in header, default: False
+    "BORDER_RADIUS": "8px",
+    "COLORS": {
+        "base": {
+            "50": "249, 250, 251",
+            "100": "243, 244, 246",
+            "200": "229, 231, 235",
+            "300": "209, 213, 219",
+            "400": "156, 163, 175",
+            "500": "107, 114, 128",
+            "600": "75, 85, 99",
+            "700": "55, 65, 81",
+            "800": "31, 41, 55",
+            "900": "17, 24, 39",
+            "950": "3, 7, 18",
+        },
+        "primary": {
+            "50": "250, 245, 255",
+            "100": "243, 232, 255",
+            "200": "233, 213, 255",
+            "300": "216, 180, 254",
+            "400": "192, 132, 252",
+            "500": "33, 145, 235",
+            "600": "33, 145, 235",
+            "700": "126, 34, 206",
+            "800": "107, 33, 168",
+            "900": "88, 28, 135",
+            "950": "59, 7, 100",
+        },
+        "font": {
+            "subtle-light": "var(--color-base-500)",  # text-base-500
+            "subtle-dark": "var(--color-base-400)",  # text-base-400
+            "default-light": "var(--color-base-600)",  # text-base-600
+            "default-dark": "var(--color-base-300)",  # text-base-300
+            "important-light": "var(--color-base-900)",  # text-base-900
+            "important-dark": "var(--color-base-100)",  # text-base-100
+        },
+    },
+    "SIDEBAR": {
+        "show_search": True,  # Search in applications and models names
+        "show_all_applications": True,  # Dropdown with all applications and models
+        "navigation": [
+            {
+                "title": _('Analysis'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Analysis'),
+                        "icon": 'network_intelligence',
+                        'link': reverse_lazy(
+                            "admin:analysis_companyanalysis_changelist",
+                        ),
+                    }
+                ],
+            },
+            {
+                "title": _('Celery results'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Group Results'),
+                        "icon": 'sports_score',
+                        'link': reverse_lazy(
+                            "admin:django_celery_results_groupresult_changelist",
+                        ),
+                    },
+                    {
+                        "title": _('Task results'),
+                        "icon": 'sports_score',
+                        'link': reverse_lazy(
+                            "admin:django_celery_results_taskresult_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Invest'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Analyst ideas'),
+                        "icon": 'online_prediction',
+                        "link": reverse_lazy(
+                            "admin:invest_analystidea_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Analysts'),
+                        "icon": 'groups_3',
+                        "link": reverse_lazy(
+                            "admin:invest_analyst_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Candles per day'),
+                        "icon": 'candlestick_chart',
+                        "link": reverse_lazy(
+                            "admin:invest_candleperday_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Companies'),
+                        "icon": 'apartment',
+                        "link": reverse_lazy(
+                            "admin:invest_company_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Countries'),
+                        "icon": 'public',
+                        "link": reverse_lazy(
+                            "admin:invest_country_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Currencies'),
+                        "icon": 'euro_symbol',
+                        "link": reverse_lazy(
+                            "admin:invest_currency_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Dividends'),
+                        "icon": 'confirmation_number',
+                        "link": reverse_lazy(
+                            "admin:invest_dividend_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Industries'),
+                        "icon": 'precision_manufacturing',
+                        "link": reverse_lazy(
+                            "admin:invest_industry_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Markets'),
+                        "icon": 'api',
+                        "link": reverse_lazy(
+                            "admin:invest_market_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Reports metadata'),
+                        "icon": 'browse_activity',
+                        "link": reverse_lazy(
+                            "admin:invest_reportmetadata_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Sectors'),
+                        "icon": 'factory',
+                        "link": reverse_lazy(
+                            "admin:invest_sector_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('News'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('News'),
+                        "icon": 'newspaper',
+                        'link': reverse_lazy(
+                            "admin:news_news_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Notes'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Notes'),
+                        "icon": 'draw',
+                        "link": reverse_lazy(
+                            "admin:notes_note_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Portfolio'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Portfolio Companies'),
+                        "icon": 'work_update',
+                        "link": reverse_lazy(
+                            "admin:portfolio_portfoliocompany_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Portfolio'),
+                        "icon": 'enterprise',
+                        "link": reverse_lazy(
+                            "admin:portfolio_portfolio_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Statements'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Statements'),
+                        "icon": 'search_check_2',
+                        'link': reverse_lazy(
+                            "admin:statements_statement_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('User Profiles'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Profiles'),
+                        "icon": 'badge',
+                        "link": reverse_lazy(
+                            "admin:user_profile_profile_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _("Celery Tasks"),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Clocked"),
+                        "icon": "hourglass_bottom",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_clockedschedule_changelist"
+                        ),
+                    },
+                    {
+                        "title": _("Crontabs"),
+                        "icon": "update",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_crontabschedule_changelist"
+                        ),
+                    },
+                    {
+                        "title": _("Intervals"),
+                        "icon": "timer",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_intervalschedule_changelist"
+                        ),
+                    },
+                    {
+                        "title": _("Periodic tasks"),
+                        "icon": "task",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_periodictask_changelist"
+                        ),
+                    },
+                    {
+                        "title": _("Solar events"),
+                        "icon": "event",
+                        "link": reverse_lazy(
+                            "admin:django_celery_beat_solarschedule_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Users & Groups'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Users"),
+                        "icon": "account_circle",
+                        "link": reverse_lazy("admin:auth_user_changelist"),
+                    },
+                    {
+                        "title": _("Groups"),
+                        "icon": "group",
+                        "link": reverse_lazy("admin:auth_group_changelist"),
+                    },
+                ],
+            },
+            {
+                "title": _('Auth Tokens'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _("Token"),
+                        "icon": 'password',
+                        "link": reverse_lazy("admin:authtoken_tokenproxy_changelist"),
+                    },
+                ],
+            },
+        ],
+    },
+}
+

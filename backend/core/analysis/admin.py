@@ -1,8 +1,9 @@
-from django.contrib import admin
+from unfold import admin
+from django.contrib.admin import register
 from .models import CompanyAnalysis
 
 
-@admin.register(CompanyAnalysis)
+@register(CompanyAnalysis)
 class CompanyAnalysisAdmin(admin.ModelAdmin):
     fieldsets = (
         ('', {
