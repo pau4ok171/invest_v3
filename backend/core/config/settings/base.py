@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'unfold.contrib.filters',
     'unfold.contrib.forms',
     'unfold.contrib.inlines',
+    'unfold.contrib.import_export',
     'parler',
     'daphne',
     'django.contrib.admin',
@@ -60,6 +61,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'django_cleanup.apps.CleanupConfig',
+    'import_export',
 ]
 
 MIDDLEWARE = [

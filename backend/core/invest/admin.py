@@ -3,8 +3,11 @@ import datetime
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
+from import_export.admin import ImportExportModelAdmin
+
 from unfold.admin import ModelAdmin, StackedInline
 from unfold.widgets import UnfoldAdminSelectWidget, UnfoldAdminTextInputWidget, UnfoldAdminTextareaWidget
+from unfold.contrib.import_export.forms import ExportForm, ImportForm
 
 from . import models
 
@@ -112,7 +115,7 @@ class CompanyPerformanceInline(StackedInline):
 
 
 @admin.register(models.Company)
-class CompanyAdmin(TranslatableAdmin, ModelAdmin):
+class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     list_display = (
         'id',
         '__str__',
@@ -128,6 +131,8 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin):
     list_editable = ('is_visible',)
     readonly_fields = ('created', 'updated', 'created_by', 'updated_by')
     actions = [check_company]
+    export_form_class = ExportForm
+    import_form_class = ImportForm
 
     inlines = [
         CompanyPerformanceInline,
