@@ -2,6 +2,8 @@
 // Components
 import AuthLoginForm from '@/components/base/auth/AuthLoginForm.vue'
 import AuthRegistrationForm from '@/components/base/auth/AuthRegistrationForm.vue'
+import AuthEmailConfirmation from "@/components/base/auth/AuthEmailConfirmation.vue";
+import AuthForgotPassword from "@/components/base/auth/AuthForgotPassword.vue";
 
 // Composables
 import { useAuthStore } from '@/store/auth'
@@ -30,7 +32,9 @@ onUnmounted(() => {
       </template>
       <v-card-item>
         <auth-login-form v-if="store.authMode === 'login'" />
-        <auth-registration-form v-else />
+        <auth-registration-form v-else-if="store.authMode === 'registration'" />
+        <auth-email-confirmation v-else-if="store.authMode === 'emailConfirmation'" />
+        <auth-forgot-password v-else />
       </v-card-item>
     </v-card>
   </v-dialog>

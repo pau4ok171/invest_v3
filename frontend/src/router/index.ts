@@ -144,6 +144,16 @@ const router = createRouter({
       component: () => import('@/views/HomeView.vue'),
     },
     {
+      path: '/email_confirmation/:uid/:token',
+      props: true,
+      component: () => import('@/views/EmailConfirmationView.vue'),
+    },
+    {
+      path: '/password/reset/confirm/:uid/:token',
+      props: true,
+      component: () => import('@/views/PasswordResetView.vue'),
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: RouteNamesEnum.page_not_found,
       component: () => import('@/views/PageNotFoundView.vue'),

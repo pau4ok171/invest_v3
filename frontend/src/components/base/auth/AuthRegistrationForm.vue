@@ -15,7 +15,7 @@ import { isObjectLike } from 'lodash'
 
 // Validators
 import { helpers, sameAs } from '@vuelidate/validators'
-import { required, minLength } from '@/common/vuelidate/validators'
+import { required, minLength, emailField } from '@/common/vuelidate/validators'
 
 interface FormError {
   title: string
@@ -25,6 +25,7 @@ interface RegistrationForm {
   username: string
   password: string
   passwordConfirmation: string
+  email: string
 }
 
 const { withAsync, withMessage } = helpers
@@ -34,6 +35,7 @@ const initialState = {
   username: '',
   password: '',
   passwordConfirmation: '',
+  email: '',
 }
 
 const usernameUniqueValidator = createUniqueValidator(
@@ -61,13 +63,20 @@ const rules = {
       sameAs(computed(() => state.password))
     ),
   },
+  email: {
+    required,
+    emailField: withMessage(
+        i18n.global.t('validations.emailField'),
+        emailField
+    ),
+  },
 }
 
 const v$ = useVuelidate(rules, state)
 const store = useAuthStore()
 
 const isValid = computed(() => !v$.value.$invalid)
-const isLoadig = shallowRef(false)
+const isLoading = shallowRef(false)
 const passwordIsHidden = shallowRef(true)
 const formErrors = ref<FormError[]>([])
 
@@ -116,7 +125,7 @@ function createUniqueValidator(endpoint: string) {
 }
 
 async function register() {
-  if (isLoadig.value) return
+  if (isLoading.value) return
 
   v$.value.$validate
 
@@ -127,18 +136,18 @@ async function register() {
   Object.entries({
     username: state.username,
     password: state.password,
+    email: state.email,
   }).forEach(([key, value]) => {
     formData.append(key, value)
   })
 
   try {
-    isLoadig.value = true
+    isLoading.value = true
 
     await axios.post('/api/v1/users/', formData)
 
-    const response = await axios.post('/api/v1/token/login/', formData)
-
-    store.setToken(response.data.auth_token)
+    store.registrationEmail = formData.get('email') as string || ''
+    store.authMode = 'emailConfirmation'
 
     clear()
   } catch (error) {
@@ -157,7 +166,7 @@ async function register() {
       }
     }
   } finally {
-    isLoadig.value = false
+    isLoading.value = false
   }
 }
 </script>
@@ -171,7 +180,7 @@ async function register() {
         required
         @blur="v$.username.$touch"
         @input="v$.username.$touch"
-        :disabled="isLoadig"
+        :disabled="isLoading"
         prepend-inner-icon="$iUser"
         :label="t('labels.username')"
         variant="outlined"
@@ -185,7 +194,7 @@ async function register() {
         required
         @blur="v$.password.$touch"
         @input="v$.password.$touch"
-        :disabled="isLoadig"
+        :disabled="isLoading"
         prepend-inner-icon="$iLock"
         :label="t('labels.password')"
         variant="outlined"
@@ -204,7 +213,7 @@ async function register() {
         required
         @blur="v$.passwordConfirmation.$touch"
         @input="v$.passwordConfirmation.$touch"
-        :disabled="isLoadig"
+        :disabled="isLoading"
         prepend-inner-icon="$iLock"
         :label="t('labels.passwordConfirmation')"
         variant="outlined"
@@ -216,8 +225,22 @@ async function register() {
         :type="passwordIsHidden ? 'password' : 'text'"
       />
 
+      <v-text-field
+        v-model="state.email"
+        :error-messages="v$.email.$errors.map((e) => e.$message) as string[]"
+        required
+        @blur="v$.email.$touch"
+        @input="v$.email.$touch"
+        prepend-inner-icon="$iLock"
+        :label="t('labels.email')"
+        variant="outlined"
+        class="my-2"
+        autocompete="email"
+        color="info"
+      />
+
       <v-card-item v-if="Object.values(formErrors).length">
-        <v-alert color="error" variant="tonal" icon="$iAlert" slim closable>
+        <v-alert color="error" variant="tonal" icon="$iAlert" slim>
           <v-list
             :items="formErrors"
             style="color: inherit; background-color: inherit"
@@ -229,7 +252,7 @@ async function register() {
       <v-btn
         :text="t('buttons.registration')"
         :disabled="!isValid"
-        :loading="isLoadig"
+        :loading="isLoading"
         @click="register"
         @keydown.enter=""
         block

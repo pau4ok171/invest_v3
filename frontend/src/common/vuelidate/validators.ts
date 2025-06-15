@@ -26,3 +26,4 @@ export const required = withI18nMessage(validators.required)
 export const minLength = withI18nMessage(validators.minLength, {
   withArguments: true,
 })
+export const emailField = withI18nMessage(validators.email)

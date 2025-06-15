@@ -135,7 +135,7 @@ async function login() {
       />
 
       <v-card-item v-if="Object.values(formErrors).length">
-        <v-alert color="error" variant="tonal" icon="$iAlert" slim closable>
+        <v-alert color="error" variant="tonal" icon="$iAlert" slim>
           <v-list
             :items="formErrors"
             style="color: inherit; background-color: inherit"
@@ -150,7 +150,7 @@ async function login() {
           variant="plain"
           color="info"
           class="text-capitalize"
-          to="/"
+          @click="store.authMode = 'forgotPassword'"
         />
       </v-card-actions>
       <v-btn
