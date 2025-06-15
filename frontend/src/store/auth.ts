@@ -28,7 +28,7 @@ export interface Profile {
   is_staff: boolean
 }
 
-export type AuthMode = 'login' | 'registration'
+export type AuthMode = 'login' | 'registration' | 'emailConfirmation' | 'forgotPassword'
 
 export const useAuthStore = defineStore({
   id: 'auth',
@@ -38,6 +38,7 @@ export const useAuthStore = defineStore({
     profile: {} as Profile,
     // WATCHLIST
     watchlistLoading: false,
+    registrationEmail: '',
   }),
   getters: {
     isAuthenticated: (state) => {
