@@ -1,4 +1,6 @@
-export const es = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const es: Locale = {
   buttons: {
     addToWatchlist: 'Añadir a la lista de seguimiento',
     addToPortfolio: 'Añadir a la cartera',
@@ -30,6 +32,9 @@ export const es = {
     no: 'No',
     search: 'Buscar',
     analysts: 'sin analistas | {n} analista | {n} analistas',
+    resentEmail: 'Reenviar',
+    sendPasswordResetRequest: 'Restablecer contraseña',
+    resetPassword: 'Cambiar contraseña',
   },
   toasts: {
     valueIsCopied: '¡Copiado!',
@@ -44,6 +49,11 @@ export const es = {
       removed: '{ticker} eliminado de la lista de seguimiento',
     },
     noteDeleted: 'Nota eliminada',
+    emailConfirmed: 'Tu correo electrónico ha sido confirmado. Ahora puedes iniciar sesión.',
+    emailYetConfirmed: 'Este correo ya fue confirmado anteriormente. No se requiere acción adicional.',
+    sendPasswordResetRequest: 'Hemos enviado un enlace para restablecer tu contraseña. ¡Revisa la carpeta de Spam!',
+    passwordResetSuccess: 'Contraseña cambiada con éxito.',
+    emailConfirmationResent: 'Hemos enviado un correo de confirmación a tu dirección. Por favor revisa tu bandeja de entrada y la carpeta de spam si no lo encuentras.',
   },
   header: {
     searchPlaceholder: 'Buscando...',
@@ -150,17 +160,30 @@ export const es = {
     username: 'Usuario',
     password: 'Contraseña',
     passwordConfirmation: 'Confirmación de contraseña',
+    email: 'Correo electrónico',
   },
   auth: {
     dontHaveAccount: '¿No tiene cuenta?',
     haveYetAccount: '¿Ya tiene cuenta?',
     disclaimer: 'Al usar Finargo, acepta nuestros <a href="#" target="_blank">términos y condiciones</a>. Finargo proporciona solo asesoramiento general de inversión.',
+    emailConfirmation: {
+      thankYou: '¡Gracias por registrarte!',
+      confirmationSent: 'Se ha enviado un enlace de confirmación a {email}.',
+      verificationWarning: '❗ Sin la verificación del correo, no podrás iniciar sesión.',
+      spamNotice: 'Revisa la carpeta de Spam si no recibes el correo en 5 minutos.',
+      resentPrompt: '¿No lo recibiste?',
+    },
+    passwordReset: {
+      emailAsking: 'Para restablecer tu contraseña, introduce el correo electrónico que usaste al registrarte. Recibirás un enlace de restablecimiento.',
+      resetInstruction: 'Crea una contraseña segura y repítela',
+    }
   },
   validations: {
     required: 'Este campo es obligatorio',
     minLengthValue: '{property} debe tener al menos {min} caracteres',
     passwordMismatch: 'La confirmación de la contraseña no coincide',
     usernameYetTaken: 'Este nombre de usuario ya está en uso',
+    emailField: 'Ingresa un correo válido (ejemplo: ejemplo@dominio.com)',
   },
   admin: {
     dashboard: 'Panel',

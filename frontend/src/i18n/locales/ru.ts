@@ -1,4 +1,6 @@
-export const ru = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const ru: Locale = {
   buttons: {
     addToWatchlist: 'Добавить в watchlist',
     addToPortfolio: 'Добавить в портфель',
@@ -30,6 +32,9 @@ export const ru = {
     no: 'Нет',
     search: 'Поиск',
     analysts: 'нет аналитиков | {n} аналитик | {n} аналитика | {n} аналитиков',
+    resentEmail: 'Отправить повторно',
+    sendPasswordResetRequest: 'Восстановить пароль',
+    resetPassword: 'Изменить пароль'
   },
   toasts: {
     valueIsCopied: 'Скопировано!',
@@ -44,6 +49,11 @@ export const ru = {
       removed: 'Вы больше не отслеживаете {ticker}',
     },
     noteDeleted: 'Заметка удалена',
+    emailConfirmed: 'Ваш email успешно подтверждён. Теперь вы можете войти в систему.',
+    emailYetConfirmed: 'Этот email уже был подтверждён ранее. Дополнительных действий не требуется.',
+    sendPasswordResetRequest: 'Мы отправили вам письмо со ссылкой для сброса пароля. Не забудьте проверить папку «Спам»!',
+    passwordResetSuccess: 'Пароль успешно изменён.',
+    emailConfirmationResent: 'Мы отправили письмо с подтверждением на вашу почту. Проверьте входящие и папку «Спам», если письмо не пришло.',
   },
   header: {
     searchPlaceholder: 'Найти...',
@@ -150,17 +160,30 @@ export const ru = {
     username: 'Логин',
     password: 'Пароль',
     passwordConfirmation: 'Подтверждение пароля',
+    email: 'E-mail',
   },
   auth: {
     dontHaveAccount: 'Еще нет аккаунта?',
     haveYetAccount: 'Уже есть аккаунт?',
     disclaimer: 'Используя Finargo, Вы соглашаетесь с нашими <a href="#" target="_blank">условиями использования</a>. Finargo предоставляет только общие инвестиционные рекомендации.',
+    emailConfirmation: {
+      thankYou: 'Спасибо за регистрацию!',
+      confirmationSent: 'На вашу почту {email} отправлено письмо с ссылкой для подтверждения аккаунта.',
+      verificationWarning: '❗ Без подтверждения email вы не сможете войти в систему.',
+      spamNotice: 'Проверьте папку «Спам», если письмо не пришло в течение 5 минут.',
+      resentPrompt: 'Не получили письмо?',
+    },
+    passwordReset: {
+      emailAsking: 'Для восстановления пароля введите адрес электронной почты, указанный при регистрации. На него будет отправлена ссылка для сброса пароля.',
+      resetInstruction: 'Придумайте надежный пароль и повторите его',
+    },
   },
   validations: {
     required: 'Это поле обязательно для заполнения',
     minLengthValue: 'Поле {property} должно содержать минимум {min} символов',
     passwordMismatch: 'Пароли не совпадают',
     usernameYetTaken: 'Это имя уже занято',
+    emailField: 'Введите корректный email-адрес (например: example@domain.com)',
   },
   admin: {
     dashboard: 'Дашборд',

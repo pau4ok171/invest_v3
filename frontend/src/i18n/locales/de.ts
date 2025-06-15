@@ -1,4 +1,6 @@
-export const de = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const de: Locale = {
   buttons: {
     addToWatchlist: 'Zur Beobachtungsliste hinzufügen',
     addToPortfolio: 'Zum Portfolio hinzufügen',
@@ -30,6 +32,9 @@ export const de = {
     no: 'Nein',
     search: 'Suchen',
     analysts: 'kein Analyst | {n} Analyst | {n} Analysten',
+    resentEmail: 'Erneut senden',
+    sendPasswordResetRequest: 'Passwort zurücksetzen',
+    resetPassword: 'Passwort ändern',
   },
   toasts: {
     valueIsCopied: 'Kopiert!',
@@ -44,6 +49,11 @@ export const de = {
       removed: '{ticker} von der Beobachtungsliste entfernt',
     },
     noteDeleted: 'Notiz gelöscht',
+    emailConfirmed: 'Ihre E-Mail wurde erfolgreich bestätigt. Sie können sich jetzt anmelden.',
+    emailYetConfirmed: 'Diese E-Mail wurde bereits bestätigt. Es ist keine weitere Aktion erforderlich.',
+    sendPasswordResetRequest: 'Wir haben Ihnen einen Link zum Zurücksetzen des Passworts geschickt. Überprüfen Sie Ihren Spam-Ordner!',
+    passwordResetSuccess: 'Passwort erfolgreich geändert.',
+    emailConfirmationResent: 'Wir haben eine Bestätigungs-E-Mail an Ihre Adresse geschickt. Bitte überprüfen Sie Ihren Posteingang und Spam-Ordner, falls Sie sie nicht finden.',
   },
   header: {
     searchPlaceholder: 'Suche...',
@@ -150,17 +160,30 @@ export const de = {
     username: 'Benutzername',
     password: 'Passwort',
     passwordConfirmation: 'Passwortbestätigung',
+    email: 'E-Mail',
   },
   auth: {
     dontHaveAccount: 'Noch keinen Account?',
     haveYetAccount: 'Schon einen Account?',
     disclaimer: 'Mit der Nutzung von Finargo akzeptieren Sie unsere <a href="#" target="_blank">Geschäftsbedingungen</a>. Finargo bietet nur allgemeine Anlageberatung.',
+    emailConfirmation: {
+      thankYou: 'Vielen Dank für Ihre Anmeldung!',
+      confirmationSent: 'Ein Bestätigungslink wurde an {email} gesendet.',
+      verificationWarning: '❗ Ohne Bestätigung können Sie sich nicht anmelden.',
+      spamNotice: 'Überprüfen Sie Ihren Spam-Ordner, falls die E-Mail nicht innerhalb von 5 Minuten ankommt.',
+      resentPrompt: 'E-Mail nicht erhalten?',
+    },
+    passwordReset: {
+      emailAsking: 'Geben Sie die bei der Registrierung verwendete E-Mail-Adresse ein, um Ihr Passwort zurückzusetzen.',
+      resetInstruction: 'Erstellen Sie ein sicheres Passwort und wiederholen Sie es',
+    },
   },
   validations: {
     required: 'Dieses Feld ist erforderlich',
     minLengthValue: '{property} muss mindestens {min} Zeichen lang sein',
     passwordMismatch: 'Passwortbestätigung stimmt nicht überein',
     usernameYetTaken: 'Dieser Benutzername ist bereits vergeben',
+    emailField: 'Geben Sie eine gültige E-Mail-Adresse ein (z.B.: beispiel@domain.de)',
   },
   admin: {
     dashboard: 'Dashboard',

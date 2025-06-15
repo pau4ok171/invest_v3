@@ -1,4 +1,6 @@
-export const it = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const it: Locale = {
   buttons: {
     addToWatchlist: 'Aggiungi alla lista di monitoraggio',
     addToPortfolio: 'Aggiungi al portafoglio',
@@ -30,6 +32,9 @@ export const it = {
     no: 'No',
     search: 'Cerca',
     analysts: 'nessun analista | {n} analista | {n} analisti',
+    resentEmail: 'Invia di nuovo',
+    sendPasswordResetRequest: 'Reimposta password',
+    resetPassword: 'Cambia password',
   },
   toasts: {
     valueIsCopied: 'Copiato!',
@@ -44,6 +49,11 @@ export const it = {
       removed: '{ticker} rimosso dalla lista di monitoraggio',
     },
     noteDeleted: 'Nota eliminata',
+    emailConfirmed: 'La tua email è stata confermata. Ora puoi accedere.',
+    emailYetConfirmed: 'Questa email è già stata confermata. Non sono necessarie ulteriori azioni.',
+    sendPasswordResetRequest: 'Ti abbiamo inviato un link per reimpostare la password. Controlla la cartella Spam!',
+    passwordResetSuccess: 'Password cambiata con successo.',
+    emailConfirmationResent: 'Abbiamo inviato un\'email di conferma al tuo indirizzo. Controlla la posta in arrivo e la cartella spam se non la trovi.',
   },
   header: {
     searchPlaceholder: 'Cerca...',
@@ -150,17 +160,30 @@ export const it = {
     username: 'Nome utente',
     password: 'Password',
     passwordConfirmation: 'Conferma password',
+    email: 'Email',
   },
   auth: {
     dontHaveAccount: 'Non hai un account?',
     haveYetAccount: 'Hai già un account?',
     disclaimer: 'Utilizzando Finargo, accetti i nostri <a href="#" target="_blank">termini di utilizzo</a>. Finargo fornisce solo consulenza di investimento generale.',
+    emailConfirmation: {
+      thankYou: 'Grazie per esserti registrato!',
+      confirmationSent: 'Un link di conferma è stato inviato a {email}.',
+      verificationWarning: '❗ Senza la verifica dell’email, non potrai accedere.',
+      spamNotice: 'Controlla la cartella **Spam** se non ricevi l’email entro 5 minuti.',
+      resentPrompt: 'Non hai ricevuto l’email?',
+    },
+    passwordReset: {
+      emailAsking: 'Per reimpostare la password, inserisci l\'email usata durante la registrazione.',
+      resetInstruction: 'Crea una password sicura e ripetila',
+    },
   },
   validations: {
     required: 'Questo campo è obbligatorio',
     minLengthValue: '{property} deve contenere almeno {min} caratteri',
     passwordMismatch: 'La conferma della password non corrisponde',
     usernameYetTaken: 'Questo nome utente è già in uso',
+    emailField: 'Inserisci un\'email valida (esempio: esempio@dominio.com)',
   },
   admin: {
     dashboard: 'Dashboard',

@@ -1,4 +1,6 @@
-export const pl = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const pl: Locale = {
   buttons: {
     addToWatchlist: 'Dodaj do listy obserwowanych',
     addToPortfolio: 'Dodaj do portfela',
@@ -30,6 +32,9 @@ export const pl = {
     no: 'Nie',
     search: 'Szukaj',
     analysts: 'brak analityka | {n} analityk | {n} analityków | {n} analityków',
+    resentEmail: 'Wyślij ponownie',
+    sendPasswordResetRequest: 'Zresetuj hasło',
+    resetPassword: 'Zmień hasło',
   },
   toasts: {
     valueIsCopied: 'Skopiowano!',
@@ -44,6 +49,11 @@ export const pl = {
       removed: '{ticker} usunięto z listy obserwowanych',
     },
     noteDeleted: 'Notatka usunięta',
+    emailConfirmed: 'Twój email został potwierdzony. Możesz się teraz zalogować.',
+    emailYetConfirmed: 'Ten email został już wcześniej potwierdzony. Nie jest wymagane żadne dodatkowe działanie.',
+    sendPasswordResetRequest: 'Wysłaliśmy Ci link do resetowania hasła. Sprawdź folder Spam!',
+    passwordResetSuccess: 'Hasło zostało zmienione.',
+    emailConfirmationResent: 'Wysłaliśmy e-mail potwierdzający na Twój adres. Sprawdź skrzynkę odbiorczą i folder spam, jeśli go nie widzisz.',
   },
   header: {
     searchPlaceholder: 'Szukaj...',
@@ -150,17 +160,30 @@ export const pl = {
     username: 'Nazwa użytkownika',
     password: 'Hasło',
     passwordConfirmation: 'Potwierdzenie hasła',
+    email: 'E-mail',
   },
   auth: {
     dontHaveAccount: 'Nie masz konta?',
     haveYetAccount: 'Masz już konto?',
     disclaimer: 'Korzystając z Finargo, akceptujesz nasze <a href="#" target="_blank">warunki użytkowania</a>. Finargo oferuje wyłącznie ogólne doradztwo inwestycyjne.',
+    emailConfirmation: {
+      thankYou: 'Dziękujemy za rejestrację!',
+      confirmationSent: 'Link aktywacyjny został wysłany na adres {email}.',
+      verificationWarning: '❗ Bez potwierdzenia adresu e-mail nie będziesz mógł się zalogować.',
+      spamNotice: 'Sprawdź folder Spam, jeśli wiadomość nie dotrze w ciągu 5 minut.',
+      resentPrompt: 'Nie otrzymałeś wiadomości?',
+    },
+    passwordReset: {
+      emailAsking: 'Aby zresetować hasło, wprowadź adres email użyty podczas rejestracji.',
+      resetInstruction: 'Wymyśl silne hasło i powtórz je',
+    },
   },
   validations: {
     required: 'To pole jest wymagane',
     minLengthValue: '{property} musi mieć co najmniej {min} znaków',
     passwordMismatch: 'Potwierdzenie hasła nie zgadza się',
     usernameYetTaken: 'Ta nazwa użytkownika jest już zajęta',
+    emailField: 'Wprowadź poprawny adres email (np.: przyklad@domena.pl)',
   },
   admin: {
     dashboard: 'Panel',

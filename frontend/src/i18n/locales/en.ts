@@ -1,4 +1,6 @@
-export const en = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const en: Locale = {
   buttons: {
     addToWatchlist: 'Add to watchlist',
     addToPortfolio: 'Add to portfolio',
@@ -30,6 +32,9 @@ export const en = {
     no: 'No',
     search: 'Search',
     analysts: 'no analysts | {n} analyst | {n} analysts',
+    resentEmail: 'Resend',
+    sendPasswordResetRequest: 'Reset password',
+    resetPassword: 'Change password',
   },
   toasts: {
     valueIsCopied: 'Copied!',
@@ -44,6 +49,11 @@ export const en = {
       removed: '{ticker} removed from watchlist',
     },
     noteDeleted: 'Note deleted',
+    emailConfirmed: 'Your email has been successfully confirmed. You can now log in.',
+    emailYetConfirmed: 'This email has already been confirmed. No further action is required.',
+    sendPasswordResetRequest: 'We\'ve sent you an email with a password reset link. Don\'t forget to check your Spam folder!',
+    passwordResetSuccess: 'Password successfully changed.',
+    emailConfirmationResent: 'We\'ve sent a confirmation email to your address. Please check your inbox and spam folder if you don\'t see it.',
   },
   header: {
     searchPlaceholder: 'Looking for...',
@@ -150,17 +160,30 @@ export const en = {
     username: 'Login',
     password: 'Password',
     passwordConfirmation: 'Password Confirmation',
+    email: 'Email',
   },
   auth: {
     dontHaveAccount: 'Don\'t have account?',
     haveYetAccount: 'Have yet account?',
     disclaimer: 'By using Finargo you are agreeing to our <a href="#" target="_blank">terms and conditions</a>. Finargo provides general investment advice only.',
+    emailConfirmation: {
+      thankYou: 'Thank you for signing up!',
+      confirmationSent: 'A confirmation link has been sent to {email}.',
+      verificationWarning: '❗ Without email verification, you won’t be able to log in.',
+      spamNotice: 'Check your Spam folder if you don’t receive the email within 5 minutes.',
+      resentPrompt: 'Didn\'t get the email?',
+    },
+    passwordReset: {
+      emailAsking: 'To reset your password, enter the email address you used to register. We\'ll send a password reset link to this address.',
+      resetInstruction: 'Create a strong password and repeat it',
+    },
   },
   validations: {
     required: 'This field is required',
     minLengthValue: '{property} must be at least {min} characters long',
     passwordMismatch: 'Password confirmation does not match',
     usernameYetTaken: 'This username is already taken',
+    emailField: 'Enter a valid email address (e.g.: example@domain.com)',
   },
   admin: {
     dashboard: 'Dashboard',

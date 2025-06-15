@@ -1,4 +1,6 @@
-export const fr = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const fr: Locale = {
   buttons: {
     addToWatchlist: 'Ajouter à la watchlist',
     addToPortfolio: 'Ajouter au portefeuille',
@@ -30,6 +32,9 @@ export const fr = {
     no: 'Non',
     search: 'Rechercher',
     analysts: 'aucun analyste | {n} analyste | {n} analystes',
+    resentEmail: 'Renvoyer',
+    sendPasswordResetRequest: 'Réinitialiser le mot de passe',
+    resetPassword: 'Changer le mot de passe',
   },
   toasts: {
     valueIsCopied: 'Copié !',
@@ -44,6 +49,11 @@ export const fr = {
       removed: '{ticker} retiré de la watchlist',
     },
     noteDeleted: 'Note supprimée',
+    emailConfirmed: 'Votre email a été confirmé avec succès. Vous pouvez maintenant vous connecter.',
+    emailYetConfirmed: 'Cet email a déjà été confirmé. Aucune action supplémentaire n\'est requise.',
+    sendPasswordResetRequest: 'Nous vous avons envoyé un email avec un lien de réinitialisation. N\'oubliez pas de vérifier votre dossier Spam !',
+    passwordResetSuccess: 'Mot de passe modifié avec succès.',
+    emailConfirmationResent: 'Nous avons envoyé un email de confirmation à votre adresse. Veuillez vérifier votre boîte de réception et le dossier spam si vous ne le trouvez pas.',
   },
   header: {
     searchPlaceholder: 'Rechercher...',
@@ -150,17 +160,30 @@ export const fr = {
     username: 'Identifiant',
     password: 'Mot de passe',
     passwordConfirmation: 'Confirmation mot de passe',
+    email: 'E-mail',
   },
   auth: {
     dontHaveAccount: 'Pas encore de compte ?',
     haveYetAccount: 'Déjà un compte ?',
     disclaimer: 'En utilisant Finargo, vous acceptez nos <a href="#" target="_blank">conditions générales</a>. Finargo fournit des conseils d\'investissement généraux uniquement.',
+    emailConfirmation: {
+      thankYou: 'Merci pour votre inscription!',
+      confirmationSent: 'Un lien de confirmation a été envoyé à {email}.',
+      verificationWarning: '❗ Sans vérification de l’email, vous ne pourrez pas vous connecter.',
+      spamNotice: 'Vérifiez votre dossier Spam si vous ne recevez pas l’email dans 5 minutes.',
+      resentPrompt: 'Vous n’avez pas reçu l’email?',
+    },
+    passwordReset: {
+      emailAsking: 'Pour réinitialiser votre mot de passe, entrez l\'adresse email utilisée lors de l\'inscription. Nous y enverrons un lien de réinitialisation.',
+      resetInstruction: 'Créez un mot de passe fort et répétez-le',
+    },
   },
   validations: {
     required: 'Ce champ est obligatoire',
     minLengthValue: '{property} doit contenir au moins {min} caractères',
     passwordMismatch: 'La confirmation ne correspond pas',
     usernameYetTaken: 'Cet identifiant est déjà pris',
+    emailField: 'Entrez une adresse email valide (exemple : exemple@domaine.com)',
   },
   admin: {
     dashboard: 'Tableau de bord',
