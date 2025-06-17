@@ -183,7 +183,7 @@ export const it: Locale = {
     minLengthValue: '{property} deve contenere almeno {min} caratteri',
     passwordMismatch: 'La conferma della password non corrisponde',
     usernameYetTaken: 'Questo nome utente è già in uso',
-    emailField: 'Inserisci un\'email valida (esempio: esempio@dominio.com)',
+    emailField: 'Inserisci un\'email valida (esempio: esempio{\'@\'}dominio.com)',
   },
   admin: {
     dashboard: 'Dashboard',

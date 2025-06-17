@@ -183,7 +183,7 @@ export const ru: Locale = {
     minLengthValue: 'Поле {property} должно содержать минимум {min} символов',
     passwordMismatch: 'Пароли не совпадают',
     usernameYetTaken: 'Это имя уже занято',
-    emailField: 'Введите корректный email-адрес (например: example@domain.com)',
+    emailField: 'Введите корректный email-адрес (например: example{\'@\'}domain.com)',
   },
   admin: {
     dashboard: 'Дашборд',

@@ -183,7 +183,7 @@ export const fr: Locale = {
     minLengthValue: '{property} doit contenir au moins {min} caractères',
     passwordMismatch: 'La confirmation ne correspond pas',
     usernameYetTaken: 'Cet identifiant est déjà pris',
-    emailField: 'Entrez une adresse email valide (exemple : exemple@domaine.com)',
+    emailField: 'Entrez une adresse email valide (exemple : exemple{\'@\'}domaine.com)',
   },
   admin: {
     dashboard: 'Tableau de bord',

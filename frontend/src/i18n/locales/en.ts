@@ -183,7 +183,7 @@ export const en: Locale = {
     minLengthValue: '{property} must be at least {min} characters long',
     passwordMismatch: 'Password confirmation does not match',
     usernameYetTaken: 'This username is already taken',
-    emailField: 'Enter a valid email address (e.g.: example@domain.com)',
+    emailField: 'Enter a valid email address (e.g.: example{\'@\'}domain.com)',
   },
   admin: {
     dashboard: 'Dashboard',

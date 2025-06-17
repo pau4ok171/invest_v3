@@ -183,7 +183,7 @@ export const pl: Locale = {
     minLengthValue: '{property} musi mieć co najmniej {min} znaków',
     passwordMismatch: 'Potwierdzenie hasła nie zgadza się',
     usernameYetTaken: 'Ta nazwa użytkownika jest już zajęta',
-    emailField: 'Wprowadź poprawny adres email (np.: przyklad@domena.pl)',
+    emailField: 'Wprowadź poprawny adres email (np.: przyklad{\'@\'}domena.pl)',
   },
   admin: {
     dashboard: 'Panel',
