@@ -66,8 +66,8 @@ const rules = {
   email: {
     required,
     emailField: withMessage(
-        i18n.global.t('validations.emailField'),
-        emailField
+      i18n.global.t('validations.emailField'),
+      emailField
     ),
   },
 }
@@ -146,7 +146,7 @@ async function register() {
 
     await axios.post('/api/v1/users/', formData)
 
-    store.registrationEmail = formData.get('email') as string || ''
+    store.registrationEmail = (formData.get('email') as string) || ''
     store.authMode = 'emailConfirmation'
 
     clear()
