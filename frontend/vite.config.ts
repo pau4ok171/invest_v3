@@ -10,14 +10,25 @@ export default defineConfig({
     headers: {
       'Content-Security-Policy':
         "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline'; " +
-        "style-src 'self' 'unsafe-inline';" +
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
+        "style-src 'self' 'unsafe-inline'; " +
         "img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 http://localhost:5173; " +
-        "font-src 'self'; " +
-        "object-src 'none';" +
-        "connect-src 'self' ws://localhost:8000 http://localhost:8000 http://127.0.0.1:8000",
+        "connect-src 'self' ws://localhost:8000 http://localhost:8000 http://127.0.0.1:8000;",
+      'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+      'Cross-Origin-Embedder-Policy': 'unsafe-none',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Credentials': 'true',
     },
+    host: 'localhost',
+    port: 5173,
     proxy: {
+      '/api': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+        secure: false,
+      },
       '/ws': {
         target: 'http://localhost:8000',
         ws: true,
