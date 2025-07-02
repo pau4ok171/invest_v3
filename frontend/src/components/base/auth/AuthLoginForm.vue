@@ -64,18 +64,10 @@ async function login() {
 
   if (v$.value.$invalid) return
 
-  const formData = new FormData()
-
-  Object.entries(state).forEach(([key, value]) => {
-    formData.append(key, value)
-  })
-
   try {
     isLoadig.value = true
 
-    const response = await axios.post('/api/v1/token/login/', formData)
-
-    await store.login(response.data.auth_token)
+    await store.login(state.username, state.password)
 
     clear()
   } catch (error) {

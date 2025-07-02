@@ -144,12 +144,12 @@ const router = createRouter({
       component: () => import('@/views/HomeView.vue'),
     },
     {
-      path: '/email_confirmation/:uid/:token',
+      path: '/auth/verify-email/:token',
       props: true,
       component: () => import('@/views/EmailConfirmationView.vue'),
     },
     {
-      path: '/password/reset/confirm/:uid/:token',
+      path: '/auth/new-password/:uid/:token',
       props: true,
       component: () => import('@/views/PasswordResetView.vue'),
     },

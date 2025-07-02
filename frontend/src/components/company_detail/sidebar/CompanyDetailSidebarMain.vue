@@ -82,7 +82,7 @@ function humanizeFinancial(val: number = 0, currencySymbol: string = '') {
     </p>
 
     <section class="detail-sidebar__button-list">
-      <template v-if="authStore.profile.watchlist.includes(company.uid)">
+      <template v-if="authStore.profile?.watchlist.includes(company.uid)">
         <v-btn
           icon="$ratingFull"
           color="blue"

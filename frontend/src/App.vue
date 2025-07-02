@@ -19,8 +19,7 @@ const { setTitle } = useTitle()
 setTitle('pageTitles.default')
 
 onMounted(async () => {
-  authStore.setToken()
-  await authStore.fetchUserProfile()
+  await authStore.checkAuth()
 })
 </script>
 

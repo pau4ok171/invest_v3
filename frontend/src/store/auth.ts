@@ -9,7 +9,7 @@ import type { Portfolio } from '@/types/portfolios'
 import type { DetailCompany } from '@/types/invest'
 import type { CompanyItem } from '@/store/companyList/types'
 
-export interface Profile {
+export interface UserProfile {
   id: string
   name: string
   email: string
@@ -28,92 +28,112 @@ export interface Profile {
   is_staff: boolean
 }
 
-export type AuthMode = 'login' | 'registration' | 'emailConfirmation' | 'forgotPassword'
+export interface LoginResponse {
+  access: string
+  refresh: string
+  user: UserProfile
+}
+
+export type AuthMode =
+  | 'login'
+  | 'registration'
+  | 'emailConfirmation'
+  | 'forgotPassword'
 
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
     token: '',
     authMode: 'login' as AuthMode,
-    profile: {} as Profile,
+    profile: null as UserProfile | null,
     // WATCHLIST
     watchlistLoading: false,
     registrationEmail: '',
   }),
   getters: {
     isAuthenticated: (state) => {
-      return !!state.token
+      return !!state.profile
     },
   },
   actions: {
-    setToken(newToken: string | null = null) {
-      if (newToken) {
-        this.token = newToken
-        localStorage.setItem('token', newToken)
-      } else {
-        this.token = localStorage.getItem('token') || ''
-      }
-
-      // Всегда устанавливаем заголовок с текущим токеном
-      if (this.token) {
-        axios.defaults.headers.common['Authorization'] = `Token ${this.token}`
-      } else {
-        delete axios.defaults.headers.common['Authorization']
-      }
+    setUserProfile(loginData: LoginResponse) {
+      this.profile = loginData.user
+      localStorage.setItem('profile', JSON.stringify(loginData.user))
     },
-    async fetchUserProfile() {
-      if (!this.token) return
-
+    async checkAuth() {
       try {
-        // Добавляем завершающий слеш и правильный префикс URL
-        const response = await axios.get('/api/v1/profile/me/')
+        const response = await axios.get<UserProfile>('/api/v1/auth/user/', {
+          withCredentials: true,
+        })
         this.profile = response.data
-      } catch (error) {
-        console.error('Profile fetch error:', error)
-        // При ошибке 403 сбрасываем токен
-        if (axios.isAxiosError(error) && error.response?.status === 403) {
-          this.logout()
-        }
+        return true
+      } catch {
+        this.profile = null
+        return false
       }
     },
-    async login(token: string) {
-      this.setToken(token)
-      await this.fetchUserProfile()
+    async login(username: string, password: string) {
+      try {
+        const response = await axios.post<LoginResponse>(
+          '/api/v1/auth/login/',
+          {
+            username,
+            password,
+          },
+          { withCredentials: true }
+        )
+
+        this.setUserProfile(response.data)
+      } catch (error) {
+        console.error(error)
+        toast.error(i18n.global.t('toasts.somethingWrong'))
+      }
     },
-    logout() {
-      axios.defaults.headers.common['Authorization'] = ''
-
-      localStorage.removeItem('token')
-
-      this.token = ''
-      this.profile = {} as Profile
+    async logout() {
+      try {
+        await axios.post('/api/v1/auth/logout/', {}, { withCredentials: true })
+      } finally {
+        this.profile = null
+        localStorage.removeItem('profile')
+      }
+    },
+    async refreshToken() {
+      try {
+        await axios.post(
+          '/api/v1/auth/token/refresh/',
+          {},
+          { withCredentials: true }
+        )
+        return true
+      } catch {
+        await this.logout()
+        return false
+      }
     },
     // WATCHLIST
     async updateWatchlist(company: DetailCompany | CompanyItem) {
-      if (!this.profile.watchlist) return
+      if (!this.profile) return
 
       const { uid, ticker } = company
-      const isCurrentlyWatchlisted = this.profile.watchlist.includes(uid)
-      const action = isCurrentlyWatchlisted ? 'remove' : 'add'
+      const oldWatchlist = [...this.profile.watchlist]
 
       try {
         this.watchlistLoading = true
+        const action = this.profile.watchlist.includes(uid) ? 'remove' : 'add'
 
-        if (action === 'add') {
-          this.profile.watchlist.push(uid)
-        } else {
-          this.profile.watchlist = this.profile.watchlist.filter(
-            (company_uid) => company_uid !== uid
-          )
-        }
+        this.profile.watchlist =
+          action === 'add'
+            ? [...this.profile.watchlist, uid]
+            : this.profile.watchlist.filter((id) => id !== uid)
 
-        const response = await axios.patch<Profile>(
+        await axios.patch<UserProfile>(
           'api/v1/profile/update_watchlist/',
           {
             company_uid: uid,
             action,
           },
           {
+            withCredentials: true,
             headers: {
               'Content-Type': 'application/json',
             },
@@ -134,15 +154,8 @@ export const useAuthStore = defineStore({
           )
         }
       } catch (error) {
-        if (action === 'add') {
-          this.profile.watchlist = this.profile.watchlist.filter(
-            (company_uid) => company_uid !== uid
-          )
-        } else {
-          this.profile.watchlist.push(uid)
-        }
-
-        console.log(error)
+        this.profile.watchlist = oldWatchlist
+        console.error(error)
         toast.error(i18n.global.t('toasts.somethingWrong'))
       } finally {
         this.watchlistLoading = false

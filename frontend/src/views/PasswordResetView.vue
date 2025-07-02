@@ -74,10 +74,11 @@ const resetPassword = async () => {
 
     isLoading.value = true
 
-    await axios.post('/api/v1/users/reset_password_confirm/', {
+    await axios.post(`/api/v1/auth/password/reset/confirm/`, {
       uid: props.uid,
       token: props.token,
-      new_password: state.password,
+      new_password1: state.password,
+      new_password2: state.passwordConfirmation,
     })
 
     clear()

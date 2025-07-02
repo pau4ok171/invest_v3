@@ -14,7 +14,7 @@ const resentActivation = async () => {
   if (!store.registrationEmail) return
 
   try {
-    await axios.post('/api/v1/users/resend_activation/', {
+    await axios.post('/api/v1/auth/registration/resend-email/', {
       email: store.registrationEmail,
     })
 

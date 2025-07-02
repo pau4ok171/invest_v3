@@ -71,7 +71,7 @@ const sendPasswordResetRequest = async () => {
 
     isLoading.value = true
 
-    await axios.post('/api/v1/users/reset_password/', { email: state.email })
+    await axios.post('/api/v1/auth/password/reset/', { email: state.email })
 
     toast.success(t('toasts.sendPasswordResetRequest'))
 

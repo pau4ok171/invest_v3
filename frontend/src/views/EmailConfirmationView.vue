@@ -13,7 +13,6 @@ import axios from 'axios'
 import type { AxiosError } from 'axios'
 
 const props = defineProps<{
-  uid: string
   token: string
 }>()
 
@@ -25,9 +24,8 @@ const activateEmail = async () => {
   try {
     store.loading = true
 
-    await axios.post('/api/v1/users/activation/', {
-      uid: props.uid,
-      token: props.token,
+    await axios.post('/api/v1/auth/registration/verify-email/', {
+      key: props.token,
     })
 
     toast.success(t('toasts.emailConfirmed'))

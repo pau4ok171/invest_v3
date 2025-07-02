@@ -117,7 +117,7 @@ function createNote() {
         />
         <template v-else>
           <v-btn
-            v-if="!authStore.profile.watchlist.includes(company.uid)"
+            v-if="!authStore.profile?.watchlist.includes(company.uid)"
             prepend-icon="$ratingEmpty"
             :text="t('buttons.addToWatchlist')"
             color="info"

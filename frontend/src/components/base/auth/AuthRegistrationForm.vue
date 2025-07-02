@@ -135,7 +135,8 @@ async function register() {
 
   Object.entries({
     username: state.username,
-    password: state.password,
+    password1: state.password,
+    password2: state.passwordConfirmation,
     email: state.email,
   }).forEach(([key, value]) => {
     formData.append(key, value)
@@ -144,7 +145,7 @@ async function register() {
   try {
     isLoading.value = true
 
-    await axios.post('/api/v1/users/', formData)
+    await axios.post('/api/v1/auth/registration', formData)
 
     store.registrationEmail = (formData.get('email') as string) || ''
     store.authMode = 'emailConfirmation'
