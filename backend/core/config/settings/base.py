@@ -25,7 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env_conf('DJANGO_KEY')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -37,6 +40,8 @@ INSTALLED_APPS = [
     'unfold.contrib.import_export',
     'parler',
     'daphne',
+
+    # Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +49,39 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'django.contrib.sites',
+
+    # External apps
+    'channels',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+
+    # Auth
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.headless',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.yandex',
+    'allauth.socialaccount.providers.telegram',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.discord',
+
+    # DRF Auth
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    # SimpleJWT
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
+
+    # Other
+    'django_celery_beat',
+    'django_celery_results',
+    'django_cleanup.apps.CleanupConfig',
+    'import_export',
+
     # My apps
     'invest.apps.InvestConfig',
     'portfolio.apps.PortfolioConfig',
@@ -53,30 +91,25 @@ INSTALLED_APPS = [
     'analysis.apps.AnalysisConfig',
     'site_admin.apps.AdminConfig',
     'user_profile.apps.UserProfileConfig',
-    # External apps
-    'channels',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'rest_framework_simplejwt',
-    'djoser',
-    'corsheaders',
-    'django_celery_beat',
-    'django_celery_results',
-    'django_cleanup.apps.CleanupConfig',
-    'import_export',
+    'user_auth.apps.UserAuthConfig',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+
     'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'i18n.middleware.DynamicLanguageMiddleware',
     # 'django.middleware.locale.LocaleMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -150,27 +183,38 @@ EMAIL_HOST_USER = env_conf('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env_conf('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 
-# https://stackoverflow.com/questions/62586797/how-to-use-a-different-domain-for-djoser-email/62586798#62586798
-DOMAIN = env_conf('EMAIL_FRONTEND_DOMAIN')
-SITE_NAME = 'FINARGO'
+# AUTHENTIFICATION
+# All auth
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_ADAPTER = "user_auth.adapters.CustomAccountAdapter"
 
-# Authentication
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
-
-DJOSER = {
-    'SEND_ACTIVATION_EMAIL': True,
-    'SEND_CONFIRMATION_EMAIL': True,
-    'SERIALIZERS': {
-        'token_create': 'user_profile.api.serializers.CustomTokenCreateSerializer',
-    },
+# Google OAuth2
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': env_conf('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
+            'secret': env_conf('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
+            'key': '',
+        },
+        'SCOPE': (
+            'profile',
+            'email',
+        ),
+        'AUTH_PARAMS': {
+            'access_type': {'access_type': 'offline'},
+        }
+    }
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=6),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=15),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": False,
 
     "ALGORITHM": "HS256",
@@ -182,7 +226,7 @@ SIMPLE_JWT = {
     "JWK_URL": None,
     "LEEWAY": 0,
 
-    "AUTH_HEADER_TYPES": ("JWT",),
+    "AUTH_HEADER_TYPES": ("Bearer",),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
@@ -195,8 +239,8 @@ SIMPLE_JWT = {
     "JTI_CLAIM": "jti",
 
     "SLIDING_TOKEN_REFRESH_EXP_CLAIM": "refresh_exp",
-    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=5),
-    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_LIFETIME": timedelta(hours=6),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=15),
 
     "TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSerializer",
@@ -204,6 +248,45 @@ SIMPLE_JWT = {
     "TOKEN_BLACKLIST_SERIALIZER": "rest_framework_simplejwt.serializers.TokenBlacklistSerializer",
     "SLIDING_TOKEN_OBTAIN_SERIALIZER": "rest_framework_simplejwt.serializers.TokenObtainSlidingSerializer",
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
+}
+
+# Rest auth
+FRONTENT_DOMAIN = 'http://localhost:5173'
+PASSWORD_RESET_URL = f'{FRONTENT_DOMAIN}/auth/new-password/<uid64>/<token>'
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'jwt-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'jwt-refresh',
+    'JWT_AUTH_HTTPONLY': True,
+    'SESSION_LOGIN': False,
+    'OLD_PASSWORD_FIELD_ENABLED': True,
+    'LOGOUT_ON_PASSWORD_CHANGE': True,
+
+    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
+    'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
+    'JWT_SERIALIZER_WITH_EXPIRATION': 'dj_rest_auth.serializers.JWTSerializerWithExpiration',
+    'JWT_TOKEN_CLAIMS_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
+    'USER_DETAILS_SERIALIZER': 'user_profile.serializers.UserProfileSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'user_auth.serializers.CustomPasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
+    'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
+
+    'REGISTER_SERIALIZER': 'dj_rest_auth.registration.serializers.RegisterSerializer',
+
+    'REGISTER_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
+
+    'TOKEN_MODEL': 'rest_framework.authtoken.models.Token',
+    'TOKEN_CREATOR': 'dj_rest_auth.utils.default_create_token',
+
+    'PASSWORD_RESET_USE_SITES_DOMAIN': True,
+
+    'JWT_AUTH_REFRESH_COOKIE_PATH': '/',
+    'JWT_AUTH_SECURE': False,
+    'JWT_AUTH_SAMESITE': 'Lax',
+    'JWT_AUTH_RETURN_EXPIRATION': False,
+    'JWT_AUTH_COOKIE_USE_CSRF': False,
+    'JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED': False,
 }
 
 # Celery
@@ -260,8 +343,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
@@ -497,18 +579,18 @@ UNFOLD = {
                 ],
             },
             {
-                "title": _('Portfolio'),
+                "title": _('Portfolios'),
                 "collapsible": True,
                 "items": [
                     {
-                        "title": _('Portfolio Companies'),
+                        "title": _('Portfolios Companies'),
                         "icon": 'work_update',
                         "link": reverse_lazy(
                             "admin:portfolio_portfoliocompany_changelist"
                         ),
                     },
                     {
-                        "title": _('Portfolio'),
+                        "title": _('Portfolios'),
                         "icon": 'enterprise',
                         "link": reverse_lazy(
                             "admin:portfolio_portfolio_changelist"
@@ -538,6 +620,86 @@ UNFOLD = {
                         "icon": 'badge',
                         "link": reverse_lazy(
                             "admin:user_profile_profile_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Token Blacklists'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Blacklisted Tokens'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:token_blacklist_blacklistedtoken_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Outstanding Tokens'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:token_blacklist_outstandingtoken_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Accounts'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Email Addresses'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:account_emailaddress_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Email Confirmations'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:account_emailconfirmation_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Social Accounts'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Social Accounts'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:socialaccount_socialaccount_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Social Apps'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:socialaccount_socialapp_changelist"
+                        ),
+                    },
+                    {
+                        "title": _('Social Tokens'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:socialaccount_socialtoken_changelist"
+                        ),
+                    },
+                ],
+            },
+            {
+                "title": _('Sites'),
+                "collapsible": True,
+                "items": [
+                    {
+                        "title": _('Sites'),
+                        "icon": '',
+                        "link": reverse_lazy(
+                            "admin:sites_site_changelist"
                         ),
                     },
                 ],

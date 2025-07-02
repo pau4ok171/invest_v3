@@ -1,7 +1,14 @@
 from django.urls import path, include
 
-app_name = 'notes'
+from rest_framework.routers import SimpleRouter
+
+from .views import NotesViewSet
+
+app_name = 'notes_api'
+
+router = SimpleRouter()
+router.register(r'notes', NotesViewSet, basename='notes')
 
 urlpatterns = [
-    path('api/v1/', include('notes.api.urls', namespace='notes_api')),
+    path('', include(router.urls)),
 ]

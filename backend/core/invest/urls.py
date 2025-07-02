@@ -1,25 +1,16 @@
 from django.urls import path
+from invest import views
 
-from . import views
-
-app_name = 'invest'
+app_name = 'invest_api'
 
 urlpatterns = [
-    path('stocks/', views.InvestCompanyListView.as_view(), name='company_list'),
-    path('stocks/detail/<slug>/', views.InvestCompanyDetailView.as_view(), name='company_detail'),
-    path(
-        'stocks/<slug:country_iso>/',
-        views.InvestCompanyListView.as_view(),
-        name='company_list_with_one_option'
-    ),
-    path(
-        'stocks/<slug:country_iso>/<slug:sorter_slug>/',
-        views.InvestCompanyListView.as_view(),
-        name='company_list_with_two_options'
-    ),
-    path(
-        'stocks/<slug:country_iso>/<slug:sector_slug>/<slug:sorter_slug>/',
-        views.InvestCompanyListView.as_view(),
-        name='company_list_with_all_options'
-    ),
+    # Objects
+    path('companies/', views.CompanyListView.as_view()),
+    path('companies/<slug:company_slug>', views.CompanyDetailAPIView.as_view()),
+    path('countries/', views.CompanyListCountries.as_view()),
+    path('sectors/', views.CompanyListSectors.as_view()),
+    path('price_data/<slug:company_slug>/', views.PriceChartList.as_view()),
+    # Functions
+    path('search_query/', views.search_query),
+    path('validate_username/', views.validate_username),
 ]

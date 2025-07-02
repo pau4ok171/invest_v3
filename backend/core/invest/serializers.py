@@ -9,9 +9,9 @@ from rest_framework.fields import empty
 from invest.models import Company, Country, Sector, Market, CandlePerDay, ReportMetadata, AnalystIdea, Analyst, \
     Currency, Dividend, SectorMarket, CompanyPerformance, MarketPerformance
 from statements.models import Statement
-from statements.api.serializers import StatementSerializer
+from statements.serializers import StatementSerializer
 from statements.types import Area, Status
-from news.api.serializers import NewsSerializer
+from news.serializers import NewsSerializer
 
 from parler_rest.serializers import TranslatableModelSerializer, TranslatedFieldsField
 

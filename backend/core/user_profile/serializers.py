@@ -2,20 +2,6 @@ from django.contrib.auth.models import User
 
 from rest_framework import serializers
 
-from djoser.serializers import TokenCreateSerializer
-
-
-class CustomTokenCreateSerializer(TokenCreateSerializer):
-    def validate(self, attrs):
-        try:
-            return super().validate(attrs)
-        except serializers.ValidationError:
-            if self.user and not self.user.is_active:
-                raise serializers.ValidationError(
-                    "Please activate your account first - check your email for instructions."
-                )
-            self.fail('invalid_credentials')
-
 
 class TimestampField(serializers.Field):
     """Сериализатор для преобразования даты в timestamp"""
