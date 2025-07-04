@@ -64,9 +64,7 @@ INSTALLED_APPS = [
     'allauth.headless',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
-    'allauth.socialaccount.providers.telegram',
     'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.discord',
 
     # DRF Auth
     'dj_rest_auth',
@@ -191,24 +189,27 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_ADAPTER = "user_auth.adapters.CustomAccountAdapter"
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 # Google OAuth2
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'APP': {
-            'client_id': env_conf('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
-            'secret': env_conf('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
-            'key': '',
-        },
         'SCOPE': (
             'profile',
             'email',
         ),
         'AUTH_PARAMS': {
-            'access_type': {'access_type': 'offline'},
-        }
+            'access_type': 'online',
+        },
+        'FETCH_USERINFO': True,
+        'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+GOOGLE_CALLBACK_URL = 'http://127.0.0.1:8000/accounts/google/login/callback/'
+YANDEX_CALLBACK_URL = 'http://127.0.0.1:8000/accounts/yandex/login/callback/'
+GITHUB_CALLBACK_URL = 'http://localhost:5173/auth/github/login/callback/'
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=6),
