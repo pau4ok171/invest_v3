@@ -13,6 +13,8 @@ import 'tippy.js/dist/tippy.css'
 import Vintersection from '@/directives/Vintersection'
 import Vdebounce from '@/directives/Vdebounce'
 
+import vue3GoogleLogin from 'vue3-google-login'
+
 import { createPinia } from 'pinia'
 
 import HighchartsVue from 'highcharts-vue'
@@ -66,6 +68,9 @@ app
       allowHTML: false,
       followCursor: 'horizontal',
     },
+  })
+  .use(vue3GoogleLogin, {
+    clientId: '964404419246-ngn9b8lj0cpjqjqabeuglabi683gm7a5.apps.googleusercontent.com',
   })
   .use(vuetify)
   .mount('#app')

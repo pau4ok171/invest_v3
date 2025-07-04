@@ -52,6 +52,9 @@ export interface Locale {
     resentEmail: string
     sendPasswordResetRequest: string
     resetPassword: string
+    loginWithGoogle: string
+    loginWithYandex: string
+    loginWithGithub: string
   },
   toasts: {
     valueIsCopied: string

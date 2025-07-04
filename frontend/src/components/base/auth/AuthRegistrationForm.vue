@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Components
-import GoogleIcon from '@/components/icons/GoogleIcon.vue'
+import SocialLogin from "@/components/base/auth/social/SocialLogin.vue";
 
 // Composables
 import { useAuthStore } from '@/store/auth'
@@ -73,7 +73,7 @@ const rules = {
 }
 
 const v$ = useVuelidate(rules, state)
-const store = useAuthStore()
+const authStore = useAuthStore()
 
 const isValid = computed(() => !v$.value.$invalid)
 const isLoading = shallowRef(false)
@@ -147,8 +147,8 @@ async function register() {
 
     await axios.post('/api/v1/auth/registration', formData)
 
-    store.registrationEmail = (formData.get('email') as string) || ''
-    store.authMode = 'emailConfirmation'
+    authStore.registrationEmail = (formData.get('email') as string) || ''
+    authStore.authMode = 'emailConfirmation'
 
     clear()
   } catch (error) {
@@ -263,23 +263,7 @@ async function register() {
       />
       <v-divider>{{ t('common.or') }}</v-divider>
 
-      <v-card-actions class="justify-center">
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-      </v-card-actions>
+      <social-login/>
 
       <v-card-text class="d-flex justify-center align-center">
         <span style="line-height: 1.5; margin-bottom: -1px">
@@ -291,7 +275,7 @@ async function register() {
           variant="plain"
           slim
           color="info"
-          @click="store.authMode = 'login'"
+          @click="authStore.authMode = 'login'"
         />
       </v-card-text>
 

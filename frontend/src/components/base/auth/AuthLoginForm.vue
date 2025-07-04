@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // Components
-import GoogleIcon from '@/components/icons/GoogleIcon.vue'
+import SocialLogin from '@/components/base/auth/social/SocialLogin.vue'
 
 // Composables
 import { useAuthStore } from '@/store/auth'
@@ -158,23 +158,7 @@ async function login() {
       />
       <v-divider>{{ t('common.or') }}</v-divider>
 
-      <v-card-actions class="justify-center">
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-        <v-btn variant="tonal">
-          <v-icon>
-            <google-icon />
-          </v-icon>
-        </v-btn>
-      </v-card-actions>
+      <social-login />
 
       <v-card-text class="d-flex justify-center align-center">
         <span style="line-height: 1.5; margin-bottom: -1px">

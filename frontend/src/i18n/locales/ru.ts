@@ -34,7 +34,10 @@ export const ru: Locale = {
     analysts: 'нет аналитиков | {n} аналитик | {n} аналитика | {n} аналитиков',
     resentEmail: 'Отправить повторно',
     sendPasswordResetRequest: 'Восстановить пароль',
-    resetPassword: 'Изменить пароль'
+    resetPassword: 'Изменить пароль',
+    loginWithGoogle: 'Войти через Google',
+    loginWithYandex: 'Войти через Яндекс',
+    loginWithGithub: 'Войти через Github',
   },
   toasts: {
     valueIsCopied: 'Скопировано!',

@@ -24,6 +24,7 @@ const router = createRouter({
         const authStore = useAuthStore()
         if (
           !authStore.isAuthenticated ||
+          !authStore.profile ||
           !Object.hasOwn(authStore.profile, 'is_staff') ||
           !authStore.profile.is_staff
         ) {
@@ -154,6 +155,28 @@ const router = createRouter({
       component: () => import('@/views/PasswordResetView.vue'),
     },
     {
+      path: '/auth/github/login/callback/',
+      props: (route) => ({
+        code: route.query.code,
+      }),
+      component: () =>
+        import('@/components/base/auth/social/GithubAuthCallback.vue'),
+      meta: {
+        layout: AppLayoutsEnum.empty,
+      },
+    },
+    {
+      path: '/auth/yandex/login/callback/',
+      props: (route) => ({
+        code: route.query.code,
+      }),
+      component: () =>
+        import('@/components/base/auth/social/YandexAuthCallback.vue'),
+      meta: {
+        layout: AppLayoutsEnum.empty,
+      },
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: RouteNamesEnum.page_not_found,
       component: () => import('@/views/PageNotFoundView.vue'),
@@ -173,7 +196,7 @@ router.beforeEach(async (route) => {
 router.afterEach(() => {
   const pageStore = usePageStore()
 
-  setTimeout(() => (pageStore.loading = false), 15000)
+  setTimeout(() => (pageStore.loading = false), 10000)
 })
 
 export default router

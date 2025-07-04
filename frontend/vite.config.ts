@@ -10,8 +10,9 @@ export default defineConfig({
     headers: {
       'Content-Security-Policy':
         "default-src 'self'; " +
-        "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
-        "style-src 'self' 'unsafe-inline'; " +
+        "script-src 'self' https://accounts.google.com 'unsafe-inline' 'unsafe-eval'; " +
+        "frame-src 'self';" +
+        "style-src 'self' https://accounts.google.com 'unsafe-inline'; " +
         "img-src 'self' data: blob: http://localhost:8000 http://127.0.0.1:8000 http://localhost:5173; " +
         "connect-src 'self' ws://localhost:8000 http://localhost:8000 http://127.0.0.1:8000;",
       'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',

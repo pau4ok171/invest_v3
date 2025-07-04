@@ -35,6 +35,9 @@ export const de: Locale = {
     resentEmail: 'Erneut senden',
     sendPasswordResetRequest: 'Passwort zurücksetzen',
     resetPassword: 'Passwort ändern',
+    loginWithGoogle: 'Anmeldung mit Google',
+    loginWithYandex: 'Anmeldung mit Yandex',
+    loginWithGithub: 'Anmeldung mit Github',
   },
   toasts: {
     valueIsCopied: 'Kopiert!',
