@@ -145,25 +145,19 @@ async function register() {
   try {
     isLoading.value = true
 
-    await axios.post('/api/v1/auth/registration', formData)
+    await axios.post('/api/v1/auth/registration/', formData)
 
     authStore.registrationEmail = (formData.get('email') as string) || ''
     authStore.authMode = 'emailConfirmation'
 
     clear()
   } catch (error) {
-    console.log(error)
-
     if (axios.isAxiosError(error)) {
       const data = error.response?.data
+      console.log(error)
 
       if (data && isObjectLike(data)) {
-        const _formErrors = data['non_field_errors']
-        if (Array.isArray(_formErrors)) {
-          formErrors.value = (_formErrors as []).map((e) => ({
-            title: e,
-          }))
-        }
+        formErrors.value = (Object.values(data).flat() as string[]).map(e => ({title: e}))
       }
     }
   } finally {
@@ -236,7 +230,7 @@ async function register() {
         :label="t('labels.email')"
         variant="outlined"
         class="my-2"
-        autocompete="email"
+        autocomplete="email"
         color="info"
       />
 
@@ -282,7 +276,7 @@ async function register() {
       <v-card-text
         class="d-flex justify-center text-center text-medium-emphasis"
       >
-        <span v-html="t('auth.disclaimer')" />
+        <span>{{ t('auth.disclaimer.prefix') }}<a href="#" target="_blank">{{ t('auth.disclaimer.terms') }}</a>{{ t('auth.disclaimer.suffix') }}</span>
       </v-card-text>
     </v-card>
   </v-form>
