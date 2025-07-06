@@ -168,7 +168,11 @@ export const fr: Locale = {
   auth: {
     dontHaveAccount: 'Pas encore de compte ?',
     haveYetAccount: 'Déjà un compte ?',
-    disclaimer: 'En utilisant Finargo, vous acceptez nos <a href="#" target="_blank">conditions générales</a>. Finargo fournit des conseils d\'investissement généraux uniquement.',
+    disclaimer: {
+      prefix: 'En utilisant Finargo, vous acceptez nos ',
+      terms: 'conditions générales',
+      suffix: '. Finargo fournit des conseils d\'investissement généraux uniquement.',
+    },
     emailConfirmation: {
       thankYou: 'Merci pour votre inscription!',
       confirmationSent: 'Un lien de confirmation a été envoyé à {email}.',

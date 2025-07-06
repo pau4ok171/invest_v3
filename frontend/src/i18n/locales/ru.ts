@@ -168,7 +168,11 @@ export const ru: Locale = {
   auth: {
     dontHaveAccount: 'Еще нет аккаунта?',
     haveYetAccount: 'Уже есть аккаунт?',
-    disclaimer: 'Используя Finargo, Вы соглашаетесь с нашими <a href="#" target="_blank">условиями использования</a>. Finargo предоставляет только общие инвестиционные рекомендации.',
+    disclaimer: {
+      prefix: 'Используя Finargo, Вы соглашаетесь с нашими ',
+      terms: 'условиями использования',
+      suffix: '. Finargo предоставляет только общие инвестиционные рекомендации.',
+    },
     emailConfirmation: {
       thankYou: 'Спасибо за регистрацию!',
       confirmationSent: 'На вашу почту {email} отправлено письмо с ссылкой для подтверждения аккаунта.',

@@ -168,7 +168,11 @@ export const de: Locale = {
   auth: {
     dontHaveAccount: 'Noch keinen Account?',
     haveYetAccount: 'Schon einen Account?',
-    disclaimer: 'Mit der Nutzung von Finargo akzeptieren Sie unsere <a href="#" target="_blank">Geschäftsbedingungen</a>. Finargo bietet nur allgemeine Anlageberatung.',
+    disclaimer: {
+      prefix: 'Mit der Nutzung von Finargo akzeptieren Sie unsere ',
+      terms: 'Geschäftsbedingungen',
+      suffix: '. Finargo bietet nur allgemeine Anlageberatung.',
+    },
     emailConfirmation: {
       thankYou: 'Vielen Dank für Ihre Anmeldung!',
       confirmationSent: 'Ein Bestätigungslink wurde an {email} gesendet.',

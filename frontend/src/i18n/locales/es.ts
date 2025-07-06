@@ -168,7 +168,11 @@ export const es: Locale = {
   auth: {
     dontHaveAccount: '¿No tiene cuenta?',
     haveYetAccount: '¿Ya tiene cuenta?',
-    disclaimer: 'Al usar Finargo, acepta nuestros <a href="#" target="_blank">términos y condiciones</a>. Finargo proporciona solo asesoramiento general de inversión.',
+    disclaimer: {
+      prefix: 'Al usar Finargo, acepta nuestros ',
+      terms: 'términos y condiciones',
+      suffix: '. Finargo proporciona solo asesoramiento general de inversión.',
+    },
     emailConfirmation: {
       thankYou: '¡Gracias por registrarte!',
       confirmationSent: 'Se ha enviado un enlace de confirmación a {email}.',

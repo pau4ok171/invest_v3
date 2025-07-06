@@ -185,7 +185,11 @@ export interface Locale {
   auth: {
     dontHaveAccount: string
     haveYetAccount: string
-    disclaimer: string
+    disclaimer: {
+      prefix: string
+      terms: string
+      suffix: string
+    },
     emailConfirmation: {
       thankYou: string
       confirmationSent: string
