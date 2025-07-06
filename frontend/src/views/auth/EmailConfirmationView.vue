@@ -29,9 +29,6 @@ const activateEmail = async () => {
     })
 
     toast.success(t('toasts.emailConfirmed'))
-
-
-
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const e = error as AxiosError

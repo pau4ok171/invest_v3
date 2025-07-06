@@ -147,12 +147,18 @@ const router = createRouter({
     {
       path: '/auth/verify-email/:token',
       props: true,
-      component: () => import('@/views/EmailConfirmationView.vue'),
+      component: () => import('@/views/auth/EmailConfirmationView.vue'),
+      meta: {
+        layout: AppLayoutsEnum.empty,
+      },
     },
     {
       path: '/auth/new-password/:uid/:token',
       props: true,
-      component: () => import('@/views/PasswordResetView.vue'),
+      component: () => import('@/views/auth/PasswordResetView.vue'),
+      meta: {
+        layout: AppLayoutsEnum.empty,
+      },
     },
     {
       path: '/auth/github/login/callback/',
@@ -160,7 +166,7 @@ const router = createRouter({
         code: route.query.code,
       }),
       component: () =>
-        import('@/components/base/auth/social/GithubAuthCallback.vue'),
+        import('@/views/auth/GithubAuthCallbackView.vue'),
       meta: {
         layout: AppLayoutsEnum.empty,
       },
@@ -171,7 +177,7 @@ const router = createRouter({
         code: route.query.code,
       }),
       component: () =>
-        import('@/components/base/auth/social/YandexAuthCallback.vue'),
+        import('@/views/auth/YandexAuthCallbackView.vue'),
       meta: {
         layout: AppLayoutsEnum.empty,
       },
