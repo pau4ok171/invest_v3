@@ -1,3 +1,4 @@
+from allauth.socialaccount.models import SocialAccount
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -53,3 +54,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     if hasattr(instance, 'profile'):
         instance.profile.save()
+
+@receiver(post_save, sender=SocialAccount)
+def set_auth_provider(sender, instance, created, **kwargs):
+    if created:
+        try:
+            profile = instance.user.profile
+            profile.auth_provider = instance.provider
+            profile.save(update_fields=['auth_provider'])
+        except Profile.DoesNotExist as e:
+            pass
