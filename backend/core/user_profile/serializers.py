@@ -1,7 +1,16 @@
 from django.contrib.auth.models import User
+from django.conf import settings
+from django.core.validators import RegexValidator
 
 from rest_framework import serializers
 
+from invest.models import Country, Currency
+from .models import THEME_CHOICES, STOCK_VIEW_CHOICES, Profile
+
+hex_color_validator = RegexValidator(
+    regex=r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
+    message='Enter a valid HEX color (e.g. #RRGGBB or #RGB)'
+)
 
 class TimestampField(serializers.Field):
     """Сериализатор для преобразования даты в timestamp"""
@@ -13,50 +22,73 @@ class TimestampField(serializers.Field):
 class UserProfileSerializer(serializers.ModelSerializer):
     # Основные поля из User
     name = serializers.SerializerMethodField()
-    avatar = serializers.ImageField(source='profile.avatar', required=False)
-    locale = serializers.CharField(source='profile.locale', required=False)
-    register_date = TimestampField(source='date_joined', read_only=True)
-    country_iso = serializers.CharField(source='profile.country_iso', required=False)
-    currency = serializers.CharField(source='profile.currency', required=False)
+    avatar = serializers.ImageField(source='profile.avatar', allow_null=True)
+    locale = serializers.ChoiceField(source='profile.locale', choices=settings.LANGUAGES)
+    country_iso = serializers.CharField(source='profile.country.iso_code')
+    currency_iso = serializers.CharField(source='profile.currency.iso_code')
+    display_name = serializers.CharField(source='profile.display_name')
+    stock_view = serializers.ChoiceField(source='profile.stock_view', choices=STOCK_VIEW_CHOICES)
+    registration_date = TimestampField(source='date_joined', read_only=True)
     auth_provider = serializers.CharField(source='profile.auth_provider', read_only=True)
-    display_name = serializers.CharField(source='profile.display_name', required=False)
-    stock_view = serializers.CharField(source='profile.stock_view', required=False)
-
+    bio = serializers.CharField(source='profile.bio')
+    external_link = serializers.URLField(source='profile.external_link')
+    theme = serializers.ChoiceField(source='profile.theme', choices=THEME_CHOICES)
+    banner_color = serializers.CharField(source='profile.banner_color', validators=[hex_color_validator])
     # Вложенные структуры
     portfolios = serializers.SerializerMethodField()
     watchlist = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = [
-            'id', 'name', 'email', 'first_name', 'last_name',
-            'avatar', 'locale', 'register_date', 'country_iso',
-            'currency', 'auth_provider', 'display_name',
-            'portfolios', 'watchlist', 'stock_view', 'is_staff',
-        ]
+        fields = (
+            # User
+            'id',
+            'name',
+            'first_name',
+            'last_name',
+            'email',
+            'username',
+            'is_staff',
+            'registration_date',
+            # Profile
+            'display_name',
+            'avatar',
+            'locale',
+            'country_iso',
+            'currency_iso',
+            'auth_provider',
+            'bio',
+            'external_link',
+            'stock_view',
+            'watchlist',
+            'portfolios',
+            'theme',
+            'banner_color',
+        )
         extra_kwargs = {
-            'email': {'required': False},
-            'first_name': {'required': False},
-            'last_name': {'required': False},
+            'username': {'read_only': True},
+            'email': {'read_only': True},
+            'is_staff': {'read_only': True},
         }
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', {})
 
-        instance = super().update(instance, validated_data)
+        profile, created = Profile.objects.get_or_create(user=instance)
 
         # Обновление Profile
-        if hasattr(instance, 'profile'):
-            profile = instance.profile
-            for attr, value in profile_data.items():
-                # Обработка вложенных полей
-                if attr == 'country_iso':
-                    profile.country_iso = value['iso'] if isinstance(value, dict) else value
-                elif attr == 'currency':
-                    profile.currency = value['code'] if isinstance(value, dict) else value
-                else:
-                    setattr(profile, attr, value)
-            profile.save()
+        for key, value in profile_data.items():
+            # Обработка вложенных полей
+            if key == 'country' and 'iso_code' in value:
+                profile.country = Country.objects.get(iso_code=value['iso_code'])
+            elif key == 'currency' and 'iso_code' in value:
+                profile.currency = Currency.objects.get(iso_code=value['iso_code'])
+            else:
+                setattr(profile, key, value)
+
+        profile.save()
+
+        instance = super().update(instance, validated_data)
 
         return instance
 
@@ -79,11 +111,22 @@ class UserProfileSerializer(serializers.ModelSerializer):
             return list(obj.profile.watchlisted_companies.values_list('uid', flat=True))
         return []
 
-    def validate(self, attrs):
-        protected_fields = ['id', 'register_date', 'auth_provider', 'is_staff']
-        for field in protected_fields:
-            if field in attrs and getattr(self.instance, field) != attrs[field]:
-                raise serializers.ValidationError(
-                    {field: f'Cannot update {field} field'}
-                )
-        return attrs
+    @staticmethod
+    def validate_country_iso(value):
+        try:
+            Country.objects.get(iso_code=value)
+        except Country.DoesNotExist:
+            raise serializers.ValidationError({
+                'country_iso': f"Country with iso code: '{value}' does not exist"
+            })
+        return value
+
+    @staticmethod
+    def validate_currency_iso(value):
+        try:
+            Currency.objects.get(iso_code=value)
+        except Currency.DoesNotExist:
+            raise serializers.ValidationError({
+                'currency_iso': f"Currency with iso code: '{value}' does not exist"
+            })
+        return value
