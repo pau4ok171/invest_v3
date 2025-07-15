@@ -165,8 +165,7 @@ const router = createRouter({
       props: (route) => ({
         code: route.query.code,
       }),
-      component: () =>
-        import('@/views/auth/GithubAuthCallbackView.vue'),
+      component: () => import('@/views/auth/GithubAuthCallbackView.vue'),
       meta: {
         layout: AppLayoutsEnum.empty,
       },
@@ -176,8 +175,7 @@ const router = createRouter({
       props: (route) => ({
         code: route.query.code,
       }),
-      component: () =>
-        import('@/views/auth/YandexAuthCallbackView.vue'),
+      component: () => import('@/views/auth/YandexAuthCallbackView.vue'),
       meta: {
         layout: AppLayoutsEnum.empty,
       },
