@@ -28,7 +28,10 @@ const activateEmail = async () => {
       key: props.token,
     })
 
-    toast.success(t('toasts.emailConfirmed'))
+    toast.success(t('toasts.emailConfirmed'), {
+      autoClose: 3000,
+      onClose: () => router.push({ name: 'home' })
+    })
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const e = error as AxiosError
