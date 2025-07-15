@@ -14,10 +14,11 @@ from invest.serializers import (
     SectorFilterSerializer,
     CompanySearchSerializer,
     CompanyDetailSerializer,
-    CompanyPeersSerializer
+    CompanyPeersSerializer,
+    CurrencySerializer,
 )
 from invest.paginators import StandardResultsSetPagination
-from invest.models import Company, CandlePerDay, Country, Sector
+from invest.models import Company, CandlePerDay, Country, Sector, Currency
 from invest.forms import (
     SearchListForm,
     UsernameVerificationForm,
@@ -113,6 +114,25 @@ class CompanyListCountries(ListAPIView):
             .order_by('iso_code')
         )
 
+class CountryOptions(ListAPIView):
+    serializer_class = CountrySerializer
+
+    def get_queryset(self):
+        return (
+            Country.objects
+            .all()
+            .prefetch_related(
+                'translations',
+                'currency',
+                'markets'
+            )
+            .order_by('iso_code')
+        )
+
+
+class CurrencyOptions(ListAPIView):
+    serializer_class = CurrencySerializer
+    queryset = Currency.objects.all()
 
 class CompanyListSectors(ListAPIView):
     serializer_class = SectorFilterSerializer
