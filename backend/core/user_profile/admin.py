@@ -29,6 +29,14 @@ class ProfileInline(StackedInline):
     )
     filter_horizontal = ('watchlisted_companies', 'portfolios')
 
+    def get_formset(
+        self, request, obj = ..., **kwargs
+    ):
+        formset = super().get_formset(request, obj, **kwargs)
+        formset.form.base_fields['portfolios'].queryset = Portfolio.objects.filter(user=obj)
+
+        return formset
+
 
 class CustomUserAdmin(BaseUserAdmin, ModelAdmin):
     inlines = (ProfileInline,)
@@ -83,3 +91,19 @@ class ProfileAdmin(ModelAdmin):
     search_fields = ('user__username', 'display_name', 'user__email')
     raw_id_fields = ('user',)
     filter_horizontal = ('watchlisted_companies', 'portfolios')
+
+    def formfield_for_manytomany(
+        self,
+        db_field: ManyToManyField,
+        request: HttpRequest,
+        **kwargs,
+    ) -> ModelMultipleChoiceField:
+        if db_field.name == 'portfolios':
+            profile_id = request.resolver_match.kwargs.get('object_id')
+            try:
+                profile = Profile.objects.get(id=profile_id)
+                kwargs['queryset'] = Portfolio.objects.filter(user=profile.user)
+            except Profile.DoesNotExist:
+                kwargs['queryset'] = Portfolio.objects.none()
+
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
