@@ -38,6 +38,10 @@ export const es: Locale = {
     loginWithGoogle: 'Entrar con Google',
     loginWithYandex: 'Entrar con Yandex',
     loginWithGithub: 'Entrar con Github',
+    reset: 'Restablecer',
+    saveModifications: 'Guardar modificaciones',
+    deleteAvatar: 'Eliminar avatar',
+    editProfile: 'Editar perfil',
   },
   toasts: {
     valueIsCopied: '¡Copiado!',
@@ -57,6 +61,7 @@ export const es: Locale = {
     sendPasswordResetRequest: 'Hemos enviado un enlace para restablecer tu contraseña. ¡Revisa la carpeta de Spam!',
     passwordResetSuccess: 'Contraseña cambiada con éxito.',
     emailConfirmationResent: 'Hemos enviado un correo de confirmación a tu dirección. Por favor revisa tu bandeja de entrada y la carpeta de spam si no lo encuentras.',
+    profileSaved: '¡Cambios guardados! Tu perfil está actualizado',
   },
   header: {
     searchPlaceholder: 'Buscando...',
@@ -164,6 +169,17 @@ export const es: Locale = {
     password: 'Contraseña',
     passwordConfirmation: 'Confirmación de contraseña',
     email: 'Correo electrónico',
+    displayName: 'Nombre visible',
+    avatar: 'Avatar',
+    bannerColor: 'Color del banner',
+    aboutMe: 'Sobre mí',
+    language: 'Idioma',
+    country: 'País',
+    currency: 'Moneda',
+    loginMethod: 'Método de inicio de sesión',
+    registrationDate: 'Fecha de registro',
+    firstName: 'Nombre',
+    familyName: 'Apellido',
   },
   auth: {
     dontHaveAccount: '¿No tiene cuenta?',
@@ -184,6 +200,15 @@ export const es: Locale = {
       emailAsking: 'Para restablecer tu contraseña, introduce el correo electrónico que usaste al registrarte. Recibirás un enlace de restablecimiento.',
       resetInstruction: 'Crea una contraseña segura y repítela',
     }
+  },
+  profile: {
+    profile: 'Perfil',
+    communityProfile: 'Perfil de la comunidad',
+    preview: 'Vista previa',
+    preferences: 'Preferencias',
+    accountDetails: 'Detalles de la cuenta',
+    saveText: '¡Atención, quedan cambios sin guardar!',
+    preventText: 'Tienes cambios sin guardar. Si sales ahora, se descartarán. ¿Continuar?',
   },
   validations: {
     required: 'Este campo es obligatorio',

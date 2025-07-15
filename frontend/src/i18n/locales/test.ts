@@ -1,4 +1,6 @@
-export const en = {
+import type { Locale } from '@/i18n/locales/index'
+
+export const en: Locale = {
   buttons: {
     addToWatchlist: 'Add to watchlist',
     addToPortfolio: 'Add to portfolio',
@@ -30,6 +32,14 @@ export const en = {
     no: 'No',
     search: 'Search',
     analysts: 'no analysts | {n} analyst | {n} analysts',
+    resentEmail: 'Resend',
+    sendPasswordResetRequest: 'Reset password',
+    resetPassword: 'Change password',
+    loginWithGoogle: 'Entry with Google',
+    loginWithYandex: 'Entry with Yandex',
+    loginWithGithub: 'Entry with Github',
+    reset: 'Reset',
+    saveModifications: 'Save modifications',
   },
   toasts: {
     valueIsCopied: 'Copied!',
@@ -44,6 +54,12 @@ export const en = {
       removed: '{ticker} removed from watchlist',
     },
     noteDeleted: 'Note deleted',
+    emailConfirmed: 'Your email has been successfully confirmed. You can now log in.',
+    emailYetConfirmed: 'This email has already been confirmed. No further action is required.',
+    sendPasswordResetRequest: 'We\'ve sent you an email with a password reset link. Don\'t forget to check your Spam folder!',
+    passwordResetSuccess: 'Password successfully changed.',
+    emailConfirmationResent: 'We\'ve sent a confirmation email to your address. Please check your inbox and spam folder if you don\'t see it.',
+    profileSaved: 'Changes saved! Your profile is up to date',
   },
   header: {
     searchPlaceholder: 'Looking for...',
@@ -83,6 +99,9 @@ export const en = {
     debtEquityRatio: 'Debt/Equity Ratio',
     currentDivYield: 'Current Dividend Yield',
     payoutRatio: 'Payout Ratio',
+    pe: 'Price to Earnings',
+    pb: 'Price to Book',
+    ps: 'price to Sales',
   },
   date: {
     shortDays: '{n}D',
@@ -119,6 +138,8 @@ export const en = {
         country: 'Discover {country} companies that are on {market}.',
       },
       marketTitle: 'Largest {country} Stocks',
+      global: 'All Countries',
+      any: 'All Sectors',
     },
     dataTable: {
       headers: {
@@ -145,17 +166,54 @@ export const en = {
     username: 'Login',
     password: 'Password',
     passwordConfirmation: 'Password Confirmation',
+    email: 'Email',
+    displayName: 'Display Name',
+    avatar: 'Avatar',
+    bannerColor: 'Banner Color',
+    aboutMe: 'About Me',
+    language: 'Language',
+    country: 'Country',
+    currency: 'Currency',
+    loginMethod: 'Login Method',
+    registrationDate: 'Registration Date',
+    firstName: 'First Name',
+    familyName: 'Family Name',
   },
   auth: {
     dontHaveAccount: 'Don\'t have account?',
     haveYetAccount: 'Have yet account?',
-    disclaimer: 'By using Finargo you are agreeing to our <a href="#" target="_blank">terms and conditions</a>. Finargo provides general investment advice only.',
+    disclaimer: {
+      prefix: 'By using Finargo you are agreeing to our ',
+      terms: 'terms and conditions',
+      suffix: '. Finargo provides general investment advice only.',
+    },
+    emailConfirmation: {
+      thankYou: 'Thank you for signing up!',
+      confirmationSent: 'A confirmation link has been sent to {email}.',
+      verificationWarning: '❗ Without email verification, you won’t be able to log in.',
+      spamNotice: 'Check your Spam folder if you don’t receive the email within 5 minutes.',
+      resentPrompt: 'Didn\'t get the email?',
+    },
+    passwordReset: {
+      emailAsking: 'To reset your password, enter the email address you used to register. We\'ll send a password reset link to this address.',
+      resetInstruction: 'Create a strong password and repeat it',
+    },
+  },
+  profile: {
+    profile: 'Profile',
+    communityProfile: 'Community Profile',
+    preview: 'Preview',
+    preferences: 'Preferences',
+    accountDetails: 'Account Details',
+    saveText: 'Attention, there are unsaved changes remaining!',
+    preventText: 'There\'s no saved content. Are you sure you want to leave without saving?',
   },
   validations: {
     required: 'This field is required',
     minLengthValue: '{property} must be at least {min} characters long',
     passwordMismatch: 'Password confirmation does not match',
     usernameYetTaken: 'This username is already taken',
+    emailField: 'Enter a valid email address (e.g.: example{\'@\'}domain.com)',
   },
   admin: {
     dashboard: 'Dashboard',
@@ -212,6 +270,15 @@ export const en = {
       placeholder: 'e.g. My new Portfolio',
       holdings: 'No Holdings|{n} Holding|{n} Holdings',
     },
+    analysts: {
+      title: 'Analysts',
+      subtitle: '{title} is covered by {n} Analysts|{title} is covered by {n} Analyst|{title} is covered by {n} Analysts',
+      table: {
+        institution: 'Institution',
+        target: 'Target',
+        score: 'Score',
+      },
+    },
     overview: {
       stockOverview: {
         header: 'Stock Overview',
@@ -236,6 +303,7 @@ export const en = {
       },
       updates: {
         header: 'Recent News & Updates',
+        emptyNews: 'We are monitoring the company\'s news - as soon as something appears, you\'ll see it here',
       },
       shareholderReturns: {
         header: 'Shareholder Returns',

@@ -55,6 +55,10 @@ export interface Locale {
     loginWithGoogle: string
     loginWithYandex: string
     loginWithGithub: string
+    reset: string
+    saveModifications: string
+    deleteAvatar: string
+    editProfile: string
   },
   toasts: {
     valueIsCopied: string
@@ -74,6 +78,7 @@ export interface Locale {
     sendPasswordResetRequest: string
     passwordResetSuccess: string
     emailConfirmationResent: string
+    profileSaved: string
   },
   header: {
     searchPlaceholder: string
@@ -181,6 +186,17 @@ export interface Locale {
     password: string
     passwordConfirmation: string
     email: string
+    displayName: string
+    avatar: string
+    bannerColor: string
+    aboutMe: string
+    language: string
+    country: string
+    currency: string
+    loginMethod: string
+    registrationDate: string
+    firstName: string
+    familyName: string
   },
   auth: {
     dontHaveAccount: string
@@ -201,6 +217,15 @@ export interface Locale {
       emailAsking: string
       resetInstruction: string
     },
+  },
+  profile: {
+    profile: string
+    communityProfile: string
+    preview: string
+    preferences: string
+    accountDetails: string
+    saveText: string
+    preventText: string
   },
   validations: {
     required: string
