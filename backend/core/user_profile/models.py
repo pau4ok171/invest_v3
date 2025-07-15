@@ -24,12 +24,12 @@ def get_portfolio_path(instance, filename):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    display_name = models.CharField(max_length=100, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    display_name = models.CharField(max_length=100, null=True)
     avatar = models.ImageField(null=True, blank=True, upload_to=get_portfolio_path)
     locale = models.CharField(max_length=10, default='en')
-    country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
-    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
+    country = models.ForeignKey(Country, on_delete=models.PROTECT, default=2)
+    currency = models.ForeignKey(Currency, on_delete=models.PROTECT, default=1)
     auth_provider = models.CharField(max_length=50, default='email')
     bio = models.TextField(max_length=240, null=True)
     external_link = models.URLField(null=True, blank=True)
