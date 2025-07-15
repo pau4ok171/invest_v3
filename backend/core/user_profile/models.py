@@ -31,7 +31,7 @@ class Profile(models.Model):
     country = models.ForeignKey(Country, on_delete=models.PROTECT, null=True)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, null=True)
     auth_provider = models.CharField(max_length=50, default='email')
-    bio = models.TextField(max_length=240, blank=True, null=True)
+    bio = models.TextField(max_length=240, null=True)
     external_link = models.URLField(null=True, blank=True)
     watchlisted_companies = models.ManyToManyField(Company, blank=True, related_name='profile_companies')
     portfolios = models.ManyToManyField(Portfolio, blank=True, related_name='profile_portfolios')
