@@ -25,8 +25,8 @@ const router = createRouter({
         if (
           !authStore.isAuthenticated ||
           !authStore.profile ||
-          !Object.hasOwn(authStore.profile, 'is_staff') ||
-          !authStore.profile.is_staff
+          !Object.hasOwn(authStore.profile, 'isStaff') ||
+          !authStore.profile.isStaff
         ) {
           next(RouteNamesEnum.page_not_found)
         }

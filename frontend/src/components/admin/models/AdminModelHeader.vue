@@ -16,11 +16,11 @@ import { toast } from 'vue3-toastify'
 
 // Types
 import type { IFormattedDetailCompany } from '@/types/admin.types'
-import type { Profile } from '@/store/auth'
+import type { UserProfile } from '@/store/auth'
 
 const store = useAdminModelStore()
 const authStore = useAuthStore()
-const profile = computed<Profile>(() => authStore.profile)
+const profile = computed<UserProfile | null>(() => authStore.profile)
 const state = computed<IFormattedDetailCompany>(() => store.formState)
 const router = useRouter()
 const { t } = useI18n()
@@ -137,7 +137,7 @@ watchEffect(() => {
               <div>
                 {{
                   !state.createdBy.lastName
-                    ? `${profile?.first_name} ${profile?.last_name}`
+                    ? `${profile?.firstName} ${profile?.familyName}`
                     : state.updatedBy.lastName
                       ? `${state.updatedBy.lastName} ${state.updatedBy.firstName}`
                       : `${state.createdBy.lastName} ${state.createdBy.firstName}`

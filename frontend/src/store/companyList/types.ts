@@ -1,6 +1,7 @@
 // Types
 import type {
   CountryTranslations,
+  CurrencyTranslations,
   ListCompany,
   Market,
   SectorTranslations,
@@ -20,6 +21,11 @@ export interface CountryState extends BaseState {
 export interface SectorState extends BaseState {
   translations: SectorTranslations
   parentKeys: number[]
+}
+
+export interface CurrencyState extends BaseState {
+  translations: CurrencyTranslations
+  symbol: string
 }
 
 export interface CompaniesOptions {

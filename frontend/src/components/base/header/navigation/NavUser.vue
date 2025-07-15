@@ -32,7 +32,8 @@ const dialog = shallowRef(false)
           <v-card>
             <v-list>
               <v-list-item
-                v-if="authStore.profile?.is_staff"
+                v-if="authStore.profile?.isStaff"
+                base-color="info"
                 :to="{ name: 'admin' }"
                 :title="t('header.adminPanel')"
               />

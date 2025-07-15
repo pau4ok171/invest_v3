@@ -6,32 +6,66 @@ import { i18n } from '@/i18n/i18n'
 
 // Types
 import type { Portfolio } from '@/types/portfolios'
-import type { DetailCompany } from '@/types/invest'
-import type { CompanyItem } from '@/store/companyList/types'
+import type { Country, Currency, DetailCompany } from '@/types/invest'
+import type {
+  CompanyItem,
+  CountryState,
+  CurrencyState,
+} from '@/store/companyList/types'
+
+// Profile that we receive from server
+export interface UserProfileResponse {
+  id: string
+  name: string
+  first_name: string
+  last_name: string
+  username: string
+  email: string
+  is_staff: boolean
+  registration_date: number
+  display_name: string
+  avatar: string | null
+  locale: string
+  country_iso: string
+  currency_iso: string
+  auth_provider: string
+  bio: string
+  external_link: string
+  stock_view: string
+  watchlist: string[]
+  portfolios: Portfolio[]
+  theme: string
+  banner_color: string
+}
 
 export interface UserProfile {
   id: string
   name: string
   email: string
-  first_name: string
-  last_name: string
+  username: string
+  firstName: string
+  familyName: string
   avatar: string | null
-  locale: string
-  register_date: number
-  country_iso: string | null
-  currency: string | null
-  auth_provider: string
-  display_name: string | null
+  languageCode: string
+  registrationDate: number
+  countryCode: string
+  currencyCode: string
+  loginMethod: string
+  displayName: string
   portfolios: Portfolio[]
   watchlist: string[]
-  stock_view: string
-  is_staff: boolean
+  stockView: string
+  isStaff: boolean
+  theme: string
+  bannerColor: string
+  aboutMe: string
+  externalLink: string
 }
 
 export interface LoginResponse {
   access: string
   refresh: string
-  user: UserProfile
+  user: UserProfileResponse
 }
 
 export type AuthMode =
@@ -43,12 +77,14 @@ export type AuthMode =
 export const useAuthStore = defineStore({
   id: 'auth',
   state: () => ({
-    token: '',
     authMode: 'login' as AuthMode,
-    profile: null as UserProfile | null,
     // WATCHLIST
     watchlistLoading: false,
     registrationEmail: '',
+    // PROFILE
+    profile: null as UserProfile | null,
+    countryOptions: [] as CountryState[],
+    currencyOptions: [] as CurrencyState[],
   }),
   getters: {
     isAuthenticated: (state) => {
@@ -56,21 +92,86 @@ export const useAuthStore = defineStore({
     },
   },
   actions: {
-    setUserProfile(loginData: LoginResponse) {
-      this.profile = loginData.user
-      localStorage.setItem('profile', JSON.stringify(loginData.user))
+    async fetchOptions() {
+      try {
+        const countryResponse = await axios.get<Country[]>(
+          'api/v1/invest/country-options/'
+        )
+        const currencyResponse = await axios.get<Currency[]>(
+          'api/v1/invest/currency-options/'
+        )
+
+        this.countryOptions = countryResponse.data.map(
+          (c) =>
+            ({
+              id: c.id,
+              key: c.slug,
+              translations: c.translations,
+              markets: c.markets,
+            }) satisfies CountryState
+        )
+        this.currencyOptions = currencyResponse.data.map(
+          (c) =>
+            ({
+              id: c.id,
+              key: c.iso_code,
+              translations: c.translations,
+              symbol: c.symbol,
+            }) satisfies CurrencyState
+        )
+      } catch (e) {
+        console.error(e)
+      }
+    },
+    setUserProfile(loginData: { user: UserProfileResponse }) {
+      const user = loginData.user
+
+      const profile: UserProfile = {
+        aboutMe: user.bio,
+        avatar: user.avatar,
+        bannerColor: user.banner_color,
+        countryCode: user.country_iso,
+        currencyCode: user.currency_iso,
+        displayName: user.display_name,
+        email: user.email,
+        username: user.username,
+        familyName: user.last_name,
+        firstName: user.first_name,
+        id: user.id,
+        isStaff: user.is_staff,
+        languageCode: user.locale,
+        loginMethod: user.auth_provider,
+        name: user.name,
+        portfolios: user.portfolios,
+        registrationDate: user.registration_date,
+        stockView: user.stock_view,
+        theme: user.theme,
+        watchlist: user.watchlist,
+        externalLink: user.external_link,
+      }
+      this.profile = profile
+      localStorage.setItem('profile', JSON.stringify(profile))
     },
     async checkAuth() {
       try {
-        const response = await axios.get<UserProfile>('/api/v1/auth/user/', {
-          withCredentials: true,
-        })
-        this.profile = response.data
+        const response = await axios.get<UserProfileResponse>(
+          '/api/v1/auth/user/',
+          {
+            withCredentials: true,
+          }
+        )
+        this.setUserProfile({ user: response.data })
         return true
       } catch {
-        this.profile = null
+        this.clearAuth()
         return false
       }
+    },
+    clearAuth () {
+      this.profile = null
+      localStorage.removeItem('profile')
+      document.cookie = 'jwt-auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+      document.cookie = 'jwt-refresh=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     },
     async login(username: string, password: string) {
       try {
@@ -93,8 +194,7 @@ export const useAuthStore = defineStore({
       try {
         await axios.post('/api/v1/auth/logout/', {}, { withCredentials: true })
       } finally {
-        this.profile = null
-        localStorage.removeItem('profile')
+        this.clearAuth()
       }
     },
     async refreshToken() {
@@ -126,7 +226,7 @@ export const useAuthStore = defineStore({
             ? [...this.profile.watchlist, uid]
             : this.profile.watchlist.filter((id) => id !== uid)
 
-        await axios.patch<UserProfile>(
+        await axios.patch<UserProfileResponse>(
           'api/v1/profile/update_watchlist/',
           {
             company_uid: uid,

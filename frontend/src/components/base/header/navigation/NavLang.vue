@@ -27,8 +27,9 @@ const { locale, t } = useI18n()
 
 // Текущая локаль из профиля или сохраненная в localeStorage
 const currentLocale = computed({
-  get: () =>
-    [authStore.profile?.locale || localStorage.getItem('locale') || 'en'],
+  get: () => [
+    authStore.profile?.languageCode || localStorage.getItem('locale') || 'en',
+  ],
   set: async (newLocale: [string]) => {
     await changeLocale(newLocale[0])
   },
@@ -46,8 +47,8 @@ const changeLocale = async (newLocale: string) => {
     localStorage.setItem('locale', newLocale)
 
     // Обновляем в хранилище (если пользователь авторизован)
-    if (authStore.isAuthenticated) {
-      authStore.profile.locale = newLocale
+    if (authStore.isAuthenticated && authStore.profile) {
+      authStore.profile.languageCode = newLocale
       await updateLocale(newLocale)
     }
   } catch (error) {
@@ -65,7 +66,7 @@ const updateLocale = async (newLocale: string) => {
 }
 
 watch(
-  () => authStore.profile?.locale,
+  () => authStore.profile?.languageCode,
   async (newLocale) => {
     if (newLocale && newLocale !== locale.value) {
       await changeLocale(currentLocale.value[0])
