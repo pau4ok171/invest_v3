@@ -13,6 +13,11 @@ STOCK_VIEW_CHOICES = (
     ('tile', 'Tile View'),
 )
 
+THEME_CHOICES = (
+    ('finargo-light', 'Finargo Light'),
+    ('finargo-dark', 'Finargo Dark'),
+)
+
 
 def get_portfolio_path(instance, filename):
     return f'profiles/avatars/{instance.user.id}/{filename}'
@@ -31,6 +36,8 @@ class Profile(models.Model):
     watchlisted_companies = models.ManyToManyField(Company, blank=True, related_name='profile_companies')
     portfolios = models.ManyToManyField(Portfolio, blank=True, related_name='profile_portfolios')
     stock_view = models.CharField(default='table', max_length=50, choices=STOCK_VIEW_CHOICES)
+    theme = models.CharField(default='finargo-light', max_length=50, choices=THEME_CHOICES)
+    banner_color = models.CharField(default='#FFFFFF', max_length=7)
 
     def __str__(self):
         return f"Profile of {self.user.username}"

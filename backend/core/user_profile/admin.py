@@ -2,6 +2,9 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.admin import GroupAdmin as BaseGroupAdmin
 from django.contrib.auth.models import User, Group
+from django.db.models import ManyToManyField
+from django.forms import ModelMultipleChoiceField
+from django.http import HttpRequest
 
 from rest_framework.authtoken.models import TokenProxy
 from rest_framework.authtoken.admin import TokenAdmin as BaseTokenAdmin
@@ -9,6 +12,7 @@ from rest_framework.authtoken.admin import TokenAdmin as BaseTokenAdmin
 from unfold.forms import AdminPasswordChangeForm, UserChangeForm, UserCreationForm
 from unfold.admin import ModelAdmin, StackedInline
 
+from portfolio.models import Portfolio
 from .models import Profile
 
 
@@ -20,7 +24,7 @@ class ProfileInline(StackedInline):
     fields = (
         'display_name', 'avatar', 'locale',
         'country', 'currency', 'auth_provider', 'bio',
-        'external_link', 'stock_view',
+        'external_link', 'stock_view', 'theme', 'banner_color',
         'watchlisted_companies', 'portfolios'
     )
     filter_horizontal = ('watchlisted_companies', 'portfolios')
