@@ -3,7 +3,11 @@
 import { type Language, LANGUAGES } from '@/assets/static/common'
 
 // Composables
-import { useAuthStore, type UserProfileResponse } from '@/store/auth'
+import {
+  useAuthStore,
+  type UserProfilePatchData,
+  type UserProfileResponse,
+} from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 import { useTranslations } from '@/composables/translations'
 
