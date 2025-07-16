@@ -15,7 +15,7 @@ import type { PropType } from 'vue'
 import type { CompanyItem } from '@/store/companyList/types'
 import type { ActiveAnimations } from '@/composables/priceUpdater'
 
-const props = defineProps({
+defineProps({
   items: {
     type: Object as PropType<CompanyItem[]>,
   },
@@ -29,6 +29,7 @@ const activeAnimations = inject<ActiveAnimations>('activeAnimations') || {}
 </script>
 
 <template>
+  <div class="opacity-0" v-if="!items?.length">loading...</div>
   <v-row justify="center">
     <v-col
       v-for="item in items"
