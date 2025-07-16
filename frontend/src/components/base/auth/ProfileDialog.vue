@@ -147,23 +147,25 @@ const submitProfileUpdate = async () => {
   const data = newProfile.value
   if (!data) return
 
-  const formData = new FormData()
-  formData.append('first_name', data.firstName)
-  formData.append('last_name', data.familyName)
-  formData.append('display_name', data.displayName)
-  formData.append('locale', data.languageCode)
-  formData.append('country_iso', data.countryCode)
-  formData.append('currency_iso', data.currencyCode)
-  formData.append('bio', data.aboutMe)
-  formData.append('banner_color', data.bannerColor)
+  const formData: UserProfilePatchData = {
+    first_name: data.firstName,
+    last_name: data.familyName,
+    display_name: data.displayName,
+    locale: data.languageCode,
+    country_iso: data.countryCode,
+    currency_iso: data.currencyCode,
+    bio: data.aboutMe,
+    banner_color: data.bannerColor,
+  }
   if (avatarFile.value && avatarFile.value.type.startsWith('image')) {
-    formData.append('avatar', avatarFile.value)
-  } else if (!newProfile.value.avatar) {
-    formData.append('avatar', '')
+    formData['avatar'] = avatarFile.value
+  } else if (!data.avatar) {
+    formData['avatar'] = ''
   }
   try {
     loading.value = true
     // Submit Form to Server
+    await authStore.patchProfile(formData)
     const response = await axios.patch<UserProfileResponse>(
       'api/v1/auth/user/',
       formData
@@ -177,7 +179,6 @@ const submitProfileUpdate = async () => {
       position: 'top-center',
       autoClose: 3000,
     })
-    // successSnack.value = true
   } catch (e) {
     console.error(e)
   } finally {
