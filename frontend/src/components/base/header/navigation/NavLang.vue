@@ -6,13 +6,12 @@ import { LANGUAGES } from '@/assets/static/common'
 import { BaseFlag } from '@/components/UI/BaseFlag'
 
 // Composables
-import { computed, watch } from 'vue'
 import { useLocale } from 'vuetify'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/store/auth'
 
 // Utilities
-import axios from 'axios'
+import { computed, watch } from 'vue'
 
 const langs = [...LANGUAGES]
 
@@ -43,20 +42,10 @@ const changeLocale = async (newLocale: string) => {
 
     // Обновляем в хранилище (если пользователь авторизован)
     if (authStore.isAuthenticated && authStore.profile) {
-      authStore.profile.languageCode = newLocale
-      await updateLocale(newLocale)
+      await authStore.patchProfile({ locale: newLocale })
     }
   } catch (error) {
     console.error('Failed to change locale:', error)
-  }
-}
-
-const updateLocale = async (newLocale: string) => {
-  try {
-    await axios.patch('/api/v1/profile/me/', { locale: newLocale })
-  } catch (error) {
-    console.error('Failed to update locale on server:', error)
-    throw error
   }
 }
 
