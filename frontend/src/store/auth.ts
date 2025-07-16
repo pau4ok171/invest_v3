@@ -62,6 +62,21 @@ export interface UserProfile {
   externalLink: string
 }
 
+export interface UserProfilePatchData {
+  first_name?: string
+  last_name?: string
+  display_name?: string
+  avatar?: File | ''
+  locale?: string
+  country_iso?: string
+  currency_iso?: string
+  bio?: string
+  external_link?: string
+  stock_view?: string
+  theme?: string
+  banner_color?: string
+}
+
 export interface LoginResponse {
   access: string
   refresh: string
@@ -151,6 +166,25 @@ export const useAuthStore = defineStore({
       }
       this.profile = profile
       localStorage.setItem('profile', JSON.stringify(profile))
+    },
+    async patchProfile(profile: UserProfilePatchData) {
+      const formData = this.getProfileFormData(profile)
+
+      try {
+        const response = await axios.patch<UserProfileResponse>(
+          'api/v1/auth/user/',
+          formData
+        )
+
+        this.setUserProfile({ user: response.data })
+      } catch (e) {
+        throw e
+      }
+    },
+    getProfileFormData(profile: UserProfilePatchData) {
+      const formData = new FormData()
+      Object.entries(profile).forEach(([k, v]) => formData.append(k, v))
+      return formData
     },
     async checkAuth() {
       try {
