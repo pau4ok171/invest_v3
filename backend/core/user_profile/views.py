@@ -32,20 +32,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
                 )
         return super().update(request, *args, **kwargs)
 
-    @action(detail=False, methods=['get', 'patch'])
-    def me(self, request):
-        """Единый метод для GET и PATCH /me/"""
-        if request.method == 'GET':
-            serializer = self.get_serializer(request.user)
-            return Response(serializer.data)
-
-        # Обработка PATCH
-        instance = request.user
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
     @action(detail=False, methods=['patch'])
     def update_watchlist(self, request):
         company_uid = request.data.get('company_uid')
