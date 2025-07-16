@@ -19,6 +19,13 @@ const store = useCompanyListStore()
 const authStore = useAuthStore()
 const { getTranslation } = useTranslations()
 
+const localStockView = computed(
+  () =>
+    authStore.profile?.stockView ||
+    localStorage.getItem('stock_view') ||
+    'table'
+)
+
 const items = computed<CompanyItem[]>(
   () =>
     store.companies.map((c) => ({
@@ -39,7 +46,7 @@ const items = computed<CompanyItem[]>(
       ticker: c.ticker,
       to: c.absolute_url,
       uid: c.uid,
-      watchlisted: authStore.profile.watchlist.includes(c.uid),
+      watchlisted: authStore.profile?.watchlist.includes(c.uid) || false,
       snowflake: getSnowflake(c),
       description: getTranslation(c.translations, 'description'),
     })) satisfies CompanyItem[]
@@ -80,10 +87,7 @@ function humanize(val: number = 0, currencyUnit: string = '') {
     empty-text=""
     class="overflow-hidden"
   >
-    <company-list-content-table-mode
-      v-if="store.contentMode === 'table'"
-      :items
-    />
+    <company-list-content-table-mode v-if="localStockView === 'table'" :items />
     <company-list-content-tile-mode v-else :items />
   </v-infinite-scroll>
 </template>

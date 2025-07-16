@@ -1,10 +1,41 @@
 <script setup lang="ts">
 // Composables
+import { useAuthStore } from '@/store/auth'
 import { useCompanyListStore } from '@/store/companyList/companyList'
 import { useI18n } from 'vue-i18n'
 
+// Utilities
+import { computed, ref } from 'vue'
+
+const authStore = useAuthStore()
 const store = useCompanyListStore()
 const { t } = useI18n()
+
+const localStockView = ref(
+  authStore.profile?.stockView || localStorage.getItem('stock_view') || 'table'
+)
+
+const setStockView = async (newValue: string) => {
+  localStockView.value = newValue
+  localStorage.setItem('stock_view', newValue)
+
+  try {
+    if (authStore.isAuthenticated && authStore.profile) {
+      await authStore.patchProfile({ stock_view: newValue })
+    }
+  } catch (error) {
+    console.error('Failed to change stock view:', error)
+    localStockView.value =
+      authStore.profile?.stockView ||
+      localStorage.getItem('stock_view') ||
+      'table'
+  }
+}
+
+const currentStockView = computed({
+  get: () => localStockView.value,
+  set: (newValue) => setStockView(newValue),
+})
 </script>
 
 <template>
@@ -24,7 +55,7 @@ const { t } = useI18n()
     </v-col>
 
     <v-col cols="3" class="d-flex justify-end">
-      <v-btn-toggle v-model="store.contentMode" mandatory variant="text">
+      <v-btn-toggle v-model="currentStockView" mandatory variant="text">
         <v-btn icon="$iTableMode" value="table" />
         <v-btn icon="$iTileMode" value="tile" />
       </v-btn-toggle>
