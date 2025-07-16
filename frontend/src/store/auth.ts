@@ -201,11 +201,13 @@ export const useAuthStore = defineStore({
         return false
       }
     },
-    clearAuth () {
+    clearAuth() {
       this.profile = null
       localStorage.removeItem('profile')
-      document.cookie = 'jwt-auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
-      document.cookie = 'jwt-refresh=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+      document.cookie =
+        'jwt-auth=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+      document.cookie =
+        'jwt-refresh=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;'
     },
     async login(username: string, password: string) {
       try {
