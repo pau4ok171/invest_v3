@@ -1,17 +1,16 @@
 <script setup lang="ts">
 // Composables
 import { useCompanyDetailStore } from '@/store/companyDetail'
+import { useAuthStore } from '@/store/auth'
 import { useI18n } from 'vue-i18n'
 
 // Utilities
 import { computed, ref, shallowRef } from 'vue'
 
-// Types
-import type { Portfolio } from '@/types/portfolios'
-
 const store = useCompanyDetailStore()
+const authStore = useAuthStore()
 const company = computed(() => store.company)
-const portfolios = computed<Portfolio[]>(() => store.portfolios)
+const portfolios = computed(() => authStore.profile?.portfolios || [])
 const { t } = useI18n()
 
 const inputMode = shallowRef(false)
@@ -24,16 +23,18 @@ async function onCreatePortfolio() {
 
   if (!value) return
 
-  submitting.value = true
+  try {
+    submitting.value = true
 
-  const result = await store.createPortfolio(value.trim())
+    await store.createPortfolio(value.trim())
 
-  if (result === 'success') {
     portfolioName.value = null
     inputMode.value = false
+  } catch (e) {
+    console.error(e)
+  } finally {
+    submitting.value = false
   }
-
-  submitting.value = false
 }
 </script>
 
@@ -75,7 +76,7 @@ async function onCreatePortfolio() {
                   color="error"
                   rounded="lg"
                   density="comfortable"
-                  @click="store.updatePortfolio('exclude', p)"
+                  @click="store.updatePortfolio(p)"
                 />
               </template>
 
@@ -85,7 +86,7 @@ async function onCreatePortfolio() {
                   :text="t('buttons.add')"
                   color="info"
                   rounded="large"
-                  @click="store.updatePortfolio('include', p)"
+                  @click="store.updatePortfolio(p)"
                 />
               </template>
             </template>
