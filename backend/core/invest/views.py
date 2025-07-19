@@ -23,9 +23,6 @@ from invest.forms import (
     SearchListForm,
     UsernameVerificationForm,
 )
-# Portfolio App
-from portfolio.models import Portfolio
-from portfolio.serializers import PortfolioSerializer
 # Notes App
 from notes.models import Note
 from notes.serializers import NoteSerializer
@@ -162,18 +159,10 @@ class CompanyDetailAPIView(RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         return Response({
             "company": self.get_serializer(self.get_object()).data,
-            "portfolios": self._get_portfolio_serializer().data,
             "notes": self._get_note_serializer().data,
             "statements": self._get_statement_serializer_data(),
             "peers": self._get_peers_serializer_data(),
         })
-
-    def _get_portfolio_serializer(self) -> PortfolioSerializer:
-        portfolios = {}
-        if self.request.user.is_authenticated:
-            portfolios = Portfolio.objects.filter(user=self.request.user)
-
-        return PortfolioSerializer(portfolios, many=True)
 
     def _get_note_serializer(self) -> NoteSerializer:
         notes = {}
