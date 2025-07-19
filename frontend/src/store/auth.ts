@@ -186,7 +186,7 @@ export const useAuthStore = defineStore({
       Object.entries(profile).forEach(([k, v]) => formData.append(k, v))
       return formData
     },
-    async checkAuth() {
+    async requestUserProfile() {
       try {
         const response = await axios.get<UserProfileResponse>(
           '/api/v1/auth/user/',
