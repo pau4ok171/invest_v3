@@ -1,3 +1,6 @@
+// Composables
+import { useAuthStore } from '@/store/auth'
+
 // Utilities
 import { defineStore } from 'pinia'
 import axios from 'axios'
@@ -160,7 +163,6 @@ export const useCompanyDetailStore = defineStore({
   state: () => ({
     priceData: [] as Candle[],
     company: genDefaultCompany() as DetailCompany,
-    portfolios: [] as Portfolio[],
     notes: [] as Note[],
     statements: {} as Record<string, Statement>,
     snowflake: {
@@ -184,79 +186,60 @@ export const useCompanyDetailStore = defineStore({
     },
   },
   actions: {
-    async createPortfolio(portfolioName: string): Promise<'success' | 'error'> {
-      const formData = new FormData()
-      const formDataFields: Object = {
-        portfolio_name: portfolioName,
-      }
-      Object.entries(formDataFields).forEach(([key, val]) =>
-        formData.append(key, val)
-      )
-
+    async createPortfolio(portfolioName: string) {
+      const authStore = useAuthStore()
       try {
-        const response = await axios.post(
-          'portfolio/api/v1/portfolios/portfolios/',
-          formData
-        )
+        const response = await axios.post('api/v1/portfolios/', {
+          name: portfolioName,
+        })
 
-        this.portfolios.push(response.data)
+        await authStore.requestUserProfile()
         toast.success(
           i18n.global.t('toasts.portfolioCreated', { name: response.data.name })
         )
-        return 'success'
+      } catch (error) {
+        toast.error(i18n.global.t('toasts.somethingWrong'))
+        throw error
+      }
+    },
+    async updatePortfolio(portfolio: Portfolio) {
+      const authStore = useAuthStore()
+      const profile = authStore.profile
+
+      if (!profile) return
+
+      const company_id = this.company.id
+      const action = portfolio.positions.includes(company_id) ? 'remove' : 'add'
+
+      const positions =
+        action === 'add'
+          ? [...portfolio.positions, company_id]
+          : portfolio.positions.filter((id) => id !== company_id)
+
+      try {
+        await axios.patch(`api/v1/portfolios/${portfolio.id}/`, { positions })
+
+        await authStore.requestUserProfile()
+
+        if (action === 'add') {
+          toast.success(
+            i18n.global.t('toasts.addedToPortfolio', {
+              ticker: this.company.ticker,
+              portfolioName: portfolio.name,
+            })
+          )
+        } else {
+          toast.success(
+            i18n.global.t('toasts.removedFromPortfolio', {
+              ticker: this.company.ticker,
+              portfolioName: portfolio.name,
+            })
+          )
+        }
       } catch (error) {
         console.log(error)
         toast.error(i18n.global.t('toasts.somethingWrong'))
-        return 'error'
       }
-    },
-    async updatePortfolio(action: 'include' | 'exclude', portfolio: Portfolio) {
-      const formData = new FormData()
-      Object.entries({
-        action: action,
-        company_id: this.company.id,
-      }).forEach(([key, val]: [string, any]) => formData.append(key, val))
-
-      await axios
-        .put(
-          `portfolio/api/v1/portfolios/portfolios/${portfolio.id}/`,
-          formData
-        )
-        .then((response) => {
-          this.updatePortfolios(response.data)
-          if (action === 'include') {
-            toast.success(
-              i18n.global.t('toasts.addedToPortfolio', {
-                ticker: this.company.ticker,
-                portfolioName: portfolio.name,
-              })
-            )
-          } else {
-            toast.success(
-              i18n.global.t('toasts.removedFromPortfolio', {
-                ticker: this.company.ticker,
-                portfolioName: portfolio.name,
-              })
-            )
-          }
-        })
-        .catch((error) => {
-          console.log(error)
-          toast.error(i18n.global.t('toasts.somethingWrong'))
-        })
-    },
-    updatePortfolios(portfolio: Portfolio) {
-      let portfolios: Portfolio[] = []
-
-      this.portfolios.forEach((p: Portfolio) => {
-        if (p.id === portfolio.id) {
-          portfolios.push(portfolio)
-        } else {
-          portfolios.push(p)
-        }
-      })
-
-      this.portfolios = portfolios
     },
     addNote(note: Note) {
       this.notes.push(note)
@@ -303,7 +286,6 @@ export const useCompanyDetailStore = defineStore({
     },
     handleCompanyResponse(data: CompanyResponse) {
       this.company = data.company
-      this.portfolios = data.portfolios
       this.notes = data.notes
       this.statements = data.statements.reduce(
         (res: Record<string, Statement>, item: Statement) => {
