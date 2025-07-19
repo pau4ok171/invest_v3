@@ -5,6 +5,8 @@ from django.core.validators import RegexValidator
 from rest_framework import serializers
 
 from invest.models import Country, Currency
+from portfolio.serializers import PortfoliosSerializer
+
 from .models import THEME_CHOICES, STOCK_VIEW_CHOICES, Profile
 
 hex_color_validator = RegexValidator(
@@ -35,7 +37,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     theme = serializers.ChoiceField(source='profile.theme', choices=THEME_CHOICES)
     banner_color = serializers.CharField(source='profile.banner_color', validators=[hex_color_validator])
     # Вложенные структуры
-    portfolios = serializers.SerializerMethodField()
+    portfolios = PortfoliosSerializer(source='profile.portfolios', many=True, read_only=True)
     watchlist = serializers.SerializerMethodField()
 
     class Meta:
@@ -96,13 +98,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
     def get_name(obj):
         """Формируем поле name из first_name и last_name"""
         return f"{obj.first_name} {obj.last_name}" if obj.first_name or obj.last_name else obj.username
-
-    @staticmethod
-    def get_portfolios(obj):
-        """Список портфелей в упрощенном формате"""
-        if hasattr(obj, 'profile'):
-            return list(obj.profile.portfolios.values_list('id', flat=True))
-        return []
 
     @staticmethod
     def get_watchlist(obj):
