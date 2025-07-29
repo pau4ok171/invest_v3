@@ -77,8 +77,8 @@ def check_company(modeladmin, request, queryset):
 
 @admin.register(models.Sector)
 class SectorAdmin(TranslatableAdmin, ModelAdmin):
-    list_display = ('id', 'get_title', 'slug')
-    list_display_links = ('get_title',)
+    list_display = ('id', 'title', 'slug')
+    list_display_links = ('title',)
     search_fields = ('translations__title', 'slug')
     ordering = ['id']
 
@@ -96,11 +96,6 @@ class SectorAdmin(TranslatableAdmin, ModelAdmin):
             )
         }),
     )
-
-    def get_title(self, obj):
-        return obj.safe_translation_getter('title', any_language=True)
-    get_title.short_description = 'Title'
-    get_title.admin_order_field = 'translations__title'
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

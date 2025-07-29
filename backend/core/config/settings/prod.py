@@ -9,8 +9,6 @@ ADMINS = [
     ('Pavel M', 'finargo@mail.ru'),
 ]
 
-SITE_ID = 1
-
 ALLOWED_HOSTS = ['www.finargo.ru', 'finargo.ru']
 
 DATABASES = {
