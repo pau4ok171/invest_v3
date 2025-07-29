@@ -20,7 +20,7 @@ ASGI_APPLICATION = 'config.asgi.application'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SITE_ID = env_conf('SITE_ID')
+SITE_ID = int(env_conf('SITE_ID'))
 
 ######################################################################
 # Domains
@@ -114,15 +114,15 @@ INSTALLED_APPS = [
     'import_export',
 
     # My apps
-    'invest.apps.InvestConfig',
-    'portfolio.apps.PortfolioConfig',
-    'notes.apps.NotesConfig',
-    'statements.apps.StatementsConfig',
-    'news.apps.NewsConfig',
-    'analysis.apps.AnalysisConfig',
-    'site_admin.apps.AdminConfig',
-    'user_profile.apps.UserProfileConfig',
-    'user_auth.apps.UserAuthConfig',
+    'apps.invest.apps.InvestConfig',
+    'apps.portfolio.apps.PortfolioConfig',
+    'apps.notes.apps.NotesConfig',
+    'apps.statements.apps.StatementsConfig',
+    'apps.news.apps.NewsConfig',
+    'apps.analysis.apps.AnalysisConfig',
+    'apps.site_admin.apps.AdminConfig',
+    'apps.user_profile.apps.UserProfileConfig',
+    'apps.user_auth.apps.UserAuthConfig',
 ]
 
 ######################################################################
@@ -214,7 +214,7 @@ ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_ADAPTER = "user_auth.adapters.CustomAccountAdapter"
+ACCOUNT_ADAPTER = "apps.user_auth.adapters.CustomAccountAdapter"
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
@@ -293,8 +293,8 @@ REST_AUTH = {
     'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
     'JWT_SERIALIZER_WITH_EXPIRATION': 'dj_rest_auth.serializers.JWTSerializerWithExpiration',
     'JWT_TOKEN_CLAIMS_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenObtainPairSerializer',
-    'USER_DETAILS_SERIALIZER': 'user_profile.serializers.UserProfileSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'user_auth.serializers.CustomPasswordResetSerializer',
+    'USER_DETAILS_SERIALIZER': 'apps.user_profile.serializers.UserProfileSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'apps.user_auth.serializers.CustomPasswordResetSerializer',
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'dj_rest_auth.serializers.PasswordResetConfirmSerializer',
     'PASSWORD_CHANGE_SERIALIZER': 'dj_rest_auth.serializers.PasswordChangeSerializer',
 
