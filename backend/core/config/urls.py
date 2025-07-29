@@ -1,10 +1,12 @@
 from django.contrib import admin
+from django.conf.urls import i18n
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18/', include(i18n)),
     path('api/v1/auth/', include('user_auth.urls')),
     path('api/v1/invest/', include('invest.urls', namespace='invest_api')),
     path('api/v1/notes/', include('notes.urls', namespace='notes_api')),

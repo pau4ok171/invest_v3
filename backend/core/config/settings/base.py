@@ -141,7 +141,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'i18n.middleware.DynamicLanguageMiddleware',
-    # 'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 
     'allauth.account.middleware.AccountMiddleware'
 ]
@@ -369,7 +369,7 @@ USE_TZ = True
 PARLER_DEFAULT_LANGUAGE_CODE = 'en'
 
 PARLER_LANGUAGES = {
-    None: (
+    env_conf('SITE_ID'): (
         {'code': 'en', },
         {'code': 'ru', },
         {'code': 'fr', },
@@ -400,7 +400,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 ######################################################################
 UNFOLD = {
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
-    # "SHOW_LANGUAGES": True,
+    "SHOW_LANGUAGES": True,
     "ENVIRONMENT": "config.settings.utils.environment_callback",
     "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
     "SHOW_BACK_BUTTON": False,  # show/hide "Back" button on changeform in header, default: False
@@ -440,6 +440,9 @@ UNFOLD = {
             "important-light": "var(--color-base-900)",  # text-base-900
             "important-dark": "var(--color-base-100)",  # text-base-100
         },
+    },
+    "EXTENSIONS": {
+        "language_selector": True,  # Включите переключатель языков
     },
     "SIDEBAR": {
         "show_search": True,  # Search in applications and models names
