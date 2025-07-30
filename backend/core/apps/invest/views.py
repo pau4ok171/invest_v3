@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
 # DRF
-from rest_framework import status, authentication
+from rest_framework import status, exceptions
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -17,8 +17,9 @@ from .serializers import (
     CompanyPeersSerializer,
     CurrencySerializer,
 )
+from .services.company import CompanyService
 from .paginators import StandardResultsSetPagination
-from .models import Company, CandlePerDay, Country, Sector, Currency
+from .models import Company, Country, Sector, Currency
 from .forms import (
     SearchListForm,
     UsernameVerificationForm,
@@ -50,7 +51,7 @@ def search_query(request):
     if form.is_valid():
         query = form.cleaned_data['query']
         companies = Company.objects.filter(
-            Q(title__icontains=query) | Q(ticker__icontains=query),
+            Q(translations__title__icontains=query) | Q(ticker__icontains=query),
             is_visible=True
         )
         return Response(
@@ -64,11 +65,16 @@ class PriceChartList(ListAPIView):
     serializer_class = CandlePerDaySerializer
 
     def get_queryset(self):
-        return CandlePerDay.objects.filter(company__slug__exact=self.kwargs.get('company_slug'))
+        try:
+            company = Company.objects.get(slug=self.kwargs.get('company_slug'))
+        except Company.DoesNotExist:
+            raise exceptions.NotFound(
+                detail=f'Company with slug \'{self.kwargs.get("company_slug")}\' does not exist',
+            )
+        return company.candle.all()
 
 
 class CompanyListView(ListAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
     pagination_class = StandardResultsSetPagination
     serializer_class = CompanySerializer
 
@@ -106,7 +112,7 @@ class CompanyListCountries(ListAPIView):
             .prefetch_related(
                 'translations',
                 'currency',
-                'markets'
+                'market'
             )
             .order_by('iso_code')
         )
@@ -121,7 +127,7 @@ class CountryOptions(ListAPIView):
             .prefetch_related(
                 'translations',
                 'currency',
-                'markets'
+                'market'
             )
             .order_by('iso_code')
         )
@@ -130,6 +136,7 @@ class CountryOptions(ListAPIView):
 class CurrencyOptions(ListAPIView):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
+
 
 class CompanyListSectors(ListAPIView):
     serializer_class = SectorFilterSerializer
@@ -150,43 +157,35 @@ class CompanyListSectors(ListAPIView):
 
 
 class CompanyDetailAPIView(RetrieveAPIView):
-    queryset = Company.objects.filter(is_visible=True)
+    queryset = Company.objects.filter(is_visible=True).select_related(
+        'country', 'market', 'sector', 'country__currency'
+    ).prefetch_related('report', 'analyst_idea', 'company_news', 'dividend')
     serializer_class = CompanyDetailSerializer
-    authentication_classes = [authentication.TokenAuthentication]
     lookup_field = 'slug'
     lookup_url_kwarg = 'company_slug'
 
     def retrieve(self, request, *args, **kwargs):
         return Response({
-            "company": self.get_serializer(self.get_object()).data,
-            "notes": self._get_note_serializer().data,
-            "statements": self._get_statement_serializer_data(),
-            "peers": self._get_peers_serializer_data(),
+            "company": self.get_company_serializer().data,
+            "notes": self.get_note_serializer().data,
+            "statements": self.get_statement_serializer().data,
+            "peers": self.get_peers_serializer().data,
         })
 
-    def _get_note_serializer(self) -> NoteSerializer:
+    def get_company_serializer(self):
+        return self.get_serializer(self.get_object())
+
+    def get_note_serializer(self) -> NoteSerializer:
         notes = {}
         if self.request.user.is_authenticated:
             notes = Note.objects.filter(user=self.request.user, company=self.get_object())
-
         return NoteSerializer(notes, many=True)
 
-    def _get_statement_serializer_data(self):
+    def get_statement_serializer(self):
         statements = Statement.objects.filter(company=self.get_object())
-        serializer = StatementSerializer(statements, many=True)
-        return serializer.data
+        return StatementSerializer(statements, many=True)
 
-    def _get_peers_serializer_data(self):
-        company_object = self.get_object()
-        peers = Company.objects.filter(is_visible=True).exclude(pk=company_object.id)
-        peers = sorted(peers, key=self._get_sort_key, reverse=True)[:4]
-        serializer = CompanyPeersSerializer(peers, many=True)
-        return serializer.data
 
-    def _get_sort_key(self, iter_company):
-        company_object = self.get_object()
-        sector_id = company_object.sector.id
-        country_id = company_object.country.id
-        country_score = 4 if iter_company.country.id == country_id else 3
-        sector_score = 4 if iter_company.sector.id == sector_id else 2
-        return country_score + sector_score
+    def get_peers_serializer(self):
+        peers = CompanyService.get_peers(self.get_object())
+        return CompanyPeersSerializer(peers, many=True)

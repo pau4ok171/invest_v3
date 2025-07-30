@@ -37,7 +37,7 @@ class CountrySerializer(TranslatableModelSerializer):
             'translations',
             'slug',
             'currency',
-            'markets',
+            'market',
         )
         depth = 1
 
@@ -314,8 +314,8 @@ class CompanyDetailSerializer(CompanySerializer):
     sector = SectorDetailSerializer(read_only=True)
     country = CountrySerializer(read_only=True)
     sector_market = serializers.SerializerMethodField('get_sector_market')
-    reports = ReportSerializer(many=True)
-    analyst_ideas = AnalystIdeaSerializer(many=True)
+    reports = ReportSerializer(source='report', many=True)
+    analyst_ideas = AnalystIdeaSerializer(source='analyst_idea', many=True)
     formatting = serializers.SerializerMethodField('get_formatting')
     company_news = NewsSerializer(many=True)
     next_dividend = serializers.SerializerMethodField('get_next_dividend')
@@ -359,7 +359,7 @@ class CompanyDetailSerializer(CompanySerializer):
 
     @staticmethod
     def get_next_dividend(instance: Company):
-        next_dividend = instance.dividends.filter(ex_dividend_date__gte=today())
+        next_dividend = instance.dividend.filter(ex_dividend_date__gte=today())
         if next_dividend:
             next_dividend = next_dividend.latest('ex_dividend_date')
             return DividendSerializer(next_dividend).data
