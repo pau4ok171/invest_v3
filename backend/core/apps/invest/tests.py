@@ -1,67 +1,167 @@
 import datetime
-from datetime import timedelta
 
-import decouple
-from tinkoff.invest import (
-    Client,
-    RequestError,
-    InstrumentIdType,
-    InstrumentResponse,
-    GetDividendsResponse,
-    GetAssetFundamentalsResponse,
-    GetAssetFundamentalsRequest,
-)
-from pprint import pprint
+from rest_framework.test import APITestCase
+from rest_framework import status
 
-from tinkoff.invest.schemas import GetAssetReportsRequest
-from tinkoff.invest.utils import now
-
-TOKEN_API = decouple.config('TINKOFF_KEY')
-COMPANY_UID = 'e6123145-9665-43e0-8413-cd61b8aa9b13'
+from apps.invest.models import Company, Country, Market, Sector, Industry, Currency
+from django.contrib.auth.models import User
 
 
-def main():
-    try:
-        with Client(TOKEN_API) as client:
-            execute(client)
-    except RequestError as e:
-        print(f'[ERROR]: {e}')
-
-
-def execute(client):
-    # main information about instrument
-    instrument: InstrumentResponse = client.instruments.get_instrument_by(
-        id_type=InstrumentIdType.INSTRUMENT_ID_TYPE_UID,
-        id=COMPANY_UID
+def create_models():
+    currency = Currency.objects.create(
+        iso_code='test',
+        symbol='test',
+        name='test',
     )
-    # pprint(instrument)
-
-    # Список дивидендов
-    dividends: GetDividendsResponse = client.instruments.get_dividends(
-        instrument_id=COMPANY_UID,
-        from_=datetime.datetime.utcnow() - timedelta(days=365*30),
-        to=datetime.datetime.utcnow(),
+    country = Country.objects.create(
+        iso_code='test',
+        currency=currency,
+        name='test',
+        name_genitive='test',
     )
-    pprint(dividends)
+    Country.objects.create(
+        iso_code='test2',
+        currency=currency,
+        name='test',
+        name_genitive='test',
+    )
+    market = Market.objects.create(
+        title='test',
+        slug='test',
+        country=country,
+    )
+    sector = Sector.objects.create(
+        slug='test',
+        title='test',
+    )
+    industry = Industry.objects.create(
+        slug='test',
+        sector=sector,
+        title='test',
+    )
+    user = User.objects.create(username='test', date_joined=datetime.datetime.now(datetime.UTC))
 
-    # fundamentals data
-    # fundamentals_request = GetAssetFundamentalsRequest(
-    #     assets=[COMPANY_UID]
-    # )
-    # fundamentals: GetAssetFundamentalsResponse = client.instruments.get_asset_fundamentals(fundamentals_request)
-    # pprint(fundamentals)
+    data = {
+        'ticker': 'test',
+        'slug': 'test',
+        'uid': 'test',
+        'country': country,
+        'market': market,
+        'sector': sector,
+        'industry': industry,
+        'title': 'test',
+        'created': datetime.datetime.now(datetime.UTC),
+        'updated': datetime.datetime.now(datetime.UTC),
+        'created_by': user,
+        'updated_by': user,
+        'is_visible': True,
+    }
+    Company.objects.create(**data)
+    data2 = {
+        'ticker': 'test2',
+        'slug': 'test2',
+        'uid': 'test2',
+        'country': country,
+        'market': market,
+        'sector': sector,
+        'industry': industry,
+        'title': 'test',
+        'created': datetime.datetime.now(datetime.UTC),
+        'updated': datetime.datetime.now(datetime.UTC),
+        'created_by': user,
+        'updated_by': user,
+    }
+    Company.objects.create(**data2)
 
-    # reports_request = GetAssetReportsRequest(
-    #     instrument_id=COMPANY_UID,
-    #     from_=now() - timedelta(days=120),
-    #     to=now()
-    # )
-    # reports = client.instruments.get_asset_reports(reports_request)
-    # pprint(reports)
 
-    # forecast = client.instruments.get_forecast_by(instrument_id=COMPANY_UID)
-    # pprint(forecast)
+class CompanyListAPITest(APITestCase):
+    def test_get_model(self):
+        url = '/api/v1/invest/companies/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-if __name__ == '__main__':
-    main()
+class CompanyDetailAPITest(APITestCase):
+    def setUp(self):
+        create_models()
+
+    def tearDown(self):
+        pass
+
+    def test_get_model(self):
+        url = '/api/v1/invest/companies/test/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_404(self):
+        url = '/api/v1/invest/companies/no-existing/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CountryFilterAPITest(APITestCase):
+    def test_get_model(self):
+        url = '/api/v1/invest/countries/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SectorFilterAPITest(APITestCase):
+    def test_get_model(self):
+        url = '/api/v1/invest/sectors/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CountryOptionsAPITest(APITestCase):
+    def test_get_model(self):
+        url = '/api/v1/invest/country-options/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class CurrencyOptionsAPITest(APITestCase):
+    def test_get_model(self):
+        url = '/api/v1/invest/currency-options/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class PriceDataAPITest(APITestCase):
+    def setUp(self):
+        create_models()
+
+    def test_get_model(self):
+        url = '/api/v1/invest/candles/test/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_get_404(self):
+        url = '/api/v1/invest/candles/no-existing/'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class SearchQueryAPITest(APITestCase):
+    def setUp(self):
+        create_models()
+
+    def test_search_query(self):
+        url = '/api/v1/invest/search-query/?query=test'
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class ValidateUsernameAPITest(APITestCase):
+    def setUp(self):
+        create_models()
+
+    def test_username_is_free(self):
+        url = '/api/v1/invest/validate-username/?username=free'
+        response = self.client.get(url)
+        self.assertEqual(response.data.get('isTaken'), False)
+
+    def test_username_is_taken(self):
+        url = '/api/v1/invest/validate-username/?username=test'
+        response = self.client.get(url)
+        self.assertEqual(response.data.get('isTaken'), True)
