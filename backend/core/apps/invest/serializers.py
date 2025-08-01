@@ -226,7 +226,7 @@ class CompanySerializer(serializers.ModelSerializer):
             self.get_candles(instance)
 
         report = ReportMetadata.objects.filter(company__pk=instance.id)
-        share_outstanding = report.latest('year', 'quarter').share_outstanding if report else None
+        share_outstanding = report.latest('year', 'quarter').share_outstanding_eop if report else None
 
         return self.candles.latest("time").close * share_outstanding if share_outstanding else 0
 
@@ -273,20 +273,9 @@ class ReportSerializer(serializers.ModelSerializer):
         fields = (
             'updated',
             'total_employees_figure',
-            'share_outstanding',
+            'share_outstanding_eop',
             'scale',
             'scale_unit',
-            'income_net',
-            'equity',
-            'debt',
-            'sales',
-            'cost_of_sales',
-            'gross_margin',
-            'operation_expenses',
-            'operation_income',
-            'other_income_net',
-            'taxes',
-            'assets',
         )
 
     @staticmethod

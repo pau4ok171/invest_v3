@@ -1,0 +1,2589 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/v1/admin/companies/:
+    get:
+      operationId: api_v1_admin_companies_list
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Companies'
+          description: ''
+    post:
+      operationId: api_v1_admin_companies_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Companies'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Companies'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Companies'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Companies'
+          description: ''
+  /api/v1/admin/companies/{company_uid}/:
+    get:
+      operationId: api_v1_admin_companies_retrieve
+      parameters:
+      - in: path
+        name: company_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    put:
+      operationId: api_v1_admin_companies_update
+      parameters:
+      - in: path
+        name: company_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Company'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Company'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    patch:
+      operationId: api_v1_admin_companies_partial_update
+      parameters:
+      - in: path
+        name: company_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCompany'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Company'
+          description: ''
+    delete:
+      operationId: api_v1_admin_companies_destroy
+      parameters:
+      - in: path
+        name: company_uid
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/admin/selector_options/:
+    get:
+      operationId: api_v1_admin_selector_options_retrieve
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/admin/users/:
+    get:
+      operationId: api_v1_admin_users_retrieve
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/v1/auth/github/:
+    post:
+      operationId: api_v1_auth_github_create
+      description: |-
+        class used for social authentications
+        example usage for facebook with access_token
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+        -------------
+
+        example usage for facebook with code
+
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+        from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+            client_class = OAuth2Client
+            callback_url = 'localhost:8000'
+        -------------
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialLogin'
+          description: ''
+  /api/v1/auth/google/:
+    post:
+      operationId: api_v1_auth_google_create
+      description: |-
+        class used for social authentications
+        example usage for facebook with access_token
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+        -------------
+
+        example usage for facebook with code
+
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+        from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+            client_class = OAuth2Client
+            callback_url = 'localhost:8000'
+        -------------
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialLogin'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: api_v1_auth_login_create
+      description: |-
+        Check the credentials and return the REST Token
+        if the credentials are valid and authenticated.
+        Calls Django Auth login method to register User ID
+        in Django session framework
+
+        Accept the following POST parameters: username, password
+        Return the REST Framework Token Object's key.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JWT'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: api_v1_auth_logout_create
+      description: |-
+        Calls Django logout method and delete the Token object
+        assigned to the current User object.
+
+        Accepts/Returns nothing.
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/password/change/:
+    post:
+      operationId: api_v1_auth_password_change_create
+      description: |-
+        Calls Django Auth SetPasswordForm save method.
+
+        Accepts the following POST parameters: new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordChange'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/password/reset/:
+    post:
+      operationId: api_v1_auth_password_reset_create
+      description: |-
+        Calls Django Auth PasswordResetForm save method.
+
+        Accepts the following POST parameters: email
+        Returns the success/fail message.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomPasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomPasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomPasswordReset'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/password/reset/confirm/:
+    post:
+      operationId: api_v1_auth_password_reset_confirm_create
+      description: |-
+        Password reset e-mail link is confirmed, therefore
+        this resets the user's password.
+
+        Accepts the following POST parameters: token, uid,
+            new_password1, new_password2
+        Returns the success/fail message.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/password/reset/confirm/{uid64}/{token}:
+    post:
+      operationId: api_v1_auth_password_reset_confirm_create_2
+      description: |-
+        Password reset e-mail link is confirmed, therefore
+        this resets the user's password.
+
+        Accepts the following POST parameters: token, uid,
+            new_password1, new_password2
+        Returns the success/fail message.
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uid64
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PasswordResetConfirm'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/registration/:
+    post:
+      operationId: api_v1_auth_registration_create
+      description: |-
+        Registers a new user.
+
+        Accepts the following POST parameters: username, email, password1, password2.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Register'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Register'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Register'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/registration/resend-email/:
+    post:
+      operationId: api_v1_auth_registration_resend_email_create
+      description: |-
+        Resends another email to an unverified email.
+
+        Accepts the following POST parameter: email.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendEmailVerification'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/registration/verify-email/:
+    post:
+      operationId: api_v1_auth_registration_verify_email_create
+      description: |-
+        Verifies the email associated with the provided key.
+
+        Accepts the following POST parameter: key.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VerifyEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VerifyEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VerifyEmail'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestAuthDetail'
+          description: ''
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: api_v1_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/auth/token/verify/:
+    post:
+      operationId: api_v1_auth_token_verify_create
+      description: |-
+        Takes a token and indicates if it is valid.  This view provides no
+        information about a token's fitness for a particular use.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenVerify'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenVerify'
+          description: ''
+  /api/v1/auth/user/:
+    get:
+      operationId: api_v1_auth_user_retrieve
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: api_v1_auth_user_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: api_v1_auth_user_partial_update
+      description: |-
+        Reads and updates UserModel fields
+        Accepts GET, PUT, PATCH methods.
+
+        Default accepted fields: username, first_name, last_name
+        Default display fields: pk, username, email, first_name, last_name
+        Read-only fields: pk, email
+
+        Returns UserModel fields.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/auth/yandex/:
+    post:
+      operationId: api_v1_auth_yandex_create
+      description: |-
+        class used for social authentications
+        example usage for facebook with access_token
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+        -------------
+
+        example usage for facebook with code
+
+        -------------
+        from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+        from allauth.socialaccount.providers.oauth2.client import OAuth2Client
+
+        class FacebookLogin(SocialLoginView):
+            adapter_class = FacebookOAuth2Adapter
+            client_class = OAuth2Client
+            callback_url = 'localhost:8000'
+        -------------
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SocialLogin'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialLogin'
+          description: ''
+  /api/v1/invest/candles/{company_slug}/:
+    get:
+      operationId: api_v1_invest_candles_list
+      parameters:
+      - in: path
+        name: company_slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CandlePerDay'
+          description: ''
+  /api/v1/invest/companies/:
+    get:
+      operationId: api_v1_invest_companies_list
+      parameters:
+      - name: _limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: _page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCompanyList'
+          description: ''
+  /api/v1/invest/companies/{company_slug}/:
+    get:
+      operationId: api_v1_invest_companies_retrieve
+      parameters:
+      - in: path
+        name: company_slug
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetail'
+          description: ''
+  /api/v1/invest/countries/:
+    get:
+      operationId: api_v1_invest_countries_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+          description: ''
+  /api/v1/invest/country-options/:
+    get:
+      operationId: api_v1_invest_country_options_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+          description: ''
+  /api/v1/invest/currency-options/:
+    get:
+      operationId: api_v1_invest_currency_options_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+          description: ''
+  /api/v1/invest/search-query/:
+    get:
+      operationId: api_v1_invest_search_query_list
+      description: Search companies by title or by ticker
+      summary: Serch companies by query
+      parameters:
+      - in: query
+        name: query
+        schema:
+          type: string
+        description: Research query
+        required: true
+        examples:
+          Example1:
+            value: apple
+            summary: Example 1
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CompanySearch'
+              examples:
+                SuccessResponse:
+                  value:
+                  - - id: 1
+                      title: Apple Inc.
+                      ticker: AAPL
+                  summary: Success Response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                ErrorResponse:
+                  value:
+                    errors:
+                      query:
+                      - This field is required.
+                  summary: Error Response
+          description: ''
+  /api/v1/invest/sectors/:
+    get:
+      operationId: api_v1_invest_sectors_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SectorFilter'
+          description: ''
+  /api/v1/invest/validate-username/:
+    get:
+      operationId: api_v1_invest_validate_username_retrieve
+      description: Check if username is free
+      summary: Check the availability of the username
+      parameters:
+      - in: query
+        name: username
+        schema:
+          type: string
+        description: Username to be verified
+        required: true
+        examples:
+          Example1:
+            value: johndoe
+            summary: Example 1
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                SuccessResponse:
+                  value:
+                    isTaken: true
+                    message: The username is already taken
+                  summary: Success Response
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+              examples:
+                ErrorResponse:
+                  value:
+                    errors:
+                      username:
+                      - The field is required
+                  summary: Error Response
+          description: ''
+  /api/v1/notes/notes/:
+    get:
+      operationId: api_v1_notes_notes_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Note'
+          description: ''
+    post:
+      operationId: api_v1_notes_notes_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+  /api/v1/notes/notes/{id}/:
+    get:
+      operationId: api_v1_notes_notes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+    put:
+      operationId: api_v1_notes_notes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Note'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Note'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Note'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+    patch:
+      operationId: api_v1_notes_notes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNote'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Note'
+          description: ''
+    delete:
+      operationId: api_v1_notes_notes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/portfolios/:
+    get:
+      operationId: api_v1_portfolios_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Portfolios'
+          description: ''
+    post:
+      operationId: api_v1_portfolios_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolios'
+          description: ''
+  /api/v1/portfolios/{id}/:
+    get:
+      operationId: api_v1_portfolios_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolios'
+          description: ''
+    put:
+      operationId: api_v1_portfolios_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Portfolios'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolios'
+          description: ''
+    patch:
+      operationId: api_v1_portfolios_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolios'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolios'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPortfolios'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolios'
+          description: ''
+    delete:
+      operationId: api_v1_portfolios_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/profile/:
+    get:
+      operationId: api_v1_profile_list
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/profile/{id}/:
+    get:
+      operationId: api_v1_profile_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    put:
+      operationId: api_v1_profile_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserProfile'
+        required: true
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+    patch:
+      operationId: api_v1_profile_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+  /api/v1/profile/update_watchlist/:
+    patch:
+      operationId: api_v1_profile_update_watchlist_partial_update
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserProfile'
+      security:
+      - jwtHeaderAuth: []
+      - jwtCookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+          description: ''
+components:
+  schemas:
+    Analyst:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        score:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+    AnalystIdea:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        analyst:
+          $ref: '#/components/schemas/Analyst'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        price_target:
+          type: number
+          format: double
+        date_target:
+          type: string
+          format: date-time
+        idea_created:
+          type: string
+          format: date-time
+        description:
+          type: string
+          nullable: true
+        company:
+          type: integer
+      required:
+      - analyst
+      - company
+      - currency
+      - date_target
+      - id
+      - idea_created
+      - price_target
+    CandlePerDay:
+      type: object
+      properties:
+        time:
+          type: string
+          readOnly: true
+        close:
+          type: number
+          format: double
+      required:
+      - close
+      - time
+    Companies:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ticker:
+          type: string
+          maxLength: 12
+        slug:
+          type: string
+          maxLength: 25
+          pattern: ^[-a-zA-Z0-9_]+$
+        uid:
+          type: string
+          maxLength: 255
+        title:
+          type: string
+          readOnly: true
+        short_title:
+          type: string
+          readOnly: true
+        is_visible:
+          type: boolean
+          description: If company is visible publicly
+        logo:
+          type: string
+          format: uri
+        is_fund:
+          type: boolean
+          description: If company is invest fund
+        market_name:
+          type: string
+          readOnly: true
+        sector_name:
+          type: string
+          readOnly: true
+        absolute_url:
+          type: string
+          readOnly: true
+      required:
+      - absolute_url
+      - id
+      - market_name
+      - sector_name
+      - short_title
+      - slug
+      - ticker
+      - title
+      - uid
+    Company:
+      type: object
+      properties:
+        ticker:
+          type: string
+          maxLength: 12
+        slug:
+          type: string
+          maxLength: 25
+          pattern: ^[-a-zA-Z0-9_]+$
+        uid:
+          type: string
+          maxLength: 255
+        title:
+          type: string
+          readOnly: true
+        short_title:
+          type: string
+          readOnly: true
+        short_title_genitive:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        short_description:
+          type: string
+          readOnly: true
+        city:
+          type: string
+          readOnly: true
+        country:
+          type: integer
+        market:
+          type: integer
+        sector:
+          type: integer
+        industry:
+          type: integer
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+          nullable: true
+        created_by:
+          type: integer
+        updated_by:
+          type: integer
+          nullable: true
+        is_visible:
+          type: boolean
+          description: If company is visible publicly
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          default: null
+        is_fund:
+          type: boolean
+          description: If company is invest fund
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        year_founded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+      required:
+      - city
+      - country
+      - description
+      - industry
+      - market
+      - sector
+      - short_description
+      - short_title
+      - short_title_genitive
+      - slug
+      - ticker
+      - title
+      - uid
+    CompanyDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        uid:
+          type: string
+          maxLength: 255
+        ticker:
+          type: string
+          maxLength: 12
+        translations:
+          type: string
+        slug:
+          type: string
+          maxLength: 25
+          pattern: ^[-a-zA-Z0-9_]+$
+        year_founded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        logo_url:
+          type: string
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/Country'
+          readOnly: true
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Market'
+          readOnly: true
+        sector_market:
+          type: string
+          readOnly: true
+        sector:
+          allOf:
+          - $ref: '#/components/schemas/SectorDetail'
+          readOnly: true
+        absolute_url:
+          type: string
+          readOnly: true
+        price_data:
+          type: string
+          readOnly: true
+        reports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+        analyst_ideas:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalystIdea'
+        formatting:
+          type: string
+          readOnly: true
+        company_news:
+          type: array
+          items:
+            $ref: '#/components/schemas/News'
+        next_dividend:
+          type: string
+          readOnly: true
+        performance:
+          allOf:
+          - $ref: '#/components/schemas/CompanyPerformance'
+          readOnly: true
+      required:
+      - absolute_url
+      - analyst_ideas
+      - company_news
+      - country
+      - formatting
+      - id
+      - logo_url
+      - market
+      - next_dividend
+      - performance
+      - price_data
+      - reports
+      - sector
+      - sector_market
+      - slug
+      - ticker
+      - translations
+      - uid
+    CompanyPerformance:
+      type: object
+      properties:
+        return_7d:
+          type: number
+          format: double
+          nullable: true
+        return_30d:
+          type: number
+          format: double
+          nullable: true
+        return_90d:
+          type: number
+          format: double
+          nullable: true
+        return_1y:
+          type: number
+          format: double
+          nullable: true
+        return_3y:
+          type: number
+          format: double
+          nullable: true
+        return_5y:
+          type: number
+          format: double
+          nullable: true
+        average_weekly_movement:
+          type: number
+          format: double
+          nullable: true
+        last_reported_earnings:
+          type: string
+          format: date
+          nullable: true
+        next_earnings:
+          type: string
+          format: date
+          nullable: true
+    CompanySearch:
+      type: object
+      properties:
+        uid:
+          type: string
+          maxLength: 255
+        translations:
+          type: string
+        ticker:
+          type: string
+          maxLength: 12
+        logo_url:
+          type: string
+          readOnly: true
+        country:
+          allOf:
+          - $ref: '#/components/schemas/Country'
+          readOnly: true
+        sector:
+          allOf:
+          - $ref: '#/components/schemas/Sector'
+          readOnly: true
+        market:
+          allOf:
+          - $ref: '#/components/schemas/Market'
+          readOnly: true
+        absolute_url:
+          type: string
+          readOnly: true
+      required:
+      - absolute_url
+      - country
+      - logo_url
+      - market
+      - sector
+      - ticker
+      - translations
+      - uid
+    Country:
+      type: object
+      description: Serializer that saves :class:`TranslatedFieldsField` automatically.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translations:
+          type: string
+        slug:
+          type: string
+          pattern: ^[-a-zA-Z0-9_]+$
+        currency:
+          allOf:
+          - $ref: '#/components/schemas/Currency'
+          readOnly: true
+        market:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+      required:
+      - currency
+      - id
+      - market
+      - slug
+      - translations
+    Currency:
+      type: object
+      description: Serializer that saves :class:`TranslatedFieldsField` automatically.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translations:
+          type: string
+        iso_code:
+          type: string
+          maxLength: 10
+        symbol:
+          type: string
+          maxLength: 10
+      required:
+      - id
+      - iso_code
+      - symbol
+      - translations
+    CustomPasswordReset:
+      type: object
+      description: Serializer for requesting a password reset e-mail.
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    JWT:
+      type: object
+      description: Serializer for JWT authentication.
+      properties:
+        access:
+          type: string
+        refresh:
+          type: string
+        user:
+          $ref: '#/components/schemas/UserProfile'
+      required:
+      - access
+      - refresh
+      - user
+    LocaleEnum:
+      enum:
+      - en
+      - ru
+      - fr
+      - es
+      - de
+      - pl
+      - it
+      type: string
+      description: |-
+        * `en` - English
+        * `ru` - Русский
+        * `fr` - Français
+        * `es` - Español
+        * `de` - Deutsch
+        * `pl` - Polski
+        * `it` - Italiano
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+      - password
+    Market:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        performance:
+          allOf:
+          - $ref: '#/components/schemas/MarketPerformance'
+          readOnly: true
+      required:
+      - performance
+      - title
+    MarketPerformance:
+      type: object
+      properties:
+        return_7d:
+          type: number
+          format: double
+          nullable: true
+        return_30d:
+          type: number
+          format: double
+          nullable: true
+        return_90d:
+          type: number
+          format: double
+          nullable: true
+        return_1y:
+          type: number
+          format: double
+          nullable: true
+        return_3y:
+          type: number
+          format: double
+          nullable: true
+        return_5y:
+          type: number
+          format: double
+          nullable: true
+        average_weekly_mouvement:
+          type: number
+          format: double
+          nullable: true
+        volatility_10p:
+          type: number
+          format: double
+          nullable: true
+        volatility_90p:
+          type: number
+          format: double
+          nullable: true
+    Nested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[-a-zA-Z0-9_]+$
+        country:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - slug
+      - title
+    News:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        content:
+          type: string
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        date:
+          type: string
+          format: date
+      required:
+      - content
+      - date
+      - id
+      - title
+      - type
+    Note:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company:
+          type: integer
+        body:
+          type: string
+        text:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - body
+      - company
+      - created_at
+      - id
+      - updated_at
+    PaginatedCompanyList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?_page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?_page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Company'
+    PasswordChange:
+      type: object
+      properties:
+        old_password:
+          type: string
+          maxLength: 128
+        new_password1:
+          type: string
+          maxLength: 128
+        new_password2:
+          type: string
+          maxLength: 128
+      required:
+      - new_password1
+      - new_password2
+      - old_password
+    PasswordResetConfirm:
+      type: object
+      description: Serializer for confirming a password reset attempt.
+      properties:
+        new_password1:
+          type: string
+          maxLength: 128
+        new_password2:
+          type: string
+          maxLength: 128
+        uid:
+          type: string
+        token:
+          type: string
+      required:
+      - new_password1
+      - new_password2
+      - token
+      - uid
+    PatchedCompany:
+      type: object
+      properties:
+        ticker:
+          type: string
+          maxLength: 12
+        slug:
+          type: string
+          maxLength: 25
+          pattern: ^[-a-zA-Z0-9_]+$
+        uid:
+          type: string
+          maxLength: 255
+        title:
+          type: string
+          readOnly: true
+        short_title:
+          type: string
+          readOnly: true
+        short_title_genitive:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        short_description:
+          type: string
+          readOnly: true
+        city:
+          type: string
+          readOnly: true
+        country:
+          type: integer
+        market:
+          type: integer
+        sector:
+          type: integer
+        industry:
+          type: integer
+        created:
+          type: string
+          format: date-time
+        updated:
+          type: string
+          format: date-time
+          nullable: true
+        created_by:
+          type: integer
+        updated_by:
+          type: integer
+          nullable: true
+        is_visible:
+          type: boolean
+          description: If company is visible publicly
+        logo:
+          type: string
+          format: uri
+          nullable: true
+          default: null
+        is_fund:
+          type: boolean
+          description: If company is invest fund
+        website:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        year_founded:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+    PatchedNote:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        company:
+          type: integer
+        body:
+          type: string
+        text:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedPortfolios:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        positions:
+          type: array
+          items:
+            type: integer
+    PatchedUserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        registration_date:
+          type: string
+          readOnly: true
+        display_name:
+          type: string
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        country_iso:
+          type: string
+        currency_iso:
+          type: string
+        auth_provider:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+        external_link:
+          type: string
+          format: uri
+        stock_view:
+          $ref: '#/components/schemas/StockViewEnum'
+        watchlist:
+          type: string
+          readOnly: true
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolios'
+          readOnly: true
+        theme:
+          $ref: '#/components/schemas/ThemeEnum'
+        banner_color:
+          type: string
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+    Portfolios:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        updated:
+          type: string
+          format: date-time
+          readOnly: true
+        positions:
+          type: array
+          items:
+            type: integer
+      required:
+      - created
+      - id
+      - name
+      - updated
+    Register:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 150
+          minLength: 1
+        email:
+          type: string
+          format: email
+        password1:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password1
+      - password2
+      - username
+    Report:
+      type: object
+      properties:
+        updated:
+          type: string
+          readOnly: true
+        total_employees_figure:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+          nullable: true
+        share_outstanding_eop:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,13}(?:\.\d{0,2})?$
+        scale:
+          $ref: '#/components/schemas/ScaleEnum'
+        scale_unit:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - scale
+      - updated
+    ResendEmailVerification:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    RestAuthDetail:
+      type: object
+      properties:
+        detail:
+          type: string
+          readOnly: true
+      required:
+      - detail
+    ScaleEnum:
+      enum:
+      - T
+      - B
+      - M
+      - t
+      - p
+      type: string
+      description: |-
+        * `T` - trillion
+        * `B` - billion
+        * `M` - million
+        * `t` - thousand
+        * `p` - pieces
+    Sector:
+      type: object
+      description: Serializer that saves :class:`TranslatedFieldsField` automatically.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translations:
+          type: string
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - id
+      - slug
+      - translations
+    SectorDetail:
+      type: object
+      properties:
+        translations:
+          type: string
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[-a-zA-Z0-9_]+$
+        main_header:
+          type: string
+          format: uri
+      required:
+      - slug
+      - translations
+    SectorFilter:
+      type: object
+      description: Serializer that saves :class:`TranslatedFieldsField` automatically.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translations:
+          type: string
+        slug:
+          type: string
+          maxLength: 255
+          pattern: ^[-a-zA-Z0-9_]+$
+        countries:
+          type: string
+          readOnly: true
+      required:
+      - countries
+      - id
+      - slug
+      - translations
+    SocialLogin:
+      type: object
+      properties:
+        access_token:
+          type: string
+        code:
+          type: string
+        id_token:
+          type: string
+    StockViewEnum:
+      enum:
+      - table
+      - tile
+      type: string
+      description: |-
+        * `table` - Table View
+        * `tile` - Tile View
+    ThemeEnum:
+      enum:
+      - finargo-light
+      - finargo-dark
+      type: string
+      description: |-
+        * `finargo-light` - Finargo Light
+        * `finargo-dark` - Finargo Dark
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenVerify:
+      type: object
+      properties:
+        token:
+          type: string
+          writeOnly: true
+      required:
+      - token
+    TypeEnum:
+      enum:
+      - DIVIDEND
+      - UPDATE
+      - ACTION
+      type: string
+      description: |-
+        * `DIVIDEND` - Dividend
+        * `UPDATE` - Update
+        * `ACTION` - Corporate Action
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        is_staff:
+          type: string
+          readOnly: true
+        is_anonymous:
+          type: string
+          readOnly: true
+        stage_in_days:
+          type: integer
+          readOnly: true
+      required:
+      - is_anonymous
+      - is_staff
+      - stage_in_days
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          readOnly: true
+          title: Email address
+        username:
+          type: string
+          readOnly: true
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+        is_staff:
+          type: boolean
+          readOnly: true
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+        registration_date:
+          type: string
+          readOnly: true
+        display_name:
+          type: string
+        avatar:
+          type: string
+          format: uri
+          nullable: true
+        locale:
+          $ref: '#/components/schemas/LocaleEnum'
+        country_iso:
+          type: string
+        currency_iso:
+          type: string
+        auth_provider:
+          type: string
+          readOnly: true
+        bio:
+          type: string
+        external_link:
+          type: string
+          format: uri
+        stock_view:
+          $ref: '#/components/schemas/StockViewEnum'
+        watchlist:
+          type: string
+          readOnly: true
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Portfolios'
+          readOnly: true
+        theme:
+          $ref: '#/components/schemas/ThemeEnum'
+        banner_color:
+          type: string
+          pattern: ^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+      required:
+      - auth_provider
+      - avatar
+      - banner_color
+      - bio
+      - country_iso
+      - currency_iso
+      - display_name
+      - email
+      - external_link
+      - id
+      - is_staff
+      - locale
+      - name
+      - portfolios
+      - registration_date
+      - stock_view
+      - theme
+      - username
+      - watchlist
+    VerifyEmail:
+      type: object
+      properties:
+        key:
+          type: string
+          writeOnly: true
+      required:
+      - key
+  securitySchemes:
+    jwtCookieAuth:
+      type: apiKey
+      in: cookie
+      name: jwt-auth
+    jwtHeaderAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

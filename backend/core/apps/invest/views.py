@@ -1,6 +1,9 @@
 # Django
 from django.contrib.auth.models import User
 from django.db.models import Q
+# Schema
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 # DRF
 from rest_framework import status, exceptions
 from rest_framework.generics import ListAPIView, RetrieveAPIView
@@ -30,7 +33,49 @@ from apps.notes.serializers import NoteSerializer
 from apps.statements.serializers import StatementSerializer
 from apps.statements.models import Statement
 
-
+@extend_schema(
+    methods=['GET'],
+    summary='Check the availability of the username',
+    description='Check if username is free',
+    parameters=[
+        OpenApiParameter(
+            name='username',
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            required=True,
+            description='Username to be verified',
+            examples=[
+                OpenApiExample(
+                    'Example 1',
+                    value='johndoe',
+                ),
+            ]
+        ),
+    ],
+    responses={
+        200: OpenApiTypes.OBJECT,
+        400: OpenApiTypes.OBJECT,
+    },
+    examples=[
+        OpenApiExample(
+            'Success Response',
+            value={
+                'isTaken': True,
+                'message': 'The username is already taken',
+            },
+            status_codes=['200'],
+        ),
+        OpenApiExample(
+            'Error Response',
+            value={
+                'errors': {
+                    'username': ['The field is required'],
+                }
+            },
+            status_codes=['400']
+        ),
+    ]
+)
 @api_view(['GET'])
 def validate_username(request):
     form = UsernameVerificationForm(request.query_params)
@@ -44,7 +89,52 @@ def validate_username(request):
         }, status=status.HTTP_200_OK)
     return Response(data={"errors": form.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-
+@extend_schema(
+    methods=['GET'],
+    summary='Serch companies by query',
+    description='Search companies by title or by ticker',
+    parameters=[
+        OpenApiParameter(
+            name='query',
+            type=OpenApiTypes.STR,
+            location=OpenApiParameter.QUERY,
+            required=True,
+            description='Research query',
+            examples=[
+                OpenApiExample(
+                    'Example 1',
+                    value='apple',
+                ),
+            ]
+        ),
+    ],
+    responses={
+        200: CompanySearchSerializer(many=True),
+        400: OpenApiTypes.OBJECT,
+    },
+    examples=[
+        OpenApiExample(
+            'Success Response',
+            value=[
+                {
+                    'id': 1,
+                    'title': 'Apple Inc.',
+                    'ticker': 'AAPL',
+                }
+            ],
+            status_codes=['200']
+        ),
+        OpenApiExample(
+            'Error Response',
+            value={
+                'errors': {
+                    'query': ['This field is required.']
+                }
+            },
+            status_codes=['400']
+        ),
+    ]
+)
 @api_view(['GET'])
 def search_query(request):
     form = SearchListForm(data=request.query_params)

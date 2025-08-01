@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
+    'drf_spectacular',
 
     # Auth
     'allauth',
@@ -344,6 +345,17 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.AllowAny',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+}
+
+######################################################################
+# Django Spectacular
+######################################################################
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Finargo API Project',
+    'DESCRIPTION': 'API for Finargo site',
+    'VERSION': '1.0.0',
 }
 
 ######################################################################
