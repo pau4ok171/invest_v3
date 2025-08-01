@@ -39,7 +39,7 @@ async function getSearchResults(v: string) {
   }
 
   await axios
-    .get('/api/v1/invest/search_query/', {
+    .get('/api/v1/invest/search-query/', {
       params: { query: v },
     })
     .then((response) => {
