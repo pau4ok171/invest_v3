@@ -260,7 +260,7 @@ export const useCompanyDetailStore = defineStore({
         this.fetchingPriceData = true
 
         const response = await axios.get<PriceDataResponse>(
-          `api/v1/invest/price_data/${companySlug}`
+          `api/v1/invest/candles/${companySlug}`
         )
         this.priceData = [...response.data]
       } catch (error) {
