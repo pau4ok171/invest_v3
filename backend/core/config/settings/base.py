@@ -381,7 +381,7 @@ USE_TZ = True
 PARLER_DEFAULT_LANGUAGE_CODE = 'en'
 
 PARLER_LANGUAGES = {
-    env_conf('SITE_ID'): (
+    int(env_conf('SITE_ID')): (
         {'code': 'en', },
         {'code': 'ru', },
         {'code': 'fr', },
