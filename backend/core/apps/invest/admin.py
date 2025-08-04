@@ -223,6 +223,7 @@ class IndustryAdmin(TranslatableAdmin, ModelAdmin):
 @admin.register(models.Country)
 class CountryAdmin(TranslatableAdmin, ModelAdmin):
     list_display = ('id', '__str__', 'currency')
+    list_filter = ('currency',)
     ordering = ['id']
 
     fieldsets = (
@@ -248,8 +249,10 @@ class CountryAdmin(TranslatableAdmin, ModelAdmin):
 
 
 @admin.register(models.Currency)
-class CurrencyAdmin(TranslatableAdmin, ModelAdmin):
-    list_display = ('__str__', 'iso_code', 'symbol')
+class CurrencyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
+    list_display = ('name', 'iso_code', 'symbol')
+    export_form_class = ExportForm
+    import_form_class = ImportForm
 
     fieldsets = (
         ('General', {

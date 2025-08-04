@@ -149,7 +149,7 @@ class Country(TranslatableModel):
 
     )
     iso_code = models.CharField(max_length=3)
-    currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
+    currency = models.ForeignKey('Currency', on_delete=models.PROTECT, related_name='countries')
 
     def __str__(self):
         return self.safe_translation_getter('name', any_language=True)
