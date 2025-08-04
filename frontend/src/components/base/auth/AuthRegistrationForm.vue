@@ -39,7 +39,7 @@ const initialState = {
 }
 
 const usernameUniqueValidator = createUniqueValidator(
-  '/api/v1/invest/validate_username/'
+  '/api/v1/invest/validate-username/'
 )
 
 const state = reactive<RegistrationForm>({
