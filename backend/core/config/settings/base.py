@@ -533,6 +533,13 @@ UNFOLD = {
                         ),
                     },
                     {
+                        "title": _('Cities'),
+                        "icon": "location_city",
+                        "link": reverse_lazy(
+                            "admin:invest_city_changelist"
+                        )
+                    },
+                    {
                         "title": _('Currencies'),
                         "icon": 'euro_symbol',
                         "link": reverse_lazy(

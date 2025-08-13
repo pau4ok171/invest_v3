@@ -170,6 +170,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
                 'slug',
                 'uid',
                 'country',
+                'city',
                 'market',
                 'sector_group',
                 'sector',
@@ -197,6 +198,21 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
         }),
     )
 
+    def get_fieldsets(self, request: HttpRequest, obj=None) -> FieldsetsType:
+        fieldsets = super().get_fieldsets(request, obj)
+        fieldsets += (
+            ('Translations', {
+                'fields': (
+                    'title',
+                    'short_title',
+                    'short_title_genitive',
+                    'description',
+                    'short_description',
+                ),
+            }),
+        )
+        return fieldsets
+
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['title'].widget = UnfoldAdminTextInputWidget()
@@ -204,7 +220,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
         form.base_fields['short_title_genitive'].widget = UnfoldAdminTextInputWidget()
         form.base_fields['description'].widget = UnfoldAdminTextareaWidget()
         form.base_fields['short_description'].widget = UnfoldAdminTextareaWidget()
-        form.base_fields['city'].widget = UnfoldAdminTextInputWidget()
+
         return form
 
     def get_html_image(self, obj):

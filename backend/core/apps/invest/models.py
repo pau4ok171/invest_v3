@@ -75,7 +75,10 @@ class Company(TranslatableModel):
     market = models.ForeignKey('Market', on_delete=models.PROTECT)
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT)
+    city = models.ForeignKey('City', on_delete=models.PROTECT, related_name='companies')
     sector_group = models.ForeignKey('SectorGroup', on_delete=models.PROTECT, related_name='companies')
+    sector = models.ForeignKey('Sector', on_delete=models.PROTECT, related_name='companies')
+    industry = models.ForeignKey('Industry', on_delete=models.PROTECT, related_name='companies')
     created = models.DateTimeField(null=False, blank=True)
     updated = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
@@ -177,6 +180,22 @@ class Country(TranslatableModel):
 
         verbose_name = 'Country'
         verbose_name_plural = 'Countries'
+
+
+class City(TranslatableModel):
+    translations = TranslatedFields(
+        name=models.CharField(max_length=255),
+    )
+    geoname_id = models.PositiveBigIntegerField()
+    locode_id = models.CharField(max_length=6, null=True, blank=True)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name='cities')
+
+    def __str__(self):
+        return self.safe_translation_getter('name', any_language=True)
+
+    class Meta:
+        verbose_name = 'City'
+        verbose_name_plural = 'Cities'
 
 
 class Currency(TranslatableModel):
