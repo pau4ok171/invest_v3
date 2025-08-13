@@ -20,6 +20,22 @@ def logo_directory_path(instance, filename):
     return f'companies/logos/small/{instance.ticker.upper()}_{filename}'
 
 
+class SectorGroup(TranslatableModel):
+    translations = TranslatedFields(
+        title = models.CharField(max_length=255)
+    )
+    slug = models.SlugField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.safe_translation_getter('title', any_language=True)
+
+    class Meta:
+        ordering = ['translations__title']
+        indexes = [
+            models.Index(fields=['slug'])
+        ]
+
+
 class Sector(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(max_length=255),
@@ -31,6 +47,7 @@ class Sector(TranslatableModel):
         default='companies/header/default.png',
         blank=True
     )
+    sector_group = models.ForeignKey(SectorGroup, on_delete=models.PROTECT, related_name='sectors')
 
     def __str__(self):
         return self.safe_translation_getter('title', any_language=True)
@@ -58,6 +75,7 @@ class Company(TranslatableModel):
     market = models.ForeignKey('Market', on_delete=models.PROTECT)
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT)
+    sector_group = models.ForeignKey('SectorGroup', on_delete=models.PROTECT, related_name='companies')
     created = models.DateTimeField(null=False, blank=True)
     updated = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')

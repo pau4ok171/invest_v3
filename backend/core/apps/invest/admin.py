@@ -75,8 +75,8 @@ def check_company(modeladmin, request, queryset):
     return main(queryset)
 
 
-@admin.register(models.Sector)
-class SectorAdmin(TranslatableAdmin, ModelAdmin):
+@admin.register(models.SectorGroup)
+class SectorGroupAdmin(TranslatableAdmin, ModelAdmin):
     list_display = ('id', 'title', 'slug')
     list_display_links = ('title',)
     search_fields = ('translations__title', 'slug')
@@ -86,7 +86,35 @@ class SectorAdmin(TranslatableAdmin, ModelAdmin):
         ('General', {
             'fields': (
                 'slug',
+            ),
+        }),
+        ('Translations', {
+            'fields': (
+                'title',
+            )
+        }),
+    )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['title'].widget = UnfoldAdminTextInputWidget()
+        return form
+
+
+@admin.register(models.Sector)
+class SectorAdmin(TranslatableAdmin, ModelAdmin):
+    list_display = ('id', 'title', 'slug', 'sector_group')
+    list_display_links = ('title',)
+    list_filter = ('sector_group',)
+    search_fields = ('translations__title', 'slug')
+    ordering = ['id']
+
+    fieldsets = (
+        ('General', {
+            'fields': (
+                'slug',
                 'main_header',
+                'sector_group',
             ),
         }),
         ('Translations', {
@@ -117,6 +145,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
         'slug',
         'get_html_image',
         'market',
+        'sector_group',
         'sector',
         'industry',
         'is_visible'
@@ -124,7 +153,8 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
 
     list_display_links = ('__str__',)
     list_editable = ('is_visible',)
-    readonly_fields = ('created', 'updated', 'created_by', 'updated_by')
+    list_filter = ('sector_group', 'sector', 'industry', 'country', 'market', 'is_visible', 'is_verified')
+    readonly_fields = ('created', 'updated', 'created_by', 'updated_by', 'uid', 'verified', 'verified_by')
     actions = [check_company]
     export_form_class = ExportForm
     import_form_class = ImportForm
@@ -141,6 +171,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
                 'uid',
                 'country',
                 'market',
+                'sector_group',
                 'sector',
                 'industry',
                 'created',

@@ -574,6 +574,13 @@ UNFOLD = {
                             "admin:invest_sector_changelist"
                         ),
                     },
+                    {
+                        "title": _('Sector Groups'),
+                        "icon": 'oil_barrel',
+                        "link": reverse_lazy(
+                            "admin:invest_sectorgroup_changelist"
+                        ),
+                    },
                 ],
             },
             {
