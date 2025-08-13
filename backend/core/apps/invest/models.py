@@ -1,8 +1,10 @@
 from enum import Enum
+import uuid
 
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from parler.models import TranslatableModel, TranslatedFields
 
@@ -66,22 +68,21 @@ class Company(TranslatableModel):
         short_title_genitive=models.CharField(max_length=255, null=True, blank=True),
         description=models.TextField(blank=True, default='No description yet'),
         short_description=models.TextField(blank=True, default='No description yet'),
-        city=models.CharField(max_length=255, null=True, blank=True),
     )
     ticker = models.CharField(max_length=12, unique=True)
     slug = models.SlugField(max_length=25, unique=True)
-    uid = models.CharField(max_length=255, unique=True)
-    country = models.ForeignKey('Country', on_delete=models.PROTECT)
-    market = models.ForeignKey('Market', on_delete=models.PROTECT)
-    sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
-    industry = models.ForeignKey('Industry', on_delete=models.PROTECT)
+    uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='companies')
     city = models.ForeignKey('City', on_delete=models.PROTECT, related_name='companies')
+    market = models.ForeignKey('Market', on_delete=models.PROTECT, related_name='companies')
     sector_group = models.ForeignKey('SectorGroup', on_delete=models.PROTECT, related_name='companies')
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT, related_name='companies')
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT, related_name='companies')
     created = models.DateTimeField(null=False, blank=True)
     updated = models.DateTimeField(null=True, blank=True)
+    verified = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
+    is_verified = models.BooleanField(default=False, help_text='Translations and other information of the company is correct')
     logo = models.ImageField(
         upload_to=logo_directory_path,
         blank=True,
@@ -93,20 +94,27 @@ class Company(TranslatableModel):
     created_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name='company_created_by',
+        related_name='created_companies',
         null=False,
         blank=True,
     )
     updated_by = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
-        related_name='company_updated_by',
+        related_name='updated_companies',
+        null=True,
+        blank=True,
+    )
+    verified_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='verified_companies',
         null=True,
         blank=True,
     )
 
     def __str__(self):
-        return self.safe_translation_getter('title', any_language=True)
+        return self.safe_translation_getter('short_title', any_language=True)
 
     def get_absolute_url(self):
         return f'/markets/{self.slug}/'
@@ -124,6 +132,18 @@ class Company(TranslatableModel):
         ]
         verbose_name = 'Company'
         verbose_name_plural = 'Companies'
+    
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old_instance = Company.objects.get(pk=self.pk)
+            if self.is_verified != old_instance.is_verified:
+                if self.is_verified:
+                    self.verified = timezone.now()
+                    self.verified_by = self.updated_by
+                else:
+                    self.verified = None
+                    self.verified_by = None
+        super().save(*args, **kwargs)
 
 
 class CompanyPerformance(models.Model):
@@ -149,7 +169,7 @@ class Industry(TranslatableModel):
         title=models.CharField(max_length=255),
     )
     slug = models.SlugField(max_length=255, unique=True)
-    sector = models.ForeignKey('Sector', on_delete=models.PROTECT)
+    sector = models.ForeignKey('Sector', on_delete=models.PROTECT, related_name='industries')
 
     def __str__(self):
         return self.safe_translation_getter('title', any_language=True)
@@ -525,7 +545,7 @@ class CashflowStatement(models.Model):
 
 
 class CandlePerDay(models.Model):
-    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='candle')
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='candles')
     open = models.FloatField()
     high = models.FloatField()
     low = models.FloatField()

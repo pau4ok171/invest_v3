@@ -1,15 +1,18 @@
 import datetime
 
 from django.contrib import admin
+from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 
 from import_export.admin import ImportExportModelAdmin
 
 from unfold.admin import ModelAdmin, StackedInline
+from unfold.typing import FieldsetsType
 from unfold.widgets import UnfoldAdminSelectWidget, UnfoldAdminTextInputWidget, UnfoldAdminTextareaWidget
 from unfold.contrib.import_export.forms import ExportForm, ImportForm
 
 from . import models
+from .resources import CompanyResource, CityResource
 
 from apps.statements.services.analysis import main
 
@@ -158,6 +161,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     actions = [check_company]
     export_form_class = ExportForm
     import_form_class = ImportForm
+    resource_class = CompanyResource
 
     inlines = [
         CompanyPerformanceInline,
@@ -166,6 +170,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     fieldsets = (
         ('General', {
             'fields': (
+                'logo',
                 'ticker',
                 'slug',
                 'uid',
@@ -175,26 +180,30 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
                 'sector_group',
                 'sector',
                 'industry',
-                'created',
-                'updated',
-                'is_visible',
-                'logo',
-                'is_fund',
-                'website',
                 'year_founded',
-                'created_by',
-                'updated_by',
+                'website',
             ),
         }),
-        ('Translations', {
+        ('Visibility', {
+           'fields': (
+                'is_visible',
+           )
+        }),
+        ('Validity', {
             'fields': (
-                'title',
-                'short_title',
-                'short_title_genitive',
-                'description',
-                'short_description',
-                'city',
-             )
+                'is_verified',
+                'verified',
+                'verified_by',
+            )
+        }),
+        ('Meta Data', {
+            'classes': ('collapse',),
+            'fields': (
+                'created',
+                'created_by',
+                'updated',
+                'updated_by',
+            )
         }),
     )
 
@@ -232,10 +241,10 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     def save_model(self, request, obj, form, change):
         if change:
             obj.updated_by = request.user
-            obj.updated = datetime.datetime.utcnow()
+            obj.updated = datetime.datetime.now(datetime.timezone.utc)
         else:
             obj.created_by = request.user
-            obj.created = datetime.datetime.utcnow()
+            obj.created = datetime.datetime.now(datetime.timezone.utc)
 
         super().save_model(request, obj, form, change)
 
@@ -292,6 +301,36 @@ class CountryAdmin(TranslatableAdmin, ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields['name'].widget = UnfoldAdminTextInputWidget()
         form.base_fields['name_genitive'].widget = UnfoldAdminTextInputWidget()
+        return form
+
+
+@admin.register(models.City)
+class City(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
+    list_display = ('id', '__str__', 'locode_id', 'geoname_id', 'country')
+    list_filter = ('country',)
+    ordering = ['id']
+    export_form_class = ExportForm
+    import_form_class = ImportForm
+    resource_class = CityResource
+
+    fieldsets = (
+        ('General', {
+            'fields': (
+                'locode_id',
+                'geoname_id',
+                'country',
+            ),
+        }),
+        ('Translations', {
+            'fields': (
+                'name',
+            )
+        }),
+    )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields['name'].widget = UnfoldAdminTextInputWidget()
         return form
 
 
