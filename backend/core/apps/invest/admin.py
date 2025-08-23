@@ -15,8 +15,6 @@ from . import models
 from .actions import check_company_translation, validate_company, check_company
 from .resources import CompanyResource, CityResource
 
-from apps.statements.services.analysis import main
-
 from parler.admin import TranslatableAdmin
 
 from django_celery_beat.models import (
