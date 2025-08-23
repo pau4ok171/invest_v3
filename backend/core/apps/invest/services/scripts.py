@@ -82,7 +82,40 @@ async def translate_description_field():
         await asyncio.gather(*(process_company(c, translator) for c in companies))
 
 
+def set_translated_fields_from_en():
+    companies = Company.objects.all()
+    for company in companies:
+        company.set_current_language('en')
+        title = company.title
+        desc = company.description
+        short_title = company.short_title
+
+        if not company.short_title_genitive:
+            company.short_title_genitive = short_title
+            company.save()
+        short_title_genitive = company.short_title_genitive
+
+        for lang_code, _ in settings.LANGUAGES:
+            if lang_code == 'en':
+                continue
+
+            company.set_current_language(lang_code)
+            if not company.title:
+                company.title = title
+            if not company.description:
+                company.description = desc
+            if not company.short_title:
+                company.short_title = short_title
+            if not company.short_title_genitive:
+                if lang_code == 'ru':
+                    company.short_title_genitive = company.short_title
+                else:
+                    company.short_title_genitive = short_title_genitive
+            company.save()
+
+
 if __name__ == '__main__':
     # upload_images_to_companies()
     # asyncio.run(translate_description_field())
+    # set_translated_fields_from_en()
     pass
