@@ -1,0 +1,261 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-20 23:33+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\apps\invest\models.py:651
+msgid "Dividend amount per 1 security"
+msgstr "Dividendenbetrag pro Wertpapier"
+
+#: .\apps\invest\models.py:652
+msgid "Actual payment date in UTC timezone"
+msgstr "Tatsächliches Zahlungsdatum in UTC-Zeitzone"
+
+#: .\apps\invest\models.py:653
+msgid "Dividend announcement date in UTC timezone"
+msgstr "Dividendenankündigungsdatum in UTC-Zeitzone"
+
+#: .\apps\invest\models.py:654
+msgid "Last day (inclusive) to purchase for receiving payment in UTC timezone"
+msgstr "Letzter Tag (einschließlich) zum Kauf für Zahlungserhalt in UTC-Zeitzone"
+
+#: .\apps\invest\models.py:657
+msgid ""
+"Payment type. Possible values: Regular Cash – regular payments, Cancelled – "
+"payment cancelled, Daily Accrual – daily accrual, Return of Capital – return "
+"of capital, other payment types"
+msgstr ""
+"Zahlungstyp. Mögliche Werte: Regular Cash – reguläre Zahlungen, Cancelled – "
+"Zahlung storniert, Daily Accrual – tägliche Abgrenzung, Return of Capital – "
+"Kapitalrückzahlung, andere Zahlungstypen"
+
+#: .\apps\invest\models.py:659
+msgid "Record date in UTC timezone"
+msgstr "Stichtag in UTC-Zeitzone"
+
+#: .\apps\invest\models.py:662
+msgid ""
+"Payment frequency. Possible values: Annual – annual, Semi-Anl – semi-annual, "
+"other payment types"
+msgstr ""
+"Zahlungshäufigkeit. Mögliche Werte: Annual – jährlich, Semi-Anl – halbjährlich, "
+"andere Zahlungstypen"
+
+#: .\apps\invest\models.py:664
+msgid "Instrument closing price at ex_dividend_date"
+msgstr "Schlusspreis des Instruments zum ex_dividend_date"
+
+#: .\apps\invest\models.py:665
+msgid "Yield value"
+msgstr "Ertragswert"
+
+#: .\config\settings\base.py:468 .\config\settings\base.py:472
+msgid "Analysis"
+msgstr ""
+
+#: .\config\settings\base.py:481
+msgid "Celery results"
+msgstr ""
+
+#: .\config\settings\base.py:485
+msgid "Group Results"
+msgstr ""
+
+#: .\config\settings\base.py:492
+msgid "Task results"
+msgstr ""
+
+#: .\config\settings\base.py:501
+msgid "Invest"
+msgstr ""
+
+#: .\config\settings\base.py:505
+msgid "Analyst ideas"
+msgstr ""
+
+#: .\config\settings\base.py:512
+msgid "Analysts"
+msgstr ""
+
+#: .\config\settings\base.py:519
+msgid "Candles"
+msgstr ""
+
+#: .\config\settings\base.py:526
+msgid "Companies"
+msgstr ""
+
+#: .\config\settings\base.py:533
+msgid "Countries"
+msgstr ""
+
+#: .\config\settings\base.py:540
+msgid "Cities"
+msgstr ""
+
+#: .\config\settings\base.py:547
+msgid "Currencies"
+msgstr ""
+
+#: .\config\settings\base.py:554
+msgid "Dividends"
+msgstr ""
+
+#: .\config\settings\base.py:561
+msgid "Exchanges"
+msgstr ""
+
+#: .\config\settings\base.py:568
+msgid "Industries"
+msgstr ""
+
+#: .\config\settings\base.py:575
+msgid "Instruments"
+msgstr ""
+
+#: .\config\settings\base.py:582
+msgid "Reports metadata"
+msgstr ""
+
+#: .\config\settings\base.py:589
+msgid "Sectors"
+msgstr ""
+
+#: .\config\settings\base.py:596
+msgid "Sector Groups"
+msgstr ""
+
+#: .\config\settings\base.py:605 .\config\settings\base.py:609
+msgid "News"
+msgstr ""
+
+#: .\config\settings\base.py:618 .\config\settings\base.py:622
+msgid "Notes"
+msgstr ""
+
+#: .\config\settings\base.py:631 .\config\settings\base.py:642
+msgid "Portfolios"
+msgstr ""
+
+#: .\config\settings\base.py:635
+msgid "Portfolios Companies"
+msgstr ""
+
+#: .\config\settings\base.py:651 .\config\settings\base.py:655
+msgid "Statements"
+msgstr ""
+
+#: .\config\settings\base.py:664
+msgid "User Profiles"
+msgstr ""
+
+#: .\config\settings\base.py:668
+msgid "Profiles"
+msgstr ""
+
+#: .\config\settings\base.py:677
+msgid "Token Blacklists"
+msgstr ""
+
+#: .\config\settings\base.py:681
+msgid "Blacklisted Tokens"
+msgstr ""
+
+#: .\config\settings\base.py:688
+msgid "Outstanding Tokens"
+msgstr ""
+
+#: .\config\settings\base.py:697
+msgid "Accounts"
+msgstr ""
+
+#: .\config\settings\base.py:701
+msgid "Email Addresses"
+msgstr ""
+
+#: .\config\settings\base.py:708
+msgid "Email Confirmations"
+msgstr ""
+
+#: .\config\settings\base.py:717 .\config\settings\base.py:721
+msgid "Social Accounts"
+msgstr ""
+
+#: .\config\settings\base.py:728
+msgid "Social Apps"
+msgstr ""
+
+#: .\config\settings\base.py:735
+msgid "Social Tokens"
+msgstr ""
+
+#: .\config\settings\base.py:744 .\config\settings\base.py:748
+msgid "Sites"
+msgstr ""
+
+#: .\config\settings\base.py:757
+msgid "Celery Tasks"
+msgstr ""
+
+#: .\config\settings\base.py:761
+msgid "Clocked"
+msgstr ""
+
+#: .\config\settings\base.py:768
+msgid "Crontabs"
+msgstr ""
+
+#: .\config\settings\base.py:775
+msgid "Intervals"
+msgstr ""
+
+#: .\config\settings\base.py:782
+msgid "Periodic tasks"
+msgstr ""
+
+#: .\config\settings\base.py:789
+msgid "Solar events"
+msgstr ""
+
+#: .\config\settings\base.py:798
+msgid "Users & Groups"
+msgstr ""
+
+#: .\config\settings\base.py:802
+msgid "Users"
+msgstr ""
+
+#: .\config\settings\base.py:807
+msgid "Groups"
+msgstr ""
+
+#: .\config\settings\base.py:814
+msgid "Auth Tokens"
+msgstr ""
+
+#: .\config\settings\base.py:818
+msgid "Token"
+msgstr ""
+
+#: .\config\settings\utils.py:8
+msgid "Development"
+msgstr ""
+
+#: .\config\settings\utils.py:10
+msgid "Production"
+msgstr ""
