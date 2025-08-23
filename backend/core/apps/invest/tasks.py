@@ -1,18 +1,20 @@
 from celery import shared_task
-import asyncio
-from invest.tinkoff_api import main
-from invest.services.dividend import main as dividend_main
-from invest.services.returns import main as returns_main
+
+from apps.invest.services.tinvest import candle_sync
+from apps.invest.services.tinvest import dividend_sync
+from apps.invest.services.returns import main as returns_main
 
 
-@shared_task(name='Tinkoff_API')
-def tinkoff_task():
-    return main()
+@shared_task(name='candles', track_started=True)
+def candles_task():
+    candle_sync()
+    return 'candles successful'
 
 
 @shared_task(name='dividends')
 def dividend_task():
-    return dividend_main()
+    dividend_sync()
+    return 'dividends successful'
 
 
 @shared_task(name='returns')
