@@ -11,7 +11,6 @@ urlpatterns = [
     path('api/v1/invest/', include('apps.invest.urls', namespace='invest_api')),
     path('api/v1/notes/', include('apps.notes.urls', namespace='notes_api')),
     path('api/v1/portfolios/', include('apps.portfolio.urls', namespace='portfolio_api')),
-    path('api/v1/admin/', include('apps.site_admin.urls', namespace='admin_api')),
     path('api/v1/profile/', include('apps.user_profile.urls', namespace='profile_api')),
 ]
 

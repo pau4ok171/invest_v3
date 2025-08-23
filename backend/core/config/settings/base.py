@@ -121,7 +121,6 @@ INSTALLED_APPS = [
     'apps.statements.apps.StatementsConfig',
     'apps.news.apps.NewsConfig',
     'apps.analysis.apps.AnalysisConfig',
-    'apps.site_admin.apps.AdminConfig',
     'apps.user_profile.apps.UserProfileConfig',
     'apps.user_auth.apps.UserAuthConfig',
 ]
