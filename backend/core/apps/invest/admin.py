@@ -12,6 +12,7 @@ from unfold.widgets import UnfoldAdminSelectWidget, UnfoldAdminTextInputWidget, 
 from unfold.contrib.import_export.forms import ExportForm, ImportForm
 
 from . import models
+from .actions import check_company_translation, validate_company, check_company
 from .resources import CompanyResource, CityResource
 
 from apps.statements.services.analysis import main
@@ -71,11 +72,6 @@ class SolarScheduleAdmin(ModelAdmin):
 @admin.register(ClockedSchedule)
 class ClockedScheduleAdmin(BaseClockedScheduleAdmin, ModelAdmin):
     pass
-
-
-@admin.action(description='Analyse company by statements checks')
-def check_company(modeladmin, request, queryset):
-    return main(queryset)
 
 
 @admin.register(models.SectorGroup)
@@ -158,7 +154,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     list_editable = ('is_visible',)
     list_filter = ('sector_group', 'sector', 'industry', 'country', 'market', 'is_visible', 'is_verified')
     readonly_fields = ('created', 'updated', 'created_by', 'updated_by', 'uid', 'verified', 'verified_by')
-    actions = [check_company]
+    actions = [check_company, check_company_translation, validate_company]
     export_form_class = ExportForm
     import_form_class = ImportForm
     resource_class = CompanyResource
