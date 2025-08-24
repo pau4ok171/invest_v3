@@ -27,7 +27,7 @@ application = ProtocolTypeRouter({
     'websocket': AuthMiddlewareStack(
         URLRouter([
             path('ws/api/v1/prices', consumers.PriceConsumer.as_asgi()),
-            re_path(r'^ws/api/v1/prices/(?P<company_slug>[\w-]+)/$', consumers.CompanyDetailPriceConsumer.as_asgi()),
+            re_path(r'^ws/api/v1/prices/(?P<instrument_uid>[\w-]+)/$', consumers.CompanyDetailPriceConsumer.as_asgi()),
         ])
     ),
 })

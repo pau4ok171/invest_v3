@@ -18,6 +18,15 @@ class ReportPeriodType(Enum):
     QUARTERLY = 'quarterly'
 
 
+class InstrumentType(models.TextChoices):
+    SHARE = 'share', 'Акция'
+    BOND = 'bond', 'Облигация'
+    CURRENCY = 'currency', 'Валюта'
+    ETF = 'etf', 'Биржевой фонд'
+    FUTURE = 'future', 'Фьючерс'
+    OPTION = 'option', 'Опцион'
+
+
 def logo_directory_path(instance, filename):
     return f'companies/logos/small/{instance.ticker.upper()}_{filename}'
 
@@ -61,6 +70,53 @@ class Sector(TranslatableModel):
         ]
 
 
+class Instrument(models.Model):
+    name_ru = models.CharField(max_length=255)
+    name_en = models.CharField(max_length=255)
+    ticker = models.CharField(
+        max_length=12,
+        help_text='If the instrument does not have a ticker, its isin is filled in'
+    )
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='instruments')
+    exchange = models.ForeignKey('Exchange', on_delete=models.PROTECT, related_name='instruments')
+    currency = models.ForeignKey('Currency', on_delete=models.PROTECT, related_name='instruments')
+    tinkoff_uid = models.CharField(max_length=255)
+    instrument_type = models.CharField(max_length=255, choices=InstrumentType)
+    class_code = models.CharField(max_length=255)
+    isin = models.CharField(max_length=255, unique=True)
+    lot = models.PositiveBigIntegerField(default=1)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='created_instruments',
+        null=False,
+        blank=True,
+    )
+    updated_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='updated_instruments',
+        null=True,
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ['id']
+        indexes = [
+            models.Index(fields=['ticker']),
+            models.Index(fields=['exchange']),
+        ]
+        unique_together = ['ticker', 'exchange']
+
+    def __str__(self):
+        return f'{self.name_en} ({self.name_ru})'
+
+    def get_absolute_url(self):
+        return f'/markets/{self.exchange.slug}-{self.ticker}/'
+
+
 class Company(TranslatableModel):
     translations = TranslatedFields(
         title=models.CharField(max_length=255),
@@ -69,12 +125,9 @@ class Company(TranslatableModel):
         description=models.TextField(blank=True, default='No description yet'),
         short_description=models.TextField(blank=True, default='No description yet'),
     )
-    ticker = models.CharField(max_length=12, unique=True)
-    slug = models.SlugField(max_length=25, unique=True)
     uid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='companies')
     city = models.ForeignKey('City', on_delete=models.PROTECT, related_name='companies')
-    market = models.ForeignKey('Market', on_delete=models.PROTECT, related_name='companies')
     sector_group = models.ForeignKey('SectorGroup', on_delete=models.PROTECT, related_name='companies')
     sector = models.ForeignKey('Sector', on_delete=models.PROTECT, related_name='companies')
     industry = models.ForeignKey('Industry', on_delete=models.PROTECT, related_name='companies')
@@ -82,7 +135,10 @@ class Company(TranslatableModel):
     updated = models.DateTimeField(null=True, blank=True)
     verified = models.DateTimeField(null=True, blank=True)
     is_visible = models.BooleanField(default=False, help_text='If company is visible publicly')
-    is_verified = models.BooleanField(default=False, help_text='Translations and other information of the company is correct')
+    is_verified = models.BooleanField(
+        default=False,
+        help_text='Translations and other information of the company is correct'
+    )
     logo = models.ImageField(
         upload_to=logo_directory_path,
         blank=True,
@@ -116,9 +172,6 @@ class Company(TranslatableModel):
     def __str__(self):
         return self.safe_translation_getter('short_title', any_language=True)
 
-    def get_absolute_url(self):
-        return f'/markets/{self.slug}/'
-
     def get_logo(self):
         if self.logo:
             return URL_PREFIX + self.logo.url
@@ -127,12 +180,12 @@ class Company(TranslatableModel):
     class Meta:
         ordering = ['id']
         indexes = [
-            models.Index(fields=['slug']),
+            models.Index(fields=['uid']),
             models.Index(fields=['is_visible']),
         ]
         verbose_name = 'Company'
         verbose_name_plural = 'Companies'
-    
+
     def save(self, *args, **kwargs):
         if self.pk:
             old_instance = Company.objects.get(pk=self.pk)
@@ -302,7 +355,7 @@ class SectorMarket(models.Model):
 
 
 class ReportMetadata(models.Model):
-    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='report')
+    company = models.ForeignKey('Company', on_delete=models.PROTECT, related_name='reports')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     verified = models.DateTimeField(blank=True, null=True)
@@ -546,6 +599,7 @@ class CashflowStatement(models.Model):
 
 class CandlePerDay(models.Model):
     company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='candles')
+    instrument = models.ForeignKey('Instrument', on_delete=models.CASCADE, related_name='candles')
     open = models.FloatField()
     high = models.FloatField()
     low = models.FloatField()
@@ -556,10 +610,7 @@ class CandlePerDay(models.Model):
 
     class Meta:
         ordering = ['time']
-        unique_together = [['company', 'time']]
-
-        verbose_name = 'Candle Per Day'
-        verbose_name_plural = 'Candles Per Day'
+        unique_together = [['instrument', 'time']]
 
 
 class AnalystIdea(models.Model):
@@ -578,7 +629,12 @@ class AnalystIdea(models.Model):
 class Dividend(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='dividend')
+    instrument = models.ForeignKey(
+        'Instrument',
+        on_delete=models.CASCADE,
+        related_name='dividends',
+        limit_choices_to={'instrument_type': 'share'}
+    )
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
     scale = models.CharField(choices=SCALES, max_length=12)
     scale_unit = models.IntegerField(default=1)
@@ -587,3 +643,5 @@ class Dividend(models.Model):
     declared_date = models.DateField()
     ex_dividend_date = models.DateField()
     pay_date = models.DateField()
+    class Meta:
+        unique_together = ['instrument', 'record_date']

@@ -565,10 +565,10 @@ UNFOLD = {
                         ),
                     },
                     {
-                        "title": _('Markets'),
-                        "icon": 'api',
+                        "title": _('Instruments'),
+                        "icon": 'contract',
                         "link": reverse_lazy(
-                            "admin:invest_market_changelist"
+                            "admin:invest_instrument_changelist"
                         ),
                     },
                     {

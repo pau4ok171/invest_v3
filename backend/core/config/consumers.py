@@ -1,4 +1,3 @@
-from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 import json
@@ -34,13 +33,13 @@ class CompanyDetailPriceConsumer(AsyncWebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(args, kwargs)
         self.group_name = None
-        self.company_slug = None
+        self.instrument_uid = None
 
     async def connect(self):
-        self.company_slug = self.scope['url_route']['kwargs']['company_slug']
-        self.group_name = f'company_{self.company_slug}'
+        self.instrument_uid = self.scope['url_route']['kwargs']['instrument_uid']
+        self.group_name = f'instrument_{self.instrument_uid}'
 
-        if await self.is_company_accessible():
+        if await self.is_instrument_accessible():
             await self.channel_layer.group_add(
                 self.group_name,
                 self.channel_name
@@ -61,9 +60,8 @@ class CompanyDetailPriceConsumer(AsyncWebsocketConsumer):
     async def company_price_update(self, event):
         await self.send(text_data=json.dumps(event['data']))
 
-    @database_sync_to_async
-    def is_company_accessible(self):
+    async def is_instrument_accessible(self):
         # Импорт модели ВНУТРИ метода
-        from invest.models import Company
+        from apps.invest.models import Instrument
 
-        return Company.objects.filter(slug=self.company_slug).exists()
+        return Instrument.objects.filter(tinkoff_uid=self.instrument_uid).aexists()

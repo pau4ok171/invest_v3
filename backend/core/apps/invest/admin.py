@@ -467,6 +467,10 @@ class CandlePerDayAdmin(ModelAdmin):
         return obj.company.safe_translation_getter('title', any_language=True)
     get_company_title.short_description = 'Company Title'
     get_company_title.admin_order_field = 'company__id'
+    list_display = ('instrument', 'open', 'high', 'close', 'low', 'volume', 'time', 'is_complete')
+    ordering = ('-time', 'instrument__id')
+    list_filter = ('instrument', 'time')
+    search_fields = ('instrument__name_en', 'instrument__name_ru', 'instrument__tinkoff_uid', 'time')
 
 
 @admin.register(models.AnalystIdea)
@@ -476,4 +480,4 @@ class AnalystIdeaAdmin(ModelAdmin):
 
 @admin.register(models.Dividend)
 class DividendAdmin(ModelAdmin):
-    list_display = ('company', 'ex_dividend_date', 'dividend_yield')
+    list_display = ('instrument', 'ex_dividend_date', 'yield_value')

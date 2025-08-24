@@ -97,7 +97,11 @@ def main(companies: list[Company] = None):
     objects = []
 
     for company in companies:
-        if not company.candles.order_by('-time').exists():
+        if not company.instruments.filter(
+            instrument_type='share'
+        ).annotate(
+            has_candles = Exists(Candle.objects.filter(instrument=OuterRef('pk')))
+        ).filter(has_candles=True).exists():
             continue
 
         fields = get_fields(company)
@@ -193,7 +197,7 @@ def main(companies: list[Company] = None):
 
 
 def get_fields(company_object):
-    last_candle = company_object.candles.order_by('-time').first()
+    last_candle = company_object.instruments.filter(instrument_type='share').first().candles.order_by('-time').first()
 
     return Fields(
         # Common

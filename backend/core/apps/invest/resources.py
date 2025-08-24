@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from import_export import resources, fields, widgets
 
-from .models import Company, Country, Market, Sector, Industry, SectorGroup, City
+from apps.invest.models import Company, Country, Sector, Industry, SectorGroup, City
 
 
 def add_translations(instance, row, model_fields: List | Tuple):
@@ -29,10 +29,6 @@ class CompanyResource(resources.ModelResource):
     city = fields.Field(
         attribute='city',
         widget=widgets.ForeignKeyWidget(City, 'geoname_id')
-    )
-    market = fields.Field(
-        attribute='market',
-        widget=widgets.ForeignKeyWidget(Market, 'slug')
     )
     sector_group = fields.Field(
         attribute='sector_group',
@@ -59,12 +55,8 @@ class CompanyResource(resources.ModelResource):
         model = Company
         skip_unchanged = True
         report_skipped = True
-        import_id_fields = ('ticker',)
         fields = (
-            'ticker',
-            'slug',
             'country',
-            'market',
             'sector_group',
             'sector',
             'industry',
@@ -93,7 +85,6 @@ class CompanyResource(resources.ModelResource):
         row['updated_by'] = user.id
         row['is_visible'] = False
         row['is_verified'] = False
-        row['slug'] = row.get('ticker').lower()
 
     def after_save_instance(self, instance, row, **kwargs):
         model_fields = ('title', 'short_title', 'short_title_genitive', 'description', 'short_description')
