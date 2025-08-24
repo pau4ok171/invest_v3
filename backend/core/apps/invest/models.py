@@ -636,12 +636,25 @@ class Dividend(models.Model):
         limit_choices_to={'instrument_type': 'share'}
     )
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT)
-    scale = models.CharField(choices=SCALES, max_length=12)
-    scale_unit = models.IntegerField(default=1)
-    dividend_yield = models.FloatField()
-    dividend_amount = models.FloatField()
-    declared_date = models.DateField()
-    ex_dividend_date = models.DateField()
-    pay_date = models.DateField()
+    dividend_net = models.FloatField(help_text=_('Dividend amount per 1 security'))
+    payment_date = models.DateTimeField(help_text=_('Actual payment date in UTC timezone'))
+    declared_date = models.DateTimeField(help_text=_('Dividend announcement date in UTC timezone'))
+    ex_dividend_date = models.DateTimeField(help_text=_('Last day (inclusive) to purchase for receiving payment in UTC timezone'))
+    dividend_type = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_('Payment type. Possible values: Regular Cash – regular payments, Cancelled – payment cancelled, Daily Accrual – daily accrual, Return of Capital – return of capital, other payment types')
+    )
+    record_date = models.DateTimeField(help_text=_('Record date in UTC timezone'))
+    regularity = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text=_('Payment frequency. Possible values: Annual – annual, Semi-Anl – semi-annual, other payment types')
+    )
+    close_price = models.FloatField(help_text=_('Instrument closing price at ex_dividend_date'))
+    yield_value = models.FloatField(help_text=_('Yield value'))
+
     class Meta:
         unique_together = ['instrument', 'record_date']
