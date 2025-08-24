@@ -13,7 +13,7 @@ class News(models.Model):
     company = models.ForeignKey(Company, related_name='company_news', on_delete=models.CASCADE)
     type = models.CharField(
         max_length=255,
-        choices=NewsTypes.choices
+        choices=NewsTypes
     )
     date = models.DateField()
     title = models.CharField(max_length=255)
