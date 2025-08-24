@@ -1,6 +1,5 @@
 # Задать переменные среды
-FROM python:3.11.3
-
+FROM python:3.13.7
 # Задать переменные среды
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
