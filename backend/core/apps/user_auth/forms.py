@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django import forms
 
 if 'allauth' in settings.INSTALLED_APPS:
     from allauth.account import app_settings as allauth_account_settings
@@ -60,3 +61,7 @@ class CustomAllAuthPasswordResetForm(AllAuthPasswordResetForm):
                 'account/email/password_reset_key', email, context
             )
         return self.cleaned_data['email']
+
+
+class UsernameVerificationForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=255)
