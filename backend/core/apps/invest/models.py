@@ -599,8 +599,7 @@ class CashflowStatement(models.Model):
     taxes_refund_paid = models.DecimalField(max_digits=15, decimal_places=2, default=0)
 
 
-class CandlePerDay(models.Model):
-    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='candles')
+class Candle(models.Model):
     instrument = models.ForeignKey('Instrument', on_delete=models.CASCADE, related_name='candles')
     open = models.FloatField()
     high = models.FloatField()

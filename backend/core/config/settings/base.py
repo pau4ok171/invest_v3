@@ -516,10 +516,10 @@ UNFOLD = {
                         ),
                     },
                     {
-                        "title": _('Candles per day'),
+                        "title": _('Candles'),
                         "icon": 'candlestick_chart',
                         "link": reverse_lazy(
-                            "admin:invest_candleperday_changelist"
+                            "admin:invest_candle_changelist"
                         ),
                     },
                     {

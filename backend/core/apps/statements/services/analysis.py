@@ -1,4 +1,6 @@
-from apps.invest.models import Company
+from django.db.models import Exists, OuterRef
+
+from apps.invest.models import Company, Candle
 from apps.statements.checks.initials import (
     AreRevenueAndEarningsExpectedToGrowCheck,
     HasBeenGrowingProfitOrRevenueCheck,

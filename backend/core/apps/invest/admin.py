@@ -492,17 +492,8 @@ class ReportAdmin(ModelAdmin):
     ]
 
 
-@admin.register(models.CandlePerDay)
-class CandlePerDayAdmin(ModelAdmin):
-    list_display = ('get_company_title', 'open', 'high', 'close', 'low', 'volume', 'time', 'is_complete')
-    ordering = ('-time', 'company__id')
-    list_filter = ('company', 'time')
-    search_fields = ('company__translations__title', 'time')
-
-    def get_company_title(self, obj):
-        return obj.company.safe_translation_getter('title', any_language=True)
-    get_company_title.short_description = 'Company Title'
-    get_company_title.admin_order_field = 'company__id'
+@admin.register(models.Candle)
+class CandleAdmin(ModelAdmin):
     list_display = ('instrument', 'open', 'high', 'close', 'low', 'volume', 'time', 'is_complete')
     ordering = ('-time', 'instrument__id')
     list_filter = ('instrument', 'time')
