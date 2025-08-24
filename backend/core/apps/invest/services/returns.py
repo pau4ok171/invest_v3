@@ -1,7 +1,7 @@
 import datetime
 import numpy as np
 
-from invest.models import Market, Company, Sector, SectorMarket
+from apps.invest.models import Exchange, Company, Sector, SectorExchange
 
 PERIODS = {
     'now': 0,
@@ -87,7 +87,7 @@ def get_aggregate_price_data(companies, market, sector=None):
 
 
 def get_market_list():
-    return Market.objects.all()
+    return Exchange.objects.all()
 
 
 def get_sector_list():
@@ -105,12 +105,12 @@ def get_company_list(market, sector):
 
 
 def update_or_create(market_price_data, sector_market_price_data, company_price_data):
-    [Market.objects.update_or_create(
+    [Exchange.objects.update_or_create(
         pk=price_data['market_id'],
         defaults=price_data
     ) for price_data in market_price_data]
 
-    [SectorMarket.objects.update_or_create(
+    [SectorExchange.objects.update_or_create(
         market__pk=price_data['market_id'],
         sector__pk=price_data['sector_id'],
         defaults=price_data

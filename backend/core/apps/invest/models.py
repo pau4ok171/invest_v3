@@ -297,10 +297,12 @@ class Analyst(TranslatableModel):
         return self.safe_translation_getter('name', any_language=True)
 
 
-class Market(models.Model):
+class Exchange(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, unique=True)
-    country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='market', null=True)
+    slug = models.SlugField(max_length=255, unique=True, help_text='National Regulatory Code')
+    mic = models.CharField(max_length=4, unique=True, help_text='Market Identifier Code')
+    lei = models.CharField(max_length=20, unique=True, help_text='Legal Entity Identifier')
+    country = models.ForeignKey('Country', on_delete=models.PROTECT, related_name='exchanges')
 
     def __str__(self):
         return self.title
@@ -312,8 +314,8 @@ class Market(models.Model):
         ]
 
 
-class MarketPerformance(models.Model):
-    market = models.OneToOneField(Market, on_delete=models.CASCADE, related_name='performance')
+class ExchangePerformance(models.Model):
+    exchange = models.OneToOneField(Exchange, on_delete=models.CASCADE, related_name='performance')
     return_7d = models.FloatField(null=True, blank=True)
     return_30d = models.FloatField(null=True, blank=True)
     return_90d = models.FloatField(null=True, blank=True)
@@ -331,9 +333,9 @@ class MarketPerformance(models.Model):
     volatility_100p = models.FloatField(null=True, blank=True)
 
 
-class SectorMarket(models.Model):
+class SectorExchange(models.Model):
     sector = models.ForeignKey('Sector', on_delete=models.CASCADE)
-    market = models.ForeignKey('Market', on_delete=models.CASCADE)
+    exchange = models.ForeignKey('Exchange', on_delete=models.CASCADE)
     return_7d = models.FloatField(null=True, blank=True)
     return_30d = models.FloatField(null=True, blank=True)
     return_90d = models.FloatField(null=True, blank=True)
@@ -351,7 +353,7 @@ class SectorMarket(models.Model):
     volatility_100p = models.FloatField(null=True, blank=True)
 
     def __str__(self):
-        return f'{self.market.title} - {self.sector.__str__()}'
+        return f'{self.exchange.title} - {self.sector.__str__()}'
 
 
 class ReportMetadata(models.Model):

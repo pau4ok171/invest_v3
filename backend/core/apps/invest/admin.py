@@ -139,9 +139,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
     list_display = (
         'id',
         '__str__',
-        'slug',
         'get_html_image',
-        'market',
         'sector_group',
         'sector',
         'industry',
@@ -150,7 +148,7 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
 
     list_display_links = ('__str__',)
     list_editable = ('is_visible',)
-    list_filter = ('sector_group', 'sector', 'industry', 'country', 'market', 'is_visible', 'is_verified')
+    list_filter = ('sector_group', 'sector', 'industry', 'country', 'is_visible', 'is_verified')
     readonly_fields = ('created', 'updated', 'created_by', 'updated_by', 'uid', 'verified', 'verified_by')
     actions = [check_company, check_company_translation, validate_company]
     export_form_class = ExportForm
@@ -380,19 +378,19 @@ class AnalystAdmin(TranslatableAdmin, ModelAdmin):
         return form
 
 
-class MarketPerformanceInline(StackedInline):
-    model = models.MarketPerformance
+class ExchangePerformanceInline(StackedInline):
+    model = models.ExchangePerformance
     extra = 0
 
 
-@admin.register(models.Market)
-class MarketAdmin(ModelAdmin):
+@admin.register(models.Exchange)
+class ExchangeAdmin(ModelAdmin):
     list_display = ('id', 'title', 'slug', 'country')
     list_display_links = ('title',)
     prepopulated_fields = {'slug': ('title',)}
 
     inlines = [
-        MarketPerformanceInline,
+        ExchangePerformanceInline,
     ]
 
 

@@ -558,6 +558,13 @@ UNFOLD = {
                         ),
                     },
                     {
+                        "title": _('Exchanges'),
+                        "icon": 'api',
+                        "link": reverse_lazy(
+                            "admin:invest_exchange_changelist"
+                        ),
+                    },
+                    {
                         "title": _('Industries'),
                         "icon": 'precision_manufacturing',
                         "link": reverse_lazy(
