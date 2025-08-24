@@ -1,30 +1,37 @@
 services:
   web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: daphne config.asgi:application
+    restart: unless-stopped
     volumes:
       - .:/code
+      - static_volume:/code/static
+      - media_volume:/code/media
     env_file:
       - ./.env
     ports:
-      - 8000:8000
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
 
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:4-management
     hostname: rabbitmq
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./rabbitmq:/var/lib/rabbitmq
     env_file:
       - ./.env
     ports:
-      - 15672:15672
-      - 5672:5672
+      - "15672:15672"
+      - "5672:5672"
 
   celery:
     build: .
     command: celery -A config worker -P eventlet -l info
+    restart: unless-stopped
     volumes:
       - .:/code
     env_file:
@@ -36,19 +43,28 @@ services:
   celery-beat:
     build: .
     command: celery -A config beat -l info
+    restart: unless-stopped
     volumes:
       - .:/code
     env_file:
       - ./.env
     depends_on:
+      - rabbitmq
+      - web
       - celery
 
   celery-flower:
     build: .
-    command: celery -A config flower
+    command: celery -A config flower --port=5555
+    restart: unless-stopped
     volumes:
       - .:/code
     env_file:
       - ./.env
     depends_on:
       - celery
+      - rabbitmq
+
+volumes:
+  static_volume:
+  media_volume:
