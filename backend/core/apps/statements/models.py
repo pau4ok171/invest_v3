@@ -10,7 +10,7 @@ SEVERITY_CHOICES = Severity.as_dict()
 
 
 class Statement(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='statement')
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='statements')
     name = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     description = models.TextField()
