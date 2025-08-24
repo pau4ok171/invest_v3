@@ -163,12 +163,9 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
         ('General', {
             'fields': (
                 'logo',
-                'ticker',
-                'slug',
                 'uid',
                 'country',
                 'city',
-                'market',
                 'sector_group',
                 'sector',
                 'industry',
@@ -238,6 +235,47 @@ class CompanyAdmin(TranslatableAdmin, ModelAdmin, ImportExportModelAdmin):
             obj.created_by = request.user
             obj.created = datetime.datetime.now(datetime.timezone.utc)
 
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(models.Instrument)
+class InstrumentAdmin(ModelAdmin):
+    list_display = ('id', 'ticker', 'company', 'exchange', 'instrument_type')
+    list_filter = ('exchange', 'company', 'instrument_type', 'currency')
+    readonly_fields = ('created', 'updated', 'created_by', 'updated_by')
+
+    fieldsets = (
+        ('General', {
+            'fields': (
+                'ticker',
+                'isin',
+                'name_ru',
+                'name_en',
+                'tinkoff_uid',
+                'class_code',
+                'instrument_type',
+                'lot',
+                'company',
+                'exchange',
+                'currency',
+            ),
+        }),
+        ('Meta Data', {
+            'classes': ('collapse',),
+            'fields': (
+                'created',
+                'created_by',
+                'updated',
+                'updated_by',
+            )
+        }),
+    )
+
+    def save_model(self, request, obj, form, change):
+        if change:
+            obj.updated_by = request.user
+        else:
+            obj.created_by = request.user
         super().save_model(request, obj, form, change)
 
 
