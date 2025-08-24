@@ -5,4 +5,16 @@ from apps.statements.models import Statement
 class StatementSerializer(ModelSerializer):
     class Meta:
         model = Statement
-        fields = '__all__'
+        fields = (
+            'id',
+            'name',
+            'title',
+            'description',
+            'question',
+            'level',
+            'area',
+            'type',
+            'status',
+            'severity',
+            'outcome',
+        )
