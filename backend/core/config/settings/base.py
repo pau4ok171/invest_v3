@@ -327,6 +327,7 @@ CELERY_BEAT_SCHEDULER = \
 
 CELERY_BROKER_TRANSPORT_OPTION = {'visibility_timeout': 3600}  # время ожидания видимости 1 час
 CELERY_RESULT_BACKEND = 'django-db'  # указание для django_celery_results куда записывать результат выполнения задач
+CELERY_RESULT_EXTENDED = True
 CELERY_ACCEPT_CONTENT = ['application/json']  # это тип содержимого, разрешенный к получению
 CELERY_TASK_SERIALIZER = 'json'  # это строка, используемая для определения метода сериализации по умолчанию
 CELERY_RESULT_SERIALIZER = 'json'  # является типом формата сериализации результатов
