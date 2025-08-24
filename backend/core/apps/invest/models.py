@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from parler.models import TranslatableModel, TranslatedFields
 
-from .model_choices import QUARTERS, REPORT_FORMS, SCALES
+from apps.invest.model_choices import QUARTERS, REPORT_FORMS, SCALES
 
 URL_PREFIX = settings.URL_PREFIX
 
@@ -240,7 +241,6 @@ class Country(TranslatableModel):
     translations = TranslatedFields(
         name=models.CharField(max_length=255),
         name_genitive=models.CharField(max_length=255),
-
     )
     iso_code = models.CharField(max_length=3)
     currency = models.ForeignKey('Currency', on_delete=models.PROTECT, related_name='countries')
@@ -395,7 +395,10 @@ class BalanceSheet(models.Model):
     # Balance Sheet
     accounts_payable = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     accounts_payable_and_accrued_expense = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    accounts_payable_and_accrued_expense_for_financial_companies = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    accounts_payable_and_accrued_expense_for_financial_companies = models.DecimalField(
+        max_digits=15, decimal_places=2,
+        default=0
+    )
     accounts_receivable = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     accumulated_depreciation = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     accumulated_other_comprehensive_income_or_loss = models.DecimalField(max_digits=15, decimal_places=2, default=0)
@@ -404,7 +407,11 @@ class BalanceSheet(models.Model):
     buildings_and_improvements = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     cash_and_cash_equivalents = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     balance_sheet_cash_and_cash_equivalents = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    cash_and_cash_equivalents_and_marketable_securities = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    cash_and_cash_equivalents_and_marketable_securities = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        default=0
+    )
     common_stock = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     construction_in_progress = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     current_accrued_expense = models.DecimalField(max_digits=15, decimal_places=2, default=0)
@@ -563,7 +570,11 @@ class CashflowStatement(models.Model):
     change_in_receivables = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     change_in_working_capital = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     deferred_tax = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    depreciation_and_depletion_and_amortization_cash_flow = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    depreciation_and_depletion_and_amortization_cash_flow = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        default=0
+    )
     dividends_paid = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     dividends_received = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     effect_of_exchange_rate_changes = models.DecimalField(max_digits=15, decimal_places=2, default=0)
