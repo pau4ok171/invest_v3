@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.invest.models import Company
+from apps.invest.models import Instrument
 
 from .models import Portfolio
 
@@ -8,7 +8,7 @@ from .models import Portfolio
 class PortfoliosSerializer(serializers.ModelSerializer):
     positions = serializers.PrimaryKeyRelatedField(
         many=True,
-        queryset=Company.objects.filter(is_visible=True),
+        queryset=Instrument.objects.filter(company__is_visible=True),
         required=False
     )
 

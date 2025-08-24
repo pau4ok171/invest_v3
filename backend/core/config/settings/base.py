@@ -632,10 +632,10 @@ UNFOLD = {
                 "collapsible": True,
                 "items": [
                     {
-                        "title": _('Portfolios Companies'),
+                        "title": _('Portfolio Positions'),
                         "icon": 'work_update',
                         "link": reverse_lazy(
-                            "admin:portfolio_portfoliocompany_changelist"
+                            "admin:portfolio_portfolioposition_changelist"
                         ),
                     },
                     {
