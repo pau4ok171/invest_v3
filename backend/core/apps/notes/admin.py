@@ -7,4 +7,4 @@ from .models import Note
 
 @admin.register(Note)
 class NoteAdmin(ModelAdmin):
-    list_display = ('user', 'company', 'body', 'created_at', 'updated_at')
+    list_display = ('user', 'instrument', 'body', 'created_at', 'updated_at')

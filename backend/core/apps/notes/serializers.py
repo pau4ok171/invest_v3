@@ -8,7 +8,7 @@ class NoteSerializer(serializers.ModelSerializer):
         model = Note
         fields = (
             'id',
-            'company',
+            'instrument',
             'body',
             'text',
             'created_at',
@@ -24,8 +24,8 @@ class NoteSerializer(serializers.ModelSerializer):
         return self.Meta.model.objects.create(**validated_data, user=request.user)
 
     def update(self, instance, validated_data):
-        if 'company' in validated_data:
+        if 'instrument' in validated_data:
             raise serializers.ValidationError(
-                {"company": "You cannot change the company after creation."}
+                {"instrument": "You cannot change the instrument after creation."}
             )
         return super().update(instance, validated_data)
